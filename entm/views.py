@@ -22,8 +22,8 @@ from django.contrib import admin
 from django.contrib.auth.models import Permission
 
 from django.urls import reverse_lazy
-# from .forms import DMABaseinfoForm,CreateDMAForm,TestForm,StationsCreateManagerForm,StationsForm
-# from . models import Organization,Stations,DMABaseinfo,Alarms,Organizations
+from .forms import OrganizationsAddForm
+from . models import Organizations
 from accounts.models import User,MyRoles
 from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailChangeForm
 
@@ -160,3 +160,475 @@ class StaticView(TemplateView):
             return response.render()
         except TemplateDoesNotExist:
             raise Http404()
+
+
+
+def choicePermissionTree(request):
+
+    roleid = request.POST.get('roleId') or -1
+
+    if roleid < 0:
+        return HttpResponse(json.dumps(PERMISSION_TREE))
+
+    
+    instance = MyRoles.objects.get(id=roleid)
+    permissiontree = instance.permissionTree
+    ctree = PERMISSION_TREE[:]
+
+    print(permissiontree)
+    
+    if len(permissiontree) > 0:
+        ptree = json.loads(permissiontree)
+        
+
+        for pt in ptree:
+            nodeid = pt['id']
+            node_edit = '{}_edit'.format(nodeid)
+            p_edit = pt['edit']
+
+            node = [n for n in ctree if n['id']==nodeid][0]
+            if p_edit:
+                node['checked'] = 'true'
+                node_sub = [n for n in ctree if n['id']==node_edit][0]
+                node_sub['checked'] = 'true'
+            else:
+                node['checked'] = 'true'
+            
+
+
+    # return JsonResponse(dicts,safe=False)
+    return HttpResponse(json.dumps(ctree))
+
+def oranizationtree(request):   
+    organtree = []
+
+    organs = Organizations.objects.all()
+    for o in organs:
+        organtree.append({
+            'name':o.name,
+            'id':o.cid,
+            'pId':o.pId,
+            'type':'group'
+            })
+
+    return HttpResponse(json.dumps(organtree)) 
+
+# def groupadd(request):
+#     print(request)
+
+#     return HttpResponse(json.dumps([{'ok':1}]))
+
+
+"""
+Roles creation, manager
+"""
+class UserGroupAddView(CreateView):
+    model = Organizations
+    template_name = 'entm/groupadd.html'
+    form_class = OrganizationsAddForm
+    success_url = reverse_lazy('home');
+
+    # @method_decorator(permission_required('dma.change_stations'))
+    def dispatch(self, *args, **kwargs):
+        return super(UserGroupAddView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print('user group add here?:',self.request.POST)
+        # print(form)
+        # do something
+        
+
+
+        return super(UserGroupAddView,self).form_valid(form)    
+
+
+def roleadd(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))
+
+def rolelist(request):
+    draw = 1
+    length = 0
+    start=0
+    if request.method == 'GET':
+        draw = int(request.GET.get('draw', None)[0])
+        length = int(request.GET.get('length', None)[0])
+        start = int(request.GET.get('start', None)[0])
+        search_value = request.GET.get('search[value]', None)
+        # order_column = request.GET.get('order[0][column]', None)[0]
+        # order = request.GET.get('order[0][dir]', None)[0]
+
+    if request.method == 'POST':
+        draw = int(request.POST.get('draw', None)[0])
+        length = int(request.POST.get('length', None)[0])
+        start = int(request.POST.get('start', None)[0])
+        pageSize = int(request.POST.get('pageSize', 10))
+        search_value = request.POST.get('search[value]', None)
+        # order_column = request.POST.get('order[0][column]', None)[0]
+        # order = request.POST.get('order[0][dir]', None)[0]
+
+    # print('get rolelist:',draw,length,start,search_value)
+    rolel = MyRoles.objects.all()
+    data = []
+    for r in rolel:
+        data.append({'id':r.pk,'name':r.name,'notes':r.notes})
+    # json = serializers.serialize('json', rolel)
+    recordsTotal = rolel.count()
+
+    result = dict()
+    result['records'] = data
+    result['draw'] = draw
+    result['success'] = 'true'
+    result['pageSize'] = pageSize
+    # result['totalPages'] = recordsTotal/pageSize
+    result['recordsTotal'] = recordsTotal
+    # result['recordsFiltered'] = music['count']
+    
+    return HttpResponse(json.dumps(result))
+    # return JsonResponse([result],safe=False)
+
+
+def userlist(request):
+    draw = 1
+    length = 0
+    start=0
+    if request.method == 'GET':
+        draw = int(request.GET.get('draw', None)[0])
+        length = int(request.GET.get('length', None)[0])
+        start = int(request.GET.get('start', None)[0])
+        search_value = request.GET.get('search[value]', None)
+        # order_column = request.GET.get('order[0][column]', None)[0]
+        # order = request.GET.get('order[0][dir]', None)[0]
+
+    if request.method == 'POST':
+        draw = int(request.POST.get('draw', None)[0])
+        length = int(request.POST.get('length', None)[0])
+        start = int(request.POST.get('start', None)[0])
+        pageSize = int(request.POST.get('pageSize', 10))
+        search_value = request.POST.get('search[value]', None)
+        # order_column = request.POST.get('order[0][column]', None)[0]
+        # order = request.POST.get('order[0][dir]', None)[0]
+
+    # print('get rolelist:',draw,length,start,search_value)
+    userl = User.objects.all()
+    data = []
+    for u in userl:
+        data.append({
+            'id':u.pk,
+            'user_name':u.user_name,
+            'real_name':u.real_name,
+            'sex':u.sex,
+            'phone_number':u.phone_number,
+            'expire_date':u.expire_date,
+            'groupName':u.belongto,
+            'roleName':u.Role,
+            'email':u.email,
+        })
+    # json = serializers.serialize('json', rolel)
+    recordsTotal = userl.count()
+
+    result = dict()
+    result['records'] = data
+    result['draw'] = draw
+    result['success'] = 'true'
+    result['pageSize'] = pageSize
+    # result['totalPages'] = recordsTotal/pageSize
+    result['recordsTotal'] = recordsTotal
+    # result['recordsFiltered'] = music['count']
+    
+    return HttpResponse(json.dumps(result))
+    # return JsonResponse([result],safe=False)
+
+
+def useredit(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))
+
+def useradd(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))    
+
+
+def userdelete(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))
+
+
+def userdeletemore(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))
+
+def roleedit(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))
+
+def roleadd(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))    
+
+
+def roledelete(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))
+
+
+def roledeletemore(request):
+    print(request)
+
+    return HttpResponse(json.dumps([{'ok':1}]))
+
+
+
+
+# 角色管理
+class RolesMangerView(TemplateView):
+    template_name = 'dma/role_manager.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RolesMangerView, self).get_context_data(*args, **kwargs)
+        context['page_title'] = '角色管理'
+        context['role_list'] = MyRoles.objects.all()
+
+        return context  
+
+    
+
+"""
+Roles creation, manager
+"""
+class RolesCreateMangerView(CreateView):
+    model = MyRoles
+    template_name = 'dma/role_create.html'
+    form_class = RoleCreateForm
+    success_url = reverse_lazy('dma:roles_manager');
+
+    # @method_decorator(permission_required('dma.change_stations'))
+    def dispatch(self, *args, **kwargs):
+        return super(RolesCreateMangerView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print('role create here?:',self.request.POST)
+        # print(form)
+        # do something
+        permissiontree = form.cleaned_data.get('permissionTree')
+        ptree = json.loads(permissiontree)
+        instance = form.save()
+        # old_permissions = instance.permissions.all()
+        # instance.permissions.clear()
+
+        for pt in ptree:
+            pname = pt['id']
+            p_edit = pt['edit']
+            perms = Permission.objects.get(codename=pname)
+            
+            if p_edit:
+                node_edit = '{}_edit'.format(pname)
+                perms_edit = Permission.objects.get(codename=node_edit)
+                instance.permissions.add(perms)
+                instance.permissions.add(perms_edit)
+
+
+        return super(RolesCreateMangerView,self).form_valid(form)
+
+    # def post(self,request,*args,**kwargs):
+    #     print('do you been here 123?')
+    #     print (request.POST)
+    #     print(kwargs)
+
+    #     form = self.get_form()
+    #     instance = form.save(commit=False)
+    #     print(form.cleaned_data['permissionTree'])
+        
+    #     form.save()
+            
+        
+
+    #     # return super(AssignRoleView,self).render_to_response(context)
+    #     return redirect(reverse_lazy('dma:roles_manager'))
+
+
+
+"""
+Roles edit, manager
+"""
+class RolesUpdateManagerView(UpdateView):
+    model = MyRoles
+    form_class = MyRolesForm
+    template_name = 'dma/role_edit_manager.html'
+    success_url = reverse_lazy('dma:roles_manager');
+
+    # @method_decorator(permission_required('dma.change_stations'))
+    def dispatch(self, *args, **kwargs):
+        self.role_id = kwargs['pk']
+        return super(RolesUpdateManagerView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print('role update here?:',self.request.POST)
+        # print(form)
+        # do something
+        permissiontree = form.cleaned_data.get('permissionTree')
+        ptree = json.loads(permissiontree)
+        instance = self.object
+        old_permissions = instance.permissions.all()
+        instance.permissions.clear()
+
+        for pt in ptree:
+            pname = pt['id']
+            p_edit = pt['edit']
+            perms = Permission.objects.get(codename=pname)
+            
+            if p_edit:
+                node_edit = '{}_edit'.format(pname)
+                perms_edit = Permission.objects.get(codename=node_edit)
+                instance.permissions.add(perms)
+                instance.permissions.add(perms_edit)
+                
+
+        return super(RolesUpdateManagerView,self).form_valid(form)
+        
+
+    # def post(self,request,*args,**kwargs):
+    #     print('role update ?')
+    #     print (request.POST)
+    #     print(kwargs)
+
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         print(form)
+    #         print(form.cleaned_data['permissionTree'])
+    #         # instance = form.save(commit=False)
+    #         return self.form_valid(form)
+            
+    #     else:
+    #         print(form.errors)
+            
+            
+        
+
+    #     # return super(AssignRoleView,self).render_to_response(context)
+    #     return redirect(reverse_lazy('dma:roles_manager'))
+
+    def get_context_data(self, **kwargs):
+        context = super(RolesUpdateManagerView, self).get_context_data(**kwargs)
+        context['page_title'] = '修改角色'
+        return context
+
+
+"""
+组织和用户管理
+"""
+class UserMangerView(TemplateView):
+    template_name = 'entm/userlist.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(UserMangerView, self).get_context_data(*args, **kwargs)
+        context['page_menu'] = '企业管理'
+        # context['page_submenu'] = '组织和用户管理'
+        context['page_title'] = '组织和用户管理'
+
+        context['user_list'] = User.objects.all()
+        
+
+        return context  
+
+
+"""
+User creation, manager
+"""
+class UserCreateMangerView(CreateView):
+    model = User
+    template_name = 'dma/user_create.html'
+    form_class = RegisterForm
+    success_url = reverse_lazy('dma:organ_users');
+
+    # @method_decorator(permission_required('dma.change_stations'))
+    def dispatch(self, *args, **kwargs):
+        return super(UserCreateMangerView, self).dispatch(*args, **kwargs)
+
+
+"""
+User edit, manager
+"""
+class UserUpdateManagerView(UpdateView):
+    model = User
+    form_class = UserDetailChangeForm
+    template_name = 'dma/user_edit_manager.html'
+    success_url = reverse_lazy('dma:organ_users')
+
+    # @method_decorator(permission_required('dma.change_stations'))
+    def dispatch(self, *args, **kwargs):
+        self.user_id = kwargs['pk']
+        return super(UserUpdateManagerView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        form.save()
+        return super(UserUpdateManagerView,self).form_valid(form)
+        # role_list = MyRoles.objects.get(id=self.role_id)
+        # return HttpResponse(render_to_string('dma/role_manager.html', {'role_list':role_list}))
+
+    def get_context_data(self, **kwargs):
+        context = super(UserUpdateManagerView, self).get_context_data(**kwargs)
+        context['page_title'] = '修改用户'
+        return context
+
+
+class AssignRoleView(TemplateView):
+    """docstring for AssignRoleView"""
+    template_name = 'dma/assign_role.html'
+        
+    def get_context_data(self, **kwargs):
+        context = super(AssignRoleView, self).get_context_data(**kwargs)
+        context['page_title'] = '分配角色'
+        context['role_list'] = MyRoles.objects.all()
+        pk = kwargs['pk']
+        context['object_id'] = pk
+        context['user'] = User.objects.get(pk=pk)
+        return context
+
+    def post(self,request,*args,**kwargs):
+        print (request.POST)
+        print(kwargs)
+        context = self.get_context_data(**kwargs)
+
+        role = request.POST.get("checks[]")
+        user = context['user']
+        # user.Role = role
+        group = MyRoles.objects.filter(name__iexact=role).first()
+        print(group)
+        user.groups.add(group)
+        user.save()
+
+        # return super(AssignRoleView,self).render_to_response(context)
+        return redirect(reverse_lazy('dma:organ_users'))
+
+
+
+class AuthStationView(TemplateView):
+    """docstring for AuthStationView"""
+    template_name = 'dma/auth_station.html'
+        
+    def get_context_data(self, **kwargs):
+        context = super(AuthStationView, self).get_context_data(**kwargs)
+        context['page_title'] = '分配角色'
+        return context        
+

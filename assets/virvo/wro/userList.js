@@ -178,12 +178,12 @@
             ];
             // 表格setting
             setting = {
-                listUrl : "user/userlist/",
-                editUrl : "user/update/",
-                deleteUrl : "/clbs/c/user/delete_",
-                deletemoreUrl : "/clbs/c/user/deletemore",
-                enableUrl : "/clbs/c/user/enable_",
-                disableUrl : "/clbs/c/user/disable_",
+                listUrl : "user/list/",
+                editUrl : "user/edit/",
+                deleteUrl : "user/delete",
+                deletemoreUrl : "user/deletemore",
+                enableUrl : "user/enable_",
+                disableUrl : "user/disable_",
                 columnDefs : columnDefs, // 表格列定义
                 columns : columns, // 表格列
                 dataTableDiv : 'dataTable', // 表格
