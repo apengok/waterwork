@@ -83,12 +83,12 @@
             };
             //表格setting
             var setting = {
-                listUrl : 'role/rolelist/',
-                editUrl : 'roles/update/',
-                deleteUrl : '/clbs/c/role/delete_',
-                deletemoreUrl : '/clbs/c/role/deletemore',
-                enableUrl : '/clbs/c/user/enable_',
-                disableUrl : '/clbs/c/user/disable_',
+                listUrl : 'role/list/',
+                editUrl : 'role/edit/',
+                deleteUrl : 'role/delete_',
+                deletemoreUrl : 'role/deletemore',
+                enableUrl : 'user/enable_',
+                disableUrl : 'user/disable_',
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
                 dataTableDiv : 'dataTable', //表格

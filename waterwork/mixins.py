@@ -18,3 +18,6 @@ class NextUrlMixin(object):
         if is_safe_url(redirect_path, request.get_host()):
                 return redirect_path
         return self.default_next
+
+
+        

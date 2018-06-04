@@ -297,7 +297,7 @@
                         	selectTreeId = "";
                             $.ajax({
                                 type: 'POST',
-                                url: '/clbs/m/basicinfo/enterprise/professionals/tree',
+                                url: 'user/oranizationtree/',
                                 data: {"isOrg" : "1"},
                                 async:false,
                                 dataType: 'json',
@@ -410,13 +410,13 @@
                 btn.bind("click", function() {
                     var oldData;
                     $.ajax({
-                        url: '/clbs/m/basicinfo/enterprise/professionals/tree',
+                        url: 'user/oranizationtree/',
                         type: 'POST',
                         data: {"isOrg" : "1"},
                         async:false,
                         dataType: 'json',
                         success: function (data) {
-                            var addData = JSON.parse(data);
+                            var addData = eval(data);// JSON.parse(data);
                             oldData = addData.length;
                         },
                     });
@@ -424,13 +424,13 @@
                     $("#" + windowId).on("hidden.bs.modal", function(data) {
                         $(this).removeData("bs.modal");                     
                         $.ajax({
-                            url: '/clbs/m/basicinfo/enterprise/professionals/tree',
+                            url: 'user/oranizationtree/',
                             type: 'POST',
                             data: {"isOrg" : "1"},
                             async:false,
                             dataType: 'json',
                             success: function (data) {
-                                var addData = JSON.parse(data);     
+                                var addData = eval(data);// JSON.parse(data);     
                                 if(addData.length != oldData){
                                     var lastData = addData[addData.length-1];           
                                     $.fn.zTree.init($("#treeDemo"), treeSetting, addData);
@@ -458,13 +458,13 @@
                         var nodes = treeObj.getSelectedNodes();        
                         $(this).removeData("bs.modal");
                         $.ajax({
-                            url: '/clbs/m/basicinfo/enterprise/professionals/tree',
+                            url: 'user/oranizationtree/',
                             type: 'POST',
                             data: {"isOrg" : "1"},
                             async:false,
                             dataType: 'json',
                             success: function (data) {
-                                var addData = JSON.parse(data);                 
+                                var addData = eval(data);// JSON.parse(data);                 
                                 $.fn.zTree.init($("#treeDemo"), treeSetting, addData);  
                                 var treeObjNew = $.fn.zTree.getZTreeObj("treeDemo");
                                 if (nodes != null && nodes.length > 0){

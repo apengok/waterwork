@@ -32,7 +32,7 @@
                                               <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">操作菜单<span class="caret"></span>
                                               </button>
                                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                                  <li><a href="{% url 'dma:role_create_manager' %}" id="addId" data-toggle="modal" data-target="#commonSmWin"><i class="glyphicon glyphicon-plus icoPaddingLeft"></i>新增</a></li>
+                                                  <li><a href="{% url 'entm:roleadd' %}" id="addId" data-toggle="modal" data-target="#commonSmWin"><i class="glyphicon glyphicon-plus icoPaddingLeft"></i>新增</a></li>
                                                   <li><a href="javascript:void(0);" id="del_model"><i class="glyphicon glyphicon-trash icoPaddingLeft"></i>批量删除</a></li>
                                               </ul>
                                           </div>
@@ -77,7 +77,7 @@
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <form id="permissionForm"
-            role="form" action="/clbs/c/role/getPermission" method="post" class="form-horizontal">
+            role="form" action="role/choicePermissionTree/" method="post" class="form-horizontal">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal"
                 aria-hidden="true">&times;</button>

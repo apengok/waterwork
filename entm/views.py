@@ -162,10 +162,52 @@ class StaticView(TemplateView):
             raise Http404()
 
 
+class AjaxableResponseMixin(object):
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    def form_invalid(self, form):
+        response = super(AjaxableResponseMixin,self).form_invalid(form)
+        print('dasf:',form.cleaned_data.get('register_date'))
+        err_str = ''
+        for k,v in form.errors.items():
+            print(k,v)
+            err_str += v[0]
+        if self.request.is_ajax():
+            data = {
+                'success': 1,
+                'obj':{
+                    'flag':0,
+                    'errMsg':err_str
+                    }
+            }
+            print(form.errors)
+            return JsonResponse(data)
+            # return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super(AjaxableResponseMixin,self).form_valid(form)
+        if self.request.is_ajax():
+            data = {
+                'success': True,
+                'obj':{'flag':1}
+            }
+            return JsonResponse(data)
+        else:
+            return response
 
 def choicePermissionTree(request):
 
+
+
     roleid = request.POST.get('roleId') or -1
+    print(' get choicePermissionTree',roleid)
 
     if roleid < 0:
         return HttpResponse(json.dumps(PERMISSION_TREE))
@@ -213,6 +255,25 @@ def oranizationtree(request):
 
     return HttpResponse(json.dumps(organtree)) 
 
+def findOperations(request):
+
+    operarions_list = {
+        # "exceptionDetailMsg":'',
+        # "msg":'',
+        "obj":{
+                "operation":[
+                {"explains":"自来水公司","id":"waterworks","operationType":"自来水公司"},
+                {"explains":"非自来水公司","id":"nonwaterworks","operationType":"非自来水公司"},
+                
+            ]
+        },
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+    
+
 # def groupadd(request):
 #     print(request)
 
@@ -220,9 +281,9 @@ def oranizationtree(request):
 
 
 """
-Roles creation, manager
+group add
 """
-class UserGroupAddView(CreateView):
+class UserGroupAddView(AjaxableResponseMixin,CreateView):
     model = Organizations
     template_name = 'entm/groupadd.html'
     form_class = OrganizationsAddForm
@@ -230,6 +291,7 @@ class UserGroupAddView(CreateView):
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
+        
         return super(UserGroupAddView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
@@ -237,18 +299,40 @@ class UserGroupAddView(CreateView):
         If the form is valid, redirect to the supplied URL.
         """
         print('user group add here?:',self.request.POST)
-        # print(form)
+        print(form)
         # do something
+        instance = form.save(commit=False)
+        instance.is_org = True
+        cid = self.request.POST.get('pid','root')
+        print(cid)
+        instance.pid = cid
+        instance.cid = 'sub_%s'%cid
         
 
 
-        return super(UserGroupAddView,self).form_valid(form)    
+        return super(UserGroupAddView,self).form_valid(form)   
 
 
-def roleadd(request):
-    print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))
+    # def post(self,request,*args,**kwargs):
+    #     print('do you been here 123?')
+    #     print (request.POST)
+    #     print(kwargs)
+        
+
+    #     form = self.get_form()
+        
+            
+        
+
+    #     # return super(AssignRoleView,self).render_to_response(context)
+    #     return redirect(reverse_lazy('entm:groupadd'))
+
+
+# def roleadd(request):
+#     print(request)
+
+#     return HttpResponse(json.dumps([{'ok':1}]))
 
 def rolelist(request):
     draw = 1
@@ -371,10 +455,10 @@ def roleedit(request):
 
     return HttpResponse(json.dumps([{'ok':1}]))
 
-def roleadd(request):
-    print(request)
+# def roleadd(request):
+#     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))    
+#     return HttpResponse(json.dumps([{'ok':1}]))    
 
 
 def roledelete(request):
@@ -393,7 +477,7 @@ def roledeletemore(request):
 
 # 角色管理
 class RolesMangerView(TemplateView):
-    template_name = 'dma/role_manager.html'
+    template_name = 'entm/rolelist.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super(RolesMangerView, self).get_context_data(*args, **kwargs)
@@ -404,18 +488,19 @@ class RolesMangerView(TemplateView):
 
     
 
+
 """
 Roles creation, manager
 """
-class RolesCreateMangerView(CreateView):
+class RolesAddView(AjaxableResponseMixin,CreateView):
     model = MyRoles
-    template_name = 'dma/role_create.html'
+    template_name = 'entm/roleadd.html'
     form_class = RoleCreateForm
-    success_url = reverse_lazy('dma:roles_manager');
+    success_url = reverse_lazy('entm:rolemanager');
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
-        return super(RolesCreateMangerView, self).dispatch(*args, **kwargs)
+        return super(RolesAddView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
@@ -442,7 +527,7 @@ class RolesCreateMangerView(CreateView):
                 instance.permissions.add(perms_edit)
 
 
-        return super(RolesCreateMangerView,self).form_valid(form)
+        return super(RolesAddView,self).form_valid(form)
 
     # def post(self,request,*args,**kwargs):
     #     print('do you been here 123?')
@@ -465,16 +550,16 @@ class RolesCreateMangerView(CreateView):
 """
 Roles edit, manager
 """
-class RolesUpdateManagerView(UpdateView):
+class RoleEditView(UpdateView):
     model = MyRoles
     form_class = MyRolesForm
-    template_name = 'dma/role_edit_manager.html'
-    success_url = reverse_lazy('dma:roles_manager');
+    template_name = 'entm/roleedit.html'
+    success_url = reverse_lazy('entm:rolemanager');
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
         self.role_id = kwargs['pk']
-        return super(RolesUpdateManagerView, self).dispatch(*args, **kwargs)
+        return super(RoleEditView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
@@ -501,7 +586,7 @@ class RolesUpdateManagerView(UpdateView):
                 instance.permissions.add(perms_edit)
                 
 
-        return super(RolesUpdateManagerView,self).form_valid(form)
+        return super(RoleEditView,self).form_valid(form)
         
 
     # def post(self,request,*args,**kwargs):
@@ -526,7 +611,7 @@ class RolesUpdateManagerView(UpdateView):
     #     return redirect(reverse_lazy('dma:roles_manager'))
 
     def get_context_data(self, **kwargs):
-        context = super(RolesUpdateManagerView, self).get_context_data(**kwargs)
+        context = super(RoleEditView, self).get_context_data(**kwargs)
         context['page_title'] = '修改角色'
         return context
 

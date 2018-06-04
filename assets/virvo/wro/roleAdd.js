@@ -5,7 +5,7 @@
             //操作权限 
             var setpermission = {
                 async : {
-                    url : "/clbs/c/role/choicePermissionTree",
+                    url : "role/choicePermissionTree",
                     type : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -94,9 +94,11 @@
             $("#permissionTree").val(JSON.stringify(list));
             if(roleAdd.validates()){
                 $("#addForm").ajaxSubmit(function(data) {
+                    console.log(data);
                     if (data != null) {
-                        var result = $.parseJSON(data);
+                        var result = eval(data);// $.parseJSON(data);
                         if (result.success) {
+                            console.log(result.success,result.obj.flag)
                             if (result.obj.flag == 1){
                                 $("#commonSmWin").modal("hide");
                                 layer.msg("添加成功！",{move:false});
@@ -115,20 +117,20 @@
         validates: function(){
             return $("#addForm").validate({
                 rules : {
-                    roleName : {
+                    name : {
                         required : true,
                         maxlength : 20
                     },
-                    description : {
+                    notes : {
                         maxlength : 140
                     }
                 },
                 messages : {
-                    roleName : {
+                    name : {
                         required : roleNameNull,
                         maxlength : publicSize20
                     },
-                    description : {
+                    notes : {
                         maxlength : publicSize140
                     }
                 }

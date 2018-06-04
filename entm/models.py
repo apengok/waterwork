@@ -9,7 +9,7 @@ from django.urls import reverse
 class Organizations(models.Model):
     name               = models.CharField('组织机构名称',max_length=300,null=True)
     attribute          = models.CharField('组织机构性质',max_length=300,null=True,blank=True)
-    register_date      = models.DateField('注册日期',max_length=300,null=True,blank=True)
+    register_date      = models.CharField('注册日期',max_length=30,null=True,blank=True)
     owner_name         = models.CharField('负责人',max_length=300,null=True,blank=True)
     phone_number       = models.CharField('电话号码',max_length=300,null=True,blank=True)
     firm_address       = models.CharField('地址',max_length=300,null=True,blank=True)

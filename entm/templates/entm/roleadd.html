@@ -1,6 +1,6 @@
 {% load staticfiles %}
 
-<form id="addForm" role="form" action="{% url 'dma:role_create_manager'  %}" method="post" class="form-horizontal">{% csrf_token %}
+<form id="addForm" role="form" action="{% url 'entm:roleadd'  %}" method="post" class="form-horizontal">{% csrf_token %}
     <div class="modal-header">
         <button type="button" id="doXAdd" class="close" data-dismiss="modal"
             aria-hidden="true">&times;</button>
@@ -52,8 +52,14 @@
     </div>
 </form>
 
-<script src="{% static 'virvo/roleAdd.js' %}"></script>
- 
+<script src="{% static 'virvo/wro/roleAdd.js' %}"></script>
+
+<script>
+    var roleNameNull = "\u89D2\u8272\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A";
+    var publicSize20="\u957F\u5EA6\u4E0D\u8D85\u8FC720\u4F4D";
+    var publicSize140="\u957F\u5EA6\u4E0D\u8D85\u8FC7140\u4F4D";
+</script>
+
 <script>
     
     // $('#role_update_form').ajaxForm(form_options);

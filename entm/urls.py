@@ -14,27 +14,29 @@ urlpatterns = [
     url(r'^(?P<page>.+\.html)$', views.StaticView.as_view()),
 
     # tree list etc
-    url(r'^role/choicePermissionTree/',views.choicePermissionTree,name='choicePermissionTree'),
+    url(r'^role/choicePermissionTree',views.choicePermissionTree,name='choicePermissionTree'),
     url(r'^user/oranizationtree/',views.oranizationtree,name='oranizationtree'),
 
     # 企业管理 --角色管理
     #组织
-    url(r'^user/group/add',views.UserGroupAddView.as_view(),name='groupadd'),
+    url(r'^user/group/add/?$',views.UserGroupAddView.as_view(),name='groupadd'),
+    url(r'^group/findOperations',views.findOperations,name='findOperations'),
 
     #用户
     url(r'^usermanager/?$', views.UserMangerView.as_view(), name='usermanager'),#组织和用户管理
     url(r'^user/list/$',views.userlist,name='userlist'),
     url(r'^user/add',views.useradd,name='useradd'),
     url(r'^user/edit',views.useredit,name='useredit'),
-    url(r'^user/delete',views.userdelete,name='userdelete'),
+    url(r'^user/delete_',views.userdelete,name='userdelete'),
     url(r'^user/deletemore',views.userdeletemore,name='userdeletemore'),
 
     #角色
+    url(r'^rolemanager/?$',views.RolesMangerView.as_view(),name='rolemanager'),
     url(r'^role/list/$',views.rolelist,name='rolelist'),
-    url(r'^role/list/add',views.roleadd,name='roleadd'),
-    url(r'^role/list/edit',views.roleedit,name='roleedit'),
-    url(r'^role/list/delete',views.roledelete,name='roledelete'),
-    url(r'^role/list/deletemore',views.roledeletemore,name='roledeletemore'),
+    url(r'^role/add',views.RolesAddView.as_view(),name='roleadd'),
+    url(r'^role/edit',views.roleedit,name='roleedit'),
+    url(r'^role/delete_',views.roledelete,name='roledelete'),
+    url(r'^role/deletemore',views.roledeletemore,name='roledeletemore'),
 
     
     # url(r'^roles/?$', views.RolesMangerView.as_view(), name='roles_manager'),

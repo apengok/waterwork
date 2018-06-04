@@ -1,11 +1,12 @@
-<form id="addForm" role="form" action="/clbs/c/group/newgroup" method="post" class="form-horizontal">
+{% load staticfiles %}
+<form id="addForm" role="form" action="{% url 'entm:groupadd' %}" method="post" class="form-horizontal">{% csrf_token %}
     <div class="modal-header">
         <button type="button" id="doXAdd" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">新增组织</h4>
     </div>
     <div class="modal-body">
-        <input  type="text" class="hidden" id="cid" name="cid" value="101" />
-        <input  type="text" class="hidden" id="pid" name="pid" value="ou=ORG_187888e1-7a09-43cf-bd46-2717b3d4382d,ou=organization"/>
+        <input  type="text" class="hidden" id="cid" name="cid" value="{{ form.cid.value }}" />
+        <input  type="text" class="hidden" id="pid" name="pid" value="{{ form.pId.value }}"/>
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -14,50 +15,51 @@
                         <input name="name" placeholder="请输入组织名称" type="text" maxlength="50" class="form-control" id="name"/>
                     </div>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label class="col-md-3 control-label"> 组织机构代码：</label>
                     <div class="col-md-7">
                         <input name="organizationCode" id="organizationCode" placeholder="请输入9位组织机构代码或18位统一社会信用代码" type="text" maxlength="18" class="form-control" />
+                    </div>
+                </div> -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label">组织机构性质：</label>
+                    <div class="col-md-7">
+                        <select id="operation" class="form-control" name="attribute" placeholder="请选择运营资质类别">
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">注册日期：</label>
                     <div class="col-md-7">
                         <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
-                               id="registerDate" name="registerDate" placeholder="请选择注册日期"/>
+                               id="registerDate" name="register_date" placeholder="请选择注册日期"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">运营资质类别：</label>
-                    <div class="col-md-7">
-                        <select id="operation" class="form-control" name="operation" placeholder="请选择运营资质类别">
-                        </select>
-                    </div>
-                </div>
+                
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 负责人：</label>
                     <div class="col-md-7">
-                        <input name="principal" placeholder="请输入负责人" type="text" maxlength="20" class="form-control" />
+                        <input name="owner_name" placeholder="请输入负责人" type="text" maxlength="20" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 电话号码：</label>
                     <div class="col-md-7">
-                        <input name ="phone" placeholder="请输入电话号码" type="text" maxlength="13" class="form-control" />
+                        <input name ="phone_number" placeholder="请输入电话号码" type="text" maxlength="13" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">地址：</label>
                     <div class="col-md-7">
-                        <input name ="address" placeholder="请输入地址" type="text" maxlength="50" class="form-control" />
+                        <input name ="firm_address" placeholder="请输入地址" type="text" maxlength="50" class="form-control" />
                     </div>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label class="col-md-3 control-label"> 描述：</label>
                     <div class="col-md-7">
                         <textarea  name="description" maxlength="50" placeholder="请输入描述" type="text" class="form-control" ></textarea>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -71,13 +73,14 @@
     </div>
     <input  type="hidden" value="ef6c759b-ef14-46f7-bec1-5819d0c322fa" name="avoidRepeatSubmitToken" id="avoidRepeatSubmitToken">
 </form>
-<script type="text/javascript" src="/clbs/resources/js/sendAjax.js"></script>
+<!-- <script type="text/javascript" src="/clbs/resources/js/sendAjax.js"></script> -->
+<script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
 <script>
     (function($,window){
         groupAdd = {
             init: function(){
                 $.ajax({
-                    url: '/clbs/c/group/findOperations',
+                    url: 'group/findOperations',
                     type: 'POST',
                     data: "",
                     async:false,
@@ -86,7 +89,7 @@
                         if(data.success==true){
                             var operations=[];
                             var selector=$("#operation");
-                            selector.append('<option  value = "">'+"请选择运营资质类别"+'</option>');
+                            selector.append('<option  value = "">'+"请选择组织结构性质"+'</option>');
                             //selector.append('<optgroup label="请选择运营资质类别"></optgroup>');
                             if(data.obj.operation != null && data.obj.operation.length > 0){
                                 var calldata = data.obj.operation;
@@ -108,11 +111,21 @@
                         $("#operation").val("");
                     }
                     $("#addForm").ajaxSubmit(function(data) {
-                        var result = $.parseJSON(data);
+                        var result = eval(data);// $.parseJSON(data);
+                        // if (result.success) {
+
+                        //     $("#commonWin").modal("hide");
+                        //     layer.msg("添加成功！",{move:false});
+                        //     $("#search_condition").val("");
+                        // }
                         if (result.success) {
-                            $("#commonWin").modal("hide");
-                            layer.msg("添加成功！",{move:false});
-                            $("#search_condition").val("");
+                            if (result.obj.flag == 1){
+                                $("#commonWin").modal("hide");
+                                layer.msg("添加成功！",{move:false});
+                                $("#search_condition").val("");
+                            }else{
+                                layer.msg(result.obj.errMsg,{move:false});
+                            }
                         }else{
                             layer.msg(result.msg,{move:false});
                         }
@@ -132,29 +145,29 @@
                             required:true,
                             maxlength:25
                         },
-                        organizationCode:{
-                            doubles:true,
-                            maxlength:20,
-                            remote: {
-                                type:"post",
-                                async:false,
-                                url:"/clbs/c/group/uniquenessOrganizationCode" ,
-                                data:{
-                                    organizationCode:function(){return $("#organizationCode").val();}
-                                }
-                            }
-                        },
+                        // organizationCode:{
+                        //     doubles:true,
+                        //     maxlength:20,
+                        //     remote: {
+                        //         type:"post",
+                        //         async:false,
+                        //         url:"/clbs/c/group/uniquenessOrganizationCode" ,
+                        //         data:{
+                        //             organizationCode:function(){return $("#organizationCode").val();}
+                        //         }
+                        //     }
+                        // },
                         registerDate:{
                             selectRegDate:true
                         },
-                        principal:{
+                        owner_name:{
                             isCN:true,
                             maxlength : 20
                         },
-                        phone:{
+                        phone_number:{
                             isTel : true
                         },
-                        address:{
+                        firm_address:{
                             maxlength : 50
                         },
                     },
@@ -163,22 +176,22 @@
                             required :  "\u4E0D\u80FD\u4E3A\u7A7A",
                             maxlength : "\u957F\u5EA6\u4E0D\u8D85\u8FC725\u4F4D"
                         },
-                        organizationCode:{
-                            doubles:"\u8BF7\u8F93\u5165\u6B63\u786E\u7684\u7EC4\u7EC7\u7ED3\u6784\u4EE3\u7801(9\u4F4D\u6570\u5B57)\u6216\u800518\u4F4D\u7684\u7EDF\u4E00\u793E\u4F1A\u4FE1\u7528\u4EE3\u7801(\u6570\u5B57\u548C\u5927\u5199\u5B57\u6BCD\u7684\u7EC4\u5408)",
-                            maxlength : "\u957F\u5EA6\u4E0D\u8D85\u8FC718\u4F4D",
-                            remote : "\u7EC4\u7EC7\u673A\u6784\u4EE3\u7801\u5DF2\u88AB\u4F7F\u7528\uFF0C\u8BF7\u91CD\u65B0\u8F93\u5165"
-                        },
+                        // organizationCode:{
+                        //     doubles:"\u8BF7\u8F93\u5165\u6B63\u786E\u7684\u7EC4\u7EC7\u7ED3\u6784\u4EE3\u7801(9\u4F4D\u6570\u5B57)\u6216\u800518\u4F4D\u7684\u7EDF\u4E00\u793E\u4F1A\u4FE1\u7528\u4EE3\u7801(\u6570\u5B57\u548C\u5927\u5199\u5B57\u6BCD\u7684\u7EC4\u5408)",
+                        //     maxlength : "\u957F\u5EA6\u4E0D\u8D85\u8FC718\u4F4D",
+                        //     remote : "\u7EC4\u7EC7\u673A\u6784\u4EE3\u7801\u5DF2\u88AB\u4F7F\u7528\uFF0C\u8BF7\u91CD\u65B0\u8F93\u5165"
+                        // },
                         registerDate:{
                             selectRegDate : "\u6CE8\u518C\u65E5\u671F\u5FC5\u987B\u5C0F\u4E8E/\u7B49\u4E8E\u4ECA\u5929"
                         },
-                        principal:{
+                        owner_name:{
                             isCN:"\u8BF7\u8F93\u5165\u4E2D\u6587\u540D/\u82F1\u6587\u540D.\u4E0D\u8981\u4E71\u641E\u5466",
                             maxlength :  "\u957F\u5EA6\u4E0D\u8D85\u8FC720\u4F4D"
                         },
-                        phone:{
+                        phone_number:{
                             isTel : "\u770B\u8D77\u6765\u4E0D\u50CF\u624B\u673A\u53F7\u5462"
                         },
-                        address:{
+                        firm_address:{
                             maxlength : "\u957F\u5EA6\u4E0D\u8D85\u8FC750\u4F4D"
                         }
                     }
@@ -189,7 +202,7 @@
             groupAdd.init();
             $("#submitAdd").on("click",groupAdd.doSubmit);
             $('input').inputClear();
-            $("#name,#organizationCode,#registerDate,#license,#principal,#phone,#address").on("change",groupAdd.clearPreviousValue);
+            $("#name,#organizationCode,#registerDate,#license,#owner_name,#phone_number,#firm_address").on("change",groupAdd.clearPreviousValue);
         });
     })($,window)
 </script>

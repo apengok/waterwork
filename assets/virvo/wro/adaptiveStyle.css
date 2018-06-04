@@ -72,7 +72,7 @@ button#areaSearch,button#exportAlarm,button#exportMileage,button#exportOnline,bu
 select::-ms-expand{display:none}
 @-moz-document url-prefix(){select.form-control{padding:0}
 }
-select.form-control{cursor:pointer;appearance:none;-moz-appearance:none;-webkit-appearance:none;-ms-appearance:none;background:url(/clbs/resources/img/down.svg) no-repeat scroll right center transparent}
+select.form-control{cursor:pointer;appearance:none;-moz-appearance:none;-webkit-appearance:none;-ms-appearance:none;background:url(/static/virvo/resources/img/down.svg) no-repeat scroll right center transparent}
 @media screen and (max-width:1600px){#commonWin .modal-lg{width:70%}
 }
 @media screen and (max-width:1270px){.wizard ul li{border-bottom:1px solid #ccc}
