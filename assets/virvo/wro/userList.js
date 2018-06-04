@@ -394,7 +394,7 @@
                     + "' data-target='#commonWin' data-toggle='modal'></span>";
             var editStr = "<span class='button edit' id='editBtn_"
                     + treeNode.tId
-                    + "' title='编辑' href='/clbs/c/group/edit.gsp?pid="
+                    + "' title='编辑' href='user/group/edit/"
                     + pid
                     + "' data-target='#commonWin' data-toggle='modal'></span>";
             var detailsStr = "<span class='button details' id='detailsBtn_"

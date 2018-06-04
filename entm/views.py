@@ -287,33 +287,64 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
     model = Organizations
     template_name = 'entm/groupadd.html'
     form_class = OrganizationsAddForm
-    success_url = reverse_lazy('home');
+    success_url = reverse_lazy('entm:usermanager');
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
-        
+        # print('dispatch',args,kwargs)
+        if self.request.method == 'GET':
+            cid = self.request.GET.get('id')
+            pid = self.request.GET.get('pid')
+            kwargs['cid'] = cid
+            kwargs['pId'] = pid
         return super(UserGroupAddView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('user group add here?:',self.request.POST)
-        print(form)
+        # print('user group add here?:',self.request.POST)
+        # print(form)
         # do something
         instance = form.save(commit=False)
         instance.is_org = True
-        cid = self.request.POST.get('pid','root')
-        print(cid)
-        instance.pid = cid
+        cid = self.request.POST.get('pId','root')
+        
+        instance.pId = cid
         instance.cid = 'sub_%s'%cid
         
 
 
         return super(UserGroupAddView,self).form_valid(form)   
 
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(UserGroupAddView, self).get_context_data(*args, **kwargs)
+    #     print(args,kwargs)
+    #     return context
 
+    # def get_form_kwargs(self, *args, **kwargs):
+    #     print('get form kwargs',args,kwargs)
+    #     form_kwargs = super(UserGroupAddView, self).get_form_kwargs(*args, **kwargs)
+        
+    #     return form_kwargs
 
+    def get(self,request, *args, **kwargs):
+        print('get::::',args,kwargs)
+        form = super(UserGroupAddView, self).get_form()
+        # Set initial values and custom widget
+        initial_base = self.get_initial() #Retrieve initial data for the form. By default, returns a copy of initial.
+        # initial_base['menu'] = Menu.objects.get(id=1)
+        initial_base['cid'] = kwargs.get('cid')
+        initial_base['pId'] = kwargs.get('pId')
+        form.initial = initial_base
+        # form.fields['cid'].value = kwargs.get('cid')
+        # form.fields['pId'].value = kwargs.get('pid')
+        # form.fields['name'].widget = forms.widgets.Textarea()
+        # return response using standard render() method
+        return render(request,self.template_name,
+                      {'form':form,})
+
+    
     # def post(self,request,*args,**kwargs):
     #     print('do you been here 123?')
     #     print (request.POST)
@@ -329,10 +360,75 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
     #     return redirect(reverse_lazy('entm:groupadd'))
 
 
-# def roleadd(request):
-#     print(request)
 
-#     return HttpResponse(json.dumps([{'ok':1}]))
+"""
+Roles edit, manager
+"""
+class UserGroupEditView(UpdateView):
+    model = MyRoles
+    form_class = MyRolesForm
+    template_name = 'entm/roleedit.html'
+    success_url = reverse_lazy('entm:rolemanager');
+
+    # @method_decorator(permission_required('dma.change_stations'))
+    def dispatch(self, *args, **kwargs):
+        self.role_id = kwargs['pk']
+        return super(UserGroupEditView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print('role update here?:',self.request.POST)
+        # print(form)
+        # do something
+        permissiontree = form.cleaned_data.get('permissionTree')
+        ptree = json.loads(permissiontree)
+        instance = self.object
+        old_permissions = instance.permissions.all()
+        instance.permissions.clear()
+
+        for pt in ptree:
+            pname = pt['id']
+            p_edit = pt['edit']
+            perms = Permission.objects.get(codename=pname)
+            
+            if p_edit:
+                node_edit = '{}_edit'.format(pname)
+                perms_edit = Permission.objects.get(codename=node_edit)
+                instance.permissions.add(perms)
+                instance.permissions.add(perms_edit)
+                
+
+        return super(UserGroupEditView,self).form_valid(form)
+        
+
+    # def post(self,request,*args,**kwargs):
+    #     print('role update ?')
+    #     print (request.POST)
+    #     print(kwargs)
+
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         print(form)
+    #         print(form.cleaned_data['permissionTree'])
+    #         # instance = form.save(commit=False)
+    #         return self.form_valid(form)
+            
+    #     else:
+    #         print(form.errors)
+            
+            
+        
+
+    #     # return super(AssignRoleView,self).render_to_response(context)
+    #     return redirect(reverse_lazy('dma:roles_manager'))
+
+    def get_context_data(self, **kwargs):
+        context = super(UserGroupEditView, self).get_context_data(**kwargs)
+        context['page_title'] = '修改角色'
+        return context
+
 
 def rolelist(request):
     draw = 1

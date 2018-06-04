@@ -20,6 +20,7 @@ urlpatterns = [
     # 企业管理 --角色管理
     #组织
     url(r'^user/group/add/?$',views.UserGroupAddView.as_view(),name='groupadd'),
+    url(r'^user/group/edit/(?P<pId>\d/?$',views.UserGroupEditView.as_view(),name='groupedit'),
     url(r'^group/findOperations',views.findOperations,name='findOperations'),
 
     #用户

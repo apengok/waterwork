@@ -18,11 +18,12 @@ class OrganizationsAddForm(forms.ModelForm):
 
     class Meta:
         model = Organizations
-        fields = ('name','attribute','register_date','owner_name','phone_number','firm_address')
+        fields = ('name','attribute','register_date','owner_name','phone_number','firm_address','cid','pId')
 
-    # def __init__(self,*args,**kwargs):
-    #     super(OrganizationsAddForm, self).__init__(*args, **kwargs)
-    #     self.fields['register_date'].widget.attrs['input_formats'] =['%Y-%m-%d',]
+    def __init__(self,*args,**kwargs):
+        print('form init',args,kwargs)
+        super(OrganizationsAddForm, self).__init__(*args, **kwargs)
+        self.fields['register_date'].widget.attrs['input_formats'] =['%Y-%m-%d',]
 
 
     def clean_register_date(self):
