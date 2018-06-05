@@ -22,8 +22,8 @@
             }).on("mouseout", function () {
                 leftToolTip.removeClass("in");
             });
-            webSocket.init('/clbs/vehicle', headers, "/user/" + userName.text() + "/alarmGlobal", pagesNav.getintimeno, null, null);
-            pagesNav.isConnectSocket();
+            // webSocket.init('/clbs/vehicle', headers, "/user/" + userName.text() + "/alarmGlobal", pagesNav.getintimeno, null, null);
+            // pagesNav.isConnectSocket();
 //            setTimeout(function () {
 //                webSocket.subscribe(headers, "/user/" + userName.text() + "/specialReport", pagesNav.specialAlarm, null, null);
 //            }, 2000);
@@ -181,7 +181,7 @@
         }
     };
     $(function () {
-        pagesNav.gethistoryno();
+        // pagesNav.gethistoryno();
         pagesNav.init();
         $("#updateFontSize").bind("click", pagesNav.helpCenterModal);
     })

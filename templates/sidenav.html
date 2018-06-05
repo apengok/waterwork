@@ -1,7 +1,7 @@
 <aside class="sidebar">
     <div id="leftside-navigation" class="nano">
         <ul class="nano-content">
-            <li class="sub-menu ">
+            <li class="sub-menu active">
                 <a href="{% url 'home' %}" class=""> 
                     <i class="fa fa-home"></i><span>首页</span>
                 </a>
@@ -9,12 +9,12 @@
 
             <li class="sub-menu">
                 <a href="javascript:void(0);">
-                    <i class="fa fa-pencil-square-o"></i><span>数据监控</span>
+                    <i class="fa fa-user"></i><span>数据监控</span>
                     <i class="arrow fa fa-angle-right pull-right"></i>
                 </a>
                 <ul class="second-menu-ul">
                     <li class="second-menu">
-                        <a href="{% url 'home' %}">
+                        <a href="#">
                             <i class="fa fa-location-arrow"></i><span>地图监控</span> 
                             <i></i> 
                         </a>
@@ -31,6 +31,7 @@
                             
                         </ul>
                     </li>
+
                     <li class="second-menu">
                         <a href="#">
                             <i class="fa fa-location-arrow"></i><span>实时数据</span> 
@@ -40,6 +41,7 @@
                             
                         </ul>
                     </li>
+                    
                 </ul>
             </li>
 
@@ -70,6 +72,10 @@
                     
                 </ul>
             </li>
+
+            
+
+            
 
             
 

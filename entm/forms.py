@@ -26,7 +26,17 @@ class OrganizationsAddForm(forms.ModelForm):
         self.fields['register_date'].widget.attrs['input_formats'] =['%Y-%m-%d',]
 
 
-    def clean_register_date(self):
-        regisdate = self.cleaned_data.get('register_date')
-        print('cleaned_data',regisdate)
-        return parse_date(regisdate)
+    
+
+
+class OrganizationsEditForm(forms.ModelForm):
+    """docstring for OrganizationsEditForm"""
+
+    class Meta:
+        model = Organizations
+        fields = ('name','attribute','register_date','owner_name','phone_number','firm_address','cid','pId')
+
+    
+
+
+        

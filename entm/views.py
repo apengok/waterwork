@@ -15,17 +15,19 @@ from mptt.templatetags.mptt_tags import cache_tree_children
 from django.template.loader import render_to_string
 from django.shortcuts import render,HttpResponse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView,FormView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView,DeleteView,FormView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import admin
 from django.contrib.auth.models import Permission
 
 from django.urls import reverse_lazy
-from .forms import OrganizationsAddForm
+from .forms import OrganizationsAddForm,OrganizationsEditForm
 from . models import Organizations
 from accounts.models import User,MyRoles
 from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailChangeForm
+
+from .utils import unique_cid_generator
 
 # from django.core.urlresolvers import reverse_lazy
 
@@ -308,10 +310,10 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
         # do something
         instance = form.save(commit=False)
         instance.is_org = True
-        cid = self.request.POST.get('pId','root')
+        cid = self.request.POST.get('pId','oranization')
         
         instance.pId = cid
-        instance.cid = 'sub_%s'%cid
+        instance.cid = unique_cid_generator(instance,new_cid=cid)
         
 
 
@@ -362,73 +364,86 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
 
 
 """
-Roles edit, manager
+Group edit, manager
 """
-class UserGroupEditView(UpdateView):
-    model = MyRoles
-    form_class = MyRolesForm
-    template_name = 'entm/roleedit.html'
+class UserGroupEditView(AjaxableResponseMixin,UpdateView):
+    model = Organizations
+    form_class = OrganizationsEditForm
+    template_name = 'entm/groupedit.html'
     success_url = reverse_lazy('entm:rolemanager');
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
-        self.role_id = kwargs['pk']
+        # self.role_id = kwargs['pk']
         return super(UserGroupEditView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('role update here?:',self.request.POST)
+        print('group update here?:',self.request.POST)
         # print(form)
         # do something
-        permissiontree = form.cleaned_data.get('permissionTree')
-        ptree = json.loads(permissiontree)
-        instance = self.object
-        old_permissions = instance.permissions.all()
-        instance.permissions.clear()
-
-        for pt in ptree:
-            pname = pt['id']
-            p_edit = pt['edit']
-            perms = Permission.objects.get(codename=pname)
-            
-            if p_edit:
-                node_edit = '{}_edit'.format(pname)
-                perms_edit = Permission.objects.get(codename=node_edit)
-                instance.permissions.add(perms)
-                instance.permissions.add(perms_edit)
+        
                 
 
         return super(UserGroupEditView,self).form_valid(form)
+
+    def get_object(self):
+        print(self.kwargs)
+        return Organizations.objects.get(cid=self.kwargs['pId'])
         
 
-    # def post(self,request,*args,**kwargs):
-    #     print('role update ?')
-    #     print (request.POST)
-    #     print(kwargs)
+"""
+Group Detail, manager
+"""
+class UserGroupDetailView(DetailView):
+    model = Organizations
+    form_class = OrganizationsEditForm
+    template_name = 'entm/groupdetail.html'
+    # success_url = reverse_lazy('entm:rolemanager');
 
-    #     form = self.get_form()
-    #     if form.is_valid():
-    #         print(form)
-    #         print(form.cleaned_data['permissionTree'])
-    #         # instance = form.save(commit=False)
-    #         return self.form_valid(form)
-            
-    #     else:
-    #         print(form.errors)
-            
-            
+    # @method_decorator(permission_required('dma.change_stations'))
+    def dispatch(self, *args, **kwargs):
+        # self.role_id = kwargs['pk']
+        return super(UserGroupDetailView, self).dispatch(*args, **kwargs)
+
+    
+    def get_object(self):
+        print(self.kwargs)
+        return Organizations.objects.get(cid=self.kwargs['pId'])
+
+"""
+Assets comment deletion, manager
+"""
+class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
+    model = Organizations
+    # template_name = 'aidsbank/asset_comment_confirm_delete.html'
+
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs['pk']
+
         
+        print(self.request.POST)
+        kwargs['pId'] = self.request.POST.get('pId')
+        print('delete dispatch:',args,kwargs)
+        return super(UserGroupDeleteView, self).dispatch(*args, **kwargs)
 
-    #     # return super(AssignRoleView,self).render_to_response(context)
-    #     return redirect(reverse_lazy('dma:roles_manager'))
+    def get_object(self,*args, **kwargs):
+        print('delete objects:',self.kwargs,kwargs)
+        return Organizations.objects.get(cid=kwargs['pId'])
 
-    def get_context_data(self, **kwargs):
-        context = super(UserGroupEditView, self).get_context_data(**kwargs)
-        context['page_title'] = '修改角色'
-        return context
-
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print('delete?',args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+        self.object.delete()
+        return JsonResponse({'success':True})
+        
+    
 
 def rolelist(request):
     draw = 1
@@ -473,6 +488,7 @@ def rolelist(request):
 
 
 def userlist(request):
+    print('userlist',request)
     draw = 1
     length = 0
     start=0

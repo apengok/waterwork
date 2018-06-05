@@ -28,7 +28,85 @@
 </head>
 <body>
     <section id="container">
-    {% include '_vheader.html' %}
+    <header id="header">
+    <!--logo start-->
+    <div><a class="brand" href="/clbs/home"></a></div>
+    <!--logo end-->
+    <div class="toggle-navigation toggle-left" id="toggle-left">
+        <button style="margin-top:-14px;" type="button" class="btn btn-default" id="toggle-left-button">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="tooltip fade right" id="toggle-left-tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner">显示隐藏导航</div></div>
+    </div>
+    <div class="toggle-left-h2">
+        <h2 class="h2" id="personalizedTitle"><span>中位</span></h2>
+    </div>
+    <div class="user-nav">
+        <ul>
+            <li>
+                <span id="alarmno" style="display:inline-block;width:17px;height:17px;line-height:17px;border-radius:50%;background-color:#E50C0C;color:#fff;text-align:center;position:relative;top:-16px;left:12px;font-size:12px;">0</span>
+            </li>
+            <li id="alarmIcoHide"  style="height:38px;width:35px;line-height:35px;margin-right:5px;"><div style="visibility:hidden;" class="waves"></div><button onclick="pagesNav.alarmDeal()" id="alarmIcoHide" style="margin-top:-25px;" class="btn btn-default "><img src="/clbs/resources/img/allcall.svg"  style="width:18px;height:18px;margin-top:-8px;"/></button>
+            </li> 
+            <li class="profile-photo">
+                <button type="button" class="btn btn-default dropdown-toggle options">
+                    <i class="fa fa-user"></i>
+                </button>
+            </li>
+            <li class="dropdown settings">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span id="userName" >13911755733</span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu animated fadeInDown">
+                    <li><a href="/clbs/c/user/profile"><i class="fa fa-user"></i>&nbsp;&nbsp;用户个人信息</a></li>
+                    <li id="editPwd"><a href="/clbs/c/user/changePwd"><i class="fa fa-pencil-square-o"></i> 修改密码</a></li>
+                    <li><a href="javascript:void(0);" id="updateFontSize" ><i class="fa fa-font"></i> 修改字体大小</a></li>
+                    <li><a href="javascript:void(0);" onclick="pagesNav.logout()"><i class="fa fa-power-off"></i> 退出</a></li>
+                </ul>
+            </li>
+            <!--dataClock start-->
+            <li class="data-time">
+                <div class="dataClock clearfix">
+                    <div id="monthsDay"><p></p>
+                        <h1></h1><span></span></div>
+                    <div id="clockBox"><p id="clockAP"></p>
+                        <p id="clock"></p></div>
+                </div>
+            </li>
+        </ul>
+        <!-- 用户所属组织id -->
+        <input id="userGroupId" value="338c7dc2-384a-1037-8466-cb3a0ec2dddf" type="text" hidden="true" />
+        <!-- 用户所属组织name -->
+        <input id="userGroupName" value="威尔沃" type="text" hidden="true" />
+        <!-- 用户是否为admin -->
+        <input id="isAdmin" value="false" type="text" hidden="true" />
+        <!-- 用户授权截止日期 -->
+        <input id="userAuthorizationDate" value="" type="text" hidden="true" />
+        <!-- 用户被分配的角色 -->
+        <input id="allUserRole" value="[POWER_USER]" type="text" hidden="true" />
+        <!-- 用户菜单权限的url -->
+        <input id="permissionUrls" value="/m/basicinfo/enterprise/assignment/list,/v/temperatureDetection/temperatureDetectionSetting/list,javascript:void(0);,javascript:void(0);,javascript:void(0);,javascript:void(0);,/realTimeVideo/resource/list,/m/basicinfo/equipment/simcard/list,/m/forwardplatform/ipmgt/list,javascript:void(0);,/m/basicinfo/monitoring/vehicle/type/list,/sx/sxReportManagement/sxSpeedAlarmReport/list,javascript:void(0);,/m/reportManagement/speedReport/list,/m/basicinfo/enterprise/professionals/list,/m/switching/signal/list,/v/humidity/statistical/list,/v/temperatureDetection/temperatureStatistics/list,/a/alarmSetting/list,javascript:void(0);,/v/veerManagement/veerStatistics/list,/v/sensorConfig/vehiclePeripheral/list,/v/veerManagement/veerVehicleSet/list,/m/basicinfo/equipment/device/list,/v/meleMonitor/tyreSpecification/list,javascript:void(0);,/m/energy/energyContrast/list,/m/reportManagement/flowReport/list,/sx/sxReportManagement/offLineReport/list,/v/oilmgt/list,/sx/sxReportManagement/locationQualifiedRateReport/list,/c/role/list,/m/intercomplatform/personalized/list,javascript:void(0);,/m/infoconfig/infoinput/list,javascript:void(0);,/m/energy/idLingStandardEnergy/list,/sx/sxReportManagement/tiredAlarmReport/list,/v/workhourmgt/vbStatistic/list,/m/reportManagement/parkingReport/list,javascript:void(0);,/v/meleMonitor/mileStatistics/list,/m/connectionparamsset/list,/v/humidity/settings/list,/v/workhourmgt/vb/list,/access/platform/list,javascript:void(0);,/realTimeVideo/videoSetting/list,/v/veerManagement/veerSensor/list,/sx/sxReportManagement/sxSpeedViolationReport/list,/v/meleMonitor/mileMonitorSet/list,/m/switching/type/list,javascript:void(0);,/m/reportManagement/logSearch/list,javascript:void(0);,/m/intercomplatform/deviceconfig/list,/sx/sxReportManagement/shiftDataReport/list,/sx/sxReportManagement/tiredViolationReport/list,/m/intercomplatform/addrconfig/list,/m/basicinfo/monitoring/vehicle/list,/v/oilmassmgt/oilcalibration/list,/m/energy/mobileSourceBaseInfo/list,/v/oilmassmgt/oilvehiclesetting/list,/m/connectionparamsConfig/list,/c/user/list,/v/oilmassmgt/oilquantitystatistics/list,/v/oilmgt/fluxsensormgt/list,/m/personalized/ico/list,javascript:void(0);,/a/search/list,/v/monitoring/realTimeMonitoring,/v/meleMonitor/mileageDemarcate/list,/v/oilmassmgt/fueltankmgt/list,/m/forwardplatform/mf/list,/m/reportManagement/passengerFlowReport/list,javascript:void(0);,javascript:void(0);,/m/reportManagement/mileageReport/list,/m/basicinfo/monitoring/personnel/list,/v/oilmgt/fluxsensorbind/list,/m/reportManagement/media/list,/m/reportManagement/bigDataReport/list,javascript:void(0);,javascript:void(0);,/v/carbonmgt/basicManagement/fuelPrice,/v/sensorConfig/vehiclePoll/list,javascript:void(0);,/m/basicinfo/equipment/rodsensor/list,/v/monitoring/trackPlayback,/v/meleMonitor/wheelSpeedSensor/list,/m/energy/travelEnergy/list,/m/reportManagement/alarmReport/list,#,/v/temperatureDetection/temperatureSensor/list,/m/reportManagement/onlineReport/list,/m/reportManagement/speedAlarmReport/list,/realTimeVideo/video/list,/m/reportManagement/logSearch/videoLog,javascript:void(0);,/v/monitoring/command/list,javascript:void(0);,/sx/sxReportManagement/beforeDawnReport/list,/v/humidity/management/list,/m/basicinfo/monitoring/ThingInfo/list,/sx/sxReportManagement/abnormalTrajectoryReport/list,javascript:void(0);,/v/workhourmgt/vbbind/list" type="text" hidden="true" />
+        <!-- help -->
+        <div class="modal fade bs-example-modal-md" id="helpCenterModal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md" style="margin:10% auto;">
+            <div class="modal-content">
+              <div class="modal-header" style="border-bottom: none;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              </div>
+              <div class="modal-body">
+                <p><strong>Windows系统：</strong></p>
+                <p>1. 按住ctrl键，使用鼠标滚轮滑动进行调整，调整后点击浏览器刷新按钮生效。</p>
+                <p>2. 按住ctrl键，点击加号（+）是放大，减号（-）是缩小，数字0是恢复默认，调整后点击浏览器刷新按钮生效。</p>
+                <p><strong>Mac系统：</strong></p>
+                <p>1. 按住command键，使用鼠标滚轮滑动进行调整，调整后点击浏览器刷新按钮生效。
+                <p>2. 按住command键，点击加号（+）是放大，减号（-）是缩小，数字0是恢复默认，调整后点击浏览器刷新按钮生效。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</header>
  <script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
             <script src="{% static 'virvo/resources/js/jquery.cookie.js' %}"></script>
             <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
@@ -43,9 +121,7 @@
 <script>
 var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 </script>
-{% comment %}
 <script src="/clbs/wro/topPublic.js"></script>
-{% endcomment %}
       <section class="main-content-wrapper">
             <!--sidebar start-->
             {% include 'sidenav.html' %}
@@ -267,7 +343,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 
     {% endblock %}
 </body>
-    <!-- <script>
+    <script>
             $(function(){
                 $.ajax({
                     url: '/clbs/inspectAuthorizationDate',
@@ -292,5 +368,5 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                     },
                 });
             });
-    </script> -->
+    </script>
 </html>

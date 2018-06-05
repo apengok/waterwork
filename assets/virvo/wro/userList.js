@@ -206,8 +206,10 @@
                     enable : true,
                     autoParam : [ "id" ],
                     dataType : "json",
+                    data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
-                        "isOrg" : "1"
+                        "isOrg" : "1",
+                        // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: groupUserManage.ajaxDataFilter
                 },
@@ -283,8 +285,8 @@
                 var parentNode = nodes[0].getParentNode();
                 $.ajax({
                     type: 'POST',
-                    url: '/clbs/c/group/delete',
-                    data: {"id": treeNode.id},
+                    url: 'user/group/delete/',
+                    data: {"pId": treeNode.id},
                     async:false,
                     dataType: 'json',
                     success: function (data) {
@@ -302,7 +304,7 @@
                                 async:false,
                                 dataType: 'json',
                                 success: function (data) {
-                                    var addData = JSON.parse(data);             
+                                    var addData = eval(data);// JSON.parse(data);             
                                     var nodeName;
                                     if(preNode != null){
                                         nodeName = preNode.name;
@@ -396,12 +398,12 @@
                     + treeNode.tId
                     + "' title='编辑' href='user/group/edit/"
                     + pid
-                    + "' data-target='#commonWin' data-toggle='modal'></span>";
+                    + "/' data-target='#commonWin' data-toggle='modal'></span>";
             var detailsStr = "<span class='button details' id='detailsBtn_"
                     + treeNode.tId
-                    + "' title='详情'  href='/clbs/c/group/detail.gsp?pid="
+                    + "' title='详情'  href='user/group/detail/"
                     + pid
-                    + "' data-target='#commonWin' data-toggle='modal'</span>";
+                    + "/' data-target='#commonWin' data-toggle='modal'</span>";
             sDetails.after(detailsStr);
             sEdit.after(editStr);
             sObj.after(addStr);

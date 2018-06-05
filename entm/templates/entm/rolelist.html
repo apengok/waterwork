@@ -20,7 +20,7 @@
                                   <div class="ToolPanel">
                                       <div class="bars pull-left">
                                           <div class="btn-group pull-left barsMargin" role="group">
-                                              <form role="form"> 
+                                              <form role="form"> {% csrf_token %}
                                                  <label><input type="text" class="Inlinesearch form-control" id="simpleQueryParam" name="simpleQueryParam" placeholder="请输入角色名称"></label>
                                                       <button type="button" id="search_button" onclick="myTable.requestData()"
                                                               class="btn btn-outline btn-default">搜索
