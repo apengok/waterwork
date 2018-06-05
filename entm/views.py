@@ -252,7 +252,8 @@ def oranizationtree(request):
             'name':o.name,
             'id':o.cid,
             'pId':o.pId,
-            'type':'group'
+            'type':'group',
+            'uuid':o.uuid
             })
 
     return HttpResponse(json.dumps(organtree)) 
@@ -747,23 +748,23 @@ class UserMangerView(TemplateView):
 
 
 """
-User creation, manager
+User add, manager
 """
-class UserCreateMangerView(CreateView):
+class UserAddView(AjaxableResponseMixin,CreateView):
     model = User
-    template_name = 'dma/user_create.html'
+    template_name = 'entm/useradd.html'
     form_class = RegisterForm
     success_url = reverse_lazy('dma:organ_users');
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
-        return super(UserCreateMangerView, self).dispatch(*args, **kwargs)
+        return super(UserAddView, self).dispatch(*args, **kwargs)
 
 
 """
 User edit, manager
 """
-class UserUpdateManagerView(UpdateView):
+class UserEditView(AjaxableResponseMixin,UpdateView):
     model = User
     form_class = UserDetailChangeForm
     template_name = 'dma/user_edit_manager.html'
@@ -772,19 +773,19 @@ class UserUpdateManagerView(UpdateView):
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
         self.user_id = kwargs['pk']
-        return super(UserUpdateManagerView, self).dispatch(*args, **kwargs)
+        return super(UserEditView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
         form.save()
-        return super(UserUpdateManagerView,self).form_valid(form)
+        return super(UserEditView,self).form_valid(form)
         # role_list = MyRoles.objects.get(id=self.role_id)
         # return HttpResponse(render_to_string('dma/role_manager.html', {'role_list':role_list}))
 
     def get_context_data(self, **kwargs):
-        context = super(UserUpdateManagerView, self).get_context_data(**kwargs)
+        context = super(UserEditView, self).get_context_data(**kwargs)
         context['page_title'] = '修改用户'
         return context
 

@@ -28,8 +28,8 @@ urlpatterns = [
     #用户
     url(r'^usermanager/?$', views.UserMangerView.as_view(), name='usermanager'),#组织和用户管理
     url(r'^user/list/$',views.userlist,name='userlist'),
-    url(r'^user/add',views.useradd,name='useradd'),
-    url(r'^user/edit',views.useredit,name='useredit'),
+    url(r'^user/add',views.UserAddView.as_view(),name='useradd'),
+    url(r'^user/edit',views.UserEditView.as_view(),name='useredit'),
     url(r'^user/delete_',views.userdelete,name='userdelete'),
     url(r'^user/deletemore',views.userdeletemore,name='userdeletemore'),
 

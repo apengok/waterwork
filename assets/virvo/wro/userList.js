@@ -766,7 +766,7 @@
    	   		$("input[name='subChkTwo']").prop("checked", e.checked);
       	},
       	addId : function (){
-      		$("#addId").attr("href","/clbs/c/user/newuser?uuid="+selectTreeIdAdd+"");
+      		$("#addId").attr("href","user/add/newuser?uuid="+selectTreeIdAdd+"");
       	},
         validates:function () {//增加运营资质类别时的数据验证
       	   return $("#eadOperation").validate({
