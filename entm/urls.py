@@ -13,6 +13,8 @@ urlpatterns = [
 
     url(r'^(?P<page>.+\.html)$', views.StaticView.as_view()),
 
+    url(r'^(?P<room_name>[^/]+)/$', views.room, name='room'),
+
     # tree list etc
     url(r'^role/choicePermissionTree',views.choicePermissionTree,name='choicePermissionTree'),
     url(r'^user/oranizationtree/',views.oranizationtree,name='oranizationtree'),

@@ -20,7 +20,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import admin
 from django.contrib.auth.models import Permission
-
+from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 from .forms import OrganizationsAddForm,OrganizationsEditForm
 from . models import Organizations
@@ -163,6 +163,11 @@ class StaticView(TemplateView):
         except TemplateDoesNotExist:
             raise Http404()
 
+
+def room(request, room_name):
+    return render(request, 'entm/room.html', {
+        'room_name_json': mark_safe(json.dumps(room_name))
+    })
 
 class AjaxableResponseMixin(object):
     """
