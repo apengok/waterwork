@@ -1,5 +1,5 @@
-<form id="addForm" role="form" action="/clbs/c/user/newuser"
-      method="post" class="form-horizontal">
+{% load staticfiles %}
+<form id="addForm" role="form" action="{% url 'entm:useradd' %}" method="post" class="form-horizontal">{% csrf_token %}
     <div class="modal-header">
         <button type="button" id="doXAdd" class="close" data-dismiss="modal"
                 aria-hidden="true">&times;</button>
@@ -13,7 +13,7 @@
                     <label class="col-md-3 control-label"><label
                             class="text-danger">*</label> 用户名：</label>
                     <div class="col-md-7">
-                        <input name="username" placeholder="请输入用户名" type="text"
+                        <input name="user_name" placeholder="请输入用户名" type="text"
                                id="usernameAdd" class="form-control" />
                     </div>
                 </div>
@@ -37,9 +37,9 @@
                        hidden="true" />
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label
-                            class="text-danger">*</label> 所属企业：</label>
+                            class="text-danger">*</label> 所属企业：</label> <!-- groupName -->
                     <div class="has-feedback col-md-7">
-                        <input name="groupName"  value="" class="form-control" id="zTreeCitySelAdd"
+                        <input name="belongto"  value="" class="form-control" id="zTreeCitySelAdd"
                                placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;" type="text" />
                         <span class="fa fa-chevron-down form-control-feedback"
                               aria-hidden="true" id="zTreeCitySelSpan"></span>
@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label class="text-danger"></label> 状态：</label>
                     <div class="col-md-7">
-                        <select id="stateAdd" class="form-control" name="state">
+                        <select id="stateAdd" class="form-control" name="is_active">
                             <option value = "1" >启用</option>
                             <option value = "0" >停用</option>
                         </select>
@@ -62,7 +62,7 @@
                     <label class="col-md-3 control-label">授权截止日期：</label>
                     <div class="col-md-7">
                         <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
-                               id="authorizationDateAdd" name="authorizationDate"
+                               id="authorizationDateAdd" name="expire_date"
                                placeholder="请选择授权截止日期" />
                     </div>
                 </div>
@@ -71,28 +71,28 @@
                     <label class="col-md-3 control-label"><label
                             class="text-danger"></label> 真实姓名：</label>
                     <div class="col-md-7">
-                        <input name="fullName" placeholder="请输入真实姓名" type="text"
+                        <input name="real_name" placeholder="请输入真实姓名" type="text"
                                id="fullNameAdd" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">性别：</label>
                     <div class="col-md-7">
-                        <label class="radio-inline"><input type="radio" name="gender" value="1" checked="checked"> 男</label> 
-                        <label class="radio-inline"><input type="radio" name="gender" value="2"> 女</label>
+                        <label class="radio-inline"><input type="radio" name="sex" value="1" checked="checked"> 男</label> 
+                        <label class="radio-inline"><input type="radio" name="sex" value="2"> 女</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">电话号码：</label>
                     <div class="col-md-7">
-                        <input name="mobile" placeholder="请输入电话号码" type="text" id="mobileAdd"
+                        <input name="phone_number" placeholder="请输入电话号码" type="text" id="mobileAdd"
                                class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">邮箱：</label>
                     <div class="col-md-7">
-                        <input name="mail" placeholder="请输入邮箱" type="text" id="mailAdd"
+                        <input name="email" placeholder="请输入邮箱" type="text" id="mailAdd"
                                class="form-control" />
                     </div>
                 </div>
@@ -131,5 +131,7 @@
     var userNameMixlength="\u59D3\u540D\u81F3\u5C11\u8F93\u51652\u4F4D";
 
 </script>
-<script src="/clbs/wro/userAdd.js"></script>
-<script type="text/javascript" src="/clbs/resources/js/sendAjax.js"></script>
+<script src="{% static 'virvo/wro/userAdd.js' %}"></script>
+<script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
+
+

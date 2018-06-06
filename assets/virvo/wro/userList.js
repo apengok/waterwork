@@ -64,8 +64,8 @@
                         // var arrayObj = row.id.all;
                         // var idStr = arrayObj.join(",");
                         var editUrlPath = myTable.editUrl + idStr + "/"; // 修改地址
-                        var roleUrlPre = '/clbs/c/user/roleList_{id}.gsp';
-                        var VehicleUrlPre = '/clbs/c/user/vehiclePer_{id}.gsp';
+                        var roleUrlPre = 'user/roleList_/{id}/';
+                        var VehicleUrlPre = 'user/assign_stn/{id}/';
                         var result = '';
                         var userId = $("#currentUserId").val();
                         var userId2 = $("#currentUserId").attr("value");

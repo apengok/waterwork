@@ -6,7 +6,7 @@
         init: function(){
             var setting = {
                 async : {
-                    url : "/clbs/m/basicinfo/enterprise/professionals/tree",
+                    url : "user/oranizationtree/",
                     tyoe : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -122,7 +122,7 @@
                 if(userAdd.validates()){
                     $("#addForm").ajaxSubmit(function(data) {
                         if (data != null) {
-                            var result = $.parseJSON(data);
+                            var result = eval(data);// $.parseJSON(data);
                             if (result.success) {
                                 if (result.obj.flag == 1){
                                     $("#commonWin").modal("hide");
@@ -142,7 +142,7 @@
                 if(userAdd.fulatAdminValidates()){
                     $("#addForm").ajaxSubmit(function(data) {
                         if (data != null) {
-                            var result = $.parseJSON(data);
+                            var result =eval(data);// $.parseJSON(data);
                             if (result.success) {
                                 if (result.obj.flag == 1){
                                     $("#commonWin").modal("hide");
@@ -172,7 +172,7 @@
                         remote :{
                             type:"post",
                             async:false,
-                            url:"/clbs/c/user/verifyUserName" ,
+                            url:"user/verifyUserName/" ,
                             data:{
                                 userName:function(){
                                     return $("#usernameAdd").val();}
@@ -269,7 +269,7 @@
                         remote :{
                             type:"post",
                             async:false,
-                            url:"/clbs/c/user/verifyUserName" ,
+                            url:"user/verifyUserName/" ,
                             data:{
                                 userName:function(){
                                     return $("#usernameAdd").val();}
@@ -311,7 +311,7 @@
                         remote: {
                             type:"post",
                             async:false,
-                            url:"/clbs/c/user/verification" ,
+                            url:"user/verification/" ,
                             data:{
                                 authorizationDate:function(){
                                     return $("#authorizationDateAdd").val();}

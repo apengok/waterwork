@@ -154,6 +154,7 @@ class RegisterForm(forms.ModelForm):
 
     def save(self, commit=True):
         # Save the provided password in hashed format
+        print('account register form save?')
         user = super(RegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         user.active = False #send confirm email

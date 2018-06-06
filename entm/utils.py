@@ -37,6 +37,35 @@ def unique_cid_generator(instance, new_cid=None):
         return unique_cid_generator(instance, new_cid=new_cid)
     return cid
 
+
+def unique_uuid_generator(instance, new_uuid=None):
+    """
+    This is for a Django project and it assumes your instance 
+    has a model with a slug field and a title character (char) field.
+    """
+    if new_uuid is not None:
+        uuid = new_uuid
+    else:
+        uuid = "{rand1}_{randstr}".format(
+                    rand1=random_string_generator(size=6),
+                    randstr=random_string_generator(size=4)
+                )
+    # if uuid in DONT_USE:
+    #     new_uuid = "{uuid}_{randstr}".format(
+    #                 uuid=uuid,
+    #                 randstr=random_string_generator(size=4)
+    #             )
+    #     return unique_uuid_generator(instance, new_uuid=new_uuid)
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(uuid=uuid).exists()
+    if qs_exists:
+        new_uuid = "{rand1}_{randstr}".format(
+                    rand1=random_string_generator(size=6),
+                    randstr=random_string_generator(size=4)
+                )
+        return unique_uuid_generator(instance, new_uuid=new_uuid)
+    return uuid
+
 def unique_slug_generator(instance, new_slug=None):
     """
     This is for a Django project and it assumes your instance 

@@ -17,7 +17,7 @@
         init:function(){
             var setting = {
                 async : {
-                    url : "/clbs/m/basicinfo/enterprise/professionals/tree",
+                    url : "user/oranizationtree/",
                     tyoe : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -269,7 +269,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"/clbs/c/user/verification" ,
+                                url:"user/verification" ,
                                 data:{
                                     authorizationDate:function(){return $("#authorizationDateEdit").val();}
                                 },

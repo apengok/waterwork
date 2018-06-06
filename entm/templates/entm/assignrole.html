@@ -1,9 +1,9 @@
 <form id="userRolesForm"
-    role="form" action="/clbs/c/user/updateRolesByUser.gsp" method="post" class="form-horizontal">
+    role="form" action="{% url 'entm:roleList_' object_id %}" method="post" class="form-horizontal">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"
             aria-hidden="true">&times;</button>
-        <h4 class="modal-title">分配角色 : 0951123456</h4>
+        <h4 class="modal-title">分配角色 : {{ user.user_name }}</h4>
     </div>
     <div class="modal-body">
         <div class="row">
@@ -11,17 +11,19 @@
                 name="uid" value="0951123456" type="hidden" />
             <div class="col-xs-12">
                 <ul class="widget-todo">
+                    {% for r in role_list %}
                     <li class="clearfix">
                         <label class="checkbox-outline"> 
                             <input type="checkbox"
-                                name="roleNames" disabled
-                                id="普通管理员" value="POWER_USER" />
-                            <label readonly style="text-decoration: none;">普通管理员</label>
+                                name="name" disabled
+                                id="{{ r.name }}" value="{{ r.id }}" />
+                            <label readonly style="text-decoration: none;">{{ r.name }}</label>
                         </label> 
                     
                          
                         
                     </li>
+                    {% endfor %}
                     <li class="clearfix">
                          
                     
@@ -71,7 +73,7 @@ function checkValue(clickLable){
     var userRoles = {
         doSubmit: function(){
             var roleIds = [];
-            $("input[name='roleNames']:checked").each(function(index,item){
+            $("input[name='name']:checked").each(function(index,item){
                 var roleName = $(this).attr("value");
                 roleIds.push(roleName);
              });
@@ -100,7 +102,7 @@ function checkValue(clickLable){
         myTable.add('commonSmWin', 'userRolesForm', null, null);
         $("#doSubmitRoles").on("click",userRoles.doSubmit);
         var startRoleIds = [];//窗体加载时多选框的值
-        $("input[name='roleNames']:checked").each(function(index,item){
+        $("input[name='name']:checked").each(function(index,item){
             var roleName = $(this).attr("value");
             startRoleIds.push(roleName);
         });

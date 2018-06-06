@@ -27,7 +27,7 @@ from . models import Organizations
 from accounts.models import User,MyRoles
 from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailChangeForm
 
-from .utils import unique_cid_generator
+from .utils import unique_cid_generator,unique_uuid_generator
 
 # from django.core.urlresolvers import reverse_lazy
 
@@ -315,6 +315,8 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
         
         instance.pId = cid
         instance.cid = unique_cid_generator(instance,new_cid=cid)
+
+        instance.uuid = unique_uuid_generator(instance)
         
 
 
@@ -541,6 +543,14 @@ def userlist(request):
     # return JsonResponse([result],safe=False)
 
 
+def verifyUserName(request):
+    print('verifyUserName:',request)
+    return JsonResponse({'success':True})
+
+def verification(request):
+    print('verification:',request)
+    return JsonResponse({'success':True})
+
 def useredit(request):
     print(request)
 
@@ -754,11 +764,25 @@ class UserAddView(AjaxableResponseMixin,CreateView):
     model = User
     template_name = 'entm/useradd.html'
     form_class = RegisterForm
-    success_url = reverse_lazy('dma:organ_users');
+    success_url = reverse_lazy('entm:usermanager');
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
+        print('user add dispatch',args,kwargs)
         return super(UserAddView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print('user  add here?:',self.request.POST)
+        # print(form)
+        # do something
+        instance = form.save(commit=False)
+        
+
+
+        return super(UserAddView,self).form_valid(form)   
 
 
 """
@@ -767,12 +791,12 @@ User edit, manager
 class UserEditView(AjaxableResponseMixin,UpdateView):
     model = User
     form_class = UserDetailChangeForm
-    template_name = 'dma/user_edit_manager.html'
-    success_url = reverse_lazy('dma:organ_users')
+    template_name = 'entm/useredit.html'
+    success_url = reverse_lazy('entm:usermanager')
 
     # @method_decorator(permission_required('dma.change_stations'))
     def dispatch(self, *args, **kwargs):
-        self.user_id = kwargs['pk']
+        # self.user_id = kwargs['pk']
         return super(UserEditView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
@@ -784,15 +808,15 @@ class UserEditView(AjaxableResponseMixin,UpdateView):
         # role_list = MyRoles.objects.get(id=self.role_id)
         # return HttpResponse(render_to_string('dma/role_manager.html', {'role_list':role_list}))
 
-    def get_context_data(self, **kwargs):
-        context = super(UserEditView, self).get_context_data(**kwargs)
-        context['page_title'] = '修改用户'
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(UserEditView, self).get_context_data(**kwargs)
+    #     context['page_title'] = '修改用户'
+    #     return context
 
 
 class AssignRoleView(TemplateView):
     """docstring for AssignRoleView"""
-    template_name = 'dma/assign_role.html'
+    template_name = 'entm/assignrole.html'
         
     def get_context_data(self, **kwargs):
         context = super(AssignRoleView, self).get_context_data(**kwargs)
@@ -817,6 +841,36 @@ class AssignRoleView(TemplateView):
         user.save()
 
         # return super(AssignRoleView,self).render_to_response(context)
+        return redirect(reverse_lazy('dma:organ_users'))
+
+
+class AssignStnView(TemplateView):
+    """docstring for AssignRoleView"""
+    template_name = 'entm/assignstn.html'
+        
+    def get_context_data(self, **kwargs):
+        context = super(AssignStnView, self).get_context_data(**kwargs)
+        context['page_title'] = '分配角色'
+        context['role_list'] = MyRoles.objects.all()
+        pk = kwargs['pk']
+        context['object_id'] = pk
+        context['user'] = User.objects.get(pk=pk)
+        return context
+
+    def post(self,request,*args,**kwargs):
+        print (request.POST)
+        print(kwargs)
+        context = self.get_context_data(**kwargs)
+
+        role = request.POST.get("checks[]")
+        user = context['user']
+        # user.Role = role
+        group = MyRoles.objects.filter(name__iexact=role).first()
+        print(group)
+        user.groups.add(group)
+        user.save()
+
+        # return super(AssignStnView,self).render_to_response(context)
         return redirect(reverse_lazy('dma:organ_users'))
 
 

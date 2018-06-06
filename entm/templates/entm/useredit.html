@@ -1,5 +1,5 @@
-<form id="editForm" role="form" action="/clbs/c/user/edit.gsp" class="form-horizontal"
-    method="post">
+{% load staticfiles %}
+<form id="editForm" role="form" action="{% url 'entm:useredit' object.id %}" class="form-horizontal" method="post">{% csrf_token %}
     <div class="modal-header">
         <button type="button" id="doXEdit" class="close" data-dismiss="modal"
             aria-hidden="true">&times;</button>
@@ -8,14 +8,14 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
-                <input id = "userId"  type="text" hidden="true" name="id" value="uid=0951123456,ou=ORG_8a4843cc-7c83-42d7-91c2-36a9f37d04b1,ou=ORG_187888e1-7a09-43cf-bd46-2717b3d4382d,ou=organization" />
+                <input id = "userId"  type="text" hidden="true" name="id" value="{{ form.pk.value }}" />
                 <input id="sign" type="text" hidden="true" name="sign" value="" />
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label
                         class="text-danger">*</label> 用户名：</label>
                     <div class="col-md-7">
                         <input readonly="true" placeholder="请输入用户名"
-                            type="text" class="form-control" id="username" name="username" value="0951123456" />
+                            type="text" class="form-control" id="username" name="user_name" value="{{ form.user_name.value|default:''}}" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -37,9 +37,9 @@
                     <label class="col-md-3 control-label"><label
                         class="text-danger">*</label> 所属企业：</label>
                     <div class="has-feedback col-md-7">
-                        <input name="groupName"
+                        <input name="belongto"
                             class="form-control" id="zTreeCitySelEdit" placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
-                            type="text" value="宁夏客户群" />
+                            type="text" value="{{ form.belongto.value }}" />
                             <span id="zTreeCitySelSpan" class="fa fa-chevron-down form-control-feedback" aria-hidden="true"></span>
                         <div id="zTreeContentEdit" class="ztreeModelBox" style="top:36px!important">
                             <ul id="ztreeDemoEdit" class="ztree"></ul>
@@ -49,7 +49,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label class="text-danger"></label> 状态：</label>
                     <div class="col-md-7">
-                        <select class="form-control" id="state" name="state">
+                        <select class="form-control" id="state" name="is_active">
                             <option value = "1" selected="selected" >启用</option>
                             <option value = "0" >停用</option>
                         </select>
@@ -59,35 +59,35 @@
                     <label class="col-md-3 control-label">授权截止日期：</label>
                         <div class="col-md-7">
                             <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
-                                    id="authorizationDateEdit" name="authorizationDate" value="2018-11-22 "/>
+                                    id="authorizationDateEdit" name="expire_date" value="{{ form.expire_date.value|default:''}} "/>
                         </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 真实姓名：</label>
                     <div class="col-md-7">
                         <input placeholder="请输入真实姓名" type="text"
-                            class="form-control" id="fullName" name="fullName" value="" />
+                            class="form-control" id="fullName" name="real_name" value="{{ form.real_name.value|default:''}}" />
                     </div>
                 </div>
                  <div class="form-group">
                     <label class="col-md-3 control-label">性别：</label>
                     <div class="col-md-7">
-                        <label class="radio-inline"><input type="radio" name="gender" value="1" checked="checked" id="gender1"> 男</label>
-                        <label class="radio-inline"><input type="radio" name="gender" value="2" id="gender2"> 女</label>
+                        <label class="radio-inline"><input type="radio" name="sex" value="1" checked="checked" id="gender1"> 男</label>
+                        <label class="radio-inline"><input type="radio" name="sex" value="2" id="gender2"> 女</label>
                     </div>
                 </div> 
                 <div class="form-group">
                     <label class="col-md-3 control-label">电话号码：</label>
                     <div class="col-md-7">
                         <input placeholder="请输入电话号码" type="text"
-                            class="form-control" id="mobile" name="mobile" value="" />
+                            class="form-control" id="mobile" name="phone_number" value="{{ form.phone_number.value|default:'' }}" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">邮箱：</label>
                     <div class="col-md-7">
                         <input placeholder="请输入邮箱" type="text"
-                            class="form-control" id="mail" name="mail" value="" />
+                            class="form-control" id="mail" name="email" value="{{ form.email.value|default:'' }}" />
                     </div>
                 </div>
             </div>
@@ -126,5 +126,6 @@
     var publicEditError = "\u4FEE\u6539\u5931\u8D25";
     var userGroupSelectNull = "\u8BF7\u9009\u62E9\u7EC4\u7EC7";
 </script>
-<script src="/clbs/wro/userEdit.js"></script>
-<script type="text/javascript" src="/clbs/resources/js/sendAjax.js"></script>
+
+<script src="{% static 'virvo/wro/userEdit.js' %}"></script>
+<script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
