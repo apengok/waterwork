@@ -9,11 +9,11 @@ from . import views
 app_name = 'entm'
 urlpatterns = [
     
-    # url(r'^$', TemplateView.as_view(template_name='dma/home.html'),name='virvo_home'),
+    url(r'^$', TemplateView.as_view(template_name='_vbase.html'),name='virvo_home'),
 
     url(r'^(?P<page>.+\.html)$', views.StaticView.as_view()),
 
-    url(r'^(?P<room_name>[^/]+)/$', views.room, name='room'),
+    # url(r'^(?P<room_name>[^/]+)/$', views.room, name='room'),
 
     # tree list etc
     url(r'^role/choicePermissionTree',views.choicePermissionTree,name='choicePermissionTree'),

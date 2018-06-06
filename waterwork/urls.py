@@ -27,8 +27,8 @@ urlpatterns = [
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
     url(r'^admin/jsi18n', i18n_javascript),
     url(r'^admin/', admin.site.urls),
-    # url(r'^$',home,name='home'),
-    url(r'^$',TemplateView.as_view(template_name='_vbase.html'),name='home'),
+    url(r'^$',LoginView.as_view(), name='login'),
+    # url(r'^$',TemplateView.as_view(template_name='_vbase.html'),name='home'),
 
 
     url(r'^accounts/$', RedirectView.as_view(url='/account')),

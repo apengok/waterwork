@@ -22,13 +22,14 @@ from django.contrib import admin
 from django.contrib.auth.models import Permission
 from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
-from .forms import OrganizationsAddForm,OrganizationsEditForm
-from . models import Organizations
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from accounts.models import User,MyRoles
 from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailChangeForm
 
 from .utils import unique_cid_generator,unique_uuid_generator
-
+from .forms import OrganizationsAddForm,OrganizationsEditForm
+from . models import Organizations
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -604,7 +605,7 @@ def roledeletemore(request):
 
 
 # 角色管理
-class RolesMangerView(TemplateView):
+class RolesMangerView(LoginRequiredMixin,TemplateView):
     template_name = 'entm/rolelist.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -747,7 +748,7 @@ class RoleEditView(UpdateView):
 """
 组织和用户管理
 """
-class UserMangerView(TemplateView):
+class UserMangerView(LoginRequiredMixin,TemplateView):
     template_name = 'entm/userlist.html'
 
     def get_context_data(self, *args, **kwargs):

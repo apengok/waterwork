@@ -116,11 +116,12 @@ class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
 
 class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
     form_class = LoginForm
-    success_url = '/'
+    success_url = '/entm/'
     template_name = 'accounts/login.html'
-    default_next = '/'
+    default_next = '/entm/'
 
     def form_valid(self, form):
+        print('login form')
         next_path = self.get_next_url()
         return redirect(to=next_path)
         # return render(self.request,next_path,{})
