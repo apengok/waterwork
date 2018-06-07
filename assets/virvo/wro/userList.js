@@ -306,7 +306,7 @@
                                 async:false,
                                 dataType: 'json',
                                 success: function (data) {
-                                    var addData = eval(data);// JSON.parse(data);             
+                                    var addData = JSON.parse(data);             
                                     var nodeName;
                                     if(preNode != null){
                                         nodeName = preNode.name;
@@ -420,7 +420,7 @@
                         async:false,
                         dataType: 'json',
                         success: function (data) {
-                            var addData = eval(data);// JSON.parse(data);
+                            var addData =  JSON.parse(data);
                             oldData = addData.length;
                         },
                     });
@@ -434,7 +434,7 @@
                             async:false,
                             dataType: 'json',
                             success: function (data) {
-                                var addData = eval(data);// JSON.parse(data);     
+                                var addData =  JSON.parse(data);     
                                 if(addData.length != oldData){
                                     var lastData = addData[addData.length-1];           
                                     $.fn.zTree.init($("#treeDemo"), treeSetting, addData);
@@ -468,7 +468,7 @@
                             async:false,
                             dataType: 'json',
                             success: function (data) {
-                                var addData = eval(data);// JSON.parse(data);                 
+                                var addData =  JSON.parse(data);                 
                                 $.fn.zTree.init($("#treeDemo"), treeSetting, addData);  
                                 var treeObjNew = $.fn.zTree.getZTreeObj("treeDemo");
                                 if (nodes != null && nodes.length > 0){

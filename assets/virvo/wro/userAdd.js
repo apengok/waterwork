@@ -122,7 +122,7 @@
                 if(userAdd.validates()){
                     $("#addForm").ajaxSubmit(function(data) {
                         if (data != null) {
-                            var result = eval(data);// $.parseJSON(data);
+                            var result =  $.parseJSON(data);
                             if (result.success) {
                                 if (result.obj.flag == 1){
                                     $("#commonWin").modal("hide");
@@ -142,7 +142,7 @@
                 if(userAdd.fulatAdminValidates()){
                     $("#addForm").ajaxSubmit(function(data) {
                         if (data != null) {
-                            var result =eval(data);// $.parseJSON(data);
+                            var result = $.parseJSON(data);
                             if (result.success) {
                                 if (result.obj.flag == 1){
                                     $("#commonWin").modal("hide");

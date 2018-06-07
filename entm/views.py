@@ -166,8 +166,8 @@ class StaticView(TemplateView):
 
 
 def room(request, room_name):
-    return render(request, 'entm/room.html', {
-        'room_name_json': mark_safe(json.dumps(room_name))
+    return render(request, "entm/room.html", {
+        "room_name_json": mark_safe(json.dumps(room_name))
     })
 
 class AjaxableResponseMixin(object):
@@ -177,36 +177,36 @@ class AjaxableResponseMixin(object):
     """
     def form_invalid(self, form):
         response = super(AjaxableResponseMixin,self).form_invalid(form)
-        # print('dasf:',form.cleaned_data.get('register_date'))
-        err_str = ''
+        # print("dasf:",form.cleaned_data.get("register_date"))
+        err_str = ""
         for k,v in form.errors.items():
             print(k,v)
             err_str += v[0]
         if self.request.is_ajax():
             data = {
-                'success': False,
-                'obj':{
-                    'flag':0,
-                    'errMsg':err_str
+                "success": False,
+                "obj":{
+                    "flag":0,
+                    "errMsg":err_str
                     }
             }
             print(form.errors)
-            return JsonResponse(data)
+            return HttpResponse(json.dumps(data)) #JsonResponse(data)
             # return JsonResponse(form.errors, status=400)
         else:
             return response
 
     def form_valid(self, form):
-        # We make sure to call the parent's form_valid() method because
+        # We make sure to call the parent"s form_valid() method because
         # it might do some processing (in the case of CreateView, it will
         # call form.save() for example).
         response = super(AjaxableResponseMixin,self).form_valid(form)
         if self.request.is_ajax():
             data = {
-                'success': True,
-                'obj':{'flag':1}
+                "success": True,
+                "obj":{"flag":1}
             }
-            return JsonResponse(data)
+            return HttpResponse(json.dumps(data)) #JsonResponse(data)
         else:
             return response
 
@@ -214,8 +214,8 @@ def choicePermissionTree(request):
 
 
 
-    roleid = request.POST.get('roleId') or -1
-    print(' get choicePermissionTree',roleid)
+    roleid = request.POST.get("roleId") or -1
+    print(" get choicePermissionTree",roleid)
 
     if roleid < 0:
         return HttpResponse(json.dumps(PERMISSION_TREE))
@@ -232,17 +232,17 @@ def choicePermissionTree(request):
         
 
         for pt in ptree:
-            nodeid = pt['id']
-            node_edit = '{}_edit'.format(nodeid)
-            p_edit = pt['edit']
+            nodeid = pt["id"]
+            node_edit = "{}_edit".format(nodeid)
+            p_edit = pt["edit"]
 
-            node = [n for n in ctree if n['id']==nodeid][0]
+            node = [n for n in ctree if n["id"]==nodeid][0]
             if p_edit:
-                node['checked'] = 'true'
-                node_sub = [n for n in ctree if n['id']==node_edit][0]
-                node_sub['checked'] = 'true'
+                node["checked"] = "true"
+                node_sub = [n for n in ctree if n["id"]==node_edit][0]
+                node_sub["checked"] = "true"
             else:
-                node['checked'] = 'true'
+                node["checked"] = "true"
             
 
 
@@ -255,11 +255,11 @@ def oranizationtree(request):
     organs = Organizations.objects.all()
     for o in organs:
         organtree.append({
-            'name':o.name,
-            'id':o.cid,
-            'pId':o.pId,
-            'type':'group',
-            'uuid':o.uuid
+            "name":o.name,
+            "id":o.cid,
+            "pId":o.pId,
+            "type":"group",
+            "uuid":o.uuid
             })
 
     return HttpResponse(json.dumps(organtree)) 
@@ -267,8 +267,8 @@ def oranizationtree(request):
 def findOperations(request):
 
     operarions_list = {
-        # "exceptionDetailMsg":'',
-        # "msg":'',
+        # "exceptionDetailMsg":"",
+        # "msg":"",
         "obj":{
                 "operation":[
                 {"explains":"自来水公司","id":"waterworks","operationType":"自来水公司"},
@@ -286,7 +286,7 @@ def findOperations(request):
 # def groupadd(request):
 #     print(request)
 
-#     return HttpResponse(json.dumps([{'ok':1}]))
+#     return HttpResponse(json.dumps([{"ok":1}]))
 
 
 """
@@ -294,30 +294,30 @@ group add
 """
 class UserGroupAddView(AjaxableResponseMixin,CreateView):
     model = Organizations
-    template_name = 'entm/groupadd.html'
+    template_name = "entm/groupadd.html"
     form_class = OrganizationsAddForm
-    success_url = reverse_lazy('entm:usermanager');
+    success_url = reverse_lazy("entm:usermanager");
 
-    # @method_decorator(permission_required('dma.change_stations'))
+    # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        # print('dispatch',args,kwargs)
-        if self.request.method == 'GET':
-            cid = self.request.GET.get('id')
-            pid = self.request.GET.get('pid')
-            kwargs['cid'] = cid
-            kwargs['pId'] = pid
+        # print("dispatch",args,kwargs)
+        if self.request.method == "GET":
+            cid = self.request.GET.get("id")
+            pid = self.request.GET.get("pid")
+            kwargs["cid"] = cid
+            kwargs["pId"] = pid
         return super(UserGroupAddView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        # print('user group add here?:',self.request.POST)
+        # print("user group add here?:",self.request.POST)
         # print(form)
         # do something
         instance = form.save(commit=False)
         instance.is_org = True
-        cid = self.request.POST.get('pId','oranization')
+        cid = self.request.POST.get("pId","oranization")
         
         instance.pId = cid
         instance.cid = unique_cid_generator(instance,new_cid=cid)
@@ -334,30 +334,30 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
     #     return context
 
     # def get_form_kwargs(self, *args, **kwargs):
-    #     print('get form kwargs',args,kwargs)
+    #     print("get form kwargs",args,kwargs)
     #     form_kwargs = super(UserGroupAddView, self).get_form_kwargs(*args, **kwargs)
         
     #     return form_kwargs
 
     def get(self,request, *args, **kwargs):
-        print('get::::',args,kwargs)
+        print("get::::",args,kwargs)
         form = super(UserGroupAddView, self).get_form()
         # Set initial values and custom widget
         initial_base = self.get_initial() #Retrieve initial data for the form. By default, returns a copy of initial.
-        # initial_base['menu'] = Menu.objects.get(id=1)
-        initial_base['cid'] = kwargs.get('cid')
-        initial_base['pId'] = kwargs.get('pId')
+        # initial_base["menu"] = Menu.objects.get(id=1)
+        initial_base["cid"] = kwargs.get("cid")
+        initial_base["pId"] = kwargs.get("pId")
         form.initial = initial_base
-        # form.fields['cid'].value = kwargs.get('cid')
-        # form.fields['pId'].value = kwargs.get('pid')
-        # form.fields['name'].widget = forms.widgets.Textarea()
+        # form.fields["cid"].value = kwargs.get("cid")
+        # form.fields["pId"].value = kwargs.get("pid")
+        # form.fields["name"].widget = forms.widgets.Textarea()
         # return response using standard render() method
         return render(request,self.template_name,
-                      {'form':form,})
+                      {"form":form,})
 
     
     # def post(self,request,*args,**kwargs):
-    #     print('do you been here 123?')
+    #     print("do you been here 123?")
     #     print (request.POST)
     #     print(kwargs)
         
@@ -368,7 +368,7 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
         
 
     #     # return super(AssignRoleView,self).render_to_response(context)
-    #     return redirect(reverse_lazy('entm:groupadd'))
+    #     return redirect(reverse_lazy("entm:groupadd"))
 
 
 
@@ -378,19 +378,19 @@ Group edit, manager
 class UserGroupEditView(AjaxableResponseMixin,UpdateView):
     model = Organizations
     form_class = OrganizationsEditForm
-    template_name = 'entm/groupedit.html'
-    success_url = reverse_lazy('entm:rolemanager');
+    template_name = "entm/groupedit.html"
+    success_url = reverse_lazy("entm:rolemanager");
 
-    # @method_decorator(permission_required('dma.change_stations'))
+    # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        # self.role_id = kwargs['pk']
+        # self.role_id = kwargs["pk"]
         return super(UserGroupEditView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('group update here?:',self.request.POST)
+        print("group update here?:",self.request.POST)
         # print(form)
         # do something
         
@@ -400,7 +400,7 @@ class UserGroupEditView(AjaxableResponseMixin,UpdateView):
 
     def get_object(self):
         print(self.kwargs)
-        return Organizations.objects.get(cid=self.kwargs['pId'])
+        return Organizations.objects.get(cid=self.kwargs["pId"])
         
 
 """
@@ -409,48 +409,48 @@ Group Detail, manager
 class UserGroupDetailView(DetailView):
     model = Organizations
     form_class = OrganizationsEditForm
-    template_name = 'entm/groupdetail.html'
-    # success_url = reverse_lazy('entm:rolemanager');
+    template_name = "entm/groupdetail.html"
+    # success_url = reverse_lazy("entm:rolemanager");
 
-    # @method_decorator(permission_required('dma.change_stations'))
+    # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        # self.role_id = kwargs['pk']
+        # self.role_id = kwargs["pk"]
         return super(UserGroupDetailView, self).dispatch(*args, **kwargs)
 
     
     def get_object(self):
         print(self.kwargs)
-        return Organizations.objects.get(cid=self.kwargs['pId'])
+        return Organizations.objects.get(cid=self.kwargs["pId"])
 
 """
 Assets comment deletion, manager
 """
 class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
     model = Organizations
-    # template_name = 'aidsbank/asset_comment_confirm_delete.html'
+    # template_name = "aidsbank/asset_comment_confirm_delete.html"
 
     def dispatch(self, *args, **kwargs):
-        # self.comment_id = kwargs['pk']
+        # self.comment_id = kwargs["pk"]
 
         
         print(self.request.POST)
-        kwargs['pId'] = self.request.POST.get('pId')
-        print('delete dispatch:',args,kwargs)
+        kwargs["pId"] = self.request.POST.get("pId")
+        print("delete dispatch:",args,kwargs)
         return super(UserGroupDeleteView, self).dispatch(*args, **kwargs)
 
     def get_object(self,*args, **kwargs):
-        print('delete objects:',self.kwargs,kwargs)
-        return Organizations.objects.get(cid=kwargs['pId'])
+        print("delete objects:",self.kwargs,kwargs)
+        return Organizations.objects.get(cid=kwargs["pId"])
 
     def delete(self, request, *args, **kwargs):
         """
         Calls the delete() method on the fetched object and then
         redirects to the success URL.
         """
-        print('delete?',args,kwargs)
+        print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
         self.object.delete()
-        return JsonResponse({'success':True})
+        return JsonResponse({"success":True})
         
     
 
@@ -458,73 +458,73 @@ def rolelist(request):
     draw = 1
     length = 0
     start=0
-    if request.method == 'GET':
-        draw = int(request.GET.get('draw', None)[0])
-        length = int(request.GET.get('length', None)[0])
-        start = int(request.GET.get('start', None)[0])
-        search_value = request.GET.get('search[value]', None)
-        # order_column = request.GET.get('order[0][column]', None)[0]
-        # order = request.GET.get('order[0][dir]', None)[0]
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", None)[0])
+        length = int(request.GET.get("length", None)[0])
+        start = int(request.GET.get("start", None)[0])
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
 
-    if request.method == 'POST':
-        draw = int(request.POST.get('draw', None)[0])
-        length = int(request.POST.get('length', None)[0])
-        start = int(request.POST.get('start', None)[0])
-        pageSize = int(request.POST.get('pageSize', 10))
-        search_value = request.POST.get('search[value]', None)
-        # order_column = request.POST.get('order[0][column]', None)[0]
-        # order = request.POST.get('order[0][dir]', None)[0]
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", None)[0])
+        length = int(request.POST.get("length", None)[0])
+        start = int(request.POST.get("start", None)[0])
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
 
-    # print('get rolelist:',draw,length,start,search_value)
+    # print("get rolelist:",draw,length,start,search_value)
     rolel = MyRoles.objects.all()
     data = []
     for r in rolel:
-        data.append({'id':r.pk,'name':r.name,'notes':r.notes})
-    # json = serializers.serialize('json', rolel)
+        data.append({"id":r.pk,"name":r.name,"notes":r.notes})
+    # json = serializers.serialize("json", rolel)
     recordsTotal = rolel.count()
 
     result = dict()
-    result['records'] = data
-    result['draw'] = draw
-    result['success'] = 'true'
-    result['pageSize'] = pageSize
-    result['totalPages'] = recordsTotal/pageSize
-    result['recordsTotal'] = recordsTotal
-    result['recordsFiltered'] = recordsTotal
-    result['start'] = 0
-    result['end'] = 0
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
     
     return HttpResponse(json.dumps(result))
     # return JsonResponse([result],safe=False)
 
 
 def userlist(request):
-    # print('userlist',request.POST)
+    # print("userlist",request.POST)
     draw = 1
     length = 0
     start=0
-    if request.method == 'GET':
-        draw = int(request.GET.get('draw', None)[0])
-        length = int(request.GET.get('length', None)[0])
-        start = int(request.GET.get('start', None)[0])
-        search_value = request.GET.get('search[value]', None)
-        # order_column = request.GET.get('order[0][column]', None)[0]
-        # order = request.GET.get('order[0][dir]', None)[0]
-        groupName = request.GET.get('groupName')
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", None)[0])
+        length = int(request.GET.get("length", None)[0])
+        start = int(request.GET.get("start", None)[0])
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
 
-    if request.method == 'POST':
-        draw = int(request.POST.get('draw', None)[0])
-        length = int(request.POST.get('length', None)[0])
-        start = int(request.POST.get('start', None)[0])
-        pageSize = int(request.POST.get('pageSize', 10))
-        search_value = request.POST.get('search[value]', None)
-        # order_column = request.POST.get('order[0][column]', None)[0]
-        # order = request.POST.get('order[0][dir]', None)[0]
-        groupName = request.POST.get('groupName')
-        print('groupName',groupName)
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", None)[0])
+        length = int(request.POST.get("length", None)[0])
+        start = int(request.POST.get("start", None)[0])
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        print("groupName",groupName)
 
-    # print('get rolelist:',draw,length,start,search_value)
-    if groupName == '':
+    # print("get rolelist:",draw,length,start,search_value)
+    if groupName == "":
         userl = User.objects.all()
     else:
         entprise = Organizations.objects.get(cid=groupName)
@@ -534,97 +534,97 @@ def userlist(request):
     for u in userl:
         ros = [r.name for r in  u.groups.all()]
         data.append({
-            'id':u.pk,
-            'user_name':u.user_name,
-            'real_name':u.real_name,
-            'sex':u.sex,
-            'phone_number':u.phone_number,
-            'expire_date':u.expire_date,
-            'groupName':u.belongto,
-            'roleName':','.join(ros),
-            'email':u.email,
+            "id":u.pk,
+            "user_name":u.user_name,
+            "real_name":u.real_name,
+            "sex":u.sex,
+            "phone_number":u.phone_number,
+            "expire_date":u.expire_date,
+            "groupName":u.belongto,
+            "roleName":",".join(ros),
+            "email":u.email,
         })
-    # json = serializers.serialize('json', rolel)
+    # json = serializers.serialize("json", rolel)
     recordsTotal = userl.count()
 
     result = dict()
-    result['records'] = data
-    result['draw'] = draw
-    result['success'] = 'true'
-    result['pageSize'] = pageSize
-    result['totalPages'] = recordsTotal/pageSize
-    result['recordsTotal'] = recordsTotal
-    result['recordsFiltered'] = recordsTotal
-    result['start'] = 0
-    result['end'] = 0
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
     
     return HttpResponse(json.dumps(result))
     # return JsonResponse([result],safe=False)
 
 
 def verifyUserName(request):
-    print('verifyUserName:',request)
-    return JsonResponse({'success':True})
+    print("verifyUserName:",request)
+    return JsonResponse({"success":True})
 
 def verification(request):
-    print('verification:',request)
-    return JsonResponse({'success':True})
+    print("verification:",request)
+    return JsonResponse({"success":True})
 
 def useredit(request):
     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))
+    return HttpResponse(json.dumps([{"ok":1}]))
 
 def useradd(request):
     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))    
+    return HttpResponse(json.dumps([{"ok":1}]))    
 
 
 def userdelete(request):
     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))
+    return HttpResponse(json.dumps([{"ok":1}]))
 
 
 def userdeletemore(request):
     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))
+    return HttpResponse(json.dumps([{"ok":1}]))
 
 def roleedit(request):
     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))
+    return HttpResponse(json.dumps([{"ok":1}]))
 
 # def roleadd(request):
 #     print(request)
 
-#     return HttpResponse(json.dumps([{'ok':1}]))    
+#     return HttpResponse(json.dumps([{"ok":1}]))    
 
 
 def roledelete(request):
     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))
+    return HttpResponse(json.dumps([{"ok":1}]))
 
 
 def roledeletemore(request):
     print(request)
 
-    return HttpResponse(json.dumps([{'ok':1}]))
+    return HttpResponse(json.dumps([{"ok":1}]))
 
 
 
 
 # 角色管理
 class RolesMangerView(LoginRequiredMixin,TemplateView):
-    template_name = 'entm/rolelist.html'
+    template_name = "entm/rolelist.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(RolesMangerView, self).get_context_data(*args, **kwargs)
-        context['page_title'] = '角色管理'
-        context['role_list'] = MyRoles.objects.all()
+        context["page_title"] = "角色管理"
+        context["role_list"] = MyRoles.objects.all()
 
         return context  
 
@@ -636,11 +636,11 @@ Roles creation, manager
 """
 class RolesAddView(AjaxableResponseMixin,CreateView):
     model = MyRoles
-    template_name = 'entm/roleadd.html'
+    template_name = "entm/roleadd.html"
     form_class = RoleCreateForm
-    success_url = reverse_lazy('entm:rolemanager');
+    success_url = reverse_lazy("entm:rolemanager");
 
-    # @method_decorator(permission_required('dma.change_stations'))
+    # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
         return super(RolesAddView, self).dispatch(*args, **kwargs)
 
@@ -648,22 +648,22 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('role create here?:',self.request.POST)
+        print("role create here?:",self.request.POST)
         # print(form)
         # do something
-        permissiontree = form.cleaned_data.get('permissionTree')
+        permissiontree = form.cleaned_data.get("permissionTree")
         ptree = json.loads(permissiontree)
         instance = form.save()
         # old_permissions = instance.permissions.all()
         # instance.permissions.clear()
 
         for pt in ptree:
-            pname = pt['id']
-            p_edit = pt['edit']
+            pname = pt["id"]
+            p_edit = pt["edit"]
             perms = Permission.objects.get(codename=pname)
             
             if p_edit:
-                node_edit = '{}_edit'.format(pname)
+                node_edit = "{}_edit".format(pname)
                 perms_edit = Permission.objects.get(codename=node_edit)
                 instance.permissions.add(perms)
                 instance.permissions.add(perms_edit)
@@ -672,20 +672,20 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
         return super(RolesAddView,self).form_valid(form)
 
     # def post(self,request,*args,**kwargs):
-    #     print('do you been here 123?')
+    #     print("do you been here 123?")
     #     print (request.POST)
     #     print(kwargs)
 
     #     form = self.get_form()
     #     instance = form.save(commit=False)
-    #     print(form.cleaned_data['permissionTree'])
+    #     print(form.cleaned_data["permissionTree"])
         
     #     form.save()
             
         
 
     #     # return super(AssignRoleView,self).render_to_response(context)
-    #     return redirect(reverse_lazy('dma:roles_manager'))
+    #     return redirect(reverse_lazy("dma:roles_manager"))
 
 
 
@@ -695,34 +695,34 @@ Roles edit, manager
 class RoleEditView(UpdateView):
     model = MyRoles
     form_class = MyRolesForm
-    template_name = 'entm/roleedit.html'
-    success_url = reverse_lazy('entm:rolemanager');
+    template_name = "entm/roleedit.html"
+    success_url = reverse_lazy("entm:rolemanager");
 
-    # @method_decorator(permission_required('dma.change_stations'))
+    # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        self.role_id = kwargs['pk']
+        self.role_id = kwargs["pk"]
         return super(RoleEditView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('role update here?:',self.request.POST)
+        print("role update here?:",self.request.POST)
         # print(form)
         # do something
-        permissiontree = form.cleaned_data.get('permissionTree')
+        permissiontree = form.cleaned_data.get("permissionTree")
         ptree = json.loads(permissiontree)
         instance = self.object
         old_permissions = instance.permissions.all()
         instance.permissions.clear()
 
         for pt in ptree:
-            pname = pt['id']
-            p_edit = pt['edit']
+            pname = pt["id"]
+            p_edit = pt["edit"]
             perms = Permission.objects.get(codename=pname)
             
             if p_edit:
-                node_edit = '{}_edit'.format(pname)
+                node_edit = "{}_edit".format(pname)
                 perms_edit = Permission.objects.get(codename=node_edit)
                 instance.permissions.add(perms)
                 instance.permissions.add(perms_edit)
@@ -732,14 +732,14 @@ class RoleEditView(UpdateView):
         
 
     # def post(self,request,*args,**kwargs):
-    #     print('role update ?')
+    #     print("role update ?")
     #     print (request.POST)
     #     print(kwargs)
 
     #     form = self.get_form()
     #     if form.is_valid():
     #         print(form)
-    #         print(form.cleaned_data['permissionTree'])
+    #         print(form.cleaned_data["permissionTree"])
     #         # instance = form.save(commit=False)
     #         return self.form_valid(form)
             
@@ -750,11 +750,11 @@ class RoleEditView(UpdateView):
         
 
     #     # return super(AssignRoleView,self).render_to_response(context)
-    #     return redirect(reverse_lazy('dma:roles_manager'))
+    #     return redirect(reverse_lazy("dma:roles_manager"))
 
     def get_context_data(self, **kwargs):
         context = super(RoleEditView, self).get_context_data(**kwargs)
-        context['page_title'] = '修改角色'
+        context["page_title"] = "修改角色"
         return context
 
 
@@ -762,15 +762,15 @@ class RoleEditView(UpdateView):
 组织和用户管理
 """
 class UserMangerView(LoginRequiredMixin,TemplateView):
-    template_name = 'entm/userlist.html'
+    template_name = "entm/userlist.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(UserMangerView, self).get_context_data(*args, **kwargs)
-        context['page_menu'] = '企业管理'
-        # context['page_submenu'] = '组织和用户管理'
-        context['page_title'] = '组织和用户管理'
+        context["page_menu"] = "企业管理"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "组织和用户管理"
 
-        context['user_list'] = User.objects.all()
+        context["user_list"] = User.objects.all()
         
 
         return context  
@@ -781,20 +781,20 @@ User add, manager
 """
 class UserAddView(AjaxableResponseMixin,CreateView):
     model = User
-    template_name = 'entm/useradd.html'
+    template_name = "entm/useradd.html"
     form_class = RegisterForm
-    success_url = reverse_lazy('entm:usermanager');
+    success_url = reverse_lazy("entm:usermanager");
 
-    # @method_decorator(permission_required('dma.change_stations'))
+    # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        print('user add dispatch',args,kwargs)
+        print("user add dispatch",args,kwargs)
         return super(UserAddView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('user  add here?:',self.request.POST)
+        print("user  add here?:",self.request.POST)
         # print(form)
         # do something
         instance = form.save(commit=False)
@@ -810,19 +810,19 @@ User edit, manager
 class UserEditView(AjaxableResponseMixin,UpdateView):
     model = User
     form_class = UserDetailChangeForm
-    template_name = 'entm/useredit.html'
-    success_url = reverse_lazy('entm:usermanager')
+    template_name = "entm/useredit.html"
+    success_url = reverse_lazy("entm:usermanager")
 
-    # @method_decorator(permission_required('dma.change_stations'))
+    # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        # self.user_id = kwargs['pk']
+        # self.user_id = kwargs["pk"]
         return super(UserEditView, self).dispatch(*args, **kwargs)
 
     def form_invalid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('user edit form_invalid:::')
+        print("user edit form_invalid:::")
         return super(UserEditView,self).form_invalid(form)
 
     def form_valid(self, form):
@@ -832,51 +832,51 @@ class UserEditView(AjaxableResponseMixin,UpdateView):
         form.save()
         return super(UserEditView,self).form_valid(form)
         # role_list = MyRoles.objects.get(id=self.role_id)
-        # return HttpResponse(render_to_string('dma/role_manager.html', {'role_list':role_list}))
+        # return HttpResponse(render_to_string("dma/role_manager.html", {"role_list":role_list}))
 
     # def get_context_data(self, **kwargs):
     #     context = super(UserEditView, self).get_context_data(**kwargs)
-    #     context['page_title'] = '修改用户'
+    #     context["page_title"] = "修改用户"
     #     return context
 
 
 class AssignRoleView(TemplateView):
     """docstring for AssignRoleView"""
-    template_name = 'entm/assignrole.html'
+    template_name = "entm/assignrole.html"
         
     def get_context_data(self, **kwargs):
         context = super(AssignRoleView, self).get_context_data(**kwargs)
-        context['page_title'] = '分配角色'
-        context['role_list'] = MyRoles.objects.all()
-        pk = kwargs['pk']
-        # context['object_id'] = pk
-        context['object'] = self.get_object()
+        context["page_title"] = "分配角色"
+        context["role_list"] = MyRoles.objects.all()
+        pk = kwargs["pk"]
+        # context["object_id"] = pk
+        context["object"] = self.get_object()
         return context
 
     def get_object(self):
         print(self.kwargs)
-        return User.objects.get(id=self.kwargs['pk'])
+        return User.objects.get(id=self.kwargs["pk"])
 
     def post(self,request,*args,**kwargs):
-        print ('assinrole:',request.POST)
+        print ("assinrole:",request.POST)
         print(kwargs)
         context = self.get_context_data(**kwargs)
 
-        role_ids = request.POST.get("roleIds").split(',')
-        print('role_ids:',role_ids)
+        role_ids = request.POST.get("roleIds").split(",")
+        print("role_ids:",role_ids)
         user = self.get_object()
-        print('user:',user)
+        print("user:",user)
         for ri in role_ids:
             role = MyRoles.objects.get(id=int(ri))
             user.groups.add(role)
-            print('role:',role)
+            print("role:",role)
         
         
         user.save()
 
         data = {
-                'msg': '分配完成',
-                'obj':{'flag':1}
+                "msg": "分配完成",
+                "obj":{"flag":1}
             }
         return JsonResponse(data)
         
@@ -884,15 +884,15 @@ class AssignRoleView(TemplateView):
 
 class AssignStnView(TemplateView):
     """docstring for AssignRoleView"""
-    template_name = 'entm/assignstn.html'
+    template_name = "entm/assignstn.html"
         
     def get_context_data(self, **kwargs):
         context = super(AssignStnView, self).get_context_data(**kwargs)
-        context['page_title'] = '分配角色'
-        context['role_list'] = MyRoles.objects.all()
-        pk = kwargs['pk']
-        context['object_id'] = pk
-        context['user'] = User.objects.get(pk=pk)
+        context["page_title"] = "分配角色"
+        context["role_list"] = MyRoles.objects.all()
+        pk = kwargs["pk"]
+        context["object_id"] = pk
+        context["user"] = User.objects.get(pk=pk)
         return context
 
     def post(self,request,*args,**kwargs):
@@ -901,7 +901,7 @@ class AssignStnView(TemplateView):
         context = self.get_context_data(**kwargs)
 
         role = request.POST.get("checks[]")
-        user = context['user']
+        user = context["user"]
         # user.Role = role
         group = MyRoles.objects.filter(name__iexact=role).first()
         print(group)
@@ -909,7 +909,7 @@ class AssignStnView(TemplateView):
         user.save()
 
         # return super(AssignStnView,self).render_to_response(context)
-        return redirect(reverse_lazy('dma:organ_users'))
+        return redirect(reverse_lazy("dma:organ_users"))
 
 
 """
@@ -917,25 +917,25 @@ Assets comment deletion, manager
 """
 class UserDeleteView(AjaxableResponseMixin,DeleteView):
     model = User
-    # template_name = 'aidsbank/asset_comment_confirm_delete.html'
+    # template_name = "aidsbank/asset_comment_confirm_delete.html"
 
     def dispatch(self, *args, **kwargs):
-        # self.comment_id = kwargs['pk']
+        # self.comment_id = kwargs["pk"]
 
-        print('user delete:',args,kwargs)
+        print("user delete:",args,kwargs)
         
         return super(UserDeleteView, self).dispatch(*args, **kwargs)
 
     def get_object(self,*args, **kwargs):
-        # print('delete objects:',self.kwargs,kwargs)
-        return User.objects.get(pk=kwargs['pk'])
+        # print("delete objects:",self.kwargs,kwargs)
+        return User.objects.get(pk=kwargs["pk"])
 
     def delete(self, request, *args, **kwargs):
         """
         Calls the delete() method on the fetched object and then
         redirects to the success URL.
         """
-        print('delete?',args,kwargs)
+        print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
 
         #delete user role in groups
@@ -943,15 +943,17 @@ class UserDeleteView(AjaxableResponseMixin,DeleteView):
             g.user_set.remove(self.object)
 
         self.object.delete()
-        return JsonResponse({'success':True})
+        result = dict()
+        # result["success"] = 1
+        return HttpResponse(json.dumps({"success":1}))
         
 
 class AuthStationView(TemplateView):
     """docstring for AuthStationView"""
-    template_name = 'dma/auth_station.html'
+    template_name = "dma/auth_station.html"
         
     def get_context_data(self, **kwargs):
         context = super(AuthStationView, self).get_context_data(**kwargs)
-        context['page_title'] = '分配角色'
+        context["page_title"] = "分配角色"
         return context        
 
