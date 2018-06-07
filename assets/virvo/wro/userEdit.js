@@ -147,10 +147,11 @@
                     }
                     $("#editForm").ajaxSubmit(function(data) {
                         if (data != null) {
-                            var result = $.parseJSON(data);
+                            var result = eval(data);// $.parseJSON(data);
+                            console.log(result);
                             if (result.success == true) {
                                 if (result.obj.flag == 1){
-                                    $("#commonWin").modal("hide");
+                                    $("#commonLgWin").modal("hide");
                                     layer.msg(publicEditSuccess,{move:false});
                                     myTable.refresh()
                                 }else{
@@ -163,7 +164,7 @@
                             }
                         }
                     });
-                    $("#commonLgWin").modal("hide"); // 关闭窗口
+                    // $("#commonLgWin").modal("hide"); // 关闭窗口
                 }
             } else {
                 $("#commonLgWin").modal("hide"); // 关闭窗口
@@ -186,6 +187,7 @@
                             minlength : 2
                         },
                         password : {
+                            required : true,
                             minlength : 6,
                             maxlength : 25
                         },
@@ -220,6 +222,7 @@
                             minlength : publicMinSize2Length
                         },
                         password : {
+                            required  : "密码不能为空",
                             minlength : passwordMinLength,
                             maxlength : publicSize25
                         },

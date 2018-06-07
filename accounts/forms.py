@@ -164,16 +164,25 @@ class RegisterForm(forms.ModelForm):
 
 
 class UserDetailChangeForm(forms.ModelForm):
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
     
     class Meta:
         model = User
-        fields = ['user_name','password','belongto','is_active','expire_date','real_name','sex','phone_number','email']
+        fields = ['user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email']
 
     def __init__(self,*args,**kwargs):
         super(UserDetailChangeForm, self).__init__(*args, **kwargs)
 
         self.fields['password'].widget = forms.PasswordInput()
         self.fields['sex'].widget = forms.RadioSelect(choices=SEX)
+
+    def clean_password(self):
+        print('clean_password::')
+        password = self.cleaned_data.get('password')
+        if len(password) == 0:
+            raise forms.ValidationError("密码不能为空")
+        return password
+
 
     def save(self, commit=True):
         # Save the provided password in hashed format

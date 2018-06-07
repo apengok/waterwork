@@ -102,9 +102,10 @@
                     "class" : "text-center"
                 },
                 {
-                    "data" : "real_Name",
+                    "data" : "real_name",
                     "class" : "text-center",
                     render : function (data,type,row,meta) {
+
                         if(data == "null" || data == null || data == undefined){
                             data = "";
                         }
@@ -178,9 +179,10 @@
             ];
             // 表格setting
             setting = {
+                suffix  : '/',
                 listUrl : "user/list/",
                 editUrl : "user/edit/",
-                deleteUrl : "user/delete",
+                deleteUrl : "user/delete/",
                 deletemoreUrl : "user/deletemore",
                 enableUrl : "user/enable_",
                 disableUrl : "user/disable_",
@@ -499,6 +501,7 @@
         zTreeOnClick: function(event, treeId, treeNode){
             selectTreeId = treeNode.id;
             selectTreeIdAdd=treeNode.uuid;
+            console.log("点击节点",selectTreeId,selectTreeIdAdd);
             $('#simpleQueryParam').val("");
             myTable.requestData();
         },

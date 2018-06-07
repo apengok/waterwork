@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html class="no-js">
 <head>
-<title>首页</title>
+<title>{% if page_title %} {{ page_title }} {% else %} 首页 {% endif %}</title>
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
 <meta http-equiv="Expires" content="0"/>
@@ -52,14 +52,18 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 <!--sidebar end-->
 <!--权限控制 -->
 <input value="" id="permission" type="hidden"  />
-<input value="false" id="isAdmin" type="hidden"  />
+<input value="{{ user.is_admin|lower }}" id="isAdmin" type="hidden"  />
             <section id="main-content">
                 <div class="row eightIsZero">
                     <div class="col-md-12">
                         <ul class="breadcrumb">
-                            <li><a href="#">首页</a>
-                            </li>
+                            <li><a href="#">首页</a></li>
+                            {% if page_menu %}
+                                <li class="active">{{ page_menu }}</li>
+                                <li class="active">{{ page_title }}</li>
+                            {% endif %}
                         </ul>
+                        <h1 class="h1 ">{{ page_title }}</h1>
                     </div>
                 </div>
                 {% block main_content %}

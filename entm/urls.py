@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^user/list/$',views.userlist,name='userlist'),
     url(r'^user/add',views.UserAddView.as_view(),name='useradd'),
     url(r'^user/edit/(?P<pk>[0-9]+)/?$',views.UserEditView.as_view(),name='useredit'),
-    url(r'^user/delete_',views.userdelete,name='userdelete'),
+    url(r'^user/delete/(?P<pk>[0-9]+)/?$',views.UserDeleteView.as_view(),name='userdelete'),
     url(r'^user/deletemore',views.userdeletemore,name='userdeletemore'),
 
     #角色

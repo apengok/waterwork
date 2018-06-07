@@ -398,7 +398,10 @@ img{max-width:100%}
 
 
 #header{z-index:200;background:#fff;min-height:80px;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;margin-right:0}
-#header .brand{float:left;width:240px;min-height:80px;padding:0 0 0 10px;position:relative;background:#28282e;font-family:'Berlin Sans FB Demi Bold', 'Berlin Sans FB Normal', 'Berlin Sans FB';
+#header .brand{float:left;width:240px;min-height:80px;padding:0 0 0 10px;position:relative;
+    background:#28282e;
+    /*background:url(/static/virvo/resources/img/VIRVO-logo2.png) center 20px no-repeat;*/
+    font-family:'Berlin Sans FB Demi Bold', 'Berlin Sans FB Normal', 'Berlin Sans FB';
     font-weight:600;
     font-style:normal;
     font-size:60px;

@@ -1,6 +1,6 @@
 <header id="header">
     <!--logo start-->
-    <div><a class="brand" href="/" ></a></div>
+    <div><a class="brand" href="{% url 'entm:virvo_home' %}" ></a></div>
     <!--logo end-->
     <div class="toggle-navigation toggle-left" id="toggle-left">
         <button style="margin-top:-14px;" type="button" class="btn btn-default" id="toggle-left-button">
@@ -50,7 +50,7 @@
         <!-- 用户所属组织name -->
         <input id="userGroupName" value="威尔沃" type="text" hidden="true">
         <!-- 用户是否为admin -->
-        <input id="isAdmin" value="false" type="text" hidden="true">
+        <input id="isAdmin" value="{{ user.is_admin|lower }}" type="text" hidden="true">
         <!-- 用户授权截止日期 -->
         <input id="userAuthorizationDate" value="" type="text" hidden="true">
         <!-- 用户被分配的角色 -->

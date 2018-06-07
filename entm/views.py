@@ -177,14 +177,14 @@ class AjaxableResponseMixin(object):
     """
     def form_invalid(self, form):
         response = super(AjaxableResponseMixin,self).form_invalid(form)
-        print('dasf:',form.cleaned_data.get('register_date'))
+        # print('dasf:',form.cleaned_data.get('register_date'))
         err_str = ''
         for k,v in form.errors.items():
             print(k,v)
             err_str += v[0]
         if self.request.is_ajax():
             data = {
-                'success': 1,
+                'success': False,
                 'obj':{
                     'flag':0,
                     'errMsg':err_str
@@ -488,16 +488,18 @@ def rolelist(request):
     result['draw'] = draw
     result['success'] = 'true'
     result['pageSize'] = pageSize
-    # result['totalPages'] = recordsTotal/pageSize
+    result['totalPages'] = recordsTotal/pageSize
     result['recordsTotal'] = recordsTotal
-    # result['recordsFiltered'] = music['count']
+    result['recordsFiltered'] = recordsTotal
+    result['start'] = 0
+    result['end'] = 0
     
     return HttpResponse(json.dumps(result))
     # return JsonResponse([result],safe=False)
 
 
 def userlist(request):
-    print('userlist',request)
+    # print('userlist',request.POST)
     draw = 1
     length = 0
     start=0
@@ -508,6 +510,7 @@ def userlist(request):
         search_value = request.GET.get('search[value]', None)
         # order_column = request.GET.get('order[0][column]', None)[0]
         # order = request.GET.get('order[0][dir]', None)[0]
+        groupName = request.GET.get('groupName')
 
     if request.method == 'POST':
         draw = int(request.POST.get('draw', None)[0])
@@ -517,11 +520,19 @@ def userlist(request):
         search_value = request.POST.get('search[value]', None)
         # order_column = request.POST.get('order[0][column]', None)[0]
         # order = request.POST.get('order[0][dir]', None)[0]
+        groupName = request.POST.get('groupName')
+        print('groupName',groupName)
 
     # print('get rolelist:',draw,length,start,search_value)
-    userl = User.objects.all()
+    if groupName == '':
+        userl = User.objects.all()
+    else:
+        entprise = Organizations.objects.get(cid=groupName)
+        userl = User.objects.filter(belongto=entprise.name)
+    
     data = []
     for u in userl:
+        ros = [r.name for r in  u.groups.all()]
         data.append({
             'id':u.pk,
             'user_name':u.user_name,
@@ -530,7 +541,7 @@ def userlist(request):
             'phone_number':u.phone_number,
             'expire_date':u.expire_date,
             'groupName':u.belongto,
-            'roleName':u.Role,
+            'roleName':','.join(ros),
             'email':u.email,
         })
     # json = serializers.serialize('json', rolel)
@@ -541,9 +552,11 @@ def userlist(request):
     result['draw'] = draw
     result['success'] = 'true'
     result['pageSize'] = pageSize
-    # result['totalPages'] = recordsTotal/pageSize
+    result['totalPages'] = recordsTotal/pageSize
     result['recordsTotal'] = recordsTotal
-    # result['recordsFiltered'] = music['count']
+    result['recordsFiltered'] = recordsTotal
+    result['start'] = 0
+    result['end'] = 0
     
     return HttpResponse(json.dumps(result))
     # return JsonResponse([result],safe=False)
@@ -805,6 +818,13 @@ class UserEditView(AjaxableResponseMixin,UpdateView):
         # self.user_id = kwargs['pk']
         return super(UserEditView, self).dispatch(*args, **kwargs)
 
+    def form_invalid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print('user edit form_invalid:::')
+        return super(UserEditView,self).form_invalid(form)
+
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
@@ -829,25 +849,37 @@ class AssignRoleView(TemplateView):
         context['page_title'] = '分配角色'
         context['role_list'] = MyRoles.objects.all()
         pk = kwargs['pk']
-        context['object_id'] = pk
-        context['user'] = User.objects.get(pk=pk)
+        # context['object_id'] = pk
+        context['object'] = self.get_object()
         return context
 
+    def get_object(self):
+        print(self.kwargs)
+        return User.objects.get(id=self.kwargs['pk'])
+
     def post(self,request,*args,**kwargs):
-        print (request.POST)
+        print ('assinrole:',request.POST)
         print(kwargs)
         context = self.get_context_data(**kwargs)
 
-        role = request.POST.get("checks[]")
-        user = context['user']
-        # user.Role = role
-        group = MyRoles.objects.filter(name__iexact=role).first()
-        print(group)
-        user.groups.add(group)
+        role_ids = request.POST.get("roleIds").split(',')
+        print('role_ids:',role_ids)
+        user = self.get_object()
+        print('user:',user)
+        for ri in role_ids:
+            role = MyRoles.objects.get(id=int(ri))
+            user.groups.add(role)
+            print('role:',role)
+        
+        
         user.save()
 
-        # return super(AssignRoleView,self).render_to_response(context)
-        return redirect(reverse_lazy('dma:organ_users'))
+        data = {
+                'msg': '分配完成',
+                'obj':{'flag':1}
+            }
+        return JsonResponse(data)
+        
 
 
 class AssignStnView(TemplateView):
@@ -880,6 +912,39 @@ class AssignStnView(TemplateView):
         return redirect(reverse_lazy('dma:organ_users'))
 
 
+"""
+Assets comment deletion, manager
+"""
+class UserDeleteView(AjaxableResponseMixin,DeleteView):
+    model = User
+    # template_name = 'aidsbank/asset_comment_confirm_delete.html'
+
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs['pk']
+
+        print('user delete:',args,kwargs)
+        
+        return super(UserDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        # print('delete objects:',self.kwargs,kwargs)
+        return User.objects.get(pk=kwargs['pk'])
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print('delete?',args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+
+        #delete user role in groups
+        for g in self.object.groups.all():
+            g.user_set.remove(self.object)
+
+        self.object.delete()
+        return JsonResponse({'success':True})
+        
 
 class AuthStationView(TemplateView):
     """docstring for AuthStationView"""
