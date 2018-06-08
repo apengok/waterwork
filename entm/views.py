@@ -511,6 +511,8 @@ def userlist(request):
         # order_column = request.GET.get("order[0][column]", None)[0]
         # order = request.GET.get("order[0][dir]", None)[0]
         groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        print("simpleQueryParam",simpleQueryParam)
 
     if request.method == "POST":
         draw = int(request.POST.get("draw", None)[0])
@@ -521,7 +523,9 @@ def userlist(request):
         # order_column = request.POST.get("order[0][column]", None)[0]
         # order = request.POST.get("order[0][dir]", None)[0]
         groupName = request.POST.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
         print("groupName",groupName)
+        print("post simpleQueryParam",simpleQueryParam)
 
     # print("get rolelist:",draw,length,start,search_value)
     if groupName == "":
@@ -529,6 +533,9 @@ def userlist(request):
     else:
         entprise = Organizations.objects.get(cid=groupName)
         userl = User.objects.filter(belongto=entprise.name)
+
+    if simpleQueryParam != "":
+        userl = userl.filter(real_name__icontains=simpleQueryParam)
     
     data = []
     for u in userl:
@@ -854,7 +861,7 @@ class AssignRoleView(TemplateView):
         return context
 
     def get_object(self):
-        print(self.kwargs)
+        # print(self.kwargs)
         return User.objects.get(id=self.kwargs["pk"])
 
     def post(self,request,*args,**kwargs):
@@ -870,6 +877,9 @@ class AssignRoleView(TemplateView):
             role = MyRoles.objects.get(id=int(ri))
             user.groups.add(role)
             print("role:",role)
+
+            permission_set = role.permissions.all()
+            user.user_permissions.add(permission_set)
         
         
         user.save()

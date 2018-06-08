@@ -43,7 +43,7 @@ urlpatterns = [
     url(r'^rolemanager/?$',views.RolesMangerView.as_view(),name='rolemanager'),
     url(r'^role/list/$',views.rolelist,name='rolelist'),
     url(r'^role/add',views.RolesAddView.as_view(),name='roleadd'),
-    url(r'^role/edit',views.roleedit,name='roleedit'),
+    url(r'^role/edit',views.RoleEditView.as_view(),name='roleedit'),
     url(r'^role/delete_',views.roledelete,name='roledelete'),
     url(r'^role/deletemore',views.roledeletemore,name='roledeletemore'),
 

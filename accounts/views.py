@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,get_user_model
 from django.contrib.auth.decorators import login_required
@@ -117,14 +118,21 @@ class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
 class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
     form_class = LoginForm
     success_url = '/entm/'
-    template_name = 'accounts/login.html'
+    template_name = 'index.html'
     default_next = '/entm/'
 
     def form_valid(self, form):
         print('login form')
+        print(self.request.POST)
+        print(form)
+        # context = super(LoginView, self).get_context_data(*args, **kwargs)
+        # if form.cleaned_data['captchaCode'] == '':
+        #     context['errmsg'] = "请滑动滑块到右边"
         next_path = self.get_next_url()
         return redirect(to=next_path)
         # return render(self.request,next_path,{})
+
+    
 
 
 

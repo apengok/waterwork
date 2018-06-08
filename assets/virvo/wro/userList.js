@@ -501,7 +501,6 @@
         zTreeOnClick: function(event, treeId, treeNode){
             selectTreeId = treeNode.id;
             selectTreeIdAdd=treeNode.uuid;
-            console.log("点击节点",selectTreeId,selectTreeIdAdd);
             $('#simpleQueryParam').val("");
             myTable.requestData();
         },

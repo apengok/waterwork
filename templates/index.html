@@ -1,0 +1,406 @@
+﻿{% load staticfiles %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" />
+    <title>威尔沃 - 登录</title>
+
+
+    <link type="text/css" rel="stylesheet" href="{% static 'virvo/logins/style/css/style.css' %}"/>
+
+    <script type="text/javascript" src="{% static 'virvo/logins/style/js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'virvo/logins/style/js/animate.js' %}"></script>
+
+    <!--弹框-->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'virvo/logins/assets/css/component.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'virvo/logins/assets/css/content.css' %}"/>
+
+    <!--弹框-->
+
+    <!-- 滑动验证-->
+    <link rel="stylesheet" href="{% static 'virvo/logins/assets/css/verifying.css' %}">
+    <!-- 滑动验证-->
+    <!--登录窗口-->
+
+    <link href="{% static 'virvo/logins/images/all.css' %}" type="text/css" rel="stylesheet" media="all"/>
+
+
+    <!--登录-->
+
+</head>
+<body>
+<div class="top-bg">
+    <div class="top">
+        <div class="main">
+            <div class="banner-top">
+
+                <div class="logo"><img title="智慧水务一体化" src="/static/virvo/logins/style/images/logo.png" style="position:absolute;margin-left: 10px "/>
+                    <img id="tab-show-1-font" src="/static/virvo/logins/style/images/tab-1-font.png" class="demo_img_font" />
+                                  <img id="tab-show-2-font" src="/static/virvo/logins/style/images/tab-2-font.png" class="demo_img_font"/>
+                                  <img id="tab-show-3-font" src="/static/virvo/logins/style/images/tab-3-font.png" class="demo_img_font"/>
+                                  <img id="tab-show-4-font" src="/static/virvo/logins/style/images/tab-4-font.png" class="demo_img_font"/>
+                                  <img id="tab-show-5-font" src="/static/virvo/logins/style/images/tab-5-font.png" class="demo_img_font"/>
+                                  <img id="tab-show-6-font" src="/static/virvo/logins/style/images/tab-6-font.png" class="demo_img_font"/>
+
+                </div>
+
+                <div class="link">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0)" id="libdescIndex" title="功能介绍">功能介绍</a>
+                        </li>
+                        <li class="separated">
+                            |
+                        </li>
+                        <li>
+                            <a href="#" title="管家论坛" target="_blank">管家论坛</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="banner">
+                <div class="banner-animation">
+                    <div class="banner-main"></div>
+
+                    <div class="banner-tab-bg">
+                        <ul id="bannerTab">
+                            <li class="tab1" data-index="0">
+                                <a href="javascript:void(0)"></a>
+                            </li>
+                            <li class="tab2" data-index="1">
+                                <a href="javascript:void(0)"></a>
+                            </li>
+                            <li class="tab3" data-index="2">
+                                <a href="javascript:void(0)"></a>
+                            </li>
+                            <li class="tab4" data-index="3" style="position: relative;">
+
+                                <a href="javascript:void(0)"></a>
+                            </li>
+                            <li class="tab5" data-index="4">
+                                <a href="javascript:void(0)"></a>
+                            </li>
+                            <li class="tab6" data-index="5">
+                                <a href="javascript:void(0)"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="banner-moveblock">
+                        <div class="block"></div>
+                    </div>
+
+                    <div class="banner-right-block">
+
+                        <!--<img id="tab-show-1" src="/static/virvo/logins/style/images/tab-1.png"/>-->
+                        <img id="tab-show-1" src="/static/virvo/logins/style/images/地图监控.png" class="demo_img"/>
+
+
+                        <img id="tab-show-2" src="/static/virvo/logins/style/images/用水分析2.png"  class="demo_img"/>
+
+
+                        <img id="tab-show-3" src="/static/virvo/logins/style/images/夜间最小流量.png" class="demo_img"/>
+
+
+                        <img id="tab-show-4" src="/static/virvo/logins/style/images/配表分析.png" class="demo_img"/>
+
+
+                        <img id="tab-show-5" src="/static/virvo/logins/style/images/对比分析.png" class="demo_img"/>
+
+
+                        <img id="tab-show-6" src="/static/virvo/logins/style/images/产销差统计表.png" class="demo_img"/>
+
+                    </div>
+
+                </div>
+
+                <div class="banner-download">
+                    <div class="main_box">
+                        <div class="main_cont">
+                            <div class="wrapper">
+                                <form method='POST'>{% csrf_token %}
+                                <dl class="xl_info clearfix">
+                                    <dt>登录</dt>
+                                    <dd><input name="user_name" type="text" class="srh" placeholder="请输入账号"></dd>
+                                    <dd><input name="password" type="password" class="srh" placeholder="请输入密码"></dd>
+                                    <dd><input type="hidden" class="form-control inputW100"
+                                           id="captchaCode" name="captchaCode" autocomplete="off" value="" required></dd>
+                                    <div class="verify" onselectstart="return false">
+                                        <span></span>
+                                        <div id="verify_box">
+                                            <div id="verify_xbox">
+                                                <div id="btn">
+                                                    <img id="ded1" src="/static/virvo/logins/images/a.png">
+                                                </div>
+                                            </div>
+                                            &nbsp; &nbsp; &nbsp; &nbsp;按住滑块，拖动到最右边
+                                        </div>
+                                    </div>
+                                    <dd><input class="button white radius4 dl" type="submit" value="登录"
+                                               style="width: 250px"/></dd>
+                                           </form>
+                                    <dd>
+                                        <div class="morph-button morph-button-modal morph-button-modal-3 morph-button-fixed"
+                                             style="width: 47% ;height: 43px;margin-top:0%;margin-left: 0% ">
+                                            <button class="button blue radius4 shenqing" type="button">注册</button>
+                                            <div class="morph-content">
+                                                <div>
+                                                    <div class="content-style-form content-style-form-2">
+                                                        <span class="icon icon-close">Close the dialog</span>
+                                                        <span>注册</span>
+                                                        <form>
+                                                            <p><label>姓名</label><input type="text"/></p>
+                                                            <p><label>联系电话</label><input type="text"/></p>
+                                                            <p><label>邮箱</label><input type="text"/></p>
+                                                            <p><label>企业名称</label><input type="text"/></p>
+                                                            <p><label>企业需求</label><input type="text"/></p>
+                                                            <p>
+                                                                <button class="button blue radius4 ">提交</button>
+                                                            </p>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input class="button blue radius4 lj" type="button" value="咨询了解"/>
+                                    <dd/>
+                                </dl>
+
+                            </div>
+                            <div class="bg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="screen">
+    <div class="s2-title">
+        <img id="libdesc" src="/static/virvo/logins/style/images/s2-title.png"/>
+    </div>
+    <div class="screen-title-line s2-title-line"></div>
+    <div class="screen-description">
+        <p class="s2-desc">
+            功能全面&nbsp;&nbsp;&nbsp; 性能强大&nbsp;&nbsp;&nbsp; 精准查漏
+        </p>
+        <p class="s2-desc">
+        </p>
+    </div>
+    <div class="s2-icon">
+        <div class="list">
+            <div class="icon"><img id="screen2Image1" data-animate="0" title="数据采集" src="/static/virvo/logins/style/images/数据采集.png"/>
+            </div>
+            <div class="lib-name">
+                数据采集
+            </div>
+            <div class="lib-desc">
+                采集水表上传的数据和营收系统的数据
+            </div>
+        </div>
+            <div class="list">
+            <div class="icon"><img id="screen2Image2" title="系统整合" src="/static/virvo/logins/style/images/系统整合.png"/>
+            </div>
+            <div class="lib-name">
+                系统整合
+            </div>
+            <div class="lib-desc">
+
+                将水司原有的系统和该系统拼接整合到一起
+            </div>
+        </div>
+        <div class="list">
+            <div class="icon"><img id="screen2Image3" title="智能分析" src="/static/virvo/logins/style/images/智能分析.png"/>
+            </div>
+            <div class="lib-name">
+                智能分析
+            </div>
+            <div class="lib-desc">
+                用采集的数据去分析管道的漏损状况
+            </div>
+        </div>
+        <div class="list">
+            <div class="icon"><img id="screen2Image4" title="运维管理" src="/static/virvo/logins/style/images/运维管理.png"/>
+            </div>
+            <div class="lib-name">
+                运维管理
+            </div>
+            <div class="lib-desc">
+                帮助建立快速响应并适应业务环境及业务发展
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="screen-line"></div>
+
+<div class="screen" style="height: 720px; overflow: visible">
+    <div class="left-block s4-left" style="position: relative;">
+        <div class="s4-title" style="position: relative; height: 40px;">
+            <img src="/static/virvo/logins/style/images/software-manage.png" id="s4TitleImage" style="position: absolute;top:0 ; "/>
+        </div>
+        <div class="screen-title-line s4-title-line"></div>
+        <div class="s4-list" style="position: absolute;" id="s4List">
+            <div class="s4-item">
+
+                <div class="s4-desc">
+                    <p class="s4-lib-name">
+                        大用户站点地图监控
+                    </p>
+                    <p class="s4-lib-desc">
+                        通过地图监控来显示大用户站点位置，方便对大用户进行清晰管理。
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="s4-item item-not-first">
+
+                <div class="s4-desc">
+                    <p class="s4-lib-name">
+                        大用户实时数据列表
+                    </p>
+                    <p class="s4-lib-desc">
+                        通过观察站点实时曲线直观了解大用户当日的实时数据变化。
+                    </p>
+                </div>
+            </div>
+
+            <div class="s4-item item-not-first">
+
+                <div class="s4-desc">
+                    <p class="s4-lib-name">
+                        大用户站点实时曲线
+                    </p>
+                    <p class="s4-lib-desc">
+                        通过数据列表方便水司快速查看大用户站点的实时数据。
+                    </p>
+                </div>
+            </div>
+
+            <div class="s4-item item-not-first">
+
+                <div class="s4-desc">
+                    <p class="s4-lib-name">
+                        大用户DMA在线监控
+                    </p>
+                    <p class="s4-lib-desc">
+                        通过分析数据判断大用户是否存在漏损，让水司实时监控漏损情况。
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="right-block s4-right">
+        <div class="s4-image">
+            <img id="screen4Image" data-animate="0" src="/static/virvo/logins/style/images/大用户月用水分析模板原型.png" style="width: 750px;height: 470px"/>
+        </div>
+    </div>
+</div>
+<div class="screen-line"></div>
+
+<div class="screen" style="overflow: visible; height: 605px;" id="screenIphoneOffset">
+    <div class="left-block s5-left">
+        <div class="s5-image">
+            <img id="screenIphoneImage" data-animate="0" src="/static/virvo/logins/style/images/dma统计报表.png"
+                 style="left:-100px; opacity: 0;height: 470px;width: 750px;border: 1px solid #d2d6d6" />
+        </div>
+    </div>
+    <div class="right-block s5-right" style="position: relative;">
+        <div class="s5-title" style="position: relative; height: 40px;">
+            <img src="/static/virvo/logins/style/images/title-32.png" id="IphoneTitleImage"
+                 style="position: absolute; left:0; top:-50px; opacity: 0;"/>
+        </div>
+        <div class="screen-title-line s5-title-line"></div>
+        <div class="s5-desc" style="position: absolute; top: 337px; opacity: 0;" id="IphoneDescription">
+            <p class="part">
+                通过数据以及该系统的精准的独立算法来帮助水司职能管理部门及时发现爆管、漏失等事故问题，辅助利用捡漏工具对漏点进行精确定位便于快速修复减少水量损失。
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="screen-line"></div>
+<div class="screen" style="height: 752px;" id="screen6AnimateOffset">
+    <div class="left-block s6-left" style="width: 352px;">
+        <div class="s6-title" style="height: 41px; position: relative;">
+            <img src="/static/virvo/logins/style/images/box-fonts.png" style="position: absolute; left: 0; top: 270px;" id="s6TitleImage"/>
+        </div>
+        <div class="screen-title-line s6-title-line"></div>
+        <div class="s6-desc" style="position: relative; height: 25px; width: 365px; float: none;">
+            <p class="part" id="s6Description" style="width: 365px; position: absolute;">
+                该系统围绕智慧水务管控一体化战略发展目标，整合云计算、大数据和GIS地理信息、物联网技术，通过对从水源、水厂到管网、用户的监测数据采集监控感知智慧水务管控一体化系统的运行状态。
+            </p>
+        </div>
+    </div>
+    <div class="right-block s6-right">
+        <div class="s6-image">
+            <img src="/static/virvo/logins/style/images/站点管理.png" id="screen6Image1" data-animate="0" style="height: 340px;width: 618px; border: 1px solid #d2d6d6" />
+            <img src="/static/virvo/logins/style/images/表具管理.png" id="screen6Image2" style="height: 340px;width: 618px;border: 1px solid #d2d6d6" />
+            <img src="/static/virvo/logins/style/images/角色管理.png" id="screen6Image3"  style="height: 340px;width: 618px; border: 1px solid #d2d6d6" />
+        </div>
+    </div>
+</div>
+
+<div class="screen-s7-bg" id="screen7AnimateOffset">
+    <div class="screen screen-s7">
+        <div class="screen" style="height: 433px;">
+            <div class="left-block s7-left" style="position: relative;">
+                <div class="s7-title" style="height: 40px; position: relative;">
+                    <img src="/static/virvo/logins/style/images/mini.png" id="s7TitleImage" style="position: absolute; top: 90px;"/>
+                </div>
+                <div class="screen-title-line s7-title-line"></div>
+                <div class="s7-desc" style="position: absolute; top: 205px;" id="s7Description">
+                    <p class="part">
+                        根据实时数据进行准确分析，可查管网、可测小区，不分漏大漏小只要有漏我们都能无微不至。查漏从你选择这款平台那一刻开始就已经成功了部分。
+                    </p>
+                </div>
+            </div>
+            <div class="right-block s7-right">
+                <div class="img-radius"><img id="screen7Image1" data-animate="0" src="/static/virvo/logins/style/images/float-radius.png"/>
+                </div>
+                <div class="img-ri">
+                    <div class="img-top">
+                        <img id="screen7Image2" data-animate="0"
+
+                        />    <!--src="/static/virvo/logins/style/images/float-window-top.png"-->
+                    </div>
+                    <div class="img img_7"><img id="screen7Image3" data-animate="0" src="/static/virvo/logins/style/images/float-window-bottom.png"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="screen-s8-bg">
+    <div class="screen screen-s8">
+
+
+        <div class="copyright">
+
+
+            <div style="text-align: center">地址：深圳市坪山新区赤坳工业区8号 电话：0755-89775533</div>
+            <div style="text-align: center; padding-top: 5px;">copyright 威尔沃自动化设备（深圳）有限公司 版权所有 | 京ICP备06019932-1</div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<!--弹框-->
+<script type="text/javascript" src="{% static 'virvo/logins/js/modernizr.custom.js' %}"></script>
+<script type="text/javascript" src="{% static 'virvo/logins/js/classie.js' %}"></script>
+<script type="text/javascript" src="{% static 'virvo/logins/js/fixed.js' %}"></script>
+
+<!--弹框-->
+<!-- 滑动验证-->
+<script type="text/javascript" src="{% static 'virvo/logins/js/slide.js' %}"></script>
+<!-- 滑动验证-->
+
+
+
+</html>
