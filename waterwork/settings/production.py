@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'entm',
     'accounts',
-    'channels',
+    # 'channels',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'waterwork.wsgi.application'
 
-ASGI_APPLICATION = "waterwork.routing.application"
+# ASGI_APPLICATION = "waterwork.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
