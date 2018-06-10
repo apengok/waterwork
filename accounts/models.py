@@ -10,6 +10,11 @@ import json
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
 
+class MyRoles(Group):
+    notes = models.CharField(max_length=156,blank=True)   
+    permissionTree = models.CharField(max_length=50000,blank=True)
+
+    
 class UserManager(BaseUserManager):
     def create_user(self, user_name, password=None):
         """
@@ -147,9 +152,9 @@ You need to inject new fields into the existing Group:
 #     field = models.ForeignKey(Group, blank=True, null=True, related_name='children')
 #     field.contribute_to_class(Group, 'parent')
 
-class MyRoles(Group):
-    notes = models.CharField(max_length=156,blank=True)   
-    permissionTree = models.CharField(max_length=50000,blank=True)
+# class MyRoles(Group):
+#     notes = models.CharField(max_length=156,blank=True)   
+#     permissionTree = models.CharField(max_length=50000,blank=True)
 
 # To add methods to the Group, subclass but tag the model as proxy:
     # class Meta:
