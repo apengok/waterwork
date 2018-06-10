@@ -51,7 +51,8 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             {% include 'sidenav.html' %}
 <!--sidebar end-->
 <!--权限控制 -->
-<input value="{{ perms.organizations.add_organizations }}" id="permission" type="hidden"  />
+<input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
+
 <input value="{{ user.is_admin|lower }}" id="isAdmin" type="hidden"  />
             <section id="main-content">
                 <div class="row eightIsZero">

@@ -96,7 +96,7 @@
                 $("#addForm").ajaxSubmit(function(data) {
                     console.log(data);
                     if (data != null) {
-                        var result = eval(data);// $.parseJSON(data);
+                        var result = $.parseJSON(data);
                         if (result.success) {
                             console.log(result.success,result.obj.flag)
                             if (result.obj.flag == 1){

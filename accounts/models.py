@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser,PermissionsMixin,Group
+    BaseUserManager, AbstractBaseUser,PermissionsMixin,Group,_user_has_perm
 )
 
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
-
+import json
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
 
@@ -66,6 +66,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     belongto     = models.CharField(_('belongs to'), max_length=30, blank=True)
     expire_date  = models.CharField(_('Expired date'), max_length=30, blank=True)
     Role         = models.CharField(_('Role'), max_length=30, blank=True)
+    # Role        = models.ForeignKey(Roles,related_name='user',on_delete=models.CASCADE)
 
     email = models.EmailField(
         verbose_name='email address',
@@ -97,7 +98,11 @@ class User(AbstractBaseUser,PermissionsMixin):
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
-        return True
+        if not self.is_active:
+            return False
+        if self.is_admin:
+            return True
+        return _user_has_perm(self,perm,obj)
 
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
@@ -113,6 +118,20 @@ class User(AbstractBaseUser,PermissionsMixin):
     def is_admin(self):
         "Is the user a admin member?"
         return self.admin
+
+    @property
+    def permissiontree(self):
+
+        role = MyRoles.objects.get(name=self.Role)
+        try:
+
+            tree = json.loads(role.permissionTree)
+            tree_str = [t['id'] for t in tree]
+            # return ','.join(tree_str)
+            return tree_str
+        except:
+            return []
+
 
     # @property
     # def is_active(self):
@@ -130,7 +149,7 @@ You need to inject new fields into the existing Group:
 
 class MyRoles(Group):
     notes = models.CharField(max_length=156,blank=True)   
-    permissionTree = models.CharField(max_length=5000,blank=True)
+    permissionTree = models.CharField(max_length=50000,blank=True)
 
 # To add methods to the Group, subclass but tag the model as proxy:
     # class Meta:
@@ -147,3 +166,9 @@ class MyRoles(Group):
 #             pass
 
 # post_save.connect(post_save_roles_model_receiver,sender=Group)  
+
+# class Roles(models.Model):
+#     group = models.OneToOneField(Group,on_delete=models.CASCADE)
+#     notes = models.CharField(max_length=156,blank=True)   
+#     permissionTree = models.CharField(max_length=5000,blank=True)
+       

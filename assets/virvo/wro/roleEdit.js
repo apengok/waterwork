@@ -92,42 +92,24 @@
                 }
             }
             $("#permissionEditTree").val(JSON.stringify(list));
-            $("#editForm").ajaxSubmit(function(data) {
-                if (data != null) {
-                    var result = $.parseJSON(data);
-                    $("#commonSmWin").modal("hide");
-                    
-                    // if (result.success) {
-                    //     if (result.obj.flag == 1){
-                    //         $("#commonSmWin").modal("hide");
-                    //         layer.msg("修改成功！",{move:false});
-                    //         myTable.refresh()
-                    //     }else{
-                    //         layer.msg(result.obj.errMsg,{move:false});
-                    //     }
-                    // }else{
-                    //     layer.msg(result.msg,{move:false});
-                    // }
-                }
-            });
-            // if(roleEdit.validates()){
-            //     $("#editForm").ajaxSubmit(function(data) {
-            //         if (data != null) {
-            //             var result = $.parseJSON(data);
-            //             if (result.success) {
-            //                 if (result.obj.flag == 1){
-            //                     $("#commonSmWin").modal("hide");
-            //                     layer.msg("修改成功！",{move:false});
-            //                     myTable.refresh()
-            //                 }else{
-            //                     layer.msg(result.obj.errMsg,{move:false});
-            //                 }
-            //             }else{
-            //                 layer.msg(result.msg,{move:false});
-            //             }
-            //         }
-            //     });
-            // }
+            if(roleEdit.validates()){
+                $("#editForm").ajaxSubmit(function(data) {
+                    if (data != null) {
+                        var result = $.parseJSON(data);
+                        if (result.success) {
+                            if (result.obj.flag == 1){
+                                $("#commonSmWin").modal("hide");
+                                layer.msg("修改成功！",{move:false});
+                                myTable.refresh()
+                            }else{
+                                layer.msg(result.obj.errMsg,{move:false});
+                            }
+                        }else{
+                            layer.msg(result.msg,{move:false});
+                        }
+                    }
+                });
+            }
         },
         //校验
         validates: function(){
@@ -157,13 +139,13 @@
     }
     $(function(){
         roleEdit.init();
-        // $('input').inputClear();
+        $('input').inputClear();
 
-        // //优先级策略单选组选择
-        // $(".priority-group").on("click","input",function () {
-        //     $(".priority-group input").prop("checked",false);
-        //     $(this).prop("checked",true)
-        // });
+        //优先级策略单选组选择
+        $(".priority-group").on("click","input",function () {
+            $(".priority-group input").prop("checked",false);
+            $(this).prop("checked",true)
+        });
 
         $("#doSubmitEdit").on("click",roleEdit.doSubmit);
     })

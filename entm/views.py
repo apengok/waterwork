@@ -184,7 +184,7 @@ class AjaxableResponseMixin(object):
             err_str += v[0]
         if self.request.is_ajax():
             data = {
-                "success": False,
+                "success": 0,
                 "obj":{
                     "flag":0,
                     "errMsg":err_str
@@ -203,7 +203,7 @@ class AjaxableResponseMixin(object):
         response = super(AjaxableResponseMixin,self).form_valid(form)
         if self.request.is_ajax():
             data = {
-                "success": True,
+                "success": 1,
                 "obj":{"flag":1}
             }
             return HttpResponse(json.dumps(data)) #JsonResponse(data)
@@ -217,7 +217,7 @@ def choicePermissionTree(request):
     roleid = request.POST.get("roleId") or -1
     print(" get choicePermissionTree",roleid)
 
-    if roleid < 0:
+    if int(roleid) < 0:
         return HttpResponse(json.dumps(PERMISSION_TREE))
 
     
@@ -229,7 +229,7 @@ def choicePermissionTree(request):
     
     if len(permissiontree) > 0:
         ptree = json.loads(permissiontree)
-        
+        print('chiocetree:',ptree)
 
         for pt in ptree:
             nodeid = pt["id"]
@@ -699,7 +699,7 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
 """
 Roles edit, manager
 """
-class RoleEditView(UpdateView):
+class RoleEditView(AjaxableResponseMixin,UpdateView):
     model = MyRoles
     form_class = MyRolesForm
     template_name = "entm/roleedit.html"
@@ -717,7 +717,9 @@ class RoleEditView(UpdateView):
         print("role update here?:",self.request.POST)
         # print(form)
         # do something
-        permissiontree = form.cleaned_data.get("permissionTree")
+        permissiontree = self.request.POST.get("permissionTree")
+        print('permissiontree:',permissiontree)
+        
         ptree = json.loads(permissiontree)
         instance = self.object
         old_permissions = instance.permissions.all()
@@ -737,32 +739,6 @@ class RoleEditView(UpdateView):
 
         return super(RoleEditView,self).form_valid(form)
         
-
-    # def post(self,request,*args,**kwargs):
-    #     print("role update ?")
-    #     print (request.POST)
-    #     print(kwargs)
-
-    #     form = self.get_form()
-    #     if form.is_valid():
-    #         print(form)
-    #         print(form.cleaned_data["permissionTree"])
-    #         # instance = form.save(commit=False)
-    #         return self.form_valid(form)
-            
-    #     else:
-    #         print(form.errors)
-            
-            
-        
-
-    #     # return super(AssignRoleView,self).render_to_response(context)
-    #     return redirect(reverse_lazy("dma:roles_manager"))
-
-    def get_context_data(self, **kwargs):
-        context = super(RoleEditView, self).get_context_data(**kwargs)
-        context["page_title"] = "修改角色"
-        return context
 
 
 """
@@ -873,14 +849,16 @@ class AssignRoleView(TemplateView):
         print("role_ids:",role_ids)
         user = self.get_object()
         print("user:",user)
+        rolename = ''
         for ri in role_ids:
             role = MyRoles.objects.get(id=int(ri))
             user.groups.add(role)
             print("role:",role)
+            rolename = role.name
 
-            permission_set = role.permissions.all()
-            user.user_permissions.add(permission_set)
-        
+            # permission_set = role.permissions.all()
+            # user.user_permissions.add(permission_set)
+        user.Role = rolename
         
         user.save()
 
@@ -905,6 +883,10 @@ class AssignStnView(TemplateView):
         context["user"] = User.objects.get(pk=pk)
         return context
 
+    def get_object(self):
+        # print(self.kwargs)
+        return User.objects.get(id=self.kwargs["pk"])
+
     def post(self,request,*args,**kwargs):
         print (request.POST)
         print(kwargs)
@@ -918,8 +900,11 @@ class AssignStnView(TemplateView):
         user.groups.add(group)
         user.save()
 
-        # return super(AssignStnView,self).render_to_response(context)
-        return redirect(reverse_lazy("dma:organ_users"))
+        data = {
+                "msg": "分配完成",
+                "obj":{"flag":1}
+            }
+        return JsonResponse(data)
 
 
 """
