@@ -1,0 +1,291 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+<title>{% if page_title %} {{ page_title }} {% else %} 首页 {% endif %}</title>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+<meta http-equiv="Expires" content="0"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-store"/>
+<meta http-equiv="refresh" content="36000; url=/clbs/login?type=timeout" />
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" href="{% static 'virvo/resources/js/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/css/font-awesome.min.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/animate.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/main.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/dataTables.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/js/zTree/css/zTreeStyle.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/wizard.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/adaptiveStyle.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/clockPlugins.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/css/twinkle.css' %}">
+<script src="{% static 'virvo/resources/js/modernizr-2.6.2.min.js' %}"></script>
+<script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'virvo/resources/js/layui/layer/skin/layer.css' %}" id="layui_layer_skinlayercss" style="">
+<link rel="stylesheet" href="{% static 'virvo/resources/js/laydate/theme/default/laydate.css' %}" id="layuicss-laydate">
+
+<link rel="stylesheet" href="{% static 'virvo/resources/css/realTimeMonitoring.css' %}"/>
+<style type="text/css">
+        #container {
+            background-color: white !important;
+        }
+
+        #thetree {
+            height: 20000px;
+        }
+
+        #MapContainer {
+            height: 20000px;
+        }
+
+        #dataTableBind td {
+            padding: 7px 10px;
+        }
+        .toolOperateClick .map-call::before{
+            content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-off.png)!important;background-size:22px 22px
+        }
+        .toolOperateClick .map-call.active::before{content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-on.png)!important;background-size:22px 22px}
+    </style>
+
+</head>
+<body>
+    <section id="container">
+    {% include '_vheader.html' %}
+ <script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/jquery.cookie.js' %}"></script>
+            <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+            <script src="{% static 'virvo/resources/js/layui/layer/layer.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/laydate/laydate.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/ungzip/pako.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/ungzip/ungzip.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/sockjs-1.1.1.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/stomp.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/webSocket.js' %}"></script> 
+<script>
+var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
+</script>
+{% comment %}
+<script src="/clbs/wro/topPublic.js"></script>
+{% endcomment %}
+      <section class="main-content-wrapper main-content-toggle-left">
+            <!--sidebar start-->
+            {% include 'sidenav.html' %}
+<!--sidebar end-->
+<!--权限控制 -->
+<input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
+
+<input value="{{ user.is_admin|lower }}" id="isAdmin" type="hidden"  />
+            <section id="main-content">
+                <div class="row eightIsZero">
+                    <div class="col-md-12 realtime-content">
+                        <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
+                            <div class="panel panel-default" id="panDefLeft">
+                                <div class="panel-heading" style="padding:0px;">
+                                    <div id="treeToTrackBlack" class="actions3 pull-right" data-toggle="tooltip"
+                                         data-placement="left" data-original-title="轨迹回放">
+                                        <a><img src="/clbs/resources/img/guijihuifang.svg"></a>
+                                    </div>
+                                    <div id="goHidden" class="actions2 pull-right">
+                                        <i class="fa fa-chevron-left" style="position: absolute;"></i>
+                                    </div>
+                                    <div class="dropdown panel-title fwb">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active" id="TabFenceBox"><a href="#home1" data-toggle="tab">监控对象</a>
+                                            </li>
+                                            <li id="TabCarBox"><a href="#profile1" data-toggle="tab">电子围栏</a></li>
+                                        </ul>
+                                    </div>
+
+
+                                </div>
+                                <div class="panel-body fixed-table-body panTabPadd">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="home1">
+                                            <div class="form-horizontal">
+                                                <div class="form-group allGroup">
+                                                    <div style="cursor:pointer" id="chooseAll"
+                                                         class="col-md-4 col-sm-5 col-xs-5 text-center btnPadding">
+                                                        <span>全部</span><span id="tall">(...)</span>
+                                                    </div>
+                                                    <div style="cursor:pointer" id="online"
+                                                         class="col-md-4 col-sm-5 col-xs-5 text-center btnPaddingOnLine">
+                                                        <span>在线</span><span id="tline">(...)</span>
+                                                    </div>
+                                                    <div style="cursor:pointer" id="chooseMissLine"
+                                                         onclick="treeMonitoring.misslines(1)"
+                                                         class="col-md-4 col-sm-5 col-xs-5 text-center btnPadding">
+                                                        <span>不在线</span><span id="tmiss">(...)</span>
+                                                    </div>
+                                                </div>
+
+                                            </div> <!-- 1 -->
+
+                                            <div class="form-group allGroup">
+                                                <div class="col-md-5 col-sm-12 col-xs-12" style="padding: 0px 5px 0px 0px;">
+                                                    <select id="searchType" placeholder="请选择搜索类别"
+                                                            class="form-control">
+                                                        <option selected="selected" value="name">监控对象</option>
+                                                        <option value="deviceNumber">终端号</option>
+                                                        <option value="simcardNumber">SIM卡号</option>
+                                                        <option value="assignName">分组</option>
+                                                        <option value="professional">从业人员</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5 col-sm-12 col-xs-12"
+                                                     style="padding: 0px 10px 0px 0px;">
+                                                    <input id="search_condition" name="search" autocomplete="off"
+                                                           type="text" class="form-control" placeholder="关键字"/>
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 col-xs-12" style="padding: 0px 0px 0px 0px;">
+                                                    <button id="refresh" class="btn btn-default" type="button"
+                                                            name="refresh" title="刷新">
+                                                        <span class="glyphicon glyphicon-refresh"></span>
+                                                    </button>
+                                                </div>
+                                            </div> <!-- 2 -->
+
+                                            <div class="col-md-12 groupzTree" id="thetree">
+                                                <ul id="treeDemo" class="ztree"></ul>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% block main_content %}
+                <div id="content-right" class="col-md-10 content-right">
+                    <div class="panel panel-default contPanelMargin">
+                        <div class="panel-body fixed-table-body form-horizontal btnPaddingTop">
+                            <div class="form-group  mapDataPadd">
+                                <div class="col-md-12 mapPaddCon">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 隐藏按钮 -->
+                        <div id="goShow">
+                            <i id="goHidden" class="fa fa-chevron-right"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+                    
+                {% endblock main_content %}
+            </section>
+        </section>
+    </section>
+    {% include 'footer.html' %}
+<script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/jquery.nanoscroller.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/bootstrap-toggle.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/toastr.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/bootstrap-suggest.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'virvo/resources/js/inputClear.min.js' %}"></script>
+    <script src="{% static 'virvo/wro/common-footer.js' %}"></script>
+
+    <script src="{% static 'virvo/resources/js/distpicker.data.js' %}"></script>
+    <script src="{% static 'virvo/wro/realtime-monitoring.js' %}"></script>
+<div id="commonWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="commonLgWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonLgWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="commonSmWin" class="modal fade" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonSmWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="uploaderWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "uploaderWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+{% block javascript %}
+
+
+    {% endblock %}
+</body>
+    <!-- <script>
+            $(function(){
+                $.ajax({
+                    url: '/clbs/inspectAuthorizationDate',
+                    type: 'POST',
+                    data: null,
+                    async:false,
+                    dataType: 'json',
+                    success: function (data) {
+                        if(data != null){
+                            if(data.success==true){
+                                if(data.obj.errMsg != null && data.obj.errMsg != ""){
+                                    layer.msg(data.obj.errMsg,{move:false});
+                                }
+                            }else{
+                                if(data != null && data != ""){
+                                    if(data.msg != null && data.msg !=""){
+                                        layer.msg(data.msg,{move:false});
+                                    }
+                                }
+                            }
+                        }
+                    },
+                });
+            });
+    </script> -->
+</html>

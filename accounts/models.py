@@ -10,9 +10,28 @@ import json
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
 
+
+class MyRolesManager(models.Manager):
+    """
+    The manager for the auth's Group model.
+    """
+    use_in_migrations = True
+
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
 class MyRoles(Group):
-    notes = models.CharField(max_length=156,blank=True)   
-    permissionTree = models.CharField(max_length=50000,blank=True)
+    notes           = models.CharField(max_length=156,blank=True)   
+    rid             = models.CharField(max_length=1000,blank=True)   
+    permissionTree  = models.CharField(max_length=50000,blank=True)
+
+    objects = MyRolesManager()
+
+    def __unicode__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
 
     
 class UserManager(BaseUserManager):

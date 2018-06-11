@@ -83,9 +83,10 @@
             };
             //表格setting
             var setting = {
+                suffix  : '/',
                 listUrl : 'role/list/',
                 editUrl : 'role/edit/',
-                deleteUrl : 'role/delete_',
+                deleteUrl : 'role/delete_/',
                 deletemoreUrl : 'role/deletemore',
                 enableUrl : 'user/enable_',
                 disableUrl : 'user/disable_',

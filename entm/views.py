@@ -742,6 +742,41 @@ class RoleEditView(AjaxableResponseMixin,UpdateView):
 
 
 """
+Assets comment deletion, manager
+"""
+class RoleDeleteView(AjaxableResponseMixin,DeleteView):
+    model = MyRoles
+    
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs["pk"]
+
+        print("role delete:",args,kwargs)
+        
+        return super(RoleDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        # print("delete objects:",self.kwargs,kwargs)
+        return MyRoles.objects.get(pk=kwargs["pk"])
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print("delete?",args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+
+        #delete user role in groups
+        # for g in self.object.groups.all():
+        #     g.user_set.remove(self.object)
+
+        self.object.delete()
+        result = dict()
+        # result["success"] = 1
+        return HttpResponse(json.dumps({"success":1}))
+
+
+"""
 组织和用户管理
 """
 class UserMangerView(LoginRequiredMixin,TemplateView):

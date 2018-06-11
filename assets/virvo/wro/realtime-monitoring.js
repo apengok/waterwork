@@ -1180,9 +1180,9 @@ var pageLayout = {
     // 页面布局
     init: function(){
     	var url = "/clbs/v/monitoring/getHost";
-        ajax_submit("POST", url, "json", true, {}, true, function(data){
-        	hostUrl = 'http://' + data.obj.host + '/F3/sockjs/webSocket';
-        });
+        // ajax_submit("POST", url, "json", true, {}, true, function(data){
+        // 	hostUrl = 'http://' + data.obj.host + '/F3/sockjs/webSocket';
+        // });
         winHeight = $(window).height();//可视区域高度
         headerHeight = $("#header").height();//头部高度
         var tabHeight = $myTab.height();//信息列表table选项卡高度
@@ -16023,15 +16023,15 @@ $(function(){
     var nmoline;
     //初始化页面
     pageLayout.init();
-    pageLayout.arrayExpand();
-    pageLayout.createMap();
-    pageLayout.responseSocket();
-    fenceOperation.init();
-    fenceOperation.fenceBindList();
+    // pageLayout.arrayExpand();
+    // pageLayout.createMap();
+    // pageLayout.responseSocket();
+    // fenceOperation.init();
+    // fenceOperation.fenceBindList();
     // fenceOperation.fenceEnterprise();
-    amapOperation.init();
-    treeMonitoring.init();
-    pageLayout.getNowFormatDate();
+    // amapOperation.init();
+    // treeMonitoring.init();
+    // pageLayout.getNowFormatDate();
     $("[data-toggle='tooltip']").tooltip();
     //右边菜单显示隐藏切换
     $("#toggle-left").on("click",pageLayout.toggleLeft);

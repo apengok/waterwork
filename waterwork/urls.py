@@ -37,6 +37,9 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     
+    #monitor
+    url(r'^monitor/', include('monitor.urls', namespace='monitor')),
+
     #waterwork
     url(r'^entm/', include('entm.urls', namespace='entm')),
     

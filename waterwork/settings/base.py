@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'entm',
     'accounts',
+    'monitor',
     # 'channels',
 ]
 
@@ -127,6 +128,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.User' #change buikld-in user model to us
+AUTH_GROUP_MODEL = 'accounts.MyRoles'
+
 LOGIN_URL = '/login/'
 LOGIN_URL_REDIRECT = '/'
 LOGOUT_URL = '/logout/'
