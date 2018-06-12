@@ -3,10 +3,10 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.urls import reverse
-
+from mptt.models import MPTTModel, TreeForeignKey
 # Create your models here.
 
-class Organizations(models.Model):
+class Organizations(MPTTModel):
     name               = models.CharField('组织机构名称',max_length=300,null=True)
     attribute          = models.CharField('组织机构性质',max_length=300,null=True,blank=True)
     register_date      = models.CharField('注册日期',max_length=30,null=True,blank=True)
@@ -19,6 +19,10 @@ class Organizations(models.Model):
     is_org        = models.BooleanField(max_length=300,blank=True)
     uuid          = models.CharField(max_length=300,null=True,blank=True)
 
+    parent  = TreeForeignKey('self', null=True, blank=True,on_delete=models.CASCADE, related_name='children', db_index=True)
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
     class Meta:
         managed = True

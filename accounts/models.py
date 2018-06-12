@@ -7,6 +7,8 @@ from django.contrib.auth.models import (
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 import json
+from django.db.models import Q
+
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
 
@@ -32,6 +34,19 @@ class MyRoles(Group):
 
     def __str__(self):
         return self.name
+
+
+class MyUserQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter( #icontains
+                Q(user_name__iexact=query)|
+                Q(real_name__iexact=query)|
+                Q(phone_number__iexact=query)|
+                Q(email__iexact=query)
+                ).distinct()
+        return self        
 
     
 class UserManager(BaseUserManager):
@@ -74,6 +89,12 @@ class UserManager(BaseUserManager):
         user.admin = True
         user.save(using=self._db)
         return user
+
+    def get_queryset(self):
+        return MyUserQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
 
 
 class User(AbstractBaseUser,PermissionsMixin):

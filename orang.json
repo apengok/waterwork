@@ -1,0 +1,44 @@
+[
+{
+  "model": "entm.organizations",
+  "pk": 1,
+  "fields": {
+    "name": "\u5a01\u5c14\u6c83",
+    "attribute": null,
+    "register_date": "2018-06-04",
+    "owner_name": null,
+    "phone_number": null,
+    "firm_address": null,
+    "cid": "virvo_organization",
+    "pId": "organization",
+    "is_org": true,
+    "uuid": "2354x1_asdf",
+    "parent": null,
+    "lft": 1,
+    "rght": 4,
+    "tree_id": 1,
+    "level": 0
+  }
+},
+{
+  "model": "entm.organizations",
+  "pk": 2,
+  "fields": {
+    "name": "\u4e16\u7eaa\u4eba\u901a\u8baf",
+    "attribute": null,
+    "register_date": "2018-06-04",
+    "owner_name": null,
+    "phone_number": null,
+    "firm_address": null,
+    "cid": null,
+    "pId": null,
+    "is_org": false,
+    "uuid": "dsf23a_dfef",
+    "parent": 1,
+    "lft": 2,
+    "rght": 3,
+    "tree_id": 1,
+    "level": 1
+  }
+}
+]

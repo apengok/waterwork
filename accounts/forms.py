@@ -80,17 +80,31 @@ class UserAdminChangeForm(forms.ModelForm):
 
 class LoginForm(forms.Form):
     user_name    = forms.CharField(label='user name')
-    password = forms.CharField(widget=forms.PasswordInput)
+    password     = forms.CharField(widget=forms.PasswordInput)
+    captchaCode  = forms.CharField(widget = forms.HiddenInput(),required=False)
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(LoginForm, self).__init__(*args, **kwargs)
+
+    # def clean_captchaCode(self):
+    #     captchaCode = self.cleaned_data.get('captchaCode')
+    #     if len(captchaCode) == 0:
+    #         print '请把滑块滑到右边'
+    #         raise forms.ValidationError("请把滑块滑到右边")
+    #     return captchaCode
 
     def clean(self):
         request = self.request
         data = self.cleaned_data
         user_name  = data.get("user_name")
         password  = data.get("password")
+        print data
+        captchaCode = data.get('captchaCode') or ''
+        if len(captchaCode) == 0:
+            print( '请把滑块滑到右边')
+            raise forms.ValidationError("请把滑块滑到右边")
+
         qs = User.objects.filter(user_name=user_name)
         if qs.exists():
             # user email is registered, check active/
@@ -115,18 +129,11 @@ class LoginForm(forms.Form):
                 #     raise forms.ValidationError("This user is inactive.")
         user = authenticate(request, username=user_name, password=password)
         if user is None:
-            raise forms.ValidationError("Invalid credentials")
+            print("invalid user")
+            raise forms.ValidationError("用户名或密码错误")
         login(request, user)
         self.user = user
         return data   
-
-MALE = '男'
-FEMALE = '女'
-SEX = (
-        
-        (MALE, "男"),
-        (FEMALE, "女"),
-    )   
 
 class RegisterForm(forms.ModelForm):
     """A form for creating new users. Includes all the required

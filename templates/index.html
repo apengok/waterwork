@@ -119,27 +119,42 @@
                     <div class="main_box">
                         <div class="main_cont">
                             <div class="wrapper">
-                                <form method='POST'>{% csrf_token %}
-                                <dl class="xl_info clearfix">
-                                    <dt>登录</dt>
-                                    <dd><input name="user_name" type="text" class="srh" placeholder="请输入账号"></dd>
-                                    <dd><input name="password" type="password" class="srh" placeholder="请输入密码"></dd>
-                                    <dd><input type="hidden" class="form-control inputW100"
-                                           id="captchaCode" name="captchaCode" autocomplete="off" value="" required></dd>
-                                    <div class="verify" onselectstart="return false">
-                                        <span></span>
-                                        <div id="verify_box">
-                                            <div id="verify_xbox">
-                                                <div id="btn">
-                                                    <img id="ded1" src="/static/virvo/logins/images/a.png">
+                                
+                                    <dl class="xl_info clearfix">
+                                    <form method='POST'>{% csrf_token %}
+                                        <dt>登录</dt>
+                                        <dd><input name="user_name" type="text" class="srh" placeholder="请输入账号" required></dd>
+                                        <dd><input name="password" type="password" class="srh" placeholder="请输入密码" required></dd>
+                                        <dd><input type="hidden" class="form-control inputW100"
+                                               id="captchaCode" name="captchaCode" autocomplete="off" value="" ></dd>
+                                        <div class="verify" onselectstart="return false">
+                                            <span></span>
+                                            <div id="verify_box">
+                                                <div id="verify_xbox">
+                                                    <div id="btn">
+                                                        <img id="ded1" src="/static/virvo/logins/images/a.png">
+                                                    </div>
                                                 </div>
+                                                &nbsp; &nbsp; &nbsp; &nbsp;按住滑块，拖动到最右边
                                             </div>
-                                            &nbsp; &nbsp; &nbsp; &nbsp;按住滑块，拖动到最右边
                                         </div>
-                                    </div>
-                                    <dd><input class="button white radius4 dl" type="submit" value="登录"
-                                               style="width: 250px"/></dd>
-                                           </form>
+                                        <dd><span>{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}</span></dd>
+                                        <dd><input class="button white radius4 dl" type="submit" value="登录"
+                                                   style="width: 250px"/></dd>
+                                    </form>
                                     <dd>
                                         <div class="morph-button morph-button-modal morph-button-modal-3 morph-button-fixed"
                                              style="width: 47% ;height: 43px;margin-top:0%;margin-left: 0% ">
