@@ -99,7 +99,7 @@ class LoginForm(forms.Form):
         data = self.cleaned_data
         user_name  = data.get("user_name")
         password  = data.get("password")
-        print data
+        
         captchaCode = data.get('captchaCode') or ''
         if len(captchaCode) == 0:
             print( '请把滑块滑到右边')

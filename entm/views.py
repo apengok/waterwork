@@ -223,7 +223,115 @@ def choicePermissionTree(request):
     
     instance = MyRoles.objects.get(id=roleid)
     permissiontree = instance.permissionTree
-    ctree = PERMISSION_TREE[:]
+    ctree = [
+        {"name":"数据监控","pId":"0","id":"perms_datamonitor"},
+        {"name":"数据分析","pId":"0","id":"perms_datanalys"},
+        {"name":"报警中心","pId":"0","id":"perms_alarmcenter"},
+        {"name":"基础管理","pId":"0","id":"perms_basemanager"},
+        {"name":"设备管理","pId":"0","id":"perms_devicemanager"},
+        {"name":"企业管理","pId":"0","id":"perms_firmmanager"},
+        {"name":"基准分析","pId":"0","id":"perms_basenalys"},
+        {"name":"报表统计","pId":"0","id":"perms_reporttable"},
+        {"name":"系统管理","pId":"0","id":"perms_systemconfig"},
+
+        # 数据监控 sub
+        {"name":"地图监控","pId":"perms_datamonitor","id":"mapmonitor_perms_datamonitor"},
+        {"name":"可写","pId":"mapmonitor_perms_datamonitor","id":"mapmonitor_perms_datamonitor_edit","type":"premissionEdit"},
+        {"name":"实时曲线","pId":"perms_datamonitor","id":"realcurlv_perms_datamonitor"},
+        {"name":"可写","pId":"realcurlv_perms_datamonitor","id":"realcurlv_perms_datamonitor_edit","type":"premissionEdit"},
+        {"name":"实时数据","pId":"perms_datamonitor","id":"realdata_perms_datamonitor"},
+        {"name":"可写","pId":"realdata_perms_datamonitor","id":"realdata_perms_datamonitor_edit","type":"premissionEdit"},
+        {"name":"DMA在线监控","pId":"perms_datamonitor","id":"dmaonline_perms_datamonitor"},
+        {"name":"可写","pId":"dmaonline_perms_datamonitor","id":"dmaonline_perms_datamonitor_edit","type":"premissionEdit"},
+
+        # 数据分析 sub
+        {"name":"日用水分析","pId":"perms_datanalys","id":"dailyuse_perms_datanalys"},
+        {"name":"可写","pId":"dailyuse_perms_datanalys","id":"dailyuse_perms_datanalys_edit","type":"premissionEdit"},
+        {"name":"月用水分析","pId":"perms_datanalys","id":"monthlyuse_perms_datanalys"},
+        {"name":"可写","pId":"monthlyuse_perms_datanalys","id":"monthlyuse_perms_datanalys_edit","type":"premissionEdit"},
+        {"name":"DMA产销差分析","pId":"perms_datanalys","id":"dmacxc_perms_datanalys"},
+        {"name":"可写","pId":"dmacxc_perms_datanalys","id":"dmacxc_perms_datanalys_edit","type":"premissionEdit"},
+        {"name":"流量分析","pId":"perms_datanalys","id":"flownalys_perms_datanalys"},
+        {"name":"可写","pId":"flownalys_perms_datanalys","id":"flownalys_perms_datanalys_edit","type":"premissionEdit"},
+        {"name":"对比分析","pId":"perms_datanalys","id":"comparenalys_perms_datanalys"},
+        {"name":"可写","pId":"comparenalys_perms_datanalys","id":"comparenalys_perms_datanalys_edit","type":"premissionEdit"},
+        {"name":"配表分析","pId":"perms_datanalys","id":"peibiao_perms_datanalys"},
+        {"name":"可写","pId":"peibiao_perms_datanalys","id":"peibiao_perms_datanalys_edit","type":"premissionEdit"},
+        {"name":"原始数据","pId":"perms_datanalys","id":"rawdata_perms_datanalys"},
+        {"name":"可写","pId":"rawdata_perms_datanalys","id":"rawdata_perms_datanalys_edit","type":"premissionEdit"},
+        {"name":"夜间最小流量","pId":"perms_datanalys","id":"mnf_perms_datanalys"},
+        {"name":"可写","pId":"mnf_perms_datanalys","id":"mnf_perms_datanalys_edit","type":"premissionEdit"},
+
+        # 报警中心 sub
+        {"name":"站点报警设置","pId":"perms_alarmcenter","id":"stationalarm_perms_alarmcenter"},
+        {"name":"可写","pId":"stationalarm_perms_alarmcenter","id":"stationalarm_perms_alarmcenter_edit","type":"premissionEdit"},
+        {"name":"DMA报警设置","pId":"perms_alarmcenter","id":"dmaalarm_perms_alarmcenter"},
+        {"name":"可写","pId":"dmaalarm_perms_alarmcenter","id":"dmaalarm_perms_alarmcenter_edit","type":"premissionEdit"},
+        {"name":"报警查询","pId":"perms_alarmcenter","id":"queryalarm_perms_alarmcenter"},
+        {"name":"可写","pId":"queryalarm_perms_alarmcenter","id":"queryalarm_perms_alarmcenter_edit","type":"premissionEdit"},
+        
+
+        # 基础管理 sub
+        {"name":"dma管理","pId":"perms_basemanager","id":"dmamanager_perms_basemanager"},
+        {"name":"可写","pId":"dmamanager_perms_basemanager","id":"dmamanager_perms_basemanager_edit","type":"premissionEdit"},
+        {"name":"站点管理","pId":"perms_basemanager","id":"stationmanager_perms_basemanager"},
+        {"name":"可写","pId":"stationmanager_perms_basemanager","id":"stationmanager_perms_basemanager_edit","type":"premissionEdit"},
+
+        # 企业管理 sub
+        {"name":"角色管理","pId":"perms_firmmanager","id":"rolemanager_perms_firmmanager"},
+        {"name":"可写","pId":"rolemanager_perms_firmmanager","id":"rolemanager_perms_firmmanager_edit","type":"premissionEdit"},
+        {"name":"组织和用户管理","pId":"perms_firmmanager","id":"organusermanager_perms_basemanager"},
+        {"name":"可写","pId":"organusermanager_perms_basemanager","id":"organusermanager_perms_basemanager_edit","type":"premissionEdit"},
+
+        # 设备管理 sub
+        {"name":"表具管理","pId":"perms_devicemanager","id":"meters_perms_devicemanager"},
+        {"name":"可写","pId":"meters_perms_devicemanager","id":"meters_perms_devicemanager_edit","type":"premissionEdit"},
+        {"name":"SIM卡管理","pId":"perms_devicemanager","id":"simcard_perms_devicemanager"},
+        {"name":"可写","pId":"simcard_perms_devicemanager","id":"simcard_perms_devicemanager_edit","type":"premissionEdit"},
+        {"name":"参数指令","pId":"perms_devicemanager","id":"params_perms_devicemanager"},
+        {"name":"可写","pId":"params_perms_devicemanager","id":"params_perms_devicemanager_edit","type":"premissionEdit"},
+        
+        # 基准分析 sub
+        {"name":"DMA基准分析","pId":"perms_basenalys","id":"dma_perms_basenalys"},
+        {"name":"可写","pId":"dma_perms_basenalys","id":"dma_perms_basenalys_edit","type":"premissionEdit"},
+        {"name":"最小流量分析","pId":"perms_basenalys","id":"mf_perms_basenalys"},
+        {"name":"可写","pId":"mf_perms_basenalys","id":"mf_perms_basenalys_edit","type":"premissionEdit"},
+        {"name":"日基准流量分析","pId":"perms_basenalys","id":"day_perms_basenalys"},
+        {"name":"可写","pId":"day_perms_basenalys","id":"day_perms_basenalys_edit","type":"premissionEdit"},
+        
+        # 统计报表 sub
+        {"name":"日志查询","pId":"perms_reporttable","id":"querylog_perms_reporttable"},
+        {"name":"可写","pId":"querylog_perms_reporttable","id":"querylog_perms_reporttable_edit","type":"premissionEdit"},
+        {"name":"报警报表","pId":"perms_reporttable","id":"alarm_perms_reporttable"},
+        {"name":"可写","pId":"alarm_perms_reporttable","id":"alarm_perms_reporttable_edit","type":"premissionEdit"},
+        {"name":"DMA统计报表","pId":"perms_reporttable","id":"dmastatics_perms_reporttable"},
+        {"name":"可写","pId":"dmastatics_perms_reporttable","id":"dmastatics_perms_reporttable_edit","type":"premissionEdit"},
+        {"name":"大用户报表","pId":"perms_reporttable","id":"biguser_perms_reporttable"},
+        {"name":"可写","pId":"biguser_perms_reporttable","id":"biguser_perms_reporttable_edit","type":"premissionEdit"},
+        {"name":"流量报表","pId":"perms_reporttable","id":"flows_perms_reporttable"},
+        {"name":"可写","pId":"flows_perms_reporttable","id":"flows_perms_reporttable_edit","type":"premissionEdit"},
+        {"name":"水量报表","pId":"perms_reporttable","id":"waters_perms_reporttable"},
+        {"name":"可写","pId":"waters_perms_reporttable","id":"waters_perms_reporttable_edit","type":"premissionEdit"},
+        {"name":"表务报表","pId":"perms_reporttable","id":"biaowu_perms_reporttable"},
+        {"name":"可写","pId":"biaowu_perms_reporttable","id":"biaowu_perms_reporttable_edit","type":"premissionEdit"},
+        {"name":"大数据报表","pId":"perms_reporttable","id":"bigdata_perms_reporttable"},
+        {"name":"可写","pId":"bigdata_perms_reporttable","id":"bigdata_perms_reporttable_edit","type":"premissionEdit"},
+        
+
+
+        
+        # 系统管理 sub
+        {"name":"平台个性化管理","pId":"perms_systemconfig","id":"personality_perms_systemconfig","chkDisabled":"true"},
+        {"name":"可写","pId":"personality_perms_systemconfig","id":"personality_perms_systemconfig_edit","type":"premissionEdit"},
+        {"name":"系统设置","pId":"perms_systemconfig","id":"system_perms_systemconfig"},
+        {"name":"可写","pId":"system_perms_systemconfig","id":"system_perms_systemconfig_edit","type":"premissionEdit"},
+        {"name":"转发设置","pId":"perms_systemconfig","id":"retransit_perms_systemconfig"},
+        {"name":"可写","pId":"retransit_perms_systemconfig","id":"retransit_perms_systemconfig_edit","type":"premissionEdit"},
+        {"name":"图标配置","pId":"perms_systemconfig","id":"icons_perms_systemconfig"},
+        {"name":"可写","pId":"icons_perms_systemconfig","id":"icons_perms_systemconfig_edit","type":"premissionEdit"},
+        {"name":"日志查询","pId":"perms_systemconfig","id":"querylog_perms_systemconfig"},
+        {"name":"可写","pId":"querylog_perms_systemconfig","id":"querylog_perms_systemconfig_edit","type":"premissionEdit"},
+    ]
 
     print(permissiontree)
     
@@ -283,12 +391,6 @@ def findOperations(request):
     return JsonResponse(operarions_list)
     
 
-# def groupadd(request):
-#     print(request)
-
-#     return HttpResponse(json.dumps([{"ok":1}]))
-
-
 """
 group add
 """
@@ -328,16 +430,6 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
 
         return super(UserGroupAddView,self).form_valid(form)   
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super(UserGroupAddView, self).get_context_data(*args, **kwargs)
-    #     print(args,kwargs)
-    #     return context
-
-    # def get_form_kwargs(self, *args, **kwargs):
-    #     print("get form kwargs",args,kwargs)
-    #     form_kwargs = super(UserGroupAddView, self).get_form_kwargs(*args, **kwargs)
-        
-    #     return form_kwargs
 
     def get(self,request, *args, **kwargs):
         print("get::::",args,kwargs)
@@ -348,28 +440,9 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
         initial_base["cid"] = kwargs.get("cid")
         initial_base["pId"] = kwargs.get("pId")
         form.initial = initial_base
-        # form.fields["cid"].value = kwargs.get("cid")
-        # form.fields["pId"].value = kwargs.get("pid")
-        # form.fields["name"].widget = forms.widgets.Textarea()
-        # return response using standard render() method
+        
         return render(request,self.template_name,
                       {"form":form,})
-
-    
-    # def post(self,request,*args,**kwargs):
-    #     print("do you been here 123?")
-    #     print (request.POST)
-    #     print(kwargs)
-        
-
-    #     form = self.get_form()
-        
-            
-        
-
-    #     # return super(AssignRoleView,self).render_to_response(context)
-    #     return redirect(reverse_lazy("entm:groupadd"))
-
 
 
 """
@@ -455,6 +528,7 @@ class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
     
 
 def rolelist(request):
+    print('get rolelist:',request)
     draw = 1
     length = 0
     start=0
@@ -479,7 +553,7 @@ def rolelist(request):
     rolel = MyRoles.objects.all()
     data = []
     for r in rolel:
-        data.append({"id":r.pk,"name":r.name,"notes":r.notes})
+        data.append({"id":r.id,"name":r.name,"notes":r.notes})
     # json = serializers.serialize("json", rolel)
     recordsTotal = rolel.count()
 
@@ -577,40 +651,8 @@ def verification(request):
     print("verification:",request)
     return JsonResponse({"success":True})
 
-def useredit(request):
-    print(request)
-
-    return HttpResponse(json.dumps([{"ok":1}]))
-
-def useradd(request):
-    print(request)
-
-    return HttpResponse(json.dumps([{"ok":1}]))    
-
-
-def userdelete(request):
-    print(request)
-
-    return HttpResponse(json.dumps([{"ok":1}]))
-
 
 def userdeletemore(request):
-    print(request)
-
-    return HttpResponse(json.dumps([{"ok":1}]))
-
-def roleedit(request):
-    print(request)
-
-    return HttpResponse(json.dumps([{"ok":1}]))
-
-# def roleadd(request):
-#     print(request)
-
-#     return HttpResponse(json.dumps([{"ok":1}]))    
-
-
-def roledelete(request):
     print(request)
 
     return HttpResponse(json.dumps([{"ok":1}]))
@@ -631,8 +673,8 @@ class RolesMangerView(LoginRequiredMixin,TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(RolesMangerView, self).get_context_data(*args, **kwargs)
         context["page_title"] = "角色管理"
-        context["role_list"] = MyRoles.objects.all()
-
+        context["page_menu"] = "企业管理"
+        
         return context  
 
     
@@ -677,23 +719,6 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
 
 
         return super(RolesAddView,self).form_valid(form)
-
-    # def post(self,request,*args,**kwargs):
-    #     print("do you been here 123?")
-    #     print (request.POST)
-    #     print(kwargs)
-
-    #     form = self.get_form()
-    #     instance = form.save(commit=False)
-    #     print(form.cleaned_data["permissionTree"])
-        
-    #     form.save()
-            
-        
-
-    #     # return super(AssignRoleView,self).render_to_response(context)
-    #     return redirect(reverse_lazy("dma:roles_manager"))
-
 
 
 """

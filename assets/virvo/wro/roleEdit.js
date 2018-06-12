@@ -59,16 +59,17 @@
             return flag;
         },
         onCheckPermissionEdit: function(e, treeId, treeNode){
-            var zTree = $.fn.zTree.getZTreeObj("permissionEditDemo"), nodes = zTree
-                .getCheckedNodes(true), v = "";
+            var zTree = $.fn.zTree.getZTreeObj("permissionEditDemo"), nodes = zTree.getCheckedNodes(true), v = "";
             for (var i = 0, l = nodes.length; i < l; i++) {
                 v += nodes[i].name + ",";
             }
+            console.log('v:',v);
         },
         doSubmit: function(){
             var list = [];
             var editlist = [];
             var checkNodes = $.fn.zTree.getZTreeObj("permissionEditDemo").getNodesByParam("checked", true);
+            console.log('checked nodes:',checkNodes);
             if (checkNodes != null && checkNodes.length > 0) {
                 for (var i = 0; i < checkNodes.length; i++) {
                     var obj = {};
@@ -81,6 +82,7 @@
                     }
                 }
             }
+            console.log('editlist:',editlist);
             // 重组可写的权限 
             if (list.length > 0 && editlist.length >0) {
                 for (var i = 0; i < list.length; i++) {
@@ -91,6 +93,7 @@
                     }
                 }
             }
+            console.log('list:',list);
             $("#permissionEditTree").val(JSON.stringify(list));
             if(roleEdit.validates()){
                 $("#editForm").ajaxSubmit(function(data) {
@@ -142,10 +145,10 @@
         $('input').inputClear();
 
         //优先级策略单选组选择
-        $(".priority-group").on("click","input",function () {
-            $(".priority-group input").prop("checked",false);
-            $(this).prop("checked",true)
-        });
+        // $(".priority-group").on("click","input",function () {
+        //     $(".priority-group input").prop("checked",false);
+        //     $(this).prop("checked",true)
+        // });
 
         $("#doSubmitEdit").on("click",roleEdit.doSubmit);
     })
