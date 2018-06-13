@@ -57,5 +57,25 @@
     "tree_id": 1,
     "level": 0
   }
+},
+{
+  "model": "accounts.user",
+  "pk": 1,
+  "fields": {
+    "is_superuser": false,
+    "user_name": "admin",
+    "real_name": "",
+    "sex": "",
+    "phone_number": "",
+    "belongto": "威尔沃",
+    "expire_date": "2019-06-14",
+    "Role": "",
+    "email": "",
+    "is_active": true,
+    "staff": true,
+    "admin": true,
+    "groups": [],
+    "user_permissions": []
+  }
 }
 ]

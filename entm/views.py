@@ -615,8 +615,8 @@ def userlist(request):
     if groupName == "":
         userl = User.objects.all()
     else:
-        entprise = Organizations.objects.get(cid=groupName)
-        userl = User.objects.filter(belongto=entprise.name)
+        # entprise = Organizations.objects.get(cid=groupName)
+        userl = User.objects.filter(idstr__icontains=groupName)
 
     if simpleQueryParam != "":
         userl = userl.filter(real_name__icontains=simpleQueryParam)
@@ -845,7 +845,14 @@ class UserAddView(AjaxableResponseMixin,CreateView):
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        print("user add dispatch",args,kwargs)
+        if self.request.method == 'GET':
+            uuid = self.request.GET.get("uuid")
+            kwargs["uuid"] = uuid
+
+        if self.request.method == 'POST':
+            uuid = self.request.POST.get("uuid")
+            kwargs["uuid"] = uuid
+        print("uuid:",kwargs.get('uuid'))
         return super(UserAddView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
@@ -853,14 +860,38 @@ class UserAddView(AjaxableResponseMixin,CreateView):
         If the form is valid, redirect to the supplied URL.
         """
         print("user  add here?:",self.request.POST)
-        # print(form)
+        print(self.kwargs,self.args)
+        print(form)
         # do something
         instance = form.save(commit=False)
-        
-        instance.idstr=''
+        uid = self.request.POST.get('user_name')
+        groupId = self.request.POST.get('groupId')
+        idstr = 'uid={uid},ou={groupid}'.format(
+            uid=uid,
+            groupid=groupId)
+        print('idstr:',idstr)
+        instance.idstr=groupId
         instance.uuid=unique_uuid_generator(instance)
 
         return super(UserAddView,self).form_valid(form)   
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(UserAddView, self).get_context_data(*args, **kwargs)
+
+        print('useradd context',args,kwargs,self.request)
+        uuid = self.request.GET.get('uuid') or ''
+
+        groupId = ''
+        if len(uuid) > 0:
+            organ = Organizations.objects.get(uuid=uuid)
+            groupId = organ.cid
+            groupname = organ.name
+        
+        context["groupId"] = groupId
+        context["groupname"] = groupname
+        
+
+        return context  
 
 
 """
@@ -888,7 +919,16 @@ class UserEditView(AjaxableResponseMixin,UpdateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        form.save()
+        print('useredit form:',form)
+        instance = form.save()
+        uid = form.cleaned_data.get('user_name')
+        groupId = form.cleaned_data.get('groupIds')
+        idstr = 'uid={uid},ou={groupid}'.format(
+            uid=uid,
+            groupid=groupId)
+        print('idstr:',idstr)
+        instance.idstr=groupId
+        # instance.uuid=unique_uuid_generator(instance)
         return super(UserEditView,self).form_valid(form)
         # role_list = MyRoles.objects.get(id=self.role_id)
         # return HttpResponse(render_to_string("dma/role_manager.html", {"role_list":role_list}))

@@ -11,9 +11,9 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('auth', '0010_remove_group_parent'),
-    ]
+    # dependencies = [
+    #     ('auth', '0010_remove_group_parent'),
+    # ]
 
     operations = [
         migrations.CreateModel(

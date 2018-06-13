@@ -8,7 +8,7 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
-                <input id = "userId"  type="text" hidden="true" name="id" value="{{ form.pk.value }}" />
+                <input id = "userId"  type="text" hidden="true" name="id" value="{{ form.idstr.value }}" />
                 <input id="sign" type="text" hidden="true" name="sign" value="" />
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label
@@ -25,14 +25,14 @@
                             type="password" />
                     </div>
                 </div>
-                <div id="sendAPassWord" class="form-group hidden">
+                <!-- <div id="sendAPassWord" class="form-group hidden">
                     <label class="col-md-3 control-label">下发口令：</label>
                     <div class="col-md-7">
                         <input placeholder="请输入下发口令" class="form-control" type="password" id="sendDownCommand" name="sendDownCommand" value="">
                     </div>
-                </div>
+                </div> -->
                 <input id="groupIds" name="groupId" type="text"
-                    hidden="true" value="ou=ORG_8a4843cc-7c83-42d7-91c2-36a9f37d04b1,ou=ORG_187888e1-7a09-43cf-bd46-2717b3d4382d,ou=organization" />
+                    hidden="true" value="{{ form.idstr.value }}" />
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label
                         class="text-danger">*</label> 所属企业：</label>
@@ -102,7 +102,7 @@
         </button>
     </div>
 </form>
-<input value="uid=0951123456,ou=ORG_8a4843cc-7c83-42d7-91c2-36a9f37d04b1,ou=ORG_187888e1-7a09-43cf-bd46-2717b3d4382d,ou=organization" id="currentUserId" type="hidden"/>
+<input value="{{ user.idstr }}" id="currentUserId" type="hidden"/>
 <script>
     var userNameNull = "\u8BF7\u8F93\u5165\u7528\u6237\u540D\uFF0C\u8303\u56F4\uFF1A4~25";
     var userNameError = "\u8BF7\u8F93\u5165\u5B57\u6BCD/\u6570\u5B57/\u4E0B\u5212\u7EBF/\u77ED\u6760\uFF0C\u5982\uFF1Alove\u3001\u5C0F\u9C7C\u30011234\u3001F3-808";

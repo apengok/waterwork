@@ -46,7 +46,7 @@
             </li>
         </ul>
         <!-- 用户所属组织id -->
-        <input id="userGroupId" value="" type="text" hidden="true">
+        <input id="userGroupId" value="{{ user.idstr }}" type="text" hidden="true">
         <!-- 用户所属组织name -->
         <input id="userGroupName" value="{{ user.groups.all.0 }}" type="text" hidden="true">
         <!-- 用户是否为admin -->

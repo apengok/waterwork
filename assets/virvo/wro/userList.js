@@ -306,7 +306,8 @@
                                 async:false,
                                 dataType: 'json',
                                 success: function (data) {
-                                    var addData = JSON.parse(data);             
+                                    var data2 = JSON.stringify(data);
+                                    var addData = JSON.parse(data2);             
                                     var nodeName;
                                     if(preNode != null){
                                         nodeName = preNode.name;

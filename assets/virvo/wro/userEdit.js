@@ -176,13 +176,13 @@
             if(isAdmin == true){
                 return $("#editForm").validate({
                     rules : {
-                        username : {
+                        user_name : {
                             required : true,
                             stringCheck:true,
                             maxSize : 25,
                             minSize : 4
                         },
-                        fullName : {
+                        real_name : {
                             maxlength : 20,
                             minlength : 2
                         },
@@ -195,28 +195,28 @@
                             minlength : 6,
                             maxlength : 25
                         },
-                        groupName : {
+                        belongto : {
                             required : true
                         },
-                        authorizationDate : {
+                        expire_date : {
                             selectDate : true
                         },
-                        mail : {
+                        email : {
                             email : true,
                             maxlength : 60
                         },
-                        mobile : {
+                        phone_number : {
                             isTel : true
                         }
                     },
                     messages : {
-                        username : {
+                        user_name : {
                             required : userNameNull,
                             stringCheck : userNameError,
                             maxSize : publicSize25,
                             minSize : userNameMinLength
                         },
-                        fullName : {
+                        real_name : {
                             required : publicNull,
                             maxlength : publicSize20,
                             minlength : publicMinSize2Length
@@ -230,10 +230,10 @@
                             minlength : publicMinSize6Length,
                             maxlength : publicSize25
                         },
-                        groupName : {
+                        belongto : {
                             required : publicSelectGroupNull
                         },
-                        authorizationDate : {
+                        expire_date : {
                             selectDate : usernameAuthorizationToday
                         },
                         mail : {
@@ -248,13 +248,13 @@
             }else{
                 return $("#editForm").validate({
                     rules : {
-                        username : {
+                        user_name : {
                             required : true,
                             stringCheck:true,
                             maxSize : 25,
                             minSize : 4
                         },
-                        fullName : {
+                        real_name : {
                             // required : true,
                             maxlength : 20,
                             minlength : 2
@@ -263,10 +263,10 @@
                             minlength : 6,
                             maxlength : 25
                         },
-                        groupName : {
+                        belongto : {
                             required : true
                         },
-                        authorizationDate : {
+                        expire_date : {
                             required:true,
                             selectDate : true,
                             remote: {
@@ -274,7 +274,7 @@
                                 async:false,
                                 url:"user/verification" ,
                                 data:{
-                                    authorizationDate:function(){return $("#authorizationDateEdit").val();}
+                                    expire_date:function(){return $("#authorizationDateEdit").val();}
                                 },
                                 dataFilter:function(data){
                                     var resultData = $.parseJSON(data);
@@ -290,22 +290,22 @@
                                 }
                             }
                         },
-                        mail : {
+                        email : {
                             email : true,
                             maxlength : 60
                         },
-                        mobile : {
+                        phone_number : {
                             isTel : true
                         }
                     },
                     messages : {
-                        username : {
+                        user_name : {
                             required : userNameNull,
                             stringCheck : userNameError,
                             maxSize : publicSize25,
                             minSize : userNameMinLength
                         },
-                        fullName : {
+                        real_name : {
                             required : publicNull,
                             maxlength : publicSize20,
                             minlength : publicMinSize2Length
@@ -314,19 +314,19 @@
                             minlength : passwordMinLength,
                             maxlength : publicSize25
                         },
-                        groupName : {
+                        belongto : {
                             required : userGroupSelectNull
                         },
-                        authorizationDate : {
+                        expire_date : {
                             required:usernameAuthorizationDateNull,
                             selectDate:usernameAuthorizationToday,
                             remote:"该用户的授权截止日期不能大于您自己的授权截止日期("+AuthorizedDeadline+")"
                         },
-                        mail : {
+                        email : {
                             email :emailError,
                             maxlength : publicSize60
                         },
-                        mobile : {
+                        phone_number : {
                             isTel : phoneError
                         }
                     }
@@ -353,6 +353,9 @@
         userEdit.init();
         $('input').inputClear();
         var userId = $("#currentUserId").val();
+        console.log('userId',$("#userId").val());
+        console.log('current userId',$("#currentUserId").val());
+
         if ($("#userId").val() == userId) {
             $("#zTreeCitySelEdit").attr("disabled","disabled"); // 禁用选择组织控件
             $("#state").attr("disabled","disabled"); // 禁用启停状态下拉选

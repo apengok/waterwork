@@ -40,7 +40,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email')
+        fields = ('user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -68,7 +68,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email')
+        fields = ('user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -143,12 +143,12 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('user_name','password1','belongto','is_active','expire_date','real_name','sex','phone_number','email')
+        fields = ('user_name','password1','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
 
     def __init__(self,instance,*args,**kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
-        self.fields['sex'].widget = forms.RadioSelect(choices=SEX)
+        # self.fields['sex'].widget = forms.RadioSelect(choices=SEX)
         # self.fields['sex'].widget.choices = SEX
 
     # def clean_password2(self):
@@ -175,7 +175,7 @@ class UserDetailChangeForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ['user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email']
+        fields = ['user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid']
 
     def __init__(self,*args,**kwargs):
         super(UserDetailChangeForm, self).__init__(*args, **kwargs)

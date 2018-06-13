@@ -100,6 +100,11 @@
             userAdd.hideErrorMsg();//清除错误提示样式
             var isAdmin = isAdminStr == 'true';
             isAdmina = isAdmin;
+            console.log(treeId);
+            console.log(parentNode);
+            console.log(responseData);
+
+
             //如果根企业下没有节点,就显示错误提示(根企业下不能新建用户)
             if(responseData != null && responseData != undefined && responseData != "" && responseData.length >= 1){
                 if($("#groupId").val()==""){
