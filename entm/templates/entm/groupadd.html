@@ -104,6 +104,7 @@
             },
             // 提交
             doSubmit: function(){
+                console.log('validas...');
                 groupAdd.validates();
                 if(groupAdd.validates() == true){
                     var s = $("#operation").val();
@@ -111,7 +112,8 @@
                         $("#operation").val("");
                     }
                     $("#addForm").ajaxSubmit(function(data) {
-                        var result = eval(data);// $.parseJSON(data);
+                        console.log(data);
+                        var result = $.parseJSON(data);
                         // if (result.success) {
 
                         //     $("#commonWin").modal("hide");
@@ -157,7 +159,7 @@
                         //         }
                         //     }
                         // },
-                        registerDate:{
+                        register_date:{
                             selectRegDate:true
                         },
                         owner_name:{
@@ -181,7 +183,7 @@
                         //     maxlength : "\u957F\u5EA6\u4E0D\u8D85\u8FC718\u4F4D",
                         //     remote : "\u7EC4\u7EC7\u673A\u6784\u4EE3\u7801\u5DF2\u88AB\u4F7F\u7528\uFF0C\u8BF7\u91CD\u65B0\u8F93\u5165"
                         // },
-                        registerDate:{
+                        register_date:{
                             selectRegDate : "\u6CE8\u518C\u65E5\u671F\u5FC5\u987B\u5C0F\u4E8E/\u7B49\u4E8E\u4ECA\u5929"
                         },
                         owner_name:{

@@ -29,7 +29,7 @@
                     "data" : null,
                     "class" : "text-center",
                     render : function(data, type, row, meta) {
-                        var idStr = row.id;
+                        var idStr = row.idstr;
                         var result = '';
                         result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" />';
                         return result;
@@ -39,15 +39,16 @@
                     "data" : null,
                     "class" : "text-center", //操作按钮
                     render : function(data, type, row, meta) {
-                        var idStr = row.id;
-                        var editUrlPath = myTable.editUrl + idStr + "/"; //修改地址
+                        var idStr = row.idstr;
+                        console.log('idstr:',idStr);
+                        var editUrlPath = myTable.editUrl + idStr ; //修改地址
                         var result = '';
                         //修改按钮
                         var isAdminStr = $("#isAdmin").attr("value");
                         var isAdmin = isAdminStr == 'true';
-                        if (isAdmin && idStr == 'cn=ROLE_ADMIN,ou=Groups') { // 若为超级管理员，禁用超级管理员角色的修改按钮 
+                        if (isAdmin && idStr == 'ROLE_ADMIN') { // 若为超级管理员，禁用超级管理员角色的修改按钮 
                         	 result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
-                        }else if (!isAdmin && (idStr == 'cn=ROLE_ADMIN,ou=Groups' || idStr == 'cn=POWER_USER,ou=Groups')) {  // 若为普通管理员，禁用超级管理员角色和普通管理员角色的修改按钮  
+                        }else if (!isAdmin && (idStr == 'ROLE_ADMIN' || idStr == 'POWER_USER')) {  // 若为普通管理员，禁用超级管理员角色和普通管理员角色的修改按钮  
                         	 result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         }else{
                         	 result += '<button href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
@@ -71,7 +72,7 @@
                     "data" : null,
                     "class" : "text-center", //最后一列，操作按钮
                     render : function(data, type, row, meta) {
-                        var idStr = row.id;
+                        var idStr = row.idstr;
                         return "<a onclick='roleList.showPermission(\"" + idStr
                         + "\")'>预览</a>";
                     }
@@ -134,7 +135,7 @@
         },
         // 删除角色
         deleteRole: function(id){
-            if (id == "cn=ROLE_ADMIN,ou=Groups" || id == "cn=POWER_USER,ou=Groups") {
+            if (id == "ROLE_ADMIN" || id == "POWER_USER") {
                 layer.msg(roleNoDelete,{move:false});
             }else{
                 myTable.deleteItem(id);
@@ -154,7 +155,7 @@
             var checkedList = new Array();
             var flag = true;
             $("input[name='subChk']:checked").each(function() {
-                if ($(this).val() == "cn=ROLE_ADMIN,ou=Groups" || $(this).val() == "cn=POWER_USER,ou=Groups") {
+                if ($(this).val() == "ROLE_ADMIN" || $(this).val() == "POWER_USER") {
                     flag = false;
                     return false;
                 }else{

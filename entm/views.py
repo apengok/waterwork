@@ -27,7 +27,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User,MyRoles
 from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailChangeForm
 
-from .utils import unique_cid_generator,unique_uuid_generator
+from .utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from .forms import OrganizationsAddForm,OrganizationsEditForm
 from . models import Organizations
 # from django.core.urlresolvers import reverse_lazy
@@ -214,14 +214,14 @@ def choicePermissionTree(request):
 
 
 
-    roleid = request.POST.get("roleId") or -1
-    print(" get choicePermissionTree",roleid)
+    rid = request.POST.get("roleId") or ''
+    print(" get choicePermissionTree",rid)
 
-    if int(roleid) < 0:
+    if len(rid) <= 0:
         return HttpResponse(json.dumps(PERMISSION_TREE))
 
     
-    instance = MyRoles.objects.get(id=roleid)
+    instance = MyRoles.objects.get(rid=rid)
     permissiontree = instance.permissionTree
     ctree = [
         {"name":"数据监控","pId":"0","id":"perms_datamonitor"},
@@ -333,11 +333,11 @@ def choicePermissionTree(request):
         {"name":"可写","pId":"querylog_perms_systemconfig","id":"querylog_perms_systemconfig_edit","type":"premissionEdit"},
     ]
 
-    print(permissiontree)
+    # print(permissiontree)
     
     if len(permissiontree) > 0:
         ptree = json.loads(permissiontree)
-        print('chiocetree:',ptree)
+        # print('chiocetree:',ptree)
 
         for pt in ptree:
             nodeid = pt["id"]
@@ -355,6 +355,7 @@ def choicePermissionTree(request):
 
 
     # return JsonResponse(dicts,safe=False)
+
     return HttpResponse(json.dumps(ctree))
 
 def oranizationtree(request):   
@@ -370,7 +371,15 @@ def oranizationtree(request):
             "uuid":o.uuid
             })
 
-    return HttpResponse(json.dumps(organtree)) 
+    
+    result = dict()
+    result["data"] = organtree
+    
+    # print(json.dumps(result))
+    
+    return HttpResponse(json.dumps(organtree))
+
+    # return JsonResponse(organtree,safe=False)
 
 def findOperations(request):
 
@@ -553,7 +562,8 @@ def rolelist(request):
     rolel = MyRoles.objects.all()
     data = []
     for r in rolel:
-        data.append({"id":r.id,"name":r.name,"notes":r.notes})
+        data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
+        print('idstr:',r.rid)
     # json = serializers.serialize("json", rolel)
     recordsTotal = rolel.count()
 
@@ -697,14 +707,14 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print("role create here?:",self.request.POST)
+        # print("role create here?:",self.request.POST)
         # print(form)
         # do something
         permissiontree = form.cleaned_data.get("permissionTree")
         ptree = json.loads(permissiontree)
         instance = form.save()
-        # old_permissions = instance.permissions.all()
-        # instance.permissions.clear()
+        instance.rid = unique_rid_generator(instance)
+        
 
         for pt in ptree:
             pname = pt["id"]
@@ -732,18 +742,23 @@ class RoleEditView(AjaxableResponseMixin,UpdateView):
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        self.role_id = kwargs["pk"]
+        print('roleedit dispatch:',self.request,args,kwargs)
         return super(RoleEditView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        print("role edit get object:",self.kwargs,kwargs)
+        return MyRoles.objects.get(rid=self.kwargs["cn"])
 
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print("role update here?:",self.request.POST)
+        # print("role edit here?:",self.request.POST)
         # print(form)
         # do something
         permissiontree = self.request.POST.get("permissionTree")
-        print('permissiontree:',permissiontree)
+        # print('permissiontree:',permissiontree)
+        print('user:',self.request.user.user_name)
         
         ptree = json.loads(permissiontree)
         instance = self.object
@@ -773,15 +788,15 @@ class RoleDeleteView(AjaxableResponseMixin,DeleteView):
     model = MyRoles
     
     def dispatch(self, *args, **kwargs):
-        # self.comment_id = kwargs["pk"]
+        print('role delete dispatch:',self.request,args,kwargs)
 
         print("role delete:",args,kwargs)
         
         return super(RoleDeleteView, self).dispatch(*args, **kwargs)
 
     def get_object(self,*args, **kwargs):
-        # print("delete objects:",self.kwargs,kwargs)
-        return MyRoles.objects.get(pk=kwargs["pk"])
+        print("delete objects:",self.kwargs,kwargs)
+        return MyRoles.objects.get(rid=self.kwargs["cn"])
 
     def delete(self, request, *args, **kwargs):
         """
@@ -842,7 +857,8 @@ class UserAddView(AjaxableResponseMixin,CreateView):
         # do something
         instance = form.save(commit=False)
         
-
+        instance.idstr=''
+        instance.uuid=unique_uuid_generator(instance)
 
         return super(UserAddView,self).form_valid(form)   
 

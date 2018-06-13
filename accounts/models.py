@@ -23,8 +23,14 @@ class MyRolesManager(models.Manager):
         return self.get(name=name)
 
 class MyRoles(Group):
+    """
+                      Group.name
+    rid:'ROLE_ADMIN',超级管理员
+         'POWER_USER',一般管理员
+         'ROLE_randomstr',用户创建的角色
+    """
     notes           = models.CharField(max_length=156,blank=True)   
-    rid             = models.CharField(max_length=1000,blank=True)   
+    rid             = models.CharField(max_length=1000,blank=True)   #name
     permissionTree  = models.CharField(max_length=50000,blank=True)
 
     objects = MyRolesManager()
@@ -112,7 +118,8 @@ class User(AbstractBaseUser,PermissionsMixin):
     expire_date  = models.CharField(_('Expired date'), max_length=30, blank=True)
     Role         = models.CharField(_('Role'), max_length=30, blank=True)
     # Role        = models.ForeignKey(Roles,related_name='user',on_delete=models.CASCADE)
-
+    idstr       = models.CharField(max_length=300,null=True,blank=True) #(string combind username,group.id,group.pid )
+    uuid        = models.CharField(max_length=300,null=True,blank=True)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,

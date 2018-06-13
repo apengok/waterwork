@@ -95,7 +95,7 @@
                     }
                     submissionFlag = true;
                     $("#editForm").ajaxSubmit(function (data) {
-                        var result = eval(data);// JSON.parse(data);
+                        var result = JSON.parse(data);
                         if (result.success) {
                             /* 关闭弹窗 */
                             $("#commonWin").modal("hide");

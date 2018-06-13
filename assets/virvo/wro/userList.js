@@ -420,7 +420,8 @@
                         async:false,
                         dataType: 'json',
                         success: function (data) {
-                            var addData =  JSON.parse(data);
+                            var data2 = JSON.stringify(data);
+                            var addData = $.parseJSON(data2);
                             oldData = addData.length;
                         },
                     });
@@ -434,7 +435,8 @@
                             async:false,
                             dataType: 'json',
                             success: function (data) {
-                                var addData =  JSON.parse(data);     
+                                var data2 = JSON.stringify(data);
+                                var addData =  JSON.parse(data2);     
                                 if(addData.length != oldData){
                                     var lastData = addData[addData.length-1];           
                                     $.fn.zTree.init($("#treeDemo"), treeSetting, addData);
@@ -468,7 +470,8 @@
                             async:false,
                             dataType: 'json',
                             success: function (data) {
-                                var addData =  JSON.parse(data);                 
+                                var data2 = JSON.stringify(data);
+                                var addData =  JSON.parse(data2);                 
                                 $.fn.zTree.init($("#treeDemo"), treeSetting, addData);  
                                 var treeObjNew = $.fn.zTree.getZTreeObj("treeDemo");
                                 if (nodes != null && nodes.length > 0){
@@ -632,6 +635,7 @@
         doSubmit:function () {
             if(groupUserManage.validates()){
                 $("#eadOperation").ajaxSubmit(function(data) {
+                    console.log('sdfe:',data);
                     if (data != null && typeof(data) == "object" &&
                         Object.prototype.toString.call(data).toLowerCase() == "[object object]" &&
                         !data.length) {//判断data是字符串还是json对象,如果是json对象

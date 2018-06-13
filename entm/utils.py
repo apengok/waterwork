@@ -38,6 +38,30 @@ def unique_cid_generator(instance, new_cid=None):
     return cid
 
 
+def unique_rid_generator(instance, new_rid=None):
+    """
+    This is for a Django project and it assumes your instance 
+    has a model with a slug field and a title character (char) field.
+    """
+    if new_rid is not None:
+        rid = new_rid
+    else:
+        rid = "ROLE_{randstr}_{randstr2}".format(
+                    randstr=random_string_generator(size=6),
+                    randstr2=random_string_generator(size=4)
+                )
+        
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(rid=rid).exists()
+    if qs_exists:
+        new_rid = "{randstr}_{randstr2}".format(
+                    randstr=random_string_generator(size=6),
+                    randstr2=random_string_generator(size=4)
+                )
+        return unique_rid_generator(instance, new_rid=new_rid)
+    return rid
+
+
 def unique_uuid_generator(instance, new_uuid=None):
     """
     This is for a Django project and it assumes your instance 

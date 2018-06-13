@@ -181,7 +181,7 @@ class UserDetailChangeForm(forms.ModelForm):
         super(UserDetailChangeForm, self).__init__(*args, **kwargs)
 
         self.fields['password'].widget = forms.PasswordInput()
-        self.fields['sex'].widget = forms.RadioSelect(choices=SEX)
+        # self.fields['sex'].widget = forms.RadioSelect(choices=SEX)
 
     def clean_password(self):
         print('clean_password::')

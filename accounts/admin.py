@@ -41,10 +41,12 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('user_name',)
     filter_horizontal = ()
 
+class MyRoleAdmin(admin.ModelAdmin):
+    list_display=  ('name','rid','notes','permissionTree')
 
 admin.site.register(User, UserAdmin)
 
-admin.site.register(MyRoles)
+admin.site.register(MyRoles,MyRoleAdmin)
 
 admin.site.register(Permission)
 # Remove Group Model from admin. We're not using it.

@@ -147,7 +147,7 @@
                     }
                     $("#editForm").ajaxSubmit(function(data) {
                         if (data != null) {
-                            var result = eval(data);// $.parseJSON(data);
+                            var result =  $.parseJSON(data);
                             console.log(result);
                             if (result.success == true) {
                                 if (result.obj.flag == 1){

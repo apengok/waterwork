@@ -54,8 +54,7 @@
             return check;
         },
         onClick: function(e, treeId, treeNode){
-            var zTree = $.fn.zTree.getZTreeObj("ztreeDemoAdd"), nodes = zTree
-                .getSelectedNodes(), v = "";
+            var zTree = $.fn.zTree.getZTreeObj("ztreeDemoAdd"), nodes = zTree.getSelectedNodes(), v = "";
             n = "";
             nodes.sort(function compare(a, b) {
                 return a.id - b.id;
