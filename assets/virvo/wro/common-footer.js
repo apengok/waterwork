@@ -5130,6 +5130,8 @@ function DayToday(){
             }
 
             var scroll = settings.oScroll;
+            console.log("scroll:",settings);
+            console.log("scroll:",scroll);
             if (scroll.sY !== '' || scroll.sX !== '') {
                 _fnScrollDraw(settings);
             }
@@ -6318,8 +6320,8 @@ function DayToday(){
             var table = $(oSettings.nTable);
             var holding = $('<div/>').insertBefore(table); // Holding element for speed
             var features = oSettings.oFeatures;
-
-            // All DataTables are wrapped in a div
+ 
+            // All DataTables are wrapped in a div ---pengwl
             var insert = $('<div/>', {
                 role: 'grid',
                 id: oSettings.sTableId + '_wrapper',
@@ -7600,7 +7602,7 @@ function DayToday(){
          */
         function _fnFeatureHtmlTable(settings) {
             var scroll = settings.oScroll;
-
+console.log("dafs:",scroll);
             if (scroll.sX === '' && scroll.sY === '') {
                 return settings.nTable;
             }
@@ -7796,7 +7798,7 @@ function DayToday(){
                     style.borderBottomWidth = "0";
                     style.height = 0;
                 };
-
+console.log("dafs:",scroll);
             /*
 		 * 1. Re-create the table inside the scrolling div
 		 */
@@ -8088,7 +8090,7 @@ function DayToday(){
                 tableContainer = table.parentNode,
                 userInputs = false,
                 i, column, columnIdx, width, outerWidth;
-
+console.log("dafs:",scroll);
             /* Convert any user input sizes into pixel sizes */
             for (i = 0; i < visibleColumns.length; i++) {
                 column = columns[visibleColumns[i]];
@@ -8305,7 +8307,7 @@ function DayToday(){
 
         function _fnScrollingWidthAdjust(settings, n) {
             var scroll = settings.oScroll;
-
+console.log("dafs:",scroll);
             if (scroll.sX || scroll.sY) {
                 // When y-scrolling only, we want to remove the width of the scroll bar
                 // so the table + scroll bar will fit into the area available, otherwise
@@ -9388,7 +9390,7 @@ function DayToday(){
                 var api = this.api(true).columns.adjust();
                 var settings = api.settings()[0];
                 var scroll = settings.oScroll;
-
+console.log("dafs:",scroll);
                 if (bRedraw === undefined || bRedraw) {
                     api.draw(false);
                 }
@@ -10137,7 +10139,7 @@ function DayToday(){
                 if (oSettings.oScroll.sX === true) { // Easy initialisation of x-scrolling
                     oSettings.oScroll.sX = '100%';
                 }
-
+console.log("dafs:",oSettings);
                 if (oSettings.iInitDisplayStart === undefined) {
                     /* Display start point, taking into account the save saving */
                     oSettings.iInitDisplayStart = oInit.iDisplayStart;
@@ -11973,7 +11975,7 @@ function DayToday(){
             if (settings.oScroll.sX || settings.oScroll.sY) {
                 _fnScrollDraw(settings);
             }
-
+console.log("dafs345:");
             _fnCallbackFire(settings, null, 'column-visibility', [settings, column, vis]);
 
             _fnSaveState(settings);
@@ -19609,6 +19611,7 @@ function tg_createTable(tg_table) {
         "dom": "t" + "<'row'<'col-md-3 col-sm-12 col-xs-12'l><'col-md-4 col-sm-12 col-xs-12'i><'col-md-5 col-sm-12 col-xs-12'p>>",
         /* "scrollX": true,
          "bAutoWidth": false,  //是否自适应宽度*/
+
         "searching": false, // 搜索
         // 分页相关
         "paging": pageable,

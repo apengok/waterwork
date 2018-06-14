@@ -192,6 +192,7 @@
                 ajaxDataParamFun : groupUserManage.ajaxDataParamFun, // ajax参数
                 pageable : true, // 是否分页
                 showIndexColumn : true, // 是否显示第一列的索引列
+                // "Scroll":{"sX":"200px","sY":"100%"},
                 enabledChange : true
             };
             // 创建表格
@@ -596,6 +597,9 @@
             "ordering": false, // 排序功能
             "Info": true,// 页脚信息
            // "autoWidth": true,// 自动宽度
+            // "scrollX": "100%",
+            
+            
 			  "stripeClasses" : [],
 			  "lengthMenu" : [ 10, 20, 50, 100, 200 ],
             "pagingType" : "full_numbers", // 分页样式
