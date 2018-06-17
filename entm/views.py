@@ -210,6 +210,59 @@ class AjaxableResponseMixin(object):
         else:
             return response
 
+
+
+def recursive_node_to_dict(node,url_cat):
+    result = {
+        'id':node.pk,
+        'name': node.name,
+        'open':'true',
+        'url':'/dma/{}/{}'.format(node.pk,url_cat),
+        'target':'_self',
+        'icon':"/static/virvo/images/站点管理/u842_1.png",
+        'class':"J_menuItem",
+    }
+    
+    children = [recursive_node_to_dict(c,url_cat) for c in node.get_children()]
+    
+    # get each node's station if exist
+    if url_cat != '':
+        try:
+            sats = node.station.all()
+            for s in sats:
+                children.append({
+                    'name':s.station_name,
+                    'url':'/dma/{}/{}/{}'.format(node.pk,url_cat,s.id),
+                    'target':'_self',
+                    'icon':"/static/virvo/images/u3672.png",
+                    # 'class':"J_menuItem",
+                })
+            # children.append({'name':})
+        except:
+            pass
+
+    if children:
+        result['children'] = children
+    
+    return result
+
+def gettree(request):
+    page_name = request.GET.get('page_name') or ''
+    print(page_name)
+    organs = Organization.objects.all()
+    
+    top_nodes = get_cached_trees(organs)
+
+    dicts = []
+    for n in top_nodes:
+        dicts.append(recursive_node_to_dict(n,page_name))
+
+    
+    # print json.dumps(dicts, indent=4)
+
+    virvo_tree = [{'name':'威尔沃','open':'true','children':dicts}]
+    return JsonResponse({'trees':virvo_tree})                
+
 def choicePermissionTree(request):
 
 
@@ -428,8 +481,9 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
         # do something
         instance = form.save(commit=False)
         instance.is_org = True
-        cid = self.request.POST.get("pId","oranization")
-        
+        cid = self.request.POST.get("pId","oranization")  #cid is parent orgnizations
+        organizaiton_belong = Organizations.objects.get(cid=cid)
+        instance.parent = organizaiton_belong
         instance.pId = cid
         instance.cid = unique_cid_generator(instance,new_cid=cid)
 
@@ -531,6 +585,8 @@ class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
         """
         print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
+
+        #删除组织 需要删除该组织的用户
         self.object.delete()
         return JsonResponse({"success":True})
         
@@ -542,17 +598,17 @@ def rolelist(request):
     length = 0
     start=0
     if request.method == "GET":
-        draw = int(request.GET.get("draw", None)[0])
-        length = int(request.GET.get("length", None)[0])
-        start = int(request.GET.get("start", None)[0])
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
         search_value = request.GET.get("search[value]", None)
         # order_column = request.GET.get("order[0][column]", None)[0]
         # order = request.GET.get("order[0][dir]", None)[0]
 
     if request.method == "POST":
-        draw = int(request.POST.get("draw", None)[0])
-        length = int(request.POST.get("length", None)[0])
-        start = int(request.POST.get("start", None)[0])
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
         pageSize = int(request.POST.get("pageSize", 10))
         search_value = request.POST.get("search[value]", None)
         # order_column = request.POST.get("order[0][column]", None)[0]
@@ -587,10 +643,11 @@ def userlist(request):
     draw = 1
     length = 0
     start=0
+    print('userlist:',request)
     if request.method == "GET":
-        draw = int(request.GET.get("draw", None)[0])
-        length = int(request.GET.get("length", None)[0])
-        start = int(request.GET.get("start", None)[0])
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
         search_value = request.GET.get("search[value]", None)
         # order_column = request.GET.get("order[0][column]", None)[0]
         # order = request.GET.get("order[0][dir]", None)[0]
@@ -599,15 +656,16 @@ def userlist(request):
         print("simpleQueryParam",simpleQueryParam)
 
     if request.method == "POST":
-        draw = int(request.POST.get("draw", None)[0])
-        length = int(request.POST.get("length", None)[0])
-        start = int(request.POST.get("start", None)[0])
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
         pageSize = int(request.POST.get("pageSize", 10))
         search_value = request.POST.get("search[value]", None)
         # order_column = request.POST.get("order[0][column]", None)[0]
         # order = request.POST.get("order[0][dir]", None)[0]
         groupName = request.POST.get("groupName")
         simpleQueryParam = request.POST.get("simpleQueryParam")
+        print(request.POST.get("draw"))
         print("groupName",groupName)
         print("post simpleQueryParam",simpleQueryParam)
 
@@ -616,7 +674,10 @@ def userlist(request):
         userl = User.objects.all()
     else:
         # entprise = Organizations.objects.get(cid=groupName)
-        userl = User.objects.filter(idstr__icontains=groupName)
+        # userl = User.objects.filter(idstr__icontains=groupName)
+        userl = User.user_in_group.search(groupName)
+        print('user1:',userl)
+
 
     if simpleQueryParam != "":
         userl = userl.filter(real_name__icontains=simpleQueryParam)
@@ -637,7 +698,7 @@ def userlist(request):
         })
     # json = serializers.serialize("json", rolel)
     recordsTotal = userl.count()
-
+    print('userlist draw:',draw)
     result = dict()
     result["records"] = data
     result["draw"] = draw
@@ -653,13 +714,24 @@ def userlist(request):
     # return JsonResponse([result],safe=False)
 
 
+#check if useradd name exists
 def verifyUserName(request):
-    print("verifyUserName:",request)
-    return JsonResponse({"success":True})
+    print("verifyUserName:",request.POST)
+
+    username = request.POST.get("userName")
+    bflag = not User.objects.filter(user_name=username).exists()
+
+    return HttpResponse(json.dumps({"success":bflag}))
 
 def verification(request):
-    print("verification:",request)
-    return JsonResponse({"success":True})
+    print("verification:",request.POST,request.user)
+    user = request.user
+    user_expiredate = user.expire_date
+    authorizationDate = request.POST.get("authorizationDate")
+    a = datetime.strptime(user_expiredate,"%Y-%m-%d")
+    b = datetime.strptime(authorizationDate,"%Y-%m-%d")
+    bflag = b < a
+    return HttpResponse(json.dumps({"success":bflag}))
 
 
 def userdeletemore(request):
@@ -881,7 +953,10 @@ class UserAddView(AjaxableResponseMixin,CreateView):
         print('useradd context',args,kwargs,self.request)
         uuid = self.request.GET.get('uuid') or ''
 
+        print('request user:',self.request.user)
+
         groupId = ''
+        groupname = ''
         if len(uuid) > 0:
             organ = Organizations.objects.get(uuid=uuid)
             groupId = organ.cid

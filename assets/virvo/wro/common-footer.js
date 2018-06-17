@@ -5130,8 +5130,7 @@ function DayToday(){
             }
 
             var scroll = settings.oScroll;
-            console.log("scroll:",settings);
-            console.log("scroll:",scroll);
+            
             if (scroll.sY !== '' || scroll.sX !== '') {
                 _fnScrollDraw(settings);
             }
@@ -7602,7 +7601,7 @@ function DayToday(){
          */
         function _fnFeatureHtmlTable(settings) {
             var scroll = settings.oScroll;
-console.log("dafs:",scroll);
+
             if (scroll.sX === '' && scroll.sY === '') {
                 return settings.nTable;
             }
@@ -7798,7 +7797,7 @@ console.log("dafs:",scroll);
                     style.borderBottomWidth = "0";
                     style.height = 0;
                 };
-console.log("dafs:",scroll);
+
             /*
 		 * 1. Re-create the table inside the scrolling div
 		 */
@@ -8090,7 +8089,7 @@ console.log("dafs:",scroll);
                 tableContainer = table.parentNode,
                 userInputs = false,
                 i, column, columnIdx, width, outerWidth;
-console.log("dafs:",scroll);
+
             /* Convert any user input sizes into pixel sizes */
             for (i = 0; i < visibleColumns.length; i++) {
                 column = columns[visibleColumns[i]];
@@ -8307,7 +8306,7 @@ console.log("dafs:",scroll);
 
         function _fnScrollingWidthAdjust(settings, n) {
             var scroll = settings.oScroll;
-console.log("dafs:",scroll);
+
             if (scroll.sX || scroll.sY) {
                 // When y-scrolling only, we want to remove the width of the scroll bar
                 // so the table + scroll bar will fit into the area available, otherwise
@@ -9390,7 +9389,7 @@ console.log("dafs:",scroll);
                 var api = this.api(true).columns.adjust();
                 var settings = api.settings()[0];
                 var scroll = settings.oScroll;
-console.log("dafs:",scroll);
+
                 if (bRedraw === undefined || bRedraw) {
                     api.draw(false);
                 }
@@ -10139,7 +10138,7 @@ console.log("dafs:",scroll);
                 if (oSettings.oScroll.sX === true) { // Easy initialisation of x-scrolling
                     oSettings.oScroll.sX = '100%';
                 }
-console.log("dafs:",oSettings);
+
                 if (oSettings.iInitDisplayStart === undefined) {
                     /* Display start point, taking into account the save saving */
                     oSettings.iInitDisplayStart = oInit.iDisplayStart;
@@ -11975,7 +11974,7 @@ console.log("dafs:",oSettings);
             if (settings.oScroll.sX || settings.oScroll.sY) {
                 _fnScrollDraw(settings);
             }
-console.log("dafs345:");
+
             _fnCallbackFire(settings, null, 'column-visibility', [settings, column, vis]);
 
             _fnSaveState(settings);

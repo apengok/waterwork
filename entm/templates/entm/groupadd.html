@@ -76,6 +76,8 @@
 <!-- <script type="text/javascript" src="/clbs/resources/js/sendAjax.js"></script> -->
 <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
 <script>
+
+
     (function($,window){
         groupAdd = {
             init: function(){
@@ -100,7 +102,7 @@
                         }
                     },
                 });
-                laydate.render({elem: '#registerDate',theme: '#6dcff6'});
+                laydate.render({elem: '#registerDate',max: groupAdd.getsTheMaxTime(),theme: '#6dcff6'});
             },
             // 提交
             doSubmit: function(){
@@ -138,6 +140,20 @@
                 if($(".remote").data("previousValue")){
                     $(".remote").data("previousValue").old = null;
                 }
+            },
+            getsTheMaxTime: function () {
+            
+                var nowDate = new Date();
+                maxTime = parseInt(nowDate.getFullYear())
+                    + "-"
+                    + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                        + parseInt(nowDate.getMonth() + 1)
+                        : parseInt(nowDate.getMonth() + 1))
+                    + "-"
+                    + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                        : nowDate.getDate()) + " ";
+                $("#registerDate").val(maxTime);
+                return maxTime
             },
             //校验
             validates: function(){

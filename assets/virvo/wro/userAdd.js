@@ -35,6 +35,8 @@
                     $("#authorizationDate-error").hide();
                 }
             });
+            console.log('userAuthorizationDate',AuthorizedDeadline);
+            console.log('isAdminStr:',isAdminStr);
             if(isAdminStr == 'false'){
                 if(AuthorizedDeadline == "null"){
                     AuthorizedDeadline = "";
@@ -100,9 +102,9 @@
             userAdd.hideErrorMsg();//清除错误提示样式
             var isAdmin = isAdminStr == 'true';
             isAdmina = isAdmin;
-            console.log(treeId);
-            console.log(parentNode);
-            console.log(responseData);
+            // console.log(treeId);
+            // console.log(parentNode);
+            // console.log(responseData);
 
 
             //如果根企业下没有节点,就显示错误提示(根企业下不能新建用户)
@@ -168,7 +170,7 @@
         validates: function(){
             return $("#addForm").validate({
                 rules : {
-                    username : {
+                    user_name : {
                         required : true,
                         stringCheck : true,
                         maxSize : 25,
@@ -195,7 +197,7 @@
                             }
                         }
                     },
-                    fullName : {
+                    real_name : {
                         maxlength : 20,
                         minlength : 2
                     },
@@ -209,29 +211,29 @@
                         minlength : 6,
                         equalTo : "#passwordAdd"
                     },
-                    groupName : {
+                    belongto : {
                         required : true
                     },
-                    authorizationDate : {
+                    expire_date : {
                         selectDate : true
                     },
-                    mail : {
+                    email : {
                         email : true,
                         maxlength : 60
                     },
-                    mobile : {
+                    phone_number : {
                         isTel : true
                     }
                 },
                 messages : {
-                    username : {
+                    user_name : {
                         required : userNameNull,
                         stringCheck : userNameError,
                         maxSize : publicSize25,
                         minSize : userNameMinLength,
                         remote : usernameExists
                     },
-                    fullName : {
+                    real_name : {
                         maxlength : publicSize20,
                         minlength : userNameMixlength
                     },
@@ -246,17 +248,17 @@
                         maxlength : publicSize25,
                         equalTo : passwordCompareNull
                     },
-                    groupName : {
+                    belongto : {
                         required : publicSelectGroupNull
                     },
-                    authorizationDate : {
+                    expire_date : {
                         selectDate : usernameAuthorizationToday
                     },
-                    mail : {
+                    email : {
                         email : emailError,
                         maxlength : publicSize60
                     },
-                    mobile : {
+                    phone_number : {
                         isTel : phoneError
                     }
                 }
@@ -265,7 +267,7 @@
         fulatAdminValidates:function () {
             return $("#addForm").validate({
                 rules : {
-                    username : {
+                    user_name : {
                         required : true,
                         stringCheck : true,
                         maxSize : 25,
@@ -292,7 +294,7 @@
                             }
                         }
                     },
-                    fullName : {
+                    real_name : {
                         maxlength : 20,
                         minlength : 2
                     },
@@ -306,10 +308,10 @@
                         minlength : 6,
                         equalTo : "#passwordAdd"
                     },
-                    groupName : {
+                    belongto : {
                         required : true
                     },
-                    authorizationDate : {
+                    expire_date : {
                         required:true,
                         selectDate :true,
                         remote: {
@@ -334,23 +336,23 @@
                             }
                         }
                     },
-                    mail : {
+                    email : {
                         email : true,
                         maxlength : 60
                     },
-                    mobile : {
+                    phone_number : {
                         isTel : true
                     }
                 },
                 messages : {
-                    username : {
+                    user_name : {
                         required : userNameNull,
                         stringCheck : userNameError,
                         maxSize : publicSize25,
                         minSize : userNameMinLength,
                         remote : usernameExists
                     },
-                    fullName : {
+                    real_name : {
                         maxlength : publicSize20,
                         minlength : publicMinSize2Length
                     },
@@ -365,19 +367,19 @@
                         maxlength : publicSize25,
                         equalTo : passwordCompareNull
                     },
-                    groupName : {
+                    belongto : {
                         required : publicSelectGroupNull
                     },
-                    authorizationDate : {
+                    expire_date : {
                         required:usernameAuthorizationDateNull,
                         selectDate : usernameAuthorizationToday,
                         remote:"新建用户的授权截止日期不能大于您自己的授权截止日期("+AuthorizedDeadline+")"
                     },
-                    mail : {
+                    email : {
                         email : emailError,
                         maxlength :publicSize60
                     },
-                    mobile : {
+                    phone_number : {
                         isTel : phoneError
                     }
                 }

@@ -135,7 +135,7 @@
         },
         // 删除角色
         deleteRole: function(id){
-            if (id == "ROLE_ADMIN" || id == "POWER_USER") {
+            if (id == "ROLE_ADMIN") { // || id == "POWER_USER"
                 layer.msg(roleNoDelete,{move:false});
             }else{
                 myTable.deleteItem(id);

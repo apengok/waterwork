@@ -42,18 +42,22 @@ class MyRoles(Group):
         return self.name
 
 
-class MyUserQuerySet(models.query.QuerySet):
-    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+class OrganUserQuerySet(models.query.QuerySet):
+    def search(self, query): 
         if query:
             query = query.strip()
             return self.filter( #icontains
-                Q(user_name__iexact=query)|
-                Q(real_name__iexact=query)|
-                Q(phone_number__iexact=query)|
-                Q(email__iexact=query)
+                Q(idstr__iexact=query)|
+                Q(belongto__iexact=query)
                 ).distinct()
         return self        
 
+class OrganUserManager(models.Manager):
+    def get_queryset(self):
+        return OrganUserQuerySet(self.model, using=self._db)
+
+    def search(self, query): 
+        return self.get_queryset().search(query)
     
 class UserManager(BaseUserManager):
     def create_user(self, user_name, password=None):
@@ -96,12 +100,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def get_queryset(self):
-        return MyUserQuerySet(self.model, using=self._db)
-
-    def search(self, query): #RestaurantLocation.objects.search()
-        return self.get_queryset().search(query)
-
+    
 
 class User(AbstractBaseUser,PermissionsMixin):
 
@@ -110,7 +109,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     #     max_length=255,
     #     unique=True,
     # )
-    user_name   = models.CharField(_('user name'), max_length=30, unique=True)
+    user_name    = models.CharField(_('user name'), max_length=30, unique=True)
     real_name    = models.CharField(_('real name'), max_length=30, blank=True)
     sex          = models.CharField(_('Sex'), max_length=30, blank=True)
     phone_number = models.CharField(_('phone number'), max_length=30, blank=True)
@@ -135,6 +134,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     REQUIRED_FIELDS = [] # Email & Password are required by default.
 
     objects = UserManager()
+    user_in_group = OrganUserManager()
 
     def get_full_name(self):
         # The user is identified by their email address
