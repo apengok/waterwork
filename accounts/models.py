@@ -9,6 +9,8 @@ from django.db.models.signals import post_save
 import json
 from django.db.models import Q
 
+from entm.models import Organizations
+
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
 
@@ -113,10 +115,11 @@ class User(AbstractBaseUser,PermissionsMixin):
     real_name    = models.CharField(_('real name'), max_length=30, blank=True)
     sex          = models.CharField(_('Sex'), max_length=30, blank=True)
     phone_number = models.CharField(_('phone number'), max_length=30, blank=True)
-    belongto     = models.CharField(_('belongs to'), max_length=30, blank=True)
+    # belongto     = models.CharField(_('belongs to'), max_length=30, blank=True)
+    belongto     = models.ForeignKey(Organizations,related_name='users',null=True, blank=True,on_delete=models.CASCADE)
     expire_date  = models.CharField(_('Expired date'), max_length=30, blank=True)
-    Role         = models.CharField(_('Role'), max_length=30, blank=True)
-    # Role        = models.ForeignKey(Roles,related_name='user',on_delete=models.CASCADE)
+    # Role         = models.CharField(_('Role'), max_length=30, blank=True)
+    Role        = models.ForeignKey(MyRoles,related_name='users',null=True, blank=True,on_delete=models.CASCADE)
     idstr       = models.CharField(max_length=300,null=True,blank=True) #(string combind username,group.id,group.pid )
     uuid        = models.CharField(max_length=300,null=True,blank=True)
     email = models.EmailField(
@@ -174,10 +177,10 @@ class User(AbstractBaseUser,PermissionsMixin):
     @property
     def permissiontree(self):
 
-        role = MyRoles.objects.get(name=self.Role)
+        # role = MyRoles.objects.get(name=self.Role)
         try:
 
-            tree = json.loads(role.permissionTree)
+            tree = json.loads(self.Role.permissionTree)
             tree_str = [t['id'] for t in tree]
             # return ','.join(tree_str)
             return tree_str

@@ -16,11 +16,11 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email','Role','idstr','uuid')
+    list_display = ('user_name','belongto','Role','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
     list_filter = ('admin','is_active')
     
     fieldsets = (
-        (None, {'fields': ('user_name','password','belongto','is_active','expire_date','real_name','sex','phone_number','email','Role','idstr','uuid')}),
+        (None, {'fields': ('user_name','password','belongto','Role','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')}),
         
     )
 
@@ -34,7 +34,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('user_name', 'password1', 'password2','belongto','is_active','expire_date','real_name','sex','phone_number','email')}
+            'fields': ('user_name', 'password1', 'password2','belongto','Role','is_active','expire_date','real_name','sex','phone_number','email')}
         ),
     )
     search_fields = ('user_name',)

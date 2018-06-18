@@ -40,7 +40,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
+        fields = ('user_name','belongto','Role','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -68,7 +68,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
+        fields = ('user_name','belongto','Role','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -139,11 +139,11 @@ class RegisterForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    # password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    belongto  = forms.CharField()
 
     class Meta:
         model = User
-        fields = ('user_name','password1','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
+        fields = ('user_name','password1','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')
 
     def __init__(self,instance,*args,**kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -172,15 +172,18 @@ class RegisterForm(forms.ModelForm):
 
 class UserDetailChangeForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    belongto  = forms.CharField()
+
     
     class Meta:
         model = User
-        fields = ['user_name','belongto','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid']
+        fields = ['user_name','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid']
 
     def __init__(self,*args,**kwargs):
         super(UserDetailChangeForm, self).__init__(*args, **kwargs)
 
         self.fields['password'].widget = forms.PasswordInput()
+        self.fields['belongto'].initial = self.instance.belongto.name
         # self.fields['sex'].widget = forms.RadioSelect(choices=SEX)
 
     def clean_password(self):

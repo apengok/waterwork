@@ -643,7 +643,7 @@ def userlist(request):
     draw = 1
     length = 0
     start=0
-    print('userlist:',request)
+    print('userlist:',request.user)
     if request.method == "GET":
         draw = int(request.GET.get("draw", 1))
         length = int(request.GET.get("length", 10))
@@ -670,12 +670,25 @@ def userlist(request):
         print("post simpleQueryParam",simpleQueryParam)
 
     # print("get rolelist:",draw,length,start,search_value)
+    current_user = request.user
+    user_orgnization = current_user.belongto
+    userl = user_orgnization.users.all()
+    print(user_orgnization,userl)
     if groupName == "":
-        userl = User.objects.all()
+        # userl = User.objects.all()
+        for c in user_orgnization.get_children():
+            userl += c.users.all()
+            print(c,userl)
     else:
         # entprise = Organizations.objects.get(cid=groupName)
         # userl = User.objects.filter(idstr__icontains=groupName)
-        userl = User.user_in_group.search(groupName)
+        # userl = User.user_in_group.search(groupName)
+        og = Organizations.objects.get(cid=groupName)
+        print('og',og)
+        if og:
+            userl = og.users.all()
+        else:
+            userl = []
         print('user1:',userl)
 
 
@@ -684,7 +697,8 @@ def userlist(request):
     
     data = []
     for u in userl:
-        ros = [r.name for r in  u.groups.all()]
+        # ros = [r.name for r in  u.groups.all()]
+        rolename = u.Role.name if u.Role else ''
         data.append({
             "id":u.pk,
             "user_name":u.user_name,
@@ -692,8 +706,8 @@ def userlist(request):
             "sex":u.sex,
             "phone_number":u.phone_number,
             "expire_date":u.expire_date,
-            "groupName":u.belongto,
-            "roleName":",".join(ros),
+            "groupName":u.belongto.name,
+            "roleName":rolename,
             "email":u.email,
         })
     # json = serializers.serialize("json", rolel)
@@ -900,7 +914,7 @@ class UserMangerView(LoginRequiredMixin,TemplateView):
         # context["page_submenu"] = "组织和用户管理"
         context["page_title"] = "组织和用户管理"
 
-        context["user_list"] = User.objects.all()
+        # context["user_list"] = User.objects.all()
         
 
         return context  
@@ -938,11 +952,14 @@ class UserAddView(AjaxableResponseMixin,CreateView):
         instance = form.save(commit=False)
         uid = self.request.POST.get('user_name')
         groupId = self.request.POST.get('groupId')
+        organization = Organizations.objects.get(cid=groupId)
+        instance.belongto = organization
         idstr = 'uid={uid},ou={groupid}'.format(
             uid=uid,
             groupid=groupId)
         print('idstr:',idstr)
         instance.idstr=groupId
+
         instance.uuid=unique_uuid_generator(instance)
 
         return super(UserAddView,self).form_valid(form)   
@@ -1038,18 +1055,20 @@ class AssignRoleView(TemplateView):
 
         role_ids = request.POST.get("roleIds").split(",")
         print("role_ids:",role_ids)
+        #只允许一个角色
         user = self.get_object()
         print("user:",user)
+
         rolename = ''
         for ri in role_ids:
             role = MyRoles.objects.get(id=int(ri))
             user.groups.add(role)
             print("role:",role)
-            rolename = role.name
+            user.Role = role
 
             # permission_set = role.permissions.all()
             # user.user_permissions.add(permission_set)
-        user.Role = rolename
+        # user.Role = rolename
         
         user.save()
 
