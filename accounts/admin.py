@@ -42,7 +42,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 class MyRoleAdmin(admin.ModelAdmin):
-    list_display=  ('name','rid','notes','permissionTree')
+    list_display=  ('name','rid','notes','uid','belongto','permissionTree')
 
 admin.site.register(User, UserAdmin)
 

@@ -11,7 +11,7 @@ from datetime import datetime
 
 from mptt.utils import get_cached_trees
 from mptt.templatetags.mptt_tags import cache_tree_children
-
+from django.contrib.auth.mixins import PermissionRequiredMixin,UserPassesTestMixin
 from django.template.loader import render_to_string
 from django.shortcuts import render,HttpResponse
 from django.views import View
@@ -23,7 +23,7 @@ from django.contrib.auth.models import Permission
 from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from collections import OrderedDict
 from accounts.models import User,MyRoles
 from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailChangeForm
 
@@ -263,8 +263,9 @@ def gettree(request):
     virvo_tree = [{'name':'威尔沃','open':'true','children':dicts}]
     return JsonResponse({'trees':virvo_tree})                
 
-choicetreedict={
-    "datamonitor":{
+
+choicetreedict=OrderedDict()
+choicetreedict["datamonitor"]={
         "name":"数据监控",
         "submenu":[{
             "mapmonitor":{"name":"地图监控","sub":{"name":"可写"}},
@@ -272,8 +273,10 @@ choicetreedict={
             "realdata":{"name":"实时数据","sub":{"name":"可写"}},
             "dmaonline":{"name":"DMA在线监控","sub":{"name":"可写"}},
         }],
-    },
-    "datanalys":{
+    }
+
+
+choicetreedict["datanalys"] = {
         "name":"数据分析",
         "submenu":[{
             "dailyuse":{"name":"日用水分析","sub":{"name":"可写"}},
@@ -285,46 +288,46 @@ choicetreedict={
             "rawdata":{"name":"原始数据","sub":{"name":"可写"}},
             "mnf":{"name":"夜间最小流量","sub":{"name":"可写"}},
         }],
-    },
-    "alarmcenter":{
+    }
+choicetreedict["alarmcenter"] = {
         "name":"报警中心",
         "submenu":[{
             "stationalarm":{"name":"站点报警设置","sub":{"name":"可写"}},
             "dmaalarm":{"name":"DMA报警设置","sub":{"name":"可写"}},
             "queryalarm":{"name":"报警查询","sub":{"name":"可写"}},
         }],
-    },
-    "basemanager":{
+    }
+choicetreedict["basemanager"] = {
         "name":"基础管理",
         "submenu":[{
             "dmamanager":{"name":"dma管理","sub":{"name":"可写"}},
             "stationmanager":{"name":"站点管理","sub":{"name":"可写"}},
         }],
-    },
-    "devicemanager":{
+    }
+choicetreedict["devicemanager"] = {
         "name":"设备管理",
         "submenu":[{
             "meters":{"name":"表具管理","sub":{"name":"可写"}},
             "simcard":{"name":"SIM卡管理","sub":{"name":"可写"}},
             "params":{"name":"参数指令","sub":{"name":"可写"}},
         }],
-    },
-    "firmmanager":{
+    }
+choicetreedict["firmmanager"] = {
         "name":"企业管理",
         "submenu":[{
             "rolemanager":{"name":"角色管理","sub":{"name":"可写"}},
             "organusermanager":{"name":"组织和用户管理","sub":{"name":"可写"}},
         }],
-    },
-    "basenalys":{
+    }
+choicetreedict["basenalys"] = {
         "name":"基准分析",
         "submenu":[{
             "dma":{"name":"DMA基准分析","sub":{"name":"可写"}},
             "mf":{"name":"最小流量分析","sub":{"name":"可写"}},
             "day":{"name":"日基准流量分析","sub":{"name":"可写"}},
         }],
-    },
-    "reporttable":{
+    }
+choicetreedict["reporttable"] = {
         "name":"报表统计",
         "submenu":[{
             "querylog":{"name":"日志查询","sub":{"name":"可写"}},
@@ -336,8 +339,8 @@ choicetreedict={
             "biaowu":{"name":"表务报表","sub":{"name":"可写"}},
             "bigdata":{"name":"大数据报表","sub":{"name":"可写"}},
         }],
-    },
-    "systemconfig":{
+    }
+choicetreedict["systemconfig"] = {
         "name":"系统管理",
         "submenu":[{
             "personality":{"name":"平台个性化管理","sub":{"name":"可写"}},
@@ -346,203 +349,92 @@ choicetreedict={
             "icons":{"name":"图标配置","sub":{"name":"可写"}},
             "querylog":{"name":"日志查询","sub":{"name":"可写"}},
         }],
-    },
+    }
     
-}
+
 
 def buildchoicetree(permstree=None):
     ctree = []
+    # print("buildtree permm:",permstree,type(permstree))
+    pt_dict = {}
+    for pt in permstree:
+        print(pt["id"],pt["edit"])
+        pt_dict[pt["id"]] = pt["edit"]
+
 
     for key in choicetreedict.keys():
         pname = choicetreedict[key]["name"]
         pid = key
-        ctree.append({
-            "name":pname,
-            "pId":0,
-            "id":pid
-        })
+        
+
+        tmp1 = {}
+        tmp1["name"] = pname
+        tmp1["pId"] = 0
+        tmp1["id"] = pid
+        if key in pt_dict.keys():
+            tmp1["checked"] = "true"
+        else:
+            tmp1["chkDisabled"] = "true" 
+        ctree.append(tmp1)
         
         submenu = choicetreedict[key]["submenu"][0]
         for sub_key in submenu.keys():
             name = submenu[sub_key]["name"]
             idstr = "{id}_{pid}".format(id=sub_key,pid=pid)
             cid = pid
-            ctree.append({
-                "name":name,
-                "pId":cid,
-                "id":idstr
-            })
+
+            tmp2 = {}
+            tmp2["name"] = name
+            tmp2["pId"] = cid
+            tmp2["id"] = idstr
+            if idstr in pt_dict.keys():
+                tmp2["checked"] = "true"
+            else:
+                tmp2["chkDisabled"] = "true" 
+            ctree.append(tmp2)
+
+        
             
             #可写
-            ctree.append({
-                "name":"可写",
-                "pId":idstr,
-                "id":"{pid}_edit".format(pid=idstr),
-                "type":"premissionEdit"
-            })
+            edit_id = "{pid}_edit".format(pid=idstr)
+            tmp3 = {}
+            tmp3["name"] = "可写"
+            tmp3["pId"] = idstr
+            tmp3["id"] = edit_id
+            tmp3["type"] = "premissionEdit"
+            if idstr in pt_dict.keys() and pt_dict[idstr] == True:
+                tmp3["checked"] = "true"
+            else:
+                tmp3["chkDisabled"] = "true" 
+            ctree.append(tmp3)
+
             
 
     return ctree
 
 
+
 def choicePermissionTree(request):
 
-    user = request.user
-    user_permstree = user.Role.permissionTree
-    print('user ',user,' perm tree',user_permstree)
-
+    
     rid = request.POST.get("roleId") or ''
     print(" get choicePermissionTree",rid)
 
-    buildtree = buildchoicetree()
+    
     # print('buildtree:',buildtree)
 
     if len(rid) <= 0:
-        if len(user_permstree) > 0:
-            ptree = json.loads(user_permstree)
-            # print('chiocetree:',ptree)
+        user = request.user
+        permissiontree = user.Role.permissionTree
 
-            for pt in ptree:
-                nodeid = pt["id"]
-                node_edit = "{}_edit".format(nodeid)
-                p_edit = pt["edit"]
-
-                node = [n for n in PERMISSION_TREE if n["id"]==nodeid][0]
-                if not p_edit:
-                    node["chkDisabled"] = "true"
-        return HttpResponse(json.dumps(buildtree))
-
-    
-    instance = MyRoles.objects.get(rid=rid)
-    permissiontree = instance.permissionTree
-    ctree = [
-        {"name":"数据监控","pId":"0","id":"perms_datamonitor"},
-        {"name":"数据分析","pId":"0","id":"perms_datanalys"},
-        {"name":"报警中心","pId":"0","id":"perms_alarmcenter"},
-        {"name":"基础管理","pId":"0","id":"perms_basemanager"},
-        {"name":"设备管理","pId":"0","id":"perms_devicemanager"},
-        {"name":"企业管理","pId":"0","id":"perms_firmmanager"},
-        {"name":"基准分析","pId":"0","id":"perms_basenalys"},
-        {"name":"报表统计","pId":"0","id":"perms_reporttable"},
-        {"name":"系统管理","pId":"0","id":"perms_systemconfig"},
-
-        # 数据监控 sub
-        {"name":"地图监控","pId":"perms_datamonitor","id":"mapmonitor_perms_datamonitor"},
-        {"name":"可写","pId":"mapmonitor_perms_datamonitor","id":"mapmonitor_perms_datamonitor_edit","type":"premissionEdit"},
-        {"name":"实时曲线","pId":"perms_datamonitor","id":"realcurlv_perms_datamonitor"},
-        {"name":"可写","pId":"realcurlv_perms_datamonitor","id":"realcurlv_perms_datamonitor_edit","type":"premissionEdit"},
-        {"name":"实时数据","pId":"perms_datamonitor","id":"realdata_perms_datamonitor"},
-        {"name":"可写","pId":"realdata_perms_datamonitor","id":"realdata_perms_datamonitor_edit","type":"premissionEdit"},
-        {"name":"DMA在线监控","pId":"perms_datamonitor","id":"dmaonline_perms_datamonitor"},
-        {"name":"可写","pId":"dmaonline_perms_datamonitor","id":"dmaonline_perms_datamonitor_edit","type":"premissionEdit"},
-
-        # 数据分析 sub
-        {"name":"日用水分析","pId":"perms_datanalys","id":"dailyuse_perms_datanalys"},
-        {"name":"可写","pId":"dailyuse_perms_datanalys","id":"dailyuse_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"月用水分析","pId":"perms_datanalys","id":"monthlyuse_perms_datanalys"},
-        {"name":"可写","pId":"monthlyuse_perms_datanalys","id":"monthlyuse_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"DMA产销差分析","pId":"perms_datanalys","id":"dmacxc_perms_datanalys"},
-        {"name":"可写","pId":"dmacxc_perms_datanalys","id":"dmacxc_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"流量分析","pId":"perms_datanalys","id":"flownalys_perms_datanalys"},
-        {"name":"可写","pId":"flownalys_perms_datanalys","id":"flownalys_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"对比分析","pId":"perms_datanalys","id":"comparenalys_perms_datanalys"},
-        {"name":"可写","pId":"comparenalys_perms_datanalys","id":"comparenalys_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"配表分析","pId":"perms_datanalys","id":"peibiao_perms_datanalys"},
-        {"name":"可写","pId":"peibiao_perms_datanalys","id":"peibiao_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"原始数据","pId":"perms_datanalys","id":"rawdata_perms_datanalys"},
-        {"name":"可写","pId":"rawdata_perms_datanalys","id":"rawdata_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"夜间最小流量","pId":"perms_datanalys","id":"mnf_perms_datanalys"},
-        {"name":"可写","pId":"mnf_perms_datanalys","id":"mnf_perms_datanalys_edit","type":"premissionEdit"},
-
-        # 报警中心 sub
-        {"name":"站点报警设置","pId":"perms_alarmcenter","id":"stationalarm_perms_alarmcenter"},
-        {"name":"可写","pId":"stationalarm_perms_alarmcenter","id":"stationalarm_perms_alarmcenter_edit","type":"premissionEdit"},
-        {"name":"DMA报警设置","pId":"perms_alarmcenter","id":"dmaalarm_perms_alarmcenter"},
-        {"name":"可写","pId":"dmaalarm_perms_alarmcenter","id":"dmaalarm_perms_alarmcenter_edit","type":"premissionEdit"},
-        {"name":"报警查询","pId":"perms_alarmcenter","id":"queryalarm_perms_alarmcenter"},
-        {"name":"可写","pId":"queryalarm_perms_alarmcenter","id":"queryalarm_perms_alarmcenter_edit","type":"premissionEdit"},
-        
-
-        # 基础管理 sub
-        {"name":"dma管理","pId":"perms_basemanager","id":"dmamanager_perms_basemanager"},
-        {"name":"可写","pId":"dmamanager_perms_basemanager","id":"dmamanager_perms_basemanager_edit","type":"premissionEdit"},
-        {"name":"站点管理","pId":"perms_basemanager","id":"stationmanager_perms_basemanager"},
-        {"name":"可写","pId":"stationmanager_perms_basemanager","id":"stationmanager_perms_basemanager_edit","type":"premissionEdit"},
-
-        # 企业管理 sub
-        {"name":"角色管理","pId":"perms_firmmanager","id":"rolemanager_perms_firmmanager"},
-        {"name":"可写","pId":"rolemanager_perms_firmmanager","id":"rolemanager_perms_firmmanager_edit","type":"premissionEdit"},
-        {"name":"组织和用户管理","pId":"perms_firmmanager","id":"organusermanager_perms_basemanager"},
-        {"name":"可写","pId":"organusermanager_perms_basemanager","id":"organusermanager_perms_basemanager_edit","type":"premissionEdit"},
-
-        # 设备管理 sub
-        {"name":"表具管理","pId":"perms_devicemanager","id":"meters_perms_devicemanager"},
-        {"name":"可写","pId":"meters_perms_devicemanager","id":"meters_perms_devicemanager_edit","type":"premissionEdit"},
-        {"name":"SIM卡管理","pId":"perms_devicemanager","id":"simcard_perms_devicemanager"},
-        {"name":"可写","pId":"simcard_perms_devicemanager","id":"simcard_perms_devicemanager_edit","type":"premissionEdit"},
-        {"name":"参数指令","pId":"perms_devicemanager","id":"params_perms_devicemanager"},
-        {"name":"可写","pId":"params_perms_devicemanager","id":"params_perms_devicemanager_edit","type":"premissionEdit"},
-        
-        # 基准分析 sub
-        {"name":"DMA基准分析","pId":"perms_basenalys","id":"dma_perms_basenalys"},
-        {"name":"可写","pId":"dma_perms_basenalys","id":"dma_perms_basenalys_edit","type":"premissionEdit"},
-        {"name":"最小流量分析","pId":"perms_basenalys","id":"mf_perms_basenalys"},
-        {"name":"可写","pId":"mf_perms_basenalys","id":"mf_perms_basenalys_edit","type":"premissionEdit"},
-        {"name":"日基准流量分析","pId":"perms_basenalys","id":"day_perms_basenalys"},
-        {"name":"可写","pId":"day_perms_basenalys","id":"day_perms_basenalys_edit","type":"premissionEdit"},
-        
-        # 统计报表 sub
-        {"name":"日志查询","pId":"perms_reporttable","id":"querylog_perms_reporttable"},
-        {"name":"可写","pId":"querylog_perms_reporttable","id":"querylog_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"报警报表","pId":"perms_reporttable","id":"alarm_perms_reporttable"},
-        {"name":"可写","pId":"alarm_perms_reporttable","id":"alarm_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"DMA统计报表","pId":"perms_reporttable","id":"dmastatics_perms_reporttable"},
-        {"name":"可写","pId":"dmastatics_perms_reporttable","id":"dmastatics_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"大用户报表","pId":"perms_reporttable","id":"biguser_perms_reporttable"},
-        {"name":"可写","pId":"biguser_perms_reporttable","id":"biguser_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"流量报表","pId":"perms_reporttable","id":"flows_perms_reporttable"},
-        {"name":"可写","pId":"flows_perms_reporttable","id":"flows_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"水量报表","pId":"perms_reporttable","id":"waters_perms_reporttable"},
-        {"name":"可写","pId":"waters_perms_reporttable","id":"waters_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"表务报表","pId":"perms_reporttable","id":"biaowu_perms_reporttable"},
-        {"name":"可写","pId":"biaowu_perms_reporttable","id":"biaowu_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"大数据报表","pId":"perms_reporttable","id":"bigdata_perms_reporttable"},
-        {"name":"可写","pId":"bigdata_perms_reporttable","id":"bigdata_perms_reporttable_edit","type":"premissionEdit"},
-        
+    else:
+        instance = MyRoles.objects.get(rid=rid)
+        permissiontree = instance.permissionTree
 
 
-        
-        # 系统管理 sub
-        {"name":"平台个性化管理","pId":"perms_systemconfig","id":"personality_perms_systemconfig","chkDisabled":"true"},
-        {"name":"可写","pId":"personality_perms_systemconfig","id":"personality_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"系统设置","pId":"perms_systemconfig","id":"system_perms_systemconfig"},
-        {"name":"可写","pId":"system_perms_systemconfig","id":"system_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"转发设置","pId":"perms_systemconfig","id":"retransit_perms_systemconfig"},
-        {"name":"可写","pId":"retransit_perms_systemconfig","id":"retransit_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"图标配置","pId":"perms_systemconfig","id":"icons_perms_systemconfig"},
-        {"name":"可写","pId":"icons_perms_systemconfig","id":"icons_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"日志查询","pId":"perms_systemconfig","id":"querylog_perms_systemconfig"},
-        {"name":"可写","pId":"querylog_perms_systemconfig","id":"querylog_perms_systemconfig_edit","type":"premissionEdit"},
-    ]
-
-    # print(permissiontree)
-    
     if len(permissiontree) > 0:
         ptree = json.loads(permissiontree)
-        # print('chiocetree:',ptree)
-
-        # for pt in ptree:
-        #     nodeid = pt["id"]
-        #     node_edit = "{}_edit".format(nodeid)
-        #     p_edit = pt["edit"]
-
-        #     node = [n for n in ctree if n["id"]==nodeid][0]
-        #     if p_edit:
-        #         node["checked"] = "true"
-        #         node_sub = [n for n in ctree if n["id"]==node_edit][0]
-        #         node_sub["checked"] = "true"
-        #     else:
-        #         node["checked"] = "true"
+        buildtree = buildchoicetree(ptree)
             
 
 
@@ -595,7 +487,7 @@ def findOperations(request):
 """
 group add
 """
-class UserGroupAddView(AjaxableResponseMixin,CreateView):
+class UserGroupAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = Organizations
     template_name = "entm/groupadd.html"
     form_class = OrganizationsAddForm
@@ -610,6 +502,29 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
             kwargs["cid"] = cid
             kwargs["pId"] = pid
         return super(UserGroupAddView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        user = self.request.user
+        permissiontree = user.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            print(pt["id"],pt["edit"])
+            pt_dict[pt["id"]] = pt["edit"]
+
+        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_valid(self, form):
         """
@@ -650,7 +565,7 @@ class UserGroupAddView(AjaxableResponseMixin,CreateView):
 """
 Group edit, manager
 """
-class UserGroupEditView(AjaxableResponseMixin,UpdateView):
+class UserGroupEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = Organizations
     form_class = OrganizationsEditForm
     template_name = "entm/groupedit.html"
@@ -660,6 +575,29 @@ class UserGroupEditView(AjaxableResponseMixin,UpdateView):
     def dispatch(self, *args, **kwargs):
         # self.role_id = kwargs["pk"]
         return super(UserGroupEditView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        user = self.request.user
+        permissiontree = user.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            print(pt["id"],pt["edit"])
+            pt_dict[pt["id"]] = pt["edit"]
+
+        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_valid(self, form):
         """
@@ -943,7 +881,7 @@ class RolesMangerView(LoginRequiredMixin,TemplateView):
 """
 Roles creation, manager
 """
-class RolesAddView(AjaxableResponseMixin,CreateView):
+class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = MyRoles
     template_name = "entm/roleadd.html"
     form_class = RoleCreateForm
@@ -952,6 +890,29 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
         return super(RolesAddView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        user = self.request.user
+        permissiontree = user.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            print(pt["id"],pt["edit"])
+            pt_dict[pt["id"]] = pt["edit"]
+
+        if 'rolemanager_firmmanager' in pt_dict.keys() and pt_dict['rolemanager_firmmanager'] == True:
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "添加角色",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_valid(self, form):
         """
@@ -964,6 +925,9 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
         ptree = json.loads(permissiontree)
         instance = form.save()
         instance.rid = unique_rid_generator(instance)
+        user = self.request.user
+        instance.uid = user.idstr
+        instance.belongto = user.belongto
         
 
         # for pt in ptree:
@@ -984,7 +948,7 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
 """
 Roles edit, manager
 """
-class RoleEditView(AjaxableResponseMixin,UpdateView):
+class RoleEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = MyRoles
     form_class = MyRolesForm
     template_name = "entm/roleedit.html"
@@ -994,6 +958,29 @@ class RoleEditView(AjaxableResponseMixin,UpdateView):
     def dispatch(self, *args, **kwargs):
         print('roleedit dispatch:',self.request,args,kwargs)
         return super(RoleEditView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        user = self.request.user
+        permissiontree = user.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            print(pt["id"],pt["edit"])
+            pt_dict[pt["id"]] = pt["edit"]
+
+        if 'rolemanager_firmmanager' in pt_dict.keys() and pt_dict['rolemanager_firmmanager'] == True:
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
 
     def get_object(self,*args, **kwargs):
         print("role edit get object:",self.kwargs,kwargs)
@@ -1087,11 +1074,12 @@ class UserMangerView(LoginRequiredMixin,TemplateView):
 """
 User add, manager
 """
-class UserAddView(AjaxableResponseMixin,CreateView):
+class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = User
     template_name = "entm/useradd.html"
     form_class = RegisterForm
-    success_url = reverse_lazy("entm:usermanager");
+    success_url = reverse_lazy("entm:usermanager")
+    # permission_required = ('entm.rolemanager_perms_firmmanager_edit', 'entm.organusermanager_perms_basemanager_edit')
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
@@ -1104,6 +1092,29 @@ class UserAddView(AjaxableResponseMixin,CreateView):
             kwargs["uuid"] = uuid
         print("uuid:",kwargs.get('uuid'))
         return super(UserAddView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        user = self.request.user
+        permissiontree = user.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            print(pt["id"],pt["edit"])
+            pt_dict[pt["id"]] = pt["edit"]
+
+        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "增加用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_valid(self, form):
         """
@@ -1153,16 +1164,43 @@ class UserAddView(AjaxableResponseMixin,CreateView):
 """
 User edit, manager
 """
-class UserEditView(AjaxableResponseMixin,UpdateView):
+class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = User
     form_class = UserDetailChangeForm
     template_name = "entm/useredit.html"
     success_url = reverse_lazy("entm:usermanager")
+    # login_url = None
+    # permission_denied_message = 'Not allowed edit user,please contact manager'
+    # permission_required = ('entm.erwqrqwer', 'entm.qewrqerq')
+    # permission_required = ('entm.rolemanager_perms_firmmanager_edit', 'entm.organusermanager_perms_basemanager_edit')
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
         # self.user_id = kwargs["pk"]
         return super(UserEditView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        user = self.request.user
+        permissiontree = user.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            print(pt["id"],pt["edit"])
+            pt_dict[pt["id"]] = pt["edit"]
+
+        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_invalid(self, form):
         """

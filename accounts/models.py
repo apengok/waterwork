@@ -33,7 +33,10 @@ class MyRoles(Group):
     """
     notes           = models.CharField(max_length=156,blank=True)   
     rid             = models.CharField(max_length=1000,blank=True)   #name
+    uid             = models.CharField(max_length=100,blank=True)
     permissionTree  = models.CharField(max_length=50000,blank=True)
+
+    belongto     = models.ForeignKey(Organizations,related_name='roles',null=True, blank=True,on_delete=models.CASCADE)
 
     objects = MyRolesManager()
 
@@ -153,6 +156,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
+        # print('user perm:',perm)
         if not self.is_active:
             return False
         if self.is_admin:
