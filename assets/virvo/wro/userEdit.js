@@ -187,7 +187,7 @@
                             minlength : 2
                         },
                         password : {
-                            required : true,
+                            // required : true,
                             minlength : 6,
                             maxlength : 25
                         },
@@ -222,7 +222,7 @@
                             minlength : publicMinSize2Length
                         },
                         password : {
-                            required  : "密码不能为空",
+                            // required  : "密码不能为空",
                             minlength : passwordMinLength,
                             maxlength : publicSize25
                         },

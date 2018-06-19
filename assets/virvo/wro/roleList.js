@@ -46,7 +46,9 @@
                         //修改按钮
                         var isAdminStr = $("#isAdmin").attr("value");
                         var isAdmin = isAdminStr == 'true';
-                        if (isAdmin && idStr == 'ROLE_ADMIN') { // 若为超级管理员，禁用超级管理员角色的修改按钮 
+
+                        // if (isAdmin && idStr == 'ROLE_ADMIN') { // 若为超级管理员，禁用超级管理员角色的修改按钮 
+                        if(0){
                         	 result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         }else if (!isAdmin && (idStr == 'ROLE_ADMIN' || idStr == 'POWER_USER')) {  // 若为普通管理员，禁用超级管理员角色和普通管理员角色的修改按钮  
                         	 result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';

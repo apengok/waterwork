@@ -330,6 +330,8 @@
                                     for(var j=0;j<nodes.length;j++){
                                     	 zTree.expandNode(nodes[j], true, true, true);
                                     }
+                                    // pengwl delete group and user refresh tabale
+                                    myTable.requestData();
                                 },      
                             });
                         }

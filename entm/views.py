@@ -263,15 +263,154 @@ def gettree(request):
     virvo_tree = [{'name':'威尔沃','open':'true','children':dicts}]
     return JsonResponse({'trees':virvo_tree})                
 
+choicetreedict={
+    "datamonitor":{
+        "name":"数据监控",
+        "submenu":[{
+            "mapmonitor":{"name":"地图监控","sub":{"name":"可写"}},
+            "realcurlv":{"name":"实时曲线","sub":{"name":"可写"}},
+            "realdata":{"name":"实时数据","sub":{"name":"可写"}},
+            "dmaonline":{"name":"DMA在线监控","sub":{"name":"可写"}},
+        }],
+    },
+    "datanalys":{
+        "name":"数据分析",
+        "submenu":[{
+            "dailyuse":{"name":"日用水分析","sub":{"name":"可写"}},
+            "monthlyuse":{"name":"月用水分析","sub":{"name":"可写"}},
+            "dmacxc":{"name":"DMA产销差分析","sub":{"name":"可写"}},
+            "flownalys":{"name":"流量分析","sub":{"name":"可写"}},
+            "comparenalys":{"name":"对比分析","sub":{"name":"可写"}},
+            "peibiao":{"name":"配表分析","sub":{"name":"可写"}},
+            "rawdata":{"name":"原始数据","sub":{"name":"可写"}},
+            "mnf":{"name":"夜间最小流量","sub":{"name":"可写"}},
+        }],
+    },
+    "alarmcenter":{
+        "name":"报警中心",
+        "submenu":[{
+            "stationalarm":{"name":"站点报警设置","sub":{"name":"可写"}},
+            "dmaalarm":{"name":"DMA报警设置","sub":{"name":"可写"}},
+            "queryalarm":{"name":"报警查询","sub":{"name":"可写"}},
+        }],
+    },
+    "basemanager":{
+        "name":"基础管理",
+        "submenu":[{
+            "dmamanager":{"name":"dma管理","sub":{"name":"可写"}},
+            "stationmanager":{"name":"站点管理","sub":{"name":"可写"}},
+        }],
+    },
+    "devicemanager":{
+        "name":"设备管理",
+        "submenu":[{
+            "meters":{"name":"表具管理","sub":{"name":"可写"}},
+            "simcard":{"name":"SIM卡管理","sub":{"name":"可写"}},
+            "params":{"name":"参数指令","sub":{"name":"可写"}},
+        }],
+    },
+    "firmmanager":{
+        "name":"企业管理",
+        "submenu":[{
+            "rolemanager":{"name":"角色管理","sub":{"name":"可写"}},
+            "organusermanager":{"name":"组织和用户管理","sub":{"name":"可写"}},
+        }],
+    },
+    "basenalys":{
+        "name":"基准分析",
+        "submenu":[{
+            "dma":{"name":"DMA基准分析","sub":{"name":"可写"}},
+            "mf":{"name":"最小流量分析","sub":{"name":"可写"}},
+            "day":{"name":"日基准流量分析","sub":{"name":"可写"}},
+        }],
+    },
+    "reporttable":{
+        "name":"报表统计",
+        "submenu":[{
+            "querylog":{"name":"日志查询","sub":{"name":"可写"}},
+            "alarm":{"name":"报警报表","sub":{"name":"可写"}},
+            "dmastatics":{"name":"DMA统计报表","sub":{"name":"可写"}},
+            "biguser":{"name":"大用户报表","sub":{"name":"可写"}},
+            "flows":{"name":"流量报表","sub":{"name":"可写"}},
+            "waters":{"name":"水量报表","sub":{"name":"可写"}},
+            "biaowu":{"name":"表务报表","sub":{"name":"可写"}},
+            "bigdata":{"name":"大数据报表","sub":{"name":"可写"}},
+        }],
+    },
+    "systemconfig":{
+        "name":"系统管理",
+        "submenu":[{
+            "personality":{"name":"平台个性化管理","sub":{"name":"可写"}},
+            "system":{"name":"系统设置","sub":{"name":"可写"}},
+            "retransit":{"name":"转发设置","sub":{"name":"可写"}},
+            "icons":{"name":"图标配置","sub":{"name":"可写"}},
+            "querylog":{"name":"日志查询","sub":{"name":"可写"}},
+        }],
+    },
+    
+}
+
+def buildchoicetree(permstree=None):
+    ctree = []
+
+    for key in choicetreedict.keys():
+        pname = choicetreedict[key]["name"]
+        pid = key
+        ctree.append({
+            "name":pname,
+            "pId":0,
+            "id":pid
+        })
+        
+        submenu = choicetreedict[key]["submenu"][0]
+        for sub_key in submenu.keys():
+            name = submenu[sub_key]["name"]
+            idstr = "{id}_{pid}".format(id=sub_key,pid=pid)
+            cid = pid
+            ctree.append({
+                "name":name,
+                "pId":cid,
+                "id":idstr
+            })
+            
+            #可写
+            ctree.append({
+                "name":"可写",
+                "pId":idstr,
+                "id":"{pid}_edit".format(pid=idstr),
+                "type":"premissionEdit"
+            })
+            
+
+    return ctree
+
+
 def choicePermissionTree(request):
 
-
+    user = request.user
+    user_permstree = user.Role.permissionTree
+    print('user ',user,' perm tree',user_permstree)
 
     rid = request.POST.get("roleId") or ''
     print(" get choicePermissionTree",rid)
 
+    buildtree = buildchoicetree()
+    # print('buildtree:',buildtree)
+
     if len(rid) <= 0:
-        return HttpResponse(json.dumps(PERMISSION_TREE))
+        if len(user_permstree) > 0:
+            ptree = json.loads(user_permstree)
+            # print('chiocetree:',ptree)
+
+            for pt in ptree:
+                nodeid = pt["id"]
+                node_edit = "{}_edit".format(nodeid)
+                p_edit = pt["edit"]
+
+                node = [n for n in PERMISSION_TREE if n["id"]==nodeid][0]
+                if not p_edit:
+                    node["chkDisabled"] = "true"
+        return HttpResponse(json.dumps(buildtree))
 
     
     instance = MyRoles.objects.get(rid=rid)
@@ -392,24 +531,24 @@ def choicePermissionTree(request):
         ptree = json.loads(permissiontree)
         # print('chiocetree:',ptree)
 
-        for pt in ptree:
-            nodeid = pt["id"]
-            node_edit = "{}_edit".format(nodeid)
-            p_edit = pt["edit"]
+        # for pt in ptree:
+        #     nodeid = pt["id"]
+        #     node_edit = "{}_edit".format(nodeid)
+        #     p_edit = pt["edit"]
 
-            node = [n for n in ctree if n["id"]==nodeid][0]
-            if p_edit:
-                node["checked"] = "true"
-                node_sub = [n for n in ctree if n["id"]==node_edit][0]
-                node_sub["checked"] = "true"
-            else:
-                node["checked"] = "true"
+        #     node = [n for n in ctree if n["id"]==nodeid][0]
+        #     if p_edit:
+        #         node["checked"] = "true"
+        #         node_sub = [n for n in ctree if n["id"]==node_edit][0]
+        #         node_sub["checked"] = "true"
+        #     else:
+        #         node["checked"] = "true"
             
 
 
     # return JsonResponse(dicts,safe=False)
 
-    return HttpResponse(json.dumps(ctree))
+    return HttpResponse(json.dumps(buildtree))
 
 def oranizationtree(request):   
     organtree = []
@@ -587,6 +726,10 @@ class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
         self.object = self.get_object(*args,**kwargs)
 
         #删除组织 需要删除该组织的用户
+        users = self.object.users.all()
+        print('delete ',self.object,'and users:',users)
+        for u in users:
+            u.delete()
         self.object.delete()
         return JsonResponse({"success":True})
         
@@ -670,36 +813,10 @@ def userlist(request):
         print("post simpleQueryParam",simpleQueryParam)
 
     # print("get rolelist:",draw,length,start,search_value)
-    current_user = request.user
-    user_orgnization = current_user.belongto
-    userl = user_orgnization.users.all()
-    print(user_orgnization,userl)
-    if groupName == "":
-        # userl = User.objects.all()
-        for c in user_orgnization.get_children():
-            userl += c.users.all()
-            print(c,userl)
-    else:
-        # entprise = Organizations.objects.get(cid=groupName)
-        # userl = User.objects.filter(idstr__icontains=groupName)
-        # userl = User.user_in_group.search(groupName)
-        og = Organizations.objects.get(cid=groupName)
-        print('og',og)
-        if og:
-            userl = og.users.all()
-        else:
-            userl = []
-        print('user1:',userl)
 
-
-    if simpleQueryParam != "":
-        userl = userl.filter(real_name__icontains=simpleQueryParam)
-    
-    data = []
-    for u in userl:
-        # ros = [r.name for r in  u.groups.all()]
+    def u_info(u):
         rolename = u.Role.name if u.Role else ''
-        data.append({
+        return {
             "id":u.pk,
             "user_name":u.user_name,
             "real_name":u.real_name,
@@ -709,9 +826,56 @@ def userlist(request):
             "groupName":u.belongto.name,
             "roleName":rolename,
             "email":u.email,
-        })
+        }
+    data = []
+    #当前登录用户
+    current_user = request.user
+    #当前用户所属组织
+    user_orgnization = current_user.belongto
+    
+    
+    if groupName == "":
+        #获取当前组织的所有用户
+        userl = user_orgnization.users.all()
+        for u in userl:
+            data.append(u_info(u))
+        #获取当前组织的下级组织所有用户
+        for c in user_orgnization.get_children():
+            for u in c.users.all():
+                data.append(u_info(u))
+    else:
+        # entprise = Organizations.objects.get(cid=groupName)
+        # userl = User.objects.filter(idstr__icontains=groupName)
+        # userl = User.user_in_group.search(groupName)
+        og = Organizations.objects.get(cid=groupName)
+        print('og',og)
+        if og:
+            userl = og.users.all()
+            for u in og.users.all():
+                data.append(u_info(u))
+        
+
+
+    if simpleQueryParam != "":
+        userl = userl.filter(real_name__icontains=simpleQueryParam)
+    
+    # data = []
+    # for u in userl:
+    #     # ros = [r.name for r in  u.groups.all()]
+    #     rolename = u.Role.name if u.Role else ''
+    #     data.append({
+    #         "id":u.pk,
+    #         "user_name":u.user_name,
+    #         "real_name":u.real_name,
+    #         "sex":u.sex,
+    #         "phone_number":u.phone_number,
+    #         "expire_date":u.expire_date,
+    #         "groupName":u.belongto.name,
+    #         "roleName":rolename,
+    #         "email":u.email,
+    #     })
     # json = serializers.serialize("json", rolel)
-    recordsTotal = userl.count()
+    recordsTotal = len(data)
     print('userlist draw:',draw)
     result = dict()
     result["records"] = data
@@ -802,16 +966,16 @@ class RolesAddView(AjaxableResponseMixin,CreateView):
         instance.rid = unique_rid_generator(instance)
         
 
-        for pt in ptree:
-            pname = pt["id"]
-            p_edit = pt["edit"]
-            perms = Permission.objects.get(codename=pname)
+        # for pt in ptree:
+        #     pname = pt["id"]
+        #     p_edit = pt["edit"]
+        #     perms = Permission.objects.get(codename=pname)
             
-            if p_edit:
-                node_edit = "{}_edit".format(pname)
-                perms_edit = Permission.objects.get(codename=node_edit)
-                instance.permissions.add(perms)
-                instance.permissions.add(perms_edit)
+        #     if p_edit:
+        #         node_edit = "{}_edit".format(pname)
+        #         perms_edit = Permission.objects.get(codename=node_edit)
+        #         instance.permissions.add(perms)
+        #         instance.permissions.add(perms_edit)
 
 
         return super(RolesAddView,self).form_valid(form)
@@ -846,21 +1010,21 @@ class RoleEditView(AjaxableResponseMixin,UpdateView):
         # print('permissiontree:',permissiontree)
         print('user:',self.request.user.user_name)
         
-        ptree = json.loads(permissiontree)
-        instance = self.object
-        old_permissions = instance.permissions.all()
-        instance.permissions.clear()
+        # ptree = json.loads(permissiontree)
+        # instance = self.object
+        # old_permissions = instance.permissions.all()
+        # instance.permissions.clear()
 
-        for pt in ptree:
-            pname = pt["id"]
-            p_edit = pt["edit"]
-            perms = Permission.objects.get(codename=pname)
+        # for pt in ptree:
+        #     pname = pt["id"]
+        #     p_edit = pt["edit"]
+        #     perms = Permission.objects.get(codename=pname)
             
-            if p_edit:
-                node_edit = "{}_edit".format(pname)
-                perms_edit = Permission.objects.get(codename=node_edit)
-                instance.permissions.add(perms)
-                instance.permissions.add(perms_edit)
+        #     if p_edit:
+        #         node_edit = "{}_edit".format(pname)
+        #         perms_edit = Permission.objects.get(codename=node_edit)
+        #         instance.permissions.add(perms)
+        #         instance.permissions.add(perms_edit)
                 
 
         return super(RoleEditView,self).form_valid(form)

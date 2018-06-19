@@ -171,7 +171,7 @@ class RegisterForm(forms.ModelForm):
 
 
 class UserDetailChangeForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password = forms.CharField(required = False)
     belongto  = forms.CharField()
 
     
@@ -182,23 +182,26 @@ class UserDetailChangeForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         super(UserDetailChangeForm, self).__init__(*args, **kwargs)
 
-        self.fields['password'].widget = forms.PasswordInput()
+        # self.fields['password'].widget = forms.PasswordInput()
         self.fields['belongto'].initial = self.instance.belongto.name
         # self.fields['sex'].widget = forms.RadioSelect(choices=SEX)
 
-    def clean_password(self):
-        print('clean_password::')
-        password = self.cleaned_data.get('password')
-        if len(password) == 0:
-            raise forms.ValidationError("密码不能为空")
-        return password
+    # def clean_password(self):
+    #     print('clean_password::')
+    #     password = self.cleaned_data.get('password')
+    #     if len(password) == 0:
+    #         raise forms.ValidationError("密码不能为空")
+    #     return password
 
 
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super(UserDetailChangeForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password"])
-        user.active = False #send confirm email
+        password = self.cleaned_data["password"]
+        print('user password:',password)
+        if password != '':
+            user.set_password(password)
+        user.active = True #send confirm email
         if commit:
             user.save()
         return user
