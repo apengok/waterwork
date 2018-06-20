@@ -274,7 +274,21 @@ choicetreedict["datamonitor"]={
             "dmaonline":{"name":"DMA在线监控","sub":{"name":"可写"}},
         }],
     }
-
+choicetreedict["firmmanager"] = {
+        "name":"企业管理",
+        "submenu":[{
+            "rolemanager":{"name":"角色管理","sub":{"name":"可写"}},
+            "organusermanager":{"name":"组织和用户管理","sub":{"name":"可写"}},
+        }],
+    }
+choicetreedict["devicemanager"] = {
+        "name":"设备管理",
+        "submenu":[{
+            "meters":{"name":"表具管理","sub":{"name":"可写"}},
+            "simcard":{"name":"SIM卡管理","sub":{"name":"可写"}},
+            "params":{"name":"参数指令","sub":{"name":"可写"}},
+        }],
+    }
 
 choicetreedict["datanalys"] = {
         "name":"数据分析",
@@ -304,27 +318,23 @@ choicetreedict["basemanager"] = {
             "stationmanager":{"name":"站点管理","sub":{"name":"可写"}},
         }],
     }
-choicetreedict["devicemanager"] = {
-        "name":"设备管理",
-        "submenu":[{
-            "meters":{"name":"表具管理","sub":{"name":"可写"}},
-            "simcard":{"name":"SIM卡管理","sub":{"name":"可写"}},
-            "params":{"name":"参数指令","sub":{"name":"可写"}},
-        }],
-    }
-choicetreedict["firmmanager"] = {
-        "name":"企业管理",
-        "submenu":[{
-            "rolemanager":{"name":"角色管理","sub":{"name":"可写"}},
-            "organusermanager":{"name":"组织和用户管理","sub":{"name":"可写"}},
-        }],
-    }
+
 choicetreedict["basenalys"] = {
         "name":"基准分析",
         "submenu":[{
             "dma":{"name":"DMA基准分析","sub":{"name":"可写"}},
             "mf":{"name":"最小流量分析","sub":{"name":"可写"}},
             "day":{"name":"日基准流量分析","sub":{"name":"可写"}},
+        }],
+    }
+choicetreedict["systemconfig"] = {
+        "name":"系统管理",
+        "submenu":[{
+            "personality":{"name":"平台个性化管理","sub":{"name":"可写"}},
+            "system":{"name":"系统设置","sub":{"name":"可写"}},
+            "retransit":{"name":"转发设置","sub":{"name":"可写"}},
+            "icons":{"name":"图标配置","sub":{"name":"可写"}},
+            "querylog":{"name":"日志查询","sub":{"name":"可写"}},
         }],
     }
 choicetreedict["reporttable"] = {
@@ -340,17 +350,54 @@ choicetreedict["reporttable"] = {
             "bigdata":{"name":"大数据报表","sub":{"name":"可写"}},
         }],
     }
-choicetreedict["systemconfig"] = {
-        "name":"系统管理",
-        "submenu":[{
-            "personality":{"name":"平台个性化管理","sub":{"name":"可写"}},
-            "system":{"name":"系统设置","sub":{"name":"可写"}},
-            "retransit":{"name":"转发设置","sub":{"name":"可写"}},
-            "icons":{"name":"图标配置","sub":{"name":"可写"}},
-            "querylog":{"name":"日志查询","sub":{"name":"可写"}},
-        }],
-    }
+
+def buildbasetree():
+    ctree = []
     
+
+    for key in choicetreedict.keys():
+        pname = choicetreedict[key]["name"]
+        pid = key
+        
+
+        tmp1 = {}
+        tmp1["name"] = pname
+        tmp1["pId"] = 0
+        tmp1["id"] = pid
+        tmp1["checked"] = "true"
+        
+        ctree.append(tmp1)
+        
+        submenu = choicetreedict[key]["submenu"][0]
+        for sub_key in submenu.keys():
+            name = submenu[sub_key]["name"]
+            idstr = "{id}_{pid}".format(id=sub_key,pid=pid)
+            cid = pid
+
+            tmp2 = {}
+            tmp2["name"] = name
+            tmp2["pId"] = cid
+            tmp2["id"] = idstr
+            tmp2["checked"] = "true"
+            
+            ctree.append(tmp2)
+
+        
+            
+            #可写
+            edit_id = "{pid}_edit".format(pid=idstr)
+            tmp3 = {}
+            tmp3["name"] = "可写"
+            tmp3["pId"] = idstr
+            tmp3["id"] = edit_id
+            tmp3["type"] = "premissionEdit"
+            tmp3["checked"] = "true"
+            
+            ctree.append(tmp3)
+
+            
+
+    return ctree    
 
 
 def buildchoicetree(permstree=None):
@@ -358,7 +405,7 @@ def buildchoicetree(permstree=None):
     # print("buildtree permm:",permstree,type(permstree))
     pt_dict = {}
     for pt in permstree:
-        print(pt["id"],pt["edit"])
+        # print(pt["id"],pt["edit"])
         pt_dict[pt["id"]] = pt["edit"]
 
 
@@ -425,6 +472,8 @@ def choicePermissionTree(request):
 
     if len(rid) <= 0:
         user = request.user
+        if user.is_admin:
+            return HttpResponse(json.dumps(buildbasetree()))
         permissiontree = user.Role.permissionTree
 
     else:
@@ -893,6 +942,8 @@ class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 
     def test_func(self):
         user = self.request.user
+        if user.is_admin:
+            return True
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -961,6 +1012,8 @@ class RoleEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 
     def test_func(self):
         user = self.request.user
+        if user.is_admin:
+            return True
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -1095,6 +1148,8 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 
     def test_func(self):
         user = self.request.user
+        if user.is_admin:
+            return True
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -1133,7 +1188,7 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
             uid=uid,
             groupid=groupId)
         print('idstr:',idstr)
-        instance.idstr=groupId
+        instance.idstr=groupId  #所属组织 cid
 
         instance.uuid=unique_uuid_generator(instance)
 
@@ -1181,6 +1236,9 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 
     def test_func(self):
         user = self.request.user
+
+        if user.is_admin:
+            return True
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)

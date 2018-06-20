@@ -57,18 +57,7 @@
                 </div>
             </li>
         </ul>
-        <!-- 用户所属组织id -->
-        <input id="userGroupId" value="{{ user.belongto.cid }}" type="text" hidden="true">
-        <!-- 用户所属组织name -->
-        <input id="userGroupName" value="{{ user.belongto }}" type="text" hidden="true">
-        <!-- 用户是否为admin -->
-        <input id="isAdmin" value="{{ user.is_admin|lower }}" type="text" hidden="true">
-        <!-- 用户授权截止日期 -->
-        <input id="userAuthorizationDate" value="{{ user.expire_date }}" type="text" hidden="true">
-        <!-- 用户被分配的角色 -->
-        <input id="allUserRole" value="{{ user.Role.rid }}" type="text" hidden="true">
-        <!-- 用户菜单权限的url -->
-        <input id="permissionUrls" value="{{ user.permissiontree }}" type="text" hidden="true">
+        
         <!-- help -->
         <div class="modal fade bs-example-modal-md" id="helpCenterModal" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-md" style="margin: 10% auto; max-height: 290px; height: auto;">

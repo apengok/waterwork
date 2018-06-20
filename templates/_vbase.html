@@ -51,11 +51,23 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 <script src="/clbs/wro/topPublic.js"></script>
 {% endcomment %}
       <section class="main-content-wrapper">
-            
-<!--权限控制 -->
-<input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
+        <!-- 用户所属组织id -->
+        <input id="userGroupId" value="{{ user.belongto.cid }}" type="text" hidden="true">
+        <!-- 用户所属组织name -->
+        <input id="userGroupName" value="{{ user.belongto }}" type="text" hidden="true">
+        <!-- 用户是否为admin -->
+        <input id="isAdmin" value="{{ user.is_admin|lower }}" type="text" hidden="true">
+        <!-- 用户授权截止日期 -->
+        <input id="userAuthorizationDate" value="{{ user.expire_date }}" type="text" hidden="true">
+        <!-- 用户被分配的角色 -->
+        <input id="allUserRole" value="{{ user.Role.rid }}" type="text" hidden="true">
+        <!-- 用户菜单权限的url -->
+        <input id="permissionUrls" value="{{ user.permissiontree }}" type="text" hidden="true">
+        <!--权限控制 -->
+        <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
 
-<input value="{{ user.is_admin|lower }}" id="isAdmin" type="hidden"  />
+        <input value="{{ user.is_admin|lower }}" id="isAdmin" type="hidden"  />
+        
             <section id="main-content">
                 <div class="row eightIsZero">
                     <div class="col-md-12">

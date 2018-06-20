@@ -173,6 +173,7 @@
         //校验
         validates: function(){
             var isAdmin = isAdminStr == 'true'
+            console.log('isadmin?',isAdmin);
             if(isAdmin == true){
                 return $("#editForm").validate({
                     rules : {
