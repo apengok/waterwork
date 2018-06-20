@@ -9,7 +9,7 @@ from . import views
 app_name = 'entm'
 urlpatterns = [
     
-    url(r'^$', TemplateView.as_view(template_name='_vbase.html'),name='virvo_home'),
+    url(r'^$', TemplateView.as_view(template_name='hplus.html'),name='virvo_home'),
 
     url(r'^(?P<page>.+\.html)$', views.StaticView.as_view()),
 

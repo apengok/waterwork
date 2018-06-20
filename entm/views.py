@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404,render,redirect
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.contrib import messages
-
+from django.template import TemplateDoesNotExist
 import json
 import random
 from datetime import datetime

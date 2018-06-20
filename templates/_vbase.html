@@ -32,7 +32,7 @@
 </head>
 <body>
     <section id="container">
-    {% include '_vheader.html' %}
+
  <script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
             <script src="{% static 'virvo/resources/js/jquery.cookie.js' %}"></script>
             <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
@@ -51,9 +51,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 <script src="/clbs/wro/topPublic.js"></script>
 {% endcomment %}
       <section class="main-content-wrapper">
-            <!--sidebar start-->
-            {% include 'sidenav.html' %}
-<!--sidebar end-->
+            
 <!--权限控制 -->
 <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
 
@@ -82,48 +80,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                                     </div>
                                 </div>
                                 <div class="panel-body" id="stretch-body">
-                                     <div class="row homeText">
-                                         <!-- <div class="col-md-3 col-md-offset-3">
-                                            <div class="fastCarUrl">
-                                                 <a th:href="${session.home1}? @{/m/infoconfig/infoFastInput/add} : '#'">
-                                                 <div class="IcocarBG"></div>
-                                                 <h2>快速录入</h2>
-                                                 </a>
-                                             </div>    
-                                         </div> -->
-                                         <div class="col-md-3 pc-realtime">
-                                            <div class="fenceUrl">
-                                                <a href="#">
-                                                 <div class="IcoBG"></div>
-                                                 <h2>实时监控</h2>
-                                                </a>
-                                             </div>   
-                                         </div>
-                                         <div class="col-md-3 pc-realtime">
-                                            <div class="fenceUrl2">
-                                                <a href="#">
-                                                 <div class="IcoBG"></div>
-                                                 <h2>企业管理</h2>
-                                                </a>
-                                             </div>   
-                                         </div>
-                                         <div class="col-md-3 pc-realtime">
-                                            <div class="fenceUrl3">
-                                                <a href="#">
-                                                 <div class="IcoBG"></div>
-                                                 <h2>DMA管理</h2>
-                                                </a>
-                                             </div>   
-                                         </div>
-                                          <div class="col-md-3 pc-realtime">
-                                            <div class="fenceUrl4">
-                                                <a href="#">
-                                                 <div class="IcoBG"></div>
-                                                 <h2>实施数据</h2>
-                                                </a>
-                                             </div>   
-                                         </div>
-                                     </div>
+                                     
                                      <div class="row homeList">
                                         <div class="form-group">
                                             <div class="col-md-3 blockTitleList">
@@ -201,7 +158,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             </section>
         </section>
     </section>
-    {% include 'footer.html' %}
+    
 <script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/waypoints.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/jquery.nanoscroller.min.js' %}"></script>
