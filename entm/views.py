@@ -494,15 +494,17 @@ def choicePermissionTree(request):
 def oranizationtree(request):   
     organtree = []
 
-    organs = Organizations.objects.all()
-    for o in organs:
+    user = request.user
+    organs = user.belongto #Organizations.objects.all()
+    
+    for o in organs.get_descendants(include_self=True):
         organtree.append({
             "name":o.name,
             "id":o.cid,
             "pId":o.pId,
             "type":"group",
             "uuid":o.uuid
-            })
+        })
 
     
     result = dict()
@@ -513,6 +515,171 @@ def oranizationtree(request):
     return HttpResponse(json.dumps(organtree))
 
     # return JsonResponse(organtree,safe=False)
+
+
+def userlist(request):
+    # print("userlist",request.POST)
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("post simpleQueryParam",simpleQueryParam)
+
+    # print("get rolelist:",draw,length,start,search_value)
+
+    def u_info(u):
+        rolename = u.Role.name if u.Role else ''
+        return {
+            "id":u.pk,
+            "user_name":u.user_name,
+            "real_name":u.real_name,
+            "sex":u.sex,
+            "phone_number":u.phone_number,
+            "expire_date":u.expire_date,
+            "groupName":u.belongto.name,
+            "roleName":rolename,
+            "email":u.email,
+        }
+    data = []
+    #当前登录用户
+    current_user = request.user
+    #当前用户所属组织
+    user_orgnization = current_user.belongto
+    
+    
+    if groupName == "":
+        #自己 和 所属组织的下级组织所有用户
+        data.append(u_info(current_user))
+        #获取
+        for c in user_orgnization.get_descendants(include_self=False):
+            for u in c.users.all():
+                data.append(u_info(u))
+    else:
+        # entprise = Organizations.objects.get(cid=groupName)
+        # userl = User.objects.filter(idstr__icontains=groupName)
+        # userl = User.user_in_group.search(groupName)
+        og = Organizations.objects.get(cid=groupName)
+        print('og',og)
+        if og:
+            userl = og.users.all()
+            for u in og.users.all():
+                data.append(u_info(u))
+        
+
+
+    if simpleQueryParam != "":
+        userl = userl.filter(real_name__icontains=simpleQueryParam)
+    
+    # data = []
+    # for u in userl:
+    #     # ros = [r.name for r in  u.groups.all()]
+    #     rolename = u.Role.name if u.Role else ''
+    #     data.append({
+    #         "id":u.pk,
+    #         "user_name":u.user_name,
+    #         "real_name":u.real_name,
+    #         "sex":u.sex,
+    #         "phone_number":u.phone_number,
+    #         "expire_date":u.expire_date,
+    #         "groupName":u.belongto.name,
+    #         "roleName":rolename,
+    #         "email":u.email,
+    #     })
+    # json = serializers.serialize("json", rolel)
+    recordsTotal = len(data)
+    print('userlist draw:',draw)
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+    
+    return HttpResponse(json.dumps(result))
+    # return JsonResponse([result],safe=False)
+
+
+
+def rolelist(request):
+    print('get rolelist:',request)
+    draw = 1
+    length = 0
+    start=0
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+
+    # print("get rolelist:",draw,length,start,search_value)
+    current_user = request.user
+    #当前用户所属组织
+    user_orgnization = current_user.belongto
+    org_cid = current_user.idstr
+    #返回该组织下的所有角色
+    # rolel = MyRoles.objects.filter(uid=org_cid)     #organizations cid
+
+    data = []
+    for og in user_orgnization.get_descendants(include_self=True):
+        role1 = og.roles.all()
+        for r in role1:
+            data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
+            print('idstr:',r.rid)
+    # json = serializers.serialize("json", rolel)
+    recordsTotal = len(data) #rolel.count()
+
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+    
+    return HttpResponse(json.dumps(result))
+    # return JsonResponse([result],safe=False)
+
 
 def findOperations(request):
 
@@ -722,163 +889,6 @@ class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
         
     
 
-def rolelist(request):
-    print('get rolelist:',request)
-    draw = 1
-    length = 0
-    start=0
-    if request.method == "GET":
-        draw = int(request.GET.get("draw", 1))
-        length = int(request.GET.get("length", 10))
-        start = int(request.GET.get("start", 0))
-        search_value = request.GET.get("search[value]", None)
-        # order_column = request.GET.get("order[0][column]", None)[0]
-        # order = request.GET.get("order[0][dir]", None)[0]
-
-    if request.method == "POST":
-        draw = int(request.POST.get("draw", 1))
-        length = int(request.POST.get("length", 10))
-        start = int(request.POST.get("start", 0))
-        pageSize = int(request.POST.get("pageSize", 10))
-        search_value = request.POST.get("search[value]", None)
-        # order_column = request.POST.get("order[0][column]", None)[0]
-        # order = request.POST.get("order[0][dir]", None)[0]
-
-    # print("get rolelist:",draw,length,start,search_value)
-    rolel = MyRoles.objects.all()
-    data = []
-    for r in rolel:
-        data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
-        print('idstr:',r.rid)
-    # json = serializers.serialize("json", rolel)
-    recordsTotal = rolel.count()
-
-    result = dict()
-    result["records"] = data
-    result["draw"] = draw
-    result["success"] = "true"
-    result["pageSize"] = pageSize
-    result["totalPages"] = recordsTotal/pageSize
-    result["recordsTotal"] = recordsTotal
-    result["recordsFiltered"] = recordsTotal
-    result["start"] = 0
-    result["end"] = 0
-    
-    return HttpResponse(json.dumps(result))
-    # return JsonResponse([result],safe=False)
-
-
-def userlist(request):
-    # print("userlist",request.POST)
-    draw = 1
-    length = 0
-    start=0
-    print('userlist:',request.user)
-    if request.method == "GET":
-        draw = int(request.GET.get("draw", 1))
-        length = int(request.GET.get("length", 10))
-        start = int(request.GET.get("start", 0))
-        search_value = request.GET.get("search[value]", None)
-        # order_column = request.GET.get("order[0][column]", None)[0]
-        # order = request.GET.get("order[0][dir]", None)[0]
-        groupName = request.GET.get("groupName")
-        simpleQueryParam = request.POST.get("simpleQueryParam")
-        print("simpleQueryParam",simpleQueryParam)
-
-    if request.method == "POST":
-        draw = int(request.POST.get("draw", 1))
-        length = int(request.POST.get("length", 10))
-        start = int(request.POST.get("start", 0))
-        pageSize = int(request.POST.get("pageSize", 10))
-        search_value = request.POST.get("search[value]", None)
-        # order_column = request.POST.get("order[0][column]", None)[0]
-        # order = request.POST.get("order[0][dir]", None)[0]
-        groupName = request.POST.get("groupName")
-        simpleQueryParam = request.POST.get("simpleQueryParam")
-        print(request.POST.get("draw"))
-        print("groupName",groupName)
-        print("post simpleQueryParam",simpleQueryParam)
-
-    # print("get rolelist:",draw,length,start,search_value)
-
-    def u_info(u):
-        rolename = u.Role.name if u.Role else ''
-        return {
-            "id":u.pk,
-            "user_name":u.user_name,
-            "real_name":u.real_name,
-            "sex":u.sex,
-            "phone_number":u.phone_number,
-            "expire_date":u.expire_date,
-            "groupName":u.belongto.name,
-            "roleName":rolename,
-            "email":u.email,
-        }
-    data = []
-    #当前登录用户
-    current_user = request.user
-    #当前用户所属组织
-    user_orgnization = current_user.belongto
-    
-    
-    if groupName == "":
-        #获取当前组织的所有用户
-        userl = user_orgnization.users.all()
-        for u in userl:
-            data.append(u_info(u))
-        #获取当前组织的下级组织所有用户
-        for c in user_orgnization.get_children():
-            for u in c.users.all():
-                data.append(u_info(u))
-    else:
-        # entprise = Organizations.objects.get(cid=groupName)
-        # userl = User.objects.filter(idstr__icontains=groupName)
-        # userl = User.user_in_group.search(groupName)
-        og = Organizations.objects.get(cid=groupName)
-        print('og',og)
-        if og:
-            userl = og.users.all()
-            for u in og.users.all():
-                data.append(u_info(u))
-        
-
-
-    if simpleQueryParam != "":
-        userl = userl.filter(real_name__icontains=simpleQueryParam)
-    
-    # data = []
-    # for u in userl:
-    #     # ros = [r.name for r in  u.groups.all()]
-    #     rolename = u.Role.name if u.Role else ''
-    #     data.append({
-    #         "id":u.pk,
-    #         "user_name":u.user_name,
-    #         "real_name":u.real_name,
-    #         "sex":u.sex,
-    #         "phone_number":u.phone_number,
-    #         "expire_date":u.expire_date,
-    #         "groupName":u.belongto.name,
-    #         "roleName":rolename,
-    #         "email":u.email,
-    #     })
-    # json = serializers.serialize("json", rolel)
-    recordsTotal = len(data)
-    print('userlist draw:',draw)
-    result = dict()
-    result["records"] = data
-    result["draw"] = draw
-    result["success"] = "true"
-    result["pageSize"] = pageSize
-    result["totalPages"] = recordsTotal/pageSize
-    result["recordsTotal"] = recordsTotal
-    result["recordsFiltered"] = recordsTotal
-    result["start"] = 0
-    result["end"] = 0
-    
-    return HttpResponse(json.dumps(result))
-    # return JsonResponse([result],safe=False)
-
-
 #check if useradd name exists
 def verifyUserName(request):
     print("verifyUserName:",request.POST)
@@ -895,7 +905,7 @@ def verification(request):
     authorizationDate = request.POST.get("authorizationDate")
     a = datetime.strptime(user_expiredate,"%Y-%m-%d")
     b = datetime.strptime(authorizationDate,"%Y-%m-%d")
-    bflag = b < a
+    bflag = b <= a
     return HttpResponse(json.dumps({"success":bflag}))
 
 
@@ -977,7 +987,7 @@ class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         instance = form.save()
         instance.rid = unique_rid_generator(instance)
         user = self.request.user
-        instance.uid = user.idstr
+        instance.uid = user.idstr   # or uuid
         instance.belongto = user.belongto
         
 
@@ -1048,7 +1058,7 @@ class RoleEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         # do something
         permissiontree = self.request.POST.get("permissionTree")
         # print('permissiontree:',permissiontree)
-        print('user:',self.request.user.user_name)
+        # print('user:',self.request.user.user_name)
         
         # ptree = json.loads(permissiontree)
         # instance = self.object
@@ -1136,6 +1146,7 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
+        #uuid is selectTreeIdAdd namely organizations uuid
         if self.request.method == 'GET':
             uuid = self.request.GET.get("uuid")
             kwargs["uuid"] = uuid
@@ -1181,13 +1192,10 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         # do something
         instance = form.save(commit=False)
         uid = self.request.POST.get('user_name')
-        groupId = self.request.POST.get('groupId')
+        groupId = self.request.POST.get('groupId') # organization cid
         organization = Organizations.objects.get(cid=groupId)
         instance.belongto = organization
-        idstr = 'uid={uid},ou={groupid}'.format(
-            uid=uid,
-            groupid=groupId)
-        print('idstr:',idstr)
+        
         instance.idstr=groupId  #所属组织 cid
 
         instance.uuid=unique_uuid_generator(instance)
@@ -1199,15 +1207,15 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 
         print('useradd context',args,kwargs,self.request)
         uuid = self.request.GET.get('uuid') or ''
-
-        print('request user:',self.request.user)
-
-        groupId = ''
-        groupname = ''
+        
         if len(uuid) > 0:
             organ = Organizations.objects.get(uuid=uuid)
             groupId = organ.cid
             groupname = organ.name
+        else:
+            user = self.request.user
+            groupId = user.belongto.cid
+            groupname = user.belongto.name
         
         context["groupId"] = groupId
         context["groupname"] = groupname
@@ -1274,11 +1282,8 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print('useredit form:',form)
         instance = form.save()
         uid = form.cleaned_data.get('user_name')
-        groupId = form.cleaned_data.get('groupIds')
-        idstr = 'uid={uid},ou={groupid}'.format(
-            uid=uid,
-            groupid=groupId)
-        print('idstr:',idstr)
+        groupId = form.cleaned_data.get('groupIds')     #organization cid
+        
         instance.idstr=groupId
         # instance.uuid=unique_uuid_generator(instance)
         return super(UserEditView,self).form_valid(form)
