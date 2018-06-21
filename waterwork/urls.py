@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 """leakage URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -32,7 +34,8 @@ urlpatterns = [
 
     url(r'^(?P<page>.+\.html)$', StaticView.as_view()),
 
-    url(r'^index/$', TemplateView.as_view(template_name='_vbase.html'), name='index'),
+    #使用hplus页面布局是iframe加载的首页项
+    url(r'^index/$', TemplateView.as_view(template_name='_hplus_vbase.html'), name='index'),
 
     url(r'^accounts/$', RedirectView.as_view(url='/account')),
     url(r'^account/', include("accounts.urls", namespace='account')),

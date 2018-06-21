@@ -1,0 +1,248 @@
+<style type="text/css">
+    #header .navbar-minimalize button{background-color:#6dcff6!important}
+#header .navbar-minimalize .fa-bars{color:#fff!important}
+
+#header .navbar-minimalize button:active,#header .navbar-minimalize button:hover,#header button#toggle-mail:active,#header button#toggle-mail:hover{background:#6dcff6}
+#header .navbar-minimalize button:hover i,#header button#toggle-mail:hover i{color:#F6F6F6}
+#header .navbar-minimalize.toggle-left{margin:23px 0 0 20px;display:inline-block}
+#header .navbar-minimalize.toggle-left{float:left}
+
+</style>
+
+
+<header id="header">
+    <!--logo start-->
+    <div class="navbar-brand-virvo" ><div class="logo-name">VIRVO</div></div>
+    <!--logo end-->
+    <div class="navbar-minimalize toggle-left" id="toggle-left">
+        <button  type="button" class="btn btn-default" id="toggle-left-button">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="tooltip fade right" id="toggle-left-tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner">显示隐藏导航</div></div>
+    </div>
+    <div class="toggle-left-h2">
+        <h2 class="h2" id="personalizedTitle">智慧水务管控一体化</h2>
+    </div>
+    <div class="user-nav">
+        <ul>
+            <!-- <li>
+                <span id="alarmno" style="display:inline-block;width:17px;height:17px;line-height:17px;border-radius:50%;background-color:#E50C0C;color:#fff;text-align:center;position:relative;top:-16px;left:12px;font-size:12px;">0</span>
+            </li>
+            <li id="alarmIcoHide" style="height:38px;width:35px;line-height:35px;margin-right:5px;"><div style="visibility:hidden;" class="waves"></div><button onclick="pagesNav.alarmDeal()" id="alarmIcoHide" style="margin-top:-25px;" class="btn btn-default "><img src="/static/virvo/resources/img/allcall.svg" style="width:18px;height:18px;margin-top:-8px;"></button>
+            </li>  -->
+            <li class="profile-photo">
+                <button type="button" class="btn btn-default dropdown-toggle options">
+                    <i class="fa fa-user"></i>
+                </button>
+            </li>
+            <li class="dropdown settings">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span id="userName">{{ user.user_name }}</span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu animated fadeInDown">
+                    <li><a href="#"><i class="fa fa-user"></i>&nbsp;&nbsp;用户个人信息</a></li>
+                    <li id="editPwd"><a href="#"><i class="fa fa-pencil-square-o"></i> 修改密码</a></li>
+                    <li><a href="javascript:void(0);" id="updateFontSize"><i class="fa fa-font"></i> 修改字体大小</a></li>
+                    <li><a href="{% url 'logout' %}" ><i class="fa fa-power-off"></i> 退出</a></li>
+                </ul>
+            </li>
+            <!--dataClock start-->
+            <li class="data-time">
+                <div class="dataClock clearfix">
+                    <div id="monthsDay"><p class="clockBoxCon"><font color="#ffffff">星期三</font></p>
+                        <h1 class="clockBoxCon"><font color="#ffffff">30</font></h1><span><font color="#ffffff">5月</font></span></div>
+                    <div id="clockBox"><p id="clockAP" style="font-size: 15px; color: grey; background: rgb(255, 255, 255) none repeat scroll 0% 0%; font-weight: bold;" class="clockBoxCon"><span class="PTclock"> 下午</span></p>
+                        <p id="clock" style="font-size: 32px; color: grey; background: rgb(255, 255, 255) none repeat scroll 0% 0%; font-weight: bold;" class="clockBoxCon">14:55<span class="PTclock"> 下午</span></p></div>
+                </div>
+            </li>
+        </ul>
+        
+        <!-- help -->
+        <div class="modal fade bs-example-modal-md" id="helpCenterModal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-md" style="margin: 10% auto; max-height: 290px; height: auto;">
+            <div class="modal-content">
+              <div class="modal-header" style="border-bottom: none;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+              </div>
+              <div class="modal-body" style="height: auto; max-height: 151px; overflow-y: auto; overflow-x: hidden;">
+                <p><strong>Windows系统：</strong></p>
+                <p>1. 按住ctrl键，使用鼠标滚轮滑动进行调整，调整后点击浏览器刷新按钮生效。</p>
+                <p>2. 按住ctrl键，点击加号（+）是放大，减号（-）是缩小，数字0是恢复默认，调整后点击浏览器刷新按钮生效。</p>
+                <p><strong>Mac系统：</strong></p>
+                <p>1. 按住command键，使用鼠标滚轮滑动进行调整，调整后点击浏览器刷新按钮生效。
+                </p><p>2. 按住command键，点击加号（+）是放大，减号（-）是缩小，数字0是恢复默认，调整后点击浏览器刷新按钮生效。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</header>
+
+
+<script type="text/javascript">
+    
+ /*------------------
+时间日期------------*/
+$(document).ready(function(){
+  $(function(){
+    $("#clock").MyDigitClock({
+        fontSize:32, 
+        fontColor: "grey", 
+        fontWeight:"bold", 
+        bAmPm:true,
+        background:'#fff',
+        timeFormat: '{HH}:{MM}'
+    });    $("#clockAP").MyDigitClock({
+        fontSize:15, 
+        fontColor:"grey",
+        background:"#fff",
+        fontWeight:"bold",
+        bAmPm:true,
+        timeFormat: ''}
+    );
+    $("#clock").MyDigitClock({
+        fontSize:32, 
+        fontColor: "grey", 
+        fontWeight:"bold", 
+        bAmPm:true,
+        background:'#fff',
+        timeFormat: '{HH}:{MM}'
+    });
+    $("#monthsDay p").html(DayToday()).addClass('clockBoxCon');
+    $("#monthsDay h1").html(DateToday()).addClass('clockBoxCon');
+    $("#monthsDay span").html(Months());
+    $("#clock").addClass('clockBoxCon');
+    $("#clockAP").addClass('clockBoxCon');
+  });
+  /**
+   * 在bootstrap中，打开一个modal时，会给body添加modal-open类，这个类限制body overflow 为hidden，使其无法滚动
+   * 在关闭modal时，会移除modal-open类，使body能够正常滚动
+   * 问题在于，打开多个modal时，如果关闭上面的modal，也会触发移除modal-open的操作，这样就让body正常滚动了，而此时，页面仍有modal可见
+   * 这与需求不符合，需求是任何时候，只有有modal，body就不能有滚动条
+   * 所以我加了一个关闭时回调，判断页面如果仍然有可见的modal，就重新添加modal-open类
+   * TODO: 测试在iframe情况下是否可用
+   */
+  $(document).on("hidden.bs.modal",".modal",
+        function(){
+            if($('.modal.in').length>0){
+                $(document.body).addClass("modal-open")
+            }
+        }
+    )
+
+});
+
+
+
+/**
+ * 时钟MyDigitClock
+ *
+ * 2016-07-14  by LEFFY
+ *
+ *
+ */
+    
+(function($) {
+
+    var _options = {};
+    var _container = {};
+
+    jQuery.fn.MyDigitClock = function(options) {
+        var id = $(this).get(0).id;
+        _options[id] = $.extend({}, $.fn.MyDigitClock.defaults, options);
+
+        return this.each(function()
+        {
+            _container[id] = $(this);
+            showClock(id);
+        });
+        
+        function showClock(id)
+        {
+            var d = new Date;
+            var h = d.getHours();
+            var m = d.getMinutes();
+            var s = d.getSeconds();
+            var ampm = "";
+            if (_options[id].bAmPm)
+            {
+                if (h>12)
+                {
+                    
+                    ampm = " 下午";
+                }
+                else
+                {
+                    ampm = " 上午";
+                }
+            }
+            
+            var templateStr = _options[id].timeFormat + "<span class='PTclock'>"+ ampm +"</span>";
+        
+            templateStr = templateStr.replace("{HH}", getDD(h));
+            templateStr = templateStr.replace("{MM}", getDD(m));
+            templateStr = templateStr.replace("{SS}", getDD(s));
+        
+            var obj = $("#"+id);
+            obj.css("fontSize", _options[id].fontSize);
+            obj.css("fontFamily", _options[id].fontFamily);
+            obj.css("color", _options[id].fontColor);
+            obj.css("background", _options[id].background);
+            obj.css("fontWeight", _options[id].fontWeight);
+            
+            //change reading
+            obj.html(templateStr)
+            
+            //toggle hands
+            if (_options[id].bShowHeartBeat)
+            {
+                obj.find("#ch1").fadeTo(800, 0.1);
+                obj.find("#ch2").fadeTo(800, 0.1);
+            }
+            setTimeout(function(){showClock(id)}, 1000);
+        }
+        
+        function getDD(num)
+        {
+            return (num>=10)?num:"0"+num;
+        }
+        
+        function refreshClock()
+        {
+            setupClock();
+        }
+    }
+})(jQuery);
+function Months(){  
+    var now = new Date();  
+    var mm = now.getMonth()+1;  
+    var cl = '<font color="#ffffff">';  
+    if (now.getDay() == 0) cl = '<font color="#ffffff">';  
+    if (now.getDay() == 6) cl = '<font color="#ffffff">';  
+    return(cl +  mm + '月</font>');  
+}
+function DateToday(){  
+    var now = new Date();  
+    var cl = '<font color="#ffffff">';  
+    if (now.getDay() == 0) cl = '<font color="#ffffff">';  
+    if (now.getDay() == 6) cl = '<font color="#ffffff">';  
+    return(cl +  now.getDate());  
+}  
+function DayToday(){  
+    var day = new Array();  
+    day[0] = "星期日";  
+    day[1] = "星期一";  
+    day[2] = "星期二";  
+    day[3] = "星期三";  
+    day[4] = "星期四";  
+    day[5] = "星期五";  
+    day[6] = "星期六";  
+    var now = new Date();  
+    var cl = '<font color="#ffffff">';  
+    if (now.getDay() == 0) cl = '<font color="#ffffff">';  
+    if (now.getDay() == 6) cl = '<font color="#ffffff">';  
+    return(cl +  day[now.getDay()] + '</font>');  
+  }  
+
+</script>
