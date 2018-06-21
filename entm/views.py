@@ -1177,7 +1177,7 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         """
         print("user  add here?:",self.request.POST)
         print(self.kwargs,self.args)
-        print(form)
+        # print(form)
         # do something
         instance = form.save(commit=False)
         uid = self.request.POST.get('user_name')
