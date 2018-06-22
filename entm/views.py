@@ -714,6 +714,10 @@ class UserGroupAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 
     def test_func(self):
         user = self.request.user
+        if user.is_admin:
+            return True
+        if user.Role is None:
+            return False
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -787,6 +791,10 @@ class UserGroupEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 
     def test_func(self):
         user = self.request.user
+        if user.is_admin:
+            return True
+        if user.Role is None:
+            return False
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -935,6 +943,8 @@ class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         user = self.request.user
         if user.is_admin:
             return True
+        if user.Role is None:
+            return False
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -1005,6 +1015,8 @@ class RoleEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         user = self.request.user
         if user.is_admin:
             return True
+        if user.Role is None:
+            return False
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -1156,6 +1168,8 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         user = self.request.user
         if user.is_admin:
             return True
+        if user.Role is None:
+            return False
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -1242,6 +1256,9 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 
         if user.is_admin:
             return True
+        
+        if user.Role is None:
+            return False
         permissiontree = user.Role.permissionTree
 
         ptree = json.loads(permissiontree)
