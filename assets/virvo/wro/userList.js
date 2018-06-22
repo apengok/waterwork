@@ -525,6 +525,7 @@
         },
         // 删除用户
         deleteRole: function(id){
+            console.log('删除用户?',id);
             if (id == "uid=admin,ou=organization") {
                 layer.msg(userSupermanagerDeleteTip,{move:false});
             }else{
@@ -543,6 +544,7 @@
         // 批量删除
         delModel: function(){
             // 判断是否至少选择一项
+            console.log('批量删除');
             var chechedNum = $("input[name='subChk']:checked").length;
             if (chechedNum == 0) {
                 layer.msg(userDeleteChooseNull,{move:false});
@@ -568,7 +570,7 @@
         },
 		findOperation:function(){
             var vagueSearch = $("#operationType").val();
-            var url="/clbs/c/group/findOperations";
+            var url="group/findOperations";
             var data={"type":vagueSearch};
             json_ajax("POST", url, "json", true,data,groupUserManage.findCallback);
 		},
@@ -683,7 +685,7 @@
                 var operationType=$("#updateOperationType").val();// 运营资质类型
                 var explains=$("#updateDescription").val();// 说明
                 var data={"id":OperationId,"operationType":operationType,"explains":explains};
-                var url="/clbs/c/group/updateOperation";
+                var url="group/updateOperation";
                 json_ajax("POST", url, "json", true,data,groupUserManage.updateCallback);
             }
         },
@@ -700,7 +702,7 @@
       	findOperationById:function(id){
       		OperationId=id;
       		var data={"id":OperationId};
-      		var url="/clbs/c/group/findOperationById";
+      		var url="group/findOperationById";
       		json_ajax("POST",url,"json",true,data,groupUserManage.findByIdback);
       	},
 	    findByIdback:function(data){
@@ -728,7 +730,7 @@
          		icon : 3, // 问号图标
          		btn: [ '确定', '取消'] // 按钮
       		}, function(){
-      			var url="/clbs/c/group/deleteOperation";
+      			var url="group/deleteOperation";
               	var data={"id" : id}
               	json_ajax("POST", url, "json", false,data,groupUserManage.deleteCallback);
       		});
@@ -752,7 +754,7 @@
        		$("input[name='subChkTwo']:checked").each(function() {
        			ids+=($(this).val())+",";
        		});
-       		var url="/clbs/c/group/deleteOperationMore";
+       		var url="group/deleteOperationMore";
        		var data={"ids" : ids};
        		layer.confirm(publicDelete, {
        			title :'操作确认',
@@ -799,7 +801,7 @@
                        remote: {
                            type:"post",
                            async:false,
-                           url:"/clbs/c/group/findOperationByoperation" ,
+                           url:"group/findOperationByoperation" ,
                            data:{
                                type:function(){return $("#addproperationtype").val();}
                            },
@@ -865,7 +867,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"/clbs/c/group/findOperationCompare" ,
+                                url:"group/findOperationCompare" ,
                                 data:{
                                     type:function(){
                                         return $("#updateOperationType").val();

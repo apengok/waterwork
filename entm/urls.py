@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^user/group/detail/(?P<pId>\w+)/?$',views.UserGroupDetailView.as_view(),name='groupdetail'),
     url(r'^user/group/delete/?$',views.UserGroupDeleteView.as_view(),name='groupdelete'),
     url(r'^group/findOperations',views.findOperations,name='findOperations'),
+    # url(r'^group/findOperationCompare',views.findOperationCompare,name='findOperationCompare'),
+    # url(r'^group/updateOperation',views.updateOperation,name='updateOperation'),
 
     #用户
     url(r'^user/verifyUserName/?$',views.verifyUserName,name='verifyUserName'),

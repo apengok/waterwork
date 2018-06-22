@@ -568,47 +568,34 @@ def userlist(request):
     current_user = request.user
     #当前用户所属组织
     user_orgnization = current_user.belongto
+    print('user belongto ',user_orgnization)
+    print('and his children',user_orgnization.get_descendants(include_self=False))
+    userl = []
+    #自己 和 所属组织的下级组织所有用户
+    userl.append(current_user)
+    for c in user_orgnization.get_descendants(include_self=False):
+        print(c.users.all())
+        for u in c.users.all():
+            print('   ',u)
+            userl.append(u)
+            # data.append(u_info(u))
+    print("user all:",userl)
+    if groupName != "":
+        #查询的组织
+        query_org = Organizations.objects.get(cid=groupName)
+        userl = [u for u in userl if u.belongto == query_org]
+        print("query organ user,",userl)
+
+    for u in userl:
+        data.append(u_info(u))
     
-    
-    if groupName == "":
-        #自己 和 所属组织的下级组织所有用户
-        data.append(u_info(current_user))
-        #获取
-        for c in user_orgnization.get_descendants(include_self=False):
-            for u in c.users.all():
-                data.append(u_info(u))
-    else:
-        # entprise = Organizations.objects.get(cid=groupName)
-        # userl = User.objects.filter(idstr__icontains=groupName)
-        # userl = User.user_in_group.search(groupName)
-        og = Organizations.objects.get(cid=groupName)
-        print('og',og)
-        if og:
-            userl = og.users.all()
-            for u in og.users.all():
-                data.append(u_info(u))
         
 
 
-    if simpleQueryParam != "":
-        userl = userl.filter(real_name__icontains=simpleQueryParam)
+    # if simpleQueryParam != "":
+    #     userl = userl.filter(real_name__icontains=simpleQueryParam)
     
-    # data = []
-    # for u in userl:
-    #     # ros = [r.name for r in  u.groups.all()]
-    #     rolename = u.Role.name if u.Role else ''
-    #     data.append({
-    #         "id":u.pk,
-    #         "user_name":u.user_name,
-    #         "real_name":u.real_name,
-    #         "sex":u.sex,
-    #         "phone_number":u.phone_number,
-    #         "expire_date":u.expire_date,
-    #         "groupName":u.belongto.name,
-    #         "roleName":rolename,
-    #         "email":u.email,
-    #     })
-    # json = serializers.serialize("json", rolel)
+    
     recordsTotal = len(data)
     print('userlist draw:',draw)
     result = dict()
@@ -653,16 +640,22 @@ def rolelist(request):
     current_user = request.user
     #当前用户所属组织
     user_orgnization = current_user.belongto
-    org_cid = current_user.idstr
+    user_uid = current_user.uuid
+    user_role = current_user.Role
+    print(current_user,user_orgnization,user_uid,user_role)
     #返回该组织下的所有角色
-    # rolel = MyRoles.objects.filter(uid=org_cid)     #organizations cid
+    created_by_user = MyRoles.objects.filter(uid=user_uid)     #organizations cid
 
     data = []
-    for og in user_orgnization.get_descendants(include_self=True):
-        role1 = og.roles.all()
-        for r in role1:
-            data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
-            print('idstr:',r.rid)
+    for r in created_by_user:
+        data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
+
+    # data.append({"idstr":user_role.rid,"name":user_role.name,"notes":user_role.notes})
+    # for og in user_orgnization.get_descendants(include_self=False):
+    #     role1 = og.roles.all()
+    #     for r in role1:
+    #         data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
+    #         print('idstr:',r.rid)
     # json = serializers.serialize("json", rolel)
     recordsTotal = len(data) #rolel.count()
 
@@ -902,23 +895,11 @@ def verification(request):
     print("verification:",request.POST,request.user)
     user = request.user
     user_expiredate = user.expire_date
-    authorizationDate = request.POST.get("authorizationDate")
+    authorizationDate = request.POST.get("expire_date") #authorizationDate
     a = datetime.strptime(user_expiredate,"%Y-%m-%d")
     b = datetime.strptime(authorizationDate,"%Y-%m-%d")
     bflag = b <= a
     return HttpResponse(json.dumps({"success":bflag}))
-
-
-def userdeletemore(request):
-    print(request)
-
-    return HttpResponse(json.dumps([{"ok":1}]))
-
-
-def roledeletemore(request):
-    print(request)
-
-    return HttpResponse(json.dumps([{"ok":1}]))
 
 
 
@@ -987,7 +968,7 @@ class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         instance = form.save()
         instance.rid = unique_rid_generator(instance)
         user = self.request.user
-        instance.uid = user.idstr   # or uuid
+        instance.uid = user.uuid   # or uuid
         instance.belongto = user.belongto
         
 
@@ -1079,6 +1060,20 @@ class RoleEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 
         return super(RoleEditView,self).form_valid(form)
         
+
+
+def roledeletemore(request):
+    print(request,request.POST)
+    deltems = request.POST.get("deltems")
+    deltems_list = deltems.split(';')
+
+    for uid in deltems_list:
+        r = MyRoles.objects.get(rid=uid)
+        print('delete Role ',r)
+        
+        r.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
 
 
 """
@@ -1252,7 +1247,7 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         ptree = json.loads(permissiontree)
         pt_dict = {}
         for pt in ptree:
-            print(pt["id"],pt["edit"])
+            # print(pt["id"],pt["edit"])
             pt_dict[pt["id"]] = pt["edit"]
 
         if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
@@ -1282,8 +1277,9 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print('useredit form:',form)
         instance = form.save()
         uid = form.cleaned_data.get('user_name')
-        groupId = form.cleaned_data.get('groupIds')     #organization cid
-        
+        print(form)
+        groupId = form.cleaned_data.get('idstr')     #organization cid
+        print('useredit dfer,',groupId)
         instance.idstr=groupId
         # instance.uuid=unique_uuid_generator(instance)
         return super(UserEditView,self).form_valid(form)
@@ -1303,7 +1299,8 @@ class AssignRoleView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AssignRoleView, self).get_context_data(**kwargs)
         context["page_title"] = "分配角色"
-        context["role_list"] = MyRoles.objects.all()
+        # created_by_user = MyRoles.objects.filter(uid=self.request.user.uuid) 
+        context["role_list"] = MyRoles.objects.filter(uid=self.request.user.uuid) 
         pk = kwargs["pk"]
         # context["object_id"] = pk
         context["object"] = self.get_object()
@@ -1381,6 +1378,22 @@ class AssignStnView(TemplateView):
             }
         return JsonResponse(data)
 
+
+def userdeletemore(request):
+    print('userdeletemore',request,request.POST)
+
+    deltems = request.POST.get("deltems")
+    deltems_list = deltems.split(';')
+
+    for uid in deltems_list:
+        u = User.objects.get(id=int(uid))
+        print('delete user ',u)
+        #删除用户 并且删除用户在分组中的角色
+        for g in u.groups.all():
+            g.user_set.remove(u)
+        u.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
 
 """
 Assets comment deletion, manager

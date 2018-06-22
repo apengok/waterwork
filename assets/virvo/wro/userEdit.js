@@ -79,7 +79,10 @@
             if (v.length > 0)
                 v = v.substring(0, v.length - 1);
             var cityObj = $("#zTreeCitySelEdit");
+            console.log('before:',$("#groupIds").val());
             $("#groupIds").val(v);
+            $("#idstr").val(v);
+            console.log('after:',$("#groupIds").val());
             cityObj.val(n);
             $("#zTreeContentEdit").hide();
         },
