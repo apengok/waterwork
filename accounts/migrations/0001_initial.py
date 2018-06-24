@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('entm', '0001_initial'),
-        ('auth', '0010_remove_group_parent'),
+        # ('auth', '0010_remove_group_parent'),
     ]
 
     operations = [

@@ -108,10 +108,11 @@
 
 
             //如果根企业下没有节点,就显示错误提示(根企业下不能新建用户)
-            if(responseData != null && responseData != undefined && responseData != "" && responseData.length >= 1){
+            if(responseData != null && responseData != undefined && responseData != "" && responseData.length > 1){
+                console.log('$("#groupId").val():',$("#groupId").val());
                 if($("#groupId").val()==""){
-                    $("#groupId").val(responseData[0].id);
-                    $("#zTreeCitySelAdd").attr("value",responseData[0].name);
+                    $("#groupId").val(responseData[1].id);
+                    $("#zTreeCitySelAdd").attr("value",responseData[1].name);
                 }
                 return responseData;
             }else{

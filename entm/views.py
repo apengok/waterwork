@@ -1217,17 +1217,21 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         print('useradd context',args,kwargs,self.request)
         uuid = self.request.GET.get('uuid') or ''
         
+        groupId = ''
+        groupname = ''
         if len(uuid) > 0:
             organ = Organizations.objects.get(uuid=uuid)
             groupId = organ.cid
             groupname = organ.name
-        else:
-            user = self.request.user
-            groupId = user.belongto.cid
-            groupname = user.belongto.name
+        # else:
+        #     user = self.request.user
+        #     groupId = user.belongto.cid
+        #     groupname = user.belongto.name
         
         context["groupId"] = groupId
         context["groupname"] = groupname
+
+        print("user add context data gourpId and groupname:",groupId,groupname)
         
 
         return context  
