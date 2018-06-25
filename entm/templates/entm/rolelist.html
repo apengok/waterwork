@@ -127,6 +127,12 @@
 {% endblock %}
 
 
+
 {% block javascript %}
+<script>
+  // var selectItem = "\u4E0D\u80FD\u56E0\u4E3A\u4F60\u957F\u7684\u597D\u770B\uFF0C\u5C31\u53EF\u4EE5\u4EC0\u4E48\u90FD\u4E0D\u9009\u5427\uFF0C\u600E\u4E48\u4E5F\u8981\u9009\u4E00\u4E2A\u5427:)";
+  var selectItem = "没有选择删除的对象";
+  var roleNoDelete = "系统管理员对象不可删除";
+</script>
 <script src="{% static 'virvo/wro/roleList.js' %}"></script>
 {% endblock %}

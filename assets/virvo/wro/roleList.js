@@ -209,7 +209,7 @@
         $('input').inputClear();
         //全选
         $("#checkAll").click(function() {
-            $("input[name='subChk']").prop("checked", this.checked);
+            $("input[name='subChk']").not(':disabled').prop("checked", this.checked);
         });
         //单选
         $subChk.on("click",roleList.subChk);

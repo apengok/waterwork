@@ -42,12 +42,13 @@
                     render : function(data, type, row, meta) {
                     	var userId = $("#currentUserId").val();
                     	var idStr = row.id;
+                        var uid = row.user_name;
                         // var arrayObj = row.id.all;
                         // arrayObj.reverse();
                         // var idStr = arrayObj.join(",");
                     	if (idStr != userId) {
                     		 var result = '';
-                             result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" />';
+                             result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
                              return result;
                     	}else{
                    		 	var result = '';
@@ -553,7 +554,10 @@
             var checkedList = new Array();
             var flag = true;
             $("input[name='subChk']:checked").each(function() {
-                if ($(this).val() == "uid=admin,ou=organization") {
+                console.log("$(this).val():",$(this).val(),$(this).attr("uid"));
+                var uid = $(this).attr("uid"); //pengwl
+                // if ($(this).val() == "uid=admin,ou=organization") {
+                if(uid == "admin"){
                     flag = false;
                     return false;
                 }else{
@@ -782,7 +786,8 @@
       		}
       	},
       	checkAll : function(e){
-      		$("input[name='subChk']").prop("checked", e.checked);
+            $("input[name='subChk']").not(':disabled').prop("checked", e.checked);
+            
       	},
       	checkAllTwo : function(e){
    	   		$("input[name='subChkTwo']").prop("checked", e.checked);

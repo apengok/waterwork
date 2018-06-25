@@ -12,17 +12,27 @@
             <div class="col-xs-12">
                 <ul class="widget-todo">
                     {% for r in role_list %}
+                    {% if user.Role == r %}
                     <li class="clearfix">
                         <label class="checkbox-outline"> 
                             <input type="checkbox"
+                                name="name" disabled
+                                id="{{ r.name }}" value="{{ r.id }}" />
+                            <label readonly style="text-decoration: none;">{{ r.name }}</label>
+                        </label> 
+                     
+                    </li>
+                    {% else %}
+                    <li class="clearfix">
+                        <label class="checkbox-outline"> 
+                            <input type="checkbox" 
                                 name="name" 
                                 id="{{ r.name }}" value="{{ r.id }}" />
-                            <label style="text-decoration: none;" onclick = "checkValue(this)">{{ r.name }}</label>
+                            <label  style="text-decoration: none;" onclick = "checkValue(this)">{{ r.name }}</label>
                         </label> 
-                    
-                         
-                        
+                     
                     </li>
+                    {% endif %}
                     {% endfor %}
 
                     <!-- <li class="clearfix">
