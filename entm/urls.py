@@ -48,7 +48,9 @@ urlpatterns = [
     url(r'^role/list/$',views.rolelist,name='rolelist'),
     url(r'^role/add/',views.RolesAddView.as_view(),name='roleadd'),
     url(r'^role/edit/(?P<cn>\w+)/?$',views.RoleEditView.as_view(),name='roleedit'),
-    # url(r'^role/edit',views.RoleEditView.as_view(),name='roleedit'),
+    url(r'^role/export',views.roleexport,name='roleexport'),
+    url(r'^role/import',views.roleimport,name='roleimport'),
+
 
     url(r'^role/delete_/(?P<cn>\w+)/?$',views.RoleDeleteView.as_view(),name='roledelete'),
     url(r'^role/deletemore',views.roledeletemore,name='roledeletemore'),

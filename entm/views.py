@@ -923,8 +923,15 @@ class RolesMangerView(LoginRequiredMixin,TemplateView):
         
         return context  
 
-    
 
+def roleimport(request):
+
+    return HttpResponse(json.dumps({"success":"roleimport"}))
+
+
+def roleexport(request):
+
+    return HttpResponse(json.dumps({"success":"roleexport"}))
 
 """
 Roles creation, manager
