@@ -53,6 +53,7 @@
         },
         beforeClick: function(treeId, treeNode){
             var check = (treeNode);
+            console.log('beforeClick',check);
             return check;
         },
         onClick: function(e, treeId, treeNode){
@@ -159,7 +160,7 @@
                                     layer.msg(result.msg,{move:false});
                                 }
                             }else{
-                                layer.msg(result.msg,{move:false});//result.obj.errMsg
+                                layer.msg(result.obj.errMsg,{move:false});//result.obj.errMsg
                             }
                         }
                     });

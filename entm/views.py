@@ -33,116 +33,6 @@ from . models import Organizations
 # from django.core.urlresolvers import reverse_lazy
 
 
-PERMISSION_TREE = [
-        {"name":"数据监控","pId":"0","id":"perms_datamonitor"},
-        {"name":"数据分析","pId":"0","id":"perms_datanalys"},
-        {"name":"报警中心","pId":"0","id":"perms_alarmcenter"},
-        {"name":"基础管理","pId":"0","id":"perms_basemanager"},
-        {"name":"设备管理","pId":"0","id":"perms_devicemanager"},
-        {"name":"企业管理","pId":"0","id":"perms_firmmanager"},
-        {"name":"基准分析","pId":"0","id":"perms_basenalys"},
-        {"name":"报表统计","pId":"0","id":"perms_reporttable"},
-        {"name":"系统管理","pId":"0","id":"perms_systemconfig"},
-
-        # 数据监控 sub
-        {"name":"地图监控","pId":"perms_datamonitor","id":"mapmonitor_perms_datamonitor"},
-        {"name":"可写","pId":"mapmonitor_perms_datamonitor","id":"mapmonitor_perms_datamonitor_edit","type":"premissionEdit"},
-        {"name":"实时曲线","pId":"perms_datamonitor","id":"realcurlv_perms_datamonitor"},
-        {"name":"可写","pId":"realcurlv_perms_datamonitor","id":"realcurlv_perms_datamonitor_edit","type":"premissionEdit"},
-        {"name":"实时数据","pId":"perms_datamonitor","id":"realdata_perms_datamonitor"},
-        {"name":"可写","pId":"realdata_perms_datamonitor","id":"realdata_perms_datamonitor_edit","type":"premissionEdit"},
-        {"name":"DMA在线监控","pId":"perms_datamonitor","id":"dmaonline_perms_datamonitor"},
-        {"name":"可写","pId":"dmaonline_perms_datamonitor","id":"dmaonline_perms_datamonitor_edit","type":"premissionEdit"},
-
-        # 数据分析 sub
-        {"name":"日用水分析","pId":"perms_datanalys","id":"dailyuse_perms_datanalys"},
-        {"name":"可写","pId":"dailyuse_perms_datanalys","id":"dailyuse_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"月用水分析","pId":"perms_datanalys","id":"monthlyuse_perms_datanalys"},
-        {"name":"可写","pId":"monthlyuse_perms_datanalys","id":"monthlyuse_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"DMA产销差分析","pId":"perms_datanalys","id":"dmacxc_perms_datanalys"},
-        {"name":"可写","pId":"dmacxc_perms_datanalys","id":"dmacxc_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"流量分析","pId":"perms_datanalys","id":"flownalys_perms_datanalys"},
-        {"name":"可写","pId":"flownalys_perms_datanalys","id":"flownalys_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"对比分析","pId":"perms_datanalys","id":"comparenalys_perms_datanalys"},
-        {"name":"可写","pId":"comparenalys_perms_datanalys","id":"comparenalys_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"配表分析","pId":"perms_datanalys","id":"peibiao_perms_datanalys"},
-        {"name":"可写","pId":"peibiao_perms_datanalys","id":"peibiao_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"原始数据","pId":"perms_datanalys","id":"rawdata_perms_datanalys"},
-        {"name":"可写","pId":"rawdata_perms_datanalys","id":"rawdata_perms_datanalys_edit","type":"premissionEdit"},
-        {"name":"夜间最小流量","pId":"perms_datanalys","id":"mnf_perms_datanalys"},
-        {"name":"可写","pId":"mnf_perms_datanalys","id":"mnf_perms_datanalys_edit","type":"premissionEdit"},
-
-        # 报警中心 sub
-        {"name":"站点报警设置","pId":"perms_alarmcenter","id":"stationalarm_perms_alarmcenter"},
-        {"name":"可写","pId":"stationalarm_perms_alarmcenter","id":"stationalarm_perms_alarmcenter_edit","type":"premissionEdit"},
-        {"name":"DMA报警设置","pId":"perms_alarmcenter","id":"dmaalarm_perms_alarmcenter"},
-        {"name":"可写","pId":"dmaalarm_perms_alarmcenter","id":"dmaalarm_perms_alarmcenter_edit","type":"premissionEdit"},
-        {"name":"报警查询","pId":"perms_alarmcenter","id":"queryalarm_perms_alarmcenter"},
-        {"name":"可写","pId":"queryalarm_perms_alarmcenter","id":"queryalarm_perms_alarmcenter_edit","type":"premissionEdit"},
-        
-
-        # 基础管理 sub
-        {"name":"dma管理","pId":"perms_basemanager","id":"dmamanager_perms_basemanager"},
-        {"name":"可写","pId":"dmamanager_perms_basemanager","id":"dmamanager_perms_basemanager_edit","type":"premissionEdit"},
-        {"name":"站点管理","pId":"perms_basemanager","id":"stationmanager_perms_basemanager"},
-        {"name":"可写","pId":"stationmanager_perms_basemanager","id":"stationmanager_perms_basemanager_edit","type":"premissionEdit"},
-
-        # 企业管理 sub
-        {"name":"角色管理","pId":"perms_firmmanager","id":"rolemanager_perms_firmmanager"},
-        {"name":"可写","pId":"rolemanager_perms_firmmanager","id":"rolemanager_perms_firmmanager_edit","type":"premissionEdit"},
-        {"name":"组织和用户管理","pId":"perms_firmmanager","id":"organusermanager_perms_basemanager"},
-        {"name":"可写","pId":"organusermanager_perms_basemanager","id":"organusermanager_perms_basemanager_edit","type":"premissionEdit"},
-
-        # 设备管理 sub
-        {"name":"表具管理","pId":"perms_devicemanager","id":"meters_perms_devicemanager"},
-        {"name":"可写","pId":"meters_perms_devicemanager","id":"meters_perms_devicemanager_edit","type":"premissionEdit"},
-        {"name":"SIM卡管理","pId":"perms_devicemanager","id":"simcard_perms_devicemanager"},
-        {"name":"可写","pId":"simcard_perms_devicemanager","id":"simcard_perms_devicemanager_edit","type":"premissionEdit"},
-        {"name":"参数指令","pId":"perms_devicemanager","id":"params_perms_devicemanager"},
-        {"name":"可写","pId":"params_perms_devicemanager","id":"params_perms_devicemanager_edit","type":"premissionEdit"},
-        
-        # 基准分析 sub
-        {"name":"DMA基准分析","pId":"perms_basenalys","id":"dma_perms_basenalys"},
-        {"name":"可写","pId":"dma_perms_basenalys","id":"dma_perms_basenalys_edit","type":"premissionEdit"},
-        {"name":"最小流量分析","pId":"perms_basenalys","id":"mf_perms_basenalys"},
-        {"name":"可写","pId":"mf_perms_basenalys","id":"mf_perms_basenalys_edit","type":"premissionEdit"},
-        {"name":"日基准流量分析","pId":"perms_basenalys","id":"day_perms_basenalys"},
-        {"name":"可写","pId":"day_perms_basenalys","id":"day_perms_basenalys_edit","type":"premissionEdit"},
-        
-        # 统计报表 sub
-        {"name":"日志查询","pId":"perms_reporttable","id":"querylog_perms_reporttable"},
-        {"name":"可写","pId":"querylog_perms_reporttable","id":"querylog_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"报警报表","pId":"perms_reporttable","id":"alarm_perms_reporttable"},
-        {"name":"可写","pId":"alarm_perms_reporttable","id":"alarm_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"DMA统计报表","pId":"perms_reporttable","id":"dmastatics_perms_reporttable"},
-        {"name":"可写","pId":"dmastatics_perms_reporttable","id":"dmastatics_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"大用户报表","pId":"perms_reporttable","id":"biguser_perms_reporttable"},
-        {"name":"可写","pId":"biguser_perms_reporttable","id":"biguser_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"流量报表","pId":"perms_reporttable","id":"flows_perms_reporttable"},
-        {"name":"可写","pId":"flows_perms_reporttable","id":"flows_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"水量报表","pId":"perms_reporttable","id":"waters_perms_reporttable"},
-        {"name":"可写","pId":"waters_perms_reporttable","id":"waters_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"表务报表","pId":"perms_reporttable","id":"biaowu_perms_reporttable"},
-        {"name":"可写","pId":"biaowu_perms_reporttable","id":"biaowu_perms_reporttable_edit","type":"premissionEdit"},
-        {"name":"大数据报表","pId":"perms_reporttable","id":"bigdata_perms_reporttable"},
-        {"name":"可写","pId":"bigdata_perms_reporttable","id":"bigdata_perms_reporttable_edit","type":"premissionEdit"},
-        
-
-
-        
-        # 系统管理 sub
-        {"name":"平台个性化管理","pId":"perms_systemconfig","id":"personality_perms_systemconfig"},
-        {"name":"可写","pId":"personality_perms_systemconfig","id":"personality_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"系统设置","pId":"perms_systemconfig","id":"system_perms_systemconfig"},
-        {"name":"可写","pId":"system_perms_systemconfig","id":"system_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"转发设置","pId":"perms_systemconfig","id":"retransit_perms_systemconfig"},
-        {"name":"可写","pId":"retransit_perms_systemconfig","id":"retransit_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"图标配置","pId":"perms_systemconfig","id":"icons_perms_systemconfig"},
-        {"name":"可写","pId":"icons_perms_systemconfig","id":"icons_perms_systemconfig_edit","type":"premissionEdit"},
-        {"name":"日志查询","pId":"perms_systemconfig","id":"querylog_perms_systemconfig"},
-        {"name":"可写","pId":"querylog_perms_systemconfig","id":"querylog_perms_systemconfig_edit","type":"premissionEdit"},
-    ]
-
 
 def error_404(request):
     return render(request,"404.html",{})
@@ -566,25 +456,15 @@ def userlist(request):
     data = []
     #当前登录用户
     current_user = request.user
-    #当前用户所属组织
-    user_orgnization = current_user.belongto
-    print('user belongto ',user_orgnization)
-    print('and his children',user_orgnization.get_descendants(include_self=False))
-    userl = []
-    #自己 和 所属组织的下级组织所有用户
-    userl.append(current_user)
-    for c in user_orgnization.get_descendants(include_self=False):
-        print(c.users.all())
-        for u in c.users.all():
-            print('   ',u)
-            userl.append(u)
-            # data.append(u_info(u))
-    print("user all:",userl)
+    
+    userl = current_user.user_list()
+    
+    # print("user all:",userl)
     if groupName != "":
         #查询的组织
         query_org = Organizations.objects.get(cid=groupName)
         userl = [u for u in userl if u.belongto == query_org]
-        print("query organ user,",userl)
+        # print("query organ user,",userl)
 
     for u in userl:
         data.append(u_info(u))
@@ -597,7 +477,7 @@ def userlist(request):
     
     
     recordsTotal = len(data)
-    print('userlist draw:',draw)
+    
     result = dict()
     result["records"] = data
     result["draw"] = draw
@@ -638,25 +518,13 @@ def rolelist(request):
 
     # print("get rolelist:",draw,length,start,search_value)
     current_user = request.user
-    #当前用户所属组织
-    user_orgnization = current_user.belongto
-    user_uid = current_user.uuid
-    user_role = current_user.Role
-    print(current_user,user_orgnization,user_uid,user_role)
-    #返回该组织下的所有角色
-    created_by_user = MyRoles.objects.filter(uid=user_uid)     #organizations cid
+    
 
     data = []
-    for r in created_by_user:
+    for r in current_user.role_list():
         data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
 
-    # data.append({"idstr":user_role.rid,"name":user_role.name,"notes":user_role.notes})
-    # for og in user_orgnization.get_descendants(include_self=False):
-    #     role1 = og.roles.all()
-    #     for r in role1:
-    #         data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
-    #         print('idstr:',r.rid)
-    # json = serializers.serialize("json", rolel)
+    
     recordsTotal = len(data) #rolel.count()
 
     result = dict()
@@ -713,20 +581,7 @@ class UserGroupAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(UserGroupAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        user = self.request.user
-        if user.is_admin:
-            return True
-        if user.Role is None:
-            return False
-        permissiontree = user.Role.permissionTree
-
-        ptree = json.loads(permissiontree)
-        pt_dict = {}
-        for pt in ptree:
-            print(pt["id"],pt["edit"])
-            pt_dict[pt["id"]] = pt["edit"]
-
-        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
             return True
         return False
 
@@ -790,20 +645,7 @@ class UserGroupEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(UserGroupEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        user = self.request.user
-        if user.is_admin:
-            return True
-        if user.Role is None:
-            return False
-        permissiontree = user.Role.permissionTree
-
-        ptree = json.loads(permissiontree)
-        pt_dict = {}
-        for pt in ptree:
-            print(pt["id"],pt["edit"])
-            pt_dict[pt["id"]] = pt["edit"]
-
-        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
             return True
         return False
 
@@ -855,7 +697,7 @@ class UserGroupDetailView(DetailView):
 """
 Assets comment deletion, manager
 """
-class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
+class UserGroupDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
     model = Organizations
     # template_name = "aidsbank/asset_comment_confirm_delete.html"
 
@@ -868,6 +710,20 @@ class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
         print("delete dispatch:",args,kwargs)
         return super(UserGroupDeleteView, self).dispatch(*args, **kwargs)
 
+    def test_func(self):
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        return HttpResponse(json.dumps(data))
+        # return render(self.request,"entm/permission_error.html",data)
+
     def get_object(self,*args, **kwargs):
         print("delete objects:",self.kwargs,kwargs)
         return Organizations.objects.get(cid=kwargs["pId"])
@@ -879,6 +735,11 @@ class UserGroupDeleteView(AjaxableResponseMixin,DeleteView):
         """
         print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
+            
+
+        # 不能删除自己所属的组织
+        if self.object == self.request.user.belongto:
+            return JsonResponse({"success":False,"msg":"不能删除自己所属的组织"})
 
         #删除组织 需要删除该组织的用户
         users = self.object.users.all()
@@ -947,20 +808,7 @@ class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(RolesAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        user = self.request.user
-        if user.is_admin:
-            return True
-        if user.Role is None:
-            return False
-        permissiontree = user.Role.permissionTree
-
-        ptree = json.loads(permissiontree)
-        pt_dict = {}
-        for pt in ptree:
-            print(pt["id"],pt["edit"])
-            pt_dict[pt["id"]] = pt["edit"]
-
-        if 'rolemanager_firmmanager' in pt_dict.keys() and pt_dict['rolemanager_firmmanager'] == True:
+        if self.request.user.has_menu_permission('rolemanager_firmmanager'):
             return True
         return False
 
@@ -985,7 +833,9 @@ class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         instance = form.save()
         instance.rid = unique_rid_generator(instance)
         user = self.request.user
+        #角色uid保存当前用户的uuid
         instance.uid = user.uuid   # or uuid
+        # 角色所属组织，取当前用户的所属组织
         instance.belongto = user.belongto
         
 
@@ -1019,20 +869,7 @@ class RoleEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(RoleEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        user = self.request.user
-        if user.is_admin:
-            return True
-        if user.Role is None:
-            return False
-        permissiontree = user.Role.permissionTree
-
-        ptree = json.loads(permissiontree)
-        pt_dict = {}
-        for pt in ptree:
-            print(pt["id"],pt["edit"])
-            pt_dict[pt["id"]] = pt["edit"]
-
-        if 'rolemanager_firmmanager' in pt_dict.keys() and pt_dict['rolemanager_firmmanager'] == True:
+        if self.request.user.has_menu_permission('rolemanager_firmmanager'):
             return True
         return False
 
@@ -1086,19 +923,31 @@ def roledeletemore(request):
     deltems = request.POST.get("deltems")
     deltems_list = deltems.split(';')
 
+    if not request.user.has_menu_permission('rolemanager_firmmanager'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    #被分配了的角色不可以删除
+    assigned_roles = []
+    for u in User.objects.all():
+        assigned_roles.append(u.Role)
+    
+    flag = 0
     for uid in deltems_list:
         r = MyRoles.objects.get(rid=uid)
-        print('delete Role ',r)
-        
-        r.delete()
-
+        # print('delete Role ',r)
+        if r in assigned_roles:
+            flag = 1
+        else:
+            r.delete()
+    if flag:
+        return HttpResponse(json.dumps({"success":0,"msg":"被分配了的角色不可以删除"}))
     return HttpResponse(json.dumps({"success":1}))
 
 
 """
 Assets comment deletion, manager
 """
-class RoleDeleteView(AjaxableResponseMixin,DeleteView):
+class RoleDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
     model = MyRoles
     
     def dispatch(self, *args, **kwargs):
@@ -1107,6 +956,20 @@ class RoleDeleteView(AjaxableResponseMixin,DeleteView):
         print("role delete:",args,kwargs)
         
         return super(RoleDeleteView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.has_menu_permission('rolemanager_firmmanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        return HttpResponse(json.dumps(data))
+        # return render(self.request,"entm/permission_error.html",data)
 
     def get_object(self,*args, **kwargs):
         print("delete objects:",self.kwargs,kwargs)
@@ -1119,8 +982,14 @@ class RoleDeleteView(AjaxableResponseMixin,DeleteView):
         """
         print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
-
-        #delete user role in groups
+        print('delete role ',self.object)
+        #被分配了的角色不可以删除
+        assigned_roles = []
+        for u in User.objects.all():
+            assigned_roles.append(u.Role)
+        print('assigned_roles:',assigned_roles)
+        if self.object in assigned_roles:
+            return HttpResponse(json.dumps({"success":0,"msg":"被分配了的角色不可以删除"}))
         # for g in self.object.groups.all():
         #     g.user_set.remove(self.object)
 
@@ -1172,20 +1041,7 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(UserAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        user = self.request.user
-        if user.is_admin:
-            return True
-        if user.Role is None:
-            return False
-        permissiontree = user.Role.permissionTree
-
-        ptree = json.loads(permissiontree)
-        pt_dict = {}
-        for pt in ptree:
-            print(pt["id"],pt["edit"])
-            pt_dict[pt["id"]] = pt["edit"]
-
-        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
             return True
         return False
 
@@ -1206,9 +1062,21 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         print(self.kwargs,self.args)
         # print(form)
         # do something
+        user = self.request.user
+        user_groupid = user.belongto.cid
         instance = form.save(commit=False)
         uid = self.request.POST.get('user_name')
         groupId = self.request.POST.get('groupId') # organization cid
+        if user_groupid == groupId:
+            data = {
+                "success": 0,
+                "obj":{
+                    "flag":0,
+                    "errMsg":"非管理员不能创建自己同级的用户,请重新选择所属企业。"
+                    }
+            }
+            
+            return HttpResponse(json.dumps(data)) #JsonResponse(data)
         organization = Organizations.objects.get(cid=groupId)
         instance.belongto = organization
         
@@ -1263,22 +1131,7 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(UserEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        user = self.request.user
-
-        if user.is_admin:
-            return True
-        
-        if user.Role is None:
-            return False
-        permissiontree = user.Role.permissionTree
-
-        ptree = json.loads(permissiontree)
-        pt_dict = {}
-        for pt in ptree:
-            # print(pt["id"],pt["edit"])
-            pt_dict[pt["id"]] = pt["edit"]
-
-        if 'organusermanager_firmmanager' in pt_dict.keys() and pt_dict['organusermanager_firmmanager'] == True:
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
             return True
         return False
 
@@ -1320,15 +1173,29 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     #     return context
 
 
-class AssignRoleView(TemplateView):
+class AssignRoleView(TemplateView,UserPassesTestMixin):
     """docstring for AssignRoleView"""
     template_name = "entm/assignrole.html"
+
+    def test_func(self):
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
         
     def get_context_data(self, **kwargs):
         context = super(AssignRoleView, self).get_context_data(**kwargs)
         context["page_title"] = "分配角色"
         # created_by_user = MyRoles.objects.filter(uid=self.request.user.uuid) 
-        context["role_list"] = MyRoles.objects.filter(uid=self.request.user.uuid) 
+        context["role_list"] = self.request.user.role_list()
         pk = kwargs["pk"]
         # context["object_id"] = pk
         context["object"] = self.get_object()
@@ -1370,10 +1237,25 @@ class AssignRoleView(TemplateView):
         
 
 
-class AssignStnView(TemplateView):
+class AssignStnView(TemplateView,UserPassesTestMixin):
     """docstring for AssignRoleView"""
     template_name = "entm/assignstn.html"
         
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
     def get_context_data(self, **kwargs):
         context = super(AssignStnView, self).get_context_data(**kwargs)
         context["page_title"] = "分配角色"
@@ -1388,15 +1270,14 @@ class AssignStnView(TemplateView):
         return User.objects.get(id=self.kwargs["pk"])
 
     def post(self,request,*args,**kwargs):
-        print (request.POST)
-        print(kwargs)
+        
         context = self.get_context_data(**kwargs)
 
         role = request.POST.get("checks[]")
         user = context["user"]
         # user.Role = role
         group = MyRoles.objects.filter(name__iexact=role).first()
-        print(group)
+        
         user.groups.add(group)
         user.save()
 
@@ -1408,14 +1289,17 @@ class AssignStnView(TemplateView):
 
 
 def userdeletemore(request):
-    print('userdeletemore',request,request.POST)
+    # print('userdeletemore',request,request.POST)
+
+    if not request.user.has_menu_permission('organusermanager_firmmanager'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
     deltems_list = deltems.split(';')
 
     for uid in deltems_list:
         u = User.objects.get(id=int(uid))
-        print('delete user ',u)
+        # print('delete user ',u)
         #删除用户 并且删除用户在分组中的角色
         for g in u.groups.all():
             g.user_set.remove(u)
@@ -1426,9 +1310,24 @@ def userdeletemore(request):
 """
 Assets comment deletion, manager
 """
-class UserDeleteView(AjaxableResponseMixin,DeleteView):
+class UserDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
     model = User
     # template_name = "aidsbank/asset_comment_confirm_delete.html"
+
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission('organusermanager_firmmanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        HttpResponse(json.dumps(data))
+        # return render(self.request,"entm/permission_error.html",data)
 
     def dispatch(self, *args, **kwargs):
         # self.comment_id = kwargs["pk"]

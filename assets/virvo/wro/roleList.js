@@ -29,10 +29,22 @@
                     "data" : null,
                     "class" : "text-center",
                     render : function(data, type, row, meta) {
+                        var current_role_rid = $("#current_role_id").attr("value");
                         var idStr = row.idstr;
                         var result = '';
-                        result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" />';
-                        return result;
+
+                        if (idStr != current_role_rid) {
+                             var result = '';
+                             result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" />';
+                             return result;
+                        }else{
+                            var result = '';
+                            result += '<input  type="checkbox" name="subChk" disabled/>';
+                            return result;
+                        }
+
+                        // result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" />';
+                        // return result;
                     }
                 },
                 {
@@ -40,22 +52,28 @@
                     "class" : "text-center", //操作按钮
                     render : function(data, type, row, meta) {
                         var idStr = row.idstr;
-                        console.log('idstr:',idStr);
+                        
                         var editUrlPath = myTable.editUrl + idStr ; //修改地址
                         var result = '';
                         //修改按钮
                         var isAdminStr = $("#isAdmin").attr("value");
+                        var current_role_rid = $("#current_role_id").attr("value");
                         var isAdmin = isAdminStr == 'true';
-
+                        console.log('idstr:',idStr,current_role_rid);
                         if (isAdmin && idStr == 'ROLE_ADMIN') { // 若为超级管理员，禁用超级管理员角色的修改按钮 
                         	result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         }else if (!isAdmin && (idStr == 'ROLE_ADMIN' || idStr == 'POWER_USER')) {  // 若为普通管理员，禁用超级管理员角色和普通管理员角色的修改按钮  
                         	result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
+                        }else if (current_role_rid == idStr) {  // 当前用户不可修改自己被分配的角色 
+                            result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         }else{
                         	result += '<button href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                         }
                         if (data.delFlag == false) { //即刻体验角色不允许删除
                         	//删除按钮
+                            result += '<button disabled type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>删除</button>&nbsp;';
+                        }else if (current_role_rid == idStr) { //当前用户不可删除自己被分配的角色
+                            //删除按钮
                             result += '<button disabled type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>删除</button>&nbsp;';
                         } else {
                         	//删除按钮

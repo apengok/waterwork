@@ -47,9 +47,9 @@
                         // arrayObj.reverse();
                         // var idStr = arrayObj.join(",");
                     	if (idStr != userId) {
-                    		 var result = '';
-                             result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
-                             return result;
+                    		var result = '';
+                            result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
+                            return result;
                     	}else{
                    		 	var result = '';
                           	result += '<input  type="checkbox" name="subChk" disabled/>';
@@ -372,6 +372,7 @@
                 + " onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name
                 + (isCancel ? "</span>" : ""));
         },
+        // 显示删除组织按钮
         showRemoveBtn: function(treeId, treeNode){
             return treeNode.children==undefined;
         },
@@ -787,7 +788,7 @@
       	},
       	checkAll : function(e){
             $("input[name='subChk']").not(':disabled').prop("checked", e.checked);
-            
+
       	},
       	checkAllTwo : function(e){
    	   		$("input[name='subChkTwo']").prop("checked", e.checked);

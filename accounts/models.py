@@ -168,6 +168,22 @@ class User(AbstractBaseUser,PermissionsMixin):
         # Simplest possible answer: Yes, always
         return True
 
+    def has_menu_permission(self,perm):
+        if self.is_admin:
+            return True
+        if self.Role is None:
+            return False
+        permissiontree = self.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            pt_dict[pt["id"]] = pt["edit"]
+
+        if perm in pt_dict.keys() and pt_dict[perm] == True:
+            return True
+        return False
+
     @property
     def is_staff(self):
         "Is the user a member of staff?"
@@ -190,6 +206,45 @@ class User(AbstractBaseUser,PermissionsMixin):
             return tree_str
         except:
             return []
+
+    def user_list(self):
+        userlist = []
+        if self.is_admin:
+            return User.objects.all()
+
+        userlist.append(self)
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=False)
+        for g in sub_organs:
+            for u in g.users.all():
+                userlist.append(u)
+
+        return userlist
+
+    # 返回用户可分配的角色列表
+    def role_list(self):
+        rolelist = []
+        if self.is_admin:
+            return MyRoles.objects.all()
+
+        # 自己被分配的角色
+        role_self = self.Role
+        rolelist.append(role_self)
+        # 该用户创建的角色
+        if MyRoles.objects.filter(uid=self.uuid).exists():
+            # Force evaluation of a QuerySet by calling list() on it
+            created_by_user = list(MyRoles.objects.filter(uid=self.uuid) )
+            
+            if created_by_user:
+                # rolelist.append(created_by_user)
+                rolelist += created_by_user
+        #下级组织的角色
+        sub_organs = self.belongto.sub_organizations(include_self=False)
+        for g in sub_organs:
+            for r in g.roles.all():
+                rolelist.append(r)
+
+        return rolelist
 
 
     # @property
