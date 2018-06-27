@@ -426,7 +426,7 @@ def userlist(request):
         # order = request.GET.get("order[0][dir]", None)[0]
         groupName = request.GET.get("groupName")
         simpleQueryParam = request.POST.get("simpleQueryParam")
-        print("simpleQueryParam",simpleQueryParam)
+        # print("simpleQueryParam",simpleQueryParam)
 
     if request.method == "POST":
         draw = int(request.POST.get("draw", 1))
@@ -438,9 +438,9 @@ def userlist(request):
         # order = request.POST.get("order[0][dir]", None)[0]
         groupName = request.POST.get("groupName")
         simpleQueryParam = request.POST.get("simpleQueryParam")
-        print(request.POST.get("draw"))
-        print("groupName",groupName)
-        print("post simpleQueryParam",simpleQueryParam)
+        # print(request.POST.get("draw"))
+        # print("groupName",groupName)
+        # print("post simpleQueryParam",simpleQueryParam)
 
     # print("get rolelist:",draw,length,start,search_value)
 
@@ -470,15 +470,20 @@ def userlist(request):
         userl = [u for u in userl if u.belongto == query_org]
         # print("query organ user,",userl)
 
+    
+    
+    def search_user(u):
+        if simpleQueryParam in u.user_name or simpleQueryParam in u.real_name or simpleQueryParam in u.email or simpleQueryParam in u.phone_number :
+            return True
+
+
+    if simpleQueryParam != "":
+        print('simpleQueryParam:',simpleQueryParam)
+        # userl = userl.filter(real_name__icontains=simpleQueryParam)
+        userl = [u for u in userl if search_user(u) is True]
+    
     for u in userl:
         data.append(u_info(u))
-    
-        
-
-
-    # if simpleQueryParam != "":
-    #     userl = userl.filter(real_name__icontains=simpleQueryParam)
-    
     
     recordsTotal = len(data)
     
@@ -508,6 +513,7 @@ def rolelist(request):
         length = int(request.GET.get("length", 10))
         start = int(request.GET.get("start", 0))
         search_value = request.GET.get("search[value]", None)
+        simpleQueryParam = request.POST.get("simpleQueryParam")
         # order_column = request.GET.get("order[0][column]", None)[0]
         # order = request.GET.get("order[0][dir]", None)[0]
 
@@ -517,6 +523,7 @@ def rolelist(request):
         start = int(request.POST.get("start", 0))
         pageSize = int(request.POST.get("pageSize", 10))
         search_value = request.POST.get("search[value]", None)
+        simpleQueryParam = request.POST.get("simpleQueryParam")
         # order_column = request.POST.get("order[0][column]", None)[0]
         # order = request.POST.get("order[0][dir]", None)[0]
 
@@ -525,7 +532,19 @@ def rolelist(request):
     
 
     data = []
-    for r in current_user.role_list():
+    rolel = current_user.role_list()
+
+    def search_role(r):
+        if simpleQueryParam in r.name:
+            return True
+
+
+    if simpleQueryParam != "":
+        print('simpleQueryParam:',simpleQueryParam)
+        # userl = userl.filter(real_name__icontains=simpleQueryParam)
+        rolel = [r for r in rolel if search_role(r) is True]
+
+    for r in rolel:
         data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
 
     
