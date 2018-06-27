@@ -290,9 +290,10 @@ def buildbasetree():
     return ctree    
 
 
-def buildchoicetree(permstree=None):
+def buildchoicetree(request,permstree=None):
     ctree = []
     # print("buildtree permm:",permstree,type(permstree))
+    user = request.user
     pt_dict = {}
     for pt in permstree:
         # print(pt["id"],pt["edit"])
@@ -311,7 +312,8 @@ def buildchoicetree(permstree=None):
         if key in pt_dict.keys():
             tmp1["checked"] = "true"
         else:
-            tmp1["chkDisabled"] = "true" 
+            if not user.has_menu_permission(pid):
+                tmp1["chkDisabled"] = "true" 
         ctree.append(tmp1)
         
         submenu = choicetreedict[key]["submenu"][0]
@@ -327,7 +329,8 @@ def buildchoicetree(permstree=None):
             if idstr in pt_dict.keys():
                 tmp2["checked"] = "true"
             else:
-                tmp2["chkDisabled"] = "true" 
+                if not user.has_menu_permission(idstr):
+                    tmp2["chkDisabled"] = "true" 
             ctree.append(tmp2)
 
         
@@ -342,7 +345,8 @@ def buildchoicetree(permstree=None):
             if idstr in pt_dict.keys() and pt_dict[idstr] == True:
                 tmp3["checked"] = "true"
             else:
-                tmp3["chkDisabled"] = "true" 
+                if not user.has_menu_permission(idstr):
+                    tmp3["chkDisabled"] = "true" 
             ctree.append(tmp3)
 
             
@@ -373,7 +377,7 @@ def choicePermissionTree(request):
 
     if len(permissiontree) > 0:
         ptree = json.loads(permissiontree)
-        buildtree = buildchoicetree(ptree)
+        buildtree = buildchoicetree(request,ptree)
             
 
 
@@ -741,11 +745,13 @@ class UserGroupDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         if self.object == self.request.user.belongto:
             return JsonResponse({"success":False,"msg":"不能删除自己所属的组织"})
 
-        #删除组织 需要删除该组织的用户
+        #删除组织 需要删除该组织的用户 和角色
         users = self.object.users.all()
         print('delete ',self.object,'and users:',users)
         for u in users:
             u.delete()
+        for r in self.object.roles.all():
+            r.delete()
         self.object.delete()
         return JsonResponse({"success":True})
         
@@ -765,8 +771,9 @@ def verification(request):
     user = request.user
     user_expiredate = user.expire_date
     authorizationDate = request.POST.get("expire_date") #authorizationDate
+    print('authorizationDate:',authorizationDate)
     a = datetime.strptime(user_expiredate,"%Y-%m-%d")
-    b = datetime.strptime(authorizationDate,"%Y-%m-%d")
+    b = datetime.strptime(authorizationDate.strip(),"%Y-%m-%d")
     bflag = b <= a
     return HttpResponse(json.dumps({"success":bflag}))
 
@@ -1155,13 +1162,25 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print('useredit form:',form)
-        instance = form.save()
-        uid = form.cleaned_data.get('user_name')
-        print(form)
-        groupId = form.cleaned_data.get('idstr')     #organization cid
-        print('useredit dfer,',groupId)
-        instance.idstr=groupId
+        user = self.request.user
+        user_groupid = user.belongto.cid
+        instance = form.save(commit=False)
+        uid = self.request.POST.get('user_name')
+        groupId = self.request.POST.get('groupId') # organization cid
+        if user_groupid == groupId:
+            data = {
+                "success": 0,
+                "obj":{
+                    "flag":0,
+                    "errMsg":"非管理员不能创建自己同级的用户,请重新选择所属企业。"
+                    }
+            }
+            
+            return HttpResponse(json.dumps(data)) #JsonResponse(data)
+        organization = Organizations.objects.get(cid=groupId)
+        instance.belongto = organization
+        
+        instance.idstr=groupId  #所属组织 cid
         # instance.uuid=unique_uuid_generator(instance)
         return super(UserEditView,self).form_valid(form)
         # role_list = MyRoles.objects.get(id=self.role_id)
