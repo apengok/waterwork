@@ -238,11 +238,15 @@ class User(AbstractBaseUser,PermissionsMixin):
             if created_by_user:
                 # rolelist.append(created_by_user)
                 rolelist += created_by_user
-        #下级组织的角色
+        #下级组织的角色 和 下级组织的用户的角色
         sub_organs = self.belongto.sub_organizations(include_self=False)
         for g in sub_organs:
             for r in g.roles.all():
-                rolelist.append(r)
+                if r not in rolelist:
+                    rolelist.append(r)
+            for u in g.users.all():
+                if u.Role not in rolelist:
+                    rolelist.append(u.Role)
 
         return rolelist
 
