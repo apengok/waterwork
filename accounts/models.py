@@ -180,6 +180,22 @@ class User(AbstractBaseUser,PermissionsMixin):
         for pt in ptree:
             pt_dict[pt["id"]] = pt["edit"]
 
+        if perm in pt_dict.keys():
+            return True
+        return False
+
+    def has_menu_permission_edit(self,perm):
+        if self.is_admin:
+            return True
+        if self.Role is None:
+            return False
+        permissiontree = self.Role.permissionTree
+
+        ptree = json.loads(permissiontree)
+        pt_dict = {}
+        for pt in ptree:
+            pt_dict[pt["id"]] = pt["edit"]
+
         if perm in pt_dict.keys() and pt_dict[perm] == True:
             return True
         return False
