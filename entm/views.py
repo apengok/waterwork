@@ -749,7 +749,7 @@ class UserGroupDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         users = self.object.users.all()
         print('delete ',self.object,'and users:',users)
         for u in users:
-            u.Role.delete()     #删除用户的角色
+            u.Role.delete()     #删除用户
             u.delete()
         for r in self.object.roles.all():
             r.delete()

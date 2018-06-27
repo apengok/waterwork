@@ -246,24 +246,28 @@ class User(AbstractBaseUser,PermissionsMixin):
         # 自己被分配的角色
         role_self = self.Role
         rolelist.append(role_self)
+        
         # 该用户创建的角色
         if MyRoles.objects.filter(uid=self.uuid).exists():
             # Force evaluation of a QuerySet by calling list() on it
             created_by_user = list(MyRoles.objects.filter(uid=self.uuid) )
             
             if created_by_user:
-                # rolelist.append(created_by_user)
+                
                 rolelist += created_by_user
+                
         #下级组织的角色 和 下级组织的用户的角色
         sub_organs = self.belongto.sub_organizations(include_self=False)
         for g in sub_organs:
             for r in g.roles.all():
-                if r not in rolelist:
+                if r and r not in rolelist:
                     rolelist.append(r)
+                    
             for u in g.users.all():
-                if u.Role not in rolelist:
+                if u.Role and u.Role not in rolelist:
                     rolelist.append(u.Role)
-
+                    
+        # print('ret rolelist:',rolelist)
         return rolelist
 
 
