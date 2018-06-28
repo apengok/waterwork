@@ -1430,7 +1430,7 @@ function DayToday(){
 				dataType: setting.async.dataType,
 				complete:function(r){
 					if (r.responseText.indexOf("<form id=\"loginForm") > 0) {
-				        window.location.replace("/clbs/login?type=expired");
+				        window.location.replace("/login?type=expired");
 				        return;
 					}				
 				},				
@@ -19635,7 +19635,7 @@ function tg_createTable(tg_table) {
             // data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
             "complete": function (r) {
                 if (r.responseText.indexOf("<form id=\"loginForm") > 0) {
-                    window.location.replace("/clbs/login?type=expired");
+                    window.location.replace("/login?type=expired");
                     return;
                 }
                 if (tg_table.sync_address) {
@@ -21385,7 +21385,7 @@ function error(XMLHttpRequest, textStatus, errorThrown){
         return;
     }
     if (XMLHttpRequest.responseText.indexOf("<form id=\"loginForm") > 0) {
-        window.location.replace("/clbs/login?type=expired");
+        window.location.replace("/login?type=expired");
         return;
     }
     layer.msg("系统的情绪不稳定，并向你扔了一个错误~");
@@ -21668,7 +21668,7 @@ function getCookie(name) {
             },*/
             complete:function(msg){
             	if (msg.responseText && msg.responseText.indexOf("<form id=\"loginForm") > 0) {
-			        window.location.replace("/clbs/login?type=expired");
+			        window.location.replace("/login?type=expired");
 			        return;
 				}	
             	fn.complete(msg);

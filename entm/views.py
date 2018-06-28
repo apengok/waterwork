@@ -30,6 +30,9 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from .utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from .forms import OrganizationsAddForm,OrganizationsEditForm
 from . models import Organizations
+
+from .resources import UserResource
+from tablib import Dataset
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -446,6 +449,7 @@ def userlist(request):
 
     def u_info(u):
         rolename = u.Role.name if u.Role else ''
+        groupname = u.belongto.name if u.belongto else ''
         return {
             "id":u.pk,
             "user_name":u.user_name,
@@ -453,9 +457,10 @@ def userlist(request):
             "sex":u.sex,
             "phone_number":u.phone_number,
             "expire_date":u.expire_date,
-            "groupName":u.belongto.name,
+            "groupName":groupname,
             "roleName":rolename,
             "email":u.email,
+            "is_active":'1' if u.is_active else '0'
         }
     data = []
     #当前登录用户
@@ -501,7 +506,16 @@ def userlist(request):
     return HttpResponse(json.dumps(result))
     # return JsonResponse([result],safe=False)
 
+def userimport(request):
+    return
 
+def userexport(request):
+    user_resource = UserResource()
+    dataset = user_resource.export()
+    response = HttpResponse(dataset.xls, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="persons.xls"'
+    return response
+        
 
 def rolelist(request):
     print('get rolelist:',request)
@@ -1111,6 +1125,13 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 
         instance.uuid=unique_uuid_generator(instance)
 
+        # 用户状态
+        is_active = self.request.POST.get('is_active')
+        if is_active == '0':
+            instance.is_active = False
+        else:
+            instance.is_active = True
+
         return super(UserAddView,self).form_valid(form)   
 
     def get_context_data(self, *args, **kwargs):
@@ -1182,6 +1203,8 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
+        print(form)
+        print(self.request.POST)
         user = self.request.user
         user_groupid = user.belongto.cid
         instance = form.save(commit=False)
@@ -1201,6 +1224,12 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         instance.belongto = organization
         
         instance.idstr=groupId  #所属组织 cid
+        # 用户状态
+        is_active = self.request.POST.get('is_active')
+        if is_active == '0':
+            instance.is_active = False
+        else:
+            instance.is_active = True
         # instance.uuid=unique_uuid_generator(instance)
         return super(UserEditView,self).form_valid(form)
         # role_list = MyRoles.objects.get(id=self.role_id)
@@ -1406,3 +1435,68 @@ class AuthStationView(TemplateView):
         context["page_title"] = "分配角色"
         return context        
 
+class UserImportView(TemplateView,UserPassesTestMixin):
+    """docstring for AssignRoleView"""
+    template_name = "entm/importuser.html"
+        
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserImportView, self).get_context_data(**kwargs)
+        context["page_title"] = "导入用户"
+        
+        return context
+
+    # def get_object(self):
+    #     # print(self.kwargs)
+    #     return User.objects.get(id=self.kwargs["pk"])
+
+    def post(self,request,*args,**kwargs):
+        
+        context = self.get_context_data(**kwargs)
+        print('importuser post:',self.request)
+
+        person_resource = UserResource()
+        dataset = Dataset()
+        new_persons = self.request.FILES['file']
+        print('new_persons:',new_persons)
+        imported_data = dataset.load(new_persons.read())
+        print('imported_data:',imported_data.dict)
+        result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+        print('result:',result.rows)
+
+        if not result.has_errors():
+            person_resource.import_data(dataset, dry_run=False)  # Actually import now
+        else:
+            print("base errors:",result.base_errors)
+            print("row errors:",result.row_errors())
+            for i ,error in result.row_errors():
+                print(i,error[0].error)
+
+
+        data={"exceptionDetailMsg":"null",
+        "msg":"导入结果：<br/>导入成功2条数据, <br/> 导入失败2条数据。<br/>第3条数据，分组名称为“维修机组”已在当前组织下存在<br/>第4条数据，分组名称为“威尔沃”已在当前组织下存在<br/>",
+        "obj":"null",
+        "success":True}
+        # data = {
+        #         "msg": "分配完成",
+        #         "success":1
+        #     }
+        return HttpResponse(json.dumps(data))
+
+
+def importProgress(request):
+    return HttpResponse(json.dumps({'success':1}))

@@ -43,6 +43,10 @@ urlpatterns = [
     url(r'^user/delete/(?P<pk>[0-9]+)/?$',views.UserDeleteView.as_view(),name='userdelete'),
     url(r'^user/deletemore',views.userdeletemore,name='userdeletemore'),
 
+    url(r'^user/export',views.userexport,name='userexport'),
+    url(r'^user/import',views.UserImportView.as_view(),name='userimport'),
+    url(r'^infoconfig/infoinput/importProgress',views.importProgress,name='importProgress'),
+
     #角色
     url(r'^rolemanager/?$',views.RolesMangerView.as_view(),name='rolemanager'),
     url(r'^role/list/$',views.rolelist,name='rolelist'),

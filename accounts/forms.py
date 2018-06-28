@@ -201,7 +201,10 @@ class UserDetailChangeForm(forms.ModelForm):
         print('user password:',password)
         if password != '':
             user.set_password(password)
-        user.active = True #send confirm email
+
+        # is_active = self.cleaned_data["is_active"]
+        # print('is_active:',is_active)
+        # user.active = is_active #send confirm email
         if commit:
             user.save()
         return user

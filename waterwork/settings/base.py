@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'entm',
     'accounts',
     'monitor',
+    'import_export',
     # 'channels',
 ]
 
@@ -79,6 +80,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'waterwork.wsgi.application'
+
+# IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # ASGI_APPLICATION = "waterwork.routing.application"
 

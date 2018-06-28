@@ -137,6 +137,7 @@
             }
         },
         doSubmit: function(){
+            console.log("pawd:",$("#passwordEdit").attr("value"));
             userEdit.valueChange();
             if (flag1){
                 if(userEdit.validates()){
