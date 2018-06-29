@@ -445,7 +445,7 @@ def userlist(request):
         # print("groupName",groupName)
         # print("post simpleQueryParam",simpleQueryParam)
 
-    # print("get rolelist:",draw,length,start,search_value)
+    print("get userlist:",draw,length,start,search_value)
 
     def u_info(u):
         rolename = u.Role.name if u.Role else ''
@@ -467,8 +467,9 @@ def userlist(request):
     current_user = request.user
     
     userl = current_user.user_list()
+    recordsTotal = len(userl)
     
-    # print("user all:",userl)
+    print("user all:",userl)
     if groupName != "":
         #查询的组织
         query_org = Organizations.objects.get(cid=groupName)
@@ -487,10 +488,10 @@ def userlist(request):
         # userl = userl.filter(real_name__icontains=simpleQueryParam)
         userl = [u for u in userl if search_user(u) is True]
     
-    for u in userl:
+    for u in userl[start:start+length]:
         data.append(u_info(u))
     
-    recordsTotal = len(data)
+    # recordsTotal = len(data)
     
     result = dict()
     result["records"] = data
@@ -502,6 +503,8 @@ def userlist(request):
     result["recordsFiltered"] = recordsTotal
     result["start"] = 0
     result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
     
     return HttpResponse(json.dumps(result))
     # return JsonResponse([result],safe=False)
@@ -513,7 +516,7 @@ def userexport(request):
     user_resource = UserResource()
     dataset = user_resource.export()
     response = HttpResponse(dataset.xls, content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="persons.xls"'
+    response['Content-Disposition'] = 'attachment; filename="atest2.xls"'
     return response
         
 
@@ -547,6 +550,7 @@ def rolelist(request):
 
     data = []
     rolel = current_user.role_list()
+    recordsTotal = len(rolel)
 
     def search_role(r):
         if simpleQueryParam in r.name:
@@ -558,11 +562,11 @@ def rolelist(request):
         # userl = userl.filter(real_name__icontains=simpleQueryParam)
         rolel = [r for r in rolel if search_role(r) is True]
 
-    for r in rolel:
+    for r in rolel[start:start+length]:
         data.append({"idstr":r.rid,"name":r.name,"notes":r.notes})
 
     
-    recordsTotal = len(data) #rolel.count()
+    # recordsTotal = len(data) #rolel.count()
 
     result = dict()
     result["records"] = data
@@ -1471,6 +1475,7 @@ class UserImportView(TemplateView,UserPassesTestMixin):
 
         person_resource = UserResource()
         dataset = Dataset()
+        # dataset.headers = ('user_name', 'real_name', 'sex','phone_number','email','is_active','expire_date','belongto','Role')
         new_persons = self.request.FILES['file']
         print('new_persons:',new_persons)
         imported_data = dataset.load(new_persons.read())
@@ -1478,17 +1483,23 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
         print('result:',result.rows)
 
+        err_msg = []
+        err_count = 0
         if not result.has_errors():
             person_resource.import_data(dataset, dry_run=False)  # Actually import now
         else:
             print("base errors:",result.base_errors)
             print("row errors:",result.row_errors())
             for i ,error in result.row_errors():
-                print(i,error[0].error)
+                print(i,unicode(error[0].error))
+                err = u'第%s条数据,%s'%(i,unicode(error[0].error))
+                err_msg.append(err)
+                err_count += 1
+        success_count = len(result.rows) - err_count
 
 
         data={"exceptionDetailMsg":"null",
-        "msg":"导入结果：<br/>导入成功2条数据, <br/> 导入失败2条数据。<br/>第3条数据，分组名称为“维修机组”已在当前组织下存在<br/>第4条数据，分组名称为“威尔沃”已在当前组织下存在<br/>",
+        "msg":'导入结果:成功导入%s条<br />'%(success_count)+'失败%s条<br/>'%(err_count)+'<br/>'.join(e for e in err_msg),
         "obj":"null",
         "success":True}
         # data = {

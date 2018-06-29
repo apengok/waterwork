@@ -114,24 +114,24 @@ class User(AbstractBaseUser,PermissionsMixin):
     #     max_length=255,
     #     unique=True,
     # )
-    user_name    = models.CharField(_('user name'), max_length=30, unique=True)
-    real_name    = models.CharField(_('real name'), max_length=30, blank=True)
-    sex          = models.CharField(_('Sex'), max_length=30, blank=True)
-    phone_number = models.CharField(_('phone number'), max_length=30, blank=True)
+    user_name    = models.CharField(verbose_name='用户名', max_length=30, unique=True)
+    real_name    = models.CharField(verbose_name='真实姓名', max_length=30, blank=True)
+    sex          = models.CharField(verbose_name='性别', max_length=30, blank=True)
+    phone_number = models.CharField(verbose_name='手机',  max_length=30, blank=True)
     # belongto     = models.CharField(_('belongs to'), max_length=30, blank=True)
-    belongto     = models.ForeignKey(Organizations,related_name='users',null=True, blank=True,on_delete=models.CASCADE)
-    expire_date  = models.CharField(_('Expired date'), max_length=30, blank=True)
+    belongto     = models.ForeignKey(Organizations,verbose_name='所属组织', related_name='users',null=True, blank=True,on_delete=models.CASCADE)
+    expire_date  = models.CharField(verbose_name='授权截止日期',  max_length=30, blank=True)
     # Role         = models.CharField(_('Role'), max_length=30, blank=True)
-    Role        = models.ForeignKey(MyRoles,related_name='users',null=True, blank=True,on_delete=models.CASCADE)
+    Role        = models.ForeignKey(MyRoles,verbose_name='角色',related_name='users',null=True, blank=True,on_delete=models.CASCADE)
     idstr       = models.CharField(max_length=300,null=True,blank=True) #(string combind username,group.id,group.pid )
     uuid        = models.CharField(max_length=300,null=True,blank=True)
     email = models.EmailField(
-        verbose_name='email address',
+        verbose_name='邮箱',
         max_length=255,
         blank=True,
     )
     # BOOL_CHOICES = ((True, '启用'), (False, '停止'))
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(verbose_name='启停状态', default=True)
     staff = models.BooleanField(default=False) # a admin user; non super-user
     admin = models.BooleanField(default=False) # a superuser
     # notice the absence of a "Password field", that's built in.
