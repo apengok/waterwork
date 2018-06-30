@@ -514,7 +514,8 @@ def userimport(request):
 
 def userexport(request):
     user_resource = UserResource()
-    dataset = user_resource.export()
+    user_query_set = request.user.user_list_queryset()
+    dataset = user_resource.export(user_query_set)
     response = HttpResponse(dataset.xls, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="atest2.xls"'
     return response
@@ -1473,14 +1474,18 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         context = self.get_context_data(**kwargs)
         print('importuser post:',self.request)
 
+        user = request.user
+
         person_resource = UserResource()
         dataset = Dataset()
         # dataset.headers = ('user_name', 'real_name', 'sex','phone_number','email','is_active','expire_date','belongto','Role')
         new_persons = self.request.FILES['file']
-        print('new_persons:',new_persons)
-        imported_data = dataset.load(new_persons.read())
+        # print('new_persons:',new_persons.read())
+        file_contents = new_persons.read()  #.decode('iso-8859-15')
+        imported_data = dataset.load(file_contents,'xls')
         print('imported_data:',imported_data.dict)
-        result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+        kwargs["user"] = user
+        result = person_resource.import_data(dataset, dry_run=True,**kwargs)  # Test the data import
         print('result:',result.rows)
 
         err_msg = []
@@ -1491,8 +1496,8 @@ class UserImportView(TemplateView,UserPassesTestMixin):
             print("base errors:",result.base_errors)
             print("row errors:",result.row_errors())
             for i ,error in result.row_errors():
-                print(i,unicode(error[0].error))
-                err = u'第%s条数据,%s'%(i,unicode(error[0].error))
+                # print(i,unicode(error[0].error))
+                err = u'第%s条数据,%s'%(i,str(error[0].error))
                 err_msg.append(err)
                 err_count += 1
         success_count = len(result.rows) - err_count

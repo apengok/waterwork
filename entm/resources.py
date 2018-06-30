@@ -3,6 +3,8 @@ from import_export import resources,fields
 from accounts.models import User,MyRoles
 from entm.models import Organizations
 
+from waterwork.middleware import get_current_user
+
 
 class UserResource(resources.ModelResource):
     user_name    = fields.Field(column_name=u'用户名', attribute="user_name")
@@ -23,23 +25,41 @@ class UserResource(resources.ModelResource):
         fields = ('user_name', 'real_name', 'sex','phone_number','email','is_active','expire_date','belongto','Role')
         export_order = fields
 
-    def import_obj(self,instance, row,dry_run):
+    def import_obj(self,instance, row,dry_run,**kwargs):
         
-        print('instance:',instance)
+        user = get_current_user()
+        print('current_user:',user)
+        print (kwargs)
         for k in row:
             print(k,row[k],type(row[k]))
 
-        username = unicode(row[u'用户名'])
+        username = str(row[u'用户名'])
         print('username:',username)
         # 从excel读上来的数据全是数字都是float类型
         if '.' in username:
             if isinstance(row[u'用户名'],float):
-                username = unicode(int(row[u'用户名']))
+                username = str(int(row[u'用户名']))
                 row[u'用户名'] = username
 
         bflag = User.objects.filter(user_name=username).exists()
         if bflag:
             raise Exception(u"用户%s已存在"%(username))
+
+
+        authorizationDate = row[u'授权截止日期']
+        user_expiredate = user.expire_date
+        
+        a = datetime.strptime(user_expiredate,"%Y-%m-%d")
+        b = datetime.strptime(authorizationDate.strip(),"%Y-%m-%d")
+        bflag = b <= a
+        if bflag:
+            raise Exception(u"用户授权截止日期%s大于当前用户的截止日期"%(authorizationDate,user_expiredate))
+
+        phone_number = str(row[u'手机'])
+        if '.' in phone_number:
+            if isinstance(row[u'手机'],float):
+                phone_number = str(int(row[u'手机']))
+                row[u'手机'] = phone_number
 
         gender = row[u'性别']
         if gender == u'男':

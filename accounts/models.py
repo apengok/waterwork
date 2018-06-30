@@ -223,6 +223,21 @@ class User(AbstractBaseUser,PermissionsMixin):
         except:
             return []
 
+    def user_list_queryset(self):
+        # userlist = []
+        if self.is_admin:
+            return User.objects.all()
+
+        user_self = User.objects.filter(user_name=self.user_name)
+        userlist = user_self
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=False)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            userlist |= g.users.all()
+            
+        return userlist
+
     def user_list(self):
         userlist = []
         if self.is_admin:
