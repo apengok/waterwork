@@ -1597,9 +1597,9 @@ def importProgress(request):
     return HttpResponse(json.dumps({'success':1}))
 
 def download(request):
-    file_path = os.path.join(settings.STATICFILES_DIRS[0] , '用户模板.xls') #development
+    # file_path = os.path.join(settings.STATICFILES_DIRS[0] , '用户模板.xls') #development
     
-    # file_path = os.path.join(settings.STATIC_ROOT , '用户模板.xls')
+    file_path = os.path.join(settings.STATIC_ROOT , '用户模板.xls')
     print('file_path:',file_path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
