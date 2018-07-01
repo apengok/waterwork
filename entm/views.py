@@ -1614,6 +1614,6 @@ def userexport(request):
     user_resource = UserResource()
     user_query_set = request.user.user_list_queryset()
     dataset = user_resource.export(user_query_set)
-    response = HttpResponse(dataset.xls, content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="atest2.xls"'
+    response = HttpResponse(dataset.xls, content_type='text/xls')
+    response['Content-Disposition'] = 'attachment; filename='+ escape_uri_path("导出用户.xls")
     return response
