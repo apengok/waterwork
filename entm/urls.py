@@ -45,6 +45,8 @@ urlpatterns = [
 
     url(r'^user/export',views.userexport,name='userexport'),
     url(r'^user/import',views.UserImportView.as_view(),name='userimport'),
+    url(r'^basetemp/download',views.download,name='download'),
+
     url(r'^infoconfig/infoinput/importProgress',views.importProgress,name='importProgress'),
 
     #角色

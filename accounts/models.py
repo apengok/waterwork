@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
+from django.db.models.signals import pre_save
 import json
 from django.db.models import Q
 
@@ -285,43 +286,15 @@ class User(AbstractBaseUser,PermissionsMixin):
         # print('ret rolelist:',rolelist)
         return rolelist
 
+from entm.utils import unique_uuid_generator
 
-    # @property
-    # def is_active(self):
-    #     "Is the user active?"
-    #     return self.active
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.uuid:
+        # instance.slug = create_slug(instance)
+        instance.uuid = unique_uuid_generator(instance)
 
-'''
-If you simply subclass the Group object then by default it will create a new database table and the admin site won't pick up any new fields.
 
-You need to inject new fields into the existing Group:
-'''
-# if not hasattr(Group, 'parent'):
-#     field = models.ForeignKey(Group, blank=True, null=True, related_name='children')
-#     field.contribute_to_class(Group, 'parent')
 
-# class MyRoles(Group):
-#     notes = models.CharField(max_length=156,blank=True)   
-#     permissionTree = models.CharField(max_length=50000,blank=True)
+pre_save.connect(pre_save_post_receiver, sender=User)
 
-# To add methods to the Group, subclass but tag the model as proxy:
-    # class Meta:
-    #     proxy = True
-
-    # def myFunction(self):
-    #     return True
-
-# def post_save_roles_model_receiver(sender,instance,created,*args,**kwargs):
-#     if created:
-#         try:
-#             Roles.objects.create(group=instance)
-#         except:
-#             pass
-
-# post_save.connect(post_save_roles_model_receiver,sender=Group)  
-
-# class Roles(models.Model):
-#     group = models.OneToOneField(Group,on_delete=models.CASCADE)
-#     notes = models.CharField(max_length=156,blank=True)   
-#     permissionTree = models.CharField(max_length=5000,blank=True)
        

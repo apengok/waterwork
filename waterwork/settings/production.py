@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'entm',
     'accounts',
     'monitor',
+    'import_export',
     # 'channels',
 ]
 

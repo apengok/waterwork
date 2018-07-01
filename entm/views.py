@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import get_object_or_404,render,redirect
-from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
+from django.http import HttpResponse,JsonResponse,HttpResponseRedirect,StreamingHttpResponse
 from django.contrib import messages
 from django.template import TemplateDoesNotExist
 import json
@@ -21,6 +21,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import admin
 from django.contrib.auth.models import Permission
 from django.utils.safestring import mark_safe
+from django.utils.encoding import escape_uri_path
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from collections import OrderedDict
@@ -30,8 +31,9 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from .utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from .forms import OrganizationsAddForm,OrganizationsEditForm
 from . models import Organizations
-
-from .resources import UserResource
+import os
+from django.conf import settings
+from .resources import UserResource,minimalist_xldate_as_datetime
 from tablib import Dataset
 # from django.core.urlresolvers import reverse_lazy
 
@@ -509,16 +511,7 @@ def userlist(request):
     return HttpResponse(json.dumps(result))
     # return JsonResponse([result],safe=False)
 
-def userimport(request):
-    return
 
-def userexport(request):
-    user_resource = UserResource()
-    user_query_set = request.user.user_list_queryset()
-    dataset = user_resource.export(user_query_set)
-    response = HttpResponse(dataset.xls, content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="atest2.xls"'
-    return response
         
 
 def rolelist(request):
@@ -1469,6 +1462,86 @@ class UserImportView(TemplateView,UserPassesTestMixin):
     #     # print(self.kwargs)
     #     return User.objects.get(id=self.kwargs["pk"])
 
+    def check_row(self, row, **kwargs):
+        user = kwargs["user"]
+        print("row :::",row)
+
+        err_msg = []
+        
+        username = str(row[u'用户名'])
+        print('username:',username)
+        # 从excel读上来的数据全是数字都是float类型
+        if '.' in username:
+            if isinstance(row[u'用户名'],float):
+                username = str(int(row[u'用户名']))
+                
+        bflag = User.objects.filter(user_name=username).exists()
+        if bflag:
+            err_msg.append(u"用户%s已存在"%(username))
+
+
+        # Excel save date as float
+        authorizationDate = row[u'授权截止日期']
+        if isinstance(authorizationDate,str):
+            b = datetime.strptime(authorizationDate.strip(),"%Y-%m-%d")
+        else:
+            authorizationDate = int(row[u'授权截止日期'])
+            b = minimalist_xldate_as_datetime(authorizationDate,0)
+
+        user_expiredate = user.expire_date
+        print(authorizationDate,user_expiredate)
+        
+        a = datetime.strptime(user_expiredate,"%Y-%m-%d")
+        # 
+        
+        print('time a:',a,"b:",b)
+        bflag = b <= a
+        if not bflag:
+            err_msg.append(u"用户授权截止日期大于当前用户的截止日期%s"%(user_expiredate))
+
+        phone_number = str(row[u'手机'])
+        if '.' in phone_number:
+            if isinstance(row[u'手机'],float):
+                phone_number = str(int(row[u'手机']))
+                row[u'手机'] = phone_number
+
+        gender = row[u'性别']
+        if gender == u'男':
+            row[u'性别'] = 1
+        elif gender == u'女':
+            row[u'性别'] = 2
+        else:
+            err_msg.append(u"请输入正确的性别")
+
+        state = row[u'启停状态']
+        if state == u'启用':
+            row[u'启停状态'] = True
+        elif state == u'停用':
+            row[u'启停状态'] = False
+        else:
+            err_msg.append(u"请输入正确的启停状态")
+
+        org_name = row[u'所属组织']
+        org = Organizations.objects.filter(name=org_name)
+        print('org:',org)
+        if org.exists():
+            row[u'所属组织'] = org[0]
+        else:
+            row[u'所属组织'] = org[0]
+            err_msg.append(u"该组织%s不存在"%(org_name))
+
+        role_name = row[u'角色']
+        role = MyRoles.objects.filter(name=role_name)
+        print('role:',role)
+        if role.exists():
+            row[u'角色'] = role[0]
+        else:
+            row[u'角色'] = None
+            err_msg.append(u"该角色%s不存在"%(role_name))
+
+        return err_msg
+
+
     def post(self,request,*args,**kwargs):
         
         context = self.get_context_data(**kwargs)
@@ -1485,34 +1558,62 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         imported_data = dataset.load(file_contents,'xls')
         print('imported_data:',imported_data.dict)
         kwargs["user"] = user
-        result = person_resource.import_data(dataset, dry_run=True,**kwargs)  # Test the data import
-        print('result:',result.rows)
 
-        err_msg = []
-        err_count = 0
-        if not result.has_errors():
-            person_resource.import_data(dataset, dry_run=False)  # Actually import now
+        row_count = 0
+        err_msgs = []
+        for row in imported_data.dict:
+            row_count += 1
+
+            err = self.check_row(row,**kwargs)
+            print('check row :',row_count,err)
+            if len(err) > 0:
+                emsg = u'第%s条错误:<br/>'%(row_count) + '<br/>'.join(e for e in err)
+                err_msgs.append(emsg)
+
+        err_count = len(err_msgs)
+        success_count = row_count - err_count
+        print('err_msgs:',err_msgs)
+        if err_count > 0:
+            msg = '导入结果:正确%s条<br />'%(success_count)+'错误%s条<br/>'%(err_count)+'<br/>'.join(e for e in err_msgs)
+            
         else:
-            print("base errors:",result.base_errors)
-            print("row errors:",result.row_errors())
-            for i ,error in result.row_errors():
-                # print(i,unicode(error[0].error))
-                err = u'第%s条数据,%s'%(i,str(error[0].error))
-                err_msg.append(err)
-                err_count += 1
-        success_count = len(result.rows) - err_count
+            msg = '导入结果:成功导入%s条<br />'%(success_count)+'失败%s条<br/>'%(err_count)
+            person_resource.import_data(dataset, dry_run=False,**kwargs)  # Actually import now
 
-
+        # result = person_resource.import_data(dataset, dry_run=True,**kwargs)  # Test the data import
+        # if not result.has_errors():
+        #     person_resource.import_data(dataset, dry_run=False,**kwargs)  # Actually import now
+        
         data={"exceptionDetailMsg":"null",
-        "msg":'导入结果:成功导入%s条<br />'%(success_count)+'失败%s条<br/>'%(err_count)+'<br/>'.join(e for e in err_msg),
-        "obj":"null",
-        "success":True}
-        # data = {
-        #         "msg": "分配完成",
-        #         "success":1
-        #     }
+                "msg":msg,
+                "obj":"null",
+                "success":True
+        }
+        
         return HttpResponse(json.dumps(data))
 
 
 def importProgress(request):
     return HttpResponse(json.dumps({'success':1}))
+
+def download(request):
+    file_path = os.path.join(settings.STATICFILES_DIRS[0] , '用户模板.xls') #development
+    
+    # file_path = os.path.join(settings.STATIC_ROOT , '用户模板.xls')
+    print('file_path:',file_path)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'attachment; filename=' + escape_uri_path("用户模板.xls")
+            return response
+    # raise Http404
+    return HttpResponse(json.dumps({'success':0,'msg':'file not found'}))
+
+
+def userexport(request):
+    user_resource = UserResource()
+    user_query_set = request.user.user_list_queryset()
+    dataset = user_resource.export(user_query_set)
+    response = HttpResponse(dataset.xls, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="atest2.xls"'
+    return response
