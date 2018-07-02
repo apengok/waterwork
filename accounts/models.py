@@ -289,9 +289,15 @@ class User(AbstractBaseUser,PermissionsMixin):
 from entm.utils import unique_uuid_generator
 
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    print('pre_save_post_receiver...')
     if not instance.uuid:
         # instance.slug = create_slug(instance)
         instance.uuid = unique_uuid_generator(instance)
+        print('pre_save password:',instance.password)
+        instance.set_password(instance.password)
+
+    if not instance.idstr:
+        instance.idstr = instance.belongto.cid
 
 
 

@@ -71,10 +71,10 @@
                         var userId = $("#currentUserId").val();
                         var userId2 = $("#currentUserId").attr("value");
                         // 修改按钮
-                        //result += '<button href="'+editUrlPath+'" data-target="#commonLgWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
+                        result += '<button href="'+editUrlPath+'" data-target="#commonLgWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                         if (idStr != userId) {
                             // 修改按钮
-                            result += '<button href="'+editUrlPath+'" data-target="#commonLgWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
+                            //result += '<button href="'+editUrlPath+'" data-target="#commonLgWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                         
                             // 分配角色
                             result += '<button href="'
@@ -88,8 +88,8 @@
                             result += '<button type="button" onclick="groupUserManage.deleteRole(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
                         }else {
                             // 修改按钮
-                            result += '<button disabled href="'+editUrlPath
-                                    +'" data-target="#commonLgWin"  class="editBtn btn-default deleteButton" type="button"  data-toggle="modal" ><i class="fa fa-ban"></i>修改</button>&nbsp;';
+                            // result += '<button disabled href="'+editUrlPath
+                            //         +'" data-target="#commonLgWin"  class="editBtn btn-default deleteButton" type="button"  data-toggle="modal" ><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         
                             // 分配角色
                             result += '<button disabled href="'

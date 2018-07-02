@@ -33,7 +33,7 @@ from .forms import OrganizationsAddForm,OrganizationsEditForm
 from . models import Organizations
 import os
 from django.conf import settings
-from .resources import UserResource,minimalist_xldate_as_datetime
+from .resources import UserResource,ImportUserResource,minimalist_xldate_as_datetime
 from tablib import Dataset
 # from django.core.urlresolvers import reverse_lazy
 
@@ -469,7 +469,7 @@ def userlist(request):
     current_user = request.user
     
     userl = current_user.user_list()
-    recordsTotal = len(userl)
+    
     
     print("user all:",userl)
     if groupName != "":
@@ -493,6 +493,7 @@ def userlist(request):
     for u in userl[start:start+length]:
         data.append(u_info(u))
     
+    recordsTotal = len(userl)
     # recordsTotal = len(data)
     
     result = dict()
@@ -1205,19 +1206,22 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print(self.request.POST)
         user = self.request.user
         user_groupid = user.belongto.cid
-        instance = form.save(commit=False)
+        
         uid = self.request.POST.get('user_name')
         groupId = self.request.POST.get('groupId') # organization cid
-        if user_groupid == groupId:
-            data = {
-                "success": 0,
-                "obj":{
-                    "flag":0,
-                    "errMsg":"非管理员不能创建自己同级的用户,请重新选择所属企业。"
-                    }
-            }
-            
-            return HttpResponse(json.dumps(data)) #JsonResponse(data)
+        if not user.is_admin:
+            if user_groupid == groupId:
+                data = {
+                    "success": 0,
+                    "obj":{
+                        "flag":0,
+                        "errMsg":"非管理员不能创建自己同级的用户,请重新选择所属企业。"
+                        }
+                }
+                
+                return HttpResponse(json.dumps(data)) #JsonResponse(data)
+
+        instance = form.save(commit=False)
         organization = Organizations.objects.get(cid=groupId)
         instance.belongto = organization
         
@@ -1466,6 +1470,9 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         user = kwargs["user"]
         print("row :::",row)
 
+        for k in row:
+            print(k,row[k],type(row[k]))
+
         err_msg = []
         
         username = str(row[u'用户名'])
@@ -1479,65 +1486,83 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         if bflag:
             err_msg.append(u"用户%s已存在"%(username))
 
+        password = row[u'密码']
+        try:
+            if isinstance(password,float):
+                password = str(int(password))
+                print(password,type(password))
+        except:
+            pass
+
+
+        if password != '':
+            if len(password) < 6:
+                err_msg.append(u"密码长度不能少于6位")
+        else:
+            err_msg.append(u"密码不能为空")
 
         # Excel save date as float
         authorizationDate = row[u'授权截止日期']
-        if isinstance(authorizationDate,str):
-            b = datetime.strptime(authorizationDate.strip(),"%Y-%m-%d")
-        else:
-            authorizationDate = int(row[u'授权截止日期'])
-            b = minimalist_xldate_as_datetime(authorizationDate,0)
+        if authorizationDate != '':
+            if isinstance(authorizationDate,str):
+                b = datetime.strptime(authorizationDate.strip(),"%Y-%m-%d")
+            else:
+                authorizationDate = int(row[u'授权截止日期'])
+                b = minimalist_xldate_as_datetime(authorizationDate,0)
 
-        user_expiredate = user.expire_date
-        print(authorizationDate,user_expiredate)
-        
-        a = datetime.strptime(user_expiredate,"%Y-%m-%d")
-        # 
-        
-        print('time a:',a,"b:",b)
-        bflag = b <= a
-        if not bflag:
-            err_msg.append(u"用户授权截止日期大于当前用户的截止日期%s"%(user_expiredate))
+            user_expiredate = user.expire_date
+            print(authorizationDate,user_expiredate)
+            
+            a = datetime.strptime(user_expiredate,"%Y-%m-%d")
+            # 
+            
+            print('time a:',a,"b:",b)
+            bflag = b <= a
+            if not bflag:
+                err_msg.append(u"用户授权截止日期大于当前用户的截止日期%s"%(user_expiredate))
 
         phone_number = str(row[u'手机'])
         if '.' in phone_number:
             if isinstance(row[u'手机'],float):
                 phone_number = str(int(row[u'手机']))
-                row[u'手机'] = phone_number
+                # row[u'手机'] = phone_number
 
         gender = row[u'性别']
-        if gender == u'男':
-            row[u'性别'] = 1
-        elif gender == u'女':
-            row[u'性别'] = 2
-        else:
-            err_msg.append(u"请输入正确的性别")
+        if gender != '':
+            if gender == u'男':
+                row[u'性别'] = 1
+            elif gender == u'女':
+                row[u'性别'] = 2
+            else:
+                err_msg.append(u"请输入正确的性别")
 
         state = row[u'启停状态']
-        if state == u'启用':
-            row[u'启停状态'] = True
-        elif state == u'停用':
-            row[u'启停状态'] = False
-        else:
-            err_msg.append(u"请输入正确的启停状态")
+        if state != '':
+            if state == u'启用':
+                row[u'启停状态'] = True
+            elif state == u'停用':
+                row[u'启停状态'] = False
+            else:
+                err_msg.append(u"请输入正确的启停状态")
 
         org_name = row[u'所属组织']
-        org = Organizations.objects.filter(name=org_name)
-        print('org:',org)
-        if org.exists():
-            row[u'所属组织'] = org[0]
+        if org_name != '':
+            org = Organizations.objects.filter(name=org_name)
+            print('org:',org)
+            if not org.exists():
+                err_msg.append(u"该组织%s不存在"%(org_name))
         else:
-            row[u'所属组织'] = org[0]
-            err_msg.append(u"该组织%s不存在"%(org_name))
+            err_msg.append(u"组织不能为空")
 
         role_name = row[u'角色']
-        role = MyRoles.objects.filter(name=role_name)
-        print('role:',role)
-        if role.exists():
-            row[u'角色'] = role[0]
-        else:
-            row[u'角色'] = None
-            err_msg.append(u"该角色%s不存在"%(role_name))
+        if role_name != '':
+            role = MyRoles.objects.filter(name=role_name)
+            print('role:',role)
+            if role.exists():
+                row[u'角色'] = role[0]
+            else:
+                row[u'角色'] = None
+                err_msg.append(u"该角色%s不存在"%(role_name))
 
         return err_msg
 
@@ -1549,7 +1574,7 @@ class UserImportView(TemplateView,UserPassesTestMixin):
 
         user = request.user
 
-        person_resource = UserResource()
+        person_resource = ImportUserResource()
         dataset = Dataset()
         # dataset.headers = ('user_name', 'real_name', 'sex','phone_number','email','is_active','expire_date','belongto','Role')
         new_persons = self.request.FILES['file']
@@ -1599,7 +1624,7 @@ def importProgress(request):
 def download(request):
     # file_path = os.path.join(settings.STATICFILES_DIRS[0] , '用户模板.xls') #development
     
-    file_path = os.path.join(settings.STATIC_ROOT , '用户模板.xls')
+    file_path = os.path.join(settings.STATIC_ROOT , 'usertemplate.xls')
     print('file_path:',file_path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:

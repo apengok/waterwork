@@ -26,81 +26,15 @@ class UserResource(resources.ModelResource):
     expire_date  = fields.Field(column_name=u'授权截止日期', attribute="expire_date")
     belongto     = fields.Field(column_name=u'所属组织', attribute="belongto")
     Role         = fields.Field(column_name=u'角色', attribute="Role")
-    idstr        = fields.Field(attribute="idstr")
-
+    
 
 
     class Meta:
         model = User
         import_id_fields = ['user_name']
         fields = ('user_name', 'real_name', 'sex','phone_number','email','is_active','expire_date','belongto','Role')
+        # exclude = ('idstr')
         export_order = fields
-
-    
-
-    def before_import_row(self, row, **kwargs):
-        
-        username = str(row[u'用户名'])
-        print('username:',username)
-        # 从excel读上来的数据全是数字都是float类型
-        if '.' in username:
-            if isinstance(row[u'用户名'],float):
-                username = str(int(row[u'用户名']))
-                row[u'用户名'] = username
-
-        
-        # Excel save date as float
-        authorizationDate = row[u'授权截止日期']
-        if isinstance(authorizationDate,str):
-            b = datetime.datetime.strptime(authorizationDate.strip(),"%Y-%m-%d")
-        else:
-            authorizationDate = int(row[u'授权截止日期'])
-            b = minimalist_xldate_as_datetime(authorizationDate,0)
-            row[u'授权截止日期'] = b.strftime('%Y-%m-%d')
-
-    
-
-        phone_number = str(row[u'手机'])
-        if '.' in phone_number:
-            if isinstance(row[u'手机'],float):
-                phone_number = str(int(row[u'手机']))
-                row[u'手机'] = phone_number
-
-        gender = row[u'性别']
-        if gender == u'男':
-            row[u'性别'] = 1
-        elif gender == u'女':
-            row[u'性别'] = 2
-        
-
-        state = row[u'启停状态']
-        if state == u'启用':
-            row[u'启停状态'] = True
-        elif state == u'停用':
-            row[u'启停状态'] = False
-        
-
-        org_name = row[u'所属组织']
-        org = Organizations.objects.filter(name=org_name)
-        print('org:',org)
-        if org.exists():
-            row[u'所属组织'] = org[0]
-            row['idstr'] = org[0].cid
-        else:
-            row[u'所属组织'] = None
-            
-
-        role_name = row[u'角色']
-        role = MyRoles.objects.filter(name=role_name)
-        print('role:',role)
-        if role.exists():
-            row[u'角色'] = role[0]
-        else:
-            row[u'角色'] = None
-            
-
-        super(UserResource,self).before_import_row(row,**kwargs)
-
 
 
     def dehydrate_sex(self,user):
@@ -138,6 +72,117 @@ class UserResource(resources.ModelResource):
             return user.Role.name
         else:
             return ''
+
+
+
+class ImportUserResource(resources.ModelResource):
+    user_name    = fields.Field(column_name=u'用户名', attribute="user_name")
+    real_name    = fields.Field(column_name=u'真实姓名', attribute="real_name")
+    sex          = fields.Field(column_name=u'性别', attribute="sex")
+    phone_number = fields.Field(column_name=u'手机', attribute="phone_number")
+    email        = fields.Field(column_name=u'邮箱', attribute="email")
+    is_active    = fields.Field(column_name=u'启停状态', attribute="is_active")
+    expire_date  = fields.Field(column_name=u'授权截止日期', attribute="expire_date")
+    belongto     = fields.Field(column_name=u'所属组织', attribute="belongto")
+    Role         = fields.Field(column_name=u'角色', attribute="Role")
+    password    = fields.Field(column_name=u'密码', attribute="password")
+
+
+
+    class Meta:
+        model = User
+        import_id_fields = ['user_name']
+        fields = ('user_name', 'real_name', 'sex','phone_number','email','is_active','expire_date','belongto','Role')
+        # exclude = ('idstr')
+        export_order = fields
+
+    
+
+    def before_import_row(self, row, **kwargs):
+        
+        user = kwargs["user"]
+        user_expiredate = user.expire_date
+
+        username = str(row[u'用户名'])
+        print('username:',username)
+        # 从excel读上来的数据全是数字都是float类型
+        if '.' in username:
+            if isinstance(row[u'用户名'],float):
+                username = str(int(row[u'用户名']))
+                row[u'用户名'] = username
+
+        password = row[u'密码']
+        try:
+            if isinstance(password,float):
+                password = str(int(password))
+                row[u'密码'] = password
+                print(password,type(password))
+        except:
+            pass
+
+
+        
+        
+        # Excel save date as float
+        authorizationDate = row[u'授权截止日期']
+        if authorizationDate == '':
+            row[u'授权截止日期'] = user_expiredate
+        else:
+            if isinstance(authorizationDate,str):
+                b = datetime.datetime.strptime(authorizationDate.strip(),"%Y-%m-%d")
+            else:
+                authorizationDate = int(row[u'授权截止日期'])
+                b = minimalist_xldate_as_datetime(authorizationDate,0)
+                row[u'授权截止日期'] = b.strftime('%Y-%m-%d')
+
+    
+
+        phone_number = str(row[u'手机'])
+        if '.' in phone_number:
+            if isinstance(row[u'手机'],float):
+                phone_number = str(int(row[u'手机']))
+                row[u'手机'] = phone_number
+
+        gender = row[u'性别']
+        if gender == u'男':
+            row[u'性别'] = 1
+        elif gender == u'女':
+            row[u'性别'] = 2
+        else:
+            row[u'性别'] = 1
+        
+
+        state = row[u'启停状态']
+        if state == u'启用':
+            row[u'启停状态'] = True
+        elif state == u'停用':
+            row[u'启停状态'] = False
+        else:
+            row[u'启停状态'] = True
+        
+
+        org_name = row[u'所属组织']
+        org = Organizations.objects.filter(name=org_name)
+        print('org:',org)
+        if org.exists():
+            row[u'所属组织'] = org[0]
+        else:
+            row[u'所属组织'] = None
+            
+
+        role_name = row[u'角色']
+        role = MyRoles.objects.filter(name=role_name)
+        print('role:',role)
+        if role.exists():
+            row[u'角色'] = role[0]
+        else:
+            row[u'角色'] = None
+            
+
+        super(ImportUserResource,self).before_import_row(row,**kwargs)
+
+
+
 
 
     # def import_obj(self,instance, row,dry_run,**kwargs):
