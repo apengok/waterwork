@@ -4,8 +4,12 @@ from accounts.models import User,MyRoles
 from entm.models import Organizations
 from waterwork.middleware import get_current_user
 import datetime 
+from entm import constant
 
 
+
+def progress_add(num):
+    constant.PROGRESS_COUNT += num
 
 #https://stackoverflow.com/questions/1108428/how-do-i-read-a-date-in-excel-format-in-python
 def minimalist_xldate_as_datetime(xldate, datemode):
@@ -104,7 +108,7 @@ class ImportUserResource(resources.ModelResource):
         user_expiredate = user.expire_date
 
         username = str(row[u'用户名'])
-        print('username:',username)
+        
         # 从excel读上来的数据全是数字都是float类型
         if '.' in username:
             if isinstance(row[u'用户名'],float):
@@ -163,7 +167,7 @@ class ImportUserResource(resources.ModelResource):
 
         org_name = row[u'所属组织']
         org = Organizations.objects.filter(name=org_name)
-        print('org:',org)
+        
         if org.exists():
             row[u'所属组织'] = org[0]
         else:
@@ -172,7 +176,7 @@ class ImportUserResource(resources.ModelResource):
 
         role_name = row[u'角色']
         role = MyRoles.objects.filter(name=role_name)
-        print('role:',role)
+        
         if role.exists():
             row[u'角色'] = role[0]
         else:
@@ -180,7 +184,7 @@ class ImportUserResource(resources.ModelResource):
             
 
         super(ImportUserResource,self).before_import_row(row,**kwargs)
-
+        progress_add(1)
 
 
 

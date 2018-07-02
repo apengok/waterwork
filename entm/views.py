@@ -35,6 +35,7 @@ import os
 from django.conf import settings
 from .resources import UserResource,ImportUserResource,minimalist_xldate_as_datetime
 from tablib import Dataset
+from entm import constant
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -1437,6 +1438,8 @@ class AuthStationView(TemplateView):
         context["page_title"] = "分配角色"
         return context        
 
+
+
 class UserImportView(TemplateView,UserPassesTestMixin):
     """docstring for AssignRoleView"""
     template_name = "entm/importuser.html"
@@ -1470,13 +1473,13 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         user = kwargs["user"]
         print("row :::",row)
 
-        for k in row:
-            print(k,row[k],type(row[k]))
+        # for k in row:
+        #     print(k,row[k],type(row[k]))
 
         err_msg = []
         
         username = str(row[u'用户名'])
-        print('username:',username)
+        
         # 从excel读上来的数据全是数字都是float类型
         if '.' in username:
             if isinstance(row[u'用户名'],float):
@@ -1490,7 +1493,6 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         try:
             if isinstance(password,float):
                 password = str(int(password))
-                print(password,type(password))
         except:
             pass
 
@@ -1511,12 +1513,10 @@ class UserImportView(TemplateView,UserPassesTestMixin):
                 b = minimalist_xldate_as_datetime(authorizationDate,0)
 
             user_expiredate = user.expire_date
-            print(authorizationDate,user_expiredate)
             
             a = datetime.strptime(user_expiredate,"%Y-%m-%d")
             # 
             
-            print('time a:',a,"b:",b)
             bflag = b <= a
             if not bflag:
                 err_msg.append(u"用户授权截止日期大于当前用户的截止日期%s"%(user_expiredate))
@@ -1548,7 +1548,6 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         org_name = row[u'所属组织']
         if org_name != '':
             org = Organizations.objects.filter(name=org_name)
-            print('org:',org)
             if not org.exists():
                 err_msg.append(u"该组织%s不存在"%(org_name))
         else:
@@ -1557,7 +1556,6 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         role_name = row[u'角色']
         if role_name != '':
             role = MyRoles.objects.filter(name=role_name)
-            print('role:',role)
             if role.exists():
                 row[u'角色'] = role[0]
             else:
@@ -1570,7 +1568,6 @@ class UserImportView(TemplateView,UserPassesTestMixin):
     def post(self,request,*args,**kwargs):
         
         context = self.get_context_data(**kwargs)
-        print('importuser post:',self.request)
 
         user = request.user
 
@@ -1582,27 +1579,30 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         file_contents = new_persons.read()  #.decode('iso-8859-15')
         imported_data = dataset.load(file_contents,'xls')
         print('imported_data:',imported_data.dict)
+        constant.PROGRESS_NUM = len(imported_data.dict)
+        constant.PROGRESS_COUNT = 0
         kwargs["user"] = user
 
         row_count = 0
         err_msgs = []
         for row in imported_data.dict:
             row_count += 1
-
+            
             err = self.check_row(row,**kwargs)
-            print('check row :',row_count,err)
+            
             if len(err) > 0:
                 emsg = u'第%s条错误:<br/>'%(row_count) + '<br/>'.join(e for e in err)
                 err_msgs.append(emsg)
 
         err_count = len(err_msgs)
         success_count = row_count - err_count
-        print('err_msgs:',err_msgs)
+        
         if err_count > 0:
             msg = '导入结果:正确%s条<br />'%(success_count)+'错误%s条<br/>'%(err_count)+'<br/>'.join(e for e in err_msgs)
             
         else:
             msg = '导入结果:成功导入%s条<br />'%(success_count)+'失败%s条<br/>'%(err_count)
+            # num_progress = 10
             person_resource.import_data(dataset, dry_run=False,**kwargs)  # Actually import now
 
         # result = person_resource.import_data(dataset, dry_run=True,**kwargs)  # Test the data import
@@ -1619,7 +1619,9 @@ class UserImportView(TemplateView,UserPassesTestMixin):
 
 
 def importProgress(request):
-    return HttpResponse(json.dumps({'success':1}))
+    num_progress = int(constant.PROGRESS_COUNT*100/constant.PROGRESS_NUM)
+    return JsonResponse(num_progress, safe=False)
+    # return HttpResponse(json.dumps({'success':10}))
 
 def download(request):
     # file_path = os.path.join(settings.STATICFILES_DIRS[0] , '用户模板.xls') #development

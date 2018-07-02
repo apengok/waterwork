@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 waterwork/settings/__init__.py
 
+static
+
 # C extensions
 *.so
 

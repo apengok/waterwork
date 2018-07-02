@@ -53,7 +53,7 @@
                             msgImport.setProgressBar(data);
                         }
                     })
-                }, 100000);
+                }, 1000);
                 $("#" + importFormId).ajaxSubmit(function (message) {
                     console.log('message:',message);
                     var data = JSON.parse(message);
