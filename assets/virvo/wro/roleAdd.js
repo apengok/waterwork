@@ -107,7 +107,8 @@
                                 layer.msg(result.obj.errMsg,{move:false});
                             }
                         }else{
-                            layer.msg(result.msg,{move:false});
+                            // layer.msg(result.msg,{move:false});
+                            layer.msg(result.obj.errMsg,{move:false});
                         }
                     }
                 });

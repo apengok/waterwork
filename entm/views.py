@@ -36,6 +36,11 @@ from django.conf import settings
 from .resources import UserResource,ImportUserResource,minimalist_xldate_as_datetime
 from tablib import Dataset
 from entm import constant
+
+import logging
+
+logger_info = logging.getLogger('info_logger')
+logger_error = logging.getLogger('error_logger')
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -78,6 +83,8 @@ class AjaxableResponseMixin(object):
         for k,v in form.errors.items():
             print(k,v)
             err_str += v[0]
+        if err_str == 'Group with this Name already exists.':
+            err_str = '角色名已存在'
         if self.request.is_ajax():
             data = {
                 "success": 0,
@@ -1471,7 +1478,7 @@ class UserImportView(TemplateView,UserPassesTestMixin):
 
     def check_row(self, row, **kwargs):
         user = kwargs["user"]
-        print("row :::",row)
+        # print("row :::",row)
 
         # for k in row:
         #     print(k,row[k],type(row[k]))
@@ -1602,7 +1609,7 @@ class UserImportView(TemplateView,UserPassesTestMixin):
             
         else:
             msg = '导入结果:成功导入%s条<br />'%(success_count)+'失败%s条<br/>'%(err_count)
-            # num_progress = 10
+            
             person_resource.import_data(dataset, dry_run=False,**kwargs)  # Actually import now
 
         # result = person_resource.import_data(dataset, dry_run=True,**kwargs)  # Test the data import
@@ -1614,12 +1621,19 @@ class UserImportView(TemplateView,UserPassesTestMixin):
                 "obj":"null",
                 "success":True
         }
+
+        constant.PROGRESS_NUM = 1
+        constant.PROGRESS_COUNT = 0
         
         return HttpResponse(json.dumps(data))
 
 
 def importProgress(request):
-    num_progress = int(constant.PROGRESS_COUNT*100/constant.PROGRESS_NUM)
+    try:
+        num_progress = int(constant.PROGRESS_COUNT*100/constant.PROGRESS_NUM)
+    except Exception as e:
+        logger_error.error(e)
+    logger_info.info('num_progress:%d'%num_progress)
     return JsonResponse(num_progress, safe=False)
     # return HttpResponse(json.dumps({'success':10}))
 
@@ -1627,7 +1641,7 @@ def download(request):
     # file_path = os.path.join(settings.STATICFILES_DIRS[0] , '用户模板.xls') #development
     
     file_path = os.path.join(settings.STATIC_ROOT , 'usertemplate.xls')
-    print('file_path:',file_path)
+    
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")

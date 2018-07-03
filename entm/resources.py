@@ -120,7 +120,7 @@ class ImportUserResource(resources.ModelResource):
             if isinstance(password,float):
                 password = str(int(password))
                 row[u'密码'] = password
-                print(password,type(password))
+                # print(password,type(password))
         except:
             pass
 
