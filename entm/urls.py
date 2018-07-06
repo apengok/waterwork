@@ -15,6 +15,10 @@ urlpatterns = [
 
     url(r'^(?P<page>.+\.html)$', views.StaticView.as_view()),
 
+    # url(r'^display_progress/$', views.progress_view,name='progress_view'),
+
+
+
     # url(r'^(?P<room_name>[^/]+)/$', views.room, name='room'),
 
     # tree list etc

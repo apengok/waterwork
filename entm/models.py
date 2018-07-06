@@ -50,3 +50,18 @@ class Organizations(MPTTModel):
     def sub_organizations(self,include_self=False):
         return self.get_descendants(include_self)
 
+
+class PorgressBar(models.Model):
+    totoal      = models.IntegerField(default=1)
+    progress    = models.IntegerField(default=0)
+
+
+    def progress_add(self):
+        self.progress += 1
+
+    def progress_set(self,n):
+        self.totoal = n
+
+    def progress_reset(self):
+        self.totoal = 1
+        self.progress = 0

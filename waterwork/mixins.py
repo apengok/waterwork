@@ -21,3 +21,45 @@ class NextUrlMixin(object):
 
 
         
+class AjaxableResponseMixin(object):
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    def form_invalid(self, form):
+        response = super(AjaxableResponseMixin,self).form_invalid(form)
+        # print("dasf:",form.cleaned_data.get("register_date"))
+        err_str = ""
+        for k,v in form.errors.items():
+            print(k,v)
+            err_str += v[0]
+        if err_str == 'Group with this Name already exists.':
+            err_str = '角色名已存在'
+        if self.request.is_ajax():
+            data = {
+                "success": 0,
+                "obj":{
+                    "flag":0,
+                    "errMsg":err_str
+                    }
+            }
+            print(form.errors)
+            return HttpResponse(json.dumps(data)) #JsonResponse(data)
+            # return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent"s form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super(AjaxableResponseMixin,self).form_valid(form)
+        if self.request.is_ajax():
+            data = {
+                "success": 1,
+                "obj":{"flag":1}
+            }
+            return HttpResponse(json.dumps(data)) #JsonResponse(data)
+        else:
+            return response
+        

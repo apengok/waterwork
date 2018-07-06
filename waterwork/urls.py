@@ -48,6 +48,13 @@ urlpatterns = [
 
     #waterwork
     url(r'^entm/', include('entm.urls', namespace='entm')),
+
+    url(r'^dmam/', include('dmam.urls', namespace='dmam')),
+
+
+    # url(r'^testapp/', include('testapp.urls')),
+
+    # url(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
     
 ]
 

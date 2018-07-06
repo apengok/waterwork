@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from import_export import resources,fields
 from accounts.models import User,MyRoles
-from entm.models import Organizations
+from entm.models import Organizations,PorgressBar
 from waterwork.middleware import get_current_user
 import datetime 
 from entm import constant
@@ -185,6 +185,12 @@ class ImportUserResource(resources.ModelResource):
 
         super(ImportUserResource,self).before_import_row(row,**kwargs)
         progress_add(1)
+        progressbar = PorgressBar.objects.first()
+        if progressbar:
+            progressbar.progress_add()
+            progressbar.save()
+            # print("progress:",progressbar.progress)
+            print('user objet count:',User.objects.count())
 
 
 

@@ -30,18 +30,21 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 
 from .utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from .forms import OrganizationsAddForm,OrganizationsEditForm
-from . models import Organizations
+from . models import Organizations,PorgressBar
 import os
 from django.conf import settings
 from .resources import UserResource,ImportUserResource,minimalist_xldate_as_datetime
 from tablib import Dataset
 from entm import constant
+from celery import shared_task
+from waterwork.mixins import AjaxableResponseMixin
 
 import logging
 
 logger_info = logging.getLogger('info_logger')
 logger_error = logging.getLogger('error_logger')
 # from django.core.urlresolvers import reverse_lazy
+
 
 
 
@@ -71,47 +74,6 @@ def room(request, room_name):
         "room_name_json": mark_safe(json.dumps(room_name))
     })
 
-class AjaxableResponseMixin(object):
-    """
-    Mixin to add AJAX support to a form.
-    Must be used with an object-based FormView (e.g. CreateView)
-    """
-    def form_invalid(self, form):
-        response = super(AjaxableResponseMixin,self).form_invalid(form)
-        # print("dasf:",form.cleaned_data.get("register_date"))
-        err_str = ""
-        for k,v in form.errors.items():
-            print(k,v)
-            err_str += v[0]
-        if err_str == 'Group with this Name already exists.':
-            err_str = '角色名已存在'
-        if self.request.is_ajax():
-            data = {
-                "success": 0,
-                "obj":{
-                    "flag":0,
-                    "errMsg":err_str
-                    }
-            }
-            print(form.errors)
-            return HttpResponse(json.dumps(data)) #JsonResponse(data)
-            # return JsonResponse(form.errors, status=400)
-        else:
-            return response
-
-    def form_valid(self, form):
-        # We make sure to call the parent"s form_valid() method because
-        # it might do some processing (in the case of CreateView, it will
-        # call form.save() for example).
-        response = super(AjaxableResponseMixin,self).form_valid(form)
-        if self.request.is_ajax():
-            data = {
-                "success": 1,
-                "obj":{"flag":1}
-            }
-            return HttpResponse(json.dumps(data)) #JsonResponse(data)
-        else:
-            return response
 
 
 
@@ -1586,7 +1548,17 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         file_contents = new_persons.read()  #.decode('iso-8859-15')
         imported_data = dataset.load(file_contents,'xls')
         print('imported_data:',imported_data.dict)
+        progressbar = PorgressBar.objects.first()
+        if progressbar is None:
+            progressbar = PorgressBar(totoal=len(imported_data.dict),progress=0)
+            progressbar.save()
+        else:
+            progressbar.totoal = len(imported_data.dict)
+            progressbar.progress = 0
+            progressbar.save()
+
         constant.PROGRESS_NUM = len(imported_data.dict)
+        constant.raw_record = User.objects.count()
         constant.PROGRESS_COUNT = 0
         kwargs["user"] = user
 
@@ -1612,6 +1584,10 @@ class UserImportView(TemplateView,UserPassesTestMixin):
             
             person_resource.import_data(dataset, dry_run=False,**kwargs)  # Actually import now
 
+            progressbar.totoal = 1
+            progressbar.progress = 0
+            progressbar.save()
+
         # result = person_resource.import_data(dataset, dry_run=True,**kwargs)  # Test the data import
         # if not result.has_errors():
         #     person_resource.import_data(dataset, dry_run=False,**kwargs)  # Actually import now
@@ -1630,6 +1606,12 @@ class UserImportView(TemplateView,UserPassesTestMixin):
 
 def importProgress(request):
     try:
+        progressbar = PorgressBar.objects.first()
+        
+        user_count=User.objects.count()
+        print("importProgress:user_count",progressbar.totoal,progressbar.progress,user_count)
+        # num_progress = int((user_count - constant.raw_record)*100/progressbar.totoal)
+
         num_progress = int(constant.PROGRESS_COUNT*100/constant.PROGRESS_NUM)
     except Exception as e:
         logger_error.error(e)

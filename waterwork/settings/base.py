@@ -27,6 +27,22 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+# Celery settings
+
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+
+#: Only add pickle to this list if your broker is secured
+#: from unwanted access (see userguide/security.html)
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+CELERY_TASK_SERIALIZER = 'json'
+
+
+# BROKER_URL = 'amqp://guest:guest@localhost//'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +57,7 @@ INSTALLED_APPS = [
     'accounts',
     'monitor',
     'import_export',
+    'dmam',
     # 'channels',
 ]
 
@@ -87,6 +104,8 @@ WSGI_APPLICATION = 'waterwork.wsgi.application'
 # ASGI_APPLICATION = "waterwork.routing.application"
 
 # Database
+# yum install mysql mysql-devel mysql-lib
+# pip install mysqlclient
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
@@ -94,14 +113,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'virvo_dev.db'),
     },
-    # 'ems': {
-        # 'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
-        # 'NAME': 'gis',
-        # 'USER': 'scada',
-        # 'PASSWORD': 'scada',
-        # 'HOST': '120.25.223.180',
-        # 'PORT': '3306',
-    # },
+    'zncb': {
+        'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
+        'NAME': 'zncb',
+        'USER': 'scada',
+        'PASSWORD': 'scada',
+        'HOST': '220.179.118.150',
+        'PORT': '3306',
+    },
     # 'gis': {
     #     'ENGINE': 'django.contrib.gis.db.backends.postgis',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
     #     'NAME': 'scada',
@@ -112,7 +131,7 @@ DATABASES = {
     # },
 }
 
-DATABASE_ROUTERS = [ ]
+DATABASE_ROUTERS = ['dmam.routers.DmamRouter', ]
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
