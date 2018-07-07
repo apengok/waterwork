@@ -205,7 +205,7 @@
                     // removeHoverDom : stationManage.removeHoverDom,
                     selectedMulti : false,
                     nameIsHTML: true,
-                    fontCss: stationManage.getFont
+                    fontCss: setFontCss_ztree
                 },
                 edit : {
                     enable : true,
@@ -233,9 +233,6 @@
            
         },
 
-        getFont:function (treeId, node) {
-          return node.font ? node.font : {};
-        },
         beforeDrag: function(treeId, treeNodes){
             return false;
         },

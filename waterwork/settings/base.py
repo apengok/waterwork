@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'monitor',
     'import_export',
     'dmam',
+    'analysis',
     # 'channels',
 ]
 

@@ -72,6 +72,20 @@ def dmatree(request):
             "icon":"/static/virvo/resources/img/u8836.png",
             "uuid":''
         })
+        # bigmeters = Bigmeter.objects.filter(districtid=d.id)
+        # for b in bigmeters:
+        #     organtree.append({
+        #     "name":b.username,
+        #     "id":b.userid,
+        #     "stationid":b.userid,
+        #     "pId":d.id,
+        #     "type":"station",
+        #     "icon":"/static/virvo/resources/img/u8836.png",
+        #     "uuid":''
+        # })
+
+    #bigmeter
+
     
     result = dict()
     result["data"] = organtree
