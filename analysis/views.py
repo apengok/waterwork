@@ -65,14 +65,17 @@ def flowdata_mnf(request):
     else:
         qdays = 30
 
-    print('qmonth',qmonth,type(qmonth))
+    
     today = datetime.date.today()
-    lastday = today - datetime.timedelta(days=1)
-    print(today,lastday)
+    
     data = []
     if bigmeter:
         comaddr = bigmeter.commaddr
         flowday = HdbFlowDataDay.objects.filter(commaddr=comaddr)
+
+        flows = []
+        hdates = []
+
 
         for i in range(qdays):
             qday = today - datetime.timedelta(days=i)
@@ -80,26 +83,33 @@ def flowdata_mnf(request):
             q_by_day = flowday.filter(hdate=daystr)
             if q_by_day.exists():
                 f = q_by_day.first()
-                data.append({
-                    "hdate":f.hdate,
-                    "dosage":f.dosage,
-                    "assignmentName":bigmeter.username,
-                    "color":"红色",
-                    "ratio":"null",
-                    })
+                flows.append(f.dosage)
             else:
-                data.append({
-                    "hdate":daystr,
-                    "dosage":0,
-                    "assignmentName":bigmeter.username,
-                    "color":"红色",
-                    "ratio":"null",
-                    })
+                flows.append(0)
+            hdates.append(daystr)
+
+        flows_float = [float(f) for f in flows]
+        maxflow = max(flows_float)
+        average = sum(flows_float)/len(flows)
+
+        for i in range(len(flows)):
+            data.append({
+                "hdate":hdates[i],
+                "dosage":flows[i],
+                "assignmentName":bigmeter.username,
+                "color":"红色",
+                "ratio":"null",
+                "maxflow":maxflow,
+                "average":average
+                })
+            
+
+    #staticstic data
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                "online":data
+                "online":data[::-1] #reverse
             },
             "success":1}
 

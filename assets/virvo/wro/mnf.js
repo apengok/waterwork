@@ -503,6 +503,8 @@
                 // activeDays = [];
                 hdates = [];
                 dosages = [];
+                maxflows = [];
+                averages = [];
                 for (var i = 0; i < online.length; i++) {
                     list =
                         [i + 1, online[i].hdate,
@@ -512,6 +514,8 @@
                             online[i].ratio == null ? "0" : online[i].ratio,
                             online[i].assignmentName == null ? "无" : online[i].assignmentName,
                             // online[i].professionalNames == "" ? "无" : online[i].professionalNames,
+                            online[i].maxflow,
+                            online[i].average,
                             
                         ]
 
@@ -520,6 +524,8 @@
                 for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
                     hdates.push(dataListArray[j][1]);
                     dosages.push(dataListArray[j][3]);
+                    maxflows.push(dataListArray[j][6]);
+                    averages.push(dataListArray[j][7]);
                 }
                 // console.log(dosages);
                 // analysisMnf.reloadData(dataListArray);
@@ -533,6 +539,10 @@
                 dosages = [];
                 hdates.push("");
                 dosages.push("");
+                maxflows = [];
+                averages = [];
+                maxflows.push("");
+                averages.push("");
             }
             var start;
             var end;
@@ -578,7 +588,7 @@
                     }
                 },
                 legend: {
-                    data: ['MNF'],
+                    data: ['MNF','最大流量','平均流量'],
                     left: 'auto',
                 },
                 toolbox: {
@@ -642,10 +652,42 @@
                             }
                         },
                         data: dosages
+                    },
+                    {
+                        name: '最大流量',
+                        yAxisIndex: 0,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#422d0c'
+                            }
+                        },
+                        data: maxflows
+                    },
+                    {
+                        name: '平均流量',
+                        yAxisIndex: 0,
+                        xAxisIndex: 0,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#e00d1f'
+                            }
+                        },
+                        data: averages
                     }
                 ]
             };
             myChart.setOption(option);
+            console.log('max:',maxflows[0]);
+            $("#maxflow span").html( maxflows[0]);
+            $("#averflow span").html( averages[0]);
             window.onresize = myChart.resize;
         },
         platenumbersplitFun:function(arr){
