@@ -36,7 +36,7 @@ from django.conf import settings
 from .resources import UserResource,ImportUserResource,minimalist_xldate_as_datetime
 from tablib import Dataset
 from entm import constant
-from celery import shared_task
+# from celery import shared_task
 from waterwork.mixins import AjaxableResponseMixin
 
 import logging

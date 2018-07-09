@@ -32,6 +32,7 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from . models import Bigmeter,District,Community
+from . forms import StationsForm
 import os
 from django.conf import settings
 
@@ -237,7 +238,7 @@ class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(DistrictAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
             return True
         return False
 
@@ -301,7 +302,7 @@ class DistrictEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(DistrictEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
             return True
         return False
 
@@ -367,7 +368,7 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         return super(DistrictDeleteView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
             return True
         return False
 
@@ -433,7 +434,7 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     template_name = "dmam/useradd.html"
     form_class = RegisterForm
     success_url = reverse_lazy("entm:usermanager")
-    # permission_required = ('entm.rolemanager_perms_firmmanager_edit', 'entm.organusermanager_perms_basemanager_edit')
+    # permission_required = ('entm.rolemanager_perms_basemanager_edit', 'entm.dmamanager_perms_basemanager_edit')
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
@@ -449,7 +450,7 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(StationAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
             return True
         return False
 
@@ -531,28 +532,27 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 User edit, manager
 """
 class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
-    model = User
-    form_class = UserDetailChangeForm
-    template_name = "dmam/useredit.html"
+    model = Bigmeter
+    form_class = StationsForm
+    template_name = "dmam/stationedit.html"
     success_url = reverse_lazy("entm:usermanager")
-    # login_url = None
-    # permission_denied_message = 'Not allowed edit user,please contact manager'
-    # permission_required = ('entm.erwqrqwer', 'entm.qewrqerq')
-    # permission_required = ('entm.rolemanager_perms_firmmanager_edit', 'entm.organusermanager_perms_basemanager_edit')
-
+    
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
         # self.user_id = kwargs["pk"]
         return super(StationEditView, self).dispatch(*args, **kwargs)
 
+    def get_object(self):
+        return Bigmeter.objects.get(commaddr=self.kwargs["caddr"])
+
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
             return True
         return False
 
     def handle_no_permission(self):
         data = {
-                "mheader": "修改用户",
+                "mheader": "修改站点",
                 "err_msg":"您没有权限进行操作，请联系管理员."
                     
             }
@@ -573,33 +573,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print(form)
         print(self.request.POST)
         user = self.request.user
-        user_groupid = user.belongto.cid
         
-        uid = self.request.POST.get('user_name')
-        groupId = self.request.POST.get('groupId') # organization cid
-        if not user.is_admin:
-            if user_groupid == groupId:
-                data = {
-                    "success": 0,
-                    "obj":{
-                        "flag":0,
-                        "errMsg":"非管理员不能创建自己同级的用户,请重新选择所属企业。"
-                        }
-                }
-                
-                return HttpResponse(json.dumps(data)) #JsonResponse(data)
-
-        instance = form.save(commit=False)
-        organization = Organizations.objects.get(cid=groupId)
-        instance.belongto = organization
-        
-        instance.idstr=groupId  #所属组织 cid
-        # 用户状态
-        is_active = self.request.POST.get('is_active')
-        if is_active == '0':
-            instance.is_active = False
-        else:
-            instance.is_active = True
         # instance.uuid=unique_uuid_generator(instance)
         return super(StationEditView,self).form_valid(form)
         # role_list = MyRoles.objects.get(id=self.role_id)
@@ -615,7 +589,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 def userdeletemore(request):
     # print('userdeletemore',request,request.POST)
 
-    if not request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+    if not request.user.has_menu_permission_edit('dmamanager_basemanager'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -640,7 +614,7 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
             return True
         return False
 

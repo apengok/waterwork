@@ -527,7 +527,9 @@
                     maxflows.push(dataListArray[j][6]);
                     averages.push(dataListArray[j][7]);
                 }
-                // console.log(dosages);
+                console.log(dosages);
+                console.log(hdates);
+
                 // analysisMnf.reloadData(dataListArray);
                 $("#simpleQueryParam").val("");
                 $("#search_button").click();
@@ -600,12 +602,12 @@
                 },
                 xAxis: {
                     type: 'category',
-                    boundaryGap: true,
+                    boundaryGap: false,  // 让折线图从X轴0刻度开始
                     name: "",
                     axisLabel: {
                         show: true,
                         interval: 0,
-                        rotate: 90
+                        rotate: 45
                     },
                     data: hdates //analysisMnf.platenumbersplitFun(hdates)
                 },

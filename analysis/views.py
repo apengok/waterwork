@@ -73,6 +73,9 @@ def flowdata_mnf(request):
         comaddr = bigmeter.commaddr
         flowday = HdbFlowDataDay.objects.filter(commaddr=comaddr)
 
+        #pressure
+        # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
+
         flows = []
         hdates = []
 
@@ -86,7 +89,7 @@ def flowdata_mnf(request):
                 flows.append(f.dosage)
             else:
                 flows.append(0)
-            hdates.append(daystr)
+            hdates.append(qday.strftime("%m-%d"))
 
         flows_float = [float(f) for f in flows]
         maxflow = max(flows_float)
