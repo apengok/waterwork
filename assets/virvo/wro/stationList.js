@@ -13,7 +13,7 @@
     var selectTreeIdAdd="";
     var startOperation;// 点击运营资质类别的修改按钮时，弹出界面时运营资质类别文本的内容
     var expliant;// 点击运营资质类别的修改按钮时，弹出界面时说明文本的内容
-    var vagueSearchlast = $("#operationType").val();
+    var vagueSearchlast = $("#userType").val();
     stationManage = {
         init: function(){
             // 显示隐藏列
@@ -555,7 +555,7 @@
             }
         },
         findOperation:function(){
-            var vagueSearch = $("#operationType").val();
+            var vagueSearch = $("#userType").val();
             var url="group/findOperations";
             var data={"type":vagueSearch};
             json_ajax("POST", url, "json", true,data,stationManage.findCallback);
@@ -571,7 +571,7 @@
                                  ++s,
                                  '<input type="checkbox" id="checkAllTwo" name="subChkTwo" value="'+calldata[i].id+'">',
                                  '<button onclick="stationManage.findOperationById(\''+calldata[i].id+'\')" data-target="#updateType" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp<button type="button"  onclick="stationManage.deleteType(\''+calldata[i].id+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>',    
-                                 calldata[i].operationType,
+                                 calldata[i].userType,
                                  calldata[i].explains
                                  ];
                         operations.push(list);
@@ -636,7 +636,7 @@
         },
         doSubmit:function () {
             if(stationManage.validates()){
-                $("#eadOperation").ajaxSubmit(function(data) {
+                $("#adduserType").ajaxSubmit(function(data) {
                     console.log('sdfe:',data);
                     if (data != null && typeof(data) == "object" &&
                         Object.prototype.toString.call(data).toLowerCase() == "[object object]" &&
@@ -645,7 +645,7 @@
                                 $("#addType").modal("hide");//关闭窗口
                                 layer.msg(publicAddSuccess,{move:false});
                                 stationManage.closeClean();//清空文本框
-                                $("#operationType").val("");
+                                $("#userType").val("");
                                 stationManage.findOperation();
                             }else{
                                 layer.msg(data.msg,{move:false});
@@ -655,7 +655,7 @@
                             if (result.success == true) {
                                     $("#addType").modal("hide");//关闭窗口
                                     layer.msg(publicAddSuccess,{move:false});
-                                    $("#operationType").val("");
+                                    $("#userType").val("");
                                     stationManage.closeClean();//清空文本框
                                     stationManage.findOperation();
                             }else{
@@ -668,21 +668,21 @@
         updateDoSubmit:function () {
             stationManage.init();
             if(stationManage.upDateValidates()){
-                var operationType=$("#updateOperationType").val();// 运营资质类型
+                var userType=$("#updateuserType").val();// 运营资质类型
                 var explains=$("#updateDescription").val();// 说明
-                var data={"id":OperationId,"operationType":operationType,"explains":explains};
+                var data={"id":OperationId,"userType":userType,"explains":explains};
                 var url="group/updateOperation";
                 json_ajax("POST", url, "json", true,data,stationManage.updateCallback);
             }
         },
         closeClean:function(){
-            $("#addproperationtype").val("");
+            $("#addpruserType").val("");
             $("#adddescription").val("");
-            $("#addproperationtype-error").hide();//隐藏上次新增时未清除的validate样式
+            $("#addpruserType-error").hide();//隐藏上次新增时未清除的validate样式
             $("#adddescription-error").hide();
         },
         updateClean:function () {
-            $("#updateOperationType-error").hide();
+            $("#updateuserType-error").hide();
             $("#updateDescription-error").hide();
         },
         findOperationById:function(id){
@@ -693,9 +693,9 @@
         },
         findByIdback:function(data){
             if(data.success==true){
-                 $("#updateOperationType").val(data.obj.operation.operationType);
+                 $("#updateuserType").val(data.obj.operation.userType);
                  $("#updateDescription").val(data.obj.operation.explains);
-                 startOperation=$("#updateOperationType").val();
+                 startOperation=$("#updateuserType").val();
                  expliant=$("#updateDescription").val();
             }else{
                  layer.msg(data.msg,{move:false});
@@ -778,9 +778,9 @@
             $("#addId").attr("href","stations/add/newuser?uuid="+selectTreeIdAdd+"");
         },
         validates:function () {//增加运营资质类别时的数据验证
-           return $("#eadOperation").validate({
+           return $("#adduserType").validate({
                rules : {
-                   addproperationtype: {
+                   addpruserType: {
                        required: true,
                        stringCheck: true,
                        maxlength: 20,
@@ -788,9 +788,9 @@
                        remote: {
                            type:"post",
                            async:false,
-                           url:"group/findOperationByoperation" ,
+                           url:"station/findusertypeByusertype/" ,
                            data:{
-                               type:function(){return $("#addproperationtype").val();}
+                               type:function(){return $("#addpruserType").val();}
                            },
                        }
                    },
@@ -800,7 +800,7 @@
                    }
                },
                messages:{
-                   addproperationtype:{
+                   addpruserType:{
                         required : userQualificationNull,
                         stringCheck : publicPerverseData,
                         maxlength : publicSize20,
@@ -815,14 +815,14 @@
            }).form();
         },
         upDateValidates:function () {//修改运营资质类别时的数据验证
-            var operationType=$("#updateOperationType").val();// 运营资质类型
+            var userType=$("#updateuserType").val();// 运营资质类型
             var explains=$("#updateDescription").val();// 说明
-            if(operationType==startOperation && explains==expliant){
+            if(userType==startOperation && explains==expliant){
                 $("#updateType").modal('hide');
-            }else if(operationType==startOperation && explains != expliant){
-                return $("#editOperation").validate({
+            }else if(userType==startOperation && explains != expliant){
+                return $("#edituserType").validate({
                     rules : {
-                        updateOperationType:{
+                        updateuserType:{
                             required:true,
                             maxlength:20,
                             minlength:2
@@ -833,7 +833,7 @@
                         }
                     },
                     messages:{
-                        updateOperationType:{
+                        updateuserType:{
                             required:userQualificationNull,
                             maxlength:publicSize20,
                             minlength:publicMinSize2Length
@@ -845,9 +845,9 @@
                     }
                 }).form();
             }else{
-                return $("#editOperation").validate({
+                return $("#edituserType").validate({
                     rules : {
-                        updateOperationType: {
+                        updateuserType: {
                             required: true,
                             stringCheck: true,
                             maxlength: 20,
@@ -857,7 +857,7 @@
                                 url:"group/findOperationCompare" ,
                                 data:{
                                     type:function(){
-                                        return $("#updateOperationType").val();
+                                        return $("#updateuserType").val();
                                     },
                                     recomposeType: function(){
                                         return startOperation;
@@ -879,7 +879,7 @@
                         }
                     },
                     messages:{
-                        updateOperationType:{
+                        updateuserType:{
                             required : userQualificationNull,
                             stringCheck : publicPerverseData,
                             maxlength : publicSize20,

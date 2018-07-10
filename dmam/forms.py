@@ -8,22 +8,16 @@ from django.contrib.postgres.forms.ranges import DateRangeField, RangeWidget
 
 
 
-from .models import Bigmeter
+from .models import WaterUserType
 import datetime
 
 
 
 
-"""
-Stations edit, manager
-"""
-class StationsForm(forms.ModelForm):
-    description = forms.CharField()
 
-    def __init__(self, *args, **kwargs):
-        super(StationsForm, self).__init__(*args, **kwargs)
-        
-
+class WaterUserTypeForm(object):
+    
     class Meta:
-        model = Bigmeter    
-        fields= ('username','districtid','usertype','metertype','serialnumber','simid','dn','createdate','lng','lat')
+        model = WaterUserType
+        fields = '__all__'
+                        

@@ -26,7 +26,12 @@ urlpatterns = [
     url(r'^district/delete/?$',views.DistrictDeleteView.as_view(),name='districtdelete'),
     
 
-    #stations
+    #stations  station/findusertypeByusertype
+    url(r'^station/findusertypeByusertype/?$',views.findusertypeByusertype,name='findusertypeByusertype'),
+    
+    url(r'^station/usertype/add/?$',views.usertypeadd,name='usertypeadd'),
+    url(r'^station/usertype/edit/(?P<pk>[0-9]+)/?$',views.usertypeedit,name='usertypeedit'),
+
     
     url(r'^stationsmanager/?$', views.StationMangerView.as_view(), name='stationsmanager'),#组织和用户管理
     url(r'^stations/list/$',views.stationlist,name='stationlist'),

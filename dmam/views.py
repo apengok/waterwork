@@ -31,8 +31,10 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
-from . models import Bigmeter,District,Community
-from . forms import StationsForm
+from legacy.models import Bigmeter,District,Community
+from . models import WaterUserType
+from legacy.forms import StationsForm
+from . forms import WaterUserTypeForm
 import os
 from django.conf import settings
 
@@ -410,6 +412,127 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         return JsonResponse({"success":True})
 
 
+
+
+"""
+用水性质
+"""
+
+def findusertypeByusertype(request):
+    print(request.POST)
+    usertype = request.POST.get('type')
+    flag = not WaterUserType.objects.filter(usertype=usertype).exists()
+
+    return JsonResponse(flag, safe=False)
+
+def usertypeadd(request):
+    if not request.user.has_menu_permission_edit('stationmanager_basemanager'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    print('usertypeadd:',request.POST)
+    usertypeform = WaterUserTypeForm(request.POST or None)
+
+    if usertypeform.is_valid():
+        obj = WaterUserType.objects.create(
+            usertype = usertypeform.cleaned_data.get('usertype'),
+            explains = usertypeform.cleaned_data.get('explains'))
+
+    if usertypeform.errors:
+        print(usertypeform.errors)
+
+    return HttpResponse(json.dumps({"success":1}))
+
+def usertypeedit(request):
+    pass
+
+
+def usertypedeletemore(request):
+    if not request.user.has_menu_permission_edit('stationmanager_basemanager'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    deltems = request.POST.get("deltems")
+    deltems_list = deltems.split(';')
+
+    for uid in deltems_list:
+        u = User.objects.get(id=int(uid))
+        # print('delete user ',u)
+        #删除用户 并且删除用户在分组中的角色
+        for g in u.groups.all():
+            g.user_set.remove(u)
+        u.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
+
+
+def userdeletemore(request):
+    # print('userdeletemore',request,request.POST)
+
+    if not request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    deltems = request.POST.get("deltems")
+    deltems_list = deltems.split(';')
+
+    for uid in deltems_list:
+        u = User.objects.get(id=int(uid))
+        # print('delete user ',u)
+        #删除用户 并且删除用户在分组中的角色
+        for g in u.groups.all():
+            g.user_set.remove(u)
+        u.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
+
+"""
+Assets comment deletion, manager
+"""
+class UsertypeDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
+    model = WaterUserType
+    # template_name = "aidsbank/asset_comment_confirm_delete.html"
+
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        HttpResponse(json.dumps(data))
+        # return render(self.request,"dmam/permission_error.html",data)
+
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs["pk"]
+
+        print("user delete:",args,kwargs)
+        
+        return super(StationDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        # print("delete objects:",self.kwargs,kwargs)
+        return User.objects.get(pk=kwargs["pk"])
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print("delete?",args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+
+        #delete user role in groups
+        for g in self.object.groups.all():
+            g.user_set.remove(self.object)
+
+        self.object.delete()
+        result = dict()
+        # result["success"] = 1
+        return HttpResponse(json.dumps({"success":1}))
+        
 
 class StationMangerView(LoginRequiredMixin,TemplateView):
     template_name = "dmam/stationlist.html"

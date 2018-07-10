@@ -21,7 +21,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User,MyRoles
-from dmam.models import District,Bigmeter,HdbFlowDataDay
+from legacy.models import District,Bigmeter,HdbFlowDataDay
 
 # from django.core.urlresolvers import reverse_lazy
 

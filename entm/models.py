@@ -65,3 +65,4 @@ class PorgressBar(models.Model):
     def progress_reset(self):
         self.totoal = 1
         self.progress = 0
+

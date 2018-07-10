@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'monitor',
     'import_export',
     'dmam',
+    'legacy',
     'analysis',
     # 'channels',
 ]
@@ -132,7 +133,7 @@ DATABASES = {
     # },
 }
 
-DATABASE_ROUTERS = ['dmam.routers.DmamRouter', ]
+DATABASE_ROUTERS = ['legacy.routers.LegacyRouter', ]
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
