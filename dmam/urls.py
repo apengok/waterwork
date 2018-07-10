@@ -26,8 +26,15 @@ urlpatterns = [
     url(r'^district/delete/?$',views.DistrictDeleteView.as_view(),name='districtdelete'),
     
 
-    #stations  station/findusertypeByusertype
+    #stations  
+    url(r'^station/findOperations/?$',views.findOperations,name='findOperations'),
+    url(r'^station/findOperationById/?$',views.findOperationById,name='findOperationById'),
+    url(r'^station/updateOperation/?$',views.updateOperation,name='updateOperation'),
+    url(r'^station/deleteOperation/?$',views.deleteOperation,name='deleteOperation'),
+    url(r'^station/deleteOperationMore/?$',views.deleteOperationMore,name='deleteOperationMore'),
+    
     url(r'^station/findusertypeByusertype/?$',views.findusertypeByusertype,name='findusertypeByusertype'),
+    url(r'^station/findOperationCompare/?$',views.findOperationCompare,name='findOperationCompare'),
     
     url(r'^station/usertype/add/?$',views.usertypeadd,name='usertypeadd'),
     url(r'^station/usertype/edit/(?P<pk>[0-9]+)/?$',views.usertypeedit,name='usertypeedit'),

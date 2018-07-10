@@ -12,6 +12,7 @@ def random_string_generator(size=10, chars=string.ascii_lowercase + string.digit
     return ''.join(random.choice(chars) for _ in range(size))
 
 
+# generate organization cid not user
 def unique_cid_generator(instance, new_cid=None):
     """
     This is for a Django project and it assumes your instance 
@@ -20,13 +21,11 @@ def unique_cid_generator(instance, new_cid=None):
     if new_cid is not None:
         cid = new_cid
     else:
-        cid = slugify(instance.pId)
-    if cid in DONT_USE:
-        new_cid = "{cid}_{randstr}".format(
-                    cid=cid,
+        cid = "{cid}_{randstr}".format(
+                    cid=random_string_generator(size=4),
                     randstr=random_string_generator(size=4)
                 )
-        return unique_cid_generator(instance, new_cid=new_cid)
+        
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(cid=cid).exists()
     if qs_exists:

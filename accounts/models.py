@@ -286,7 +286,7 @@ class User(AbstractBaseUser,PermissionsMixin):
         # print('ret rolelist:',rolelist)
         return rolelist
 
-from entm.utils import unique_uuid_generator
+from entm.utils import unique_uuid_generator,unique_cid_generator
 
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.uuid:
@@ -295,7 +295,10 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
         instance.set_password(instance.password)
 
     if not instance.idstr:
-        instance.idstr = instance.belongto.cid
+        if instance.belongto:
+            instance.idstr = instance.belongto
+        else:
+            instance.idstr = unique_uuid_generator(instance)
 
 
 

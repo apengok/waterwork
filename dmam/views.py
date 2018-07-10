@@ -425,22 +425,116 @@ def findusertypeByusertype(request):
 
     return JsonResponse(flag, safe=False)
 
+def findOperationCompare(request):
+    print('findOperationCompare',request.POST)
+    usertype = request.POST.get('usertype')
+    updateuserType = request.POST.get("updateuserType")
+    recomposeType = request.POST.get("recomposeType")
+    print(usertype,updateuserType,recomposeType)
+
+    tmp = WaterUserType.objects.filter(usertype=updateuserType)
+    print('tmp:',tmp)
+    flag = not WaterUserType.objects.filter(usertype=usertype).exists()
+
+    return JsonResponse(flag, safe=False)
+
+def findOperations(request):
+    usertypes = WaterUserType.objects.all()
+    data = []
+    for ut in usertypes:
+        data.append({
+            "explains":ut.explains,
+            "id":ut.pk,
+            "userType":ut.usertype
+            })
+    operarions_list = {
+        "exceptionDetailMsg":"",
+        "msg":"",
+        "obj":{
+                "operation":data
+        },
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+
+
+
 def usertypeadd(request):
     if not request.user.has_menu_permission_edit('stationmanager_basemanager'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     print('usertypeadd:',request.POST)
     usertypeform = WaterUserTypeForm(request.POST or None)
+    print('usertypeform',usertypeform)
 
-    if usertypeform.is_valid():
-        obj = WaterUserType.objects.create(
-            usertype = usertypeform.cleaned_data.get('usertype'),
-            explains = usertypeform.cleaned_data.get('explains'))
+    usertype = request.POST.get("usertype")
+    explains = request.POST.get("explains")
+    obj = WaterUserType.objects.create(
+            usertype = usertype,
+            explains = explains)
 
-    if usertypeform.errors:
-        print(usertypeform.errors)
+    if obj:
+        flag = 1
+    else:
+        flag = 0
 
-    return HttpResponse(json.dumps({"success":1}))
+    return HttpResponse(json.dumps({"success":flag}))
+
+def findOperationById(request):
+    print(request.POST)
+    tid = request.POST.get("id")
+    tid = int(tid)
+    ut = WaterUserType.objects.get(pk=tid)
+
+    operarions_list = {
+        "exceptionDetailMsg":"",
+        "msg":"",
+        "obj":{
+                "operation":{
+                    "explains":ut.explains,
+                    "id":ut.pk,
+                    "userType":ut.usertype}
+        },
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+
+def updateOperation(request):
+    print('updateOperation:',request.POST)
+    tid = request.POST.get("id")
+    usertype = request.POST.get("userType")
+    explains = request.POST.get("explains")
+    tid = int(tid)
+    ut = WaterUserType.objects.get(pk=tid)
+    ut.usertype = usertype
+    ut.explains = explains
+    ut.save()
+
+    return JsonResponse({"success":True})
+
+
+def deleteOperation(request):
+    tid = request.POST.get("id")
+    tid = int(tid)
+    ut = WaterUserType.objects.get(pk=tid)
+    ut.delete()
+
+    return JsonResponse({"success":True})
+
+def deleteOperationMore(request):
+    print("deleteOperationMore:",request.POST)
+    deltems = request.POST.get("ids")
+    deltems_list = deltems.split(',')
+    print(deltems_list)
+    for uid in deltems_list:
+        if uid !='':
+            u = WaterUserType.objects.get(id=int(uid))
+            u.delete()
+    return JsonResponse({"success":True})
 
 def usertypeedit(request):
     pass

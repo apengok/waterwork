@@ -15,9 +15,12 @@ import datetime
 
 
 
-class WaterUserTypeForm(object):
+class WaterUserTypeForm(forms.ModelForm):
     
     class Meta:
         model = WaterUserType
-        fields = '__all__'
+        fields = ['usertype','explains']
+
+    def __init__(self,instance,*args,**kwargs):
+        super(WaterUserTypeForm, self).__init__(*args, **kwargs)
                         

@@ -113,7 +113,7 @@ WSGI_APPLICATION = 'waterwork.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'virvo_dev.db'),
+        'NAME': os.path.join(BASE_DIR, 'virvo_dev2.db'),
     },
     'zncb': {
         'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
@@ -122,6 +122,10 @@ DATABASES = {
         'PASSWORD': 'scada',
         'HOST': '220.179.118.150',
         'PORT': '3306',
+        # 'OPTIONS':{
+        #     'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+        #     'charset':'utf8mb4',
+        # }
     },
     # 'gis': {
     #     'ENGINE': 'django.contrib.gis.db.backends.postgis',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2

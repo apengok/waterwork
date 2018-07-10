@@ -556,7 +556,7 @@
         },
         findOperation:function(){
             var vagueSearch = $("#userType").val();
-            var url="group/findOperations";
+            var url="station/findOperations";
             var data={"type":vagueSearch};
             json_ajax("POST", url, "json", true,data,stationManage.findCallback);
         },
@@ -577,6 +577,7 @@
                         operations.push(list);
                     }
                 }
+                console.log(operations);
                 reloadData(operations);
             }else{
                 layer.msg(data.msg);
@@ -671,7 +672,7 @@
                 var userType=$("#updateuserType").val();// 运营资质类型
                 var explains=$("#updateDescription").val();// 说明
                 var data={"id":OperationId,"userType":userType,"explains":explains};
-                var url="group/updateOperation";
+                var url="station/updateOperation";
                 json_ajax("POST", url, "json", true,data,stationManage.updateCallback);
             }
         },
@@ -688,7 +689,7 @@
         findOperationById:function(id){
             OperationId=id;
             var data={"id":OperationId};
-            var url="group/findOperationById";
+            var url="station/findOperationById";
             json_ajax("POST",url,"json",true,data,stationManage.findByIdback);
         },
         findByIdback:function(data){
@@ -696,6 +697,7 @@
                  $("#updateuserType").val(data.obj.operation.userType);
                  $("#updateDescription").val(data.obj.operation.explains);
                  startOperation=$("#updateuserType").val();
+                 console.log('startOperation:',startOperation);
                  expliant=$("#updateDescription").val();
             }else{
                  layer.msg(data.msg,{move:false});
@@ -716,7 +718,7 @@
                 icon : 3, // 问号图标
                 btn: [ '确定', '取消'] // 按钮
             }, function(){
-                var url="group/deleteOperation";
+                var url="station/deleteOperation";
                 var data={"id" : id}
                 json_ajax("POST", url, "json", false,data,stationManage.deleteCallback);
             });
@@ -740,7 +742,7 @@
             $("input[name='subChkTwo']:checked").each(function() {
                 ids+=($(this).val())+",";
             });
-            var url="group/deleteOperationMore";
+            var url="station/deleteOperationMore";
             var data={"ids" : ids};
             layer.confirm(publicDelete, {
                 title :'操作确认',
@@ -780,7 +782,7 @@
         validates:function () {//增加运营资质类别时的数据验证
            return $("#adduserType").validate({
                rules : {
-                   addpruserType: {
+                   usertype: {
                        required: true,
                        stringCheck: true,
                        maxlength: 20,
@@ -794,20 +796,20 @@
                            },
                        }
                    },
-                   adddescription:{
+                   explains:{
                         stringCheck:true,
                         maxlength:30,
                    }
                },
                messages:{
-                   addpruserType:{
+                   usertype:{
                         required : userQualificationNull,
                         stringCheck : publicPerverseData,
                         maxlength : publicSize20,
                         minlength:publicMinSize2Length,
                         remote:userQualificationExists
                     },
-                   adddescription : {
+                   explains : {
                         stringCheck:publicPerverseData,
                         maxlength:publicSize30
                    }
@@ -822,23 +824,23 @@
             }else if(userType==startOperation && explains != expliant){
                 return $("#edituserType").validate({
                     rules : {
-                        updateuserType:{
+                        usertype:{
                             required:true,
                             maxlength:20,
                             minlength:2
                         },
-                        updateDescription:{
+                        explains:{
                             stringCheck:true,
                             maxlength:30,
                         }
                     },
                     messages:{
-                        updateuserType:{
+                        usertype:{
                             required:userQualificationNull,
                             maxlength:publicSize20,
                             minlength:publicMinSize2Length
                         },
-                        updateDescription : {
+                        explains : {
                             stringCheck:publicPerverseData,
                             maxlength:publicSize30
                         }
@@ -847,14 +849,14 @@
             }else{
                 return $("#edituserType").validate({
                     rules : {
-                        updateuserType: {
+                        usertype: {
                             required: true,
                             stringCheck: true,
                             maxlength: 20,
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"group/findOperationCompare" ,
+                                url:"station/findOperationCompare" ,
                                 data:{
                                     type:function(){
                                         return $("#updateuserType").val();
@@ -863,29 +865,29 @@
                                         return startOperation;
                                     }
                                 },
-                                dataFilter:function(data){
-                                    var resultData = $.parseJSON(data);
-                                    if(resultData.success == true){
-                                        return true;
-                                    }else{
-                                        return false;
-                                    }
-                                }
+                                // dataFilter:function(data){
+                                //     var resultData = $.parseJSON(data);
+                                //     if(resultData.success == true){
+                                //         return true;
+                                //     }else{
+                                //         return false;
+                                //     }
+                                // }
                             }
                         },
-                        updateDescription:{
+                        explains:{
                             stringCheck:true,
                             maxlength:30,
                         }
                     },
                     messages:{
-                        updateuserType:{
+                        usertype:{
                             required : userQualificationNull,
                             stringCheck : publicPerverseData,
                             maxlength : publicSize20,
                             remote:userQualificationExists
                         },
-                        updateDescription : {
+                        explains : {
                             stringCheck:publicPerverseData,
                             maxlength:publicSize30
                         }
@@ -906,7 +908,7 @@
         stationManage.userTree();
         getTable('dataTables');
         stationManage.init();
-        // stationManage.findOperation();
+        stationManage.findOperation();
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             stationManage.refreshTable();
