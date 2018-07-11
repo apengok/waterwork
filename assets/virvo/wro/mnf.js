@@ -527,8 +527,7 @@
                     maxflows.push(dataListArray[j][6]);
                     averages.push(dataListArray[j][7]);
                 }
-                console.log(dosages);
-                console.log(hdates);
+                
 
                 // analysisMnf.reloadData(dataListArray);
                 $("#simpleQueryParam").val("");
@@ -558,12 +557,12 @@
                 barWidth = null;
             }
             ;
-            if (length <= 20) {
+            if (length <= 200) {
                 start = 0;
                 end = 100;
             } else {
                 start = 0;
-                end = 100 * (20 / length);
+                end = 100 * (200 / length);
             }
             ;
             // wjk
@@ -606,8 +605,16 @@
                     name: "",
                     axisLabel: {
                         show: true,
-                        interval: 0,
+                        interval: 24,
                         rotate: 45
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#483d8b',
+                            type: 'dashed',
+                            width: 1
+                        }
                     },
                     data: hdates //analysisMnf.platenumbersplitFun(hdates)
                 },
@@ -625,21 +632,21 @@
                         }
                     },
                 ],
-                // dataZoom: [{
-                //     type: 'inside',
-                //     start: start,
-                //     end: end
-                // }, {
+                dataZoom: [{
+                    type: 'inside',
+                    start: start,
+                    end: end
+                }, {
 
-                //     show: true,
-                //     height: 20,
-                //     type: 'slider',
-                //     top: 'top',
-                //     xAxisIndex: [0],
-                //     start: 0,
-                //     end: 10,
-                //     showDetail: false,
-                // }],
+                    show: true,
+                    height: 20,
+                    type: 'slider',
+                    top: 'top',
+                    xAxisIndex: [0],
+                    start: 0,
+                    end: 10,
+                    showDetail: false,
+                }],
                 series: [
                     {
                         name: 'MNF',

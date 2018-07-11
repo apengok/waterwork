@@ -21,7 +21,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User,MyRoles
-from legacy.models import District,Bigmeter,HdbFlowDataDay
+from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay
 
 # from django.core.urlresolvers import reverse_lazy
 
@@ -71,7 +71,8 @@ def flowdata_mnf(request):
     data = []
     if bigmeter:
         comaddr = bigmeter.commaddr
-        flowday = HdbFlowDataDay.objects.filter(commaddr=comaddr)
+        flowday_stastic = HdbFlowDataDay.objects.filter(commaddr=comaddr)
+        flowday = HdbFlowData.objects.filter(commaddr=comaddr)
 
         #pressure
         # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
@@ -83,13 +84,21 @@ def flowdata_mnf(request):
         for i in range(qdays):
             qday = today - datetime.timedelta(days=i)
             daystr = qday.strftime("%Y-%m-%d")
-            q_by_day = flowday.filter(hdate=daystr)
+            # q_by_day = flowday.filter(hdate=daystr)
+            q_by_day = flowday.filter(readtime__icontains=daystr)
+
             if q_by_day.exists():
-                f = q_by_day.first()
-                flows.append(f.dosage)
+                # f = q_by_day.first()
+                for f in q_by_day:
+                    flows.append(f.flux)
+                    tmp_day = f.readtime
+                    hdates.append(tmp_day)
             else:
                 flows.append(0)
-            hdates.append(qday.strftime("%m-%d"))
+                tmp_day = qday.strftime("%m-%d")
+                hdates.append(tmp_day)
+
+            # hdates.append(tmp_day)
 
         flows_float = [float(f) for f in flows]
         maxflow = max(flows_float)
@@ -116,21 +125,6 @@ def flowdata_mnf(request):
             },
             "success":1}
 
-    # data=[
-    #             {"activeDays":0,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV24M6","color":"红色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":3,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV11M6","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":2,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV25M7","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":1,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"蓝色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":9,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":10,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"绿色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":4,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":5,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":0,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":7,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             {"activeDays":6,"allDays":3,"assignmentName":"维修机组","carLicense":"粤BV21M6","color":"黑色","professionalNames":"","ratio":"null","vehicleId":"34981bff"},
-    #             ]
-
-
-
+    
     
     return HttpResponse(json.dumps(ret))
