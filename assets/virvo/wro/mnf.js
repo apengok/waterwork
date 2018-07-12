@@ -406,13 +406,13 @@
             // } else if (number == -7) {
             //     analysisMnf.startDay(-7)
             // };
-            // if (num != 1) {
-            //     $('#timeInterval').val(startTime + '--' + endTime);
-            // }
+            if (num != 1) {
+                $('#timeInterval').val(startTime + '--' + endTime);
+            }
             if (!analysisMnf.validates()) {
                 return;
             }
-            // analysisMnf.estimate();
+            analysisMnf.estimate();
             dataListArray = [];
             var url = "/analysis/flowdata_mnf/";
 
@@ -495,8 +495,34 @@
             var list = [];
             var myChart = echarts.init(document.getElementById('onlineGraphics'));
             var online = "";
+            var today_use;
+            var yestoday_use;
+            var last_year_same;
+            var tongbi;
+            var huanbi;
+            var maxflow;
+            var minflow;
+            var average;
+            var mnf;
+            var mnf_add;
+            var ref_mnf;
+            var back_leak;
+            var alarm_set;
             if (data.obj != null && data.obj != "") {
                 online = data.obj.online;
+                today_use = data.obj.today_use;
+                yestoday_use = data.obj.yestoday_use;
+                last_year_same = data.obj.last_year_same;
+                tongbi = data.obj.tongbi;
+                huanbi = data.obj.huanbi;
+                maxflow = data.obj.maxflow;
+                minflow = data.obj.minflow;
+                average = data.obj.average;
+                mnf = data.obj.mnf;
+                mnf_add = data.obj.mnf_add;
+                ref_mnf = data.obj.ref_mnf;
+                back_leak = data.obj.back_leak;
+                alarm_set = data.obj.alarm_set;
             }
             if (data.success == true) {
                 // carLicense = [];
@@ -660,7 +686,19 @@
                                 color: '#6dcff6'
                             }
                         },
-                        data: dosages
+                        data: dosages,
+                        // markLine : {
+                        //   symbol : 'none',
+                        //   itemStyle : {
+                        //     normal : {
+                        //       color:'#1e90ff',
+                        //       label : {
+                        //         show:true
+                        //       }
+                        //     }
+                        //   },
+                        //   data : [{type : 'average', name: '平均值'}]
+                        // }
                     },
                     {
                         name: '最大流量',
@@ -697,6 +735,20 @@
             console.log('max:',maxflows[0]);
             $("#maxflow span").html( maxflows[0]);
             $("#averflow span").html( averages[0]);
+            $("#today_use span").html( today_use);
+            $("#yestoday_use span").html( yestoday_use);
+            $("#last_year_same span").html( last_year_same);
+            $("#tongbi span").html( tongbi);
+            $("#huanbi span").html( huanbi);
+            $("#average span").html( average);
+            $("#max_flow span").html( maxflow);
+            $("#min_flow span").html( minflow);
+            $("#mnf span").html( mnf);
+            $("#mnf_add span").html( mnf_add);
+            $("#back_leak span").html( back_leak);
+            $("#ref_mnf span").html( ref_mnf);
+            $("#alarm_set span").html( alarm_set);
+
             window.onresize = myChart.resize;
         },
         platenumbersplitFun:function(arr){
@@ -721,6 +773,10 @@
         analysisMnf.userTree();
         
         analysisMnf.init();
+        $('#timeInterval').dateRangePicker({dateLimit:30});
+        analysisMnf.getsTheCurrentTime();  
+        analysisMnf.startDay(-7);  
+        $('#timeInterval').val(startTime + '--' + endTime);
         analysisMnf.inquireClick(1);
         // analysisMnf.findOperation();
         // IE9

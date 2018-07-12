@@ -48,6 +48,9 @@ def flowdata_mnf(request):
     print("flowdata_mnf:",request.POST)
 
     stationid = request.POST.get("station") # districtid
+    startTime = request.POST.get("startTime")
+    endTime = request.POST.get("endTime")
+
     if stationid != '':
         distict = District.objects.get(id=int(stationid))
         print('District',distict,distict.bigmeter)
@@ -56,50 +59,32 @@ def flowdata_mnf(request):
         bigmeter = Bigmeter.objects.first()
     print('bigmeter',bigmeter)
 
-    qmonth = request.POST.get("qmonth")
+    # qmonth = request.POST.get("qmonth")
     
-    if qmonth == '-2':
-        qdays = 60
-    elif qmonth == '-3':
-        qdays = 90
-    else:
-        qdays = 30
+    # if qmonth == '-2':
+    #     qdays = 60
+    # elif qmonth == '-3':
+    #     qdays = 90
+    # else:
+    #     qdays = 7
 
     
-    today = datetime.date.today()
+    
     
     data = []
     if bigmeter:
         comaddr = bigmeter.commaddr
         flowday_stastic = HdbFlowDataDay.objects.filter(commaddr=comaddr)
-        flowday = HdbFlowData.objects.filter(commaddr=comaddr)
+        flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
 
         #pressure
         # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
 
-        flows = []
-        hdates = []
+        flows = [f.flux for f in flowday]
+        hdates = [f.readtime for f in flowday]
 
 
-        for i in range(qdays):
-            qday = today - datetime.timedelta(days=i)
-            daystr = qday.strftime("%Y-%m-%d")
-            # q_by_day = flowday.filter(hdate=daystr)
-            q_by_day = flowday.filter(readtime__icontains=daystr)
-
-            if q_by_day.exists():
-                # f = q_by_day.first()
-                for f in q_by_day:
-                    flows.append(f.flux)
-                    tmp_day = f.readtime
-                    hdates.append(tmp_day)
-            else:
-                flows.append(0)
-                tmp_day = qday.strftime("%m-%d")
-                hdates.append(tmp_day)
-
-            # hdates.append(tmp_day)
-
+ 
         flows_float = [float(f) for f in flows]
         maxflow = max(flows_float)
         average = sum(flows_float)/len(flows)
@@ -115,13 +100,81 @@ def flowdata_mnf(request):
                 "average":average
                 })
             
+    #表具信息
+    #MNF
+    mnf = 0
+    #MNF/ADD
+    mnf_add = 0
+    #背景漏损
+    back_leak = 0
+    #参考MNF
+    ref_mnf = 0
+    #设定报警
+    alarm_set = 0
 
     #staticstic data
+    #当天用水量
+    today_use = 0
+    #昨日用水量
+    yestoday_use = 0
+    #去年同期用水量
+    last_year_same = 0
+    #同比增长
+    tongbi = 0
+    #环比增长
+    huanbi = 0
+    #最大值
+    maxflow = 0
+    #最小值
+    minflow = 0
+    #平均值
+    average = 0
+
+    today = datetime.date.today()
+    today_str = today.strftime("%Y-%m-%d")
+    today_flow = HdbFlowDataDay.objects.filter(hdate=today_str)
+    
+    if today_flow.exists():
+        today_use = today_flow.first().dosage
+
+    yestoday = today - datetime.timedelta(days=1)
+    yestoday_str = yestoday.strftime("%Y-%m-%d")
+    yestoday_flow = HdbFlowDataDay.objects.filter(hdate=yestoday_str)
+    if yestoday_flow.exists():
+        yestoday_use = yestoday_flow.first().dosage
+
+    lastyear = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
+    lastyear_str = lastyear.strftime("%Y-%m-%d")
+    lastyear_flow = HdbFlowDataDay.objects.filter(hdate=lastyear_str)
+    if lastyear_flow.exists():
+        last_year_same = lastyear_flow.first().dosage
+    tongbi = float(today_use) - float(last_year_same)
+    huanbi = float(today_use) - float(yestoday_use)
+    maxflow = max(flows_float)
+    minflow = min(flows_float)
+    average = sum(flows_float)/len(flows)
+
+
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                "online":data[::-1] #reverse
+                "online":data[::-1], #reverse
+                "today_use":today_use,
+                "yestoday_use":yestoday_use,
+                "last_year_same":last_year_same,
+                "tongbi":tongbi,
+                "huanbi":huanbi,
+                "maxflow":maxflow,
+                "minflow":minflow,
+                "average":average,
+                "mnf":mnf,
+                "mnf_add":mnf_add,
+                "ref_mnf":ref_mnf,
+                "back_leak":back_leak,
+                "alarm_set":alarm_set,
+
+
             },
             "success":1}
 

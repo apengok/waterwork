@@ -38,21 +38,28 @@
                     </div>
                     <div class="panel-body fixed-table-body"   id="stretch-body">
                         <!--工具面板-->
-                        <div class="col-md-10 alarmSearchToolPanel">
-                            <form id="hourslist" class="form-horizontal" action="#"  method="post" role="form">{% csrf_token %}
-                                <div class="form-group">
-                                    <label class="col-md-2  control-label" style="margin-left: 0px;">所属组织：</label> 
+                        <div class="col-md-12 alarmSearchToolPanel" style="padding: 0px;">
+                            <form id="hourslist" class="form-horizontal" action="#"  method="post" role="form" >{% csrf_token %}
+                                <div class="form-group" >
+                                    <label class="col-md-1  control-label" style="margin-left: 0px;">组织：</label> 
                                     <div class="col-md-2">
                                       <input id="organ_name" class="form-control" value="{{ organ }}"  readonly="" type="text">
                                     </div>
-                                    <label class="col-md-2  control-label searchListSelect">站点名称：</label>
+                                    <label class="col-md-1  control-label searchListSelect" style="margin-left: 0px;">站点：</label>
                                     <div class="col-md-3">
                                       <input id="station_name" class="form-control" value="{{ station }}" readonly="" type="text">
                                     </div>
-                                    <div class="col-md-3 control-label pull-right" id="dateSearchData">
+                                    <label class="col-md-1 col-sm-3 control-label searchListSelect">时间：</label>
+                                    <div class="col-md-4 col-sm-8 searchListSelect">
+                                        <input style="cursor: pointer; background-color: #fafafa;"
+                                            class="form-control layer-date laydate-icon"
+                                            id="timeInterval" name="timeInterval" readonly />
+                                        <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
+                                    </div>
+                                    <div class="col-md-1 control-label pull-right" id="dateSearchData">
                                         
-                                        <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="analysisMnf.inquireClick(-2)">两月内  </button>
-                                        <button id="nearlyThreeDays" type="button"class="btn btn-primary" name="-3" onclick="analysisMnf.inquireClick(-3)">三月内  </button>
+                                        <!-- <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="analysisMnf.inquireClick(-2)">两月内  </button>
+                                        <button id="nearlyThreeDays" type="button"class="btn btn-primary" name="-3" onclick="analysisMnf.inquireClick(-3)">三月内  </button> -->
                                         <!--<button id="nearlySevenDays" type="button"class="btn btn-primary" name="-7" onclick="analysisMnf.inquireClick(-7)">前七天 </button>-->
                                         <button id="inquireClick" type="button" class="btn btn-primary search-btn" name="1" onclick="analysisMnf.inquireClick(1)"><i class="glyphicon glyphicon-search"></i>  查询</button>
                                         
@@ -85,21 +92,21 @@
                           <label id="averflow">平均流量：<span>-</span></label>
                           <label id="mnf">MNF：<span>-</span></label>
                           <label id="mnf_add">MNF/ADD：<span>-</span></label>
-                          <label id="bleak">背景漏损：<span>-</span></label>
-                          <label id="mnf_ref">参考MNF：<span>-</span></label>
-                          <label id="warn_set">设定报警：<span>-</span></label>
+                          <label id="back_leak">背景漏损：<span>-</span></label>
+                          <label id="ref_mnf">参考MNF：<span>-</span></label>
+                          <label id="alarm_set">设定报警：<span>-</span></label>
                           
                           
                         </div>
                         <div style="background: rgba(22, 155, 213, 1);margin-top: 600px;height: 60px;color: white;">
                           <label id="today_use" class="col-md-3 control-label">当天用水量:<span>186 m³</span></label>
                           <label id="yestoday_use" class="col-md-3 control-label">昨日用水量:<span>206.3 </span></label>
-                          <label id="lastyear_month" class="col-md-3 control-label">去年同期用水量：<span>206 m³</span></label>
+                          <label id="last_year_same" class="col-md-3 control-label">去年同期用水量：<span>206 m³</span></label>
                           <label id="tongbi" class="col-md-3 control-label">同比增量：<span>21 m³</span></label>
                           <label id="huanbi" class="col-md-3 control-label">环比增量：<span>60 m³</span></label>
                           <label id="max_flow" class="col-md-3 control-label">最大值: <span>68 m³   （11：00）</span></label>
                           <label id="min_flow" class="col-md-3 control-label">最小值: <span>21 m³   （04：00）</span></label>
-                          <label id="aver_flow" class="col-md-3 control-label">平均值:<span>46 m³   （11：00）</span></label>
+                          <label id="average" class="col-md-3 control-label">平均值:<span>46 m³   （11：00）</span></label>
 
                           
                         </div>

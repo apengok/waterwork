@@ -8,7 +8,7 @@ body,html{margin:0;padding:0;height:100%}#wrapper{padding:9pt}.drp-popup{font-fa
 #timepiker{
 	width:64px;
 	height:28px;
-	background-image:url("/clbs/resources/img/timewhite.svg");
+	background-image:url("/static/virvo/resources/img/timewhite.svg");
 	background-size:64px 28px;
 	position:relative;
 	left:63px;
@@ -16,7 +16,7 @@ body,html{margin:0;padding:0;height:100%}#wrapper{padding:9pt}.drp-popup{font-fa
 #savebutton{
 	width:64px;
 	height:28px;
-	background-image:url("/clbs/resources/img/surewhite.svg");
+	background-image:url("/static/virvo/resources/img/surewhite.svg");
 	background-size:64px 28px;
 	position:relative;
 	left:54px;
@@ -24,13 +24,13 @@ body,html{margin:0;padding:0;height:100%}#wrapper{padding:9pt}.drp-popup{font-fa
 #timepiker:hover{
 	width:64px;
 	height:28px;
-	background-image:url("/clbs/resources/img/timeblue.svg");
+	background-image:url("/static/virvo/resources/img/timeblue.svg");
 	background-size:64px 28px;
 }
 #savebutton:hover{
 	width:64px;
 	height:28px;
-	background-image:url("/clbs/resources/img/sureblue.svg");
+	background-image:url("/static/virvo/resources/img/sureblue.svg");
 	background-size:64px 28px;
 }
 #timepikerdiv{
