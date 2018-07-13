@@ -1,78 +1,62 @@
 [
 
 {
-  "model": "auth.group", 
-  "pk": 1, 
-  "fields": {
-    "name": "系统管理员", 
-    "permissions": [79, 80, 89, 90, 91, 92, 83, 84, 37, 38, 29, 30, 74, 75, 70, 71, 48, 49, 33, 34, 53, 54, 26, 27, 81, 82, 35, 36, 85, 86, 100, 101, 20, 21, 63, 64, 72, 73, 43, 44, 31, 32, 60, 61, 67, 68, 39, 40, 94, 95, 50, 51, 77, 78, 102, 103, 41, 42, 22, 23, 24, 25, 98, 99, 58, 59, 65, 66, 46, 47, 55, 56, 96, 97, 87, 88]
-  }
-}, 
-{
-  "model": "auth.group", 
-  "pk": 2, 
-  "fields": {
-  "name": "一般管理员", 
-
-  "permissions": [79, 80, 89, 90, 91, 92, 83, 84, 37, 38, 29, 30, 74, 75, 70, 71, 48, 49, 33, 34, 53, 54, 81, 82, 35, 36, 85, 86, 100, 101, 63, 64, 72, 73, 43, 44, 31, 32, 60, 61, 67, 68, 39, 40, 94, 95, 50, 51, 77, 78, 102, 103, 41, 42, 98, 99, 58, 59, 65, 66, 46, 47, 55, 56, 96, 97, 87, 88]
-  }
-},
-{
-  "model": "accounts.myroles",
+  "model": "auth.group",
   "pk": 1,
   "fields": {
-    "name":"系统管理员",
-    "notes": "admin",
-    "permissionTree": "[{\"id\":\"perms_datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_perms_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_perms_datamonitor\",\"edit\":true},{\"id\":\"realdata_perms_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_perms_datamonitor\",\"edit\":true},{\"id\":\"perms_datanalys\",\"edit\":false},{\"id\":\"dailyuse_perms_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_perms_datanalys\",\"edit\":true},{\"id\":\"dmacxc_perms_datanalys\",\"edit\":true},{\"id\":\"flownalys_perms_datanalys\",\"edit\":true},{\"id\":\"comparenalys_perms_datanalys\",\"edit\":true},{\"id\":\"peibiao_perms_datanalys\",\"edit\":true},{\"id\":\"rawdata_perms_datanalys\",\"edit\":true},{\"id\":\"mnf_perms_datanalys\",\"edit\":true},{\"id\":\"perms_alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_perms_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_perms_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_perms_alarmcenter\",\"edit\":true},{\"id\":\"perms_basemanager\",\"edit\":false},{\"id\":\"dmamanager_perms_basemanager\",\"edit\":true},{\"id\":\"stationmanager_perms_basemanager\",\"edit\":true},{\"id\":\"perms_devicemanager\",\"edit\":false},{\"id\":\"meters_perms_devicemanager\",\"edit\":true},{\"id\":\"simcard_perms_devicemanager\",\"edit\":true},{\"id\":\"params_perms_devicemanager\",\"edit\":true},{\"id\":\"perms_firmmanager\",\"edit\":false},{\"id\":\"rolemanager_perms_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_perms_basemanager\",\"edit\":true},{\"id\":\"perms_basenalys\",\"edit\":false},{\"id\":\"dma_perms_basenalys\",\"edit\":true},{\"id\":\"mf_perms_basenalys\",\"edit\":true},{\"id\":\"day_perms_basenalys\",\"edit\":true},{\"id\":\"perms_reporttable\",\"edit\":false},{\"id\":\"querylog_perms_reporttable\",\"edit\":true},{\"id\":\"alarm_perms_reporttable\",\"edit\":true},{\"id\":\"dmastatics_perms_reporttable\",\"edit\":true},{\"id\":\"biguser_perms_reporttable\",\"edit\":true},{\"id\":\"flows_perms_reporttable\",\"edit\":true},{\"id\":\"waters_perms_reporttable\",\"edit\":true},{\"id\":\"biaowu_perms_reporttable\",\"edit\":true},{\"id\":\"bigdata_perms_reporttable\",\"edit\":true},{\"id\":\"perms_systemconfig\",\"edit\":false},{\"id\":\"personality_perms_systemconfig\",\"edit\":true},{\"id\":\"system_perms_systemconfig\",\"edit\":true},{\"id\":\"retransit_perms_systemconfig\",\"edit\":true},{\"id\":\"icons_perms_systemconfig\",\"edit\":true},{\"id\":\"querylog_perms_systemconfig\",\"edit\":true}]",
-    "rid": "ROLE_ADMIN"
+    "name": "\u8d85\u7ea7\u7ba1\u7406\u5458",
+    "permissions": []
   }
-},
-{
-  "model": "accounts.myroles",
-  "pk": 2,
-  "fields": {
-    "name":"一般管理员",
-    "notes": "power user",
-    "permissionTree": "[{\"id\":\"perms_datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_perms_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_perms_datamonitor\",\"edit\":true},{\"id\":\"realdata_perms_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_perms_datamonitor\",\"edit\":true},{\"id\":\"perms_datanalys\",\"edit\":false},{\"id\":\"dailyuse_perms_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_perms_datanalys\",\"edit\":true},{\"id\":\"dmacxc_perms_datanalys\",\"edit\":true},{\"id\":\"flownalys_perms_datanalys\",\"edit\":true},{\"id\":\"comparenalys_perms_datanalys\",\"edit\":true},{\"id\":\"peibiao_perms_datanalys\",\"edit\":true},{\"id\":\"rawdata_perms_datanalys\",\"edit\":true},{\"id\":\"mnf_perms_datanalys\",\"edit\":true},{\"id\":\"perms_alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_perms_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_perms_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_perms_alarmcenter\",\"edit\":true},{\"id\":\"perms_basemanager\",\"edit\":false},{\"id\":\"dmamanager_perms_basemanager\",\"edit\":true},{\"id\":\"stationmanager_perms_basemanager\",\"edit\":true},{\"id\":\"perms_devicemanager\",\"edit\":false},{\"id\":\"meters_perms_devicemanager\",\"edit\":true},{\"id\":\"simcard_perms_devicemanager\",\"edit\":true},{\"id\":\"params_perms_devicemanager\",\"edit\":true},{\"id\":\"perms_firmmanager\",\"edit\":false},{\"id\":\"rolemanager_perms_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_perms_basemanager\",\"edit\":true},{\"id\":\"perms_basenalys\",\"edit\":false},{\"id\":\"dma_perms_basenalys\",\"edit\":true},{\"id\":\"mf_perms_basenalys\",\"edit\":true},{\"id\":\"day_perms_basenalys\",\"edit\":true},{\"id\":\"perms_reporttable\",\"edit\":false},{\"id\":\"querylog_perms_reporttable\",\"edit\":true},{\"id\":\"alarm_perms_reporttable\",\"edit\":true},{\"id\":\"dmastatics_perms_reporttable\",\"edit\":true},{\"id\":\"biguser_perms_reporttable\",\"edit\":true},{\"id\":\"flows_perms_reporttable\",\"edit\":true},{\"id\":\"waters_perms_reporttable\",\"edit\":true},{\"id\":\"biaowu_perms_reporttable\",\"edit\":true},{\"id\":\"bigdata_perms_reporttable\",\"edit\":true},{\"id\":\"perms_systemconfig\",\"edit\":false},{\"id\":\"personality_perms_systemconfig\",\"edit\":true},{\"id\":\"system_perms_systemconfig\",\"edit\":true},{\"id\":\"retransit_perms_systemconfig\",\"edit\":true},{\"id\":\"icons_perms_systemconfig\",\"edit\":true},{\"id\":\"querylog_perms_systemconfig\",\"edit\":true}]",
-    "rid": "POWER_USER"
-  }
-},
+}, 
 {
   "model": "entm.organizations",
   "pk": 1,
   "fields": {
-    "name":"威尔沃",
+    "name": "\u5a01\u5c14\u6c83",
     "attribute": null,
-    "register_date": "2018-06-04",
+    "register_date": "2018-06-01",
     "owner_name": null,
     "phone_number": null,
     "firm_address": null,
     "cid": "virvo_organization",
     "pId": "organization",
     "is_org": true,
-    "uuid": "virvos_supe",
+    "uuid": "ib7f6v_2cra",
     "parent": null,
     "lft": 1,
-    "rght": 4,
+    "rght": 2,
     "tree_id": 1,
     "level": 0
   }
 },
 {
+  "model": "accounts.myroles",
+  "pk": 1,
+  "fields": {
+    "notes": "admin",
+    "rid": "ROLE_5gbxjg_zm6q",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+
+{
   "model": "accounts.user",
   "pk": 1,
   "fields": {
-    "is_superuser": false,
+    "password": "pbkdf2_sha256$100000$3AfFLiqYYMQY$jRE3aeohO/9aqgQeTcnseO715IDd4r4rPXL5UxKvi+c=",
     "user_name": "admin",
+    "is_superuser": true,
     "real_name": "",
     "sex": "",
     "phone_number": "",
-    "belongto": "威尔沃",
-    "expire_date": "2019-06-14",
-    "Role": "",
+    "belongto": 1,
+    "expire_date": "2019-07-13",
+    "Role": 1,
+    "uuid": "ib7f6v_2cra",
     "email": "",
-    "idstr":"virvo_organization",
-    "uuid":"virvo_superuser",
     "is_active": true,
     "staff": true,
     "admin": true,

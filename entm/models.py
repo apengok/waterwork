@@ -55,6 +55,9 @@ class PorgressBar(models.Model):
     totoal      = models.IntegerField(default=1)
     progress    = models.IntegerField(default=0)
 
+    class Meta:
+        managed=True
+        db_table='porgressbar'
 
     def progress_add(self):
         self.progress += 1

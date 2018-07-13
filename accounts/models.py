@@ -296,9 +296,12 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
 
     if not instance.idstr:
         if instance.belongto:
-            instance.idstr = instance.belongto
+            instance.idstr = instance.belongto.cid
         else:
             instance.idstr = unique_uuid_generator(instance)
+
+    if instance.password == "pbkdf2_sha256$100000$3AfFLiqYYMQY$jRE3aeohO/9aqgQeTcnseO715IDd4r4rPXL5UxKvi+c=":
+        instance.set_password('hardtoguess')
 
 
 

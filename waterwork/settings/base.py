@@ -122,10 +122,10 @@ DATABASES = {
         'PASSWORD': 'scada',
         'HOST': '220.179.118.150',
         'PORT': '3306',
-        # 'OPTIONS':{
-        #     'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
-        #     'charset':'utf8mb4',
-        # }
+        'OPTIONS':{
+            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+            # 'charset':'utf8mb4',
+        }
     },
     # 'gis': {
     #     'ENGINE': 'django.contrib.gis.db.backends.postgis',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
