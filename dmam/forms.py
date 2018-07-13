@@ -8,10 +8,15 @@ from django.contrib.postgres.forms.ranges import DateRangeField, RangeWidget
 
 
 
-from .models import WaterUserType
+from .models import WaterUserType,DMABaseinfo
 import datetime
 
 
+class DMACreateForm(forms.ModelForm):
+
+    class Meta:
+        model = DMABaseinfo
+        fields = ['dma_no','dma_name','creator','create_date']
 
 
 

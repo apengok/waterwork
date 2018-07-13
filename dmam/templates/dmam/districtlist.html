@@ -41,20 +41,20 @@
                 <div class="panel-body fixed-table-body"  id="stretch-body">
                   <!--工具面板-->
                   <div class="ToolPanel">
-                    <form id="saveCommandForm" role="form" action="/clbs/v/monitoring/command/saveCommand" method="post" class="form-horizontal">
+                    <form id="baseinfoForm" role="form" action="#" method="post" class="form-horizontal">
                       
                         <div class="form-group">
                           <label class="col-md-2 control-label">分区编号：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_dma_no" name="dma_no" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">管道材质：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_pipe_texture" name="pipe_texture" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">IFC参数：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_ifc" name="ifc" class="form-control" readonly="" type="text">
                           </div>
                         </div>
 
@@ -62,7 +62,7 @@
                           <label class="col-md-2 control-label">所属组织：</label>
                           <div class="col-md-2">
                             <div class="input-group">
-                              <input name="brands" class="form-control" id="reportPlate" autocomplete="off" type="text">
+                              <input name="brands" class="form-control" id="id_belongto" name="belongto" autocomplete="off" type="text">
                               <div class="input-group-btn">
                                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="">
                                   <span class="caret"></span>
@@ -74,59 +74,59 @@
                           </div>
                           <label class="col-md-2 control-label">管道总长度（m）：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_pipe_length" name="pipe_length" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">AZNP：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_aznp" name="aznp" class="form-control" readonly="" type="text">
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label class="col-md-2 control-label">服务人口：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_pepoles_num" name="pepoles_num" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">管道连接总数（个）：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_pipe_links" name="pipe_links" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">正常夜间用水量：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_night_use" name="night_use" class="form-control" readonly="" type="text">
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label class="col-md-2 control-label">服务面积：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_acreage" name="acreage" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">管道最长服务年限（年）：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_pipe_years" name="pipe_years" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">产销差目标值：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_cxc_value" name="cxc_value" class="form-control" readonly="" type="text">
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label class="col-md-2 control-label">用户数量：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_user_num" name="user_num" class="form-control" readonly="" type="text">
                           </div>
                           <label class="col-md-2 control-label">私人拥有水管长度（m）：</label>
                           <div class="col-md-2">
-                            <input id="reportObject" class="form-control" readonly="" type="text">
+                            <input id="id_pipe_private" name="pipe_private" class="form-control" readonly="" type="text">
                           </div>
 
                           <!-- <div class="col-md-2"></div> -->
                           <div class="col-md-4" >
-                            <button type="button" id="saveCommand" style="margin-left: 140px;" class="btn btn-primary ">修改</button>
-                            <button type="button" id="saveCommand" class="btn btn-primary ">提交</button>
-                            <button type="button" id="saveCommand" class="btn btn-primary ">恢复</button>
+                            <button type="button" id="baseinfomMdify" style="margin-left: 140px;" class="btn btn-primary ">修改</button>
+                            <button type="button" id="baseinfoCommit" class="btn btn-primary ">提交</button>
+                            <button type="button" id="baseinfoRestore" class="btn btn-primary ">恢复</button>
                           </div>
 
                         </div>
@@ -381,7 +381,7 @@
   var userQualificationExists="\u8BE5\u8FD0\u8425\u8D44\u8D28\u7C7B\u522B\u5DF2\u7ECF\u5B58\u5728,\u8BF7\u52FF\u91CD\u590D\u6DFB\u52A0";
 </script>
 <script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
-{% comment %}
+
 <script src="{% static 'virvo/wro/districtList.js' %}"></script>
-{% endcomment %}
+
 {% endblock %}

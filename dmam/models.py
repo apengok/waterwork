@@ -41,7 +41,7 @@ class DMABaseinfo(models.Model):
     cxc_value     = models.CharField('产销差目标值',max_length=50, null=True, blank=True)
 
     creator      = models.CharField('负责人',max_length=50, null=True, blank=True) 
-    create_date  = models.DateField('建立日期',max_length=50, null=True, blank=True) 
+    create_date  = models.CharField('建立日期',max_length=30, null=True, blank=True) 
 
     belongto = models.ForeignKey(
         Organizations,

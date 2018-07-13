@@ -34,7 +34,7 @@ from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community
 from . models import WaterUserType
 from legacy.forms import StationsForm
-from . forms import WaterUserTypeForm
+from . forms import WaterUserTypeForm,DMACreateForm
 import os
 from django.conf import settings
 
@@ -225,13 +225,13 @@ group add
 """
 class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = Organizations
-    template_name = "dmam/groupadd.html"
-    form_class = OrganizationsAddForm
-    success_url = reverse_lazy("entm:usermanager");
+    template_name = "dmam/districtadd.html"
+    form_class = DMACreateForm
+    success_url = reverse_lazy("dmam:districtmanager");
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
-        # print("dispatch",args,kwargs)
+        print("dispatch",args,kwargs)
         if self.request.method == "GET":
             cid = self.request.GET.get("id")
             pid = self.request.GET.get("pid")
@@ -257,36 +257,43 @@ class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        # print("user group add here?:",self.request.POST)
-        # print(form)
+        print("dma add here?:",self.request.POST)
+        print(form)
         # do something
         instance = form.save(commit=False)
         instance.is_org = True
         cid = self.request.POST.get("pId","oranization")  #cid is parent orgnizations
+        print('cid:',cid)
         organizaiton_belong = Organizations.objects.get(cid=cid)
-        instance.parent = organizaiton_belong
-        instance.pId = cid
-        instance.cid = unique_cid_generator(instance,new_cid=cid)
-
-        instance.uuid = unique_uuid_generator(instance)
+        instance.belongto = organizaiton_belong
+        
         
 
 
         return super(DistrictAddView,self).form_valid(form)   
 
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(DistrictAddView, self).get_context_data(*args, **kwargs)
+    #     context["cid"] = kwargs.get("cid")
+    #     context["pId"] = kwargs.get("pId")
+        
+
+    #     return context  
 
     def get(self,request, *args, **kwargs):
         print("get::::",args,kwargs)
         form = super(DistrictAddView, self).get_form()
         # Set initial values and custom widget
-        initial_base = self.get_initial() #Retrieve initial data for the form. By default, returns a copy of initial.
-        # initial_base["menu"] = Menu.objects.get(id=1)
-        initial_base["cid"] = kwargs.get("cid")
-        initial_base["pId"] = kwargs.get("pId")
-        form.initial = initial_base
+        # initial_base = self.get_initial() #Retrieve initial data for the form. By default, returns a copy of initial.
+       
+        # initial_base["cid"] = kwargs.get("cid")
+        # initial_base["pId"] = kwargs.get("pId")
+        # form.initial = initial_base
+        cid = kwargs.get("cid")
+        pId = kwargs.get("pId")
         
         return render(request,self.template_name,
-                      {"form":form,})
+                      {"form":form,"cid":cid,"pId":pId})
 
 
 """

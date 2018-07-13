@@ -201,8 +201,8 @@
                     dataFilter: dmaManage.ajaxDataFilter
                 },
                 view : {
-                    // addHoverDom : dmaManage.addHoverDom,
-                    // removeHoverDom : dmaManage.removeHoverDom,
+                    addHoverDom : dmaManage.addHoverDom,
+                    removeHoverDom : dmaManage.removeHoverDom,
                     selectedMulti : false,
                     nameIsHTML: true,
                     fontCss: setFontCss_ztree
@@ -210,7 +210,7 @@
                 edit : {
                     enable : true,
                     editNameSelectAll : true,
-                    showRemoveBtn : false,//dmaManage.showRemoveBtn,
+                    showRemoveBtn : dmaManage.showRemoveBtn,
                     showRenameBtn : false
                 },
                 data : {
@@ -386,17 +386,17 @@
                     + id
                     + "&pid="
                     + pid
-                    + "' data-target='#commonWin' data-toggle='modal'></span>";
+                    + "' data-target='#commonSmWin' data-toggle='modal'></span>";
             var editStr = "<span class='button edit' id='editBtn_"
                     + treeNode.tId
                     + "' title='编辑' href='district/edit/"
                     + pid
-                    + "/' data-target='#commonWin' data-toggle='modal'></span>";
+                    + "/' data-target='#commonSmWin' data-toggle='modal'></span>";
             var detailsStr = "<span class='button details' id='detailsBtn_"
                     + treeNode.tId
                     + "' title='详情'  href='district/detail/"
                     + pid
-                    + "/' data-target='#commonWin' data-toggle='modal'</span>";
+                    + "/' data-target='#commonSmWin' data-toggle='modal'</span>";
             sDetails.after(detailsStr);
             sEdit.after(editStr);
             sObj.after(addStr);
@@ -416,7 +416,7 @@
                             oldData = addData.length;
                         },
                     });
-                    var windowId = 'commonWin'; 
+                    var windowId = 'commonSmWin'; 
                     $("#" + windowId).on("hidden.bs.modal", function(data) {
                         $(this).removeData("bs.modal");                     
                         $.ajax({
@@ -449,7 +449,7 @@
             var editBtn = $("#editBtn_" + treeNode.tId);
             if(editBtn)
                 editBtn.bind("click", function() {      
-                    var windowId = 'commonWin';
+                    var windowId = 'commonSmWin';
                     $("#" + windowId).on("hidden.bs.modal", function(data) {
                         var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
                         var nodes = treeObj.getSelectedNodes();        
@@ -908,7 +908,7 @@
         dmaManage.userTree();
         getTable('dataTables');
         dmaManage.init();
-        dmaManage.findOperation();
+        // dmaManage.findOperation();
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             dmaManage.refreshTable();
