@@ -497,7 +497,56 @@
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd=treeNode.uuid;
             $('#simpleQueryParam').val("");
-            myTable.requestData();
+            if(treeNode.type == "dma"){
+                var pNode = treeNode.getParentNode();
+                $("#current_dma_no").attr("value",pNode.id);
+                $("#current_dma_name").attr("value",treeNode.name);
+                var organ = pNode.id;
+                dma_no = pNode.id;
+                dma_name = treeNode.name;
+                var url="/dmam/district/dmabaseinfo/";
+                var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
+                json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
+            }else{
+                myTable.requestData();
+
+            }
+        },
+        setBaseinfo:function(data){
+            console.log(data);
+            if(data.success == true){
+                // $("#phoneBookObject").val(data.obj.vid);
+                // if(data.msg == null&&data.obj.referVehicleList!= null){
+                //     realTimeCommand.initReferVehicleList(data.obj.referVehicleList);
+                // }
+                if (data.msg == null&&data.obj.baseinfo!= null) {
+                    var baseinfo = data.obj.baseinfo;
+                    $("#id_dma_no").val(baseinfo.dma_no);
+                    $("#id_pepoles_num").val(baseinfo.pepoles_num);
+                    $("#id_acreage").val(baseinfo.acreage);
+                    $("#id_user_num").val(baseinfo.user_num);
+                    $("#id_pipe_texture").val(baseinfo.pipe_texture);
+                    $("#id_pipe_length").val(baseinfo.pipe_length);
+                    $("#id_pipe_links").val(baseinfo.pipe_links);
+                    $("#id_pipe_years").val(baseinfo.pipe_years);
+                    $("#id_pipe_private").val(baseinfo.pipe_private);
+                    $("#id_ifc").val(baseinfo.ifc);
+                    $("#id_aznp").val(baseinfo.aznp);
+                    $("#id_night_use").val(baseinfo.night_use);
+                    $("#id_cxc_value").val(baseinfo.cxc_value);
+                    $("#id_belongto").val(baseinfo.belongto);
+                }else{
+
+                }
+            }
+        },
+        Alterdma:function(){
+            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").removeAttr("readonly");
+
+        },
+        restore:function(){
+            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").attr("readonly","readonly");
+
         },
         // ajax参数
         ajaxDataParamFun: function(d){

@@ -42,7 +42,10 @@
                   <!--工具面板-->
                   <div class="ToolPanel">
                     <form id="baseinfoForm" role="form" action="#" method="post" class="form-horizontal">
-                      
+                      <input value="{{ current_dma_no }}" id="current_dma_no" type="hidden"  />
+                      <input value="{{ current_dma_name }}" id="current_dma_name" type="hidden"  />
+
+                      <div class="modal-body" id="baseinfoParameters">
                         <div class="form-group">
                           <label class="col-md-2 control-label">分区编号：</label>
                           <div class="col-md-2">
@@ -124,15 +127,15 @@
 
                           <!-- <div class="col-md-2"></div> -->
                           <div class="col-md-4" >
-                            <button type="button" id="baseinfomMdify" style="margin-left: 140px;" class="btn btn-primary ">修改</button>
+                            <button type="button" id="baseinfomMdify" onclick="dmaManage.Alterdma()" style="margin-left: 140px;" class="btn btn-primary ">修改</button>
                             <button type="button" id="baseinfoCommit" class="btn btn-primary ">提交</button>
-                            <button type="button" id="baseinfoRestore" class="btn btn-primary ">恢复</button>
+                            <button type="button" id="baseinfoRestore" onclick="dmaManage.restore()" class="btn btn-primary ">恢复</button>
                           </div>
 
                         </div>
-
+                      </div>
                           
-                      </form>
+                    </form>
 
                   </div>
                   
@@ -143,7 +146,7 @@
               
 
 
-            <!-- <div class="col-md-2" style="padding-right: 0px; padding-left:0px;"></div> -->
+            <div class="col-md-2" style="padding-right: 0px; padding-left:0px;"></div>
             <div class="col-md-10 " style="padding-right: 0px; padding-left:10px;">
               <div class="panel panel-default">
                 <div class="panel-heading" id="stretch2" >
@@ -267,7 +270,7 @@
             </div>
 
 
-            <!-- <div class="col-md-2" style="padding-right: 0px; padding-left:0px;"></div> -->
+            <div class="col-md-2" style="padding-right: 0px; padding-left:0px;"></div>
             <div class="col-md-10 " style="padding-right: 0px; padding-left:10px;">
               <div class="panel panel-default">
                 <div class="panel-heading" id="stretch3" >

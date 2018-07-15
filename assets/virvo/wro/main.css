@@ -21,16 +21,13 @@ select.form-control{padding: 6px 40px 6px 11px}
     -o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;background:#f1f2f7;}
 .sidebar{margin-left: -240px;float: left;width:240px;height:100%;background:#32323a;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;z-index:100}
 #main-content .eightIsZero{height:0px;}
-footer{height:26px;background:#fff;width:100%;text-align:center}
-footer .imitateMenuBg{background:#32323a;width:240px;height:46px;float:left;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;}
-footer .imitateMenuBg-left{margin-left:-240px;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;}
-footer .defaultFootBg p{color:#7A7676;font-size:12px;margin: 6px;}
-footer .defaultFootBg a{color:#7A7676;font-size:12px;font-size:12px;}
-footer .defaultFootBg{
-  width:calc(100% - 240px);
-  /*margin-top: 50px;*/
-  float:right;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;}
-footer .defaultFootBg-left{width:100%;}
+footer{max-height:46px;background:red;width:100%;text-align:center}
+footer .imitateMenuBg{background:#32323a;width:240px;height:46px;float:left;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out}
+footer .imitateMenuBg-left{margin-left:-240px;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out}
+footer .defaultFootBg p{color:#7A7676;font-size:12px;margin:6px}
+footer .defaultFootBg a{color:#7A7676;font-size:12px;font-size:12px}
+footer .defaultFootBg{width:calc(100% - 240px);float:right;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out}
+footer .defaultFootBg-left{width:100%}
 .disabled-btn{background-color: #bdc3c7 !important;}
 #groupSelectSpan,#parameterHead,.traceTo,.hiddenparameter,#gpsTable3 tbody tr,.monitoringSelect,.lngLat_show,.fa-question-circle,
 #sensorBasisInfoTwo,#tankBasisInfoTwo,#sensorBasisInfo,#tankBasisInfo,#stretch,#stretch2,#stretch3,

@@ -32,9 +32,9 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community
-from . models import WaterUserType
+from . models import WaterUserType,DMABaseinfo,DmaStations
 from legacy.forms import StationsForm
-from . forms import WaterUserTypeForm,DMACreateForm
+from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm
 import os
 from django.conf import settings
 
@@ -61,6 +61,18 @@ def dmatree(request):
             "districtid":'',
             "type":"group",
             "uuid":o.uuid
+        })
+
+        #dma
+        for d in o.dma.all():
+            organtree.append({
+            "name":d.dma_name,
+            "id":d.pk,
+            "districtid":d.pk,
+            "pId":o.cid,
+            "type":"dma",
+            "icon":"/static/virvo/resources/img/u8836.png",
+            "uuid":''
         })
 
     # district
@@ -205,6 +217,48 @@ def stationlist(request):
     return HttpResponse(json.dumps(result))
 
 
+# class DistrictFormView(FormView):
+#     form_class = DMABaseinfoForm
+
+def dmabaseinfo(request):
+
+    if request.method == 'GET':
+        print('dmabaseinfo get:',request.GET)
+        dma_id = request.GET.get("dma_no")
+        dmabase = DMABaseinfo.objects.get(pk=int(dma_id))
+
+        operarions_list = {
+            "exceptionDetailMsg":"null",
+            "msg":None,
+            "obj":{
+                    "baseinfo":{
+                        "dma_no":dmabase.dma_no,
+                        "pepoles_num":dmabase.pepoles_num,
+                        "acreage":dmabase.acreage,
+                        "user_num":dmabase.user_num,
+                        "pipe_texture":dmabase.pipe_texture,
+                        "pipe_length":dmabase.pipe_length,
+                        "pipe_links":dmabase.pipe_links,
+                        "pipe_years":dmabase.pipe_years,
+                        "pipe_private":dmabase.pipe_private,
+                        "ifc":dmabase.ifc,
+                        "aznp":dmabase.aznp,
+                        "night_use":dmabase.night_use,
+                        "cxc_value":dmabase.cxc_value,
+                        "belongto":dmabase.belongto.name
+                        }
+            },
+            "success":True
+        }
+       
+
+        return JsonResponse(operarions_list)
+
+    if request.method == 'POST':
+        print('dmabaseinfo post:',request.POST)
+
+    return HttpResponse(json.dumps({"success":True}))
+
 
 class DistrictMangerView(LoginRequiredMixin,TemplateView):
     template_name = "dmam/districtlist.html"
@@ -214,6 +268,12 @@ class DistrictMangerView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "dma管理"
         # context["page_submenu"] = "组织和用户管理"
         context["page_title"] = "dma分区管理"
+        user_organ = self.request.user.belongto
+
+        default_dma = user_organ.dma.all().first()
+
+        context["current_dma_no"] = default_dma.pk
+        context["current_dma_name"] = default_dma.dma_name
 
         # context["user_list"] = User.objects.all()
         

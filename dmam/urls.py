@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^district/edit/(?P<pId>\w+)/?$',views.DistrictEditView.as_view(),name='districtedit'),
     url(r'^district/detail/(?P<pId>\w+)/?$',views.DistrictDetailView.as_view(),name='districtdetail'),
     url(r'^district/delete/?$',views.DistrictDeleteView.as_view(),name='districtdelete'),
+    url(r'^district/dmabaseinfo/?$',views.dmabaseinfo,name='dmabaseinfo'),
     
 
     #stations  

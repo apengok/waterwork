@@ -20,6 +20,14 @@ class DMACreateForm(forms.ModelForm):
 
 
 
+class DMABaseinfoForm(forms.ModelForm):
+
+    class Meta:
+        model = DMABaseinfo
+        fields = ['dma_no','pepoles_num','acreage','user_num','pipe_texture','pipe_length','pipe_links','pipe_years','pipe_private','ifc','aznp','night_use','cxc_value','belongto']
+
+
+
 class WaterUserTypeForm(forms.ModelForm):
     
     class Meta:
