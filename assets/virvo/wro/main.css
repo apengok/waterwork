@@ -11,11 +11,11 @@ select.form-control{padding: 6px 40px 6px 11px}
 #container{
     background:#32323a;
     width:100%;z-index:0;
-    height: 95%;
+    /*height: 95%;*/
     -webkit-transition:all .3s ease-in-out;
     -moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out}
 .main-content-wrapper{
-    height: 95%;
+    /*height: 95%;*/
     margin-left:240px;
     margin-right:0;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;
     -o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;background:#f1f2f7;}

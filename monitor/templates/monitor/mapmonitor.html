@@ -27,6 +27,11 @@
 <link rel="stylesheet" href="{% static 'virvo/resources/js/laydate/theme/default/laydate.css' %}" id="layuicss-laydate">
 
 <link rel="stylesheet" href="{% static 'virvo/resources/css/realTimeMonitoring.css' %}"/>
+
+<!-- gis -->
+<link rel="stylesheet" href="{% static 'gis/assets/css/ol.css' %}" type = "text/css"/>
+<link rel="stylesheet" href="{% static 'gis/assets/css/jquery-ui.css' %}" type = "text/css"/>
+
 <style type="text/css">
         #container {
             background-color: white !important;
@@ -64,6 +69,17 @@
             <script src="{% static 'virvo/resources/js/sockjs-1.1.1.min.js' %}"></script>
             <script src="{% static 'virvo/resources/js/stomp.min.js' %}"></script>
             <script src="{% static 'virvo/resources/js/webSocket.js' %}"></script> 
+
+
+<!-- openlayer -->
+    
+    <script src="{%  static 'gis/assets/js/ol-debug.js' %} "></script>
+
+    <script src="{%  static 'gis/assets/js/jquery.js' %} "></script>
+    <script src="{%  static 'gis/assets/js/jquery-ui.js' %} "></script>
+
+
+
 <script>
 var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 </script>
@@ -81,93 +97,77 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             <section id="main-content">
                 <div class="row eightIsZero">
                     <div class="col-md-12 realtime-content">
-                        <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
-                            <div class="panel panel-default" id="panDefLeft">
-                                <div class="panel-heading" style="padding:0px;">
-                                    <div id="treeToTrackBlack" class="actions3 pull-right" data-toggle="tooltip"
-                                         data-placement="left" data-original-title="轨迹回放">
-                                        <a><img src="/clbs/resources/img/guijihuifang.svg"></a>
-                                    </div>
-                                    <div id="goHidden" class="actions2 pull-right">
-                                        <i class="fa fa-chevron-left" style="position: absolute;"></i>
-                                    </div>
-                                    <div class="dropdown panel-title fwb">
-                                        <ul class="nav nav-tabs">
-                                            <li class="active" id="TabFenceBox"><a href="#home1" data-toggle="tab">监控对象</a>
-                                            </li>
-                                            <li id="TabCarBox"><a href="#profile1" data-toggle="tab">电子围栏</a></li>
-                                        </ul>
-                                    </div>
-
-
+                        <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;border: 1px solid red;">
+                            <div style="background-color: rgba(0, 153, 204, 1);" >
+                                <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(1251)
                                 </div>
-                                <div class="panel-body fixed-table-body panTabPadd">
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="home1">
-                                            <div class="form-horizontal">
-                                                <div class="form-group allGroup">
-                                                    <div style="cursor:pointer" id="chooseAll"
-                                                         class="col-md-4 col-sm-5 col-xs-5 text-center btnPadding">
-                                                        <span>全部</span><span id="tall">(...)</span>
-                                                    </div>
-                                                    <div style="cursor:pointer" id="online"
-                                                         class="col-md-4 col-sm-5 col-xs-5 text-center btnPaddingOnLine">
-                                                        <span>在线</span><span id="tline">(...)</span>
-                                                    </div>
-                                                    <div style="cursor:pointer" id="chooseMissLine"
-                                                         onclick="treeMonitoring.misslines(1)"
-                                                         class="col-md-4 col-sm-5 col-xs-5 text-center btnPadding">
-                                                        <span>不在线</span><span id="tmiss">(...)</span>
-                                                    </div>
-                                                </div>
-
-                                            </div> <!-- 1 -->
-
-                                            <div class="form-group allGroup">
-                                                <div class="col-md-5 col-sm-12 col-xs-12" style="padding: 0px 5px 0px 0px;">
-                                                    <select id="searchType" placeholder="请选择搜索类别"
-                                                            class="form-control">
-                                                        <option selected="selected" value="name">监控对象</option>
-                                                        <option value="deviceNumber">终端号</option>
-                                                        <option value="simcardNumber">SIM卡号</option>
-                                                        <option value="assignName">分组</option>
-                                                        <option value="professional">从业人员</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-5 col-sm-12 col-xs-12"
-                                                     style="padding: 0px 10px 0px 0px;">
-                                                    <input id="search_condition" name="search" autocomplete="off"
-                                                           type="text" class="form-control" placeholder="关键字"/>
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 col-xs-12" style="padding: 0px 0px 0px 0px;">
-                                                    <button id="refresh" class="btn btn-default" type="button"
-                                                            name="refresh" title="刷新">
-                                                        <span class="glyphicon glyphicon-refresh"></span>
-                                                    </button>
-                                                </div>
-                                            </div> <!-- 2 -->
-
-                                            <div class="col-md-12 groupzTree" id="thetree">
-                                                <ul id="treeDemo" class="ztree"></ul>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
                             </div>
+                            <div>
+                                <div class="form-group">
+                                  <label class="col-md-6 control-label">在线(12)</label>
+                                  <label class="col-md-6 control-label">离线(12)</label>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-md-6 control-label">报警站点(12)</label>
+                                  <label class="col-md-6 control-label">关注站点(12)</label>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-md-6 control-label">大用户站点(12)</label>
+                                  
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" style="padding-right: 0px; padding-left: 0px;">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                      <h3 class="panel-title fwb">组织架构</h3>
+                                      <div class="actions  listActions">
+                                        <i class="fa fa-chevron-down"></i>
+                                      </div>
+                                    </div>
+                                    <div class="panel-body" style="padding: 0px;">
+                                      <div class="form-group" style="margin-top: 15px;">
+                                        <div class="col-md-12">
+                                          <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:80%!important">
+                                        <ul id="treeDemo" class="ztreee" style="overflow:auto;height:600px!important"></ul>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>
                 </div>
                 {% block main_content %}
-                <div id="content-right" class="col-md-10 content-right">
+                <div id="content-right" class="col-md-10 content-right" style="border: 1px solid blue;">
+                    <div >
+      <div id="js-map" class="map"></div>
+      <div id="js-overlay" class="overlay" >
+          <div>站点名称:<span class="map_span" style="color: #0099CC;">东门小学</span></div>
+          <div>所属组织:<span class="map_span">龙岗分公司</span></div>
+          <div>关联表具:<span class="map_span">170524</span></div>
+          <div>表具类型:<span class="map_span">电池水表</span></div>
+          <div>表均口径:<span class="map_span">DN600</span></div>
+          <div>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:<span class="map_span" style="color: #008000;">在线</span></div>
+          <!-- <hr style="color: #ccc;background-color: #ccc;height: 1px;"> -->
+          <div style=";margin-left: -16px;"><img  src="{% static 'virvo/images/u3922.png' %}"></div>
+          <div>采集时间:<span class="map_span">2018-04-11</span></div>
+          <div>瞬时流量:<span class="map_span">12.54 m3/h</span></div>
+          <div>累积流量:<span class="map_span">546521 m3</span></div>
+          <div>管网压力:<span class="map_span">0.054MPa</span></div>
+          <div>信号强度:<span class="map_span">25</span></div>
+      </div>
+
+  </div>
                     <div class="panel panel-default contPanelMargin">
                         <div class="panel-body fixed-table-body form-horizontal btnPaddingTop">
                             <div class="form-group  mapDataPadd">
                                 <div class="col-md-12 mapPaddCon">
+
                                 </div>
                             </div>
                         </div>
@@ -258,9 +258,183 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
     </script>
 </div>
 {% block javascript %}
+ 
+    <SCRIPT LANGUAGE="JavaScript">
+
+    //load tree
+    // $(function(){
+    //     load_Tree('mapmonitor');
+    // });
+
+    // map
+    var appLayer = function (options) {
+    var layer = new ol.layer.Tile({
+       extent: ol.proj.transformExtent(options.mapExtent, options.fromProject, options.toProject),
+       source: new ol.source.XYZ({
+            urls: options.urls,
+            tilePixelRatio: options.tilePixelRatio,
+            minZoom: options.mapMinZoom,
+            maxZoom: options.mapMaxZoom
+            })
+       });
+       return layer;
+    }
+
+    var normal_background = new appLayer({
+        urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+                'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+                'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+                'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+                'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+                'http://t5.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+                'http://t6.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+                'http://t7.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}'],
+        mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+        tilePixelRatio: 1,
+        fromProject: "EPSG:102100",
+        toProject: "EPSG:3857"
+    })
+
+    var normal_data = new appLayer({
+        urls: ['http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+                'http://t1.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+                'http://t2.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+                'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+                'http://t4.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+                'http://t5.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+                'http://t6.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
+                'http://t7.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}'],
+        mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+        tilePixelRatio: 1,
+        fromProject: "EPSG:102100",
+        toProject: "EPSG:3857"
+    })
+
+    var latitude = 114.3524087439;//22.6942072709,114.3524087439
+    var longitude = 22.6942072709;
+
+    var center = [latitude,longitude];
+
+    var attribution = new ol.control.Attribution({
+        className : 'none'
+    });
+
+    var arrNormal = new ol.Collection();
+    arrNormal.push(normal_background);
+    arrNormal.push(normal_data);
+
+    var normal_group = new ol.layer.Group({
+        //mapType: ol.control.MapType.NORMAL_MAP,
+        layers : arrNormal
+    });
+
+    var map = new ol.Map({
+        view: new ol.View({
+            center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
+            maxZoom : 23,
+            minZoom : 13,
+            zoom: 13
+        }),
+        controls: ol.control.defaults({ attribution: false }).extend([attribution]),
+        target:"js-map"
+    });
+
+    map.addLayer(normal_group);
+
+    // var mousePosition = new ol.control.MousePosition({
+    //     coordinateFormat: ol.coordinate.createStringXY(5),
+    //     projection: 'EPSG:4326',
+    //     target: document.getElementById('myposition'),
+    //     undefinedHTML: '&nbsp;'
+    //     });
+
+    // map.addControl(mousePosition);
+
+    // add icon marker
+    var createIconStyle = function(country) {
+        return new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [0.5, 46],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                opacity: 0.75,
+                src: "{% static 'virvo/images/' %}" + country + '.png'
+            })
+        })
+    };
+
+    var algeria = new ol.Feature({
+        geometry:new ol.geom.Point(ol.proj.transform([114.32416, 22.69306],"EPSG:4326","EPSG:3857")),
+        name:'algeria',
+        population: 4000,
+        rainfall: 500
+    });
+    var libya = new ol.Feature(new ol.geom.Point(ol.proj.transform([114.37316, 22.69107],"EPSG:4326","EPSG:3857")));
+    var niger = new ol.Feature(new ol.geom.Point(ol.proj.transform([114.39709, 22.67306],"EPSG:4326","EPSG:3857")));
+
+    algeria.setStyle(createIconStyle('u3019'));
+    libya.setStyle(createIconStyle('u3054'));
+    niger.setStyle(createIconStyle('u3044'));
+
+    var vectorLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: [algeria, libya, niger]
+        })
+    });
+
+    map.addLayer(vectorLayer);
+
+    var element = document.getElementById('js-overlay');
+    
+
+    // overlay
+    var overlay = new ol.Overlay({
+        element:document.getElementById('js-overlay'),
+        positioning: 'bottom-left',
+    });
+
+    
+
+overlay.setMap(map);
+map.on(['pointermove', 'singleclick'], function(evt) {
+  var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+    overlay.setPosition(evt.coordinate);
+    // overlay.getElement().innerHTML = feature.get('name');
+    return feature;
+  });
+  // console.log(feature);
+  overlay.getElement().style.display = 'block';
+  (feature) ? overlay.setPosition(feature.getGeometry().getCoordinates()) : overlay.setPosition(undefined);
+  // overlay.getElement().style.display = feature ? 'block' : 'none';
+  // document.body.style.cursor = feature ? 'pointer' : '';
+});
 
 
-    {% endblock %}
+    // display popup on click
+
+    // map.addOverlay(overlay);
+    //document.getElementById('js-overlay').style.display = 'block';
+
+    // var selectedFeature;
+
+    // var select = new ol.interaction.Select({
+    //     condition:ol.events.condition.pointerMove,
+    //     // condition:ol.events.condition.click,
+    //     layers:[vectorLayer]
+    // });
+    // map.addInteraction(select);
+    
+    // select.on('select',function(event) {
+    //     //if(event.length > 0){
+    //     selectedFeature = event.selected[0];
+    //     console.log(selectedFeature);
+    //     (selectedFeature) ? overlay.setPosition(selectedFeature.getGeometry().getCoordinates()) : overlay.setPosition(undefined);
+    //     //}
+    // });
+
+        
+</SCRIPT>
+{% endblock %}
 </body>
     <!-- <script>
             $(function(){

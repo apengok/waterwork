@@ -41,7 +41,7 @@
                 <div class="panel-body fixed-table-body"  id="stretch-body">
                   <!--工具面板-->
                   <div class="ToolPanel">
-                    <form id="baseinfoForm" role="form" action="#" method="post" class="form-horizontal">
+                    <form id="baseinfoForm" role="form" action="/dmam/district/dmabaseinfo/" method="post" class="form-horizontal">
                       <input value="{{ current_dma_no }}" id="current_dma_no" type="hidden"  />
                       <input value="{{ current_dma_name }}" id="current_dma_name" type="hidden"  />
 
@@ -64,16 +64,18 @@
                         <div class="form-group">
                           <label class="col-md-2 control-label">所属组织：</label>
                           <div class="col-md-2">
-                            <div class="input-group">
-                              <input name="brands" class="form-control" id="id_belongto" name="belongto" autocomplete="off" type="text">
+                            <input class="form-control" id="id_belongto" name="belongto" autocomplete="off" type="text">
+                            <!-- <div class="input-group">
+                              <input class="form-control" id="id_belongto" name="belongto" autocomplete="off" type="text">
                               <div class="input-group-btn">
                                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="">
                                   <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" role="menu" style="padding-top: 0px; max-height: 275px; overflow: auto; transition: all 0.3s ease 0s;">
+
                                 </ul>
                               </div>
-                            </div>
+                            </div> -->
                           </div>
                           <label class="col-md-2 control-label">管道总长度（m）：</label>
                           <div class="col-md-2">

@@ -224,7 +224,7 @@ def dmabaseinfo(request):
 
     if request.method == 'GET':
         print('dmabaseinfo get:',request.GET)
-        dma_id = request.GET.get("dma_no")
+        dma_id = request.GET.get("dma_id")
         dmabase = DMABaseinfo.objects.get(pk=int(dma_id))
 
         operarions_list = {
@@ -256,9 +256,83 @@ def dmabaseinfo(request):
 
     if request.method == 'POST':
         print('dmabaseinfo post:',request.POST)
+        dma_no = request.POST.get("dma_no")
+        dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
+        # form = DMABaseinfoForm(request.POST or None)
+        # if form.is_valid():
+        #     form.save()
+        #     flag = 1
+        # err_str = ""
+        # if form.errors:
+        #     flag = 0
+        #     for k,v in form.errors.items():
+        #         print(k,v)
+        #         err_str += v[0]
+    
+        data = {
+            "success": flag,
+            "errMsg":err_str
+            
+        }
+        
+        return HttpResponse(json.dumps(data)) #JsonResponse(data)
+
 
     return HttpResponse(json.dumps({"success":True}))
 
+
+class DMABaseinfoEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+    model = DMABaseinfo
+    form_class = DMABaseinfoForm
+    template_name = "dmam/baseinfo.html"
+    success_url = reverse_lazy("dmam:districtmanager");
+
+    # @method_decorator(permission_required("dma.change_stations"))
+    def dispatch(self, *args, **kwargs):
+        # self.role_id = kwargs["pk"]
+        return super(DMABaseinfoEditView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"dmam/permission_error.html",data)
+
+    def form_invalid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("dmabaseinfo edit form_invalid?:",self.request.POST)
+        # print(form)
+        # do something
+        
+                
+
+        return super(DMABaseinfoEditView,self).form_invalid(form)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("dmabaseinfo edit here?:",self.request.POST)
+        # print(form)
+        # do something
+        
+                
+
+        return super(DMABaseinfoEditView,self).form_valid(form)
+
+    # def get_object(self):
+    #     print(self.kwargs)
+    #     return Organizations.objects.get(cid=self.kwargs["pId"])
 
 class DistrictMangerView(LoginRequiredMixin,TemplateView):
     template_name = "dmam/districtlist.html"

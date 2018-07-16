@@ -499,18 +499,29 @@
             $('#simpleQueryParam').val("");
             if(treeNode.type == "dma"){
                 var pNode = treeNode.getParentNode();
-                $("#current_dma_no").attr("value",pNode.id);
+                $("#current_dma_no").attr("value",treeNode.id);
                 $("#current_dma_name").attr("value",treeNode.name);
-                var organ = pNode.id;
-                dma_no = pNode.id;
-                dma_name = treeNode.name;
-                var url="/dmam/district/dmabaseinfo/";
-                var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
-                json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
+                dmaManage.getBaseinfo();
+
+
+                // var organ = pNode.id;
+                // dma_no = pNode.id;
+                // dma_name = treeNode.name;
+                // var url="/dmam/district/dmabaseinfo/";
+                // var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
+                // json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
             }else{
                 myTable.requestData();
 
             }
+        },
+        getBaseinfo:function(){
+            
+            dma_id = $("#current_dma_no").val();
+            dma_name = $("#current_dma_name").val();
+            var url="/dmam/district/dmabaseinfo/";
+            var parameter={"dma_id":dma_id,"dma_name":dma_name};
+            json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
         },
         setBaseinfo:function(data){
             console.log(data);
@@ -539,6 +550,31 @@
 
                 }
             }
+        },
+        baseinfoCommit: function(){
+            var     baseinfo_action = "/dmam/district/dmabaseinfo/edit/{id}/";
+            dma_id = $("#current_dma_no").val();
+            
+            new_action = baseinfo_action.replace("{id}", dma_id);
+            
+            $("#baseinfoForm").attr("action",new_action);
+            console.log("new_form_action:",new_action);
+            console.log("ajaxSubmit_action:",$("#baseinfoForm").attr("action"));
+                    
+            if(dmaManage.validateSubmit()){
+                $("#baseinfoForm").ajaxSubmit(function(data) {
+                    if(data.success){
+                        layer.msg("保存成功");
+                    }
+                    else{
+                        layer.msg(data.obj.errMsg);
+                    }
+                    myTable.refresh()
+                });
+            }
+        },
+        validateSubmit:function(){
+            return true;
         },
         Alterdma:function(){
             $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").removeAttr("readonly");
@@ -957,7 +993,7 @@
         dmaManage.userTree();
         getTable('dataTables');
         dmaManage.init();
-        // dmaManage.findOperation();
+        dmaManage.getBaseinfo();
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             dmaManage.refreshTable();
@@ -987,6 +1023,8 @@
                 "checked",
                 subChk.length == subChk.filter(":checked").length ? true: false);
         });
+        //提交基本信息
+        $("#baseinfoCommit").bind("click",dmaManage.baseinfoCommit);
         // 批量删除
         $("#del_model").on("click",dmaManage.delModel);
         $("#addoperation").on("click",dmaManage.doSubmit);
