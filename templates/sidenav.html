@@ -141,7 +141,7 @@
                             </ul>
                         </li>
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'analysis:cxc' %}">
                                 <i class="fa fa-location-arrow"></i><span>DMA产销差分析</span> 
                                 <i></i> 
                             </a>
@@ -605,7 +605,7 @@
                         {% endif %}
                         {% if  'dmacxc_datanalys' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'analysis:cxc' %}">
                                 <i class="fa fa-location-arrow"></i><span>DMA产销差分析</span> 
                                 <i></i> 
                             </a>

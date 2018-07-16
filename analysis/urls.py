@@ -16,6 +16,8 @@ urlpatterns = [
     # 数据分析 -- 夜间最小流量
     url(r'^mnf/?$',views.MnfView.as_view(),name='mnf'),
     url(r'flowdata_mnf/?$',views.flowdata_mnf,name='flowdata_mnf'),
+
+    url(r'^cxc/?$',views.CXCView.as_view(),name='cxc'),
     
         
 ]

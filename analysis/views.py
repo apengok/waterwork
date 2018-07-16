@@ -43,6 +43,25 @@ class MnfView(LoginRequiredMixin,TemplateView):
 
         return context                  
 
+
+        
+class CXCView(LoginRequiredMixin,TemplateView):
+    template_name = "analysis/dmacxc.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CXCView, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据监控"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "DMA产销差综合统计"
+
+        bigmeter = Bigmeter.objects.first()
+        context["station"] = bigmeter.username
+        context["organ"] = "威尔沃"
+        
+
+        return context                  
+
+
 def flowdata_mnf(request):
 
     print("flowdata_mnf:",request.POST)
