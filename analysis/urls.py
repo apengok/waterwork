@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'flowdata_mnf/?$',views.flowdata_mnf,name='flowdata_mnf'),
 
     url(r'^cxc/?$',views.CXCView.as_view(),name='cxc'),
+    url(r'flowdata_cxc/?$',views.flowdata_cxc,name='flowdata_cxc'),
     
         
 ]

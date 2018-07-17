@@ -78,8 +78,12 @@ th, td {
                                     <div class="col-md-2">
                                       <input id="organ_name" class="form-control" value="{{ organ }}"  readonly="" type="text">
                                     </div>
-                                    <label class="col-md-1  control-label searchListSelect" style="margin-left: 0px;">统计截止时间：</label>
-                                    <div class="col-md-3">
+                                    <label class="col-md-2  control-label searchListSelect" style="margin-left: 0px;">统计截止时间：</label>
+                                    <div class="col-md-4">
+                                        <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
+                                               id="endtime" name="endtime" placeholder=""/>
+                                    </div>
+                                    <!-- <div class="col-md-3">
                                       <input id="station_name" class="form-control" value="{{ station }}" readonly="" type="text">
                                     </div>
                                     <label class="col-md-1 col-sm-3 control-label searchListSelect">时间：</label>
@@ -88,13 +92,13 @@ th, td {
                                             class="form-control layer-date laydate-icon"
                                             id="timeInterval" name="timeInterval" readonly />
                                         <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
-                                    </div>
+                                    </div> -->
                                     <div class="col-md-1 control-label pull-right" id="dateSearchData">
                                         
-                                        <!-- <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="analysisMnf.inquireClick(-2)">两月内  </button>
-                                        <button id="nearlyThreeDays" type="button"class="btn btn-primary" name="-3" onclick="analysisMnf.inquireClick(-3)">三月内  </button> -->
-                                        <!--<button id="nearlySevenDays" type="button"class="btn btn-primary" name="-7" onclick="analysisMnf.inquireClick(-7)">前七天 </button>-->
-                                        <button id="inquireClick" type="button" class="btn btn-primary search-btn" name="1" onclick="analysisMnf.inquireClick(1)"><i class="glyphicon glyphicon-search"></i>  查询</button>
+                                        <!-- <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="analysisCxc.inquireClick(-2)">两月内  </button>
+                                        <button id="nearlyThreeDays" type="button"class="btn btn-primary" name="-3" onclick="analysisCxc.inquireClick(-3)">三月内  </button> -->
+                                        <!--<button id="nearlySevenDays" type="button"class="btn btn-primary" name="-7" onclick="analysisCxc.inquireClick(-7)">前七天 </button>-->
+                                        <!-- <button id="inquireClick" type="button" class="btn btn-primary search-btn" name="1" onclick="analysisCxc.inquireClick(1)"><i class="glyphicon glyphicon-search"></i>  查询</button> -->
                                         
                                     </div>
                                 </div>
@@ -116,37 +120,37 @@ th, td {
                                     
                                 </tr>
                                 <tr>
-                                    <td>121.45</td>
-                                    <td rowspan="3">234.5</td>
+                                    <td id="influx"></td>
+                                    <td id="total" rowspan="3"></td>
                                     <td>售水量</td>
-                                    <td>84.56</td>
-                                    <td>/</td>
-                                    <td>/</td>
-                                    <td rowspan="3">20.14%</td>
+                                    <td id="sale"></td>
+                                    <td >/</td>
+                                    <td >/</td>
+                                    <td id="leak_percent" rowspan="3"></td>
 
                                 </tr>
                                 <tr>
                                     <td>出水总量</td>
                                     <td>未计量水量</td>
-                                    <td>12.14</td>
-                                    <td rowspan="2">36.89</td>
-                                    <td rowspan="2">36.89%</td>
+                                    <td id="uncharg"></td>
+                                    <td id="cxc" rowspan="2"></td>
+                                    <td id="cxc_percent" rowspan="2"></td>
 
                                 </tr>
                                 <tr>
-                                    <td>0.0000</td>
+                                    <td id="outflux"></td>
                                     <td>漏水量</td>
-                                    <td>24.46</td>
+                                    <td id="leak"></td>
                                 </tr>
                             </table>
                             <table border="1" style="margin-top: 10px;">
                                 <tr>
                                     <td >MNF</td>
-                                    <td ></td>
+                                    <td id="mnf"></td>
                                     <td>背景漏水量</td>
-                                    <td ></td>
+                                    <td id="bg_leak"></td>
                                     <td >破管漏水量</td>
-                                    <td ></td>
+                                    <td id="broken_pipe"></td>
 
                                     <td > 漏损率</td>
                                     
@@ -233,5 +237,5 @@ th, td {
 <script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
 <script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
 
-<script src="{% static 'virvo/wro/mnf.js' %}"></script>
+<script src="{% static 'virvo/wro/cxc.js' %}"></script>
 {% endblock %}

@@ -21,7 +21,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User,MyRoles
-from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay
+from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth
 from dmam.models import DMABaseinfo,DmaStations
 
 # from django.core.urlresolvers import reverse_lazy
@@ -41,24 +41,6 @@ class MnfView(LoginRequiredMixin,TemplateView):
         dma = DMABaseinfo.objects.first()
         context["station"] = dma.dma_name
         context["organ"] = dma.belongto
-        
-
-        return context                  
-
-
-        
-class CXCView(LoginRequiredMixin,TemplateView):
-    template_name = "analysis/dmacxc.html"
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(CXCView, self).get_context_data(*args, **kwargs)
-        context["page_menu"] = "数据监控"
-        # context["page_submenu"] = "组织和用户管理"
-        context["page_title"] = "DMA产销差综合统计"
-
-        bigmeter = Bigmeter.objects.first()
-        context["station"] = bigmeter.username
-        context["organ"] = "威尔沃"
         
 
         return context                  
@@ -201,6 +183,139 @@ def flowdata_mnf(request):
                 "back_leak":back_leak,
                 "alarm_set":alarm_set,
 
+
+            },
+            "success":1}
+
+    
+    
+    return HttpResponse(json.dumps(ret))
+        
+class CXCView(LoginRequiredMixin,TemplateView):
+    template_name = "analysis/dmacxc.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CXCView, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据监控"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "DMA产销差综合统计"
+
+        bigmeter = Bigmeter.objects.first()
+        context["station"] = bigmeter.username
+        context["organ"] = "威尔沃"
+        
+
+        return context                  
+
+
+def flowdata_cxc(request):
+
+    print("flowdata_cxc:",request.POST)
+
+    stationid = request.POST.get("station") # DMABaseinfo pk
+    endTime = request.POST.get("endTime")
+
+    today = datetime.date.today()
+    endTime = today.strftime("%Y-%m")
+    
+    lastyear = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
+    startTime = lastyear.strftime("%Y-%m")
+
+
+    # etime = datetime.datetime.strptime(endTime.strip(),"%Y-%m-%d")
+    # stime = etime - datetime.timedelta(days=10)
+    # startTime = stime.strftime("%Y-%m-%d")
+
+    if stationid != '':
+        # distict = District.objects.get(id=int(stationid))
+        # bigmeter = distict.bigmeter.first()
+        dma = DMABaseinfo.objects.get(pk=int(stationid))
+        print('DMA',dma,dma.dmastation)
+        dmastation = dma.dmastation.first()
+        comaddr = dmastation.station_id
+    else:
+        dma = DMABaseinfo.objects.first()
+        dmastation = dma.dmastation.first()
+        comaddr = dmastation.station_id
+    # print('bigmeter',bigmeter)
+
+    # qmonth = request.POST.get("qmonth")
+    
+    # if qmonth == '-2':
+    #     qdays = 60
+    # elif qmonth == '-3':
+    #     qdays = 90
+    # else:
+    #     qdays = 7
+
+    if comaddr == '':
+        comaddr = '4892354820'
+    
+    
+    data = []
+    # if comaddr:
+        # comaddr = bigmeter.commaddr
+    flowday = HdbFlowDataMonth.objects.filter(commaddr=comaddr).filter(hdate__range=[startTime,endTime])
+    
+    # flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
+
+    #pressure
+    # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
+
+    # flows = [f.flux for f in flowday]
+    # hdates = [f.readtime for f in flowday]
+
+    flows = [f.dosage for f in flowday]
+    hdates = [f.hdate for f in flowday]
+
+
+    flows_float = [float(f) for f in flows]
+    flows_leak = [random.uniform(float(f)/20,float(f)/10 ) for f in flows]
+    uncharged =[random.uniform(float(f)/20,float(f)/10 ) for f in flows]
+    
+
+    for i in range(len(flows)):
+        data.append({
+            "hdate":hdates[i],
+            "dosage":flows[i],
+            "assignmentName":dma.dma_name,
+            "color":"红色",
+            "ratio":"null",
+            "leak":flows_leak[i],
+            "uncharged":uncharged[i]
+            })
+            
+    #表具信息
+    influx = sum(flows_float)/1.8
+    total = sum(flows_float)
+    leak = sum(flows_leak)
+    uncharg = sum(uncharged)
+    sale = total - leak - uncharg
+    cxc = cxc_percent = sale / total
+    leak_percent = (leak * 100)/total
+    broken_pipe=0
+    mnf=1.2
+    back_leak=1.8
+
+    print('leak_percent:',leak_percent)
+
+
+
+    ret = {"exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":{
+                "online":data[::-1], #reverse
+                "influx":round(influx,2),
+                "total":round(total,2),
+                "leak":round(leak,2),
+                "uncharg":round(uncharg,2),
+                "sale":round(sale,2),
+                "cxc":round(cxc,2),
+                "cxc_percent":round(cxc_percent,2),
+                "broken_pipe":broken_pipe,
+                "back_leak":back_leak,
+                "mnf":mnf,
+                "leak_percent":round(leak_percent,2)
 
             },
             "success":1}

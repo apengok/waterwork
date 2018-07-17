@@ -62,7 +62,7 @@
     padding: 15px;
     border-radius: 10px;
     border: 1px solid #ccc;
-    width: 200px;
+    width: 300px;
     /*top: -76px;*/
     left: -90px;
     user-select: none;
@@ -177,15 +177,15 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                         <div id="js-map" class="map"></div>
                         <div id="js-overlay" class="overlay2" >
                               <div id="dma_name">分区名称:<span style="color: #0099CC;">经济开发区片区</span></div>
-                              <div>所属组织:<span >龙岗分公司</span></div>
-                              <div>分区层级:<span >二级</span></div>
+                              <div id="belongto">所属组织:<span >龙岗分公司</span></div>
+                              <div id="dma_level">分区层级:<span >二级</span></div>
                               <div style=";margin-left: -16px;"><img  src="{% static 'virvo/images/u3922.png' %}"></div>
-                              <div>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:<span class="map_span" style="color: #008000;">在线</span></div>
+                              <div id="dma_status">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:<span class="map_span" style="color: #008000;">在线</span></div>
                               <!-- <hr style="color: #ccc;background-color: #ccc;height: 1px;"> -->
-                              <div>分区流量:<span >2018 m3/h</span></div>
-                              <div>当月售水量:<span >12.54 m3/h</span></div>
-                              <div>上月售水量:<span >546521 m3</span></div>
-                              <div>上月增长比例:<span ">15.5%</span></div>
+                              <div id="dmaflow">分区流量:<span >2018 </span>m3/h</div>
+                              <div id="month_sale">当月售水量:<span >12.54 </span>m3</div>
+                              <div id="lastmonth_sale">上月售水量:<span >546521 </span>m3</div>
+                              <div id="bili">上月增长比例:<span ">15.5%</span></div>
                               
                         </div>
 

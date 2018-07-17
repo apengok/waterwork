@@ -132,12 +132,13 @@
             var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
                 overlay.setPosition(evt.coordinate);
                 // overlay.getElement().innerHTML = feature.get('name');
-                console.log(feature.get('text'));
-                name = feature.get('name');
+                // console.log(feature.get('text'));
+                
                 
                 return feature;
               });
               // console.log(feature);
+              name = feature.get('name');
               mapMonitor.rebuildoverlay(name);
               overlay.getElement().style.display = 'block';
               (feature) ? overlay.setPosition(feature.getGeometry().getCoordinates()) : overlay.setPosition(undefined);
@@ -177,6 +178,18 @@
         },
         updateoverlay:function(data){
             console.log('updateoverlay',data);
+            if(data.dma_statics != null){
+                statistic = data.dma_statics;
+                // $("#dma_name span").html(name);
+                // $("#dma_name span").html(name);
+                $("#belongto span").html(statistic.belongto);
+                $("#dma_level span").html(statistic.dma_level);
+                $("#dma_status span").html(statistic.dma_status);
+                $("#dmaflow span").html(statistic.dmaflow);
+                $("#month_sale span").html(statistic.month_sale);
+                $("#lastmonth_sale span").html(statistic.lastmonth_sale);
+                $("#bili span").html(statistic.bili);
+            }
         },
         userTree : function(){
             // 初始化文件树

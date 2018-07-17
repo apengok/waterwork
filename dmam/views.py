@@ -314,6 +314,9 @@ def getdmamapusedata(request):
 
     data = {
         "dma_statics":{
+            "belongto":dma.belongto.name,
+            "dma_level":"二级",
+            "dma_status":"在线",
             "dmaflow":dmaflow,
             "month_sale":month_sale,
             "lastmonth_sale":lastmonth_sale,
