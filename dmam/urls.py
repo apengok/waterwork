@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^district/delete/?$',views.DistrictDeleteView.as_view(),name='districtdelete'),
     url(r'^district/dmabaseinfo/?$',views.dmabaseinfo,name='dmabaseinfo'),
     url(r'^district/dmabaseinfo/edit/(?P<pk>\w+)/?$',views.DMABaseinfoEditView.as_view(),name='dmabaseinfoedit'),
+    url(r'^getdmamapusedata/?$',views.getdmamapusedata,name='getdmamapusedata'),
+
     
 
     #stations  

@@ -52,6 +52,35 @@
             content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-off.png)!important;background-size:22px 22px
         }
         .toolOperateClick .map-call.active::before{content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-on.png)!important;background-size:22px 22px}
+
+
+.overlay2 {
+    display: none;
+    position: absolute;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 200px;
+    /*top: -76px;*/
+    left: -90px;
+    user-select: none;
+}
+
+.overlay2:after {
+    /*top: 100%;*/
+    border: 10px solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border-top-color: rgba(255,255,255,0.9);
+}
+
+.overlay button + button {
+    float: right;
+}
     </style>
 
 </head>
@@ -97,7 +126,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             <section id="main-content">
                 <div class="row eightIsZero">
                     <div class="col-md-12 realtime-content">
-                        <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;border: 1px solid red;">
+                        <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
                             <div style="background-color: rgba(0, 153, 204, 1);" >
                                 <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(1251)
                                 </div>
@@ -142,27 +171,26 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                         </div>
 
                         {% block main_content %}
-                <div id="content-right" class="col-md-10 content-right" style="border: 1px solid blue;">
+                        <div id="myposition"></div>
+                <div id="content-right" class="col-md-10 content-right" ">
                     <div >
                         <div id="js-map" class="map"></div>
-                        <div id="js-overlay" class="overlay" >
-                              <div>站点名称:<span class="map_span" style="color: #0099CC;">东门小学</span></div>
-                              <div>所属组织:<span class="map_span">龙岗分公司</span></div>
-                              <div>关联表具:<span class="map_span">170524</span></div>
-                              <div>表具类型:<span class="map_span">电池水表</span></div>
-                              <div>表均口径:<span class="map_span">DN600</span></div>
+                        <div id="js-overlay" class="overlay2" >
+                              <div id="dma_name">分区名称:<span style="color: #0099CC;">经济开发区片区</span></div>
+                              <div>所属组织:<span >龙岗分公司</span></div>
+                              <div>分区层级:<span >二级</span></div>
+                              <div style=";margin-left: -16px;"><img  src="{% static 'virvo/images/u3922.png' %}"></div>
                               <div>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:<span class="map_span" style="color: #008000;">在线</span></div>
                               <!-- <hr style="color: #ccc;background-color: #ccc;height: 1px;"> -->
-                              <div style=";margin-left: -16px;"><img  src="{% static 'virvo/images/u3922.png' %}"></div>
-                              <div>采集时间:<span class="map_span">2018-04-11</span></div>
-                              <div>瞬时流量:<span class="map_span">12.54 m3/h</span></div>
-                              <div>累积流量:<span class="map_span">546521 m3</span></div>
-                              <div>管网压力:<span class="map_span">0.054MPa</span></div>
-                              <div>信号强度:<span class="map_span">25</span></div>
+                              <div>分区流量:<span >2018 m3/h</span></div>
+                              <div>当月售水量:<span >12.54 m3/h</span></div>
+                              <div>上月售水量:<span >546521 m3</span></div>
+                              <div>上月增长比例:<span ">15.5%</span></div>
+                              
                         </div>
 
                     </div>
-                    <div class="panel panel-default contPanelMargin">
+                    <!-- <div class="panel panel-default contPanelMargin">
                         <div class="panel-body fixed-table-body form-horizontal btnPaddingTop">
                             <div class="form-group  mapDataPadd">
                                 <div class="col-md-12 mapPaddCon">
@@ -170,14 +198,16 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                                 </div>
                             </div>
                         </div>
-                        <!-- 隐藏按钮 -->
+                        
                         <div id="goShow">
                             <i id="goHidden" class="fa fa-chevron-right"></i>
                         </div>
 
-                    </div>
+                    </div> -->
 
                 </div>
+
+
                     
                 {% endblock main_content %}
 
@@ -200,6 +230,9 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 
     <script src="{% static 'virvo/resources/js/distpicker.data.js' %}"></script>
     <script src="{% static 'virvo/wro/realtime-monitoring.js' %}"></script>
+
+    <script src="{% static 'virvo/wro/mapmonitor.js' %}"></script>
+
 <div id="commonWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content"></div>
@@ -262,203 +295,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 </div>
 {% block javascript %}
  
-    <SCRIPT LANGUAGE="JavaScript">
-
-    //load tree
-    // $(function(){
-    //     load_Tree('mapmonitor');
-    // });
-
-    // map
-    var appLayer = function (options) {
-    var layer = new ol.layer.Tile({
-       extent: ol.proj.transformExtent(options.mapExtent, options.fromProject, options.toProject),
-       source: new ol.source.XYZ({
-            urls: options.urls,
-            tilePixelRatio: options.tilePixelRatio,
-            minZoom: options.mapMinZoom,
-            maxZoom: options.mapMaxZoom
-            })
-       });
-       return layer;
-    }
-
-    var normal_background = new appLayer({
-        urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-                'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-                'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-                'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-                'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-                'http://t5.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-                'http://t6.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-                'http://t7.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}'],
-        mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
-        tilePixelRatio: 1,
-        fromProject: "EPSG:102100",
-        toProject: "EPSG:3857"
-    })
-
-    var normal_data = new appLayer({
-        urls: ['http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-                'http://t1.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-                'http://t2.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-                'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-                'http://t4.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-                'http://t5.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-                'http://t6.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}',
-                'http://t7.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}'],
-        mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
-        tilePixelRatio: 1,
-        fromProject: "EPSG:102100",
-        toProject: "EPSG:3857"
-    })
-
-    var latitude = 114.3524087439;//22.6942072709,114.3524087439
-    var longitude = 22.6942072709;
-
-    var center = [latitude,longitude];
-
-    var attribution = new ol.control.Attribution({
-        className : 'none'
-    });
-
-    var arrNormal = new ol.Collection();
-    arrNormal.push(normal_background);
-    arrNormal.push(normal_data);
-
-    var normal_group = new ol.layer.Group({
-        //mapType: ol.control.MapType.NORMAL_MAP,
-        layers : arrNormal
-    });
-console.log("afdsfasdfasdfasdfasd");
-    var extent = [0, 0, 1024, 968];
-    var projection = new ol.proj.Projection({
-        code: 'xkcd-image',
-        units: 'pixels',
-        extent: extent
-      });
-var centerr = ol.extent.getCenter(extent);
-console.log(centerr);
-    var map = new ol.Map({
-        layers: [
-          new ol.layer.Image({
-            source: new ol.source.ImageStatic({
-              attributions: '© <a href="http://xkcd.com/license.html">xkcd</a>',
-              url: 'https://imgs.xkcd.com/comics/online_communities.png',
-              projection: projection,
-              imageExtent: extent
-            })
-          })
-        ],
-        view: new ol.View({
-            projection: projection,
-            center: ol.extent.getCenter(extent),
-            // center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
-            maxZoom : 8,
-            zoom: 2
-        }),
-        // controls: ol.control.defaults({ attribution: false }).extend([attribution]),
-        target:"js-map"
-    });
-
-    // map.addLayer(normal_group);
-
-    // var mousePosition = new ol.control.MousePosition({
-    //     coordinateFormat: ol.coordinate.createStringXY(5),
-    //     projection: 'EPSG:4326',
-    //     target: document.getElementById('myposition'),
-    //     undefinedHTML: '&nbsp;'
-    //     });
-
-    // map.addControl(mousePosition);
-
-    // add icon marker
-    var createIconStyle = function(country) {
-        return new ol.style.Style({
-            image: new ol.style.Icon({
-                anchor: [0.5, 46],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                opacity: 0.75,
-                src: "{% static 'virvo/images/' %}" + country + '.png'
-            })
-        })
-    };
-
-
-
-    var algeria = new ol.Feature({
-        geometry:new ol.geom.Point(ol.extent.getCenter(extent)),
-        name:'algeria',
-        population: 4000,
-        rainfall: 500
-    });
-    var libya = new ol.Feature(new ol.geom.Point([512,384]));
-    var niger = new ol.Feature(new ol.geom.Point(ol.proj.transform([114.39709, 22.67306],"EPSG:4326","EPSG:3857")));
-
-    algeria.setStyle(createIconStyle('u3019'));
-    libya.setStyle(createIconStyle('u3054'));
-    niger.setStyle(createIconStyle('u3044'));
-
-    var vectorLayer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: [algeria, libya, niger]
-        })
-    });
-
-    map.addLayer(vectorLayer);
-
-    var element = document.getElementById('js-overlay');
-    
-
-    // overlay
-    var overlay = new ol.Overlay({
-        element:document.getElementById('js-overlay'),
-        positioning: 'bottom-left',
-    });
-
-    
-
-overlay.setMap(map);
-map.on(['pointermove', 'singleclick'], function(evt) {
-  var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-    overlay.setPosition(evt.coordinate);
-    // overlay.getElement().innerHTML = feature.get('name');
-    console.log(feature.get('name'));
-    return feature;
-  });
-  // console.log(feature);
-  overlay.getElement().style.display = 'block';
-  (feature) ? overlay.setPosition(feature.getGeometry().getCoordinates()) : overlay.setPosition(undefined);
-  // overlay.getElement().style.display = feature ? 'block' : 'none';
-  // document.body.style.cursor = feature ? 'pointer' : '';
-});
-
-
-    // display popup on click
-
-    // map.addOverlay(overlay);
-    //document.getElementById('js-overlay').style.display = 'block';
-
-    // var selectedFeature;
-
-    // var select = new ol.interaction.Select({
-    //     condition:ol.events.condition.pointerMove,
-    //     // condition:ol.events.condition.click,
-    //     layers:[vectorLayer]
-    // });
-    // map.addInteraction(select);
-    
-    // select.on('select',function(event) {
-    //     //if(event.length > 0){
-    //     selectedFeature = event.selected[0];
-    //     console.log(selectedFeature);
-    //     (selectedFeature) ? overlay.setPosition(selectedFeature.getGeometry().getCoordinates()) : overlay.setPosition(undefined);
-    //     //}
-    // });
-
-        
-</SCRIPT>
+ 
 {% endblock %}
 </body>
     <!-- <script>

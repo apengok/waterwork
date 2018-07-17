@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import WaterUserType,DMABaseinfo
+from . models import WaterUserType,DMABaseinfo,DmaStations
 # Register your models here.
 
 
@@ -7,6 +7,10 @@ from . models import WaterUserType,DMABaseinfo
 class WaterUserTypeAdmin(admin.ModelAdmin):
     list_display = ['usertype','explains']
 
+
+@admin.register(DmaStations)
+class DmaStationsAdmin(admin.ModelAdmin):
+    list_display = ['dmaid','station_id','meter_type']
 
 
 @admin.register(DMABaseinfo)

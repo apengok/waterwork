@@ -8,6 +8,47 @@
             </li>
             {% if user.is_admin %}
 
+                <li class="sub-menu">
+                    <a href="javascript:void(0);">
+                        <i class="fa fa fa-bar-chart-o"></i><span>DMA分区数据展示</span>
+                        <i class="arrow fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="second-menu-ul">
+                        
+                        <li class="second-menu">
+                            <a href="{% url 'monitor:mapmonitor' %}">
+                                <i class="fa fa-location-arrow"></i><span>DMA地图监控</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        
+                        <li class="second-menu">
+                            <a href="{% url 'analysis:cxc' %}">
+                                <i class="fa fa-location-arrow"></i><span>DMA产销差分析</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        
+                        <li class="second-menu">
+                            <a href="{% url 'analysis:mnf' %}">
+                                <i class="fa fa-location-arrow"></i><span>DMA夜间最小流量</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        
+                        
+                    </ul>
+                </li>
+
                 
                 <li class="sub-menu">
                     <a href="javascript:void(0);">
@@ -17,7 +58,7 @@
                     <ul class="second-menu-ul">
                         
                         <li class="second-menu">
-                            <a href="{% url 'monitor:mapmonitor' %}">
+                            <a href="#">
                                 <i class="fa fa-location-arrow"></i><span>地图监控</span> 
                                 <i></i> 
                             </a>
@@ -141,8 +182,8 @@
                             </ul>
                         </li>
                         <li class="second-menu">
-                            <a href="{% url 'analysis:cxc' %}">
-                                <i class="fa fa-location-arrow"></i><span>DMA产销差分析</span> 
+                            <a href="#">
+                                <i class="fa fa-location-arrow"></i><span>产销差分析</span> 
                                 <i></i> 
                             </a>
                             <ul>
@@ -186,7 +227,7 @@
                             </ul>
                         </li>
                         <li class="second-menu">
-                            <a href="{% url 'analysis:mnf' %}">
+                            <a href="#">
                                 <i class="fa fa-location-arrow"></i><span>夜间最小流量</span> 
                                 <i></i> 
                             </a>
@@ -439,6 +480,47 @@
 
             {% else %}
 
+                <li class="sub-menu">
+                    <a href="javascript:void(0);">
+                        <i class="fa fa fa-bar-chart-o"></i><span>DMA分区数据展示</span>
+                        <i class="arrow fa fa-angle-right pull-right"></i>
+                    </a>
+                    <ul class="second-menu-ul">
+                        
+                        <li class="second-menu">
+                            <a href="{% url 'monitor:mapmonitor' %}">
+                                <i class="fa fa-location-arrow"></i><span>地图监控</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        
+                        <li class="second-menu">
+                            <a href="{% url 'analysis:cxc' %}">
+                                <i class="fa fa-location-arrow"></i><span>产销差分析</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        
+                        <li class="second-menu">
+                            <a href="{% url 'analysis:mnf' %}">
+                                <i class="fa fa-location-arrow"></i><span>夜间最小流量</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        
+                        
+                    </ul>
+                </li>
+
 
                 {% if  'datamonitor' in user.permissiontree %}
                 <li class="sub-menu">
@@ -449,7 +531,7 @@
                     <ul class="second-menu-ul">
                         {% if  'mapmonitor_datamonitor' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="{% url 'monitor:mapmonitor' %}">
+                            <a href="#">
                                 <i class="fa fa-location-arrow"></i><span>地图监控</span> 
                                 <i></i> 
                             </a>
@@ -605,7 +687,7 @@
                         {% endif %}
                         {% if  'dmacxc_datanalys' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="{% url 'analysis:cxc' %}">
+                            <a href="#">
                                 <i class="fa fa-location-arrow"></i><span>DMA产销差分析</span> 
                                 <i></i> 
                             </a>
@@ -660,7 +742,7 @@
                         {% endif %}
                         {% if  'mnf_datanalys' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="{% url 'analysis:mnf' %}">
+                            <a href="#">
                                 <i class="fa fa-location-arrow"></i><span>夜间最小流量</span> 
                                 <i></i> 
                             </a>

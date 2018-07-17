@@ -120,7 +120,7 @@
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd = treeNode.uuid;
             $('#simpleQueryParam').val("");
-            if(treeNode.type == "district"){
+            if(treeNode.type == "dma"){
                 var pNode = treeNode.getParentNode();
                 $("#organ_name").attr("value",pNode.name);
                 $("#station_name").attr("value",treeNode.name);

@@ -62,10 +62,10 @@ class DMABaseinfo(models.Model):
         return reverse('dma:dma_manager', kwargs={'pk': self.pk})
 
     def __unicode__(self):
-        return self.dma_no
+        return self.dma_name
 
     def __str__(self):
-        return self.dma_no        
+        return self.dma_name        
 
 
 
@@ -78,3 +78,9 @@ class DmaStations(models.Model):
     class Meta:
         managed=True
         db_table = 'dmastations'  
+
+    def __unicode__(self):
+        return self.dmaid.dma_name
+
+    def __str__(self):
+        return self.dmaid.dma_name   

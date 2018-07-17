@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.template import TemplateDoesNotExist
 import json
 import random
-from datetime import datetime
+import datetime
 
 from mptt.utils import get_cached_trees
 from mptt.templatetags.mptt_tags import cache_tree_children
@@ -31,7 +31,7 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
-from legacy.models import Bigmeter,District,Community
+from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 from . models import WaterUserType,DMABaseinfo,DmaStations
 from legacy.forms import StationsForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm
@@ -76,17 +76,17 @@ def dmatree(request):
         })
 
     # district
-    districts = District.objects.all()
-    for d in districts:
-        organtree.append({
-            "name":d.name,
-            "id":d.id,
-            "districtid":d.id,
-            "pId":organs.cid,
-            "type":"district",
-            "icon":"/static/virvo/resources/img/u8836.png",
-            "uuid":''
-        })
+    # districts = District.objects.all()
+    # for d in districts:
+    #     organtree.append({
+    #         "name":d.name,
+    #         "id":d.id,
+    #         "districtid":d.id,
+    #         "pId":organs.cid,
+    #         "type":"district",
+    #         "icon":"/static/virvo/resources/img/u8836.png",
+    #         "uuid":''
+    #     })
         # bigmeters = Bigmeter.objects.filter(districtid=d.id)
         # for b in bigmeters:
         #     organtree.append({
@@ -281,6 +281,48 @@ def dmabaseinfo(request):
     return HttpResponse(json.dumps({"success":True}))
 
 
+def getdmamapusedata(request):
+    print('getdmamapusedata:',request.GET)
+    dma_name = request.GET.get("dma_name")
+    dma = DMABaseinfo.objects.get(dma_name=dma_name)
+    dmastation = dma.dmastation.first()
+    commaddr = dmastation.station_id
+
+    dmaflow = 0
+    month_sale = 0
+    lastmonth_sale = 0
+    bili = 0
+    today = datetime.date.today()
+    today_str = today.strftime("%Y-%m-%d")
+    today_flow = HdbFlowDataDay.objects.filter(hdate=today_str)
+    if today_flow.exists():
+        dmaflow = today_flow.first().dosage
+
+    month_str = today.strftime("%Y-%m")
+    month_flow = HdbFlowDataMonth.objects.filter(hdate=month_str)
+    if month_flow.exists():
+        month_sale = month_flow.first().dosage
+
+    lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=today.day)
+    lastmonth_str = lastmonth.strftime("%Y-%m")
+    lastmonth_flow = HdbFlowDataMonth.objects.filter(hdate=lastmonth_str)
+    if lastmonth_flow.exists():
+        lastmonth_sale = lastmonth_flow.first().dosage
+
+    if float(month_sale) > 0 and float(lastmonth_sale) > 0:
+        bili =  (float(month_sale) - float(lastmonth_sale) ) / float(lastmonth_sale)
+
+    data = {
+        "dma_statics":{
+            "dmaflow":dmaflow,
+            "month_sale":month_sale,
+            "lastmonth_sale":lastmonth_sale,
+            "bili":bili
+        }
+    }
+
+    return HttpResponse(json.dumps(data))
+
 class DMABaseinfoEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = DMABaseinfo
     form_class = DMABaseinfoForm
@@ -344,7 +386,7 @@ class DistrictMangerView(LoginRequiredMixin,TemplateView):
         context["page_title"] = "dma分区管理"
         user_organ = self.request.user.belongto
 
-        default_dma = user_organ.dma.all().first()
+        default_dma = DMABaseinfo.objects.first()   # user_organ.dma.all().first()
 
         context["current_dma_no"] = default_dma.pk
         context["current_dma_name"] = default_dma.dma_name

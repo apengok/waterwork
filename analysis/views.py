@@ -22,6 +22,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay
+from dmam.models import DMABaseinfo,DmaStations
 
 # from django.core.urlresolvers import reverse_lazy
 
@@ -37,8 +38,9 @@ class MnfView(LoginRequiredMixin,TemplateView):
         context["page_title"] = "最小夜间流量分析（MNF）"
 
         bigmeter = Bigmeter.objects.first()
-        context["station"] = bigmeter.username
-        context["organ"] = "威尔沃"
+        dma = DMABaseinfo.objects.first()
+        context["station"] = dma.dma_name
+        context["organ"] = dma.belongto
         
 
         return context                  
@@ -66,17 +68,22 @@ def flowdata_mnf(request):
 
     print("flowdata_mnf:",request.POST)
 
-    stationid = request.POST.get("station") # districtid
+    stationid = request.POST.get("station") # DMABaseinfo pk
     startTime = request.POST.get("startTime")
     endTime = request.POST.get("endTime")
 
     if stationid != '':
-        distict = District.objects.get(id=int(stationid))
-        print('District',distict,distict.bigmeter)
-        bigmeter = distict.bigmeter.first()
+        # distict = District.objects.get(id=int(stationid))
+        # bigmeter = distict.bigmeter.first()
+        dma = DMABaseinfo.objects.get(pk=int(stationid))
+        print('DMA',dma,dma.dmastation)
+        dmastation = dma.dmastation.first()
+        comaddr = dmastation.station_id
     else:
-        bigmeter = Bigmeter.objects.first()
-    print('bigmeter',bigmeter)
+        dma = DMABaseinfo.objects.first()
+        dmastation = dma.dmastation.first()
+        comaddr = dmastation.station_id
+    # print('bigmeter',bigmeter)
 
     # qmonth = request.POST.get("qmonth")
     
@@ -87,37 +94,38 @@ def flowdata_mnf(request):
     # else:
     #     qdays = 7
 
-    
+    if comaddr == '':
+        comaddr = '4892354820'
     
     
     data = []
-    if bigmeter:
-        comaddr = bigmeter.commaddr
-        flowday_stastic = HdbFlowDataDay.objects.filter(commaddr=comaddr)
-        flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
+    # if comaddr:
+        # comaddr = bigmeter.commaddr
+    flowday_stastic = HdbFlowDataDay.objects.filter(commaddr=comaddr)
+    flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
 
-        #pressure
-        # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
+    #pressure
+    # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
 
-        flows = [f.flux for f in flowday]
-        hdates = [f.readtime for f in flowday]
+    flows = [f.flux for f in flowday]
+    hdates = [f.readtime for f in flowday]
 
 
- 
-        flows_float = [float(f) for f in flows]
-        maxflow = max(flows_float)
-        average = sum(flows_float)/len(flows)
 
-        for i in range(len(flows)):
-            data.append({
-                "hdate":hdates[i],
-                "dosage":flows[i],
-                "assignmentName":bigmeter.username,
-                "color":"红色",
-                "ratio":"null",
-                "maxflow":maxflow,
-                "average":average
-                })
+    flows_float = [float(f) for f in flows]
+    maxflow = max(flows_float)
+    average = sum(flows_float)/len(flows)
+
+    for i in range(len(flows)):
+        data.append({
+            "hdate":hdates[i],
+            "dosage":flows[i],
+            "assignmentName":dma.dma_name,
+            "color":"红色",
+            "ratio":"null",
+            "maxflow":maxflow,
+            "average":average
+            })
             
     #表具信息
     #MNF
