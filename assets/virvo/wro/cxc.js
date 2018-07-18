@@ -1,5 +1,6 @@
 (function($,window){
     var selectTreeId = '';
+    var selectTreeType = '';
     var selectDistrictId = '';
     var zNodes = null;
     var log, className = "dark";
@@ -145,8 +146,10 @@
         //点击节点
         zTreeOnClick: function(event, treeId, treeNode){
             selectTreeId = treeNode.id;
+            selectTreeType = treeNode.type;
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd = treeNode.uuid;
+            station = treeNode.id;
             $('#simpleQueryParam').val("");
             $("#organ_name").attr("value",treeNode.name);
             if(treeNode.type == "dma"){
@@ -158,6 +161,7 @@
             }
 
             analysisCxc.inquireClick(1);
+            analysisCxc.inquireDmastations(1);
             // myTable.requestData();
         },
         // ajax参数
@@ -430,7 +434,7 @@
             var url = "/analysis/flowdata_cxc/";
             var endTime = $("#endtime").val()
 
-            var data = {"organ": organ,"station":station,"endTime": endTime};
+            var data = {"organ": organ,"treetype":selectTreeType,"station":station,"endTime": endTime};
             json_ajax("POST", url, "json", false, data, analysisCxc.findOnline);     //发送请求
         },
         validates: function () {
@@ -503,7 +507,7 @@
             var dma_id = 1;
             var url="analysisCxc/dmastations/";
             // var parameter={"dma_id":dma_id};
-            var data = {"organ": organ,"station":station,"endTime": endTime};
+            var data = {"organ": organ,'treetype':selectTreeType,"station":station,"endTime": endTime};
             json_ajax("POST",url,"json",true,data,analysisCxc.getCallback);
         },
         getCallback:function(date){
