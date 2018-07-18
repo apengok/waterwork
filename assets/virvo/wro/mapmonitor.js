@@ -212,7 +212,7 @@
                     // removeHoverDom : mapMonitor.removeHoverDom,
                     selectedMulti : false,
                     nameIsHTML: true,
-                    fontCss: setFontCss_ztree
+                    // fontCss: setFontCss_ztree
                 },
                 edit : {
                     enable : true,

@@ -28,7 +28,7 @@ from dmam.models import DMABaseinfo,DmaStations
 
 
         
-class MnfView(LoginRequiredMixin,TemplateView):
+class MnfView(TemplateView):
     template_name = "analysis/mnf.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -94,32 +94,23 @@ def flowdata_mnf(request):
 
 
 
-    flows_float = [float(f) for f in flows]
-    maxflow = max(flows_float)
-    average = sum(flows_float)/len(flows)
+    flows_float = [round(float(f),2) for f in flows]
+    flows_float = flows_float[::-1]
+    
 
-    for i in range(len(flows)):
-        data.append({
-            "hdate":hdates[i],
-            "dosage":flows[i],
-            "assignmentName":dma.dma_name,
-            "color":"红色",
-            "ratio":"null",
-            "maxflow":maxflow,
-            "average":average
-            })
-            
-    #表具信息
-    #MNF
-    mnf = 0
-    #MNF/ADD
-    mnf_add = 0
-    #背景漏损
-    back_leak = 0
     #参考MNF
-    ref_mnf = 0
+    ref_mnf = 4.46
+    #MNF
+    mnf = 8.63
+    #表具信息
+    
+    #MNF/ADD
+    mnf_add = 51
+    #背景漏损
+    back_leak = 4.46
+    
     #设定报警
-    alarm_set = 0
+    alarm_set = 12
 
     #staticstic data
     #当天用水量
@@ -138,6 +129,28 @@ def flowdata_mnf(request):
     minflow = 0
     #平均值
     average = 0
+
+    maxflow = max(flows_float)
+    minflow = min(flows_float)
+    average = sum(flows_float)/len(flows)
+    mnf = minflow
+    ref_mnf = mnf/2
+    back_leak = ref_mnf * 0.8
+
+    for i in range(len(flows_float)):
+        data.append({
+            "hdate":hdates[i],
+            "dosage":flows_float[i],
+            "assignmentName":dma.dma_name,
+            "color":"红色",
+            "ratio":"null",
+            "maxflow":maxflow,
+            "average":average,
+            "mnf":mnf,
+            "ref_mnf":ref_mnf
+            })
+            
+    
 
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
@@ -159,29 +172,27 @@ def flowdata_mnf(request):
         last_year_same = lastyear_flow.first().dosage
     tongbi = float(today_use) - float(last_year_same)
     huanbi = float(today_use) - float(yestoday_use)
-    maxflow = max(flows_float)
-    minflow = min(flows_float)
-    average = sum(flows_float)/len(flows)
+    
 
 
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                "online":data[::-1], #reverse
-                "today_use":today_use,
-                "yestoday_use":yestoday_use,
-                "last_year_same":last_year_same,
-                "tongbi":tongbi,
-                "huanbi":huanbi,
-                "maxflow":maxflow,
-                "minflow":minflow,
-                "average":average,
-                "mnf":mnf,
-                "mnf_add":mnf_add,
-                "ref_mnf":ref_mnf,
-                "back_leak":back_leak,
-                "alarm_set":alarm_set,
+                "online":data, #reverse
+                "today_use":round(float(today_use),2),
+                "yestoday_use":round(float(yestoday_use),2),
+                "last_year_same":round(float(last_year_same),2),
+                "tongbi":round(tongbi,2),
+                "huanbi":round(huanbi,2),
+                "maxflow":round(maxflow,2),
+                "minflow":round(minflow,2),
+                "average":round(average,2),
+                "mnf":round(mnf,2),
+                "mnf_add":round(mnf_add,2),
+                "ref_mnf":round(ref_mnf,2),
+                "back_leak":round(back_leak,2),
+                "alarm_set":round(alarm_set,2),
 
 
             },
@@ -190,8 +201,8 @@ def flowdata_mnf(request):
     
     
     return HttpResponse(json.dumps(ret))
-        
-class CXCView(LoginRequiredMixin,TemplateView):
+        # LoginRequiredMixin,
+class CXCView(TemplateView):
     template_name = "analysis/dmacxc.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -202,7 +213,9 @@ class CXCView(LoginRequiredMixin,TemplateView):
 
         bigmeter = Bigmeter.objects.first()
         context["station"] = bigmeter.username
-        context["organ"] = "威尔沃"
+        context["organ"] = "歙县自来水公司"
+
+        # dmastations = DmaStations.objects.all()
         
 
         return context                  
@@ -266,18 +279,19 @@ def flowdata_cxc(request):
     # hdates = [f.readtime for f in flowday]
 
     flows = [f.dosage for f in flowday]
-    hdates = [f.hdate for f in flowday]
-
+    hdates = [f.hdate[-2:] for f in flowday]
+    hdates = hdates[::-1]
 
     flows_float = [float(f) for f in flows]
+    flows_float = flows_float[::-1]
     flows_leak = [random.uniform(float(f)/20,float(f)/10 ) for f in flows]
     uncharged =[random.uniform(float(f)/20,float(f)/10 ) for f in flows]
     
 
-    for i in range(len(flows)):
+    for i in range(len(flows_float)):
         data.append({
             "hdate":hdates[i],
-            "dosage":flows[i],
+            "dosage":flows_float[i],
             "assignmentName":dma.dma_name,
             "color":"红色",
             "ratio":"null",
@@ -318,6 +332,55 @@ def flowdata_cxc(request):
                 "leak_percent":round(leak_percent,2)
 
             },
+            "success":1}
+
+    
+    
+    return HttpResponse(json.dumps(ret))
+
+
+
+def dmastations(request):
+    print('dmastations:',request,request.POST)
+    stationid = request.POST.get("station") # DMABaseinfo pk
+    startTime = request.POST.get("startTime")
+    endTime = request.POST.get("endTime")
+
+    if stationid != '':
+        # distict = District.objects.get(id=int(stationid))
+        # bigmeter = distict.bigmeter.first()
+        dma = DMABaseinfo.objects.get(pk=int(stationid))
+        print('DMA',dma,dma.dmastation)
+        dmastation = dma.dmastation.first()
+        comaddr = dmastation.station_id
+    else:
+        dma = DMABaseinfo.objects.first()
+        dmastation = dma.dmastation.first()
+        comaddr = dmastation.station_id
+
+    data = []
+    for i in range(1):
+        data.append({
+            "organ":'test',
+            # "influx":round(influx,2),
+            "total":12345,
+            "sale":9866,
+            "uncharg":123,
+            "leak":32,
+            "cxc":12,
+            "cxc_percent":11,
+            "huanbi":12,
+            "leak_percent":3,
+            "tongbi":32,
+            "mnf":4.5,
+            "back_leak":1.2,
+            "other_leak":0,
+            "statis_date":'2018-07-17',
+        })
+
+    ret = {"exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":data,
             "success":1}
 
     

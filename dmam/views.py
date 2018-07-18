@@ -51,7 +51,12 @@ def dmatree(request):
     organtree = []
 
     user = request.user
-    organs = user.belongto #Organizations.objects.all()
+    print('dmatree:',user)
+    # if user.is_anonymous:
+    if not user.is_authenticated:
+        organs = Organizations.objects.first()
+    else:
+        organs = user.belongto #Organizations.objects.all()
     
     for o in organs.get_descendants(include_self=True):
         organtree.append({

@@ -26,7 +26,7 @@ from accounts.models import User,MyRoles
 
 
         
-class MapMonitorView(LoginRequiredMixin,TemplateView):
+class MapMonitorView(TemplateView):
     template_name = "monitor/mapmonitor.html"
 
     def get_context_data(self, *args, **kwargs):

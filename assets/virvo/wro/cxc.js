@@ -14,7 +14,7 @@
     var startOperation;// 点击运营资质类别的修改按钮时，弹出界面时运营资质类别文本的内容
     var expliant;// 点击运营资质类别的修改按钮时，弹出界面时说明文本的内容
     var vagueSearchlast = $("#operationType").val();
-
+    var stationdataListArray = [];
     var dataListArray = [];
     var endTime;// 当天时间
     var sTime;
@@ -32,11 +32,23 @@
     var checkFlag = false; //判断组织节点是否是勾选操作
     var size;//当前权限监控对象数量
 
+    var myTable;
+
     analysisCxc = {
         init: function(){
             console.log("analysisCxc init");
             // analysisCxc.getsTheMaxTime();
             laydate.render({elem: '#endtime',max: analysisCxc.getsTheMaxTime(),theme: '#6dcff6'});
+        },
+        tableFilter: function(){
+            //显示隐藏列
+            var menu_text = "";
+            var table = $("#dataTable tr th:gt(1)");
+            menu_text += "<li><label><input type=\"checkbox\" checked=\"checked\" class=\"toggle-vis\" data-column=\"" + parseInt(2) +"\" disabled />"+ table[0].innerHTML +"</label></li>"
+            for(var i = 1; i < table.length; i++){
+                menu_text += "<li><label><input type=\"checkbox\" checked=\"checked\" class=\"toggle-vis\" data-column=\"" + parseInt(i+2) +"\" />"+ table[i].innerHTML +"</label></li>"
+            };
+            $("#Ul-menu-text").html(menu_text);
         },
         getsTheMaxTime: function () {
             
@@ -136,9 +148,10 @@
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd = treeNode.uuid;
             $('#simpleQueryParam').val("");
+            $("#organ_name").attr("value",treeNode.name);
             if(treeNode.type == "dma"){
                 var pNode = treeNode.getParentNode();
-                $("#organ_name").attr("value",pNode.name);
+                // $("#organ_name").attr("value",pNode.name);
                 $("#station_name").attr("value",treeNode.name);
                 organ = pNode.id;
                 station = treeNode.id;
@@ -486,6 +499,117 @@
             }
             key = true;
         },
+        inquireDmastations: function (number) {
+            var dma_id = 1;
+            var url="analysisCxc/dmastations/";
+            // var parameter={"dma_id":dma_id};
+            var data = {"organ": organ,"station":station,"endTime": endTime};
+            json_ajax("POST",url,"json",true,data,analysisCxc.getCallback);
+        },
+        getCallback:function(date){
+            if(date.success==true){
+                stationdataListArray = [];//用来储存显示数据
+                if(date.obj!=null&&date.obj.length!=0){
+                    var stasticinfo=date.obj;
+                    for(var i=0;i<stasticinfo.length;i++){
+                        var dateList=
+                            [
+                              i+1,
+                              stasticinfo[i].organ,
+                              stasticinfo[i].total,
+                              stasticinfo[i].sale,
+                              stasticinfo[i].uncharg,
+                              stasticinfo[i].leak,
+                              stasticinfo[i].cxc,
+                              stasticinfo[i].cxc_percent,
+                              stasticinfo[i].huanbi,
+                              stasticinfo[i].leak_percent,
+                              stasticinfo[i].tongbi,
+                              stasticinfo[i].mnf,
+                              stasticinfo[i].back_leak,
+                              stasticinfo[i].other_leak,
+                              stasticinfo[i].statis_date
+                            ];
+//                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
+//                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
+//                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
+                            stationdataListArray.push(dateList);
+//                      }
+                    }
+                    analysisCxc.reloadData(stationdataListArray);
+                    $("#simpleQueryParam").val("");
+                    $("#search_button").click();
+                }else{
+                    analysisCxc.reloadData(stationdataListArray);
+                    $("#simpleQueryParam").val("");
+                    $("#search_button").click();
+                }
+            }else{
+                layer.msg(data.msg,{move:false});
+            }
+        },
+        getTable: function(table){
+            $('.toggle-vis').prop('checked', true);
+            myTable = $(table).DataTable({
+              "destroy": true,
+              "dom": 'tiprl',// 自定义显示项
+              "lengthChange": true,// 是否允许用户自定义显示数量
+              "bPaginate": true, // 翻页功能
+              "bFilter": false, // 列筛序功能
+              "searching": true,// 本地搜索
+              "ordering": false, // 排序功能
+              "Info": true,// 页脚信息
+              "autoWidth": true,// 自动宽度
+              "stripeClasses" : [],
+              "lengthMenu" : [ 10, 20, 50, 100, 200 ],
+              "pagingType" : "full_numbers", // 分页样式
+              "dom" : "t" + "<'row'<'col-md-3 col-sm-12 col-xs-12'l><'col-md-4 col-sm-12 col-xs-12'i><'col-md-5 col-sm-12 col-xs-12'p>>",
+              "oLanguage": {// 国际语言转化
+                  "oAria": {
+                      "sSortAscending": " - click/return to sort ascending",
+                      "sSortDescending": " - click/return to sort descending"
+                  },
+                  "sLengthMenu": "显示 _MENU_ 记录",
+                  "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录。",
+                  "sZeroRecords": "我本将心向明月，奈何明月照沟渠，不行您再用其他方式查一下？",
+                  "sEmptyTable": "我本将心向明月，奈何明月照沟渠，不行您再用其他方式查一下？",
+                  "sLoadingRecords": "正在加载数据-请等待...",
+                  "sInfoEmpty": "当前显示0到0条，共0条记录",
+                  "sInfoFiltered": "（数据库中共为 _MAX_ 条记录）",
+                  "sProcessing": "<img src='../resources/user_share/row_details/select2-spinner.gif'/> 正在加载数据...",
+                  "sSearch": "模糊查询：",
+                  "sUrl": "",
+                  "oPaginate": {
+                      "sFirst": "首页",
+                      "sPrevious": " 上一页 ",
+                      "sNext": " 下一页 ",
+                      "sLast": " 尾页 "
+                  }
+              },
+              "order": [
+                  [0, null]
+              ],// 第一列排序图标改为默认
+
+              });
+              myTable.on('order.dt search.dt', function () {
+                  myTable.column(0, {
+                      search: 'applied',
+                      order: 'applied'
+                  }).nodes().each(function (cell, i) {
+                      cell.innerHTML = i + 1;
+                  });
+              }).draw();
+              //显示隐藏列
+              $('.toggle-vis').off('change').on('change', function (e) {
+                  var column = myTable.column($(this).attr('data-column'));
+                  column.visible(!column.visible());
+                  $(".keep-open").addClass("open");
+              });
+              $("#search_button").on("click",function(){
+                  var tsval = $("#simpleQueryParam").val()
+                  myTable.search(tsval, false, false).draw();
+              });
+        },
         reloadData: function (dataList) {
             var currentPage = myTable.page()
             myTable.clear()
@@ -773,9 +897,9 @@
         
         analysisCxc.init();
         
-        
+        analysisCxc.getTable('#dataTable');
         analysisCxc.inquireClick(1);
-        // analysisCxc.findOperation();
+        analysisCxc.inquireDmastations(1);
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             analysisCxc.refreshTable();

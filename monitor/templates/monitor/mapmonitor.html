@@ -86,7 +86,7 @@
 </head>
 <body>
     <section id="container">
-    {% include '_vheader.html' %}
+    
  <script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
             <script src="{% static 'virvo/resources/js/jquery.cookie.js' %}"></script>
             <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
@@ -117,7 +117,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 {% endcomment %}
       <section class="main-content-wrapper main-content-toggle-left">
             <!--sidebar start-->
-            {% include 'sidenav.html' %}
+            
 <!--sidebar end-->
 <!--权限控制 -->
 <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
@@ -171,45 +171,45 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                         </div>
 
                         {% block main_content %}
-                        <div id="myposition"></div>
-                <div id="content-right" class="col-md-10 content-right" ">
-                    <div >
-                        <div id="js-map" class="map"></div>
-                        <div id="js-overlay" class="overlay2" >
-                              <div id="dma_name">分区名称:<span style="color: #0099CC;">经济开发区片区</span></div>
-                              <div id="belongto">所属组织:<span >龙岗分公司</span></div>
-                              <div id="dma_level">分区层级:<span >二级</span></div>
-                              <div style=";margin-left: -16px;"><img  src="{% static 'virvo/images/u3922.png' %}"></div>
-                              <div id="dma_status">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:<span class="map_span" style="color: #008000;">在线</span></div>
-                              <!-- <hr style="color: #ccc;background-color: #ccc;height: 1px;"> -->
-                              <div id="dmaflow">分区流量:<span >2018 </span>m3/h</div>
-                              <div id="month_sale">当月售水量:<span >12.54 </span>m3</div>
-                              <div id="lastmonth_sale">上月售水量:<span >546521 </span>m3</div>
-                              <div id="bili">上月增长比例:<span ">15.5%</span></div>
-                              
-                        </div>
-
-                    </div>
-                    <!-- <div class="panel panel-default contPanelMargin">
-                        <div class="panel-body fixed-table-body form-horizontal btnPaddingTop">
-                            <div class="form-group  mapDataPadd">
-                                <div class="col-md-12 mapPaddCon">
-
-                                </div>
-                            </div>
-                        </div>
                         
-                        <div id="goShow">
-                            <i id="goHidden" class="fa fa-chevron-right"></i>
+                        <div id="content-right" class="col-md-10 content-right" ">
+                            <div >
+                                <div id="js-map" class="map"></div>
+                                <div id="js-overlay" class="overlay2" >
+                                      <div id="dma_name">分区名称:<span style="color: #0099CC;">经济开发区片区</span></div>
+                                      <div id="belongto">所属组织:<span >龙岗分公司</span></div>
+                                      <div id="dma_level">分区层级:<span >二级</span></div>
+                                      <div style=";margin-left: -16px;"><img  src="{% static 'virvo/images/u3922.png' %}"></div>
+                                      <div id="dma_status">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:<span class="map_span" style="color: #008000;">在线</span></div>
+                                      <!-- <hr style="color: #ccc;background-color: #ccc;height: 1px;"> -->
+                                      <div id="dmaflow">分区流量:<span >2018 </span>m3/h</div>
+                                      <div id="month_sale">当月售水量:<span >12.54 </span>m3</div>
+                                      <div id="lastmonth_sale">上月售水量:<span >546521 </span>m3</div>
+                                      <div id="bili">上月增长比例:<span ">15.5%</span></div>
+                                      
+                                </div>
+
+                            </div>
+                            <!-- <div class="panel panel-default contPanelMargin">
+                                <div class="panel-body fixed-table-body form-horizontal btnPaddingTop">
+                                    <div class="form-group  mapDataPadd">
+                                        <div class="col-md-12 mapPaddCon">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="goShow">
+                                    <i id="goHidden" class="fa fa-chevron-right"></i>
+                                </div>
+
+                            </div> -->
+
                         </div>
 
-                    </div> -->
 
-                </div>
-
-
-                    
-                {% endblock main_content %}
+                            
+                        {% endblock main_content %}
 
                     </div>
                 </div>
@@ -217,7 +217,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             </section>
         </section>
     </section>
-    {% include 'footer.html' %}
+    
 <script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/waypoints.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/jquery.nanoscroller.min.js' %}"></script>
@@ -229,7 +229,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
     <script src="{% static 'virvo/wro/common-footer.js' %}"></script>
 
     <script src="{% static 'virvo/resources/js/distpicker.data.js' %}"></script>
-    <script src="{% static 'virvo/wro/realtime-monitoring.js' %}"></script>
+    
 
     <script src="{% static 'virvo/wro/mapmonitor.js' %}"></script>
 

@@ -1,4 +1,4 @@
-{% extends '_vbase.html' %}
+{% extends '_vbase_tmp.html' %}
 
 
 {% load staticfiles %}
@@ -175,19 +175,19 @@ th, td {
                         </div>
                     </div>
                     <div class="panel-body mileage-Content"  id="stretch2-body">
-                      <div class="col-md-12">
+                      <div style="overflow:auto">
                         <table id="dataTable"
-                            class="table table-striped table-bordered table-hover "
+                            class="table table-striped table-bordered table-hover noCheckTable"
                             cellspacing="0" width="100%">
                             <thead>
                               <tr>
-                                <th>分区编号</th>
-                                <th>组织分区名称</th>
+                                <th>分区<br/>编号</th>
+                                <th>组织<br/>分区名称</th>
                                 <th>供水量<br/>(万m3)</th>
                                 <th>售水量<br/>(万m3)</th>
-                                <th>未计量水量<br/>(万m3)</th>
+                                <th>未计量<br/>(万m3)</th>
                                 <th>漏水量<br/>(万m3)</th>
-                                <th>产销差水量<br/>(万m3)</th>
+                                <th>产销差<br/>(万m3)</th>
                                 <th>产销差率<br/>(%)</th>
                                 <th>环比</th>
                                 <th>漏损率<br/>(%)</th>

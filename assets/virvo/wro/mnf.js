@@ -31,7 +31,7 @@
     var number;
     var checkFlag = false; //判断组织节点是否是勾选操作
     var size;//当前权限监控对象数量
-
+    var online_length;
     analysisMnf = {
         init: function(){
             console.log("analysisMnf init");
@@ -529,6 +529,8 @@
                 // activeDays = [];
                 hdates = [];
                 dosages = [];
+                mnfs = [];
+                ref_mnfs = [];
                 maxflows = [];
                 averages = [];
                 for (var i = 0; i < online.length; i++) {
@@ -542,6 +544,8 @@
                             // online[i].professionalNames == "" ? "无" : online[i].professionalNames,
                             online[i].maxflow,
                             online[i].average,
+                            online[i].mnf,
+                            online[i].ref_mnf,
                             
                         ]
 
@@ -552,6 +556,8 @@
                     dosages.push(dataListArray[j][3]);
                     maxflows.push(dataListArray[j][6]);
                     averages.push(dataListArray[j][7]);
+                    mnfs.push(dataListArray[j][8]);
+                    ref_mnfs.push(dataListArray[j][9]);
                 }
                 
 
@@ -570,11 +576,16 @@
                 averages = [];
                 maxflows.push("");
                 averages.push("");
+                mnfs = [];
+                ref_mnfs = [];
+                mnfs.push("");
+                ref_mnfs.push("");
             }
             var start;
             var end;
             var length;
-            length = online.length;
+            online_length = online.length;
+            
             if (length < 4) {
                 barWidth = "30%";
             } else if (length < 6) {
@@ -588,7 +599,8 @@
                 end = 100;
             } else {
                 start = 0;
-                end = 100 * (200 / length);
+                // end = 100 * (200 / length);
+                end = 100;
             }
             ;
             // wjk
@@ -615,7 +627,7 @@
                     }
                 },
                 legend: {
-                    data: ['MNF','最大流量','平均流量'],
+                    data: ['MNF','最大流量','平均流量','背景漏损'],
                     left: 'auto',
                 },
                 toolbox: {
@@ -631,8 +643,15 @@
                     name: "",
                     axisLabel: {
                         show: true,
-                        interval: 24,
-                        rotate: 45
+                        interval: function(index,name){
+                            
+                            if(index==0 || index == online_length-1 || index == online_length/2 ){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        },
+                        rotate: 0
                     },
                     splitLine: {
                         show: true,
@@ -658,24 +677,45 @@
                         }
                     },
                 ],
-                dataZoom: [{
-                    type: 'inside',
-                    start: start,
-                    end: end
-                }, {
-
-                    show: true,
+                dataZoom : [{
+                    show : true,
+                    realtime : true,
+                    //orient: 'vertical',   // 'horizontal'
+                    //x: 0,
+                    y: 550,
+                    //width: 400,
                     height: 20,
+                    //backgroundColor: 'rgba(221,160,221,0.5)',
+                    //dataBackgroundColor: 'rgba(138,43,226,0.5)',
+                    //fillerColor: 'rgba(38,143,26,0.6)',
+                    //handleColor: 'rgba(128,43,16,0.8)',
+                    //xAxisIndex:[],
+                    //yAxisIndex:[],
+                    type: 'inside',
+                    start : start,
+                    end : end
+                },
+                {
+                    show : true,
+                    realtime : true,
+                    //orient: 'vertical',   // 'horizontal'
+                    //x: 0,
+                    y: 550,
+                    //width: 400,
+                    height: 20,
+                    //backgroundColor: 'rgba(221,160,221,0.5)',
+                    //dataBackgroundColor: 'rgba(138,43,226,0.5)',
+                    //fillerColor: 'rgba(38,143,26,0.6)',
+                    //handleColor: 'rgba(128,43,16,0.8)',
+                    //xAxisIndex:[],
+                    //yAxisIndex:[],
                     type: 'slider',
-                    top: 'top',
-                    xAxisIndex: [0],
-                    start: 0,
-                    end: 10,
-                    showDetail: false,
+                    start : 0,
+                    end : 100
                 }],
                 series: [
                     {
-                        name: 'MNF',
+                        name: '流量',
                         yAxisIndex: 0,
                         type: 'line',
                         smooth: true,
@@ -728,13 +768,42 @@
                             }
                         },
                         data: averages
+                    },
+                    {
+                        name: 'MNF',
+                        yAxisIndex: 0,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#65F015'
+                            }
+                        },
+                        data: mnfs
+                    },
+                    {
+                        name: '背景漏损',
+                        yAxisIndex: 0,
+                        xAxisIndex: 0,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#152BF0'
+                            }
+                        },
+                        data: ref_mnfs
                     }
                 ]
             };
             myChart.setOption(option);
             console.log('max:',maxflows[0]);
-            $("#maxflow span").html( maxflows[0]);
-            $("#averflow span").html( averages[0]);
+            $("#maxflow span").html( maxflow);
+            $("#averflow span").html( average);
             $("#today_use span").html( today_use);
             $("#yestoday_use span").html( yestoday_use);
             $("#last_year_same span").html( last_year_same);
