@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     # 'channels',
 ]
 
+X_FRAME_OPTIONS = 'ALLOW-FROM http://220.179.118.150:8082/'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
