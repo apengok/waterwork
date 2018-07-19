@@ -134,17 +134,25 @@
                 overlay.setPosition(evt.coordinate);
                 // overlay.getElement().innerHTML = feature.get('name');
                 // console.log(feature.get('text'));
-                
+                name = feature.get('name');
                 
                 return feature;
               });
               // console.log(feature);
-              name = feature.get('name');
+              
               mapMonitor.rebuildoverlay(name);
               overlay.getElement().style.display = 'block';
-              (feature) ? overlay.setPosition(feature.getGeometry().getCoordinates()) : overlay.setPosition(undefined);
+              (feature) ? overlay.setPosition(mapMonitor.recalcposition(feature.getGeometry().getCoordinates())) : overlay.setPosition(undefined);
+
               // overlay.getElement().style.display = feature ? 'block' : 'none';
               // document.body.style.cursor = feature ? 'pointer' : '';
+        },
+        recalcposition:function(cord){
+            console.log(cord);
+            if(cord[1] < -1000){
+                return [cord[0],cord[1]+800];
+            }
+            return cord;
         },
         createIconStyle:function(country,description) {
             return new ol.style.Style({
@@ -172,10 +180,27 @@
         rebuildoverlay:function(name){
             console.log('name:',name);
             $("#dma_name span").html(name);
+
+            var tmpste = eval(statsinfo);
             
-            var data={"dma_name":name,'csrfmiddlewaretoken': '{{ csrf_token }}'};
-            var url="/dmam/getdmamapusedata/";
-            json_ajax("GET", url, "json", true,data,mapMonitor.updateoverlay);
+            if(tmpste != null){
+                statistic = tmpste.statsinfo;
+                for (var i = 0; i < statistic.length; i++){
+                    if(name==statistic[i].dma_name){
+                        $("#belongto span").html(statistic[i].belongto);
+                        $("#dma_level span").html(statistic[i].dma_level);
+                        $("#dma_status span").html(statistic[i].dma_status);
+                        $("#dmaflow span").html(statistic[i].dmaflow);
+                        $("#month_sale span").html(statistic[i].month_sale);
+                        $("#lastmonth_sale span").html(statistic[i].lastmonth_sale);
+                        $("#bili span").html(statistic[i].bili);
+                    }
+                }
+            }
+            
+            // var data={"dma_name":name,'csrfmiddlewaretoken': '{{ csrf_token }}'};
+            // var url="/dmam/getdmamapusedata/";
+            // json_ajax("GET", url, "json", true,data,mapMonitor.updateoverlay);
         },
         updateoverlay:function(data){
             console.log('updateoverlay',data);

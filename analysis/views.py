@@ -21,7 +21,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User,MyRoles
-from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth
+from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 from dmam.models import DMABaseinfo,DmaStations
 from entm.models import Organizations
 
@@ -105,7 +105,9 @@ def flowdata_mnf(request):
     flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
 
     #pressure
-    # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
+    pressures = HdbPressureData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
+    press = [round(float(f.pressure),2) for f in pressures]
+    # print('pressures:',pressures)
 
     flows = [f.flux for f in flowday]
     hdates = [f.readtime for f in flowday]
@@ -181,7 +183,8 @@ def flowdata_mnf(request):
             "maxflow":maxflow,
             "average":average,
             "mnf":mnf,
-            "ref_mnf":ref_mnf
+            "ref_mnf":ref_mnf,
+            "press":press[i] if len(press)>0 else 0
             })
             
     

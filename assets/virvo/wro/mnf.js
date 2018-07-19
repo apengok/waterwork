@@ -529,13 +529,15 @@
                 // activeDays = [];
                 hdates = [];
                 dosages = [];
+                press = [];
                 mnfs = [];
                 ref_mnfs = [];
                 maxflows = [];
                 averages = [];
                 for (var i = 0; i < online.length; i++) {
                     list =
-                        [i + 1, online[i].hdate,
+                        [i + 1, 
+                            online[i].hdate,
                             online[i].color,
                             online[i].dosage,
                             // online[i].allDays == null ? "0" : online[i].allDays,
@@ -546,7 +548,7 @@
                             online[i].average,
                             online[i].mnf,
                             online[i].ref_mnf,
-                            
+                            online[i].press,
                         ]
 
                     dataListArray.push(list);                                       //组装完成，传入  表格
@@ -558,6 +560,7 @@
                     averages.push(dataListArray[j][7]);
                     mnfs.push(dataListArray[j][8]);
                     ref_mnfs.push(dataListArray[j][9]);
+                    press.push(dataListArray[j][10])
                 }
                 
 
@@ -580,6 +583,8 @@
                 ref_mnfs = [];
                 mnfs.push("");
                 ref_mnfs.push("");
+                press=[];
+                press.push("");
             }
             var start;
             var end;
@@ -612,22 +617,25 @@
                         fontSize: 20
                     },
                     formatter: function (a) {
+                        // console.log(a);
                         var relVal = "";
                         //var relValTime = a[0].name;
                         var relValTime  =hdates[a[0].dataIndex];
                         if (a[0].data == 0) {
                             relVal = "无相关数据";
                             relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
+                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[5].color + "'></span>" + a[5].seriesName + "：" + a[5].value + " m³/h";
                         } else {
                             relVal = relValTime;
                             relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
+                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[5].color + "'></span>" + a[5].seriesName + "：" + a[5].value + " m³/h";
                         }
                         ;
                         return relVal;
                     }
                 },
                 legend: {
-                    data: ['MNF','最大流量','平均流量','背景漏损'],
+                    data: ['MNF','最大流量','平均流量','背景漏损',"压力曲线"],
                     left: 'auto',
                 },
                 toolbox: {
@@ -802,6 +810,21 @@
                             }
                         },
                         data: ref_mnfs
+                    },
+                    {
+                        name: '压力曲线',
+                        yAxisIndex: 0,
+                        xAxisIndex: 0,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#cc1cae'
+                            }
+                        },
+                        data: press
                     }
                 ]
             };

@@ -62,7 +62,7 @@
     padding: 15px;
     border-radius: 10px;
     border: 1px solid #ccc;
-    width: 300px;
+    width: 400px;
     /*top: -76px;*/
     left: -90px;
     user-select: none;
@@ -128,20 +128,20 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                     <div class="col-md-12 realtime-content">
                         <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
                             <div style="background-color: rgba(0, 153, 204, 1);" >
-                                <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(1251)
+                                <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(6)
                                 </div>
                             </div>
-                            <div>
+                            <div style="background:#fff;">
                                 <div class="form-group">
-                                  <label class="col-md-6 control-label">在线(12)</label>
-                                  <label class="col-md-6 control-label">离线(12)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #1627e0;">在线(6)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: grey;">离线(0)</label>
                                 </div>
                                 <div class="form-group">
-                                  <label class="col-md-6 control-label">报警站点(12)</label>
-                                  <label class="col-md-6 control-label">关注站点(12)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #f20804;">报警站点(0)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #02470e;">关注站点(0)</label>
                                 </div>
                                 <div class="form-group">
-                                  <label class="col-md-6 control-label">大用户站点(12)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;margin-bottom:20px;color: #8c4380;">大用户站点(0)</label>
                                   
                                 </div>
                             </div>
@@ -176,16 +176,40 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                             <div >
                                 <div id="js-map" class="map"></div>
                                 <div id="js-overlay" class="overlay2" >
-                                      <div id="dma_name">分区名称:<span style="color: #0099CC;">经济开发区片区</span></div>
-                                      <div id="belongto">所属组织:<span >龙岗分公司</span></div>
-                                      <div id="dma_level">分区层级:<span >二级</span></div>
-                                      <div style=";margin-left: -16px;"><img  src="{% static 'virvo/images/u3922.png' %}"></div>
-                                      <div id="dma_status">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:<span class="map_span" style="color: #008000;">在线</span></div>
-                                      <!-- <hr style="color: #ccc;background-color: #ccc;height: 1px;"> -->
-                                      <div id="dmaflow">分区流量:<span >2018 </span>m3/h</div>
-                                      <div id="month_sale">当月售水量:<span >12.54 </span>m3</div>
-                                      <div id="lastmonth_sale">上月售水量:<span >546521 </span>m3</div>
-                                      <div id="bili">上月增长比例:<span ">15.5%</span></div>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区名称:</label>
+                                          <label class="col-md-7 control-label" id="dma_name"><span style="color: #0099CC;"></span></label>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">所属组织:</label>
+                                          <label class="col-md-7 control-label" id="belongto"><span "></span></label>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区层级:</label>
+                                          <label class="col-md-7 control-label" id="dma_level"><span "></span></label>
+                                        </div>
+                                        <br>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">状态:</label>
+                                          <label class="col-md-7 control-label" id="dma_status"><span style="color: #2ce80b;"></span></label>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区流量:</label>
+                                          <label class="col-md-7 control-label" id="dmaflow"><span ></span></label>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">当月售水量:</label>
+                                          <label class="col-md-7 control-label" id="month_sale"><span ></span></label>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">上月售水量:</label>
+                                          <label class="col-md-7 control-label" id="lastmonth_sale"><span ></span></label>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-5 control-label" style="margin-left: 0,margin-right: 0;text-align: right;">上月增长比例:</label>
+                                          <label class="col-md-7 control-label" id="bili"><span ></span></label>
+                                        </div>
+                                      
                                       
                                 </div>
 
@@ -231,7 +255,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
     <script src="{% static 'virvo/resources/js/distpicker.data.js' %}"></script>
     
 
-    <script src="{% static 'virvo/wro/mapmonitor.js' %}"></script>
+    
 
 <div id="commonWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg">
@@ -294,9 +318,15 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
     </script>
 </div>
 {% block javascript %}
- 
+ <script type="text/javascript">
+     
+    var  statsinfo = {{ dmastasticinfo|safe }};
+    
+ </script>
  
 {% endblock %}
+<script src="{% static 'virvo/wro/mapmonitor.js' %}"></script>
+
 </body>
     <!-- <script>
             $(function(){
