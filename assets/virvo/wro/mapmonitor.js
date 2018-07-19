@@ -15,6 +15,7 @@
     var expliant;// 点击运营资质类别的修改按钮时，弹出界面时说明文本的内容
     var vagueSearchlast = $("#userType").val();
     var overlay;
+    var getdmamapusedata_flag = 0;
     mapMonitor = {
         init: function(){
             // map

@@ -15,6 +15,7 @@ urlpatterns = [
 
     # 数据监控 --地图监控
     url(r'^mapmonitor/?$',views.MapMonitorView.as_view(),name='mapmonitor'),
+    url(r'^mapmonitor2/?$',views.MapMonitorView2.as_view(),name='mapmonitor2'),
     
     
         

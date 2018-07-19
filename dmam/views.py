@@ -322,10 +322,10 @@ def getdmamapusedata(request):
             "belongto":dma.belongto.name,
             "dma_level":"二级",
             "dma_status":"在线",
-            "dmaflow":dmaflow,
-            "month_sale":month_sale,
-            "lastmonth_sale":lastmonth_sale,
-            "bili":bili
+            "dmaflow":round(float(dmaflow),2),
+            "month_sale":round(float(month_sale),2),
+            "lastmonth_sale":round(float(lastmonth_sale),2),
+            "bili":round(bili,2)
         }
     }
 

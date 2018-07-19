@@ -44,6 +44,23 @@ class MnfView(TemplateView):
         context["organ"] = dma.belongto
         
 
+        return context      
+
+class MnfView2(TemplateView):
+    template_name = "analysis/mnf2.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(MnfView2, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据监控"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "最小夜间流量分析（MNF）"
+
+        bigmeter = Bigmeter.objects.first()
+        dma = DMABaseinfo.objects.first()
+        context["station"] = dma.dma_name
+        context["organ"] = dma.belongto
+        
+
         return context                  
 
 
@@ -93,6 +110,22 @@ def flowdata_mnf(request):
     flows = [f.flux for f in flowday]
     hdates = [f.readtime for f in flowday]
 
+    # print('mnf hdates',hdates)
+    show_flag=1
+    tmp = ''
+    count_cnt = 1
+    for i in range(len(hdates)):
+        if i == 0:
+            continue
+        h = hdates[i]
+        if tmp != h[:10]:
+            tmp = h[:10]
+            count_cnt += 1
+            if count_cnt == 5:
+                hdates[i] = h[:10] + " 00:00:00"
+            else:
+                hdates[i]=''
+        
 
 
     flows_float = [round(float(f),2) for f in flows]
@@ -203,6 +236,25 @@ def flowdata_mnf(request):
     
     return HttpResponse(json.dumps(ret))
         # LoginRequiredMixin,
+class CXCView2(TemplateView):
+    template_name = "analysis/dmacxc2.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CXCView2, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据监控"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "DMA产销差综合统计"
+
+        bigmeter = Bigmeter.objects.first()
+        context["station"] = bigmeter.username
+        context["organ"] = "歙县自来水公司"
+
+        # dmastations = DmaStations.objects.all()
+        
+
+        return context                  
+
+
 class CXCView(TemplateView):
     template_name = "analysis/dmacxc.html"
 
@@ -221,7 +273,6 @@ class CXCView(TemplateView):
 
         return context                  
 
-
 def flowdata_cxc(request):
 
     print("flowdata_cxc:",request.POST)
@@ -238,15 +289,32 @@ def flowdata_cxc(request):
 
     data = []
     sub_dma_list = []
+    print(startTime,'-',endTime)
     # etime = datetime.datetime.strptime(endTime.strip(),"%Y-%m-%d")
     # stime = etime - datetime.timedelta(days=10)
     # startTime = stime.strftime("%Y-%m-%d")
+    echart_data = {}
+    def month_year_iter( start_month, start_year, end_month, end_year ):
+        ym_start= 12*start_year + start_month
+        ym_end= 12*end_year + end_month
+        for ym in range( ym_start, ym_end ):
+            y, m = divmod( ym, 12 )
+            # yield y, m+1
+            yield '{}-{:02d}'.format(y,m+1)
+
+    month_list = month_year_iter(lastyear.month,lastyear.year,today.month,today.year)
+    print(month_list)
+    for m in month_list:
+        # print (m)
+        if m not in echart_data.keys():
+            echart_data[m] = 0
+    print('echart_data:',echart_data)
 
     if treetype == 'dma':
         # distict = District.objects.get(id=int(stationid))
         # bigmeter = distict.bigmeter.first()
         dmas = DMABaseinfo.objects.filter(pk=int(stationid))
-        print('DMA',dma,dma.dmastation)
+        
         
     else:
         # dma = DMABaseinfo.objects.first()
@@ -261,10 +329,25 @@ def flowdata_cxc(request):
 
         organs = organ.get_descendants(include_self=True)
 
+        dmas = None
         for o in organs:
-            dmas = o.dma.all()
+            if dmas is None:
+                dmas = o.dma.all()
+            else:
+                dmas |= o.dma.all()
+    print('dmas:',dmas)
 
-    
+    total_influx       = 0
+    total_total        = 0
+    total_leak         = 0
+    total_uncharg      = 0
+    total_sale         = 0
+    total_cxc          = 0
+    total_cxc_percent  = 0
+    total_leak_percent = 0
+    total_broken_pipe  = 0
+    total_mnf          = 0
+    total_back_leak    = 0
     
     for dma in dmas:
         dmastation = dma.dmastation.first()
@@ -278,6 +361,12 @@ def flowdata_cxc(request):
         # if comaddr:
             # comaddr = bigmeter.commaddr
         flowday = HdbFlowDataMonth.objects.filter(commaddr=comaddr).filter(hdate__range=[startTime,endTime])
+        
+        #fill echart data
+        for de,value in flowday.values_list('hdate','dosage'):
+            if de in echart_data.keys():
+                o_data = echart_data[de]
+                echart_data[de] = o_data + float(value)
         
         # flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
 
@@ -293,54 +382,94 @@ def flowdata_cxc(request):
 
         flows_float = [float(f) for f in flows]
         flows_float = flows_float[::-1]
-        flows_leak = [random.uniform(float(f)/20,float(f)/10 ) for f in flows]
-        uncharged =[random.uniform(float(f)/20,float(f)/10 ) for f in flows]
+        flows_leak = [random.uniform(float(f)/10,float(f)/5 ) for f in flows]
+        uncharged =[random.uniform(float(f)/10,float(f)/5 ) for f in flows]
 
         #表具信息
-        influx = sum(flows_float)/1.8
+        
         total = sum(flows_float)
+        influx = sum(flows_float)
         leak = sum(flows_leak)
         uncharg = sum(uncharged)
         sale = total - leak - uncharg
-        cxc = cxc_percent = sale / total
+        cxc = total - sale
+        cxc_percent = (cxc / total)*100
+        huanbi=0
         leak_percent = (leak * 100)/total
-        broken_pipe=0
+        tongbi=0
         mnf=1.2
         back_leak=1.8
+        broken_pipe=0
+        other_leak = 0
+
+        total_influx += influx
+        total_total += total
+        total_leak += leak
+        total_uncharg += uncharg
+        total_sale += sale
+        total_cxc += cxc
+        total_cxc_percent += cxc_percent
+        total_leak_percent += leak_percent
+
+        #记录每个dma分区的统计信息
+        sub_dma_list.append({
+                    "organ":dma.dma_name,
+                    # "influx":round(influx,2),
+                    "total":round(total,2),
+                    "sale":round(sale,2),
+                    "uncharg":round(uncharg,2),
+                    "leak":round(leak,2),
+                    "cxc":round(cxc,2),
+                    "cxc_percent":round(cxc_percent,2),
+                    "huanbi":round(huanbi,2),
+                    "leak_percent":round(leak_percent,2),
+                    "tongbi":round(tongbi,2),
+                    "mnf":round(mnf,2),
+                    "back_leak":round(back_leak,2),
+                    "other_leak":round(other_leak,2),
+                    "statis_date":endTime,
+                })
         
 
-        for i in range(len(flows_float)):
-            data.append({
-                "hdate":hdates[i],
-                "dosage":flows_float[i],
-                "assignmentName":dma.dma_name,
-                "color":"红色",
-                "ratio":"null",
-                "leak":flows_leak[i],
-                "uncharged":uncharged[i]
-                })
-            
+        
+    dma_name = 'shex'
+    for k in echart_data:
+        v = echart_data[k]
+        l = v/5
+        u = v/4
+        data.append({
+            "hdate":k[-2:],
+            "dosage":round(v-l-u,2),
+            "assignmentName":dma_name,
+            "color":"红色",
+            "ratio":"null",
+            "leak":round(l,2),
+            "uncharged":round(u,2)
+            })    
     
 
-    print('leak_percent:',leak_percent)
-
-
+    
+    
+    total_cxc = total_total - total_sale
+    total_cxc_percent = (total_cxc / total_total)*100
+    total_leak_percent = (total_leak * 100)/total_total
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
                 "online":data, #reverse
-                "influx":round(influx,2),
-                "total":round(total,2),
-                "leak":round(leak,2),
-                "uncharg":round(uncharg,2),
-                "sale":round(sale,2),
-                "cxc":round(cxc,2),
-                "cxc_percent":round(cxc_percent,2),
+                "influx":round(total_influx,2),
+                "total":round(total_total,2),
+                "leak":round(total_leak,2),
+                "uncharg":round(total_uncharg,2),
+                "sale":round(total_sale,2),
+                "cxc":round(total_cxc,2),
+                "cxc_percent":round(total_cxc_percent,2),
                 "broken_pipe":broken_pipe,
                 "back_leak":back_leak,
                 "mnf":mnf,
-                "leak_percent":round(leak_percent,2)
+                "leak_percent":round(total_leak_percent,2),
+                "stationsstastic":sub_dma_list
 
             },
             "success":1}
@@ -350,102 +479,3 @@ def flowdata_cxc(request):
     return HttpResponse(json.dumps(ret))
 
 
-
-def dmastations(request):
-    print('dmastations:',request,request.POST)
-    stationid = request.POST.get("station") # DMABaseinfo pk
-    startTime = request.POST.get("startTime")
-    endTime = request.POST.get("endTime")
-
-    treetype = request.POST.get("treetype")
-
-
-    data = []
-
-    if treetype == 'dma':
-        # distict = District.objects.get(id=int(stationid))
-        # bigmeter = distict.bigmeter.first()
-        dma = DMABaseinfo.objects.get(pk=int(stationid))
-        print('DMA',dma,dma.dmastation)
-        dmastation = dma.dmastation.first()
-        comaddr = dmastation.station_id
-        data.append({
-                    "organ":dma.dma_name,
-                    # "influx":round(influx,2),
-                    "total":12345,
-                    "sale":9866,
-                    "uncharg":123,
-                    "leak":32,
-                    "cxc":12,
-                    "cxc_percent":11,
-                    "huanbi":12,
-                    "leak_percent":3,
-                    "tongbi":32,
-                    "mnf":4.5,
-                    "back_leak":1.2,
-                    "other_leak":0,
-                    "statis_date":'2018-07-17',
-                })
-    else:
-        if treetype == '':
-            organ = Organizations.objects.first()
-
-        if treetype == 'group':
-            organ = Organizations.objects.get(cid=stationid)
-
-        organs = organ.get_descendants(include_self=True)
-        # print('organs:',organs)
-
-        
-
-        for o in organs:
-            print(o)
-            dmas = o.dma.all()
-            if dmas.exists():
-                for d in dmas:
-                    data.append({
-                    "organ":d.dma_name,
-                    # "influx":round(influx,2),
-                    "total":12345,
-                    "sale":9866,
-                    "uncharg":123,
-                    "leak":32,
-                    "cxc":12,
-                    "cxc_percent":11,
-                    "huanbi":12,
-                    "leak_percent":3,
-                    "tongbi":32,
-                    "mnf":4.5,
-                    "back_leak":1.2,
-                    "other_leak":0,
-                    "statis_date":'2018-07-17',
-                })
-
-    
-    # for i in range(1):
-    #     data.append({
-    #         "organ":'test',
-    #         # "influx":round(influx,2),
-    #         "total":12345,
-    #         "sale":9866,
-    #         "uncharg":123,
-    #         "leak":32,
-    #         "cxc":12,
-    #         "cxc_percent":11,
-    #         "huanbi":12,
-    #         "leak_percent":3,
-    #         "tongbi":32,
-    #         "mnf":4.5,
-    #         "back_leak":1.2,
-    #         "other_leak":0,
-    #         "statis_date":'2018-07-17',
-    #     })
-
-    ret = {"exceptionDetailMsg":"null",
-            "msg":"null",
-            "obj":data,
-            "success":1}
-
-    
-    
-    return HttpResponse(json.dumps(ret))

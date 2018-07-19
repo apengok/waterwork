@@ -39,3 +39,14 @@ class MapMonitorView(TemplateView):
         return context          
 
 
+class MapMonitorView2(TemplateView):
+    template_name = "monitor/mapmonitor2.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(MapMonitorView2, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据监控"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "地图监控"
+        
+
+        return context          

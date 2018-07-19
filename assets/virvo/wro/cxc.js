@@ -39,7 +39,7 @@
         init: function(){
             console.log("analysisCxc init");
             // analysisCxc.getsTheMaxTime();
-            laydate.render({elem: '#endtime',max: analysisCxc.getsTheMaxTime(),theme: '#6dcff6'});
+            // laydate.render({elem: '#endtime',max: analysisCxc.getsTheMaxTime(),theme: '#6dcff6'});
         },
         tableFilter: function(){
             //显示隐藏列
@@ -161,7 +161,7 @@
             }
 
             analysisCxc.inquireClick(1);
-            analysisCxc.inquireDmastations(1);
+            //analysisCxc.inquireDmastations(1);
             // myTable.requestData();
         },
         // ajax参数
@@ -516,6 +516,7 @@
                 if(date.obj!=null&&date.obj.length!=0){
                     var stasticinfo=date.obj;
                     for(var i=0;i<stasticinfo.length;i++){
+                        
                         var dateList=
                             [
                               i+1,
@@ -528,6 +529,7 @@
                               stasticinfo[i].cxc_percent,
                               stasticinfo[i].huanbi,
                               stasticinfo[i].leak_percent,
+                              leak_tmp_str,
                               stasticinfo[i].tongbi,
                               stasticinfo[i].mnf,
                               stasticinfo[i].back_leak,
@@ -575,8 +577,8 @@
                   },
                   "sLengthMenu": "显示 _MENU_ 记录",
                   "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录。",
-                  "sZeroRecords": "我本将心向明月，奈何明月照沟渠，不行您再用其他方式查一下？",
-                  "sEmptyTable": "我本将心向明月，奈何明月照沟渠，不行您再用其他方式查一下？",
+                  "sZeroRecords": "该分区没有子分区",
+                  "sEmptyTable": "该分区没有子分区",
                   "sLoadingRecords": "正在加载数据-请等待...",
                   "sInfoEmpty": "当前显示0到0条，共0条记录",
                   "sInfoFiltered": "（数据库中共为 _MAX_ 条记录）",
@@ -618,7 +620,9 @@
             var currentPage = myTable.page()
             myTable.clear()
             myTable.rows.add(dataList)
-            myTable.page(currentPage).draw(false);
+            // myTable.page(currentPage).draw(false);
+            myTable.columns.adjust().draw();
+
         },
         findOnline: function (data) {//回调函数    数据组装
             var list = [];
@@ -635,9 +639,11 @@
             var mnf;
             var leak_percent;
             var back_leak;
+            var stasticinfo = "";
             
             if (data.obj != null && data.obj != "") {
                 online = data.obj.online;
+                stasticinfo = data.obj.stationsstastic;
                 influx = data.obj.influx;
                 total = data.obj.total;
                 leak = data.obj.leak;
@@ -657,6 +663,7 @@
                 dosages = [];
                 leakages = [];
                 uncharged = [];
+                stationdataListArray = [];//用来储存显示数据
                 for (var i = 0; i < online.length; i++) {
                     list =
                         [i + 1, online[i].hdate,
@@ -673,6 +680,44 @@
 
                     dataListArray.push(list);                                       //组装完成，传入  表格
                 };
+                // 子分区统计信息
+                for(var i=0;i<stasticinfo.length;i++){
+                    var leak_tmp_str;
+                    var leak_tmp = stasticinfo[i].leak_percent;
+                        if(leak_tmp < 12 ){
+                            leak_tmp_str = '<span style="background-color:#68f442;color:white;">'+ leak_tmp+'</span>';
+                        }else if(leak_tmp<16){
+                            leak_tmp_str = '<span style="background-color:#e58a22;color:white;">'+ leak_tmp+'</span>';
+                        }else{
+                            leak_tmp_str = '<span style="background-color:#f70439;color:white;">'+ leak_tmp+'</span>';
+                        }
+                    var dateList=
+                        [
+                          i+1,
+                          stasticinfo[i].organ,
+                          stasticinfo[i].total,
+                          stasticinfo[i].sale,
+                          stasticinfo[i].uncharg,
+                          stasticinfo[i].leak,
+                          stasticinfo[i].cxc,
+                          stasticinfo[i].cxc_percent,
+                          stasticinfo[i].huanbi,
+                          // stasticinfo[i].leak_percent,
+                          leak_tmp_str,
+                          stasticinfo[i].tongbi,
+                          stasticinfo[i].mnf,
+                          stasticinfo[i].back_leak,
+                          stasticinfo[i].other_leak,
+                          stasticinfo[i].statis_date
+                        ];
+//                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
+//                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
+//                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
+                        stationdataListArray.push(dateList);
+//                      }
+                }
+                analysisCxc.reloadData(stationdataListArray);
+
                 for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
                     hdates.push(dataListArray[j][1]);
                     dosages.push(dataListArray[j][3]);
@@ -725,20 +770,20 @@
                     textStyle: {
                         fontSize: 20
                     },
-                    formatter: function (a) {
-                        var relVal = "";
-                        //var relValTime = a[0].name;
-                        var relValTime  =hdates[a[0].dataIndex];
-                        if (a[0].data == 0) {
-                            relVal = "无相关数据";
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                        } else {
-                            relVal = relValTime;
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                        }
-                        ;
-                        return relVal;
-                    }
+                    // formatter: function (a) {
+                    //     var relVal = "";
+                    //     //var relValTime = a[0].name;
+                    //     var relValTime  =hdates[a[0].dataIndex];
+                    //     if (a[0].data == 0) {
+                    //         relVal = "无相关数据";
+                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
+                    //     } else {
+                    //         relVal = relValTime;
+                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
+                    //     }
+                    //     ;
+                    //     return relVal;
+                    // }
                 },
                 legend: {
                     data: ['售水量','未计量水量','漏水量','产销差率'],
@@ -898,12 +943,12 @@
         });
         
         analysisCxc.userTree();
-        
+        analysisCxc.getsTheMaxTime();
         analysisCxc.init();
         
         analysisCxc.getTable('#dataTable');
         analysisCxc.inquireClick(1);
-        analysisCxc.inquireDmastations(1);
+        //analysisCxc.inquireDmastations(1);
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             analysisCxc.refreshTable();

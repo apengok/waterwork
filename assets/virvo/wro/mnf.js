@@ -644,10 +644,15 @@
                     axisLabel: {
                         show: true,
                         interval: function(index,name){
-                            
-                            if(index==0 || index == online_length-1 || index == online_length/2 ){
+                            // console.log(index,name);
+                            // if(index==0 || index == online_length-1 || index == online_length/2 ){
+                            if(index==0 || name == '' || index == online_length-1 ){
+
                                 return true;
                             }else{
+                                if(name.includes("00:00:00")){
+                                    return true;
+                                }
                                 return false;
                             }
                         },
