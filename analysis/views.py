@@ -69,36 +69,85 @@ def flowdata_mnf(request):
     print("flowdata_mnf:",request.POST)
 
     stationid = request.POST.get("station") # DMABaseinfo pk
+    treetype = request.POST.get("treetype")
     startTime = request.POST.get("startTime")
     endTime = request.POST.get("endTime")
 
-    if stationid != '':
+    data = []
+
+    if treetype == 'dma':
         # distict = District.objects.get(id=int(stationid))
         # bigmeter = distict.bigmeter.first()
-        dma = DMABaseinfo.objects.get(pk=int(stationid))
-        print('DMA',dma,dma.dmastation)
-        dmastation = dma.dmastation.first()
-        comaddr = dmastation.station_id
+        dmas = DMABaseinfo.objects.filter(pk=int(stationid))
+        
+        
     else:
-        dma = DMABaseinfo.objects.first()
-        dmastation = dma.dmastation.first()
-        comaddr = dmastation.station_id
-    # print('bigmeter',bigmeter)
+        # dma = DMABaseinfo.objects.first()
+        # dmastation = dma.dmastation.first()
+        # comaddr = dmastation.station_id
 
-    # qmonth = request.POST.get("qmonth")
+        if treetype == '':
+            organ = Organizations.objects.first()
+
+        if treetype == 'group':
+            organ = Organizations.objects.get(cid=stationid)
+
+        organs = organ.get_descendants(include_self=True)
+
+        dmas = None
+        for o in organs:
+            if dmas is None:
+                dmas = o.dma.all()
+            else:
+                dmas |= o.dma.all()
+    print('dmas:',dmas)
+
+    if len(dmas) == 0:
+        ret = {"exceptionDetailMsg":"null",
+            "msg":"没有dma分区信息",
+            "obj":{
+                "online":data, #reverse
+                # "today_use":round(float(today_use),2),
+                # "yestoday_use":round(float(yestoday_use),2),
+                # "last_year_same":round(float(last_year_same),2),
+                # "tongbi":round(tongbi,2),
+                # "huanbi":round(huanbi,2),
+                # "maxflow":round(maxflow,2),
+                # "minflow":round(minflow,2),
+                # "average":round(average,2),
+                # "mnf":round(mnf,2),
+                # "mnf_add":round(mnf_add,2),
+                # "ref_mnf":round(ref_mnf,2),
+                # "back_leak":round(back_leak,2),
+                # "alarm_set":round(alarm_set,2),
+
+
+            },
+            "success":0}
+
     
-    # if qmonth == '-2':
-    #     qdays = 60
-    # elif qmonth == '-3':
-    #     qdays = 90
+    
+        return HttpResponse(json.dumps(ret))
+
+    # if stationid != '':
+    #     # distict = District.objects.get(id=int(stationid))
+    #     # bigmeter = distict.bigmeter.first()
+    #     dma = DMABaseinfo.objects.get(pk=int(stationid))
+    #     print('DMA',dma,dma.dmastation)
+    #     dmastation = dma.dmastation.first()
+    #     comaddr = dmastation.station_id
     # else:
-    #     qdays = 7
+    #     dma = DMABaseinfo.objects.first()
+    #     dmastation = dma.dmastation.first()
+    #     comaddr = dmastation.station_id
 
-    if comaddr == '':
-        comaddr = '4892354820'
+
+    dma = dmas.first()
+    dmastation = dma.dmastation.first()
+    comaddr = dmastation.station_id
     
     
-    data = []
+    
     # if comaddr:
         # comaddr = bigmeter.commaddr
     flowday_stastic = HdbFlowDataDay.objects.filter(commaddr=comaddr)
@@ -340,6 +389,8 @@ def flowdata_cxc(request):
                 dmas |= o.dma.all()
     print('dmas:',dmas)
 
+    
+
     total_influx       = 0
     total_total        = 0
     total_leak         = 0
@@ -351,6 +402,37 @@ def flowdata_cxc(request):
     total_broken_pipe  = 0
     total_mnf          = 0
     total_back_leak    = 0
+    huanbi=0
+    tongbi=0
+    mnf=1.2
+    back_leak=1.8
+    broken_pipe=0
+    other_leak = 0
+
+    if len(dmas) == 0:
+        ret = {"exceptionDetailMsg":"null",
+            "msg":"没有dma分区信息",
+            "obj":{
+                "online":data, #reverse
+                "influx":round(total_influx,2),
+                "total":round(total_total,2),
+                "leak":round(total_leak,2),
+                "uncharg":round(total_uncharg,2),
+                "sale":round(total_sale,2),
+                "cxc":round(total_cxc,2),
+                "cxc_percent":round(total_cxc_percent,2),
+                "broken_pipe":broken_pipe,
+                "back_leak":back_leak,
+                "mnf":mnf,
+                "leak_percent":round(total_leak_percent,2),
+                "stationsstastic":sub_dma_list
+
+            },
+            "success":0}
+
+    
+    
+        return HttpResponse(json.dumps(ret))
     
     for dma in dmas:
         dmastation = dma.dmastation.first()
@@ -452,10 +534,10 @@ def flowdata_cxc(request):
     
 
     
-    
-    total_cxc = total_total - total_sale
-    total_cxc_percent = (total_cxc / total_total)*100
-    total_leak_percent = (total_leak * 100)/total_total
+    if total_total != 0:
+        total_cxc = total_total - total_sale
+        total_cxc_percent = (total_cxc / total_total)*100
+        total_leak_percent = (total_leak * 100)/total_total
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",

@@ -1,6 +1,7 @@
 (function($,window){
     var selectTreeId = '';
     var selectDistrictId = '';
+    var selectTreeType = '';
     var zNodes = null;
     var log, className = "dark";
     var newCount = 1;
@@ -117,9 +118,13 @@
         //点击节点
         zTreeOnClick: function(event, treeId, treeNode){
             selectTreeId = treeNode.id;
+            selectTreeType = treeNode.type;
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd = treeNode.uuid;
+            station = treeNode.id;
             $('#simpleQueryParam').val("");
+            $("#organ_name").attr("value",treeNode.name);
+            $("#station_name").attr("value","");
             if(treeNode.type == "dma"){
                 var pNode = treeNode.getParentNode();
                 $("#organ_name").attr("value",pNode.name);
@@ -416,7 +421,7 @@
             dataListArray = [];
             var url = "/analysis/flowdata_mnf/";
 
-            var data = {"organ": organ,"station":station,"qmonth":number, 'startTime': sTime, "endTime": eTime};
+            var data = {"organ": organ,"treetype":selectTreeType,"station":station,"qmonth":number, 'startTime': sTime, "endTime": eTime};
             json_ajax("POST", url, "json", false, data, analysisMnf.findOnline);     //发送请求
         },
         validates: function () {
@@ -495,19 +500,19 @@
             var list = [];
             var myChart = echarts.init(document.getElementById('onlineGraphics'));
             var online = "";
-            var today_use;
-            var yestoday_use;
-            var last_year_same;
-            var tongbi;
-            var huanbi;
-            var maxflow;
-            var minflow;
-            var average;
-            var mnf;
-            var mnf_add;
-            var ref_mnf;
-            var back_leak;
-            var alarm_set;
+            var today_use = "";
+            var yestoday_use = "";
+            var last_year_same = "";
+            var tongbi = "";
+            var huanbi = "";
+            var maxflow = "";
+            var minflow = "";
+            var average = "";
+            var mnf = "";
+            var mnf_add = "";
+            var ref_mnf = "";
+            var back_leak = "";
+            var alarm_set = "";
             if (data.obj != null && data.obj != "") {
                 online = data.obj.online;
                 today_use = data.obj.today_use;
@@ -585,6 +590,19 @@
                 ref_mnfs.push("");
                 press=[];
                 press.push("");
+                today_use = "";
+                yestoday_use = "";
+                last_year_same = "";
+                tongbi = "";
+                huanbi = "";
+                maxflow = "";
+                minflow = "";
+                average = "";
+                mnf = "";
+                mnf_add = "";
+                ref_mnf = "";
+                back_leak = "";
+                alarm_set = "";
             }
             var start;
             var end;
@@ -829,7 +847,7 @@
                 ]
             };
             myChart.setOption(option);
-            console.log('max:',maxflows[0]);
+            
             $("#maxflow span").html( maxflow);
             $("#averflow span").html( average);
             $("#today_use span").html( today_use);

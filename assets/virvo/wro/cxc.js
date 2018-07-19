@@ -716,7 +716,7 @@
                         stationdataListArray.push(dateList);
 //                      }
                 }
-                analysisCxc.reloadData(stationdataListArray);
+                // analysisCxc.reloadData(stationdataListArray);
 
                 for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
                     hdates.push(dataListArray[j][1]);
@@ -741,6 +741,7 @@
                 uncharged = [];
                 leakages.push("");
                 uncharged.push("");
+                stationdataListArray = [];
             }
             var start;
             var end;
@@ -922,6 +923,7 @@
             
 
             window.onresize = myChart.resize;
+            analysisCxc.reloadData(stationdataListArray);
         },
         platenumbersplitFun:function(arr){
             var newArr = [];
