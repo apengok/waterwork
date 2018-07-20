@@ -355,12 +355,12 @@ def flowdata_cxc(request):
             yield '{}-{:02d}'.format(y,m+1)
 
     month_list = month_year_iter(lastyear.month,lastyear.year,today.month,today.year)
-    print(month_list)
+    # print(month_list)
     for m in month_list:
         # print (m)
         if m not in echart_data.keys():
             echart_data[m] = 0
-    print('echart_data:',echart_data)
+    
 
     if treetype == 'dma':
         # distict = District.objects.get(id=int(stationid))
@@ -387,7 +387,7 @@ def flowdata_cxc(request):
                 dmas = o.dma.all()
             else:
                 dmas |= o.dma.all()
-    print('dmas:',dmas)
+    # print('dmas:',dmas)
 
     
 
@@ -451,7 +451,10 @@ def flowdata_cxc(request):
         for de,value in flowday.values_list('hdate','dosage'):
             if de in echart_data.keys():
                 o_data = echart_data[de]
-                echart_data[de] = o_data + float(value)
+                echart_data[de] = o_data + float(value)/10000
+
+        # print('comaddr:',comaddr)
+        # print('echart_data:',echart_data)
         
         # flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
 
@@ -473,9 +476,13 @@ def flowdata_cxc(request):
         #表具信息
         
         total = sum(flows_float)
+        total /= 10000
         influx = sum(flows_float)
+        influx /=10000
         leak = sum(flows_leak)
+        leak /=10000
         uncharg = sum(uncharged)
+        uncharg /=10000
         sale = total - leak - uncharg
         cxc = total - sale
         cxc_percent = (cxc / total)*100
@@ -493,8 +500,8 @@ def flowdata_cxc(request):
         total_uncharg += uncharg
         total_sale += sale
         total_cxc += cxc
-        total_cxc_percent += cxc_percent
-        total_leak_percent += leak_percent
+        # total_cxc_percent += cxc_percent
+        # total_leak_percent += leak_percent
 
         #记录每个dma分区的统计信息
         sub_dma_list.append({
@@ -517,11 +524,15 @@ def flowdata_cxc(request):
         
 
         
-    dma_name = 'shex'
+    dma_name = '歙县自来水公司'
     for k in echart_data:
         v = echart_data[k]
         l = v/5
         u = v/4
+        cp = 0
+        if v != 0:
+            cp = (l+u)/v * 100;
+        print(k,v,l,u,cp)
         data.append({
             "hdate":k[-2:],
             "dosage":round(v-l-u,2),
@@ -529,7 +540,8 @@ def flowdata_cxc(request):
             "color":"红色",
             "ratio":"null",
             "leak":round(l,2),
-            "uncharged":round(u,2)
+            "uncharged":round(u,2),
+            "cp_month":round(cp,2)
             })    
     
 
