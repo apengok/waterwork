@@ -295,7 +295,7 @@ class CXCView2(TemplateView):
         context = super(CXCView2, self).get_context_data(*args, **kwargs)
         context["page_menu"] = "数据监控"
         # context["page_submenu"] = "组织和用户管理"
-        context["page_title"] = "DMA产销差综合统计"
+        context["page_title"] = "DMA综合统计"
 
         bigmeter = Bigmeter.objects.first()
         context["station"] = bigmeter.username
@@ -314,7 +314,7 @@ class CXCView(TemplateView):
         context = super(CXCView, self).get_context_data(*args, **kwargs)
         context["page_menu"] = "数据监控"
         # context["page_submenu"] = "组织和用户管理"
-        context["page_title"] = "DMA产销差综合统计"
+        context["page_title"] = "DMA综合统计"
 
         bigmeter = Bigmeter.objects.first()
         context["station"] = bigmeter.username

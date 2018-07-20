@@ -856,7 +856,7 @@
                         sampling: 'average',
                         itemStyle: {
                             normal: {
-                                color: '#6dcff6'
+                                color: '#7cb4ed'
                             }
                         },
                         data: dosages,
@@ -883,7 +883,7 @@
                         sampling: 'average',
                         itemStyle: {
                             normal: {
-                                color: '#422d0c'
+                                color: '#474249'
                             }
                         },
                         data: uncharged
@@ -899,7 +899,7 @@
                         sampling: 'average',
                         itemStyle: {
                             normal: {
-                                color: '#e00d1f'
+                                color: '#92eb7f'
                             }
                         },
                         data: leakages

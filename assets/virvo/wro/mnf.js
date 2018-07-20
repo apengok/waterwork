@@ -642,11 +642,11 @@
                         if (a[0].data == 0) {
                             relVal = "无相关数据";
                             relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[5].color + "'></span>" + a[5].seriesName + "：" + a[5].value + " m³/h";
+                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[5].color + "'></span>" + a[5].seriesName + "：" + a[5].value + " Mpa";
                         } else {
                             relVal = relValTime;
                             relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[5].color + "'></span>" + a[5].seriesName + "：" + a[5].value + " m³/h";
+                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[5].color + "'></span>" + a[5].seriesName + "：" + a[5].value + " Mpa";
                         }
                         ;
                         return relVal;
@@ -699,7 +699,7 @@
                         type: 'value',
                         name: '瞬时流量 （m³/h）',
                         scale: false,
-                        position: '',
+                        position: 'left',
                         axisLabel: {
                             formatter: '{value}'
                         },
@@ -707,6 +707,20 @@
                             show: true
                         }
                     },
+
+                    {
+                        type : 'value',
+                        splitNumber: 1,
+                        axisLabel : {
+                            formatter: function (value) {
+                                // Function formatter
+                                return value + ' Mpa'
+                            }
+                        },
+                        splitLine : {
+                            show: false
+                        }
+                    }
                 ],
                 dataZoom : [{
                     show : true,
@@ -831,7 +845,7 @@
                     },
                     {
                         name: '压力曲线',
-                        yAxisIndex: 0,
+                        yAxisIndex: 1,
                         xAxisIndex: 0,
                         type: 'line',
                         smooth: true,
