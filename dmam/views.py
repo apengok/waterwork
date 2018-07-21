@@ -65,6 +65,7 @@ def dmatree(request):
             "pId":o.pId,
             "districtid":'',
             "type":"group",
+            "icon":"/static/virvo/resources/img/wenjianjia.png",
             "uuid":o.uuid
         })
 

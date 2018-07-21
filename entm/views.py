@@ -372,6 +372,7 @@ def oranizationtree(request):
             "id":o.cid,
             "pId":o.pId,
             "type":"group",
+            "icon":"/static/virvo/resources/img/wenjianjia.png",
             "uuid":o.uuid
         })
 

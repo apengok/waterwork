@@ -692,16 +692,45 @@
                             width: 1
                         }
                     },
-                    data: hdates //analysisMnf.platenumbersplitFun(hdates)
+                    data: hdates //analysisMnf.platenumbersplitYear(hdates)
                 },
                 yAxis: [
                     {
                         type: 'value',
                         name: '瞬时流量 （m³/h）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:80,
                         scale: false,
                         position: 'left',
-                        axisLabel: {
-                            formatter: '{value}'
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'black',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
                         },
                         splitLine: {
                             show: true
@@ -711,15 +740,40 @@
                     {
                         type : 'value',
                         splitNumber: 1,
-                        axisLabel : {
-                            formatter: function (value) {
-                                // Function formatter
-                                return value + ' Mpa'
+                        name: 'Mpa',
+                        nameLocation:'middle',
+                        nameGap:50,
+                        scale: false,
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine : {    // 轴线
+                            show: true,
+                            lineStyle: {
+                                color: 'grey',
+                                type: 'dashed',
+                                width: 1
                             }
                         },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        // axisLabel : {
+                        //     formatter: function (value) {
+                        //         // Function formatter
+                        //         return value + ' Mpa'
+                        //     }
+                        // },
                         splitLine : {
                             show: false
-                        }
+                        },
+                        offset : 20
                     }
                 ],
                 dataZoom : [{
@@ -879,6 +933,27 @@
             $("#alarm_set span").html( alarm_set);
 
             window.onresize = myChart.resize;
+        },
+        platenumbersplitYear:function(arr){
+
+            var newArr = [ '08','09','10','11',
+                {
+                    value:'12',
+                    textStyle: {
+                        color: 'red',
+                        fontSize: 30,
+                        fontStyle: 'normal',
+                        fontWeight: 'bold'
+                    }
+                },
+                '01','02','03','04','05','06','07'];
+            // arr.forEach(function(item){
+            //     if (item.length > 8) {
+            //         item = item.substring(0,7) + '...'
+            //     }
+            //     newArr.push(item)
+            // })
+            return newArr
         },
         platenumbersplitFun:function(arr){
             var newArr = [];
