@@ -742,7 +742,7 @@
                         splitNumber: 1,
                         name: 'Mpa',
                         nameLocation:'middle',
-                        nameGap:50,
+                        nameGap:30,
                         scale: false,
                         axisLabel: {
                             formatter: '{value}'

@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^mapmonitor/?$',views.MapMonitorView.as_view(),name='mapmonitor'),
     url(r'^mapmonitor2/?$',views.MapMonitorView2.as_view(),name='mapmonitor2'),
     
+    url(r'^mapstation/?$',views.MapStationView.as_view(),name='mapstation'),
     
         
 ]
