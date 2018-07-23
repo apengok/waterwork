@@ -65,9 +65,9 @@ th, td {
                 <div class="panel panel-default">
                     <div class="panel-heading" style="cursor:pointer;" id="stretch" >
                         <h3 class="panel-title fwb">主分区信息</h3>
-                        <!-- <div class="actions pull-right listActions">
+                        <div class="actions pull-right listActions">
                             <i class="fa chevron-up"  id="stretch-chevron" ></i>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="panel-body fixed-table-body"   id="stretch-body">
                         <!--工具面板-->
@@ -175,7 +175,26 @@ th, td {
                         </div>
                     </div>
                     <div class="panel-body mileage-Content"  id="stretch2-body">
-                      <div style="overflow:auto">
+                      <div class="ToolPanel">
+                        
+                        <div class="columns btn-group pull-right refShowRight">
+                          <button id="refreshTable" class="btn btn-default"
+                            type="button" name="refresh" title="刷新">
+                            <i class="glyphicon glyphicon-refresh icon-refresh"></i>
+                          </button>
+                          <div class="keep-open btn-group" title="定制显示列">
+                            <button id="customizeColumns" type="button"
+                              class="btn btn-default dropdown-toggle"
+                              data-toggle="dropdown">
+                              <i class="glyphicon glyphicon-th icon-th"></i> <span
+                                class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" id="Ul-menu-text">
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      
                         <table id="dataTable"
                             class="table table-striped table-bordered table-hover noCheckTable"
                             cellspacing="0" width="100%">
@@ -200,7 +219,7 @@ th, td {
                             </thead>
                           </table>
                         
-                       </div> 
+                       
                         
                     </div>
                 </div>

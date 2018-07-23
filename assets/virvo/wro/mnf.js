@@ -692,7 +692,7 @@
                             width: 1
                         }
                     },
-                    data: hdates //analysisMnf.platenumbersplitFun(hdates)
+                    data: hdates //analysisMnf.platenumbersplitYear(hdates)
                 },
                 yAxis: [
                     {
@@ -879,6 +879,27 @@
             $("#alarm_set span").html( alarm_set);
 
             window.onresize = myChart.resize;
+        },
+        platenumbersplitYear:function(arr){
+
+            var newArr = [ '08','09','10','11',
+                {
+                    value:'12',
+                    textStyle: {
+                        color: 'red',
+                        fontSize: 30,
+                        fontStyle: 'normal',
+                        fontWeight: 'bold'
+                    }
+                },
+                '01','02','03','04','05','06','07'];
+            // arr.forEach(function(item){
+            //     if (item.length > 8) {
+            //         item = item.substring(0,7) + '...'
+            //     }
+            //     newArr.push(item)
+            // })
+            return newArr
         },
         platenumbersplitFun:function(arr){
             var newArr = [];
