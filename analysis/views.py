@@ -329,9 +329,9 @@ def flowdata_cxc(request):
 
     print("flowdata_cxc:",request.POST)
 
-    stationid = request.POST.get("station") # DMABaseinfo pk
-    endTime = request.POST.get("endTime")
-    treetype = request.POST.get("treetype")
+    stationid = request.POST.get("station") or '' # DMABaseinfo pk
+    endTime = request.POST.get("endTime") or ''
+    treetype = request.POST.get("treetype") or ''
 
     today = datetime.date.today()
     endTime = today.strftime("%Y-%m")

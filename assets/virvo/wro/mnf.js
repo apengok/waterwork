@@ -698,10 +698,39 @@
                     {
                         type: 'value',
                         name: '瞬时流量 （m³/h）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:80,
                         scale: false,
                         position: 'left',
-                        axisLabel: {
-                            formatter: '{value}'
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'black',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
                         },
                         splitLine: {
                             show: true
@@ -711,15 +740,40 @@
                     {
                         type : 'value',
                         splitNumber: 1,
-                        axisLabel : {
-                            formatter: function (value) {
-                                // Function formatter
-                                return value + ' Mpa'
+                        name: 'Mpa',
+                        nameLocation:'middle',
+                        nameGap:30,
+                        scale: false,
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                        axisLine : {    // 轴线
+                            show: true,
+                            lineStyle: {
+                                color: 'grey',
+                                type: 'dashed',
+                                width: 1
                             }
                         },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        // axisLabel : {
+                        //     formatter: function (value) {
+                        //         // Function formatter
+                        //         return value + ' Mpa'
+                        //     }
+                        // },
                         splitLine : {
                             show: false
-                        }
+                        },
+                        offset : 20
                     }
                 ],
                 dataZoom : [{

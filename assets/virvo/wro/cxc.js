@@ -591,7 +591,12 @@
                       "sPrevious": " 上一页 ",
                       "sNext": " 下一页 ",
                       "sLast": " 尾页 "
-                  }
+                  },
+                  "columnDefs": [
+                    { 'width': "40%", "targets": 0 },
+                    { 'width': "80%", "targets": 1 },
+                    { 'width': "30%", "targets": 2 },
+                ],
               },
               "order": [
                   [0, null]
@@ -800,8 +805,9 @@
                     show: false
                 },
                 grid: {
-                    left: '120',
-                    bottom:'100'
+                    left: '80',
+                    bottom:'50',
+                    right:'80'
                 },
                 xAxis: {
                     type: 'category',
@@ -815,9 +821,9 @@
                     splitLine: {
                         show: true,
                         lineStyle: {
-                            color: '#483d8b',
+                            color: 'grey',
                             type: 'dashed',
-                            width: 1
+                            width: 0.5
                         }
                     },
                     data: analysisCxc.platenumbersplitYear(hdates)
@@ -826,10 +832,41 @@
                     {
                         type: 'value',
                         name: '供水总量 （万m³/月）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:60,
                         scale: false,
                         position: 'left',
-                        axisLabel: {
-                            formatter: '{value}'
+
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'grey',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+
                         },
                         splitLine: {
                             show: true
@@ -838,13 +875,39 @@
                     {
                         type : 'value',
                         name :'产销差率(%)',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:35,
                         min: 0,
                         max: 100,
                         interval: 25,
+                        axisLine : {    // 轴线
+                            show: true,
+                            lineStyle: {
+                                color: 'grey',
+                                type: 'dashed',
+                                width: 1
+                            }
+                        },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
                         splitLine: {
                             show: false
                         },
-                        offset : 20
+                        offset : 18
                     }
                 ],
                 // dataZoom: [{

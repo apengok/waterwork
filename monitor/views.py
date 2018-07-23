@@ -120,3 +120,23 @@ class MapMonitorView2(TemplateView):
         
 
         return context          
+
+
+
+class MapStationView(TemplateView):
+    template_name = "monitor/mapstation.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(MapStationView, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据监控"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "站点监控"
+
+        stat_list = dmastasticinfo()
+        statsinfo = json.dumps({"statsinfo":stat_list})
+        
+        context["dmastasticinfo"] = statsinfo
+
+        
+
+        return context          
