@@ -1,4 +1,5 @@
 (function($,window){
+    var isAdminStr = $("#isAdmin").attr("value");//是否是admin
     var selectTreeId = '';
     var selectDistrictId = '';
     var zNodes = null;
@@ -14,6 +15,241 @@
     var startOperation;// 点击运营资质类别的修改按钮时，弹出界面时运营资质类别文本的内容
     var expliant;// 点击运营资质类别的修改按钮时，弹出界面时说明文本的内容
     var vagueSearchlast = $("#userType").val();
+
+    //dmabaseinfo
+    var dma_no = $("#id_dma_no").val();
+    var pipe_texture = $("#id_pipe_texture").val();
+    var id_ifc = $("#id_ifc").val();
+    var ozTreeOrganSelEdit = $("#zTreeOrganSelEdit").val();
+    var pipe_length = $("#id_pipe_length").val();
+    var aznp = $("#id_aznp").val();
+    var pepoles_num = $("#id_pepoles_num").val();
+    var pipe_links = $("#id_pipe_links").val();
+    var night_use = $("#id_night_use").val();
+    var acreage = $("#id_acreage").val();
+    var pipe_years = $("#id_pipe_years").val();
+    var cxc_value = $("#id_cxc_value").val();
+    var user_num = $("#id_user_num").val();
+    var pipe_private = $("#id_pipe_private").val();
+    var flag1 = false;
+    var DMABaseEdit = {
+        //初始化
+        init:function(){
+            var setting = {
+                async : {
+                    url : "/entm/user/oranizationtree/",
+                    tyoe : "post",
+                    enable : true,
+                    autoParam : [ "id" ],
+                    contentType : "application/json",
+                    dataType : "json",
+                },
+                view : {
+                    dblClickExpand : false
+                },
+                data : {
+                    simpleData : {
+                        enable : true
+                    }
+                },
+                callback : {
+                    beforeClick : DMABaseEdit.beforeClick,
+                    onClick : DMABaseEdit.onClick
+
+                }
+            };
+            $.fn.zTree.init($("#ztreeOrganEdit"), setting, null);
+            
+           
+        },
+        beforeClick: function(treeId, treeNode){
+            var check = (treeNode);
+            return check;
+        },
+        onClick: function(e, treeId, treeNode){
+            var zTree = $.fn.zTree.getZTreeObj("ztreeOrganEdit"), nodes = zTree
+                .getSelectedNodes(), v = "";
+            n = "";
+            nodes.sort(function compare(a, b) {
+                return a.id - b.id;
+            });
+            for (var i = 0, l = nodes.length; i < l; i++) {
+                n += nodes[i].name;
+                v += nodes[i].id + ",";
+            }
+            if (v.length > 0)
+                v = v.substring(0, v.length - 1);
+            var cityObj = $("#zTreeOrganSelEdit");
+            console.log('before:',$("#groupIds").val());
+            $("#groupIds").val(v);
+            $("#idstr").val(v);
+            console.log('after:',$("#groupIds").val());
+            cityObj.val(n);
+            $("#zTreeContentEdit").hide();
+        },
+        showMenu: function(e){
+            // 判断是否是当前用户,不能修改自己的组织 
+            if ($("#zTreeContentEdit").is(":hidden")) {
+                var width = $(e).parent().width();
+                $("#zTreeContentEdit").css("width",width + "px");
+                $(window).resize(function() {
+                    var width = $(e).parent().width();
+                    $("#zTreeContentEdit").css("width",width + "px");
+                })
+                $("#zTreeContentEdit").show();
+            } else {
+                $("#zTreeContentEdit").hide();
+            }
+            $("body").bind("mousedown", DMABaseEdit.onBodyDown);
+        },
+        hideMenu: function(){
+            $("#zTreeContentEdit").fadeOut("fast");
+            $("body").unbind("mousedown", DMABaseEdit.onBodyDown);
+        },
+        onBodyDown: function(event){
+            if (!(event.target.id == "menuBtn" || event.target.id == "zTreeContentEdit" || $(event.target).parents("#zTreeContentEdit").length > 0)) {
+                DMABaseEdit.hideMenu();
+            }
+        },
+        valueChange:function () { // 判断值是否改变
+            var edit_dma_no = $("#id_dma_no").val();
+            var edit_pipe_texture = $("#id_pipe_texture").val();
+            var edit_ifc = $("#id_ifc").val();
+            var edit_zTreeOrganSelEdit = $("#zTreeOrganSelEdit").val();
+            var edit_pipe_length = $("#id_pipe_length").val();
+            var edit_aznp = $("#id_aznp").val();
+            var edit_pepoles_num = $("#id_pepoles_num").val();
+            var edit_pipe_links = $("#id_pipe_links").val();
+            var edit_night_use = $("#id_night_use").val();
+            var edit_acreage = $("#id_acreage").val();
+            var edit_pipe_years = $("#id_pipe_years").val();
+            var edit_cxc_value = $("#id_cxc_value").val();
+            var edit_user_num = $("#id_user_num").val();
+            var edit_pipe_private = $("#id_pipe_private").val();
+            
+            // 值已经发生改变
+            if (dma_no != edit_dma_no || pipe_texture != edit_pipe_texture || ifc != edit_ifc || ozTreeOrganSelEdit != edit_zTreeOrganSelEdit
+                || pipe_length != edit_pipe_length || aznp != edit_aznp || pepoles_num != edit_pepoles_num || pipe_links != edit_pipe_links || night_use != edit_night_use
+                || acreage != edit_acreage || pipe_years != edit_pipe_years || cxc_value != edit_cxc_value || user_num != edit_user_num || pipe_private != edit_pipe_private ) {
+                    flag1 = true;
+            } else { // 表单值没有发生改变
+                
+                flag1 = false;
+            }
+        },
+        Alterdma:function(){
+            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").removeAttr("readonly");
+            $("#zTreeOrganSelEdit").attr("disabled",false);
+        },
+        restore:function(){
+            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").attr("readonly","readonly");
+            $("#zTreeOrganSelEdit").attr("disabled","disabled");
+        },
+        doSubmit: function(){
+            
+            DMABaseEdit.valueChange();
+            if (flag1){
+                var     baseinfo_action = "/dmam/district/dmabaseinfo/edit/{id}/";
+                dma_id = $("#current_dma_no").val();
+                
+                new_action = baseinfo_action.replace("{id}", dma_id);
+                
+                $("#baseinfoForm").attr("action",new_action);
+
+                if(DMABaseEdit.validates()){
+                    $('#simpleQueryParam').val("");
+                    
+                    $("#baseinfoForm").ajaxSubmit(function(data) {
+                        if (data != null) {
+                            var result =  $.parseJSON(data);
+                            console.log(result);
+                            if (result.success == true) {
+                                if (result.obj.flag == 1){
+                                    // $("#commonLgWin").modal("hide");
+                                    layer.msg(publicEditSuccess,{move:false});
+                                    myTable.refresh()
+                                }else{
+                                    if(date != null){
+                                        layer.msg(publicEditError,{move:false});
+                                    }
+                                }
+                            }else{
+                                layer.msg(result.obj.errMsg,{move:false});
+                            }
+                        }
+                    });
+                    // $("#commonLgWin").modal("hide"); // 关闭窗口
+                }
+            } else {
+                // $("#commonLgWin").modal("hide"); // 关闭窗口
+            }
+        },
+        //校验
+        validates: function(){
+            var isAdmin = isAdminStr == 'true'
+            console.log('isadmin?',isAdmin);
+            if(isAdmin == true){
+                return $("#baseinfoForm").validate({
+                    rules : {
+                        dma_no : {
+                            required : true,
+                            
+                        },
+                        belongto : {
+                            required : true
+                        }
+                    },
+                    messages : {
+                        dma_no : {
+                            required : "分区编号不能为空",
+                            
+                        },
+                        
+                        belongto : {
+                            required : "组织不能为空"
+                        }
+                    }
+                }).form();
+            }else{
+                return $("#baseinfoForm").validate({
+                    rules : {
+                        dma_no : {
+                            required : true,
+                            
+                        },
+                        
+                        belongto : {
+                            required : true
+                        }
+                        
+                    },
+                    messages : {
+                        dma_no : {
+                            required : "分区编号不能为空",
+                            
+                        },
+                        belongto : {
+                            required : "组织不能为空"
+                        }
+                    }
+                }).form();
+            }
+
+        },
+        getsTheCurrentTime: function () {
+            var time=$("#authorizationDateEdit").val();
+                var nowDate = new Date();
+                var startTime = parseInt(nowDate.getFullYear()+1)
+                    + "-"
+                    + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                        + parseInt(nowDate.getMonth() + 1)
+                        : parseInt(nowDate.getMonth() + 1))
+                    + "-"
+                    + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                        : nowDate.getDate()) + " ";
+                $("#authorizationDateEdit").val(startTime);
+        },
+    },
     dmaManage = {
         init: function(){
             // 显示隐藏列
@@ -376,6 +612,7 @@
             var sDetails = $("#" + treeNode.tId + "_span");
             if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
                 return;
+
             var id = (100 + newCount);
             var pid = treeNode.id;
             pid = window.encodeURI(window.encodeURI(pid));
@@ -397,9 +634,18 @@
                     + "' title='详情'  href='district/detail/"
                     + pid
                     + "/' data-target='#commonSmWin' data-toggle='modal'</span>";
-            sDetails.after(detailsStr);
-            sEdit.after(editStr);
-            sObj.after(addStr);
+            // sDetails.after(detailsStr);
+            // sEdit.after(editStr);
+            // sObj.after(addStr);
+            if(treeNode.type == "dma"){
+                sDetails.after(detailsStr);
+                sEdit.after(editStr);
+                // sObj.after(addStr);
+            }else{
+                sDetails.after(detailsStr);
+                sEdit.after(editStr);
+                sObj.after(addStr);
+            }
             var btn = $("#addBtn_" + treeNode.tId);
             if (btn)
                 btn.bind("click", function() {
@@ -545,7 +791,7 @@
                     $("#id_aznp").val(baseinfo.aznp);
                     $("#id_night_use").val(baseinfo.night_use);
                     $("#id_cxc_value").val(baseinfo.cxc_value);
-                    $("#id_belongto").val(baseinfo.belongto);
+                    $("#zTreeOrganSelEdit").val(baseinfo.belongto);
                 }else{
 
                 }
@@ -576,14 +822,7 @@
         validateSubmit:function(){
             return true;
         },
-        Alterdma:function(){
-            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").removeAttr("readonly");
-
-        },
-        restore:function(){
-            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").attr("readonly","readonly");
-
-        },
+        
         // ajax参数
         ajaxDataParamFun: function(d){
             d.simpleQueryParam = $('#simpleQueryParam').val(); // 模糊查询
@@ -993,6 +1232,7 @@
         dmaManage.userTree();
         getTable('dataTables');
         dmaManage.init();
+        DMABaseEdit.init();
         dmaManage.getBaseinfo();
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
@@ -1023,8 +1263,14 @@
                 "checked",
                 subChk.length == subChk.filter(":checked").length ? true: false);
         });
+        //basic dma infor invole
+        $("#zTreeOrganSelEdit").attr("disabled","disabled"); // 禁用选择组织控件 
+        $("#zTreeOrganSelEdit").on("click",function(){DMABaseEdit.showMenu(this)});
+        $("#baseinfomMdify").on("click",DMABaseEdit.Alterdma);
+        $("#baseinfoCommit").on("click",DMABaseEdit.doSubmit);
+        $("#baseinfoRestore").on("click",DMABaseEdit.restore);
         //提交基本信息
-        $("#baseinfoCommit").bind("click",dmaManage.baseinfoCommit);
+        // $("#baseinfoCommit").bind("click",dmaManage.baseinfoCommit);
         // 批量删除
         $("#del_model").on("click",dmaManage.delModel);
         $("#addoperation").on("click",dmaManage.doSubmit);

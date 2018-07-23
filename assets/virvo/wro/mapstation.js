@@ -16,6 +16,7 @@
     var vagueSearchlast = $("#userType").val();
     var overlay;
     var getdmamapusedata_flag = 0;
+    var markerInfoWindow = null;
     mapStation = {
         init: function(){
             // map
@@ -25,6 +26,8 @@
                   opacity:1,       //透明度
                   zIndex:0         //叠加层级
             });
+            
+
             map = new AMap.Map('map-container',{
                 zoom: 10,  //设置地图显示的缩放级别
                 center: [118.438781,29.871515],
@@ -32,7 +35,82 @@
                 viewMode: '2D',  //设置地图模式
                 lang:'zh_cn',  //设置地图语言类型
             });
+
+            // overlay = document.getElementById('js-overlay');
+            markerInfoWindow = new AMap.InfoWindow({
+                // isCustom: true,  //使用自定义窗体
+                // content: mapStation.createInfoWindow("title", overlay.innerHTML),
+                size:new AMap.Size(400,300),
+                offset: new AMap.Pixel(0, 0),
+                autoMove: true
+            });
+
+            var marker = new AMap.Marker({
+                position: new AMap.LngLat(118.438781,29.871515),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                title: 'station1'
+            });
+
+            marker.on("mouseover",function(e){
+                overlay = document.getElementById('js-overlay');
+                overlay.getElement().style.display = 'block';
+                console.log(overlay.outerHTML);
+                var position = e.lnglat;
+
+
+                markerInfoWindow.setContent(overlay.outerHTML);
+                // markerInfoWindow.setSize(AMap.Size(400,300));
+                markerInfoWindow.open(map,position);
+            });
+
+            marker.on("mouseout",function(){
+                markerInfoWindow.close();
+            })
+
+            map.add(marker);
             
+        },
+        //构建自定义信息窗体
+        createInfoWindow:function (title, content) {
+            var info = document.createElement("div");
+            info.className = "info";
+     
+            //可以通过下面的方式修改自定义窗体的宽高
+            //info.style.width = "400px";
+            // 定义顶部标题
+            var top = document.createElement("div");
+            var titleD = document.createElement("div");
+            var closeX = document.createElement("img");
+            top.className = "info-top";
+            titleD.innerHTML = title;
+            closeX.src = "http://webapi.amap.com/images/close2.gif";
+            closeX.onclick = mapStation.closeInfoWindow();
+     
+            top.appendChild(titleD);
+            top.appendChild(closeX);
+            info.appendChild(top);
+     
+            // 定义中部内容
+            var middle = document.createElement("div");
+            middle.className = "info-middle";
+            middle.style.backgroundColor = 'white';
+            middle.innerHTML = content;
+            info.appendChild(middle);
+     
+            // 定义底部内容
+            var bottom = document.createElement("div");
+            bottom.className = "info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '0px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "http://webapi.amap.com/images/sharp.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
+            return info;
+        },
+        //关闭信息窗体
+        closeInfoWindow:function () {
+            map.clearInfoWindow();
         },
         appLayer:function (options) {
             var layer = new ol.layer.Tile({

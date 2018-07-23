@@ -63,20 +63,15 @@
 
                         <div class="form-group">
                           <label class="col-md-2 control-label">所属组织：</label>
-                          <div class="col-md-2">
-                            <input class="form-control" id="id_belongto" name="belongto" autocomplete="off" type="text">
-                            <!-- <div class="input-group">
-                              <input class="form-control" id="id_belongto" name="belongto" autocomplete="off" type="text">
-                              <div class="input-group-btn">
-                                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="">
-                                  <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right" role="menu" style="padding-top: 0px; max-height: 275px; overflow: auto; transition: all 0.3s ease 0s;">
-
-                                </ul>
-                              </div>
-                            </div> -->
-                          </div>
+                          <div class="has-feedback col-md-2">
+                            <input name="belongto"
+                                class="form-control" id="zTreeOrganSelEdit" placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
+                                type="text" value="{{ form.belongto.value }}" />
+                                <span id="zTreeCitySelSpan" class="fa fa-chevron-down form-control-feedback" aria-hidden="true"></span>
+                            <div id="zTreeContentEdit" class="ztreeModelBox" style="top:36px!important">
+                                <ul id="ztreeOrganEdit" class="ztree"></ul>
+                            </div>
+                        </div>
                           <label class="col-md-2 control-label">管道总长度（m）：</label>
                           <div class="col-md-2">
                             <input id="id_pipe_length" name="pipe_length" class="form-control" readonly="" type="text">
@@ -129,9 +124,9 @@
 
                           <!-- <div class="col-md-2"></div> -->
                           <div class="col-md-4" >
-                            <button type="button" id="baseinfomMdify" onclick="dmaManage.Alterdma()" style="margin-left: 140px;" class="btn btn-primary ">修改</button>
+                            <button type="button" id="baseinfomMdify"  style="margin-left: 140px;" class="btn btn-primary ">修改</button>
                             <button type="button" id="baseinfoCommit" class="btn btn-primary ">提交</button>
-                            <button type="button" id="baseinfoRestore" onclick="dmaManage.restore()" class="btn btn-primary ">恢复</button>
+                            <button type="button" id="baseinfoRestore"  class="btn btn-primary ">恢复</button>
                           </div>
 
                         </div>
@@ -368,6 +363,8 @@
 
 {% block javascript %}
 <script>
+  var publicEditSuccess = "成功提交";
+  var publicEditError = "提交不成功";
   var userGroupDeleteConfirm = "\u60A8\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u7EC4\u7EC7\u5417";
   var systemError = "\u5BF9\u4E0D\u8D77\uFF0C\u7CFB\u7EDF\u8D70\u4E22\u4E86\uFF0C\u8BF7\u8054\u7CFB\u7BA1\u7406\u5458";
   var userNodeNameNull = "\u8282\u70B9\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A";
@@ -388,5 +385,5 @@
 <script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
 
 <script src="{% static 'virvo/wro/districtList.js' %}"></script>
-
+<script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
 {% endblock %}

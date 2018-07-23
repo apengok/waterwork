@@ -21,10 +21,11 @@ class DMACreateForm(forms.ModelForm):
 
 
 class DMABaseinfoForm(forms.ModelForm):
+    belongto  = forms.CharField()
 
     class Meta:
         model = DMABaseinfo
-        fields = ['dma_no','pepoles_num','acreage','user_num','pipe_texture','pipe_length','pipe_links','pipe_years','pipe_private','ifc','aznp','night_use','cxc_value','belongto']
+        fields = ['dma_no','pepoles_num','acreage','user_num','pipe_texture','pipe_length','pipe_links','pipe_years','pipe_private','ifc','aznp','night_use','cxc_value']
 
     def __init__(self,*args,**kwargs):
         super(DMABaseinfoForm, self).__init__(*args, **kwargs)

@@ -264,16 +264,16 @@ def dmabaseinfo(request):
         print('dmabaseinfo post:',request.POST)
         dma_no = request.POST.get("dma_no")
         dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
-        # form = DMABaseinfoForm(request.POST or None)
-        # if form.is_valid():
-        #     form.save()
-        #     flag = 1
-        # err_str = ""
-        # if form.errors:
-        #     flag = 0
-        #     for k,v in form.errors.items():
-        #         print(k,v)
-        #         err_str += v[0]
+        form = DMABaseinfoForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            flag = 1
+        err_str = ""
+        if form.errors:
+            flag = 0
+            for k,v in form.errors.items():
+                print(k,v)
+                err_str += v[0]
     
         data = {
             "success": flag,
@@ -376,7 +376,11 @@ class DMABaseinfoEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print("dmabaseinfo edit here?:",self.request.POST)
         # print(form)
         # do something
-        
+        belongto_name = form.cleaned_data.get("belongto")
+        print('belongto_name',belongto_name)
+        organ = Organizations.objects.get(name=belongto_name)
+        instance = form.save(commit=False)
+        instance.belongto = organ
                 
 
         return super(DMABaseinfoEditView,self).form_valid(form)
@@ -485,10 +489,10 @@ class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 Group edit, manager
 """
 class DistrictEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
-    model = Organizations
-    form_class = OrganizationsEditForm
-    template_name = "dmam/groupedit.html"
-    success_url = reverse_lazy("entm:rolemanager");
+    model = DMACreateForm
+    form_class = DMABaseinfoForm
+    template_name = "dmam/districtedit.html"
+    success_url = reverse_lazy("dmam:rolemanager");
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
