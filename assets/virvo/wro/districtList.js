@@ -250,285 +250,6 @@
                 $("#authorizationDateEdit").val(startTime);
         },
     },
-    assignStation = {
-        //初始化
-        init:function(){
-            var setting = {
-                async : {
-                    url : "district/dmatree/",
-                    tyoe : "post",
-                    enable : true,
-                    autoParam : [ "id" ],
-                    contentType : "application/json",
-                    dataType : "json",
-                },
-                view : {
-                    dblClickExpand : false
-                },
-                edit : {
-                    enable : true,
-                    editNameSelectAll : true,
-                    showRemoveBtn : false,//stationManage.showRemoveBtn,
-                    showRenameBtn : false
-                },
-                data : {
-                    simpleData : {
-                        enable : true
-                    }
-                },
-                callback : {
-                    beforeClick : assignStation.beforeClick,
-                    onClick : assignStation.onClick
-
-                }
-            };
-            $.fn.zTree.init($("#stationtreeDemo"), setting, zNodes);
-            // $.fn.zTree.init($("#treeDemo"), treeSetting, zNodes);
-            var treeObj = $.fn.zTree.getZTreeObj('stationtreeDemo');
-            treeObj.expandAll(true);
-           
-        },
-        beforeClick: function(treeId, treeNode){
-            var check = (treeNode);
-            return check;
-        },
-        onClick: function(e, treeId, treeNode){
-            var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo"), nodes = zTree
-                .getSelectedNodes(), v = "";
-            n = "";
-            nodes.sort(function compare(a, b) {
-                return a.id - b.id;
-            });
-            for (var i = 0, l = nodes.length; i < l; i++) {
-                n += nodes[i].name;
-                v += nodes[i].id + ",";
-            }
-            if (v.length > 0)
-                v = v.substring(0, v.length - 1);
-            var cityObj = $("#zTreeOrganSelEdit");
-            console.log('before:',$("#groupIds").val());
-            $("#groupIds").val(v);
-            $("#idstr").val(v);
-            console.log('after:',$("#groupIds").val());
-            cityObj.val(n);
-            
-        },
-        export:function(){
-            var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo"), nodes = zTree
-                .getSelectedNodes(), v = "";
-
-                console.log(nodes);
-            n = "";
-            nodes.sort(function compare(a, b) {
-                return a.id - b.id;
-            });
-            var oTable = document.getElementById('tb_zone_static');
-            var rowLength = oTable.rows.length;
-            console.log('rowLength',rowLength);
-            for (var i = 0, l = nodes.length; i < l; i++) {
-                n += nodes[i].name;
-                v += nodes[i].id + ",";
-            console.log('rowLength',rowLength+i);
-                var row_cnt = rowLength+i;
-                var tr = '<tr>';
-                tr += '<td><input  type="checkbox" name="subChk"  value="' + nodes[i].name + '" uid="'+ nodes[i].id +'" /></td>';
-                tr += '<td>'+row_cnt +'</td>';
-                tr += '<td>'+nodes[i].name+'</td>';
-                tr += '<td>'+nodes[i].name+'</td>';
-                tr += '<td>'+'<div class="has-feedback ">'+
-                                    '<select class="form-control" id="state" name="relate_meter">'+
-                                        '<option>进水表</option>'+
-                                        '<option>出水表</option>'+
-                                        '<option>贸易结算表</option>'+
-                                        '<option>未计费水表</option>'+
-                                        '<option>官网检测表</option>'+
-                                    '</select>'+
-                               ' </div>'+'</td>';
-                tr += '</tr>'
-                $('#tb_zone_static tr:last').after(tr);
-            }
-            if (v.length > 0)
-                v = v.substring(0, v.length - 1);
-
-            // #add to table
-            
-            
-        },
-        import:function(){
-
-            //gets table
-            var oTable = document.getElementById('myTable');
-
-            //gets rows of table
-            var rowLength = oTable.rows.length;
-
-            //loops through rows    
-            for (i = 0; i < rowLength; i++){
-
-              //gets cells of current row  
-               var oCells = oTable.rows.item(i).cells;
-
-               //gets amount of cells of current row
-               var cellLength = oCells.length;
-
-               //loops through each cell in current row
-               for(var j = 0; j < cellLength; j++){
-
-                      // get your cell info here
-
-                      var cellVal = oCells.item(j).innerHTML;
-                      alert(cellVal);
-                   }
-            }
-        },
-        hideMenu: function(){
-            $("#zTreeContentEdit").fadeOut("fast");
-            $("body").unbind("mousedown", assignStation.onBodyDown);
-        },
-        onBodyDown: function(event){
-            if (!(event.target.id == "menuBtn" || event.target.id == "zTreeContentEdit" || $(event.target).parents("#zTreeContentEdit").length > 0)) {
-                assignStation.hideMenu();
-            }
-        },
-        valueChange:function () { // 判断值是否改变
-            var edit_dma_no = $("#id_dma_no").val();
-            var edit_pipe_texture = $("#id_pipe_texture").val();
-            var edit_ifc = $("#id_ifc").val();
-            var edit_zTreeOrganSelEdit = $("#zTreeOrganSelEdit").val();
-            var edit_pipe_length = $("#id_pipe_length").val();
-            var edit_aznp = $("#id_aznp").val();
-            var edit_pepoles_num = $("#id_pepoles_num").val();
-            var edit_pipe_links = $("#id_pipe_links").val();
-            var edit_night_use = $("#id_night_use").val();
-            var edit_acreage = $("#id_acreage").val();
-            var edit_pipe_years = $("#id_pipe_years").val();
-            var edit_cxc_value = $("#id_cxc_value").val();
-            var edit_user_num = $("#id_user_num").val();
-            var edit_pipe_private = $("#id_pipe_private").val();
-            
-            // 值已经发生改变
-            if (dma_no != edit_dma_no || pipe_texture != edit_pipe_texture || ifc != edit_ifc || ozTreeOrganSelEdit != edit_zTreeOrganSelEdit
-                || pipe_length != edit_pipe_length || aznp != edit_aznp || pepoles_num != edit_pepoles_num || pipe_links != edit_pipe_links || night_use != edit_night_use
-                || acreage != edit_acreage || pipe_years != edit_pipe_years || cxc_value != edit_cxc_value || user_num != edit_user_num || pipe_private != edit_pipe_private ) {
-                    flag1 = true;
-            } else { // 表单值没有发生改变
-                
-                flag1 = false;
-            }
-        },
-        Alterdma:function(){
-            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").removeAttr("readonly");
-            $("#zTreeOrganSelEdit").attr("disabled",false);
-        },
-        restore:function(){
-            $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").attr("readonly","readonly");
-            $("#zTreeOrganSelEdit").attr("disabled","disabled");
-        },
-        doSubmit: function(){
-            
-            assignStation.valueChange();
-            if (flag1){
-                var     baseinfo_action = "/dmam/district/dmabaseinfo/edit/{id}/";
-                dma_id = $("#current_dma_no").val();
-                
-                new_action = baseinfo_action.replace("{id}", dma_id);
-                
-                $("#baseinfoForm").attr("action",new_action);
-
-                if(assignStation.validates()){
-                    $('#simpleQueryParam').val("");
-                    
-                    $("#baseinfoForm").ajaxSubmit(function(data) {
-                        if (data != null) {
-                            var result =  $.parseJSON(data);
-                            console.log(result);
-                            if (result.success == true) {
-                                if (result.obj.flag == 1){
-                                    // $("#commonLgWin").modal("hide");
-                                    layer.msg(publicEditSuccess,{move:false});
-                                    myTable.refresh()
-                                }else{
-                                    if(date != null){
-                                        layer.msg(publicEditError,{move:false});
-                                    }
-                                }
-                            }else{
-                                layer.msg(result.obj.errMsg,{move:false});
-                            }
-                        }
-                    });
-                    // $("#commonLgWin").modal("hide"); // 关闭窗口
-                }
-            } else {
-                // $("#commonLgWin").modal("hide"); // 关闭窗口
-            }
-        },
-        //校验
-        validates: function(){
-            var isAdmin = isAdminStr == 'true'
-            console.log('isadmin?',isAdmin);
-            if(isAdmin == true){
-                return $("#baseinfoForm").validate({
-                    rules : {
-                        dma_no : {
-                            required : true,
-                            
-                        },
-                        belongto : {
-                            required : true
-                        }
-                    },
-                    messages : {
-                        dma_no : {
-                            required : "分区编号不能为空",
-                            
-                        },
-                        
-                        belongto : {
-                            required : "组织不能为空"
-                        }
-                    }
-                }).form();
-            }else{
-                return $("#baseinfoForm").validate({
-                    rules : {
-                        dma_no : {
-                            required : true,
-                            
-                        },
-                        
-                        belongto : {
-                            required : true
-                        }
-                        
-                    },
-                    messages : {
-                        dma_no : {
-                            required : "分区编号不能为空",
-                            
-                        },
-                        belongto : {
-                            required : "组织不能为空"
-                        }
-                    }
-                }).form();
-            }
-
-        },
-        getsTheCurrentTime: function () {
-            var time=$("#authorizationDateEdit").val();
-                var nowDate = new Date();
-                var startTime = parseInt(nowDate.getFullYear()+1)
-                    + "-"
-                    + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
-                        + parseInt(nowDate.getMonth() + 1)
-                        : parseInt(nowDate.getMonth() + 1))
-                    + "-"
-                    + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
-                        : nowDate.getDate()) + " ";
-                $("#authorizationDateEdit").val(startTime);
-        },
-    },
     dmaManage = {
         init: function(){
             // 显示隐藏列
@@ -551,46 +272,6 @@
                     // 第一列，用来显示序号
                     "data" : null,
                     "class" : "text-center"
-                },
-                {
-                    "data" : null,
-                    "class" : "text-center",
-                    render : function(data, type, row, meta) {
-                        var userId = $("#currentUserId").val();
-                        var idStr = row.id;
-                        var uid = row.user_name;
-                        // var arrayObj = row.id.all;
-                        // arrayObj.reverse();
-                        // var idStr = arrayObj.join(",");
-                        if (idStr != userId) {
-                            var result = '';
-                            result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
-                            return result;
-                        }else{
-                            var result = '';
-                            result += '<input  type="checkbox" name="subChk" disabled/>';
-                            return result;
-                        }
-                    }
-                },
-                {
-                    "data" : null,
-                    "class" : "text-center", // 最后一列，操作按钮
-                    render : function(data, type, row, meta) {
-                        var idStr = row.id;
-                        // var arrayObj = row.id.all;
-                        // var idStr = arrayObj.join(",");
-                        var editUrlPath = myTable.editUrl + idStr + "/"; // 修改地址
-                        
-                        var result = '';
-                        var userId = $("#currentUserId").val();
-                        var userId2 = $("#currentUserId").attr("value");
-                        // 修改按钮
-                        result += '<button href="'+editUrlPath+'" data-target="#commonLgWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
-                        result += '<button type="button" onclick="dmaManage.deleteRole(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
-                        
-                        return result;
-                    }
                 },
                 {
                     "data" : "username",    //站点名称
@@ -616,11 +297,6 @@
                     "class" : "text-center"
                 },
                 {
-                    "data" : "simid",
-                    "class" : "text-center",
-                    
-                },
-                {
                     "data" : "dn",
                     "class" : "text-center",
                     render : function (data,type,row,meta) {
@@ -643,28 +319,6 @@
                 
                 
                 
-                {
-                    "data" : "big_user",
-                    "class" : "text-center",
-                    render : function(data, type, row, meta) {
-                        if (data == "1") {
-                            return '是';
-                        } else {
-                            return '';
-                        }
-                    }
-                } ,
-                {
-                    "data" : "focus",
-                    "class" : "text-center",
-                    render : function(data, type, row, meta) {
-                        if (data == "1") {
-                            return '是';
-                        } else {
-                            return '';
-                        }
-                    }
-                } ,
                 {
                     "data" : "createdate",
                     "class" : "text-center",
@@ -867,7 +521,7 @@
         },
         // 显示删除组织按钮
         showRemoveBtn: function(treeId, treeNode){
-            return treeNode.children==undefined;
+            return (treeNode.children==undefined && treeNode.type != 'group');
         },
         showRenameBtn: function(treeId, treeNode){
             return !treeNode.isLastNode;
@@ -891,6 +545,8 @@
             var sDetails = $("#" + treeNode.tId + "_span");
             if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
                 return;
+            if (treeNode.editNameFlag || $("#editBtn_" + treeNode.tId).length > 0)
+                return;
 
             var id = (100 + newCount);
             var pid = treeNode.id;
@@ -902,28 +558,30 @@
                     + id
                     + "&pid="
                     + pid
-                    + "' data-target='#commonSmWin' data-toggle='modal'></span>";
+                    + "' data-target='#commonSmWin' data-toggle='modal' style='background-image:url(/static/virvo/images/add.png)'><img  src='/static/virvo/images/add.png' style='outline: none;'></span>";
             var editStr = "<span class='button edit' id='editBtn_"
                     + treeNode.tId
                     + "' title='编辑' href='district/edit/"
                     + pid
-                    + "/' data-target='#commonSmWin' data-toggle='modal'></span>";
+                    + "/' data-target='#commonSmWin' data-toggle='modal' style='background-image:url(/static/virvo/images/edit.png)' >"
+                    + "<img  src='/static/virvo/images/edit.png' style='outline: none;'>"
+                    +"</span>";
+            
             var detailsStr = "<span class='button details' id='detailsBtn_"
                     + treeNode.tId
                     + "' title='详情'  href='district/detail/"
                     + pid
-                    + "/' data-target='#commonSmWin' data-toggle='modal'</span>";
+                    + "/' data-target='#commonSmWin' data-toggle='modal' style='background-image:url(/static/virvo/images/detail.png)'><img  src='/static/virvo/images/detail.png' style='outline: none;'></span>";
             // sDetails.after(detailsStr);
             // sEdit.after(editStr);
             // sObj.after(addStr);
+            if(treeNode.type == "group"){
+                sObj.after(addStr);
+            }
             if(treeNode.type == "dma"){
                 sDetails.after(detailsStr);
-                sEdit.after(editStr);
-                // sObj.after(addStr);
-            }else{
-                sDetails.after(detailsStr);
-                sEdit.after(editStr);
-                sObj.after(addStr);
+                // sEdit.after(editStr);
+                sObj.after(editStr);
             }
             var btn = $("#addBtn_" + treeNode.tId);
             if (btn)
@@ -963,6 +621,7 @@
                                     treeObj.selectNode(treenode);*/
                                 }
                                 treeObj.expandAll(true);
+                                dmaManage.getBaseinfo();
                             },
                             error: function () {
                                 layer.msg(systemError, {move: false});
@@ -1008,6 +667,7 @@
             var detBtn = $("#detailsBtn_" + treeNode.tId);
         },
         removeHoverDom: function(treeId, treeNode){
+
             $("#addBtn_" + treeNode.tId).unbind().remove();
             $("#editBtn_" + treeNode.tId).unbind().remove();
             $("#detailsBtn_" + treeNode.tId).unbind().remove();
@@ -1022,30 +682,33 @@
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd=treeNode.uuid;
             $('#simpleQueryParam').val("");
-            if(treeNode.type == "dma"){
-                var pNode = treeNode.getParentNode();
-                $("#current_dma_no").attr("value",treeNode.id);
-                $("#current_dma_name").attr("value",treeNode.name);
-                dmaManage.getBaseinfo();
+            $("#current_dma_no").attr("value",treeNode.dma_no);
+            $("#current_dma_name").attr("value",treeNode.name);
+            dmaManage.getBaseinfo();
+            // if(treeNode.type == "dma"){
+            //     var pNode = treeNode.getParentNode();
+            //     $("#current_dma_no").attr("value",treeNode.dma_no);
+            //     $("#current_dma_name").attr("value",treeNode.name);
+            //     dmaManage.getBaseinfo();
 
 
-                // var organ = pNode.id;
-                // dma_no = pNode.id;
-                // dma_name = treeNode.name;
-                // var url="/dmam/district/dmabaseinfo/";
-                // var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
-                // json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
-            }else{
-                myTable.requestData();
+            //     // var organ = pNode.id;
+            //     // dma_no = pNode.id;
+            //     // dma_name = treeNode.name;
+            //     // var url="/dmam/district/dmabaseinfo/";
+            //     // var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
+            //     // json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
+            // }else{
+            //     myTable.requestData();
 
-            }
+            // }
         },
         getBaseinfo:function(){
             
-            dma_id = $("#current_dma_no").val();
+            dma_no = $("#current_dma_no").val();
             dma_name = $("#current_dma_name").val();
             var url="/dmam/district/dmabaseinfo/";
-            var parameter={"dma_id":dma_id,"dma_name":dma_name};
+            var parameter={"dma_no":dma_no,"dma_name":dma_name};
             json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
         },
         setBaseinfo:function(data){
@@ -1072,8 +735,11 @@
                     $("#id_cxc_value").val(baseinfo.cxc_value);
                     $("#zTreeOrganSelEdit").val(baseinfo.belongto);
                 }else{
-
+                    layer.msg(data.msg);
                 }
+            }
+            else{
+                layer.msg("没有分区");
             }
         },
         baseinfoCommit: function(){
@@ -1513,7 +1179,7 @@
         dmaManage.init();
         DMABaseEdit.init();
         dmaManage.getBaseinfo();
-        assignStation.init();
+        
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             dmaManage.refreshTable();
@@ -1550,8 +1216,7 @@
         $("#baseinfoCommit").on("click",DMABaseEdit.doSubmit);
         $("#baseinfoRestore").on("click",DMABaseEdit.restore);
 
-        // station manager
-        $("#export").on("click",assignStation.export);
+        
 
         //提交基本信息
         // $("#baseinfoCommit").bind("click",dmaManage.baseinfoCommit);

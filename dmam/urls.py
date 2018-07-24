@@ -27,6 +27,12 @@ urlpatterns = [
     url(r'^district/dmabaseinfo/?$',views.dmabaseinfo,name='dmabaseinfo'),
     url(r'^district/dmabaseinfo/edit/(?P<pk>\w+)/?$',views.DMABaseinfoEditView.as_view(),name='dmabaseinfoedit'),
     url(r'^getdmamapusedata/?$',views.getdmamapusedata,name='getdmamapusedata'),
+    url(r'^verifydmano/?$',views.verifydmano,name='verifydmano'),
+    url(r'^verifydmaname/?$',views.verifydmaname,name='verifydmaname'),
+
+    #dma分区站点配置
+    url(r'^district/assignstation/(?P<pk>\w+)/?$',views.DistrictAssignStationView.as_view(),name='districtassignstation'),
+
 
     
 

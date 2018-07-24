@@ -59,12 +59,17 @@ def dmatree(request):
         organs = user.belongto #Organizations.objects.all()
     
     for o in organs.get_descendants(include_self=True):
+        if o.dma.exists():
+            p_dma_no = o.dma.first().dma_no
+        else:
+            p_dma_no = ''
         organtree.append({
             "name":o.name,
             "id":o.cid,
             "pId":o.pId,
             "districtid":'',
             "type":"group",
+            "dma_no":p_dma_no,  #如果存在dma分区，分配第一个dma分区的dma_no，点击数条目的时候使用
             "icon":"/static/virvo/resources/img/wenjianjia.png",
             "uuid":o.uuid
         })
@@ -77,6 +82,7 @@ def dmatree(request):
             "districtid":d.pk,
             "pId":o.cid,
             "type":"dma",
+            "dma_no":d.dma_no,
             "icon":"/static/virvo/resources/img/u8836.png",
             "uuid":''
         })
@@ -230,8 +236,37 @@ def dmabaseinfo(request):
 
     if request.method == 'GET':
         print('dmabaseinfo get:',request.GET)
-        dma_id = request.GET.get("dma_id")
-        dmabase = DMABaseinfo.objects.get(pk=int(dma_id))
+        dma_no = request.GET.get("dma_no")
+        if dma_no == '':
+            operarions_list = {
+                "exceptionDetailMsg":"null",
+                "msg":None,
+                "obj":{
+                        "baseinfo":{
+                            "dma_no":'',
+                            "pepoles_num":'',
+                            "acreage":'',
+                            "user_num":'',
+                            "pipe_texture":'',
+                            "pipe_length":'',
+                            "pipe_links":'',
+                            "pipe_years":'',
+                            "pipe_private":'',
+                            "ifc":'',
+                            "aznp":'',
+                            "night_use":'',
+                            "cxc_value":'',
+                            "belongto":''
+                            }
+                },
+                "success":True
+            }
+           
+
+            return JsonResponse(operarions_list)
+            
+
+        dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
 
         operarions_list = {
             "exceptionDetailMsg":"null",
@@ -262,26 +297,26 @@ def dmabaseinfo(request):
 
     if request.method == 'POST':
         print('dmabaseinfo post:',request.POST)
-        dma_no = request.POST.get("dma_no")
-        dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
-        form = DMABaseinfoForm(request.POST or None)
-        if form.is_valid():
-            form.save()
-            flag = 1
-        err_str = ""
-        if form.errors:
-            flag = 0
-            for k,v in form.errors.items():
-                print(k,v)
-                err_str += v[0]
+        # dma_no = request.POST.get("dma_no")
+        # dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
+        # form = DMABaseinfoForm(request.POST or None)
+        # if form.is_valid():
+        #     form.save()
+        #     flag = 1
+        # err_str = ""
+        # if form.errors:
+        #     flag = 0
+        #     for k,v in form.errors.items():
+        #         print(k,v)
+        #         err_str += v[0]
     
-        data = {
-            "success": flag,
-            "errMsg":err_str
+        # data = {
+        #     "success": flag,
+        #     "errMsg":err_str
             
-        }
+        # }
         
-        return HttpResponse(json.dumps(data)) #JsonResponse(data)
+        # return HttpResponse(json.dumps(data)) #JsonResponse(data)
 
 
     return HttpResponse(json.dumps({"success":True}))
@@ -401,7 +436,7 @@ class DistrictMangerView(LoginRequiredMixin,TemplateView):
 
         default_dma = DMABaseinfo.objects.first()   # user_organ.dma.all().first()
 
-        context["current_dma_no"] = default_dma.pk
+        context["current_dma_no"] = default_dma.dma_no
         context["current_dma_name"] = default_dma.dma_name
 
         # context["user_list"] = User.objects.all()
@@ -412,6 +447,18 @@ class DistrictMangerView(LoginRequiredMixin,TemplateView):
     """
 group add
 """
+def verifydmano(request):
+    dma_no = request.POST.get("dma_no")
+    bflag = not DMABaseinfo.objects.filter(dma_no=dma_no).exists()
+
+    return HttpResponse(json.dumps({"success":bflag}))
+
+def verifydmaname(request):
+    dma_name = request.POST.get("dma_name")
+    bflag = not DMABaseinfo.objects.filter(dma_name=dma_name).exists()
+
+    return HttpResponse(json.dumps({"success":bflag}))    
+
 class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = Organizations
     template_name = "dmam/districtadd.html"
@@ -489,10 +536,10 @@ class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 Group edit, manager
 """
 class DistrictEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
-    model = DMACreateForm
-    form_class = DMABaseinfoForm
+    model = DMABaseinfo
+    form_class = DMACreateForm
     template_name = "dmam/districtedit.html"
-    success_url = reverse_lazy("dmam:rolemanager");
+    success_url = reverse_lazy("dmam:districtmanager");
 
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
@@ -527,16 +574,16 @@ class DistrictEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 
     def get_object(self):
         print(self.kwargs)
-        return Organizations.objects.get(cid=self.kwargs["pId"])
+        return DMABaseinfo.objects.get(pk=self.kwargs["pId"])
         
 
 """
 Group Detail, manager
 """
 class DistrictDetailView(DetailView):
-    model = Organizations
-    form_class = OrganizationsEditForm
-    template_name = "dmam/groupdetail.html"
+    model = DMABaseinfo
+    form_class = DMABaseinfoForm
+    template_name = "dmam/districtdetail.html"
     # success_url = reverse_lazy("entm:rolemanager");
 
     # @method_decorator(permission_required("dma.change_stations"))
@@ -547,13 +594,13 @@ class DistrictDetailView(DetailView):
     
     def get_object(self):
         print(self.kwargs)
-        return Organizations.objects.get(cid=self.kwargs["pId"])
+        return DMABaseinfo.objects.get(pk=self.kwargs["pId"])
 
 """
 Assets comment deletion, manager
 """
 class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
-    model = Organizations
+    model = DMABaseinfo
     # template_name = "aidsbank/asset_comment_confirm_delete.html"
 
     def dispatch(self, *args, **kwargs):
@@ -581,7 +628,7 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def get_object(self,*args, **kwargs):
         print("delete objects:",self.kwargs,kwargs)
-        return Organizations.objects.get(cid=kwargs["pId"])
+        return DMABaseinfo.objects.get(pk=kwargs["pId"])
 
     def delete(self, request, *args, **kwargs):
         """
@@ -592,22 +639,58 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         self.object = self.get_object(*args,**kwargs)
             
 
-        # 不能删除自己所属的组织
-        if self.object == self.request.user.belongto:
-            return JsonResponse({"success":False,"msg":"不能删除自己所属的组织"})
+        
 
-        #删除组织 需要删除该组织的用户 和角色
-        users = self.object.users.all()
-        print('delete ',self.object,'and users:',users)
-        for u in users:
-            u.Role.delete()     #删除用户
-            u.delete()
-        for r in self.object.roles.all():
+        #删除dma分区 需要删除该分区关联的站点
+        dmastation = self.object.dmastation.all()
+        
+        for r in dmastation:
             r.delete()
         self.object.delete()
         return JsonResponse({"success":True})
 
 
+class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+    model = DMABaseinfo
+    form_class = DMACreateForm
+    template_name = "dmam/districtassignstation.html"
+    success_url = reverse_lazy("dmam:districtmanager");
+
+    # @method_decorator(permission_required("dma.change_stations"))
+    def dispatch(self, *args, **kwargs):
+        # self.role_id = kwargs["pk"]
+        return super(DistrictAssignStationView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"dmam/permission_error.html",data)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("group update here?:",self.request.POST)
+        # print(form)
+        # do something
+        
+                
+
+        return super(DistrictAssignStationView,self).form_valid(form)
+
+    def get_object(self):
+        print(self.kwargs)
+        return DMABaseinfo.objects.first()#get(pk=self.kwargs["pk"])
+        
 
 
 """

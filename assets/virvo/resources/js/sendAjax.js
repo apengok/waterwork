@@ -118,6 +118,8 @@ function error(XMLHttpRequest, textStatus, errorThrown){
 
 function beforeSend(XMLHttpRequest){
     console.log('here?');
+    var csrftoken = getCookie('csrftoken');
+    XMLHttpRequest.setRequestHeader("X-CSRFToken", csrftoken);
     layer.load(2);
 }
 function complete(XMLHttpRequest, textStatus){

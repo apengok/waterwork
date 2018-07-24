@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<form id="addForm" role="form" action="{% url 'dmam:districtadd' %}" method="post" class="form-horizontal">{% csrf_token %}
+<form id="editForm" role="form" action="{% url 'dmam:districtedit' object.pk %}" method="post" class="form-horizontal">{% csrf_token %}
     <div class="modal-header">
         <button type="button" id="doXAdd" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">新 建DMA分区</h4>
@@ -12,22 +12,22 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" style="padding-right: 0px;"><label class="text-danger">*</label> 分区编号：</label>
                     <div class="col-md-4">
-                        <input name="dma_no" placeholder="请输入分区编号" type="text" maxlength="50" class="form-control" id="dma_no"/>
+                        <input name="dma_no" value="{{ form.dma_no.value }}" placeholder="请输入分区编号" type="text"  maxlength="50" class="form-control" id="dma_no"/>
                     </div>
                     <label class="col-md-2 control-label" style="padding-right: 0px;"><label class="text-danger">*</label> 分区名称：</label>
                     <div class="col-md-4">
-                        <input name="dma_name" placeholder="请输入分区名称" type="text" maxlength="50" class="form-control" id="dma_name"/>
+                        <input name="dma_name" value="{{ form.dma_name.value }}" placeholder="请输入分区名称" type="text" maxlength="50" class="form-control" id="dma_name"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label" style="text-align: right;"><label class="text-danger">*</label> 负责人：</label>
                     <div class="col-md-4">
-                        <input name="creator" placeholder="请输入负责人姓名" type="text" maxlength="50" class="form-control" id="creator"/>
+                        <input name="creator" value="{{ form.creator.value }}" placeholder="请输入负责人姓名" type="text" maxlength="50" class="form-control" id="creator"/>
                     </div>
                     <label class="col-md-2 control-label" style="padding-right: 0px;">建立日期：</label>
                     <div class="col-md-4">
                         <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
-                               id="registerDate" name="create_date" placeholder=""/>
+                               id="registerDate" name="create_date" value="{{ form.create_date.value }}" placeholder=""/>
                     </div>
                 </div>
                 
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button id="submitAdd"  class="btn btn-primary" type="button">
+        <button id="submitEdit"  class="btn btn-primary" type="button">
             <strong>提 交</strong>
         </button>
         <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal">
@@ -50,8 +50,16 @@
 
 
     (function($,window){
-        
-        districtAdd = {
+        var dma_no = $("#dma_no").val();
+        var dma_name = $("#dma_name").val();
+        var creator = $("#creator").val();
+        var create_date = $("registerDate").val();
+        var edit_dma_no = '';
+        var edit_dma_name = '';
+        var edit_creator = '';
+        var edit_create_date = '';
+        var flag1 = false;
+        districtEdit = {
             init: function(){
                 // $.ajax({
                 //     url: 'group/findOperations',
@@ -74,42 +82,58 @@
                 //         }
                 //     },
                 // });
-                laydate.render({elem: '#registerDate',max: districtAdd.getsTheMaxTime(),theme: '#6dcff6'});
+                laydate.render({elem: '#registerDate',max: districtEdit.getsTheMaxTime(),theme: '#6dcff6'});
             },
-            
+            valuechange:function(){
+                edit_dma_no = $("#dma_no").val();
+                edit_dma_name = $("#dma_name").val();
+                edit_creator = $("#creator").val();
+                edit_create_date = $("registerDate").val();
+                if(dma_no != edit_dma_no || dma_name != edit_dma_name || creator != edit_creator || create_date != edit_create_date){
+                    flag1 = true;
+                }
+                else{
+                    flag1 = false;
+                }
+            },
             // 提交
             doSubmit: function(){
                 console.log('validas...');
-                // districtAdd.validates();
-                if(districtAdd.validates() == true){
-                    // var s = $("#operation").val();
-                    // if (s == null) {
-                    //     $("#operation").val("");
-                    // }
-                    $("#addForm").ajaxSubmit(function(data) {
-                        console.log(data);
-                        var result = $.parseJSON(data);
-                        // if (result.success) {
-
-                        //     $("#commonSmWin").modal("hide");
-                        //     layer.msg("添加成功！",{move:false});
-                        //     $("#search_condition").val("");
+                districtEdit.valuechange();
+                if(flag1){
+                    if(districtEdit.validates() == true){
+                        // var s = $("#operation").val();
+                        // if (s == null) {
+                        //     $("#operation").val("");
                         // }
-                        if (result.success) {
-                            if (result.obj.flag == 1){
-                                $("#commonSmWin").modal("hide");
-                                $("#current_dma_no").attr("value",$("#dma_no").val());
-                                $("#current_dma_name").attr("value",$("#dma_name").val());
-                                layer.msg("添加成功！",{move:false});
-                                $("#search_condition").val("");
+                        $("#editForm").ajaxSubmit(function(data) {
+                            console.log(data);
+                            var result = $.parseJSON(data);
+                            // if (result.success) {
+
+                            //     $("#commonSmWin").modal("hide");
+                            //     layer.msg("添加成功！",{move:false});
+                            //     $("#search_condition").val("");
+                            // }
+                            if (result.success) {
+                                if (result.obj.flag == 1){
+                                    $("#commonSmWin").modal("hide");
+                                    $("#current_dma_no").attr("value",edit_dma_no);
+                                    $("#current_dma_name").attr("value",edit_dma_name);
+                                    layer.msg("添加成功！",{move:false});
+                                    $("#search_condition").val("");
+                                }else{
+                                    layer.msg(result.obj.errMsg,{move:false});
+                                }
                             }else{
-                                layer.msg(result.obj.errMsg,{move:false});
+                                layer.msg(result.msg,{move:false});
                             }
-                        }else{
-                            layer.msg(result.msg,{move:false});
-                        }
-                    });
+                        });
+                    }
+                }else{
+                    $("#commonSmWin").modal("hide");
                 }
+
             },
             clearPreviousValue :function(){
                 if($(".remote").data("previousValue")){
@@ -127,12 +151,12 @@
                     + "-"
                     + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
                         : nowDate.getDate()) + " ";
-                $("#registerDate").val(maxTime);
+                
                 return maxTime
             },
             //校验
             validates: function(){
-                return $("#addForm").validate({
+                return $("#editForm").validate({
                     rules : {
                         dma_no:{
                             required:true,
@@ -150,8 +174,8 @@
                                     if(resultData.success == true){
                                         return true;
                                     }else{
-                                        if(resultData.msg != null && resultData.msg != ""){
-                                            layer.msg(resultData.msg,{move:false});
+                                        if(dma_no == edit_dma_no){
+                                            return true;
                                         }else{
                                             return false;
                                         }
@@ -175,8 +199,8 @@
                                     if(resultData.success == true){
                                         return true;
                                     }else{
-                                        if(resultData.msg != null && resultData.msg != ""){
-                                            layer.msg(resultData.msg,{move:false});
+                                        if(dma_name == edit_dma_name){
+                                            return true;
                                         }else{
                                             return false;
                                         }
@@ -216,10 +240,10 @@
             }
         }
         $(function() {
-            districtAdd.init();
-            $("#submitAdd").on("click",districtAdd.doSubmit);
+            districtEdit.init();
+            $("#submitEdit").on("click",districtEdit.doSubmit);
             $('input').inputClear();
-            $("#dma_no,#dma_name,#registerDate,#create_date,#cursor").on("change",districtAdd.clearPreviousValue);
+            $("#dma_no,#dma_name,#registerDate,#create_date,#cursor").on("change",districtEdit.clearPreviousValue);
         });
     })($,window)
 </script>

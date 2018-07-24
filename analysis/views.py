@@ -435,8 +435,11 @@ def flowdata_cxc(request):
         return HttpResponse(json.dumps(ret))
     
     for dma in dmas:
-        dmastation = dma.dmastation.first()
-        comaddr = dmastation.station_id
+        if dma.dmastation.exists():
+            dmastation = dma.dmastation.first()
+            comaddr = dmastation.station_id
+        else:
+            continue
 
         if comaddr == '':
             comaddr = '4892354820'

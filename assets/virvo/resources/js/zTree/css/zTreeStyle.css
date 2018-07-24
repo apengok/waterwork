@@ -157,7 +157,7 @@ website:	http://code.google.com/p/jquerytree/
 .ztreee li span.button.details{margin-right:0;background-position:-22px -90px;vertical-align:top;width:20px!important;height:20px!important;}
 
 /* .ztreee li span.button.remove{margin-right:2px;background-position:-110px -119px;vertical-align:top} */
-.ztreee li span.button.remove{margin-right:2px;background-position:-42px -72px;vertical-align:top;width:20px!important;height:18px!important;}
+.ztreee li span.button.remove{margin-right:2px;background-position:-42px -72px;vertical-align:top;width:20px!important;height:18px!important;/*background-image:url(/static/virvo/images/del.png)*/}
 
 .ztreee li span.button.ico_loading{margin-right:2px;background:url(./img/loading.gif) no-repeat scroll 0 0 transparent;vertical-align:top}
 ul.tmpTargetzTree{background-color:#FFE6B0;opacity:.8;filter:alpha(opacity=80)}
