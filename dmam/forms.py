@@ -50,7 +50,7 @@ class WaterUserTypeForm(forms.ModelForm):
                         
 
 class StationsForm(forms.ModelForm):
-    description = forms.CharField()
+    description = forms.CharField(required = False)
     belongto = forms.CharField()
     serialnumber = forms.CharField()
     simid = forms.CharField()
@@ -64,5 +64,30 @@ class StationsForm(forms.ModelForm):
 
     class Meta:
         model = Station    
-        fields= ('username','description','belongto','usertype','madedate','lng','lat','locate')
+        fields= ('username','description','usertype','madedate','lng','lat','locate')
 
+
+class StationsEditForm(forms.ModelForm):
+    description = forms.CharField(required = False)
+    belongto = forms.CharField()
+    serialnumber = forms.CharField()
+    simid = forms.CharField()
+    dn = forms.CharField()
+    metertype = forms.CharField()
+    meter = forms.CharField()
+
+
+    def __init__(self, *args, **kwargs):
+        super(StationsEditForm, self).__init__(*args, **kwargs)
+
+        self.fields['belongto'].initial = self.instance.belongto.name
+        self.fields['serialnumber'].initial = self.instance.meter.serialnumber
+        self.fields['dn'].initial = self.instance.meter.dn
+        self.fields['simid'].initial = self.instance.meter.simid
+        self.fields['meter'].initial = self.instance.meter.serialnumber
+        self.fields['metertype'].initial = self.instance.meter.metertype
+        
+
+    class Meta:
+        model = Station    
+        fields= ('username','description','usertype','madedate','lng','lat','locate')

@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<form id="addForm" role="form" action="#" class="form-horizontal" method="post">{% csrf_token %}
+<form id="addForm" role="form" action="{% url 'dmam:stationadd' %}" class="form-horizontal" method="post">{% csrf_token %}
     <div class="modal-header">
         <button type="button" id="doXEdit" class="close" data-dismiss="modal"
             aria-hidden="true">&times;</button>
@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 站点描述：</label>
                     <div class="col-md-7">
-                        <input id="stationdescription" name="description"  class="form-control"/>
+                        <input id="description" name="description"  class="form-control"/>
                     </div>
                 </div>
                 
@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">所属组织：</label>
                     <div class="has-feedback col-md-7">
-                        <input name="districtid"
+                        <input name="belongto"
                             class="form-control" id="zTreeStationSelEdit" placeholder="所属组织" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
                             type="text"  />
                             <span id="zTreeCitySelSpan" class="fa fa-chevron-down form-control-feedback" aria-hidden="true"></span>
@@ -62,8 +62,9 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label"></label>
+                    <input id="metertypeEdit" name="metertype" type="text" hidden="true"  />
                     <div class="col-md-7">
-                        <label class="radio-inline"><input type="radio" name="meter_type" value="水表" checked="checked" id="metertype"> 水表</label>
+                        <label class="radio-inline"><input type="radio" name="meter_type" value="水表" id="metertype"> 水表</label>
                         <label class="radio-inline"><input type="radio" name="meter_type" value="流量计" id="metertype"> 流量计</label>
                     </div>
                 </div> 
@@ -120,7 +121,7 @@
                     <label class="col-md-3 control-label">安装日期：</label>
                     <div class="col-md-7">
                         <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
-                                id="authorizationDateEdit" name="createdate" />
+                                id="madedate" name="madedate" />
                     </div>
                 </div>
                 
@@ -132,14 +133,14 @@
                     <label class = "col-sm-3 control-label">经度:</label>
                       
                     <div class = "col-sm-3">
-                       <input type = "text" class = "form-control " id = "jingdu" name="lng" >
+                       <input type = "text" class = "form-control " id = "lng" name="lng" >
                        
                     </div>
                  
                     <label class= "col-sm-3 control-label">纬度:</label>
                       
                     <div class = "col-sm-3">
-                       <input type = "text" class = "form-control" id = "id_latitude" name="lat" >
+                       <input type = "text" class = "form-control" id = "lat" name="lat" >
                     </div>
                 </div>
                
@@ -147,7 +148,7 @@
                <div class = "form-group">
                     <label class="col-sm-3 control-label" >位置信息:</label>
                     <div class="has-feedback col-md-7">
-                        <select class="form-control" id="state" name="locate">
+                        <select class="form-control" id="locate" name="locate">
                             <option>室外底下</option>
                             <option>室外地上</option>
                             <option>室内</option>

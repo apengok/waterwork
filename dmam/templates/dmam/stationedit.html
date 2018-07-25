@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<form id="editForm" role="form" action="#" class="form-horizontal" method="post">{% csrf_token %}
+<form id="editForm" role="form" action="{% url 'dmam:stationedit' object.id %}" class="form-horizontal" method="post">{% csrf_token %}
     <div class="modal-header">
         <button type="button" id="doXEdit" class="close" data-dismiss="modal"
             aria-hidden="true">&times;</button>
@@ -17,25 +17,23 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 站点名称：</label>
                     <div class="col-md-7">
-                        <input readonly="true" placeholder="请输入站点名"
-                            type="text" class="form-control" id="username" name="user_name" value="{{ form.username.value|default:''}}" />
+                        <input readonly="true"  type="text" class="form-control" id="username" name="username" value="{{ form.username.value|default:''}}" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 站点描述：</label>
                     <div class="col-md-7">
-                        <input id="stationdescription" name="description"  class="form-control"/>
+                        <input id="description" name="description"  class="form-control" value="{{ form.description.value|default:'' }}" />
                     </div>
                 </div>
                 
-                <input id="groupIds" name="groupId" type="text"
-                    hidden="true" value="{{ object.belongto.cid }}" />
+                <input id="groupIds" name="groupId" type="text" hidden="true" value="{{ object.belongto.cid }}" />
                 <div class="form-group">
                     <label class="col-md-3 control-label">所属组织：</label>
                     <div class="has-feedback col-md-7">
                         <input name="districtid"
-                            class="form-control" id="zTreeCitySelEdit" placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
-                            type="text" value="{{ form.districtid.value }}" />
+                            class="form-control" id="zTreeStationSelEdit" placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
+                            type="text" value="{{ form.belongto.value|default:'' }}" />
                             <span id="zTreeCitySelSpan" class="fa fa-chevron-down form-control-feedback" aria-hidden="true"></span>
                         <div id="zTreeContentEdit" class="ztreeModelBox" style="top:36px!important">
                             <ul id="ztreeDemoEdit" class="ztree"></ul>
@@ -44,22 +42,27 @@
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">用水性质：</label>
-                    <div class="has-feedback col-md-7">
-                        <input name="usertype"
-                            class="form-control" id="zTreeCitySelEdit" placeholder="请选择用水性质" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
-                            type="text" value="{{ form.usertype.value }}" />
-                            <span id="zTreeCitySelSpan" class="fa fa-chevron-down form-control-feedback" aria-hidden="true"></span>
-                        <div id="zTreeContentEdit" class="ztreeModelBox" style="top:36px!important">
-                            <ul id="ztreeDemoEdit" class="ztree"></ul>
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <input name="usertype" type="text" class="form-control" id="usertype" value="{{ form.usertype.value|default:'' }}" readonly>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-white dropdown-toggle"
+                                    data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-md-3 control-label"></label>
+                    <input id="metertypeEdit" name="metertype" type="text" hidden="true" value="{{ form.metertype.value }}"  />
                     <div class="col-md-7">
-                        <label class="radio-inline"><input type="radio" name="meter_type" value="1" checked="checked" id="metertype"> 水表</label>
-                        <label class="radio-inline"><input type="radio" name="meter_type" value="2" id="metertype"> 流量计</label>
+                        <label class="radio-inline"><input type="radio" name="meter_type" value="水表" > 水表</label>
+                        <label class="radio-inline"><input type="radio" name="meter_type" value="流量计"> 流量计</label>
                     </div>
                 </div> 
 
@@ -67,44 +70,43 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label class="text-danger"></label> 关联表具：</label>
-                    <div class="has-feedback col-md-7">
-                        <select class="form-control" id="state" name="relate_meter">
-                            <option value = "1" selected="selected" >启用</option>
-                            <option value = "0" >停用</option>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>30</option>
-                            <option>40</option>
-                            <option>50</option>
-                        </select>
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <input name="meter" type="text" class="form-control" id="relate_meter" value="{{ form.meter.value|default:'' }}" readonly>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-white dropdown-toggle"
+                                    data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 表具编号：</label>
                     <div class="col-md-7">
-                        <input placeholder="serialnumber" type="text"
-                            class="form-control" id="fullName" name="serialnumber" value="{{ form.serialnumber.value|default:''}}" />
+                        <input type="text" class="form-control" id="serialnumber" name="serialnumber" value="{{ form.serialnumber.value|default:'' }}" readonly />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">SIM卡号：</label>
                     <div class="col-md-7">
-                        <input placeholder="请输入SIM卡号" type="text"
-                            class="form-control" id="mobile" name="simid" value="{{ form.simid.value|default:'' }}" />
+                        <input  type="text" class="form-control" id="simid" name="simid" value="{{ form.simid.value|default:'' }}"  readonly />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">口径：</label>
                     <div class="col-md-7">
-                        <input placeholder="请输入口径" type="text"
-                            class="form-control" id="mail" name="dn" value="{{ form.dn.value|default:'' }}" />
+                        <input type="text"  class="form-control" id="dn" name="dn" value="{{ form.dn.value|default:'' }}"  readonly />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">安装日期：</label>
                     <div class="col-md-7">
                         <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
-                                id="authorizationDateEdit" name="createdate" value="{{ form.createdate.value|default:''}} "/>
+                                id="madedate" name="madedate" value="{{ form.madedate.value|default:''}} "/>
                     </div>
                 </div>
                 
@@ -116,14 +118,14 @@
                     <label class = "col-sm-3 control-label">经度:</label>
                       
                     <div class = "col-sm-3">
-                       <input type = "text" class = "form-control " id = "jingdu" name="lng" value="{{ form.lng.value|default:'' }}">
+                       <input type = "text" class = "form-control " id = "lng" name="lng" value="{{ form.lng.value|default:'' }}">
                        
                     </div>
                  
                     <label class= "col-sm-3 control-label">纬度:</label>
                       
                     <div class = "col-sm-3">
-                       <input type = "text" class = "form-control" id = "id_latitude" name="lat" value="{{ form.lat.value|default:'' }}">
+                       <input type = "text" class = "form-control" id = "lat" name="lat" value="{{ form.lat.value|default:'' }}">
                     </div>
                 </div>
                
@@ -131,7 +133,7 @@
                <div class = "form-group">
                     <label class="col-sm-3 control-label" >位置信息:</label>
                     <div class="has-feedback col-md-7">
-                        <select class="form-control" id="state" name="relate_meter">
+                        <select class="form-control" id="locate" name="locate">
                             <option>室外底下</option>
                             <option>室外地上</option>
                             <option>室内</option>
@@ -190,7 +192,7 @@
     var userGroupSelectNull = "\u8BF7\u9009\u62E9\u7EC4\u7EC7";
 </script>
 
-{% comment %}
+
 <script src="{% static 'virvo/wro/stationEdit.js' %}"></script>
-{% endcomment %}
+
 <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>

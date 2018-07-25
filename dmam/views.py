@@ -33,7 +33,7 @@ from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 from . models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter
-from .forms import StationsForm
+from .forms import StationsForm,StationsEditForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm
 import os
 from django.conf import settings
@@ -514,6 +514,13 @@ def verifydmaname(request):
     bflag = not DMABaseinfo.objects.filter(dma_name=dma_name).exists()
 
     return HttpResponse(json.dumps({"success":bflag}))    
+
+
+def verifyusername(request):
+    username = request.POST.get("username")
+    bflag = not Station.objects.filter(username=username).exists()
+
+    return HttpResponse(json.dumps({"success":bflag}))  
 
 class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = Organizations
@@ -1019,40 +1026,23 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print("user  add here?:",self.request.POST)
+        print("station  add here?:",self.request.POST)
         print(self.kwargs,self.args)
         # print(form)
         # do something
         user = self.request.user
         user_groupid = user.belongto.cid
         instance = form.save(commit=False)
-        uid = self.request.POST.get('user_name')
-        groupId = self.request.POST.get('groupId') # organization cid
-        if user_groupid == groupId:
-            data = {
-                "success": 0,
-                "obj":{
-                    "flag":0,
-                    "errMsg":"非管理员不能创建自己同级的用户,请重新选择所属企业。"
-                    }
-            }
-            
-            return HttpResponse(json.dumps(data)) #JsonResponse(data)
-        organization = Organizations.objects.get(cid=groupId)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
         instance.belongto = organization
         
-        instance.idstr=groupId  #所属组织 cid
+        serialnumber = self.request.POST.get("serialnumber")
+        meter = Meter.objects.get(serialnumber=serialnumber)
+        instance.meter = meter
 
-        instance.uuid=unique_uuid_generator(instance)
-
-        # 用户状态
-        is_active = self.request.POST.get('is_active')
-        if is_active == '0':
-            instance.is_active = False
-        else:
-            instance.is_active = True
-
-        return super(UserAddView,self).form_valid(form)   
+        return super(StationAddView,self).form_valid(form)   
 
     def get_context_data(self, *args, **kwargs):
         context = super(StationAddView, self).get_context_data(*args, **kwargs)
@@ -1085,7 +1075,7 @@ User edit, manager
 """
 class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = Station
-    form_class = StationsForm
+    form_class = StationsEditForm
     template_name = "dmam/stationedit.html"
     success_url = reverse_lazy("dmam:stationsmanager")
     
@@ -1095,7 +1085,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(StationEditView, self).dispatch(*args, **kwargs)
 
     def get_object(self):
-        return Station.objects.get(id=self.kwargs["caddr"])
+        return Station.objects.get(id=self.kwargs["pk"])
 
     def test_func(self):
         if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
@@ -1124,12 +1114,41 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         """
         print(form)
         print(self.request.POST)
-        user = self.request.user
+
+        
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+        
+        serialnumber = self.request.POST.get("serialnumber")
+        meter = Meter.objects.get(serialnumber=serialnumber)
+        instance.meter = meter
         
         # instance.uuid=unique_uuid_generator(instance)
         return super(StationEditView,self).form_valid(form)
         # role_list = MyRoles.objects.get(id=self.role_id)
         # return HttpResponse(render_to_string("dma/role_manager.html", {"role_list":role_list}))
+
+    # def get(self,request, *args, **kwargs):
+    #     print("get::::",args,kwargs)
+    #     form = super(StationEditView, self).get_form()
+    #     print("edit form:",form)
+    #     # Set initial values and custom widget
+    #     initial_base = self.get_initial() #Retrieve initial data for the form. By default, returns a copy of initial.
+    #     # initial_base["menu"] = Menu.objects.get(id=1)
+    #     self.object = self.get_object()
+
+    #     initial_base["belongto"] = self.object.belongto.name
+    #     initial_base["serialnumber"] = self.object.meter.serialnumber
+    #     initial_base["dn"] = self.object.meter.dn
+    #     initial_base["meter"] = self.object.meter.serialnumber
+    #     initial_base["simid"] = self.object.meter.simid
+    #     form.initial = initial_base
+        
+    #     return render(request,self.template_name,
+    #                   {"form":form,"object":self.object})
 
     # def get_context_data(self, **kwargs):
     #     context = super(UserEditView, self).get_context_data(**kwargs)
@@ -1161,7 +1180,7 @@ def userdeletemore(request):
 Assets comment deletion, manager
 """
 class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
-    model = User
+    model = Station
     # template_name = "aidsbank/asset_comment_confirm_delete.html"
 
     def test_func(self):
@@ -1188,7 +1207,7 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def get_object(self,*args, **kwargs):
         # print("delete objects:",self.kwargs,kwargs)
-        return User.objects.get(pk=kwargs["pk"])
+        return Station.objects.get(pk=kwargs["pk"])
 
     def delete(self, request, *args, **kwargs):
         """
@@ -1198,9 +1217,7 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
 
-        #delete user role in groups
-        for g in self.object.groups.all():
-            g.user_set.remove(self.object)
+        
 
         self.object.delete()
         result = dict()

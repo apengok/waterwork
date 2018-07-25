@@ -49,11 +49,12 @@ urlpatterns = [
     url(r'^station/usertype/add/?$',views.usertypeadd,name='usertypeadd'),
     url(r'^station/usertype/edit/(?P<pk>[0-9]+)/?$',views.usertypeedit,name='usertypeedit'),
 
+    url(r'^station/verifyusername/$',views.verifyusername,name='verifyusername'),
     
     url(r'^stationsmanager/?$', views.StationMangerView.as_view(), name='stationsmanager'),#组织和用户管理
     url(r'^stations/list/$',views.stationlist,name='stationlist'),
     url(r'^stations/add',views.StationAddView.as_view(),name='stationadd'),
-    url(r'^stations/edit/(?P<caddr>\w+)/?$',views.StationEditView.as_view(),name='stationedit'),
+    url(r'^stations/edit/(?P<pk>\w+)/?$',views.StationEditView.as_view(),name='stationedit'),
     url(r'^stations/delete/(?P<pk>[0-9]+)/?$',views.StationDeleteView.as_view(),name='stationdelete'),
     # url(r'^stations/deletemore',views.stationdeletemore,name='stationdeletemore'),
     
