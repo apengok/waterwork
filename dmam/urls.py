@@ -37,14 +37,14 @@ urlpatterns = [
     
 
     #stations  
-    url(r'^station/findOperations/?$',views.findOperations,name='findOperations'),
-    url(r'^station/findOperationById/?$',views.findOperationById,name='findOperationById'),
+    url(r'^station/findUsertypes/?$',views.findUsertypes,name='findUsertypes'),
+    url(r'^station/findUsertypeById/?$',views.findUsertypeById,name='findUsertypeById'),
     url(r'^station/updateOperation/?$',views.updateOperation,name='updateOperation'),
     url(r'^station/deleteOperation/?$',views.deleteOperation,name='deleteOperation'),
     url(r'^station/deleteOperationMore/?$',views.deleteOperationMore,name='deleteOperationMore'),
     
     url(r'^station/findusertypeByusertype/?$',views.findusertypeByusertype,name='findusertypeByusertype'),
-    url(r'^station/findOperationCompare/?$',views.findOperationCompare,name='findOperationCompare'),
+    url(r'^station/findUsertypeCompare/?$',views.findUsertypeCompare,name='findUsertypeCompare'),
     
     url(r'^station/usertype/add/?$',views.usertypeadd,name='usertypeadd'),
     url(r'^station/usertype/edit/(?P<pk>[0-9]+)/?$',views.usertypeedit,name='usertypeedit'),
@@ -56,6 +56,9 @@ urlpatterns = [
     url(r'^stations/edit/(?P<caddr>\w+)/?$',views.StationEditView.as_view(),name='stationedit'),
     url(r'^stations/delete/(?P<pk>[0-9]+)/?$',views.StationDeleteView.as_view(),name='stationdelete'),
     # url(r'^stations/deletemore',views.stationdeletemore,name='stationdeletemore'),
+    
+    url(r'^station/getmeterlist/$',views.getmeterlist,name='getmeterlist'),
+    url(r'^station/getmeterParam/$',views.getmeterParam,name='getmeterParam'),
 
     # url(r'^stations/export',views.stationexport,name='stationexport'),
     # url(r'^stations/import',views.StationImportView.as_view(),name='stationimport'),

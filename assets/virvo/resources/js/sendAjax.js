@@ -117,7 +117,7 @@ function error(XMLHttpRequest, textStatus, errorThrown){
 
 
 function beforeSend(XMLHttpRequest){
-    console.log('here?');
+    // console.log('here?');
     var csrftoken = getCookie('csrftoken');
     XMLHttpRequest.setRequestHeader("X-CSRFToken", csrftoken);
     layer.load(2);

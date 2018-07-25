@@ -32,8 +32,8 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
-from . models import WaterUserType,DMABaseinfo,DmaStations
-from legacy.forms import StationsForm
+from . models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter
+from .forms import StationsForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm
 import os
 from django.conf import settings
@@ -122,6 +122,60 @@ def dmatree(request):
     return HttpResponse(json.dumps(organtree))
 
 
+def getmeterlist(request):
+
+    meters = Meter.objects.all()
+
+    def m_info(m):
+        
+        return {
+            "id":m.pk,
+            # "simid":m.simid,
+            # "dn":m.dn,
+            # "belongto":m.belongto.name,#current_user.belongto.name,
+            # "metertype":m.metertype,
+            "serialnumber":m.serialnumber,
+            
+        }
+    data = []
+
+    for m in meters:
+        data.append(m_info(m))
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":{
+                "meterlist":data
+        },
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+
+
+def getmeterParam(request):
+
+    mid = request.POST.get("mid")
+    meter = Meter.objects.get(id=int(mid))
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":{
+                "id":meter.pk,
+                "simid":meter.simid,
+                "dn":meter.dn,
+                "belongto":meter.belongto.name,#current_user.belongto.name,
+                "metertype":meter.metertype,
+                "serialnumber":meter.serialnumber,
+        },
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+
 def stationlist(request):
     # print("userlist",request.POST)
     draw = 1
@@ -166,30 +220,32 @@ def stationlist(request):
             "id":u.pk,
             "username":u.username,
             "usertype":u.usertype,
-            "simid":u.simid,
-            "dn":u.dn,
-            "belongto":u.districtid.name,#current_user.belongto.name,
-            "metertype":u.metertype,
-            "serialnumber":u.serialnumber,
+            "simid":u.meter.simid if u.meter else '',
+            "dn":u.meter.dn if u.meter else '',
+            "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
+            "metertype":u.meter.metertype if u.meter else '',
+            "serialnumber":u.meter.serialnumber if u.meter else '',
             "big_user":1,
             "focus":1,
-            "createdate":u.createdate
+            "createdate":u.madedate
         }
     data = []
     
     
     # userl = current_user.user_list()
 
-    bigmeters = Bigmeter.objects.all()
+    # bigmeters = Bigmeter.objects.all()
+    stations = Station.objects.all()
     
     
-    # print("user all:",userl)
-    if districtId != "":
-        #查询的组织
-        query_district = District.objects.get(id=districtId)
-        bigmeters = [u for u in bigmeters if u.districtid == query_district]
-        # print("query organ user,",userl)
-
+    # # print("user all:",userl)
+    # if districtId != "":
+    #     #查询的组织
+    #     query_district = District.objects.get(id=districtId)
+    #     bigmeters = [u for u in bigmeters if u.districtid == query_district]
+    #     # print("query organ user,",userl)
+    # for m in bigmeters[start:start+length]:
+    #     data.append(u_info(m))
     
     
     # def search_user(u):
@@ -207,10 +263,10 @@ def stationlist(request):
 
     
 
-    for m in bigmeters[start:start+length]:
+    for m in stations[start:start+length]:
         data.append(u_info(m))
     
-    recordsTotal = len(bigmeters)
+    recordsTotal = len(stations)
     # recordsTotal = len(data)
     
     result = dict()
@@ -704,8 +760,8 @@ def findusertypeByusertype(request):
 
     return JsonResponse(flag, safe=False)
 
-def findOperationCompare(request):
-    print('findOperationCompare',request.POST)
+def findUsertypeCompare(request):
+    print('findUsertypeCompare',request.POST)
     usertype = request.POST.get('usertype')
     updateuserType = request.POST.get("updateuserType")
     recomposeType = request.POST.get("recomposeType")
@@ -717,7 +773,7 @@ def findOperationCompare(request):
 
     return JsonResponse(flag, safe=False)
 
-def findOperations(request):
+def findUsertypes(request):
     usertypes = WaterUserType.objects.all()
     data = []
     for ut in usertypes:
@@ -761,7 +817,7 @@ def usertypeadd(request):
 
     return HttpResponse(json.dumps({"success":flag}))
 
-def findOperationById(request):
+def findUsertypeById(request):
     print(request.POST)
     tid = request.POST.get("id")
     tid = int(tid)
@@ -926,10 +982,10 @@ class StationMangerView(LoginRequiredMixin,TemplateView):
 User add, manager
 """
 class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
-    model = User
-    template_name = "dmam/useradd.html"
-    form_class = RegisterForm
-    success_url = reverse_lazy("entm:usermanager")
+    model = Station
+    form_class = StationsForm
+    template_name = "dmam/stationadd.html"
+    success_url = reverse_lazy("dmam:stationsmanager")
     # permission_required = ('entm.rolemanager_perms_basemanager_edit', 'entm.dmamanager_perms_basemanager_edit')
 
     # @method_decorator(permission_required("dma.change_stations"))
@@ -1028,10 +1084,10 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 User edit, manager
 """
 class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
-    model = Bigmeter
+    model = Station
     form_class = StationsForm
     template_name = "dmam/stationedit.html"
-    success_url = reverse_lazy("entm:usermanager")
+    success_url = reverse_lazy("dmam:stationsmanager")
     
     # @method_decorator(permission_required("dma.change_stations"))
     def dispatch(self, *args, **kwargs):
@@ -1039,7 +1095,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(StationEditView, self).dispatch(*args, **kwargs)
 
     def get_object(self):
-        return Bigmeter.objects.get(commaddr=self.kwargs["caddr"])
+        return Station.objects.get(id=self.kwargs["caddr"])
 
     def test_func(self):
         if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):

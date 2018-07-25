@@ -554,9 +554,9 @@
                 layer.msg(userSupermanagerDeleteTip,{move:false});
             }
         },
-        findOperation:function(){
+        findUsertype:function(){
             var vagueSearch = $("#userType").val();
-            var url="station/findOperations";
+            var url="station/findUsertypes";
             var data={"type":vagueSearch};
             json_ajax("POST", url, "json", true,data,stationManage.findCallback);
         },
@@ -570,7 +570,7 @@
                         var list=[
                                  ++s,
                                  '<input type="checkbox" id="checkAllTwo" name="subChkTwo" value="'+calldata[i].id+'">',
-                                 '<button onclick="stationManage.findOperationById(\''+calldata[i].id+'\')" data-target="#updateType" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp<button type="button"  onclick="stationManage.deleteType(\''+calldata[i].id+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>',    
+                                 '<button onclick="stationManage.findUsertypeById(\''+calldata[i].id+'\')" data-target="#updateType" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp<button type="button"  onclick="stationManage.deleteType(\''+calldata[i].id+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>',    
                                  calldata[i].userType,
                                  calldata[i].explains
                                  ];
@@ -647,7 +647,7 @@
                                 layer.msg(publicAddSuccess,{move:false});
                                 stationManage.closeClean();//清空文本框
                                 $("#userType").val("");
-                                stationManage.findOperation();
+                                stationManage.findUsertype();
                             }else{
                                 layer.msg(data.msg,{move:false});
                             }
@@ -658,7 +658,7 @@
                                     layer.msg(publicAddSuccess,{move:false});
                                     $("#userType").val("");
                                     stationManage.closeClean();//清空文本框
-                                    stationManage.findOperation();
+                                    stationManage.findUsertype();
                             }else{
                                 layer.msg(result.msg,{move:false});
                             }
@@ -686,10 +686,10 @@
             $("#updateuserType-error").hide();
             $("#updateDescription-error").hide();
         },
-        findOperationById:function(id){
+        findUsertypeById:function(id){
             OperationId=id;
             var data={"id":OperationId};
-            var url="station/findOperationById";
+            var url="station/findUsertypeById";
             json_ajax("POST",url,"json",true,data,stationManage.findByIdback);
         },
         findByIdback:function(data){
@@ -707,7 +707,7 @@
             if(data.success == true){
                 $("#updateType").modal('hide');
                 layer.msg("修改成功");
-                stationManage.findOperation();
+                stationManage.findUsertype();
             }else{
                 layer.msg(data.msg,{move:false});
             }
@@ -726,7 +726,7 @@
         deleteCallback:function(data){
             if(data.success==true){
                 layer.closeAll('dialog');
-                stationManage.findOperation();
+                stationManage.findUsertype();
             }else{
                 layer.msg(publicError,{move:false});
             }
@@ -756,17 +756,17 @@
         deleteOperationMoreCallback : function(data){
             if(data.success){
                 layer.msg(publicDeleteSuccess);
-                stationManage.findOperation();
+                stationManage.findUsertype();
             }else{
                 layer.msg(data.msg,{move:false});
             }
         },
-        findOperationByVague:function(){
-            stationManage.findOperation();
+        findUsertypeByVague:function(){
+            stationManage.findUsertype();
         },
         findDownKey:function(event){
             if(event.keyCode==13){
-                stationManage.findOperation();
+                stationManage.findUsertype();
             }
         },
         checkAll : function(e){
@@ -776,8 +776,8 @@
         checkAllTwo : function(e){
             $("input[name='subChkTwo']").prop("checked", e.checked);
         },
-        addId : function (){
-            $("#addId").attr("href","stations/add/newuser?uuid="+selectTreeIdAdd+"");
+        addStation : function (){
+            $("#addStation").attr("href","stations/add/newstation?uuid="+selectTreeIdAdd+"");
         },
         validates:function () {//增加运营资质类别时的数据验证
            return $("#adduserType").validate({
@@ -856,7 +856,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"station/findOperationCompare" ,
+                                url:"station/findUsertypeCompare" ,
                                 data:{
                                     type:function(){
                                         return $("#updateuserType").val();
@@ -908,7 +908,7 @@
         stationManage.userTree();
         getTable('dataTables');
         stationManage.init();
-        stationManage.findOperation();
+        stationManage.findUsertype();
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             stationManage.refreshTable();
@@ -944,8 +944,8 @@
         $("#deleteOperation").on("click",stationManage.deleteType);
         $("#updateOperation").on("click",stationManage.updateDoSubmit);
         $("#del_modelTwo").on("click",stationManage.deleteTypeMore);
-        $("#search_operation").on("click",stationManage.findOperationByVague);
-        $("#addId").on("click",stationManage.addId);
+        $("#search_operation").on("click",stationManage.findUsertypeByVague);
+        $("#addStation").on("click",stationManage.addStation);
         $("#closeAdd").on("click",stationManage.closeClean);
         $("#updateClose").on("click",stationManage.updateClean);
     })

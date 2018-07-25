@@ -8,7 +8,7 @@ from django.contrib.postgres.forms.ranges import DateRangeField, RangeWidget
 
 
 from entm.models import Organizations
-from .models import WaterUserType,DMABaseinfo
+from .models import WaterUserType,DMABaseinfo,Station,Meter
 import datetime
 
 
@@ -48,3 +48,21 @@ class WaterUserTypeForm(forms.ModelForm):
     def __init__(self,instance,*args,**kwargs):
         super(WaterUserTypeForm, self).__init__(*args, **kwargs)
                         
+
+class StationsForm(forms.ModelForm):
+    description = forms.CharField()
+    belongto = forms.CharField()
+    serialnumber = forms.CharField()
+    simid = forms.CharField()
+    dn = forms.CharField()
+    metertype = forms.CharField()
+
+
+    def __init__(self, *args, **kwargs):
+        super(StationsForm, self).__init__(*args, **kwargs)
+        
+
+    class Meta:
+        model = Station    
+        fields= ('username','description','belongto','usertype','madedate','lng','lat','locate')
+
