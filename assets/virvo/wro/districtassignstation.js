@@ -77,7 +77,7 @@
                     dataType : "json",
                     data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
-                        "isOrg" : "1",
+                        "isStation" : "1",
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: dmaStation.ajaxDataFilter
@@ -116,8 +116,13 @@
            
         },
         beforeClick: function(treeId, treeNode){
-            var check = (treeNode);
-            return check;
+            var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
+            if(treeNode.type != "station"){
+                zTree.cancelSelectedNode(treeNode);
+                
+            }
+            // var check = (treeNode);
+            // return check;
         },
         
         // 组织树预处理函数
@@ -150,22 +155,28 @@
         },
         //点击节点
         zTreeOnClick: function(event, treeId, treeNode){
-            selectTreeId = treeNode.id;
-            selectTreeType = treeNode.type;
-            selectDistrictId = treeNode.districtid;
-            selectTreeIdAdd = treeNode.uuid;
-            station = treeNode.id;
-            $('#simpleQueryParam').val("");
-            $("#organ_name").attr("value",treeNode.name);
-            if(treeNode.type == "dma"){
-                var pNode = treeNode.getParentNode();
-                // $("#organ_name").attr("value",pNode.name);
-                $("#station_name").attr("value",treeNode.name);
-                organ = pNode.id;
-                station = treeNode.id;
-            }
 
-            
+            var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
+            if(treeNode.type != "station"){
+                zTree.cancelSelectedNode(treeNode);
+                
+            }else{
+                selectTreeId = treeNode.id;
+                selectTreeType = treeNode.type;
+                selectDistrictId = treeNode.districtid;
+                selectTreeIdAdd = treeNode.uuid;
+                station = treeNode.id;
+                $('#simpleQueryParam').val("");
+                $("#organ_name").attr("value",treeNode.name);
+                if(treeNode.type == "dma"){
+                    var pNode = treeNode.getParentNode();
+                    // $("#organ_name").attr("value",pNode.name);
+                    $("#station_name").attr("value",treeNode.name);
+                    organ = pNode.id;
+                    station = treeNode.id;
+                }
+
+            }
         },
         export:function(){
             var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo"), nodes = zTree

@@ -49,7 +49,8 @@ logger_error = logging.getLogger('error_logger')
 
 def dmatree(request):   
     organtree = []
-
+    print('dmatree:',request.POST)
+    stationflag = request.POST.get("isStation") or ''
     user = request.user
     print('dmatree:',user)
     # if user.is_anonymous:
@@ -83,9 +84,23 @@ def dmatree(request):
             "pId":o.cid,
             "type":"dma",
             "dma_no":d.dma_no,
-            "icon":"/static/virvo/resources/img/u8836.png",
+            "icon":"/static/virvo/resources/img/dma.png",
             "uuid":''
         })
+
+        #station
+        if stationflag == '1':
+            for s in o.station.all():
+                organtree.append({
+                    "name":s.username,
+                    "id":s.pk,
+                    "districtid":'',
+                    "pId":o.cid,
+                    "type":"station",
+                    "dma_no":'',
+                    "icon":"/static/virvo/resources/img/station.png",
+                    "uuid":''
+                })
 
     # district
     # districts = District.objects.all()
@@ -492,6 +507,7 @@ class DistrictMangerView(LoginRequiredMixin,TemplateView):
 
         default_dma = DMABaseinfo.objects.first()   # user_organ.dma.all().first()
 
+        context["current_dma_pk"] = default_dma.pk
         context["current_dma_no"] = default_dma.dma_no
         context["current_dma_name"] = default_dma.dma_name
 
@@ -752,8 +768,22 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
 
     def get_object(self):
         print(self.kwargs)
-        return DMABaseinfo.objects.first()#get(pk=self.kwargs["pk"])
+        return DMABaseinfo.objects.get(pk=int(self.kwargs["pk"]))
         
+    def get_context_data(self, *args, **kwargs):
+        context = super(DistrictAssignStationView, self).get_context_data(*args, **kwargs)
+        
+
+        self.object = self.get_object()  # user_organ.dma.all().first()
+        
+        context["dma_pk"] = self.object.pk
+        context["dma_no"] = self.object.dma_no
+        context["dma_name"] = self.object.dma_name
+
+        # context["user_list"] = User.objects.all()
+        
+
+        return context  
 
 
 """

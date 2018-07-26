@@ -42,6 +42,7 @@
                   <!--工具面板-->
                   <div class="ToolPanel">
                     <form id="baseinfoForm" role="form" action="/dmam/district/dmabaseinfo/" method="post" class="form-horizontal">{% csrf_token %}
+                      <input value="{{ current_dma_pk }}" id="current_dma_pk" type="hidden"  />
                       <input value="{{ current_dma_no }}" id="current_dma_no" type="hidden"  />
                       <input value="{{ current_dma_name }}" id="current_dma_name" type="hidden"  />
 
@@ -156,7 +157,7 @@
                   
                   <div class="ToolPanel">
                     <div class="row">
-                      <button type="button" href="district/assignstation/1/" id="search_button" data-toggle="modal" data-target="#commonLgWin"  class="btn  btn-primary " style="margin-left: 100px;">站点管理</button>
+                      <button type="button" href="" id="assignstation" data-toggle="modal" data-target="#commonLgWin"  class="btn  btn-primary " style="margin-left: 100px;">站点管理</button>
                     
 
                     <div class="columns btn-group pull-right refShowRight">

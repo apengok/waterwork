@@ -8,8 +8,9 @@
     var relate_meter = $("#relate_meter").val();
     var serialnumber = $("#serialnumber").val();
     var simid = $("#simid").val();
+    var meter = $("#meter").val();
     var metertype = $("input[type='radio']:checked").val();
-    var dn = $("#mobile").val();
+    var dn = $("#dn").val();
     var madedate = $("#madedate").val();
     var lng = $("#lng").val();
     var lat = $("#lat").val();
@@ -56,6 +57,12 @@
            });
            
            $("[name=meter_type]").val([$("#metertypeEdit").val()]);
+
+           $("#locatesel option").filter(function() {
+                return $(this).text() == locate;
+            }).attr('selected', true);
+
+           // $('#relate_meter').val(relate_meter).trigger('onSetSelectValue', [relate_meter]);
         },
         beforeClick: function(treeId, treeNode){
             var check = (treeNode);
@@ -115,7 +122,7 @@
             var edit_serialnumber = $("#serialnumber").val();
             var edit_simid = $("#simid").val();
             var edit_metertype = $("input[type='radio']:checked").val();
-            var edit_dn = $("#mobile").val();
+            var edit_dn = $("#dn").val();
             var edit_madedate = $("#madedate").val();
             var edit_lng = $("#lng").val();
             var edit_lat = $("#lat").val();
@@ -123,19 +130,16 @@
             // 值已经发生改变
             if (username != edit_username || description != edit_description || zTreeStationSelEdit != edit_zTreeStationSelEdit || usertype != edit_usertype
                 || madedate != edit_madedate || lng != edit_lng || lat != edit_lat || locate != edit_locate
-                || relate_meter != edit_relate_meter || serialnumber != edit_serialnumber || simid != edit_simid || metertype != edit_metertype || dn != edit_dn) {
+                || relate_meter != edit_relate_meter ) {
                     flag1 = true;
             } else { // 表单值没有发生改变
-                var timestamp = Date.parse(new Date(editAuthorizationDate));
-                timestamp = timestamp / 1000;
-                var timestamp2 = Date.parse(new Date(AuthorizedDeadline));
-                timestamp2 =  timestamp2 / 1000;
-                if (timestamp > timestamp2) { // 如果页面获取的授予权截止日期小于等于当前登录用户的授权截止日期,则需要验证
-                    flag1 = true;
-                    return;
-                }
+                
                 flag1 = false;
             }
+        },
+        locatechange:function(){
+            var selectedopt = $("#locatesel :selected").text();
+            $("#locate").val(selectedopt);
         },
         initUsertype:function(){
             var url="/dmam/station/findUsertypes/";
@@ -218,6 +222,7 @@
                 }
                 
             }
+            
             $("#relate_meter").bsSuggest({
                 indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
                 indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
@@ -227,6 +232,16 @@
                 searchFields:["id"],
                 data: dataList
             }).on('onDataRequestSuccess', function (e, result) {
+                //更精确的查找
+                console.log("onDataRequestSuccess");
+                $(this).click().next().find('ul tr td').each(function() {
+                    //拿缓存的信息作比对，比如文本
+                    if ($(this).text() === meter) {
+                        $(this).parents('tr').trigger('mousedown');
+                        //终止继续 each
+                        return false;
+                    }
+                });
             }).on('onSetSelectValue', function (e, keyword, data) {
                 // 当选择meter
                 
@@ -297,14 +312,14 @@
             var isAdmin = isAdminStr == 'true'
             console.log('isadmin?',isAdmin);
             if(isAdmin == true){
-                return $("#addForm").validate({
+                return $("#editForm").validate({
                     rules : {
                         username : {
                             required : true,
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"user/verification" ,
+                                url:"/dmam/station/verifyusername/" ,
                                 data:{
                                     username:function(){return $("#username").val();}
                                 },
@@ -313,8 +328,8 @@
                                     if(resultData.success == true){
                                         return true;
                                     }else{
-                                        if(resultData.msg != null && resultData.msg != ""){
-                                            layer.msg(resultData.msg,{move:false});
+                                        if(username == $("#username").val()){
+                                            return true;    //没有修改站点名
                                         }else{
                                             return false;
                                         }
@@ -333,7 +348,7 @@
                     }
                 }).form();
             }else{
-                return $("#addForm").validate({
+                return $("#editForm").validate({
                     rules : {
                         username : {
                             required : true,
@@ -387,15 +402,19 @@
     }
     $(function(){
         var myTable;
-        stationEdit.init();
+        
         stationEdit.initUsertype();
+        
         stationEdit.initRefer();
+        stationEdit.init();
         $('input').inputClear();
         var userId = $("#currentUserId").val();
         console.log('userId',$("#userId").val());
         console.log('current userId',$("#currentUserId").val());
 
         $(':radio:not(:checked)').attr('disabled', true);
+
+        $("#locatesel").on("change",stationEdit.locatechange);
 
         if ($("#userId").val() == userId) {
             $("#zTreeStationSelEdit").attr("disabled","disabled"); // 禁用选择组织控件

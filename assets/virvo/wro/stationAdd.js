@@ -92,6 +92,10 @@
                 stationAdd.hideMenu();
             }
         },
+        locatechange:function(){
+            var selectedopt = $("#locatesel :selected").text();
+            $("#locate").val(selectedopt);
+        },
         initUsertype:function(){
             var url="/dmam/station/findUsertypes/";
             var parameter={};
@@ -342,6 +346,8 @@
         console.log('current userId',$("#currentUserId").val());
 
         $(':radio:not(:checked)').attr('disabled', true);
+
+        $("#locatesel").on("change",stationAdd.locatechange);
 
         // if ($("#userId").val() == userId) {
         //     $("#zTreeStationSelEdit").attr("disabled","disabled"); // 禁用选择组织控件

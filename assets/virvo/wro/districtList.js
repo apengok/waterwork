@@ -12,6 +12,7 @@
     var idStr;
     var OperationId;
     var selectTreeIdAdd="";
+    var current_dma_pk = "";
     var startOperation;// 点击运营资质类别的修改按钮时，弹出界面时运营资质类别文本的内容
     var expliant;// 点击运营资质类别的修改按钮时，弹出界面时说明文本的内容
     var vagueSearchlast = $("#userType").val();
@@ -681,7 +682,9 @@
             selectTreeId = treeNode.id;
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd=treeNode.uuid;
+            current_dma_pk = treeNode.id;
             $('#simpleQueryParam').val("");
+            $("#current_dma_pk").attr("value",treeNode.id);
             $("#current_dma_no").attr("value",treeNode.dma_no);
             $("#current_dma_name").attr("value",treeNode.name);
             dmaManage.getBaseinfo();
@@ -1045,8 +1048,8 @@
         checkAllTwo : function(e){
             $("input[name='subChkTwo']").prop("checked", e.checked);
         },
-        addId : function (){
-            $("#addId").attr("href","stations/add/newuser?uuid="+selectTreeIdAdd+"");
+        assignstation : function (){
+            $("#assignstation").attr("href","district/assignstation/"+current_dma_pk+"/");
         },
         validates:function () {//增加运营资质类别时的数据验证
            return $("#adduserType").validate({
@@ -1227,7 +1230,7 @@
         $("#updateOperation").on("click",dmaManage.updateDoSubmit);
         $("#del_modelTwo").on("click",dmaManage.deleteTypeMore);
         $("#search_operation").on("click",dmaManage.findOperationByVague);
-        $("#addId").on("click",dmaManage.addId);
+        $("#assignstation").on("click",dmaManage.assignstation);
         $("#closeAdd").on("click",dmaManage.closeClean);
         $("#updateClose").on("click",dmaManage.updateClean);
     })

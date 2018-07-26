@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">所属组织：</label>
                     <div class="has-feedback col-md-7">
-                        <input name="districtid"
+                        <input name="belongto"
                             class="form-control" id="zTreeStationSelEdit" placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
                             type="text" value="{{ form.belongto.value|default:'' }}" />
                             <span id="zTreeCitySelSpan" class="fa fa-chevron-down form-control-feedback" aria-hidden="true"></span>
@@ -132,8 +132,9 @@
 
                <div class = "form-group">
                     <label class="col-sm-3 control-label" >位置信息:</label>
+                    <input id="locate" name="locate" type="text" hidden="true" value="{{ form.locate.value }}"  />
                     <div class="has-feedback col-md-7">
-                        <select class="form-control" id="locate" name="locate">
+                        <select class="form-control" id="locatesel" >
                             <option>室外底下</option>
                             <option>室外地上</option>
                             <option>室内</option>

@@ -87,20 +87,20 @@ class DmaStations(models.Model):
 
 
 class Meter(models.Model):
-    serialnumber = models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    simid = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    version = models.CharField(db_column='version', max_length=30, blank=True, null=True)  # Field name made lowercase.型号
-    dn = models.CharField(db_column='Dn', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    metertype = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    belongto = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='meter')
-    mtype = models.CharField(db_column='Type', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    manufacturer = models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    protocol = models.CharField(db_column='Protocol', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    R = models.CharField(db_column='R', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    q3 = models.CharField(db_column='Q3', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    q1 = models.CharField(db_column='Q1', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    serialnumber= models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    simid       = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    version     = models.CharField(db_column='version', max_length=30, blank=True, null=True)  # Field name made lowercase.型号
+    dn          = models.CharField(db_column='Dn', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    metertype   = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='meter')
+    mtype       = models.CharField(db_column='Type', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    manufacturer= models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    protocol    = models.CharField(db_column='Protocol', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    R           = models.CharField(db_column='R', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    q3          = models.CharField(db_column='Q3', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    q1          = models.CharField(db_column='Q1', max_length=64, blank=True, null=True)  # Field name made lowercase.
     check_cycle = models.CharField(db_column='check cycle', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    state = models.CharField(db_column='state', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    state       = models.CharField(db_column='state', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
 
     class Meta:
@@ -111,21 +111,22 @@ class Meter(models.Model):
         return '%s'%(self.serialnumber)    
 
 class Station(models.Model):
-    username = models.CharField(db_column='UserName', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    username    = models.CharField(db_column='UserName', max_length=30, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    usertype = models.CharField(db_column='UserType', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    madedate = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    lng = models.CharField(db_column='Lng', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    lat = models.CharField(db_column='Lat', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    coortype = models.CharField(db_column='CoorType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    usertype    = models.CharField(db_column='UserType', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    madedate    = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    lng         = models.CharField(db_column='Lng', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    lat         = models.CharField(db_column='Lat', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    coortype    = models.CharField(db_column='CoorType', max_length=30, blank=True, null=True)  # Field name made lowercase.
     # commaddr = models.CharField(db_column='CommAddr', primary_key=True, max_length=30)  # Field name made lowercase.
     # districtid = models.IntegerField(db_column='DistrictId', blank=True, null=True)  # Field name made lowercase.
     # districtid = models.ForeignKey(District,db_column='DistrictId',related_name='bigmeter',blank=True, null=True,on_delete=models.CASCADE) 
-    biguser = models.CharField(db_column='biguser', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    focus = models.CharField(db_column='focus', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    locate = models.CharField(db_column='locate', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    belongto = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='station')
-    meter = models.ForeignKey(Meter,on_delete=models.CASCADE,related_name='station')
+    biguser     = models.CharField(db_column='biguser', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    focus       = models.CharField(db_column='focus', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    locate      = models.CharField(db_column='locate', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='station')
+    meter       = models.ForeignKey(Meter,on_delete=models.CASCADE,related_name='station')
+    dmaid       = models.ForeignKey(DMABaseinfo,related_name='station',blank=True, null=True,on_delete=models.CASCADE) 
 
     class Meta:
         managed = True
