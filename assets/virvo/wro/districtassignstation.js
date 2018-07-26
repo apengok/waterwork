@@ -32,6 +32,12 @@
     var number;
     var checkFlag = false; //判断组织节点是否是勾选操作
     var size;//当前权限监控对象数量
+    var dma_pk =$("#dma_pk").val();
+    var dma_no =$("#dma_no").val();
+    var dma_name =$("#dma_name").val();
+
+    var meter_types = ["出水表","进水表","贸易结算表","未计费水表","官网检测表"];
+
 
     var myTable;
 
@@ -187,37 +193,31 @@
             nodes.sort(function compare(a, b) {
                 return a.id - b.id;
             });
-            // var oTable = $('#stationdataTable').DataTable();
-            // var rowLength = oTable.rows.length;
+            // var oTable = $('#stationdataTable').dataTable();
+            // var rowLength = oTable.rows().count();
+            var oTable = document.getElementById('stationdataTable');
+
+            // //gets rows of table
+            var rowLength = oTable.rows.length;
             
             stationdataListArray=[];
             for (var i = 0, l = nodes.length; i < l; i++) {
                 n += nodes[i].name;
                 v += nodes[i].id + ",";
             
-                
-                
-                meter_type = '<td>'+'<div class="has-feedback ">'+
-                                    '<select class="form-control" id="state" name="relate_meter">'+
-                                        '<option>进水表</option>'+
-                                        '<option>出水表</option>'+
-                                        '<option>贸易结算表</option>'+
-                                        '<option>未计费水表</option>'+
-                                        '<option>官网检测表</option>'+
-                                    '</select>'+
-                               ' </div>'+'</td>';
-                
                 var dateList=
                             [
-                              '<td><input  type="checkbox" name="subChk"  value="' + nodes[i].name + '" uid="'+ nodes[i].id +'" /></td>',
-                              i+1,
+                              // '<td><input  type="checkbox" name="subChk"  value="' + nodes[i].name + '" uid="'+ nodes[i].id +'" /></td>',
+                              '',
+                              nodes[i].id,
+                              dma_name,
                               nodes[i].name,
-                              nodes[i].name,
-                              meter_type,
+                              "未计费水表",
                               
                             ];
                 // oTable.row.add(dateList);
                 stationdataListArray.push(dateList);
+                zTree.removeNode(nodes[i]);
             }
             dmaStation.rowaddData(stationdataListArray);
             if (v.length > 0)
@@ -228,31 +228,39 @@
             
         },
         import:function(){
-
-            //gets table
-            var oTable = document.getElementById('myTable');
-
-            //gets rows of table
-            var rowLength = oTable.rows.length;
-
-            //loops through rows    
-            for (i = 0; i < rowLength; i++){
-
-              //gets cells of current row  
-               var oCells = oTable.rows.item(i).cells;
-
-               //gets amount of cells of current row
-               var cellLength = oCells.length;
-
-               //loops through each cell in current row
-               for(var j = 0; j < cellLength; j++){
-
-                      // get your cell info here
-
-                      var cellVal = oCells.item(j).innerHTML;
-                      alert(cellVal);
-                   }
+            var table = $("#stationdataTable").dataTable();
+            var rows = table.fnGetNodes();
+            var cells = [];
+            for(var i=0;i<rows.length;i++)
+            {
+                // Get HTML of 3rd column (for example)
+                cells.push($(rows[i]).find("td:eq(2)").html()); 
             }
+            console.log(cells);
+            //gets table
+            // var oTable = document.getElementById('stationdataTable');
+
+            // //gets rows of table
+            // var rowLength = oTable.rows.length;
+
+            // //loops through rows    
+            // for (i = 0; i < rowLength; i++){
+
+            //   //gets cells of current row  
+            //    var oCells = oTable.rows.item(i).cells;
+
+            //    //gets amount of cells of current row
+            //    var cellLength = oCells.length;
+
+            //    //loops through each cell in current row
+            //    for(var j = 0; j < cellLength; j++){
+
+            //           // get your cell info here
+
+            //           var cellVal = oCells.item(j).innerHTML;
+            //           alert(cellVal);
+            //        }
+            // }
         },
         // ajax参数
         ajaxDataParamFun: function(d){
@@ -387,6 +395,68 @@
               "autoWidth": true,// 自动宽度
               "stripeClasses" : [],
               "lengthMenu" : [ 10, 20, 50, 100, 200 ],
+              "columns": [
+                    { "data": null,
+                        "render" : function(data, type, row, meta) {
+                            console.log("data-----",data);
+                            console.log("type-----",type);
+                            console.log("row-----",row);
+
+                            var result = '';
+                            result += '<input  type="checkbox" name="subChk" />';
+                            return result;
+                            
+                            // if (idStr != userId) {
+                            //     var result = '';
+                            //     result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
+                            //     return result;
+                            // }else{
+                            //     var result = '';
+                            //     result += '<input  type="checkbox" name="subChk" />';
+                            //     return result;
+                            // }
+                        }
+                    },
+                    { "data": null },
+                    { "data": "dma_name",
+                        "render": function (data, type, row, meta) {
+                            // if(data == "null" || data == null || data == undefined){
+                            //     data = "";
+                            // }
+                            // return data;
+                            return row[2];
+                        }
+                    },
+                    { "data": "station_name",
+                        "render": function (data, type, row, meta) {
+                            return row[3];
+                        }
+                    },
+                    {
+                        "data": "mtype",
+                        "render": function (data, type, row, meta) {
+                            console.log("2data-----",data);
+                            console.log("2type-----",type);
+                            console.log("2row-----",row);
+
+                                var $select = $("<select></select>", {"id": "meter_type"+row[1],
+                                    "value": row[4]
+                                });
+                                $.each(meter_types, function (k, v) {
+
+                                    var $option = $("<option></option>", {
+                                        "text": v,
+                                        "value": v
+                                    });
+                                    if (row[4] === v) {
+                                        $option.attr("selected", "selected")
+                                    }
+                                    $select.append($option);
+                                });
+                                return $select.prop("outerHTML");
+                        }
+                    }
+                ],
               "pagingType" : "full_numbers", // 分页样式
               "dom" : "t" + "<'row'<'col-md-3 col-sm-12 col-xs-12'l><'col-md-4 col-sm-12 col-xs-12'i><'col-md-5 col-sm-12 col-xs-12'p>>",
               "oLanguage": {// 国际语言转化
@@ -411,10 +481,13 @@
                       "sLast": " 尾页 "
                   },
                   "columnDefs": [
-                    { 'width': "40%", "targets": 0 },
-                    { 'width': "80%", "targets": 1 },
+                    { 'width': "10%", "targets": 0 },
+                    { 'width': "20%", "targets": 1 },
                     { 'width': "30%", "targets": 2 },
+                    { 'width': "30%", "targets": 3 },
+                    
                 ],
+                
               },
               "order": [
                   [0, null]

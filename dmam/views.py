@@ -506,7 +506,7 @@ class DistrictMangerView(LoginRequiredMixin,TemplateView):
         user_organ = self.request.user.belongto
 
         default_dma = DMABaseinfo.objects.first()   # user_organ.dma.all().first()
-
+        print('districtmanager',default_dma.pk,default_dma.dma_name)
         context["current_dma_pk"] = default_dma.pk
         context["current_dma_no"] = default_dma.dma_no
         context["current_dma_name"] = default_dma.dma_name

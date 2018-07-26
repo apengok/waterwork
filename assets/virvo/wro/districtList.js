@@ -12,7 +12,7 @@
     var idStr;
     var OperationId;
     var selectTreeIdAdd="";
-    var current_dma_pk = "";
+    var current_dma_pk =$("#current_dma_pk").val();
     var startOperation;// 点击运营资质类别的修改按钮时，弹出界面时运营资质类别文本的内容
     var expliant;// 点击运营资质类别的修改按钮时，弹出界面时说明文本的内容
     var vagueSearchlast = $("#userType").val();
