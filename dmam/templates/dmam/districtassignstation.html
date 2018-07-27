@@ -25,7 +25,7 @@
                         <div class="panel-body" style="padding: 0px;">
                           <div class="form-group" style="margin-top: 15px;">
                             <div class="col-md-12">
-                              <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
+                              <input id="search_station_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
                             </div>
                           </div>
                           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:80%!important">
@@ -52,7 +52,7 @@
                               <div class="ToolPanel">
                                 
                                 <div class="columns btn-group pull-right refShowRight">
-                                    <button type="button" id="addoperation" class="btn btn-primary">保存</button>
+                                    <button type="button" id="saveDmaStation" class="btn btn-primary">保存</button>
                                     <button type="button" class="btn btn-default btn-off" data-dismiss="modal" id="closeAddDialog">取消</button>
                                 </div>
                               </div>
@@ -62,7 +62,7 @@
                                     cellspacing="0" width="100%">
                                     <thead>
                                       <tr>
-                                        <th><input type="checkbox" id="checkAllTwo"  onclick=""></th>
+                                        <th><input type="checkbox" id="checkAll"  onclick="dmaStation.checkAll(this)"></th>
                                         <th>序号</th>
                                         <th>分区名称</th>
                                         <th>站点名称</th>

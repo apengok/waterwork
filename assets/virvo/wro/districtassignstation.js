@@ -1,4 +1,5 @@
 (function($,window){
+    var $subChk = $("input[name='subChk']");
     var selectTreeId = '';
     var selectTreeType = '';
     var selectDistrictId = '';
@@ -206,15 +207,14 @@
                 v += nodes[i].id + ",";
             
                 var dateList=
-                            [
-                              // '<td><input  type="checkbox" name="subChk"  value="' + nodes[i].name + '" uid="'+ nodes[i].id +'" /></td>',
-                              '',
-                              nodes[i].id,
-                              dma_name,
-                              nodes[i].name,
-                              "未计费水表",
+                            {
+                              "pnode_id":nodes[i].pId,
+                              "staion_id":nodes[i].id,
+                              "dma_name":dma_name,
+                              "station_name":nodes[i].name,
+                              "metertype":""
                               
-                            ];
+                            };
                 // oTable.row.add(dateList);
                 stationdataListArray.push(dateList);
                 zTree.removeNode(nodes[i]);
@@ -231,6 +231,24 @@
             var table = $("#stationdataTable").dataTable();
             var rows = table.fnGetNodes();
             var cells = [];
+
+            var chechedNum = $("input[name='subChk']:checked").length;
+            if (chechedNum == 0) {
+                layer.msg("没有站点选中",{move:false});
+                return
+            }
+            
+            var checkedList = new Array();
+            var flag = true;
+            $("input[name='subChk']:checked").each(function() {
+                console.log("$(this).val():",$(this).val(),$(this).attr("pid"));
+                var pid = $(this).attr("pid"); //pengwl
+                var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
+                var pnode = zTree.getNodeByParam("id", pid, null);
+                var newNode = { id:1, pId:pid, name:"leaf node 222",icon:"/static/virvo/resources/img/station.png",type:"station"};
+                zTree.addNodes(pnode,0,newNode);
+            });
+
             for(var i=0;i<rows.length;i++)
             {
                 // Get HTML of 3rd column (for example)
@@ -268,7 +286,29 @@
             d.groupName = selectTreeId;
             d.districtId = selectDistrictId;
         },
-        
+        saveDmaStation:function(){
+            console.log("saveDmaStation");
+            var table = $("#stationdataTable").dataTable();
+            var rows = table.fnGetNodes();
+            var list = [];
+            $.each(table.fnGetNodes(), function (index, value) {
+                console.log(index,value);
+                var obj = {};
+                console.log("dasfas:",$(value).find('input'));
+                var station_id = $(value).find('input').val();
+                var dma_name = $(value).find('td:eq(2)').html();
+                var station_name = $(value).find('td:eq(3)').html();
+                var metertype = $(value).find('select').val();
+                obj.station_id = station_id;
+                obj.dma_name = dma_name;
+                obj.station_name = station_name;
+                obj.metertype = metertype;
+
+                list.push(obj);
+            });  
+            var dmastation_json = JSON.stringify(list);
+            console.log(dmastation_json);
+        },
         doSubmit:function () {
             if(dmaStation.validates()){
                 $("#eadOperation").ajaxSubmit(function(data) {
@@ -398,62 +438,63 @@
               "columns": [
                     { "data": null,
                         "render" : function(data, type, row, meta) {
-                            console.log("data-----",data);
-                            console.log("type-----",type);
-                            console.log("row-----",row);
+                            // console.log("data:",data);
+                            // console.log("row:",row);
 
-                            var result = '';
-                            result += '<input  type="checkbox" name="subChk" />';
-                            return result;
-                            
-                            // if (idStr != userId) {
-                            //     var result = '';
-                            //     result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
-                            //     return result;
-                            // }else{
-                            //     var result = '';
-                            //     result += '<input  type="checkbox" name="subChk" />';
-                            //     return result;
-                            // }
+                        var result = '';
+                        result += '<input  type="checkbox" name="subChk"  value="' + row.station_id + '" pid="'+ row.pnode_id +'" />';
+                        return result;
+                        
+                        // if (idStr != userId) {
+                        //     var result = '';
+                        //     result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
+                        //     return result;
+                        // }else{
+                        //     var result = '';
+                        //     result += '<input  type="checkbox" name="subChk" />';
+                        //     return result;
+                        // }
                         }
                     },
                     { "data": null },
                     { "data": "dma_name",
                         "render": function (data, type, row, meta) {
-                            // if(data == "null" || data == null || data == undefined){
-                            //     data = "";
-                            // }
-                            // return data;
-                            return row[2];
+                            
+                            if(data == "null" || data == null || data == undefined){
+                                data = "";
+                            }
+                            return data;
+                            // return row[2];
                         }
                     },
                     { "data": "station_name",
                         "render": function (data, type, row, meta) {
-                            return row[3];
+                            if(data == "null" || data == null || data == undefined){
+                                data = "";
+                            }
+                            return data;
+                            // return row[3];
                         }
                     },
                     {
-                        "data": "mtype",
+                        "data": "metertype",
                         "render": function (data, type, row, meta) {
-                            console.log("2data-----",data);
-                            console.log("2type-----",type);
-                            console.log("2row-----",row);
+                        
+                            var $select = $("<select></select>", {"id": "meter_type"+data,
+                                "value": data
+                            });
+                            $.each(meter_types, function (k, v) {
 
-                                var $select = $("<select></select>", {"id": "meter_type"+row[1],
-                                    "value": row[4]
+                                var $option = $("<option></option>", {
+                                    "text": v,
+                                    "value": v
                                 });
-                                $.each(meter_types, function (k, v) {
-
-                                    var $option = $("<option></option>", {
-                                        "text": v,
-                                        "value": v
-                                    });
-                                    if (row[4] === v) {
-                                        $option.attr("selected", "selected")
-                                    }
-                                    $select.append($option);
-                                });
-                                return $select.prop("outerHTML");
+                                if (data === v) {
+                                    $option.attr("selected", "selected")
+                                }
+                                $select.append($option);
+                            });
+                            return $select.prop("outerHTML");
                         }
                     }
                 ],
@@ -466,8 +507,8 @@
                   },
                   "sLengthMenu": "显示 _MENU_ 记录",
                   "sInfo": "",
-                  "sZeroRecords": "该分区没有子分区",
-                  "sEmptyTable": "该分区没有子分区",
+                  "sZeroRecords": "该分区还没有站点",
+                  "sEmptyTable": "该分区还没有站点",
                   "sLoadingRecords": "正在加载数据-请等待...",
                   "sInfoEmpty": "",
                   "sInfoFiltered": "（数据库中共为 _MAX_ 条记录）",
@@ -537,8 +578,8 @@
     $(function(){
         $('input').inputClear().on('onClearEvent',function(e,data){
             var id = data.id;
-            if(id == 'search_condition'){
-                search_ztree('stationtreeDemo',id,'group');
+            if(id == 'search_station_condition'){
+                search_ztree('stationtreeDemo',id,'station');
             };
         });
         
@@ -553,22 +594,30 @@
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             dmaStation.refreshTable();
             var search;
-            $("#search_condition").bind("focus",function(){
+            $("#search_station_condition").bind("focus",function(){
                 search = setInterval(function(){
-                    search_ztree('stationtreeDemo', 'search_condition','group');
+                    search_ztree('stationtreeDemo', 'search_station_condition','station');
                 },500);
             }).bind("blur",function(){
                 clearInterval(search);
             });
         }
         // IE9 end
+        $("#checkAll").bind("click", dmaStation.checkAll);
+        // 全选
+        $("input[name='subChk']").click(function() {
+            $("#checkAll").prop(
+                "checked",
+                subChk.length == subChk.filter(":checked").length ? true: false);
+        });
         $("#export").on("click",dmaStation.export);
         $("#import").on("click",dmaStation.import);
+        $("#saveDmaStation").on("click",dmaStation.saveDmaStation);
 
         // $("#selectAll").bind("click", dmaStation.selectAll);
         // 组织架构模糊搜索
-        $("#search_condition").on("input oninput",function(){
-            search_ztree('stationtreeDemo', 'search_condition','group');
+        $("#search_station_condition").on("input oninput",function(){
+            search_ztree('stationtreeDemo', 'search_station_condition','station');
         });       
         
         
