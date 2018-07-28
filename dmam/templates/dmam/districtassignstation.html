@@ -5,13 +5,15 @@
 </style>
 <!-- 新增站点管理 -->
   
-    <form id="adduserType" role="form" action="" method="post" class="form-horizontal">{% csrf_token %}
+    <form id="dmastationform" role="form" action="" method="post" class="form-horizontal">{% csrf_token %}
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
           <h4 class="modal-title">DMA分区站点配置</h4>
           <input value="{{ dma_pk }}" id="dma_pk" type="hidden"  />
-          <input value="{{ dma_no }}" id="dma_no" type="hidden"  />
-          <input value="{{ dma_name }}" id="dma_name" type="hidden"  />
+          <input value="{{ dma_no }}" id="dma_no" name="dma_no" type="hidden"  />
+          <input value="{{ dma_name }}" id="dma_name" name="dma_name" type="hidden"  />
+          <input  id="dmastation_json" name="stationassign" type="hidden"  />
+
         </div>
         <div class="modal-body">
             <div class="row">
@@ -62,7 +64,8 @@
                                     cellspacing="0" width="100%">
                                     <thead>
                                       <tr>
-                                        <th><input type="checkbox" id="checkAll"  onclick="dmaStation.checkAll(this)"></th>
+                                        <!-- <th><input type="checkbox" id="checkAll"  onclick="dmaStation.checkAll(this)"></th> -->
+                                        <th><input name="select_all" value="1" type="checkbox"></th>
                                         <th>序号</th>
                                         <th>分区名称</th>
                                         <th>站点名称</th>

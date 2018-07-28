@@ -41,6 +41,7 @@
 
 
     var myTable;
+    var rows_selected = [];
 
     dmaStation = {
         init: function(){
@@ -186,11 +187,14 @@
             }
         },
         export:function(){
-            var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo"), nodes = zTree
-                .getSelectedNodes(), v = "";
+            var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo"), nodes = zTree.getSelectedNodes(), v = "";
 
                 console.log(nodes);
             n = "";
+            if(nodes.length == 0){
+                layer.msg("没有站点选中",{move:false});
+                return
+            }
             nodes.sort(function compare(a, b) {
                 return a.id - b.id;
             });
@@ -209,7 +213,7 @@
                 var dateList=
                             {
                               "pnode_id":nodes[i].pId,
-                              "staion_id":nodes[i].id,
+                              "station_id":nodes[i].id,
                               "dma_name":dma_name,
                               "station_name":nodes[i].name,
                               "metertype":""
@@ -220,41 +224,76 @@
                 zTree.removeNode(nodes[i]);
             }
             dmaStation.rowaddData(stationdataListArray);
+            console.log("row add data:",stationdataListArray);
             if (v.length > 0)
                 v = v.substring(0, v.length - 1);
 
-            // #add to table
-            
+            zTree.cancelSelectedNode();
+            var tnodes = zTree.getSelectedNodes();
+            console.log("after cancle:",tnodes);
             
         },
         import:function(){
-            var table = $("#stationdataTable").dataTable();
-            var rows = table.fnGetNodes();
-            var cells = [];
-
             var chechedNum = $("input[name='subChk']:checked").length;
             if (chechedNum == 0) {
                 layer.msg("没有站点选中",{move:false});
                 return
             }
-            
-            var checkedList = new Array();
-            var flag = true;
-            $("input[name='subChk']:checked").each(function() {
-                console.log("$(this).val():",$(this).val(),$(this).attr("pid"));
-                var pid = $(this).attr("pid"); //pengwl
-                var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
-                var pnode = zTree.getNodeByParam("id", pid, null);
-                var newNode = { id:1, pId:pid, name:"leaf node 222",icon:"/static/virvo/resources/img/station.png",type:"station"};
-                zTree.addNodes(pnode,0,newNode);
-            });
 
-            for(var i=0;i<rows.length;i++)
-            {
-                // Get HTML of 3rd column (for example)
-                cells.push($(rows[i]).find("td:eq(2)").html()); 
-            }
-            console.log(cells);
+            var table = $("#stationdataTable").dataTable();
+            var rows = table.fnGetNodes();
+            var list = [];
+            var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
+            $.each(table.fnGetNodes(), function (index, value) {
+                console.log(index,value);
+                var obj = {};
+                var checked_flag = $(value).find('input[type="checkbox"]:checked').length;
+                if(checked_flag != 0 ){
+                    // var station_id = $(value).find('input').val();
+                    var dma_name = $(value).find('td:eq(2)').html();
+                    var station_name = $(value).find('td:eq(3)').html();
+                    var metertype = $(value).find('select').val();
+
+                    var sid = $(value).find('input[type="checkbox"]').attr('sid');
+                    var pid = $(value).find('input[type="checkbox"]').attr('pid');
+                    var pnode = zTree.getNodeByParam("id", pid, null);
+                    var newNode = { id:sid, pId:pid, name:station_name,icon:"/static/virvo/resources/img/station.png",type:"station"};
+                    zTree.addNodes(pnode,0,newNode);
+
+                    obj.station_id = sid;
+                    obj.dma_name = dma_name;
+                    obj.station_name = station_name;
+                    obj.metertype = metertype;
+
+                    list.push(obj);
+                }
+            });  
+            var dmastation_json = JSON.stringify(list);
+            console.log(dmastation_json);
+
+            dmaStation.removeseleted();
+            
+            // var anSelected = table.$('tr.selected');
+            
+            // $(anSelected).remove();
+            
+            zTree.cancelSelectedNode();
+            
+            // var checkedList = new Array();
+            // var flag = true;
+            // $("input[name='subChk']:checked").each(function() {
+            //     console.log("$(this).val():",$(this).val(),$(this).attr("pid"));
+            //     var pid = $(this).attr("pid"); //pengwl
+                
+                
+            // });
+
+            // for(var i=0;i<rows.length;i++)
+            // {
+            //     // Get HTML of 3rd column (for example)
+            //     cells.push($(rows[i]).find("td:eq(2)").html()); 
+            // }
+            // console.log(cells);
             //gets table
             // var oTable = document.getElementById('stationdataTable');
 
@@ -292,21 +331,51 @@
             var rows = table.fnGetNodes();
             var list = [];
             $.each(table.fnGetNodes(), function (index, value) {
-                console.log(index,value);
+                // console.log(index,value);
                 var obj = {};
-                console.log("dasfas:",$(value).find('input'));
-                var station_id = $(value).find('input').val();
+                
                 var dma_name = $(value).find('td:eq(2)').html();
                 var station_name = $(value).find('td:eq(3)').html();
                 var metertype = $(value).find('select').val();
-                obj.station_id = station_id;
+
+                var sid = $(value).find('input[type="checkbox"]').attr('sid');
+                
+
+                obj.station_id = sid;
                 obj.dma_name = dma_name;
                 obj.station_name = station_name;
                 obj.metertype = metertype;
 
                 list.push(obj);
+                
             });  
             var dmastation_json = JSON.stringify(list);
+            $("#dmastation_json").val(dmastation_json);
+            $("#dmastationform").attr("action","district/assignstation/"+dma_pk+"/");
+            $("#dmastationform").ajaxSubmit(function(data) {
+                    console.log('sdfe:',data);
+                    if (data != null && typeof(data) == "object" &&
+                        Object.prototype.toString.call(data).toLowerCase() == "[object object]" &&
+                        !data.length) {//判断data是字符串还是json对象,如果是json对象
+                            if(data.success == true){
+                                $("#addType").modal("hide");//关闭窗口
+                                layer.msg(publicAddSuccess,{move:false});
+                                
+                            }else{
+                                layer.msg(data.msg,{move:false});
+                            }
+                    }else{//如果data不是json对象
+                            var result = $.parseJSON(data);//转成json对象
+                            if (result.success == true) {
+                                    $("#addType").modal("hide");//关闭窗口
+                                    layer.msg(publicAddSuccess,{move:false});
+                                    
+                            }else{
+                                layer.msg(result.msg,{move:false});
+                            }
+                    }
+                });
+            
             console.log(dmastation_json);
         },
         doSubmit:function () {
@@ -442,7 +511,7 @@
                             // console.log("row:",row);
 
                         var result = '';
-                        result += '<input  type="checkbox" name="subChk"  value="' + row.station_id + '" pid="'+ row.pnode_id +'" />';
+                        result += '<input  type="checkbox" name="subChk"  sid="' + row.station_id + '" pid="'+ row.pnode_id +'" />';
                         return result;
                         
                         // if (idStr != userId) {
@@ -498,6 +567,16 @@
                         }
                     }
                 ],
+                'rowCallback': function(row, data, dataIndex){
+                     // Get row ID
+                     var rowId = data[0];
+
+                     // If row ID is in the list of selected row IDs
+                     if($.inArray(rowId, rows_selected) !== -1){
+                        $(row).find('input[type="checkbox"]').prop('checked', true);
+                        $(row).addClass('selected');
+                     }
+                  },
               "pagingType" : "full_numbers", // 分页样式
               "dom" : "t" + "<'row'<'col-md-3 col-sm-12 col-xs-12'l><'col-md-4 col-sm-12 col-xs-12'i><'col-md-5 col-sm-12 col-xs-12'p>>",
               "oLanguage": {// 国际语言转化
@@ -551,7 +630,7 @@
             myTable.clear()
             myTable.rows.add(dataList)
             // myTable.page(currentPage).draw(false);
-            myTable.columns.adjust().draw();
+            myTable.columns.adjust().draw(false);
 
         },
         rowaddData: function (dataList) {
@@ -559,7 +638,14 @@
             // myTable.clear()
             myTable.rows.add(dataList)
             // myTable.page(currentPage).draw(false);
-            myTable.columns.adjust().draw();
+            myTable.columns.adjust().draw(false);
+
+        },
+        removeseleted: function (dataList) {
+            var currentPage = myTable.page()
+            // myTable.clear()
+            myTable.row('.selected').remove().draw( false ); 
+            
 
         },
         // 查询全部
@@ -582,12 +668,96 @@
                 search_ztree('stationtreeDemo',id,'station');
             };
         });
+
+        
+        function updateDataTableSelectAllCtrl(table){
+           var $table             = myTable.table().node();
+           var $chkbox_all        = $('tbody input[type="checkbox"]', $table);
+           var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
+           var chkbox_select_all  = $('thead input[name="select_all"]', $table).get(0);
+
+           // If none of the checkboxes are checked
+           if($chkbox_checked.length === 0){
+              chkbox_select_all.checked = false;
+              if('indeterminate' in chkbox_select_all){
+                 chkbox_select_all.indeterminate = false;
+              }
+
+           // If all of the checkboxes are checked
+           } else if ($chkbox_checked.length === $chkbox_all.length){
+              chkbox_select_all.checked = true;
+              if('indeterminate' in chkbox_select_all){
+                 chkbox_select_all.indeterminate = false;
+              }
+
+           // If some of the checkboxes are checked
+           } else {
+              chkbox_select_all.checked = true;
+              if('indeterminate' in chkbox_select_all){
+                 chkbox_select_all.indeterminate = true;
+              }
+           }
+        }
         
         dmaStation.userTree();
         
         dmaStation.init();
         
         dmaStation.getTable('#stationdataTable');
+
+        // Handle click on checkbox
+   $('#stationdataTable tbody').on('click', 'input[type="checkbox"]', function(e){
+      var $row = $(this).closest('tr');
+
+
+      // Get row data
+      var data = myTable.row($row).data();
+
+      // Get row ID
+      var rowId = data[0];
+
+      // Determine whether row ID is in the list of selected row IDs 
+      var index = $.inArray(rowId, rows_selected);
+
+      // If checkbox is checked and row ID is not in list of selected row IDs
+      if(this.checked && index === -1){
+         rows_selected.push(rowId);
+
+      // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+      } else if (!this.checked && index !== -1){
+         rows_selected.splice(index, 1);
+      }
+
+      if(this.checked){
+         $row.addClass('selected');
+      } else {
+         $row.removeClass('selected');
+      }
+
+      // Update state of "Select all" control
+      // updateDataTableSelectAllCtrl(table);
+
+      // Prevent click event from propagating to parent
+      e.stopPropagation();
+   });
+
+   // Handle click on table cells with checkboxes
+   $('#stationdataTable').on('click', 'tbody td, thead th:first-child', function(e){
+      $(this).parent().find('input[type="checkbox"]').trigger('click');
+   });
+
+   // Handle click on "Select all" control
+   $('thead input[name="select_all"]').on('click', function(e){
+      if(this.checked){
+         $('#stationdataTable tbody input[type="checkbox"]:not(:checked)').trigger('click');
+      } else {
+         $('#stationdataTable tbody input[type="checkbox"]:checked').trigger('click');
+      }
+
+      // Prevent click event from propagating to parent
+      e.stopPropagation();
+   });
+
         // dmaStation.inquireClick(1);
         //dmaStation.inquireDmastations(1);
         // IE9

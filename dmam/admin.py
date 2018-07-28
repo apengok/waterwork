@@ -25,4 +25,4 @@ class MeterAdmin(admin.ModelAdmin):
 
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
-    list_display = ['username','usertype','biguser','focus','madedate']
+    list_display = ['username','usertype','biguser','focus','madedate','meter','belongto','dmaid','dmametertype']

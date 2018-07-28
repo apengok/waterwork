@@ -262,97 +262,7 @@
             };
             $("#Ul-menu-text").html(menu_text);
             // 表格列定义
-            columnDefs = [ {
-                // 第一列，用来显示序号
-                "searchable" : false,
-                "orderable" : false,
-                "targets" : 0
-            }];
-            columns = [
-                {
-                    // 第一列，用来显示序号
-                    "data" : null,
-                    "class" : "text-center"
-                },
-                {
-                    "data" : "username",    //站点名称
-                    "class" : "text-center"
-                },
-                {
-                    "data" : "usertype",
-                    "class" : "text-center",
-                    render : function (data,type,row,meta) {
-
-                        if(data == "null" || data == null || data == undefined){
-                            data = "";
-                        }
-                        return data;
-                    }
-                },
-                {
-                    "data" : "metertype",
-                    "class" : "text-center"
-                },
-                {
-                    "data" : "serialnumber",
-                    "class" : "text-center"
-                },
-                {
-                    "data" : "dn",
-                    "class" : "text-center",
-                    render : function (data,type,row,meta) {
-                        if(data == "null" || data == null || data == undefined){
-                            data = "";
-                        }
-                        return data;
-                    }
-                },
-                {
-                    "data" : "belongto",
-                    "class" : "text-center",
-                    render : function (data,type,row,meta) {
-                        if(data == "null" || data == null || data == undefined){
-                            data = "";
-                        }
-                        return data;
-                    }
-                } ,
-                
-                
-                
-                {
-                    "data" : "createdate",
-                    "class" : "text-center",
-                    render : function (data,type,row,meta) {
-                        if(data == "null" || data == null || data == undefined){
-                            data = "";
-                        }
-                        return data;
-                    }
-                } ,
-            ];
-            // 表格setting
-            setting = {
-                suffix  : '/',
-                listUrl : "stations/list/",
-                editUrl : "stations/edit/",
-                deleteUrl : "stations/delete/",
-                deletemoreUrl : "stations/deletemore",
-                enableUrl : "stations/enable_",
-                disableUrl : "stations/disable_",
-                columnDefs : columnDefs, // 表格列定义
-                columns : columns, // 表格列
-                dataTableDiv : 'dataTable', // 表格
-                ajaxDataParamFun : dmaManage.ajaxDataParamFun, // ajax参数
-                pageable : true, // 是否分页
-                showIndexColumn : true, // 是否显示第一列的索引列
-                // "Scroll":{"sX":"200px","sY":"100%"},
-                enabledChange : true
-            };
-            // 创建表格
-            myTable = new TG_Tabel.createNew(setting);
-            // 表格初始化
-            myTable.init();
+            
         },
         userTree : function(){
             // 初始化文件树
@@ -740,6 +650,39 @@
                 }else{
                     layer.msg(data.msg);
                 }
+                
+                var stationdataListArray = [];//用来储存显示数据
+                if(data.obj.dmastationlist !=null&&data.obj.dmastationlist.length!=0){
+                    var ustasticinfo=data.obj.dmastationlist;
+                    console.log(ustasticinfo);
+                    for(var i=0;i<ustasticinfo.length;i++){
+                        
+                        var dateList=
+                            {
+                                // "id":ustasticinfo.pk,
+                                "username":ustasticinfo[i].username,
+                                "usertype":ustasticinfo[i].usertype,
+                                "simid":ustasticinfo[i].simid,
+                                "dn":ustasticinfo[i].dn,
+                                "belongto":ustasticinfo[i].belongto,
+                                "metertype":ustasticinfo[i].metertype,
+                                "serialnumber":ustasticinfo[i].serialnumber,
+                                "createdate":ustasticinfo[i].createdate
+                            }
+//                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
+//                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
+//                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
+                            stationdataListArray.push(dateList);
+//                      }
+                    }
+                    console.log(dateList);
+                    dmaManage.reloadData(stationdataListArray);
+                    
+                }else{
+                    dmaManage.reloadData(stationdataListArray);
+                    
+                }
+            
             }
             else{
                 layer.msg("没有分区");
@@ -785,6 +728,14 @@
             }else{
                 myTable.deleteItem(id);
             }
+        },
+        reloadData: function (dataList) {
+            var currentPage = myTable.page()
+            myTable.clear()
+            myTable.rows.add(dataList)
+            // myTable.page(currentPage).draw(false);
+            myTable.columns.adjust().draw(false);
+
         },
         // 查询全部
         refreshTable: function(){
@@ -856,7 +807,7 @@
             }
         },
          getTable:function(table,operations){
-           myTableTwo = $(table).DataTable({
+           myTable = $(table).DataTable({
           "destroy": true,
             "dom": 'tiprl',// 自定义显示项
             "data": operations,
@@ -868,7 +819,69 @@
             "Info": true,// 页脚信息
            // "autoWidth": true,// 自动宽度
             // "scrollX": "100%",
-            
+            "columns" : [
+                {
+                    // 第一列，用来显示序号
+                    "data" : null,
+                    "class" : "text-center"
+                },
+                {
+                    "data" : "username",    //站点名称
+                    "class" : "text-center"
+                },
+                {
+                    "data" : "usertype",
+                    "class" : "text-center",
+                    render : function (data,type,row,meta) {
+
+                        if(data == "null" || data == null || data == undefined){
+                            data = "";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "data" : "metertype",
+                    "class" : "text-center"
+                },
+                {
+                    "data" : "serialnumber",
+                    "class" : "text-center"
+                },
+                {
+                    "data" : "dn",
+                    "class" : "text-center",
+                    render : function (data,type,row,meta) {
+                        if(data == "null" || data == null || data == undefined){
+                            data = "";
+                        }
+                        return data;
+                    }
+                },
+                {
+                    "data" : "belongto",
+                    "class" : "text-center",
+                    render : function (data,type,row,meta) {
+                        if(data == "null" || data == null || data == undefined){
+                            data = "";
+                        }
+                        return data;
+                    }
+                } ,
+                
+                
+                
+                {
+                    "data" : "createdate",
+                    "class" : "text-center",
+                    render : function (data,type,row,meta) {
+                        if(data == "null" || data == null || data == undefined){
+                            data = "";
+                        }
+                        return data;
+                    }
+                } ,
+            ],
             
               "stripeClasses" : [],
               "lengthMenu" : [ 10, 20, 50, 100, 200 ],
@@ -906,6 +919,14 @@
             ],// 第一列排序图标改为默认
 
               });
+                myTable.on('order.dt search.dt', function () {
+                  myTable.column(0, {
+                      search: 'applied',
+                      order: 'applied'
+                  }).nodes().each(function (cell, i) {
+                      cell.innerHTML = i + 1;
+                  });
+              }).draw();
         },
         doSubmit:function () {
             if(dmaManage.validates()){
@@ -1178,7 +1199,8 @@
         });
         var myTable;
         dmaManage.userTree();
-        getTable('dataTables');
+        
+        dmaManage.getTable('#dataTable');
         dmaManage.init();
         DMABaseEdit.init();
         dmaManage.getBaseinfo();

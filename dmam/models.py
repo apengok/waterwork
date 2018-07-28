@@ -124,9 +124,12 @@ class Station(models.Model):
     biguser     = models.CharField(db_column='biguser', max_length=30, blank=True, null=True)  # Field name made lowercase.
     focus       = models.CharField(db_column='focus', max_length=30, blank=True, null=True)  # Field name made lowercase.
     locate      = models.CharField(db_column='locate', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='station')
-    meter       = models.ForeignKey(Meter,on_delete=models.CASCADE,related_name='station')
-    dmaid       = models.ForeignKey(DMABaseinfo,related_name='station',blank=True, null=True,on_delete=models.CASCADE) 
+    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='station') #所属组织
+    meter       = models.ForeignKey(Meter,on_delete=models.CASCADE,related_name='station') #关联表具
+    dmaid       = models.ForeignKey(DMABaseinfo,related_name='station',blank=True, null=True,on_delete=models.CASCADE) #所在dma分区
+
+    dmametertype     = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+
 
     class Meta:
         managed = True

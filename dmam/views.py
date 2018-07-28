@@ -34,7 +34,7 @@ from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 from . models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter
 from .forms import StationsForm,StationsEditForm
-from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm
+from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssignForm
 import os
 from django.conf import settings
 
@@ -300,6 +300,96 @@ def stationlist(request):
     return HttpResponse(json.dumps(result))
 
 
+def dmastationlist(request):
+    print("userlist",request.POST,request.kwargs)
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    print("get userlist:",draw,length,start,search_value)
+
+    #当前登录用户
+    current_user = request.user
+
+    def u_info(u):
+        
+        return {
+            "id":u.pk,
+            "username":u.username,
+            "usertype":u.usertype,
+            "simid":u.meter.simid if u.meter else '',
+            "dn":u.meter.dn if u.meter else '',
+            "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
+            "metertype":u.meter.metertype if u.meter else '',
+            "serialnumber":u.meter.serialnumber if u.meter else '',
+            "big_user":1,
+            "focus":1,
+            "createdate":u.madedate
+        }
+    data = []
+    
+    
+    # userl = current_user.user_list()
+
+    # bigmeters = Bigmeter.objects.all()
+    # dma_pk = request.POST.get("pk") or 4
+    dma_pk=4
+    dma = DMABaseinfo.objects.first() #get(pk=int(dma_pk))
+    stations = dma.station.all()
+    
+    
+    
+
+    
+
+    for m in stations[start:start+length]:
+        data.append(u_info(m))
+    
+    recordsTotal = len(stations)
+    # recordsTotal = len(data)
+    
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+
 # class DistrictFormView(FormView):
 #     form_class = DMABaseinfoForm
 
@@ -307,6 +397,7 @@ def dmabaseinfo(request):
 
     if request.method == 'GET':
         print('dmabaseinfo get:',request.GET)
+        data = []
         dma_no = request.GET.get("dma_no")
         if dma_no == '':
             operarions_list = {
@@ -328,7 +419,8 @@ def dmabaseinfo(request):
                             "night_use":'',
                             "cxc_value":'',
                             "belongto":''
-                            }
+                            },
+                        "dmastationlist":data
                 },
                 "success":True
             }
@@ -338,6 +430,27 @@ def dmabaseinfo(request):
             
 
         dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
+
+        def u_info(u):
+        
+            return {
+                "id":u.pk,
+                "username":u.username,
+                "usertype":u.usertype,
+                "simid":u.meter.simid if u.meter else '',
+                "dn":u.meter.dn if u.meter else '',
+                "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
+                "metertype":u.meter.metertype if u.meter else '',
+                "serialnumber":u.meter.serialnumber if u.meter else '',
+                "big_user":1,
+                "focus":1,
+                "createdate":u.madedate
+            }
+        
+        #dma分区的站点
+        stations = dmabase.station.all()
+        for s in stations:
+            data.append(u_info(s))
 
         operarions_list = {
             "exceptionDetailMsg":"null",
@@ -358,7 +471,8 @@ def dmabaseinfo(request):
                         "night_use":dmabase.night_use,
                         "cxc_value":dmabase.cxc_value,
                         "belongto":dmabase.belongto.name
-                        }
+                        },
+                    "dmastationlist":data
             },
             "success":True
         }
@@ -731,7 +845,7 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
 class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = DMABaseinfo
-    form_class = DMACreateForm
+    form_class = StationAssignForm
     template_name = "dmam/districtassignstation.html"
     success_url = reverse_lazy("dmam:districtmanager");
 
@@ -758,13 +872,30 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print("group update here?:",self.request.POST)
+        print("dma station assign here?:",self.request.POST)
         # print(form)
         # do something
-        
-                
+        stationassign = form.cleaned_data.get("stationassign")
+        jd = json.loads(stationassign)
 
-        return super(DistrictAssignStationView,self).form_valid(form)
+        print(jd)
+        self.object = self.get_object()
+        for d in jd:
+            print(d["station_id"],d["dma_name"],d["station_name"],d["metertype"])
+            station_id = int(d["station_id"])
+            metertype = d["metertype"]
+            station = Station.objects.get(pk=station_id)
+            station.dmaid = self.object
+            station.dmametertype = metertype
+            station.save()
+        
+        data = {
+                "success": 1,
+                "obj":{"flag":1}
+            }
+        return HttpResponse(json.dumps(data)) #JsonResponse(data)        
+
+        # return super(DistrictAssignStationView,self).form_valid(form)
 
     def get_object(self):
         print(self.kwargs)

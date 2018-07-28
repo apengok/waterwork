@@ -92,3 +92,12 @@ class StationsEditForm(forms.ModelForm):
     class Meta:
         model = Station    
         fields= ('username','description','usertype','madedate','lng','lat','locate')
+
+
+
+class StationAssignForm(forms.ModelForm):
+    stationassign = forms.CharField()
+
+    class Meta:
+        model = DMABaseinfo
+        fields = ('dma_no',)

@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^stations/edit/(?P<pk>\w+)/?$',views.StationEditView.as_view(),name='stationedit'),
     url(r'^stations/delete/(?P<pk>[0-9]+)/?$',views.StationDeleteView.as_view(),name='stationdelete'),
     # url(r'^stations/deletemore',views.stationdeletemore,name='stationdeletemore'),
+    url(r'^dmastations/list/(?P<pk>\w+)/$',views.dmastationlist,name='dmastationlist'),
     
     url(r'^station/getmeterlist/$',views.getmeterlist,name='getmeterlist'),
     url(r'^station/getmeterParam/$',views.getmeterParam,name='getmeterParam'),
