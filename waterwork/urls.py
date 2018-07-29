@@ -52,6 +52,7 @@ urlpatterns = [
 
     url(r'^analysis/', include('analysis.urls', namespace='analysis')),
 
+    url(r'^devm/', include('devm.urls', namespace='devm')),
 
     # url(r'^testapp/', include('testapp.urls')),
 

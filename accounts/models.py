@@ -11,6 +11,7 @@ import json
 from django.db.models import Q
 
 from entm.models import Organizations
+from dmam.models import Meter,Station,SimCard
 
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
@@ -224,6 +225,7 @@ class User(AbstractBaseUser,PermissionsMixin):
         except:
             return []
 
+    #组织及下属组织下的所有用户
     def user_list_queryset(self):
         # userlist = []
         if self.is_admin:
@@ -238,6 +240,51 @@ class User(AbstractBaseUser,PermissionsMixin):
             userlist |= g.users.all()
             
         return userlist
+
+    #组织及下属组织下的所有站点
+    def station_list_queryset(self):
+        # userlist = []
+        if self.is_admin:
+            return Station.objects.all()
+
+        stationlist = Station.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=False)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            stationlist |= g.station.all()
+            
+        return stationlist
+
+    #组织及下属组织下的所有表具
+    def meter_list_queryset(self):
+        # userlist = []
+        if self.is_admin:
+            return Meter.objects.all()
+
+        meterlist = Meter.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=False)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            meterlist |= g.meter.all()
+            
+        return meterlist
+
+    #组织及下属组织下的所有simcard
+    def simcard_list_queryset(self):
+        # userlist = []
+        if self.is_admin:
+            return SimCard.objects.all()
+
+        simcardlist = SimCard.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=False)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            simcardlist |= g.simcard.all()
+            
+        return simcardlist
 
     def user_list(self):
         userlist = []

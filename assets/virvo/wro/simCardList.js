@@ -45,41 +45,21 @@
                     "data": null,
                     "class": "text-center", //最后一列，操作按钮
                     render: function (data, type, row, meta) {
-                        var editUrlPath = myTable.editUrl + row.id + ".gsp"; //修改地址
+                        var editUrlPath = myTable.editUrl + row.id + "/"; //修改地址
                         var result = '';
                         //修改按钮
                         result += '<button href="' + editUrlPath + '" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
-                        if (!row.brand) {
-                            result += '<button disabled class="editBtn btn-default deleteButton" type="button"><i class=" fa fa-ban"></i>下发参数</button>&nbsp;'
-                        }else {
-                            result += '<button onclick="simCardManagement.sendSimParam(\''+row.id+'\',\''+row.vehicleId+'\',\''+row.configId+'\',\''+row.paramId+'\')" class="editBtn editBtn-info" type="button"><i class="glyphicon glyphicon-circle-arrow-down"></i>下发参数</button>&nbsp;'
-                        }
+                        // if (!row.brand) {
+                        //     result += '<button disabled class="editBtn btn-default deleteButton" type="button"><i class=" fa fa-ban"></i>下发参数</button>&nbsp;'
+                        // }else {
+                        //     result += '<button onclick="simCardManagement.sendSimParam(\''+row.id+'\',\''+row.vehicleId+'\',\''+row.configId+'\',\''+row.paramId+'\')" class="editBtn editBtn-info" type="button"><i class="glyphicon glyphicon-circle-arrow-down"></i>下发参数</button>&nbsp;'
+                        // }
                         //删除按钮
                         result += '<button type="button" onclick="myTable.deleteItem(\'' + row.id + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
                         return result;
                     }
                 },
                 {
-                    "data": "pstatus",
-                    "class": "text-center",
-                    render : function(data, type, row, meta) {
-                        if (data == "0") {
-                            return '指令已生效';
-                        } else if (data == "1") {
-                            return '指令未生效';
-                        } else if (data == "2") {
-                            return "指令未生效";
-                        } else if (data == "3") {
-                            return "指令未生效";
-                        } else if (data == "4") {
-                            return "指令已发出";
-                        } else if  (data == "5") {
-                            return "设备离线，未下发";
-                        } else {
-                            return "";
-                        }
-                    }
-                },{
                     "data": "iccid",
                     "class": "text-center",
                     render:function(data){
@@ -106,7 +86,7 @@
                         return data == null ? "" : data;
                     }
                 }, {
-                    "data": "groupName",
+                    "data": "belongto",
                     "class": "text-center",
                     render: function (data, type, row, meta) {
                         return data == null ? "" : data;
@@ -136,66 +116,6 @@
                         return data == null ? "" : data;
                     }
                 }, {
-                    "data": "dayRealValue",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                }, {
-                    "data": "monthRealValue",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                }, {
-                    "data": "monthTrafficDeadline",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                },{
-                    "data": "alertsFlow",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                }, {
-                    "data": "monthlyStatement",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                }, {
-                    "data": "correctionCoefficient",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                }, {
-                    "data": "forewarningCoefficient",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                },{
-                    "data": "hourThresholdValue",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                },{
-                    "data": "dayThresholdValue",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                },{
-                    "data": "monthThresholdValue",
-                    "class": "text-center",
-                    render: function (data, type, row, meta) {
-                        return data == null ? "" : data;
-                    }
-                },  {
                     "data": "openCardTime",
                     "class": "text-center",
                     render: function (data, type, row, meta) {
@@ -208,13 +128,13 @@
                         return data ? data:"";
                     }
                 }, {
-                    "data": "deviceNumber",
+                    "data": "meter",
                     "class": "text-center",
                     render: function (data, type, row, meta) {
                         return data == null ? "" : data;
                     }
                 },{
-                    "data": "brand",
+                    "data": "station",
                     "class": "text-center",
                     render: function (data, type, row, meta) {
                         return data == null ? "" : data;
@@ -244,10 +164,10 @@
             };
             //表格setting
             var setting = {
-                listUrl: '/clbs/m/basicinfo/equipment/simcard/list',
-                editUrl: '/clbs/m/basicinfo/equipment/simcard/edit_',
-                deleteUrl: '/clbs/m/basicinfo/equipment/simcard/delete_',
-                deletemoreUrl: '/clbs/m/basicinfo/equipment/simcard/deletemore',
+                listUrl: '/devm/simcard/list/',
+                editUrl: '/devm/simcard/edit/',
+                deleteUrl: '/devm/simcard/delete/',
+                deletemoreUrl: '/devm/simcard/deletemore/',
                 enableUrl: '/clbs/c/user/enable_',
                 disableUrl: '/clbs/c/user/disable_',
                 columnDefs: columnDefs, //表格列定义
@@ -272,7 +192,7 @@
             $("#checkAll").prop("checked", subChk.length == subChk.filter(":checked").length ? true : false);
         },
         sendSimParam:function (id,vid,cid,paramId) {
-            var url="/clbs/m/basicinfo/equipment/simcard/sendSimP";
+            var url="/devm/simcard/sendSimP";
             json_ajax("POST",url,"json",false,{"sid":id,"vid":vid,"cid":cid,"type":2},simCardManagement.sendCallBack)
             layer.msg(sendCommandComplete);
         },

@@ -86,9 +86,34 @@ class DmaStations(models.Model):
         return self.dmaid.dma_name   
 
 
+class SimCard(models.Model):
+    simcardNumber       = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    belongto            = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='simcard')
+    isStart             = models.CharField(db_column='state', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    iccid               = models.CharField(db_column='ICCID', max_length=30, blank=True, null=True)  # Field name made lowercase.型号
+    imei                = models.CharField(db_column='IMEI', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    imsi                = models.CharField(db_column='IMSI', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    operator            = models.CharField(db_column='operator', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    simFlow             = models.CharField(db_column='simFlow', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    openCardTime        = models.CharField(db_column='openCardTime', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    endTime             = models.CharField(db_column='endTime', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    create_date         = models.CharField(db_column='create_date', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    update_date         = models.CharField(db_column='update_date', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    remark              = models.CharField(db_column='remark', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    
+
+    class Meta:
+        managed = True
+        db_table = 'simcard'
+
+    def __unicode__(self):
+        return '%s'%(self.simcardNumber)    
+
+
 class Meter(models.Model):
     serialnumber= models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    simid       = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    # simid       = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    simid       = models.ForeignKey(SimCard,on_delete=models.CASCADE,related_name='meter') # Field name made lowercase.
     version     = models.CharField(db_column='version', max_length=30, blank=True, null=True)  # Field name made lowercase.型号
     dn          = models.CharField(db_column='Dn', max_length=30, blank=True, null=True)  # Field name made lowercase.
     metertype   = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.

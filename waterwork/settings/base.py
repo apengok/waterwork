@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'dmam',
     'legacy',
     'analysis',
+    'devm',
     # 'channels',
 ]
 

@@ -91,16 +91,17 @@ def dmatree(request):
         #station
         if stationflag == '1':
             for s in o.station.all():
-                organtree.append({
-                    "name":s.username,
-                    "id":s.pk,
-                    "districtid":'',
-                    "pId":o.cid,
-                    "type":"station",
-                    "dma_no":'',
-                    "icon":"/static/virvo/resources/img/station.png",
-                    "uuid":''
-                })
+                if s.dmaid is None: #已分配dma分区的不显示
+                    organtree.append({
+                        "name":s.username,
+                        "id":s.pk,
+                        "districtid":'',
+                        "pId":o.cid,
+                        "type":"station",
+                        "dma_no":'',
+                        "icon":"/static/virvo/resources/img/station.png",
+                        "uuid":''
+                    })
 
     # district
     # districts = District.objects.all()
@@ -250,7 +251,8 @@ def stationlist(request):
     # userl = current_user.user_list()
 
     # bigmeters = Bigmeter.objects.all()
-    stations = Station.objects.all()
+    # stations = Station.objects.all()
+    stations = current_user.station_list_queryset()
     
     
     # # print("user all:",userl)
@@ -911,7 +913,27 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
         context["dma_no"] = self.object.dma_no
         context["dma_name"] = self.object.dma_name
 
-        # context["user_list"] = User.objects.all()
+        #dma station
+        dmastaions = self.object.station.all()
+
+        data = []
+        #dma分区的站点
+        
+        for s in dmastaions:
+            data.append({
+                "id":s.pk,
+                "username":s.username,
+                "pid":self.object.belongto.cid,
+                "dmametertype":s.dmametertype
+            })
+
+        dmastation_list = {
+            "obj":{
+                    "dmastationlist":data
+            }
+        }
+
+        context["dmastation_list"] = json.dumps(dmastation_list)
         
 
         return context  

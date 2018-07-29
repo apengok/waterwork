@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import WaterUserType,DMABaseinfo,DmaStations,Meter,Station
+from . models import WaterUserType,DMABaseinfo,DmaStations,Meter,Station,SimCard
 # Register your models here.
 
 
@@ -26,3 +26,7 @@ class MeterAdmin(admin.ModelAdmin):
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
     list_display = ['username','usertype','biguser','focus','madedate','meter','belongto','dmaid','dmametertype']
+
+@admin.register(SimCard)
+class SimCardAdmin(admin.ModelAdmin):
+    list_display = ['simcardNumber','belongto','isStart','iccid','imei','imsi','operator','simFlow','openCardTime','endTime','remark']

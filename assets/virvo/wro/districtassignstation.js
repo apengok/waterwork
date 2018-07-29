@@ -39,6 +39,10 @@
 
     var meter_types = ["出水表","进水表","贸易结算表","未计费水表","官网检测表"];
 
+    var dmastation_list = $("#dmastation_list").val()
+
+    console.log(dmastation_list);
+
 
     var myTable;
     var rows_selected = [];
@@ -186,6 +190,51 @@
 
             }
         },
+
+        initdmastations:function(){
+            console.log(dmastation_list);
+            var data = $.parseJSON(dmastation_list);//转成json对象
+            var stationdataListArray = [];//用来储存显示数据
+            if(data.obj.dmastationlist !=null&&data.obj.dmastationlist.length!=0){
+                var ustasticinfo=data.obj.dmastationlist;
+                console.log(ustasticinfo);
+                for(var i=0;i<ustasticinfo.length;i++){
+                    
+                    var dateList=
+                            {
+                              "pnode_id":ustasticinfo[i].pid,
+                              "station_id":ustasticinfo[i].id,
+                              "dma_name":dma_name,
+                              "station_name":ustasticinfo[i].username,
+                              "metertype":ustasticinfo[i].dmametertype
+                              
+                            };
+                    // var dateList=
+                    //     {
+                    //         // "id":ustasticinfo.pk,
+                    //         "username":ustasticinfo[i].username,
+                    //         "usertype":ustasticinfo[i].usertype,
+                    //         "simid":ustasticinfo[i].simid,
+                    //         "dn":ustasticinfo[i].dn,
+                    //         "belongto":ustasticinfo[i].belongto,
+                    //         "metertype":ustasticinfo[i].metertype,
+                    //         "serialnumber":ustasticinfo[i].serialnumber,
+                    //         "createdate":ustasticinfo[i].createdate
+                    //     }
+//                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
+//                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
+//                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
+                        stationdataListArray.push(dateList);
+//                      }
+                }
+                console.log(dateList);
+                dmaStation.reloadData(stationdataListArray);
+                
+            }else{
+                dmaStation.reloadData(stationdataListArray);
+                
+            }
+        },
         export:function(){
             var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo"), nodes = zTree.getSelectedNodes(), v = "";
 
@@ -279,45 +328,7 @@
             
             zTree.cancelSelectedNode();
             
-            // var checkedList = new Array();
-            // var flag = true;
-            // $("input[name='subChk']:checked").each(function() {
-            //     console.log("$(this).val():",$(this).val(),$(this).attr("pid"));
-            //     var pid = $(this).attr("pid"); //pengwl
-                
-                
-            // });
-
-            // for(var i=0;i<rows.length;i++)
-            // {
-            //     // Get HTML of 3rd column (for example)
-            //     cells.push($(rows[i]).find("td:eq(2)").html()); 
-            // }
-            // console.log(cells);
-            //gets table
-            // var oTable = document.getElementById('stationdataTable');
-
-            // //gets rows of table
-            // var rowLength = oTable.rows.length;
-
-            // //loops through rows    
-            // for (i = 0; i < rowLength; i++){
-
-            //   //gets cells of current row  
-            //    var oCells = oTable.rows.item(i).cells;
-
-            //    //gets amount of cells of current row
-            //    var cellLength = oCells.length;
-
-            //    //loops through each cell in current row
-            //    for(var j = 0; j < cellLength; j++){
-
-            //           // get your cell info here
-
-            //           var cellVal = oCells.item(j).innerHTML;
-            //           alert(cellVal);
-            //        }
-            // }
+            
         },
         // ajax参数
         ajaxDataParamFun: function(d){
@@ -704,6 +715,8 @@
         dmaStation.init();
         
         dmaStation.getTable('#stationdataTable');
+
+        dmaStation.initdmastations();
 
         // Handle click on checkbox
    $('#stationdataTable tbody').on('click', 'input[type="checkbox"]', function(e){

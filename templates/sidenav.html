@@ -99,7 +99,7 @@
                     </a>
                     <ul class="second-menu-ul">
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'devm:metermanager' %}">
                                 <i class="fa fa-location-arrow"></i><span>表具管理</span> 
                                 <i></i> 
                             </a>
@@ -108,7 +108,7 @@
                             </ul>
                         </li>
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'devm:simcardmanager' %}">
                                 <i class="fa fa-location-arrow"></i><span>SIM卡管理</span> 
                                 <i></i> 
                             </a>
@@ -552,7 +552,7 @@
                     <ul class="second-menu-ul">
                         {% if  'meters_devicemanager' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'devm:metermanager' %}">
                                 <i class="fa fa-location-arrow"></i><span>表具管理</span> 
                                 <i></i> 
                             </a>
