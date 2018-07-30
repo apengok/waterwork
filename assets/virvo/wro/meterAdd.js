@@ -1,7 +1,7 @@
 (function (window, $) {
     var submissionFlag = false;
     var simInput = $("#sims");
-    var simCardId = $("#simid").val();
+    var simCardId = $("#simID").val();
     var simCard = $("#simCard").val();
     var serialnumber = $("#serialnumber").val();
     var deviceType = $("#deviceType").val();
@@ -97,6 +97,32 @@
                 addMeterManagement.hideMenu();
             }
         },
+        //显示或隐藏输入框
+        showHideValueCase: function(type,dataInput){
+            var dataInputType = dataInput.selector;
+            if (type == 0) {//限制输入
+                
+                if ("#sims" == dataInputType) { //sim卡限制
+                    $(".simsList").attr("readonly",true);
+                    $("#simParentGroupName").css("background-color","");
+                    $("#simGroupDiv").css("display","block");
+                    $("#operatorTypeDiv").css("display","block");
+                    simFlag = false;
+                }
+            } else if (type == 1) {//放开输入
+                
+                if ("#sims" == dataInputType) { //sim卡放开
+                    $(".simsList").removeAttr("readonly");
+                    $("#simParentGroupName").css("background-color","#fafafa");
+                    $("#simGroupDiv").css("display","none");
+                    $("#operatorTypeDiv").css("display","none");
+                    simFlag = true;
+                }
+            }
+        },
+        hideErrorMsg: function(){
+            $("#error_label").hide();
+        },
         InitCallback: function(){
             //sim卡
             addMeterManagement.initSimCard("/devm/simcard/getSimcardSelect/");
@@ -106,9 +132,9 @@
             addMeterManagement.initDataList(simInput, url, simCardId,addMeterManagement.simsChange);
         },
         simsChange: function (keyword) {
-            datas = keyword.key;
-            json_ajax("POST", "/devm/getSimcardInfoBySimcardNumber/", "json", true,
-                {simcardNumber: datas}, addMeterManagement.simsChangeCallback);
+            // datas = keyword.key;
+            // json_ajax("POST", "/devm/getSimcardInfoBySimcardNumber/", "json", true,
+            //     {simcardNumber: datas}, addMeterManagement.simsChangeCallback);
         },
         simsChangeCallback: function(data){
             if(data.success){
@@ -137,10 +163,13 @@
                 dataType: "json",
                 success: function (data) {
                     var itemList = data.obj;
+                    console.log(itemList);
                     var suggest=dataInput.bsSuggest({
                         indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
                         indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
                         data: {value:itemList},
+                        idField: "id",
+                        keyField: "name",
                         effectiveFields: ["name"]
                     }).on('onDataRequestSuccess', function (e, result) {
                     }).on("click",function(){
@@ -150,11 +179,11 @@
                             callback(keyword)
                         }
                         //限制输入
-                        msgEdit.showHideValueCase(0,dataInput);
-                        msgEdit.hideErrorMsg();
+                        addMeterManagement.showHideValueCase(0,dataInput);
+                        addMeterManagement.hideErrorMsg();
                     }).on('onUnsetSelectValue', function () {
                         //放开输入
-                        msgEdit.showHideValueCase(1,dataInput);
+                        addMeterManagement.showHideValueCase(1,dataInput);
                     });
                     
                     dataInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
@@ -192,6 +221,7 @@
             } else {
                 deviceType = $("#deviceType").val();
                 serialnumber = $("#serialnumber").val();
+                console.log("doSubmit");
                 addMeterManagement.serialnumberValidates();
                 if ($("#serialnumber").val() != "" && deviceFlag) {
                     if (addMeterManagement.validates()) {
@@ -224,6 +254,7 @@
                 deviceFlag = false;
             }
             else {
+                console.log("deviceAjax")
                 addMeterManagement.deviceAjax();
             }
             
@@ -314,7 +345,7 @@
                         maxlength: publicSize10
                     },
                     q3: {
-                        required: publicNull,
+                        required: "q3 值不能为空",
                         maxlength: publicSize6
                     }
                 },
@@ -370,7 +401,8 @@
                     data: {serialnumber: serialnumber},
                     success: function (d) {
                         var result = $.parseJSON(d);
-                        if (!result) {
+                        // if (!result) {
+                        if (result.success == false) {
                             serialnumberError.html("表具编号已存在！");
                             serialnumberError.show();
                             deviceFlag = false;

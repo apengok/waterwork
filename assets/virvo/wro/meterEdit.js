@@ -1,5 +1,8 @@
 (function(window,$){
     var bindId = $("#bindId").val();
+    var simInput = $("#sims");
+    var simCardId = $("#simID").val();
+    var simCard = $("#simCard").val();
     var installTime = $("#installTime").val();
     var serialnumber = $("#serialnumber").val();
     var oldDeviceNumber = $("#serialnumber").val();
@@ -40,6 +43,7 @@
             fts = $("#functionalType").val();//获取当前终端通讯类型
             // laydate.render({elem: '#installDateEdit', theme: '#6dcff6'});
             // laydate.render({elem: '#procurementDateEdit', theme: '#6dcff6'});
+            editMeterManagement.InitCallback();
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);
@@ -239,6 +243,102 @@
                         maxlength: publicSize6
                     }
            }}).form();
+        },
+        //显示或隐藏输入框
+        showHideValueCase: function(type,dataInput){
+            var dataInputType = dataInput.selector;
+            if (type == 0) {//限制输入
+                
+                if ("#sims" == dataInputType) { //sim卡限制
+                    $(".simsList").attr("readonly",true);
+                    $("#simParentGroupName").css("background-color","");
+                    $("#simGroupDiv").css("display","block");
+                    $("#operatorTypeDiv").css("display","block");
+                    simFlag = false;
+                }
+            } else if (type == 1) {//放开输入
+                
+                if ("#sims" == dataInputType) { //sim卡放开
+                    $(".simsList").removeAttr("readonly");
+                    $("#simParentGroupName").css("background-color","#fafafa");
+                    $("#simGroupDiv").css("display","none");
+                    $("#operatorTypeDiv").css("display","none");
+                    simFlag = true;
+                }
+            }
+        },
+        hideErrorMsg: function(){
+            $("#error_label").hide();
+        },
+        InitCallback: function(){
+            //sim卡
+            editMeterManagement.initSimCard("/devm/simcard/getSimcardSelect/");
+            
+        },
+        initSimCard: function (url) {
+            editMeterManagement.initDataList(simInput, url, simCardId,editMeterManagement.simsChange);
+        },
+        simsChange: function (keyword) {
+            // datas = keyword.key;
+            // json_ajax("POST", "/devm/getSimcardInfoBySimcardNumber/", "json", true,
+            //     {simcardNumber: datas}, editMeterManagement.simsChangeCallback);
+        },
+        simsChangeCallback: function(data){
+            if(data.success){
+                console.log("simsChangeCallback");
+                // $("#iccidSim").val(data.obj.simcardInfo.ICCID);
+                // $("#simParentGroupName").val(data.obj.simcardInfo.groupName);
+                // $("#operator").val(data.obj.simcardInfo.operator);
+                // $("#simFlow").val(data.obj.simcardInfo.simFlow);
+                // $("#openCardTime").val(data.obj.simcardInfo.openCardTime);
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        initDataList: function (dataInput, urlString, id, callback,moreCallback) {
+            console.log(dataInput,id);
+            // if(id.indexOf('#')<0){
+            //     dataInput.attr('data-id',id);
+            // }
+            //if(dataInput.attr('name').indexOf('_')<0){
+            //  dataInput.attr('name',dataInput.attr('name')+'__');
+            //}
+            $.ajax({
+                type: "POST",
+                url: urlString,
+                data: {},   //{configId: $("#configId").val()},
+                dataType: "json",
+                success: function (data) {
+                    var itemList = data.obj;
+                    console.log(itemList);
+                    var suggest=dataInput.bsSuggest({
+                        indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+                        indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+                        data: {value:itemList},
+                        idField: "id",
+                        keyField: "name",
+                        effectiveFields: ["name"]
+                    }).on('onDataRequestSuccess', function (e, result) {
+                    }).on("click",function(){
+                    }).on('onSetSelectValue', function (e, keyword, data) {
+                        if(callback){
+                            dataInput.closest('.form-group').find('.dropdown-menu').hide()
+                            callback(keyword)
+                        }
+                        //限制输入
+                        editMeterManagement.showHideValueCase(0,dataInput);
+                        editMeterManagement.hideErrorMsg();
+                    }).on('onUnsetSelectValue', function () {
+                        //放开输入
+                        editMeterManagement.showHideValueCase(1,dataInput);
+                    });
+                    
+                    dataInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
+                    if(moreCallback){
+                        moreCallback()
+                    }
+                }
+            });
         },
         //提交
         doSubmit: function(){

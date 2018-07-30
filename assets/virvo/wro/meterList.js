@@ -188,6 +188,7 @@
             };
             //表格setting
             var setting = {
+                suffix  : '/',
                 listUrl : '/devm/meter/list/',
                 editUrl : '/devm/meter/edit/',
                 deleteUrl : '/devm/meter/delete/',

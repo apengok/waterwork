@@ -164,6 +164,7 @@
             };
             //表格setting
             var setting = {
+                suffix  : '/',
                 listUrl: '/devm/simcard/list/',
                 editUrl: '/devm/simcard/edit/',
                 deleteUrl: '/devm/simcard/delete/',

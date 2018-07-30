@@ -97,7 +97,7 @@ def meterlist(request):
             # "belongto":m.belongto.name,#current_user.belongto.name,
             # "metertype":m.metertype,
             "serialnumber":m.serialnumber,
-            "simid":'',#m.simid.all()[0].simcardNumber if m.simid.count() > 0 else "",
+            "simid":m.simid.simcardNumber if m.simid else "",
             "version":m.version,
             "dn":m.dn,
             "metertype":m.metertype,
@@ -140,6 +140,7 @@ def repetition(request):
     serialnumber = request.POST.get("serialnumber")
     bflag = not Meter.objects.filter(serialnumber=serialnumber).exists()
 
+    # return HttpResponse(json.dumps(bflag))
     return HttpResponse(json.dumps({"success":bflag}))
 
 class MeterMangerView(LoginRequiredMixin,TemplateView):
@@ -212,9 +213,9 @@ class MeterAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         simcardNumber = self.request.POST.get('simid') or ''
         if SimCard.objects.filter(simcardNumber=simcardNumber).exists():
             instance.simid = SimCard.objects.get(simcardNumber=simcardNumber)
-        else:
-            tmp=SimCard.objects.create(simcardNumber=simcardNumber,belongto=organization)
-            instance.simid = tmp
+        # else:
+        #     tmp=SimCard.objects.create(simcardNumber=simcardNumber,belongto=organization)
+        #     instance.simid = tmp
         # instance.simid = SimCard.objects.get_or_create(simcardNumber=simcardNumber)
         # instance.simid = SimCard.objects.get_or_create(simcardNumber=simcardNumber)
 
@@ -297,6 +298,9 @@ class MeterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         organization = Organizations.objects.get(name=organ_name)
         instance.belongto = organization
         
+        simcardNumber = self.request.POST.get('simid') or ''
+        if SimCard.objects.filter(simcardNumber=simcardNumber).exists():
+            instance.simid = SimCard.objects.get(simcardNumber=simcardNumber)
         
         
         # instance.uuid=unique_uuid_generator(instance)
@@ -330,21 +334,21 @@ class MeterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 
 
 
-def userdeletemore(request):
+def meterdeletemore(request):
     # print('userdeletemore',request,request.POST)
 
     if not request.user.has_menu_permission_edit('dmamanager_basemanager'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
-    deltems_list = deltems.split(';')
+    print('deltems:',deltems)
+    deltems_list = deltems.split(',')
 
     for uid in deltems_list:
-        u = User.objects.get(id=int(uid))
+        u = Meter.objects.get(id=int(uid))
         # print('delete user ',u)
         #删除用户 并且删除用户在分组中的角色
-        for g in u.groups.all():
-            g.user_set.remove(u)
+        
         u.delete()
 
     return HttpResponse(json.dumps({"success":1}))
@@ -493,7 +497,8 @@ def simcard_repetition(request):
     simcardNumber = request.POST.get("simcardNumber")
     bflag = not SimCard.objects.filter(simcardNumber=simcardNumber).exists()
 
-    return HttpResponse(json.dumps({"success":bflag}))
+    return HttpResponse(json.dumps(bflag))
+    # return HttpResponse(json.dumps({"success":bflag}))
 
 class SimCardMangerView(LoginRequiredMixin,TemplateView):
     template_name = "devm/simcardlist.html"
@@ -684,14 +689,12 @@ def simcarddeletemore(request):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
-    deltems_list = deltems.split(';')
+    deltems_list = deltems.split(',')
 
     for uid in deltems_list:
-        u = User.objects.get(id=int(uid))
+        u = SimCard.objects.get(id=int(uid))
         # print('delete user ',u)
-        #删除用户 并且删除用户在分组中的角色
-        for g in u.groups.all():
-            g.user_set.remove(u)
+        
         u.delete()
 
     return HttpResponse(json.dumps({"success":1}))
