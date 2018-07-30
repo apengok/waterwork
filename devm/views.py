@@ -743,3 +743,34 @@ class SimCardDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         result = dict()
         # result["success"] = 1
         return HttpResponse(json.dumps({"success":1}))
+
+
+def getSimcardSelect(request):
+    # meters = Meter.objects.all()
+    simcards = request.user.simcard_list_queryset()
+
+    def m_info(m):
+        
+        return {
+            "id":m.pk,
+            # "simid":m.simid,
+            # "dn":m.dn,
+            # "belongto":m.belongto.name,#current_user.belongto.name,
+            # "metertype":m.metertype,
+            "name":m.simcardNumber,
+            
+        }
+    data = []
+
+    for m in simcards:
+        data.append(m_info(m))
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":data,
+        "success":True
+    }
+   
+    print(operarions_list)
+    return JsonResponse(operarions_list)

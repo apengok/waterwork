@@ -1,5 +1,8 @@
 (function (window, $) {
     var submissionFlag = false;
+    var simInput = $("#sims");
+    var simCardId = $("#simid").val();
+    var simCard = $("#simCard").val();
     var serialnumber = $("#serialnumber").val();
     var deviceType = $("#deviceType").val();
     var serialnumberError = $("#serialnumber-error");
@@ -32,6 +35,7 @@
             $.fn.zTree.init($("#ztreeDemo"), setting, null);
             // laydate.render({elem: '#installDate', theme: '#6dcff6'});
             // laydate.render({elem: '#procurementDate', theme: '#6dcff6'});
+            addMeterManagement.InitCallback();
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);
@@ -92,6 +96,73 @@
                     event.target).parents("#zTreeContent").length > 0)) {
                 addMeterManagement.hideMenu();
             }
+        },
+        InitCallback: function(){
+            //sim卡
+            addMeterManagement.initSimCard("/devm/simcard/getSimcardSelect/");
+            
+        },
+        initSimCard: function (url) {
+            addMeterManagement.initDataList(simInput, url, simCardId,addMeterManagement.simsChange);
+        },
+        simsChange: function (keyword) {
+            datas = keyword.key;
+            json_ajax("POST", "/devm/getSimcardInfoBySimcardNumber/", "json", true,
+                {simcardNumber: datas}, addMeterManagement.simsChangeCallback);
+        },
+        simsChangeCallback: function(data){
+            if(data.success){
+                console.log("simsChangeCallback");
+                // $("#iccidSim").val(data.obj.simcardInfo.ICCID);
+                // $("#simParentGroupName").val(data.obj.simcardInfo.groupName);
+                // $("#operator").val(data.obj.simcardInfo.operator);
+                // $("#simFlow").val(data.obj.simcardInfo.simFlow);
+                // $("#openCardTime").val(data.obj.simcardInfo.openCardTime);
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        initDataList: function (dataInput, urlString, id, callback,moreCallback) {
+            console.log(dataInput,id);
+            // if(id.indexOf('#')<0){
+            //     dataInput.attr('data-id',id);
+            // }
+            //if(dataInput.attr('name').indexOf('_')<0){
+            //  dataInput.attr('name',dataInput.attr('name')+'__');
+            //}
+            $.ajax({
+                type: "POST",
+                url: urlString,
+                data: {},   //{configId: $("#configId").val()},
+                dataType: "json",
+                success: function (data) {
+                    var itemList = data.obj;
+                    var suggest=dataInput.bsSuggest({
+                        indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+                        indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+                        data: {value:itemList},
+                        effectiveFields: ["name"]
+                    }).on('onDataRequestSuccess', function (e, result) {
+                    }).on("click",function(){
+                    }).on('onSetSelectValue', function (e, keyword, data) {
+                        if(callback){
+                            dataInput.closest('.form-group').find('.dropdown-menu').hide()
+                            callback(keyword)
+                        }
+                        //限制输入
+                        msgEdit.showHideValueCase(0,dataInput);
+                        msgEdit.hideErrorMsg();
+                    }).on('onUnsetSelectValue', function () {
+                        //放开输入
+                        msgEdit.showHideValueCase(1,dataInput);
+                    });
+                    
+                    dataInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
+                    if(moreCallback){
+                        moreCallback()
+                    }
+                }
+            });
         },
         //组织树预处理函数
         ajaxDataFilter: function (treeId, parentNode, responseData) {

@@ -16,13 +16,31 @@
                             class="form-control" />
                         <!-- <label id="deviceNumber-error" style="display: none" class="error" for="deviceNumber">请输入终端号，范围：7~15</label> -->
                     </div>
-                    <label class="col-md-2 control-label"><label
-                        class="text-danger">*</label> SIM卡号：</label>
-                    <div class="col-md-4">
+                    <label class="col-md-2 control-label"><label class="text-danger">*</label> SIM卡号：</label>
+                    <div class="col-sm-4 col-md-4 form-group" style="padding-top:10px; margin:0px;">
+                        <div style="position:relative;">
+                            <span style="overflow:hidden;">
+                                <input type="hidden" id="simid" name="simID" value="4490dc8d-3f17-45c4-b7fd-02e764458a6c"/>
+                                </span>
+                                <div class="input-group">
+                                    <input value="15019204556"  type="text" placeholder="" class="form-control" maxlength="20" id="sims">
+                                    
+                                    <div class="input-group-btn">
+                                        <!-- <input type="hidden" class="hidenSubmitControl"/> -->
+                                      <button type="button" id="button" class="btn btn-white dropdown-toggle disabled loading-state-button" data-toggle="dropdown">
+                                          <i class="fa fa-spinner loading-state"></i>
+                                      </button>
+                                      <ul class="dropdown-menu dropdown-menu-right" role="menu"  style="width:100%">
+                                      </ul>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-4">
                         <input name="simid" placeholder="请输入表具编号" type="text" id= "simid"
                             class="form-control" />
-                        <!-- <label id="deviceNumber-error" style="display: none" class="error" for="deviceNumber">请输入终端号，范围：7~15</label> -->
-                    </div>
+                        
+                    </div> -->
                 </div>
                 
                 <div class="form-group">
