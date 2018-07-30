@@ -117,16 +117,16 @@
                     simcardNumber: {
                         required: true,
                         // isSim: true,
-                        remote: {
-                            type: "post",
-                            async: false,
-                            url: "/devm/simcard/repetition/",
-                            data: {
-                                username: function () {
-                                    return $("#simcardNumber").val();
-                                }
-                            }
-                        }
+                        // remote: {
+                        //     type: "post",
+                        //     async: false,
+                        //     url: "/devm/simcard/repetition/",
+                        //     data: {
+                        //         username: function () {
+                        //             return $("#simcardNumber").val();
+                        //         }
+                        //     }
+                        // }
                     },
                     belongto: {
                         required: true
@@ -200,7 +200,7 @@
                     simcardNumber: {
                         required: simNumberError,
                         // isSim: simNumberError,
-                        remote: simNumberExists
+                        // remote: simNumberExists
                     },
                     belongto: {
                         required: publicNull

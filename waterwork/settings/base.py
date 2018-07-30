@@ -116,6 +116,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'virvo_dev2.db'),
     },
+    # 'default': { 
+    #     'ENGINE': 'django.contrib.gis.db.backends.postgis',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
+    #     'NAME': 'waterwork',
+    #     'USER': 'scada',
+    #     'PASSWORD': 'scada',
+    #     'HOST': 'localhost',    #120.78.255.129
+    #     'PORT': '5432',
+    # },
     'zncb': {
         'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
         'NAME': 'zncb',
@@ -128,7 +136,7 @@ DATABASES = {
             # 'charset':'utf8mb4',
         }
     },
-    # 'gis': {
+    # 'gis': { http://120.78.255.129
     #     'ENGINE': 'django.contrib.gis.db.backends.postgis',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
     #     'NAME': 'scada',
     #     'USER': 'scada',

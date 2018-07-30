@@ -209,8 +209,14 @@ class MeterAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         
         organization = Organizations.objects.get(name=organ_name)
         instance.belongto = organization
-        
-        
+        simcardNumber = self.request.POST.get('simid') or ''
+        if SimCard.objects.filter(simcardNumber=simcardNumber).exists():
+            instance.simid = SimCard.objects.get(simcardNumber=simcardNumber)
+        else:
+            tmp=SimCard.objects.create(simcardNumber=simcardNumber,belongto=organization)
+            instance.simid = tmp
+        # instance.simid = SimCard.objects.get_or_create(simcardNumber=simcardNumber)
+        # instance.simid = SimCard.objects.get_or_create(simcardNumber=simcardNumber)
 
         return super(MeterAddView,self).form_valid(form)   
 

@@ -180,7 +180,7 @@ def getmeterParam(request):
         "msg":None,
         "obj":{
                 "id":meter.pk,
-                "simid":meter.simid,
+                "simid":meter.simid.simcardNumber,
                 "dn":meter.dn,
                 "belongto":meter.belongto.name,#current_user.belongto.name,
                 "metertype":meter.metertype,
@@ -236,7 +236,7 @@ def stationlist(request):
             "id":u.pk,
             "username":u.username,
             "usertype":u.usertype,
-            "simid":u.meter.simid if u.meter else '',
+            "simid":u.meter.simid.simcardNumber if u.meter else '',
             "dn":u.meter.dn if u.meter else '',
             "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
             "metertype":u.meter.metertype if u.meter else '',
@@ -346,7 +346,7 @@ def dmastationlist(request):
             "id":u.pk,
             "username":u.username,
             "usertype":u.usertype,
-            "simid":u.meter.simid if u.meter else '',
+            "simid":u.meter.simid.simcardNumber if u.meter else '',
             "dn":u.meter.dn if u.meter else '',
             "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
             "metertype":u.meter.metertype if u.meter else '',
@@ -439,7 +439,7 @@ def dmabaseinfo(request):
                 "id":u.pk,
                 "username":u.username,
                 "usertype":u.usertype,
-                "simid":u.meter.simid if u.meter else '',
+                "simid":u.meter.simid.simcardNumber if u.meter else '',
                 "dn":u.meter.dn if u.meter else '',
                 "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
                 "metertype":u.meter.metertype if u.meter else '',
@@ -622,10 +622,10 @@ class DistrictMangerView(LoginRequiredMixin,TemplateView):
         user_organ = self.request.user.belongto
 
         default_dma = DMABaseinfo.objects.first()   # user_organ.dma.all().first()
-        print('districtmanager',default_dma.pk,default_dma.dma_name)
-        context["current_dma_pk"] = default_dma.pk
-        context["current_dma_no"] = default_dma.dma_no
-        context["current_dma_name"] = default_dma.dma_name
+        # print('districtmanager',default_dma.pk,default_dma.dma_name)
+        context["current_dma_pk"] = default_dma.pk if default_dma else ''
+        context["current_dma_no"] = default_dma.dma_no if default_dma else ''
+        context["current_dma_name"] = default_dma.dma_name if default_dma else ''
 
         # context["user_list"] = User.objects.all()
         

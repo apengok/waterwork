@@ -16,10 +16,11 @@ import datetime
 
 class MeterAddForm(forms.ModelForm):
     belongto  = forms.CharField()
+    simid  = forms.CharField()
 
     class Meta:
         model = Meter
-        fields = ['serialnumber','simid','version','dn','metertype','mtype','manufacturer','protocol','R','q3','q1','check_cycle','state']
+        fields = ['serialnumber','version','dn','metertype','mtype','manufacturer','protocol','R','q3','q1','check_cycle','state']
 
     # def __init__(self,*args,**kwargs):
     #     super(MeterAddForm, self).__init__(*args, **kwargs)
