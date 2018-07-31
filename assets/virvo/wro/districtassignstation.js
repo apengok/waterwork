@@ -421,8 +421,12 @@
             var dmastation_json = JSON.stringify(list);
             $("#dmastation_json").val(dmastation_json);
             var now_dma_pk = $("#dma_pk").val();
-            $("#dmastationform").attr("action","district/assignstation/"+now_dma_pk+"/");
-            $("#dmastationform").ajaxSubmit(function(data) {
+
+            var dma_id = 1;
+            var url="dmaStation/saveDmaStation/";
+            // var parameter={"dma_id":dma_id};
+            var data = {"dma_pk": dma_pk,"stationassign":dmastation_json};
+            json_ajax("POST",url,"json",true,data,function(data) {
                     console.log('sdfe:',data);
                     if (data != null && typeof(data) == "object" &&
                         Object.prototype.toString.call(data).toLowerCase() == "[object object]" &&
@@ -446,6 +450,33 @@
                             }
                     }
                 });
+
+            // form submit cant resoled error
+            // $("#dmastationform").attr("action","district/assignstation/"+now_dma_pk+"/");
+            // $("#dmastationform").ajaxSubmit(function(data) {
+            //         console.log('sdfe:',data);
+            //         if (data != null && typeof(data) == "object" &&
+            //             Object.prototype.toString.call(data).toLowerCase() == "[object object]" &&
+            //             !data.length) {//判断data是字符串还是json对象,如果是json对象
+            //                 if(data.success == true){
+            //                     $("#commonLgWin").modal("hide");//关闭窗口
+            //                     change_flag = true;
+            //                     layer.msg(publicAddSuccess,{move:false});
+                                
+            //                 }else{
+            //                     layer.msg(data.msg,{move:false});
+            //                 }
+            //         }else{//如果data不是json对象
+            //                 var result = $.parseJSON(data);//转成json对象
+            //                 if (result.success == true) {
+            //                         $("#commonLgWin").modal("hide");//关闭窗口
+            //                         layer.msg(publicAddSuccess,{move:false});
+                                    
+            //                 }else{
+            //                     layer.msg(result.msg,{move:false});
+            //                 }
+            //         }
+            //     });
             
             console.log(dmastation_json);
         },

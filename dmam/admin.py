@@ -25,7 +25,7 @@ class MeterAdmin(admin.ModelAdmin):
 
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
-    list_display = ['username','usertype','biguser','focus','madedate','meter','belongto','dmaid','dmametertype']
+    list_display = ['username','usertype','biguser','focus','madedate','meter','belongto','dmametertype']
 
 @admin.register(SimCard)
 class SimCardAdmin(admin.ModelAdmin):

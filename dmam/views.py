@@ -940,6 +940,31 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
         return context  
 
 
+def saveDmaStation(request):
+    dma_pk = request.POST.get("dma_pk")
+    dma = DMABaseinfo.objects.get(pk=int(dma_pk))
+    print("dma stations:",dma.station_set)
+    stationassign = request.POST.get("stationassign")
+    jd = json.loads(stationassign)
+
+    print(jd)
+    
+    for d in jd:
+        print(d["station_id"],d["dma_name"],d["station_name"],d["metertype"])
+        station_id = int(d["station_id"])
+        metertype = d["metertype"]
+        station = Station.objects.get(pk=station_id)
+        station.dmaid = dma
+        station.dmametertype = metertype
+        station.save()
+    
+    data = {
+            "success": 1,
+            "obj":{"flag":1}
+        }
+    return HttpResponse(json.dumps(data)) #JsonResponse(data)   
+
+
 def getdmastationsbyId(request):
 
     dma_pk = request.POST.get("dma_pk")
