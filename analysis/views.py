@@ -215,9 +215,9 @@ def flowdata_mnf(request):
     #平均值
     average = 0
 
-    maxflow = max(flows_float)
-    minflow = min(flows_float)
-    average = sum(flows_float)/len(flows)
+    maxflow = max(flows_float) if len(flows_float)>0 else 0
+    minflow = min(flows_float) if len(flows_float)>0 else 0
+    average = sum(flows_float)/len(flows) if len(flows_float)>0 else 0
     mnf = minflow
     ref_mnf = mnf/2
     back_leak = ref_mnf * 0.8

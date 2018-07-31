@@ -43,6 +43,8 @@ def dmastasticinfo():
     for dma in dmas:
 
         dmastation = dma.dmastation.first()
+        if dmastation is None:
+            continue
         commaddr = dmastation.station_id
 
         dmaflow = 0
@@ -60,7 +62,7 @@ def dmastasticinfo():
         if month_flow.exists():
             month_sale = month_flow.first().dosage
 
-        lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=today.day)
+        lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=1)
         lastmonth_str = lastmonth.strftime("%Y-%m")
         lastmonth_flow = HdbFlowDataMonth.objects.filter(commaddr=commaddr).filter(hdate=lastmonth_str)
         if lastmonth_flow.exists():
