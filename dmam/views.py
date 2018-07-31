@@ -91,17 +91,17 @@ def dmatree(request):
         #station
         if stationflag == '1':
             for s in o.station.all():
-                if s.dmaid is None: #已分配dma分区的不显示
-                    organtree.append({
-                        "name":s.username,
-                        "id":s.pk,
-                        "districtid":'',
-                        "pId":o.cid,
-                        "type":"station",
-                        "dma_no":'',
-                        "icon":"/static/virvo/resources/img/station.png",
-                        "uuid":''
-                    })
+                # if s.dmaid is None: #已分配dma分区的不显示
+                organtree.append({
+                    "name":s.username,
+                    "id":s.pk,
+                    "districtid":'',
+                    "pId":o.cid,
+                    "type":"station",
+                    "dma_no":'',
+                    "icon":"/static/virvo/resources/img/station.png",
+                    "uuid":''
+                })
 
     # district
     # districts = District.objects.all()
@@ -912,6 +912,7 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
         context["dma_pk"] = self.object.pk
         context["dma_no"] = self.object.dma_no
         context["dma_name"] = self.object.dma_name
+        context["dma_group"] = self.object.belongto.name
 
         #dma station
         dmastaions = self.object.station.all()
@@ -938,6 +939,32 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
 
         return context  
 
+
+def getdmastationsbyId(request):
+
+    dma_pk = request.POST.get("dma_pk")
+    dma = DMABaseinfo.objects.get(pk = int(dma_pk))
+
+    #dma station
+    dmastaions = dma.station.all()
+
+    data = []
+    #dma分区的站点
+    
+    for s in dmastaions:
+        data.append({
+            "id":s.pk,
+            "username":s.username,
+            "pid":dma.belongto.cid,
+            "dmametertype":s.dmametertype
+        })
+
+    dmastation_list = {
+        "obj":data,
+        "success":True
+    }
+
+    return HttpResponse(json.dumps(dmastation_list)) 
 
 """
 用水性质

@@ -1255,5 +1255,18 @@
         $("#assignstation").on("click",dmaManage.assignstation);
         $("#closeAdd").on("click",dmaManage.closeClean);
         $("#updateClose").on("click",dmaManage.updateClean);
+
+
+        var windowId = 'commonLgWin'; 
+        $("#" + windowId).on("hidden.bs.modal", function(data) {
+            $(this).removeData("bs.modal");       
+            // layer.msg(" close modal window", {move: false});              
+            dmaManage.getBaseinfo();
+        });
+
+
+
+
+
     })
 })($,window)

@@ -25,17 +25,20 @@
     var vid;
     var carLicense = [];
     var activeDays = [];
-    var organ = '';
-    var station = '';
+    
     var bflag = true;
     var zTreeIdJson = {};
     var barWidth;
     var number;
     var checkFlag = false; //判断组织节点是否是勾选操作
     var size;//当前权限监控对象数量
-    var dma_pk =$("#dma_pk").val();
-    var dma_no =$("#dma_no").val();
-    var dma_name =$("#dma_name").val();
+
+    var organ = '';     //组织
+    var station = '';
+    var dma_pk = $("#dma_pk").val(); //分区id
+    var dma_no = $("#dma_no").val(); //分区编号
+    var dma_name = $("#dma_name").val(); //分区名
+    var current_dma_group = $("dma_group").val(); //分区所在组织
 
     var meter_types = ["出水表","进水表","贸易结算表","未计费水表","官网检测表"];
 
@@ -46,6 +49,8 @@
 
     var myTable;
     var rows_selected = [];
+    var edit_dmastation_list = [];
+    var change_flag = false;
 
     dmaStation = {
         init: function(){
@@ -129,7 +134,7 @@
         },
         beforeClick: function(treeId, treeNode){
             var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
-            if(treeNode.type != "station"){
+            if(treeNode.type != "station" || treeNode.type != "dma"){
                 zTree.cancelSelectedNode(treeNode);
                 
             }
@@ -169,25 +174,84 @@
         zTreeOnClick: function(event, treeId, treeNode){
 
             var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
-            if(treeNode.type != "station"){
-                zTree.cancelSelectedNode(treeNode);
-                
-            }else{
-                selectTreeId = treeNode.id;
-                selectTreeType = treeNode.type;
-                selectDistrictId = treeNode.districtid;
-                selectTreeIdAdd = treeNode.uuid;
-                station = treeNode.id;
-                $('#simpleQueryParam').val("");
-                $("#organ_name").attr("value",treeNode.name);
-                if(treeNode.type == "dma"){
-                    var pNode = treeNode.getParentNode();
-                    // $("#organ_name").attr("value",pNode.name);
-                    $("#station_name").attr("value",treeNode.name);
-                    organ = pNode.id;
-                    station = treeNode.id;
-                }
+            selectTreeId = treeNode.id;
+            selectTreeType = treeNode.type;
+            selectDistrictId = treeNode.districtid;
+            selectTreeIdAdd = treeNode.uuid;
+            $('#simpleQueryParam').val("");
 
+            if(treeNode.type == "dma" ){
+                // zTree.cancelSelectedNode(treeNode);
+                if(dma_name == treeNode.name){
+                    return
+                }
+                var pNode = treeNode.getParentNode(); //父节点---组织
+
+                if (change_flag) {
+                    layer.confirm("分区编辑中，是否换到其他分区",{
+                        title :'操作确认',
+                        icon : 3, // 问号图标
+                        btn: ['确认','取消'] // 按钮
+                    },function(index){
+                        // layer.msg('yes', {icon: 1});
+                        change_flag = false;
+                        dma_pk = treeNode.id;
+                        dma_name = treeNode.name;
+                        $("#dma_pk").attr("value",dma_pk);
+                        $("#dma_name").attr("value",dma_name);
+                        $("#dma_group").attr("value",pNode.name);
+                        $("#current_dma span").html(dma_name);
+
+                        layer.close(index,{move:false});
+                        edit_dmastation_list = [];
+                        dmaStation.inquireDmastations(1);
+                    },function(index){
+                        layer.close(index,{move:false});
+                    });
+                }else{
+                    dma_pk = treeNode.id;
+                    dma_name = treeNode.name;
+                    $("#dma_pk").attr("value",dma_pk);
+                    $("#dma_name").attr("value",dma_name);
+                    $("#dma_group").attr("value",pNode.name);
+                    $("#current_dma span").html(dma_name);
+
+                    dmaStation.inquireDmastations(1);
+                }
+                
+                
+
+            }else if(treeNode.type == "station"){
+                
+                station = treeNode.id;
+                
+                var pNode = treeNode.getParentNode(); //父节点---组织
+                var dma_group = $("#dma_group").val();
+                if(dma_group != pNode.name){
+                    // layer.msg("非当前组织站点");
+                    layer.confirm("选择了非当前分区组织的站点,是否继续",{
+                        title :'操作确认',
+                        icon : 3, // 问号图标
+                        btn: ['确认','取消'] // 按钮
+                    },function(index){
+                        layer.close(index,{move:false});
+                        
+                    },function(index){
+                        zTree.cancelSelectedNode(treeNode);
+                        layer.close(index,{move:false});
+                    });
+                }
+                
+                // if(treeNode.type == "dma"){
+                    
+                //     // $("#organ_name").attr("value",pNode.name);
+                //     $("#station_name").attr("value",treeNode.name);
+                //     organ = pNode.id;
+                //     station = treeNode.id;
+                // }
+
+            }else{
+                zTree.cancelSelectedNode(treeNode);
             }
         },
 
@@ -209,23 +273,7 @@
                               "metertype":ustasticinfo[i].dmametertype
                               
                             };
-                    // var dateList=
-                    //     {
-                    //         // "id":ustasticinfo.pk,
-                    //         "username":ustasticinfo[i].username,
-                    //         "usertype":ustasticinfo[i].usertype,
-                    //         "simid":ustasticinfo[i].simid,
-                    //         "dn":ustasticinfo[i].dn,
-                    //         "belongto":ustasticinfo[i].belongto,
-                    //         "metertype":ustasticinfo[i].metertype,
-                    //         "serialnumber":ustasticinfo[i].serialnumber,
-                    //         "createdate":ustasticinfo[i].createdate
-                    //     }
-//                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
-//                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
-//                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
-                        stationdataListArray.push(dateList);
-//                      }
+                    stationdataListArray.push(dateList);
                 }
                 console.log(dateList);
                 dmaStation.reloadData(stationdataListArray);
@@ -256,8 +304,11 @@
             
             stationdataListArray=[];
             for (var i = 0, l = nodes.length; i < l; i++) {
-                n += nodes[i].name;
-                v += nodes[i].id + ",";
+                if($.inArray(nodes[i].id,edit_dmastation_list) !== -1){
+                    layer.msg("该站点已存在");
+                    zTree.cancelSelectedNode(nodes[i]);
+                    continue;
+                }
             
                 var dateList=
                             {
@@ -270,16 +321,17 @@
                             };
                 // oTable.row.add(dateList);
                 stationdataListArray.push(dateList);
-                zTree.removeNode(nodes[i]);
+                edit_dmastation_list.push(nodes[i].id);
+                // zTree.removeNode(nodes[i]);
             }
             dmaStation.rowaddData(stationdataListArray);
             console.log("row add data:",stationdataListArray);
-            if (v.length > 0)
-                v = v.substring(0, v.length - 1);
+            
 
             zTree.cancelSelectedNode();
-            var tnodes = zTree.getSelectedNodes();
-            console.log("after cancle:",tnodes);
+            change_flag = true;
+            // var tnodes = zTree.getSelectedNodes();
+            // console.log("after cancle:",tnodes);
             
         },
         import:function(){
@@ -299,15 +351,17 @@
                 var checked_flag = $(value).find('input[type="checkbox"]:checked').length;
                 if(checked_flag != 0 ){
                     // var station_id = $(value).find('input').val();
-                    var dma_name = $(value).find('td:eq(2)').html();
+                    // var dma_name = $(value).find('td:eq(2)').html();
                     var station_name = $(value).find('td:eq(3)').html();
                     var metertype = $(value).find('select').val();
 
                     var sid = $(value).find('input[type="checkbox"]').attr('sid');
-                    var pid = $(value).find('input[type="checkbox"]').attr('pid');
-                    var pnode = zTree.getNodeByParam("id", pid, null);
-                    var newNode = { id:sid, pId:pid, name:station_name,icon:"/static/virvo/resources/img/station.png",type:"station"};
-                    zTree.addNodes(pnode,0,newNode);
+                    
+                    // 站点没有从左侧树删除，所以不用添加到树
+                    // var pid = $(value).find('input[type="checkbox"]').attr('pid');
+                    // var pnode = zTree.getNodeByParam("id", pid, null);
+                    // var newNode = { id:sid, pId:pid, name:station_name,icon:"/static/virvo/resources/img/station.png",type:"station"};
+                    // zTree.addNodes(pnode,0,newNode);
 
                     obj.station_id = sid;
                     obj.dma_name = dma_name;
@@ -321,6 +375,7 @@
             console.log(dmastation_json);
 
             dmaStation.removeseleted();
+            change_flag = true;
             
             // var anSelected = table.$('tr.selected');
             
@@ -337,6 +392,9 @@
             d.districtId = selectDistrictId;
         },
         saveDmaStation:function(){
+            if(change_flag == false){
+                return
+            }
             console.log("saveDmaStation");
             var table = $("#stationdataTable").dataTable();
             var rows = table.fnGetNodes();
@@ -362,14 +420,16 @@
             });  
             var dmastation_json = JSON.stringify(list);
             $("#dmastation_json").val(dmastation_json);
-            $("#dmastationform").attr("action","district/assignstation/"+dma_pk+"/");
+            var now_dma_pk = $("#dma_pk").val();
+            $("#dmastationform").attr("action","district/assignstation/"+now_dma_pk+"/");
             $("#dmastationform").ajaxSubmit(function(data) {
                     console.log('sdfe:',data);
                     if (data != null && typeof(data) == "object" &&
                         Object.prototype.toString.call(data).toLowerCase() == "[object object]" &&
                         !data.length) {//判断data是字符串还是json对象,如果是json对象
                             if(data.success == true){
-                                $("#addType").modal("hide");//关闭窗口
+                                $("#commonLgWin").modal("hide");//关闭窗口
+                                change_flag = true;
                                 layer.msg(publicAddSuccess,{move:false});
                                 
                             }else{
@@ -378,7 +438,7 @@
                     }else{//如果data不是json对象
                             var result = $.parseJSON(data);//转成json对象
                             if (result.success == true) {
-                                    $("#addType").modal("hide");//关闭窗口
+                                    $("#commonLgWin").modal("hide");//关闭窗口
                                     layer.msg(publicAddSuccess,{move:false});
                                     
                             }else{
@@ -452,50 +512,41 @@
         
         inquireDmastations: function (number) {
             var dma_id = 1;
-            var url="dmaStation/dmastations/";
+            var url="dmaStation/getdmastationsbyId/";
             // var parameter={"dma_id":dma_id};
-            var data = {"organ": organ,'treetype':selectTreeType,"station":station,"endTime": endTime};
+            var data = {"dma_pk": dma_pk};
             json_ajax("POST",url,"json",true,data,dmaStation.getCallback);
         },
         getCallback:function(date){
             if(date.success==true){
+                edit_dmastation_list = []; //用来储存当前dma分区站点的id
                 stationdataListArray = [];//用来储存显示数据
                 if(date.obj!=null&&date.obj.length!=0){
-                    var stasticinfo=date.obj;
-                    for(var i=0;i<stasticinfo.length;i++){
+                    var ustasticinfo=date.obj;
+                    for(var i=0;i<ustasticinfo.length;i++){
                         
                         var dateList=
-                            [
-                              i+1,
-                              stasticinfo[i].organ,
-                              stasticinfo[i].total,
-                              stasticinfo[i].sale,
-                              stasticinfo[i].uncharg,
-                              stasticinfo[i].leak,
-                              stasticinfo[i].cxc,
-                              stasticinfo[i].cxc_percent,
-                              stasticinfo[i].huanbi,
-                              stasticinfo[i].leak_percent,
-                              leak_tmp_str,
-                              stasticinfo[i].tongbi,
-                              stasticinfo[i].mnf,
-                              stasticinfo[i].back_leak,
-                              stasticinfo[i].other_leak,
-                              stasticinfo[i].statis_date
-                            ];
+                            {
+                              "pnode_id":ustasticinfo[i].pid,
+                              "station_id":ustasticinfo[i].id,
+                              "dma_name":dma_name,
+                              "station_name":ustasticinfo[i].username,
+                              "metertype":ustasticinfo[i].dmametertype
+                              
+                            };
 //                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
 //                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
 //                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
                             stationdataListArray.push(dateList);
+                            edit_dmastation_list.push(ustasticinfo[i].id);
 //                      }
                     }
                     dmaStation.reloadData(stationdataListArray);
-                    $("#simpleQueryParam").val("");
-                    $("#search_button").click();
+                    // $("#simpleQueryParam").val("");
+                    // $("#search_button").click();
                 }else{
                     dmaStation.reloadData(stationdataListArray);
-                    $("#simpleQueryParam").val("");
-                    $("#search_button").click();
+                    
                 }
             }else{
                 layer.msg(data.msg,{move:false});
@@ -716,7 +767,9 @@
         
         dmaStation.getTable('#stationdataTable');
 
-        dmaStation.initdmastations();
+        // dmaStation.initdmastations();
+
+        dmaStation.inquireDmastations(1);
 
         // Handle click on checkbox
    $('#stationdataTable tbody').on('click', 'input[type="checkbox"]', function(e){
@@ -771,8 +824,7 @@
       e.stopPropagation();
    });
 
-        // dmaStation.inquireClick(1);
-        //dmaStation.inquireDmastations(1);
+        
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
             dmaStation.refreshTable();

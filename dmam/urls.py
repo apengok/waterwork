@@ -32,6 +32,7 @@ urlpatterns = [
 
     #dma分区站点配置
     url(r'^district/assignstation/(?P<pk>\w+)/?$',views.DistrictAssignStationView.as_view(),name='districtassignstation'),
+    url(r'^dmaStation/getdmastationsbyId//?$',views.getdmastationsbyId,name='getdmastationsbyId'),
 
 
     

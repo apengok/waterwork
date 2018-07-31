@@ -8,10 +8,11 @@
     <form id="dmastationform" role="form" action="" method="post" class="form-horizontal">{% csrf_token %}
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-          <h4 class="modal-title">DMA分区站点配置</h4>
+          <h4 class="modal-title">DMA分区站点配置 -- 当前分区 <label id="current_dma"><span>{{ dma_name }}</span></label></h4>
           <input value="{{ dma_pk }}" id="dma_pk" type="hidden"  />
           <input value="{{ dma_no }}" id="dma_no" name="dma_no" type="hidden"  />
           <input value="{{ dma_name }}" id="dma_name" name="dma_name" type="hidden"  />
+          <input value="{{ dma_group }}" id="dma_group" name="dma_group" type="hidden"  />
           <input  id="dmastation_json" name="stationassign" type="hidden"  />
           <input  id="dmastation_list" name="dmastation_list" value="{{ dmastation_list }}" type="hidden"  />
 
