@@ -85,7 +85,7 @@ class StationsEditForm(forms.ModelForm):
 
         self.fields['serialnumber'].initial = self.instance.meter.serialnumber
         self.fields['dn'].initial = self.instance.meter.dn
-        self.fields['simid'].initial = self.instance.meter.simid
+        self.fields['simid'].initial = self.instance.meter.simid.simcardNumber
         self.fields['metertype'].initial = self.instance.meter.metertype
         
 

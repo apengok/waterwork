@@ -238,7 +238,7 @@ def stationlist(request):
             "usertype":u.usertype,
             "simid":u.meter.simid.simcardNumber if u.meter else '',
             "dn":u.meter.dn if u.meter else '',
-            "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
+            "belongto":u.belongto.name,# if u.meter else '',#current_user.belongto.name,
             "metertype":u.meter.metertype if u.meter else '',
             "serialnumber":u.meter.serialnumber if u.meter else '',
             "big_user":1,

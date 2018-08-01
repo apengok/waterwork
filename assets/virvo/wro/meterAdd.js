@@ -293,7 +293,7 @@
                     //     maxlength: 6
                     // },
                     protocol: {
-                        maxlength: 64
+                        required: true
                     },
                     check_cycle: {
                         maxlength: 11
@@ -309,7 +309,7 @@
                         maxlength: 100
                     },
                     q3: {
-                        required: false,
+                        required: true,
                         maxlength: 50
                     }
                 },
