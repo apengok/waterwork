@@ -253,6 +253,14 @@ def stationlist(request):
     # bigmeters = Bigmeter.objects.all()
     # stations = Station.objects.all()
     stations = current_user.station_list_queryset()
+
+    if districtId != '': #dma
+        dma = DMABaseinfo.objects.get(pk=int(districtId))
+        dma_stations = dma.station_set.all()
+        stations = [s for s in dma_stations if s in stations]
+    elif groupName != '':
+        filter_group = Organizations.objects.get(cid=groupName)
+        stations = [s for s in stations if s.belongto == filter_group]
     
     
     # # print("user all:",userl)
@@ -364,7 +372,7 @@ def dmastationlist(request):
     # dma_pk = request.POST.get("pk") or 4
     dma_pk=4
     dma = DMABaseinfo.objects.first() #get(pk=int(dma_pk))
-    stations = dma.station.all()
+    stations = dma.station_set.all()
     
     
     
@@ -450,7 +458,7 @@ def dmabaseinfo(request):
             }
         
         #dma分区的站点
-        stations = dmabase.station.all()
+        stations = dmabase.station_set.all()
         for s in stations:
             data.append(u_info(s))
 
@@ -915,7 +923,7 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
         context["dma_group"] = self.object.belongto.name
 
         #dma station
-        dmastaions = self.object.station.all()
+        dmastaions = self.object.station_set.all()
 
         data = []
         #dma分区的站点
@@ -943,21 +951,33 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
 def saveDmaStation(request):
     dma_pk = request.POST.get("dma_pk")
     dma = DMABaseinfo.objects.get(pk=int(dma_pk))
-    print("dma stations:",dma.station_set)
     stationassign = request.POST.get("stationassign")
     jd = json.loads(stationassign)
 
-    print(jd)
     
+    dmastations = dma.station_set.all()
+    print("dma stations:",dmastations)
+
+    refresh_list = []
+    # 更新dma分区站点信息，
     for d in jd:
         print(d["station_id"],d["dma_name"],d["station_name"],d["metertype"])
         station_id = int(d["station_id"])
+        refresh_list.append(station_id)
         metertype = d["metertype"]
         station = Station.objects.get(pk=station_id)
-        station.dmaid = dma
+        if station not in dmastations:
+            station.dmaid.add(dma)
+
         station.dmametertype = metertype
         station.save()
     
+    print("refresh_list:",refresh_list)
+    # 删除不在更新列表里的已分配的站点
+    for s in dmastations:
+        if s.id not in refresh_list:
+            dma.station_set.remove(s)
+
     data = {
             "success": 1,
             "obj":{"flag":1}
@@ -971,7 +991,7 @@ def getdmastationsbyId(request):
     dma = DMABaseinfo.objects.get(pk = int(dma_pk))
 
     #dma station
-    dmastaions = dma.station.all()
+    dmastaions = dma.station_set.all()
 
     data = []
     #dma分区的站点

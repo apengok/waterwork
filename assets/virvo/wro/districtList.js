@@ -20,7 +20,7 @@
     //dmabaseinfo
     var dma_no = $("#id_dma_no").val();
     var pipe_texture = $("#id_pipe_texture").val();
-    var id_ifc = $("#id_ifc").val();
+    var ifc = $("#id_ifc").val();
     var ozTreeOrganSelEdit = $("#zTreeOrganSelEdit").val();
     var pipe_length = $("#id_pipe_length").val();
     var aznp = $("#id_aznp").val();
@@ -151,7 +151,7 @@
             DMABaseEdit.valueChange();
             if (flag1){
                 var     baseinfo_action = "/dmam/district/dmabaseinfo/edit/{id}/";
-                dma_id = $("#current_dma_no").val();
+                dma_id = $("#current_dma_pk").val();
                 
                 new_action = baseinfo_action.replace("{id}", dma_id);
                 
@@ -168,7 +168,7 @@
                                 if (result.obj.flag == 1){
                                     // $("#commonLgWin").modal("hide");
                                     layer.msg(publicEditSuccess,{move:false});
-                                    myTable.refresh()
+                                    // myTable.refresh()
                                 }else{
                                     if(date != null){
                                         layer.msg(publicEditError,{move:false});

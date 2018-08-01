@@ -205,6 +205,7 @@
                         layer.close(index,{move:false});
                         edit_dmastation_list = [];
                         dmaStation.inquireDmastations(1);
+                        zTree.cancelSelectedNode(treeNode);
                     },function(index){
                         layer.close(index,{move:false});
                     });
@@ -217,6 +218,7 @@
                     $("#current_dma span").html(dma_name);
 
                     dmaStation.inquireDmastations(1);
+                    zTree.cancelSelectedNode(treeNode);
                 }
                 
                 
@@ -307,6 +309,11 @@
                 if($.inArray(nodes[i].id,edit_dmastation_list) !== -1){
                     layer.msg("该站点已存在");
                     zTree.cancelSelectedNode(nodes[i]);
+                    continue;
+                }
+
+                if(nodes[i].type != "station"){
+                    layer.msg("dma分区不能导入，请选择站点导入");
                     continue;
                 }
             

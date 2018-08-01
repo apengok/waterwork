@@ -68,7 +68,10 @@ class DMABaseinfo(models.Model):
         return self.dma_name        
 
 
-
+'''
+obsolete 
+直接在Station 用ManyToManyField关联到dmabaseinfo
+'''
 class DmaStations(models.Model):
     dmaid       = models.ForeignKey(DMABaseinfo,related_name='dmastation',blank=True, null=True,on_delete=models.CASCADE) 
     # station_id  = models.ForeignKey(Bigmeter,related_name='underdma',blank=True, null=True,on_delete=models.CASCADE) 
