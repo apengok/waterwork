@@ -110,7 +110,7 @@ def meterlist(request):
             "q1":m.q1,
             "check_cycle":m.check_cycle,
             "state":m.state,
-            "station":m.station.all()[0].username if m.station.count() > 0 else ""
+            "station":m.station_set.first().username if m.station_set.count() > 0 else ""
         }
     data = []
 
@@ -445,29 +445,43 @@ def simcardlist(request):
     simcards = user.simcard_list_queryset()
     # simcards = SimCard.objects.all()
 
-    def m_info(m):
+    def m_info(s):
+
+        #关联表具
+        s_m = ""
+        s_m_t = ""
+        related = "" #是否关联了表具
+        if s.meter.count() > 0:
+            m = s.meter.first()
+            s_m = m.serialnumber
+        else:
+            m = ""
+
+        #关联站点，站点由表具关联，所以取表具关联的站点
+        if m != "":
+            if m.station_set.count() > 0:
+                t = m.station_set.first()
+                s_m_t = t.username
+            else:
+                t = ""
         
         return {
-            "id":m.pk,
-            # "simid":m.simid,
-            # "dn":m.dn,
-            # "belongto":m.belongto.name,#current_user.belongto.name,
-            # "simcardtype":m.simcardtype,
-            "simcardNumber":m.simcardNumber,
-            "isStart":m.isStart,
-            "iccid":m.iccid,
-            "imei":m.imei,
-            "imsi":m.imsi,
-            "belongto":m.belongto.name,
-            "operator":m.operator,
-            "simFlow":m.simFlow,
-            "openCardTime":m.openCardTime,
-            "endTime":m.endTime,
-            "remark":m.remark,
-            "createDataTime":"",
-            "updateDataTime":"",
-            "meter":"",
-            "station": "" #m.station.all()[0].username if m.station.count() > 0 else ""
+            "id":s.pk,
+            "simcardNumber":s.simcardNumber,
+            "isStart":s.isStart,
+            "iccid":s.iccid,
+            "imei":s.imei,
+            "imsi":s.imsi,
+            "belongto":s.belongto.name,
+            "operator":s.operator,
+            "simFlow":s.simFlow,
+            "openCardTime":s.openCardTime,
+            "endTime":s.endTime,
+            "remark":s.remark,
+            "createDataTime":s.create_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "updateDataTime":s.update_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "meter":s_m,
+            "station": s_m_t
         }
     data = []
 
@@ -492,6 +506,19 @@ def simcardlist(request):
     
     return HttpResponse(json.dumps(result))
 
+def releaseRelate(request):
+    sid = request.POST.get("sid")
+    sim = SimCard.objects.get(pk=int(sid))
+
+    sim.meter.clear()
+    # sim.meter.simid = None
+    return HttpResponse(json.dumps(True))
+
+def getSimRelated(request):
+    simcardNumber = request.POST.get("simcardNumber")
+    bflag = not SimCard.objects.filter(simcardNumber=simcardNumber).exists()
+
+    return HttpResponse(json.dumps(bflag))
 
 def simcard_repetition(request):
     simcardNumber = request.POST.get("simcardNumber")

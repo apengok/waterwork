@@ -55,7 +55,14 @@
                         //     result += '<button onclick="simCardManagement.sendSimParam(\''+row.id+'\',\''+row.vehicleId+'\',\''+row.configId+'\',\''+row.paramId+'\')" class="editBtn editBtn-info" type="button"><i class="glyphicon glyphicon-circle-arrow-down"></i>下发参数</button>&nbsp;'
                         // }
                         //删除按钮
-                        result += '<button type="button" onclick="myTable.deleteItem(\'' + row.id + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
+                        if(row.meter != ""){
+                            // result += '<button type="button" onclick="simCardManagement.releaseRelate(\'' + row.id + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>解除关联</button>';
+                            result += '<button disabled type="button" onclick="myTable.deleteItem(\'' + row.id + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
+
+                        }else{
+                            result += '<button type="button" onclick="myTable.deleteItem(\'' + row.id + '\')" class="deleteButton editBtn "><i class="fa fa-trash-o"></i>删除</button>';
+                            // result += '<button type="button" onclick="simCardManagement.checkDeleteItem(\'' + row.simcardNumber + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
+                        }
                         return result;
                     }
                 },
@@ -183,6 +190,24 @@
             myTable = new TG_Tabel.createNew(setting);
             //表格初始化
             myTable.init();
+        },
+        releaseRelate:function(sid){
+            //如果必要的话判断sim卡是否关联再决定是否删除
+            var url="/devm/simcard/releaseRelate/";
+            json_ajax("POST",url,"json",false,{"sid":sid},function(data){
+                if (data != null) {
+                    var result = $.parseJSON(data);
+                    if (result != null) {
+                        layer.msg("已解除关联的表具")
+                        myTable.refresh();
+                    }
+                }
+            })
+        },
+        checkDeleteItem:function(sid){
+            //如果必要的话判断sim卡是否关联再决定是否删除
+            var url="/devm/simcard/getSimRelated/";
+            json_ajax("POST",url,"json",false,{"sid":sid},simCardManagement.sendCallBack)
         },
         //全选
         checkAll: function () {

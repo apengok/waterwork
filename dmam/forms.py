@@ -53,7 +53,7 @@ class StationsForm(forms.ModelForm):
     description = forms.CharField(required = False)
     belongto = forms.CharField()
     serialnumber = forms.CharField()
-    simid = forms.CharField()
+    simid = forms.CharField(required = False)
     dn = forms.CharField()
     metertype = forms.CharField()
 
@@ -71,7 +71,7 @@ class StationsEditForm(forms.ModelForm):
     description = forms.CharField(required = False)
     belongto = forms.CharField()
     serialnumber = forms.CharField()
-    simid = forms.CharField()
+    simid = forms.CharField(required = False)
     dn = forms.CharField()
     metertype = forms.CharField()
     meter = forms.CharField()
@@ -83,10 +83,13 @@ class StationsEditForm(forms.ModelForm):
         self.fields['belongto'].initial = self.instance.belongto.name
         self.fields['meter'].initial = self.instance.meter.serialnumber
 
-        self.fields['serialnumber'].initial = self.instance.meter.serialnumber
-        self.fields['dn'].initial = self.instance.meter.dn
-        self.fields['simid'].initial = self.instance.meter.simid.simcardNumber
-        self.fields['metertype'].initial = self.instance.meter.metertype
+        if self.instance.meter:
+            self.fields['serialnumber'].initial = self.instance.meter.serialnumber
+            self.fields['dn'].initial = self.instance.meter.dn
+            self.fields['metertype'].initial = self.instance.meter.metertype
+            
+            if self.instance.meter.simid:
+                self.fields['simid'].initial = self.instance.meter.simid.simcardNumber
         
 
     class Meta:

@@ -90,7 +90,7 @@ def dmatree(request):
 
         #station
         if stationflag == '1':
-            for s in o.station.all():
+            for s in o.station_set.all():
                 # if s.dmaid is None: #已分配dma分区的不显示
                 organtree.append({
                     "name":s.username,
@@ -146,10 +146,6 @@ def getmeterlist(request):
         
         return {
             "id":m.pk,
-            # "simid":m.simid,
-            # "dn":m.dn,
-            # "belongto":m.belongto.name,#current_user.belongto.name,
-            # "metertype":m.metertype,
             "serialnumber":m.serialnumber,
             
         }
@@ -180,7 +176,7 @@ def getmeterParam(request):
         "msg":None,
         "obj":{
                 "id":meter.pk,
-                "simid":meter.simid.simcardNumber,
+                "simid":meter.simid.simcardNumber if meter.simid else "",
                 "dn":meter.dn,
                 "belongto":meter.belongto.name,#current_user.belongto.name,
                 "metertype":meter.metertype,
@@ -230,13 +226,19 @@ def stationlist(request):
     #当前登录用户
     current_user = request.user
 
-    def u_info(u):
+    def u_info(u):  #u means station
+
+        simcardNumber = ""
+        if u.meter:
+            s = u.meter.simid
+            if s:
+                simcardNumber = s.simcardNumber
         
         return {
             "id":u.pk,
             "username":u.username,
             "usertype":u.usertype,
-            "simid":u.meter.simid.simcardNumber if u.meter else '',
+            "simid":simcardNumber,
             "dn":u.meter.dn if u.meter else '',
             "belongto":u.belongto.name,# if u.meter else '',#current_user.belongto.name,
             "metertype":u.meter.metertype if u.meter else '',
@@ -354,7 +356,7 @@ def dmastationlist(request):
             "id":u.pk,
             "username":u.username,
             "usertype":u.usertype,
-            "simid":u.meter.simid.simcardNumber if u.meter else '',
+            "simid":u.meter.simid.simcardNumber if u.meter and u.meter.simid else '',
             "dn":u.meter.dn if u.meter else '',
             "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
             "metertype":u.meter.metertype if u.meter else '',
@@ -447,7 +449,7 @@ def dmabaseinfo(request):
                 "id":u.pk,
                 "username":u.username,
                 "usertype":u.usertype,
-                "simid":u.meter.simid.simcardNumber if u.meter else '',
+                "simid":u.meter.simid.simcardNumber if u.meter and u.meter.simid else '',
                 "dn":u.meter.dn if u.meter else '',
                 "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
                 "metertype":u.meter.metertype if u.meter else '',
@@ -842,13 +844,6 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         self.object = self.get_object(*args,**kwargs)
             
 
-        
-
-        #删除dma分区 需要删除该分区关联的站点
-        dmastation = self.object.dmastation.all()
-        
-        for r in dmastation:
-            r.delete()
         self.object.delete()
         return JsonResponse({"success":True})
 

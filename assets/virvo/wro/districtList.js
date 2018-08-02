@@ -341,7 +341,7 @@
             var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             zTree.selectNode(treeNode);
             var result;
-            layer.confirm(userGroupDeleteConfirm, {
+            layer.confirm("确定删除该分区吗", { //userGroupDeleteConfirm
                 title :'操作确认',
                 icon : 3, // 问号图标
                 btn: ['确认','取消'] // 按钮

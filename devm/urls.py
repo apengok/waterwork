@@ -29,6 +29,8 @@ urlpatterns = [
     #simcards   
     url(r'^simcard/repetition/$',views.simcard_repetition,name='simcard_repetition'),
     url(r'^simcard/getSimcardSelect/$',views.getSimcardSelect,name='getSimcardSelect'),
+    url(r'^simcard/getSimRelated/$',views.getSimRelated,name='getSimRelated'),
+    url(r'^simcard/releaseRelate/$',views.releaseRelate,name='releaseRelate'),
 
     url(r'^simcardmanager/?$', views.SimCardMangerView.as_view(), name='simcardmanager'),#组织和用户管理
     url(r'^simcard/list/$',views.simcardlist,name='simcardlist'),

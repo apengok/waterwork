@@ -19515,7 +19515,9 @@ function tg_dleteItem(url, sucCallbackFun, failCallbackFun) {
     var okCallbackFun = function () {
         tg_simpleAjaxPost(url, null, sucCallbackFun, failCallbackFun);
     };
-    if (url.substr(0, url.lastIndexOf("/")) == "/clbs/m/infoconfig/infoinput"
+    // console.log("tg_dleteItem:url",url);
+    if (url.substr(0, url.lastIndexOf("/")) == "/devm/simcard"
+        // || url.includes("/devm/simcard")
         || url.substr(0, url.lastIndexOf("/")) == "/clbs/m/functionconfig/fence/bindfence"
         || url.substr(0, url.lastIndexOf("/")) == "/clbs/v/workhourmgt/vbbind"
         || url.substr(0, url.lastIndexOf("/")) == "/clbs/v/oilmgt/fluxsensorbind"
