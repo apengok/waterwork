@@ -33,9 +33,16 @@
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
 
-                            var result = '';
-                            result += '<input  type="checkbox" name="subChk"  value="' + row.id + '" />';
-                            return result;
+                            if (row.station == "") {
+                                var result = '';
+                                result += '<input  type="checkbox" name="subChk"  value="' + row.id + '" />';
+                                return result;
+                            }else{
+                                var result = '';
+                                result += '<input  type="checkbox" name="subChk" disabled/>';
+                                return result;
+                            }
+
                         }
                     },
                     {

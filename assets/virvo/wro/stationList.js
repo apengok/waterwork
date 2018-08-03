@@ -47,7 +47,7 @@
                         // var arrayObj = row.id.all;
                         // arrayObj.reverse();
                         // var idStr = arrayObj.join(",");
-                        if (idStr != userId) {
+                        if (!row.related) {
                             var result = '';
                             result += '<input  type="checkbox" name="subChk"  value="' + idStr + '" uid="'+ uid+'" />';
                             return result;
@@ -72,8 +72,12 @@
                         var userId2 = $("#currentUserId").attr("value");
                         // 修改按钮
                         result += '<button href="'+editUrlPath+'" data-target="#commonLgWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
-                        result += '<button type="button" onclick="stationManage.deleteRole(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
-                        
+                        if(row.related){
+                            result += '<button disabled type="button" onclick="stationManage.deleteRole(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
+
+                        }else{
+                            result += '<button type="button" onclick="stationManage.deleteRole(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
+                        }
                         return result;
                     }
                 },

@@ -15,7 +15,7 @@
                 <input id="uuid" type="text" hidden="true" name="uuid" value="{{ form.uuid.value }}" />
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label"> 站点名称：</label>
+                    <label class="col-md-3 control-label"><label class="text-danger">*</label> 站点名称：</label>
                     <div class="col-md-7">
                         <input readonly="true"  type="text" class="form-control" id="username" name="username" value="{{ form.username.value|default:''}}" />
                     </div>
@@ -29,7 +29,7 @@
                 
                 <input id="groupIds" name="groupId" type="text" hidden="true" value="{{ object.belongto.cid }}" />
                 <div class="form-group">
-                    <label class="col-md-3 control-label">所属组织：</label>
+                    <label class="col-md-3 control-label"><label class="text-danger">*</label> 所属组织：</label>
                     <div class="has-feedback col-md-7">
                         <input name="belongto"
                             class="form-control" id="zTreeStationSelEdit" placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"
@@ -69,7 +69,7 @@
                 
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label"><label class="text-danger"></label> 关联表具：</label>
+                    <label class="col-md-3 control-label"><label class="text-danger">*</label> 关联表具：</label>
                     <div class="col-md-7">
                         <div class="input-group">
                             <input name="meter" type="text" class="form-control" id="relate_meter" value="{{ form.meter.value|default:'' }}" readonly>
@@ -170,7 +170,7 @@
 </form>
 <input value="{{ user.idstr }}" id="currentUserId" type="hidden"/>
 <script>
-    var userNameNull = "\u8BF7\u8F93\u5165\u7528\u6237\u540D\uFF0C\u8303\u56F4\uFF1A4~25";
+    var userNameNull = "站点名称不能为空";
     var userNameError = "\u8BF7\u8F93\u5165\u5B57\u6BCD/\u6570\u5B57/\u4E0B\u5212\u7EBF/\u77ED\u6760\uFF0C\u5982\uFF1Alove\u3001\u5C0F\u9C7C\u30011234\u3001F3-808";
     var userNameMinLength = "\u9601\u4E0B\u81F3\u5C11\u8981\u8F93\u51654\u4F4D\uFF0C\u5982\uFF1Alove\u3001\u5C0F\u9C7C";
     var usernameExists = "\u8BE5\u7528\u6237\u540D\u5DF2\u88AB\u4F7F\u7528,\u8BF7\u91CD\u65B0\u6DFB\u52A0";

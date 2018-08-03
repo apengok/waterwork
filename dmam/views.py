@@ -245,7 +245,8 @@ def stationlist(request):
             "serialnumber":u.meter.serialnumber if u.meter else '',
             "big_user":1,
             "focus":1,
-            "createdate":u.madedate
+            "createdate":u.madedate,
+            "related":True if u.dmaid.all().count() else False
         }
     data = []
     

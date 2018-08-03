@@ -272,6 +272,12 @@
                                 }
                             }
                         },
+                        belongto :{
+                            required : true,
+                        },
+                        meter : {
+                            required : true,
+                        }
                         
                     },
                     messages : {
@@ -279,6 +285,12 @@
                             required : userNameNull,
                             remote:"该名称已被使用"
                         },
+                        belongto :{
+                            required : "请选择所属组织",
+                        },
+                        meter : {
+                            required : "请关联表具"
+                        }
                         
                     }
                 }).form();
@@ -308,14 +320,24 @@
                                 }
                             }
                         },
-                        
+                        belongto :{
+                            required : true,
+                        },
+                        meter : {
+                            required : true,
+                        }
                     },
                     messages : {
-                        user_name : {
+                        username : {
                             required : userNameNull,
                             remote:"该名称已被使用"
                         },
-                        
+                        belongto :{
+                            required : "请选择所属组织",
+                        },
+                        meter : {
+                            required : "请关联表具"
+                        }
                     }
                 }).form();
             }
