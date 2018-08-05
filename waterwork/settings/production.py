@@ -166,8 +166,8 @@ STATIC_URL = '/static/'
 
 
 #add geospatial something
-GEOS_LIBRARY_PATH = '/usr/local/lib/libgeos_c.so'
-GDAL_LIBRARY_PATH = '/usr/local/lib/libgdal.so'
+GEOS_LIBRARY_PATH = '/usr/local/geos-3.4.2/lib/libgeos_c.so'
+GDAL_LIBRARY_PATH = '/usr/local/gdal-1.11.2/lib/libgdal.so'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
