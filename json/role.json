@@ -1,0 +1,134 @@
+[
+{
+  "model": "accounts.myroles",
+  "pk": 1,
+  "fields": {
+    "notes": "admin",
+    "rid": "ROLE_5gbxjg_zm6q",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 2,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_pkhm7f_upeh",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 3,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_majr0x_j199",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 4,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_vo44w1_nbvn",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 5,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_r0vee8_kqr1",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 6,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_q6cw1m_x3rk",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 7,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_tryzrn_hfzr",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 8,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_ulppp3_ddhu",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 9,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_jw5pau_8ww6",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 10,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_9ljtoh_eo45",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+},
+{
+  "model": "accounts.myroles",
+  "pk": 11,
+  "fields": {
+    "notes": "",
+    "rid": "ROLE_m4uwc4_bzy3",
+    "uid": "ib7f6v_2cra",
+    "permissionTree": "[{\"id\":\"datamonitor\",\"edit\":false},{\"id\":\"mapmonitor_datamonitor\",\"edit\":true},{\"id\":\"realcurlv_datamonitor\",\"edit\":true},{\"id\":\"realdata_datamonitor\",\"edit\":true},{\"id\":\"dmaonline_datamonitor\",\"edit\":true},{\"id\":\"firmmanager\",\"edit\":false},{\"id\":\"rolemanager_firmmanager\",\"edit\":true},{\"id\":\"organusermanager_firmmanager\",\"edit\":true},{\"id\":\"devicemanager\",\"edit\":false},{\"id\":\"meters_devicemanager\",\"edit\":true},{\"id\":\"simcard_devicemanager\",\"edit\":true},{\"id\":\"params_devicemanager\",\"edit\":true},{\"id\":\"datanalys\",\"edit\":false},{\"id\":\"dailyuse_datanalys\",\"edit\":true},{\"id\":\"monthlyuse_datanalys\",\"edit\":true},{\"id\":\"dmacxc_datanalys\",\"edit\":true},{\"id\":\"flownalys_datanalys\",\"edit\":true},{\"id\":\"comparenalys_datanalys\",\"edit\":true},{\"id\":\"peibiao_datanalys\",\"edit\":true},{\"id\":\"rawdata_datanalys\",\"edit\":true},{\"id\":\"mnf_datanalys\",\"edit\":true},{\"id\":\"alarmcenter\",\"edit\":false},{\"id\":\"stationalarm_alarmcenter\",\"edit\":true},{\"id\":\"dmaalarm_alarmcenter\",\"edit\":true},{\"id\":\"queryalarm_alarmcenter\",\"edit\":true},{\"id\":\"basemanager\",\"edit\":false},{\"id\":\"dmamanager_basemanager\",\"edit\":true},{\"id\":\"stationmanager_basemanager\",\"edit\":true},{\"id\":\"basenalys\",\"edit\":false},{\"id\":\"dma_basenalys\",\"edit\":true},{\"id\":\"mf_basenalys\",\"edit\":true},{\"id\":\"day_basenalys\",\"edit\":true},{\"id\":\"systemconfig\",\"edit\":false},{\"id\":\"personality_systemconfig\",\"edit\":true},{\"id\":\"system_systemconfig\",\"edit\":true},{\"id\":\"retransit_systemconfig\",\"edit\":true},{\"id\":\"icons_systemconfig\",\"edit\":true},{\"id\":\"querylog_systemconfig\",\"edit\":true},{\"id\":\"reporttable\",\"edit\":false},{\"id\":\"querylog_reporttable\",\"edit\":true},{\"id\":\"alarm_reporttable\",\"edit\":true},{\"id\":\"dmastatics_reporttable\",\"edit\":true},{\"id\":\"biguser_reporttable\",\"edit\":true},{\"id\":\"flows_reporttable\",\"edit\":true},{\"id\":\"waters_reporttable\",\"edit\":true},{\"id\":\"biaowu_reporttable\",\"edit\":true},{\"id\":\"bigdata_reporttable\",\"edit\":true}]",
+    "belongto": 1,
+    "permissions": []
+  }
+}
+]

@@ -1,0 +1,59 @@
+[
+{
+  "model": "dmam.simcard",
+  "pk": 1,
+  "fields": {
+    "simcardNumber": "1354685",
+    "belongto": 3,
+    "isStart": "1",
+    "iccid": null,
+    "imei": null,
+    "imsi": null,
+    "operator": "\u4e2d\u56fd\u79fb\u52a8",
+    "simFlow": null,
+    "openCardTime": null,
+    "endTime": null,
+    "create_date": "2018-08-02T16:07:57.299",
+    "update_date": "2018-08-02T16:07:57.400",
+    "remark": null
+  }
+},
+{
+  "model": "dmam.simcard",
+  "pk": 2,
+  "fields": {
+    "simcardNumber": "123124241",
+    "belongto": 1,
+    "isStart": "1",
+    "iccid": null,
+    "imei": null,
+    "imsi": null,
+    "operator": "\u4e2d\u56fd\u79fb\u52a8",
+    "simFlow": null,
+    "openCardTime": "2018-07-29",
+    "endTime": "2018-08-01",
+    "create_date": "2018-08-02T16:07:57.299",
+    "update_date": "2018-08-02T16:07:57.400",
+    "remark": null
+  }
+},
+{
+  "model": "dmam.simcard",
+  "pk": 3,
+  "fields": {
+    "simcardNumber": "1233213",
+    "belongto": 1,
+    "isStart": "1",
+    "iccid": null,
+    "imei": null,
+    "imsi": null,
+    "operator": "\u4e2d\u56fd\u79fb\u52a8",
+    "simFlow": null,
+    "openCardTime": "2018-07-10",
+    "endTime": "2018-08-01",
+    "create_date": "2018-08-02T16:07:57.299",
+    "update_date": "2018-08-02T16:07:57.400",
+    "remark": null
+  }
+}
+]

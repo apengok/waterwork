@@ -1,0 +1,56 @@
+[
+{
+  "model": "dmam.dmastations",
+  "pk": 1,
+  "fields": {
+    "dmaid": 4,
+    "station_id": "01003483526",
+    "meter_type": "\u51fa\u6c34\u8868"
+  }
+},
+{
+  "model": "dmam.dmastations",
+  "pk": 2,
+  "fields": {
+    "dmaid": 3,
+    "station_id": "41770002251",
+    "meter_type": "\u51fa\u6c34\u8868"
+  }
+},
+{
+  "model": "dmam.dmastations",
+  "pk": 3,
+  "fields": {
+    "dmaid": 5,
+    "station_id": "0100850001",
+    "meter_type": "\u51fa\u6c34\u8868"
+  }
+},
+{
+  "model": "dmam.dmastations",
+  "pk": 4,
+  "fields": {
+    "dmaid": 6,
+    "station_id": "4892354820",
+    "meter_type": "\u51fa\u6c34\u8868"
+  }
+},
+{
+  "model": "dmam.dmastations",
+  "pk": 5,
+  "fields": {
+    "dmaid": 7,
+    "station_id": "4892354839",
+    "meter_type": "\u51fa\u6c34\u8868"
+  }
+},
+{
+  "model": "dmam.dmastations",
+  "pk": 6,
+  "fields": {
+    "dmaid": 8,
+    "station_id": "4892354816",
+    "meter_type": "\u51fa\u6c34\u8868"
+  }
+}
+]

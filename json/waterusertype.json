@@ -1,0 +1,10 @@
+[
+{
+  "model": "dmam.waterusertype",
+  "pk": 1,
+  "fields": {
+    "usertype": "\u5de5\u4e1a\u7528\u6c34",
+    "explains": ""
+  }
+}
+]

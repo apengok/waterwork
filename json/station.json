@@ -1,0 +1,48 @@
+[
+{
+  "model": "dmam.station",
+  "pk": 4,
+  "fields": {
+    "username": "\u82b1\u56ed\u5c0f\u533a",
+    "description": "",
+    "usertype": "\u5de5\u4e1a\u7528\u6c34",
+    "madedate": "2018-08-02",
+    "lng": null,
+    "lat": null,
+    "coortype": null,
+    "biguser": null,
+    "focus": null,
+    "locate": "None",
+    "belongto": 5,
+    "meter": 5,
+    "dmametertype": "\u51fa\u6c34\u8868",
+    "dmaid": [
+      3,
+      4,
+      10
+    ]
+  }
+},
+{
+  "model": "dmam.station",
+  "pk": 5,
+  "fields": {
+    "username": "\u7b2c\u4e8c\u5c0f\u533a",
+    "description": "",
+    "usertype": "\u5de5\u4e1a\u7528\u6c34",
+    "madedate": "2018-08-03",
+    "lng": null,
+    "lat": null,
+    "coortype": null,
+    "biguser": null,
+    "focus": null,
+    "locate": "None",
+    "belongto": 8,
+    "meter": 3,
+    "dmametertype": "\u51fa\u6c34\u8868",
+    "dmaid": [
+      7
+    ]
+  }
+}
+]

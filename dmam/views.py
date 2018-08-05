@@ -1301,8 +1301,8 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         print('useradd context',args,kwargs,self.request)
         uuid = self.request.GET.get('uuid') or ''
         
-        groupId = ''
-        groupname = ''
+        groupId = self.request.user.belongto.cid
+        groupname = self.request.user.belongto.name
         if len(uuid) > 0:
             organ = Organizations.objects.get(uuid=uuid)
             groupId = organ.cid

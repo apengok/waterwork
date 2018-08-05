@@ -592,29 +592,30 @@
             selectTreeId = treeNode.id;
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd=treeNode.uuid;
-            current_dma_pk = treeNode.id;
+            
             $('#simpleQueryParam').val("");
-            $("#current_dma_pk").attr("value",treeNode.id);
-            $("#current_dma_no").attr("value",treeNode.dma_no);
-            $("#current_dma_name").attr("value",treeNode.name);
-            dmaManage.getBaseinfo();
-            // if(treeNode.type == "dma"){
-            //     var pNode = treeNode.getParentNode();
-            //     $("#current_dma_no").attr("value",treeNode.dma_no);
-            //     $("#current_dma_name").attr("value",treeNode.name);
-            //     dmaManage.getBaseinfo();
+            
+            
+            // dmaManage.getBaseinfo();
+            if(treeNode.type == "dma"){
+                var pNode = treeNode.getParentNode();
+                current_dma_pk = treeNode.id;
+                $("#current_dma_pk").attr("value",treeNode.id);
+                $("#current_dma_no").attr("value",treeNode.dma_no);
+                $("#current_dma_name").attr("value",treeNode.name);
+                dmaManage.getBaseinfo();
 
 
-            //     // var organ = pNode.id;
-            //     // dma_no = pNode.id;
-            //     // dma_name = treeNode.name;
-            //     // var url="/dmam/district/dmabaseinfo/";
-            //     // var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
-            //     // json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
-            // }else{
-            //     myTable.requestData();
+                // var organ = pNode.id;
+                // dma_no = pNode.id;
+                // dma_name = treeNode.name;
+                // var url="/dmam/district/dmabaseinfo/";
+                // var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
+                // json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
+            }else{
+                // myTable.requestData();
 
-            // }
+            }
         },
         getBaseinfo:function(){
             

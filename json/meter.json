@@ -1,0 +1,62 @@
+[
+{
+  "model": "dmam.meter",
+  "pk": 3,
+  "fields": {
+    "serialnumber": "123123",
+    "simid": 3,
+    "version": "200",
+    "dn": "10",
+    "metertype": "\u6c34\u8868",
+    "belongto": 1,
+    "mtype": "0",
+    "manufacturer": null,
+    "protocol": "0",
+    "R": "100",
+    "q3": "100",
+    "q1": null,
+    "check_cycle": "10",
+    "state": "1"
+  }
+},
+{
+  "model": "dmam.meter",
+  "pk": 4,
+  "fields": {
+    "serialnumber": "123",
+    "simid": 2,
+    "version": null,
+    "dn": "10",
+    "metertype": "\u6c34\u8868",
+    "belongto": 1,
+    "mtype": "0",
+    "manufacturer": null,
+    "protocol": "0",
+    "R": "100",
+    "q3": null,
+    "q1": null,
+    "check_cycle": "10",
+    "state": "1"
+  }
+},
+{
+  "model": "dmam.meter",
+  "pk": 5,
+  "fields": {
+    "serialnumber": "1123",
+    "simid": 1,
+    "version": null,
+    "dn": "10",
+    "metertype": "\u6c34\u8868",
+    "belongto": 1,
+    "mtype": "1",
+    "manufacturer": null,
+    "protocol": null,
+    "R": "100",
+    "q3": null,
+    "q1": null,
+    "check_cycle": "10",
+    "state": "1"
+  }
+}
+]
