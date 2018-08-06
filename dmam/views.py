@@ -148,7 +148,7 @@ def getmeterlist(request):
         
         return {
             "id":m.pk,
-            "serialnumber":m.serialnumber,
+            "name":m.serialnumber,
             
         }
     data = []

@@ -1,0 +1,2756 @@
+[
+  {
+    "pk": 1, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581937", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 1, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01721970", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 2, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680456", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 3, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583626", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 4, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01681288", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 5, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680454", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 6, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01780668", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 7, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01683284", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 8, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01683283", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 9, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01681289", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 10, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01480404", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 11, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580214", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 12, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680455", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 13, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01683198", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 14, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680785", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 15, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680786", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 16, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "50", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "17058044", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 17, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "17048231", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 18, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "1801334400710", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 19, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "18013355", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 20, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "80", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 21, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "150", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "1807097", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 22, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "1805020", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 23, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "1805021", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 24, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380715", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 25, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380328", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 26, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380400", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 27, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380402", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 28, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380420", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 29, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01582950", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 30, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01480403", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 31, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01381623", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 32, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680787", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 33, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680073", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 34, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583308", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 35, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 36, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "1", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 37, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01384018", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 38, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01384016", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 39, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01384017", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 40, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01384019", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 41, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580776", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 42, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680071", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 43, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583627", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 44, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01484224", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 45, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "DXL-B100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581936", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 46, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01582949", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 47, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01484315", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 48, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "\u538b\u529b\u76d1\u63a7\u70b9(15)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "00030001", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 49, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580702", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 50, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580287", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 51, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680074", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 52, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01484312", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 53, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 54, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580366", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 54, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 55, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580703", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 55, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 56, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580291", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 56, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 57, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01484223", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 57, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 58, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581239", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 58, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 59, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580650", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 59, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 60, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580213", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 60, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 61, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581237", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 61, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 62, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "\u538b\u529b\u76d1\u63a7\u70b9(15)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "00030011", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 62, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 63, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01582954", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 63, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 64, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580705", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 64, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 65, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580367", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 65, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 66, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581240", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 66, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 67, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580777", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 67, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01484314", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 68, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 69, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01485069", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 69, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 70, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01485068", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 70, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 71, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01484316", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 71, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 72, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01484313", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 72, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 73, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01280723", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 73, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 74, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01280725", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 74, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 75, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01281212", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 75, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 76, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380698", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 76, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 77, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380974", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 77, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 78, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583309", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 78, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 79, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581934", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 79, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 80, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01381639", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 80, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 81, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "\u538b\u529b\u76d1\u63a7\u70b9(15)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "00030009", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 81, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 82, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "\u538b\u529b\u76d1\u63a7\u70b9(15)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "00030007", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 82, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 83, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01680072", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 83, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 84, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580290", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 84, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 85, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580289", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 85, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "DXL-B150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581257", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 86, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 87, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01681290", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 87, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01684434", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 88, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 89, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583422", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 89, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01381640", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 90, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 91, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580288", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 91, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 92, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580368", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 92, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 93, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581236", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 93, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 94, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580652", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 94, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 95, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580704", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 95, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 96, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580365", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 96, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 97, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583306", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 97, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 98, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580651", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 98, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 99, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01683123", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 99, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 100, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580649", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 100, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 101, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "DXL-B100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581933", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 101, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 102, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01380714", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 102, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 103, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581935", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 103, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 104, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01581238", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 104, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 105, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01480407", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 105, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 106, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01480405", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 106, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 107, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583516", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 107, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 108, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01384015", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 108, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 109, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01480406", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 109, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 110, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "\u538b\u529b\u76d1\u63a7\u70b9(15)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "00030010", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 110, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 111, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01582955", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 111, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 112, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01582951", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 112, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 113, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01582953", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 113, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 114, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583307", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 114, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 115, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583628", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 115, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 116, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG150(150mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583421", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 116, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 117, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01582952", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 117, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 118, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01583517", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 118, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 119, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01485029", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 119, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 120, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01580424", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 120, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 121, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "\u538b\u529b\u76d1\u63a7\u70b9(15)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "00030006", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 121, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 122, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "600", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "72414131", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 122, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 123, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "50", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "3251174910062", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 123, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 124, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "50", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "3251175110823", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 124, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 125, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "600", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "1261175210134", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 125, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 126, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "DN100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "3251174800096", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 126, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 127, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "200", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "3261180503626", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 127, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 128, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "100", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "3251174910060", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 128, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 129, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "200", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "3261180503627", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 129, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 130, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01683035", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 130, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 131, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01683285", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 131, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 132, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01684018", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 132, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 133, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01684017", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 133, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 134, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01684432", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 134, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 135, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01684433", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 135, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 136, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01780672", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 136, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 137, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "1683199", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 137, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 138, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01681609", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 138, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 139, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01780214", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 139, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 140, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01681614", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 140, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 141, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01780671", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 141, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 142, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01780670", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 142, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 143, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG800050(50mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01780213", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 143, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 144, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01782639", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 144, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 145, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01782638", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 145, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 146, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01782640", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 146, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 147, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01782636", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 147, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 148, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01782637", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 148, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 149, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01783140", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 149, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 150, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01783141", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 150, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 151, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01783858", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 151, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 152, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG8000100(100mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01780669", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 152, 
+      "belongto": 1
+    }
+  }, 
+  {
+    "pk": 153, 
+    "model": "dmam.meter", 
+    "fields": {
+      "dn": "MAG200(200mm)", 
+      "protocol": "0", 
+      "metertype": "\u6c34\u8868", 
+      "serialnumber": "01721972", 
+      "mtype": "0", 
+      "R": "100", 
+      "check_cycle": "10", 
+      "q3": "100", 
+      "state": "1", 
+      "version": "200", 
+      "simid": 153, 
+      "belongto": 1
+    }
+  }
+]

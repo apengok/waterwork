@@ -1,0 +1,2450 @@
+[
+  {
+    "pk": 1, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u521b\u60f3\u79d1\u6280\u80a1\u4efd\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.849493", 
+      "meter": 1, 
+      "lng": "118.386009", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5609\u6d69\u65b0\u6750\u6599\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.901048", 
+      "meter": 2, 
+      "lng": "118.439399", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u57ce\u6295\u7f6e\u4e1a\u6709\u9650\u516c\u53f82(57656)", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.854177", 
+      "meter": 3, 
+      "lng": "118.402877", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6c34\u5cb8\u540d\u57ce", 
+      "usertype": "\u5c45\u6c11\u7528\u6237", 
+      "description": "", 
+      "lat": "29.88134", 
+      "meter": 4, 
+      "lng": "118.446029", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u4f73\u4ed5\u5c45\u88c5\u9970\u6750\u6599\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.88758", 
+      "meter": 5, 
+      "lng": "118.41169", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5fbd\u4f73\u7f6e\u4e1a\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.854784", 
+      "meter": 6, 
+      "lng": "118.410812", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u541b\u5f3a\u7f6e\u4e1a\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.890798", 
+      "meter": 7, 
+      "lng": "118.404617", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u534e\u90a6\u7279\u79cd\u6750\u6599\u6709\u9650\u516c\u53f82", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.893409", 
+      "meter": 8, 
+      "lng": "118.401675", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u534e\u90a6\u7279\u79cd\u6750\u6599\u6709\u9650\u516c\u53f81", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.893388", 
+      "meter": 9, 
+      "lng": "118.401481", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u534e\u901a\u7269\u6d41\u7f6e\u4e1a\u6709\u9650\u516c\u53f81", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.890159", 
+      "meter": 10, 
+      "lng": "118.472412", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u7ecf\u6d4e\u5f00\u53d1\u533a\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f847604", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.902963", 
+      "meter": 11, 
+      "lng": "118.442947", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u7d2b\u9633\u5b66\u682152631", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.86898", 
+      "meter": 12, 
+      "lng": "118.388374", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u56fd\u6709\u8d44\u4ea7\u8fd0\u8425\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5546\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.86215", 
+      "meter": 13, 
+      "lng": "118.413711", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u6b59\u53bf\u5b9d\u8bda\u7f6e\u4e1a\u6709\u9650\u516c\u53f81", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 14, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u56fd\u5b89\u623f\u5730\u4ea7\u5f00\u53d1\u6709\u9650\u516c\u53f8\uff08\u4e1c\u5c71\u82b1\u56ed", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.885745", 
+      "meter": 15, 
+      "lng": "118.437202", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u4f4f\u623f\u4fdd\u969c\u5efa\u8bbe\u4e2d\u5fc3\uff08\u6e14\u6881", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.858063", 
+      "meter": 16, 
+      "lng": "118.445592", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4e1c\u5c71\u82b1\u56ed\u65bd\u5de5\u8868", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.8608226312", 
+      "meter": 17, 
+      "lng": "118.3817625046", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5faa\u73af\u56ed\u6d88\u9632\u7ad952598", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.8608226344", 
+      "meter": 18, 
+      "lng": "118.3817625146", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5e73\u548c\u7cbe\u795e\u5eb7\u590d\u533b\u9662", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.8608226344", 
+      "meter": 19, 
+      "lng": "118.3817225046", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4eba\u6b66\u90e8\u5bf9\u9762\u6d88\u9632\u6813\u6bd4\u5bf92", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "3305427.525", 
+      "meter": 20, 
+      "lng": "490986.13", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5a01\u5c14\u6c83\u6d4b\u8bd5", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "11", 
+      "meter": 21, 
+      "lng": "11", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5a01\u5c14\u6c83\u6d4b\u8bd503", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "11", 
+      "meter": 22, 
+      "lng": "11", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5a01\u5c14\u6c83\u6d4b\u8bd502", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "11", 
+      "meter": 23, 
+      "lng": "11", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5a01\u5c14\u6c83\u6d4b\u8bd501", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.524243769", 
+      "meter": 24, 
+      "lng": "118.242892338", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u91d1\u8d28\u4e3d\u79d1\u6280\u6709\u9650\u516c\u53f833837", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.844469", 
+      "meter": 25, 
+      "lng": "118.385177", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u79d1\u5b8f\u79d1\u6280\u53d1\u5c55\u6709\u9650\u516c\u53f830059", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.841451", 
+      "meter": 26, 
+      "lng": "118.377815", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u91d1\u78ca\u65b0\u6750\u6599\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.530075346", 
+      "meter": 27, 
+      "lng": "118.255794162", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u53cb\u8c0a\u5316\u5de5\u79d1\u6280\u6709\u9650\u516c\u53f829632", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.845451", 
+      "meter": 28, 
+      "lng": "118.387878", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u5584\u5b5a\u65b0\u6750\u659932204", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.844984", 
+      "meter": 29, 
+      "lng": "118.385276", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5370\u8c61\u5fbd\u5dde39\u5e621012\u5546\u94fa\u8fb9\u6d88\u9632\u886855621", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.862163", 
+      "meter": 30, 
+      "lng": "118.429695", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u4e07\u90a6\u7535\u5b50\u79d1\u6280\u6709\u9650\u516c\u53f849261", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.843687", 
+      "meter": 31, 
+      "lng": "118.391259", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u53bf\u533b\u9662", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.879264", 
+      "meter": 32, 
+      "lng": "118.440467", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u6c47\u901a\u878d\u8d44\u62c5\u4fdd\u516c\u53f8", 
+      "usertype": "\u5546\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.869201", 
+      "meter": 33, 
+      "lng": "118.4206", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5965\u80dc\u6ee4\u6e05\u5668\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 34, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": " \u9ec4\u5c71\u5e02\u56fd\u91d1\u7f6e\u4e1a\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.87495", 
+      "meter": 35, 
+      "lng": "118.421676", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u4e9a\u6cf0\u5316\u5de5\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.84569", 
+      "meter": 36, 
+      "lng": "118.388253", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": null
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u68c0\u5bdf\u9662", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.8678700000", 
+      "meter": 37, 
+      "lng": "118.3899600000", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u6b27\u73ae\u7279\u6c7d\u8f66\u914d\u4ef6\u6709\u9650\u516c\u53f840931", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.900337", 
+      "meter": 38, 
+      "lng": "118.4664", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u770b\u5b88\u624025862", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.88681", 
+      "meter": 39, 
+      "lng": "118.479393", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u957f\u946b\u6c7d\u8f66\u9500\u552e39961", 
+      "usertype": "\u5546\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.846261", 
+      "meter": 40, 
+      "lng": "118.377822", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u7f8e\u6fb3\u590d\u5408\u6750\u659939940", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.898988", 
+      "meter": 41, 
+      "lng": "118.441879", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u5bcc\u5b89\u623f\u5730\u4ea7\u5f00\u53d1\u6709\u9650\u516c\u53f8\uff08\u6c47\u91d1\u5927\u53a6\uff09", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 42, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u56fd\u91d1\u7f6e\u4e1a1", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.875247", 
+      "meter": 43, 
+      "lng": "118.422294", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u56fd\u7f51\u5b89\u5fbd\u7701\u7535\u529b\u516c\u53f8\u9ec4\u5c71\u4f9b\u7535\u516c\u53f8\uff0856129", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 44, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u82cf\u9633\u7f6e\u4e1a\uff08\u6587\u6b23\u82d1\uff0920543", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.875953", 
+      "meter": 45, 
+      "lng": "118.415519", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u5987\u5e7c\u4fdd\u5065\u9662", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.860894", 
+      "meter": 46, 
+      "lng": "118.410037", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5370\u8c61\u5fbd\u5dde43\u5e621015\u5546\u94fa\u8fb9\u6d88\u9632\u886855622", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.862434", 
+      "meter": 47, 
+      "lng": "118.42955", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u7ecf\u6d4e\u5f00\u53d1\u533a\u6807\u51c6\u5382\u623f52594", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.902549", 
+      "meter": 48, 
+      "lng": "118.443649", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4e00\u6c34\u5382\u538b\u529b\u76d1\u63a7\u70b9", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.906564", 
+      "meter": 49, 
+      "lng": "118.467506", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ad8\u94c1\u7ad9\u524d\u5e7f\u573a52710(DN150", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 50, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5f3a\u5cf0\u94dd\u4e1a\uff08DN100)13241", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.894466", 
+      "meter": 51, 
+      "lng": "118.461044", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5434\u5409\u5e73", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.875753", 
+      "meter": 52, 
+      "lng": "118.42041", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u7ecf\u6d4e\u5f00\u53d1\u533a\u6807\u51c6\u5382\u623f52597", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.902605", 
+      "meter": 53, 
+      "lng": "118.445335", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 54, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5f3a\u5cf0\u94dd\u4e1a(DN50)12503", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.894023", 
+      "meter": 54, 
+      "lng": "118.460762", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 55, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u6b23\u665f\u673a\u68b0\u5236\u9020\u6709\u9650\u516c\u53f852698", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.90142", 
+      "meter": 55, 
+      "lng": "118.460594", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 56, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u6b59\u5dde\u4e2d\u5fc3\u5e02\u573a\u6709\u9650\u516c\u53f851505", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.864618", 
+      "meter": 56, 
+      "lng": "118.432273", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 57, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u91d1\u9a6c\u9a7e\u6821\u6709\u9650\u516c\u53f851470", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.88694", 
+      "meter": 57, 
+      "lng": "118.415321", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 58, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u8054\u67ab\u65b0\u6750\u6599\u6709\u9650\u516c\u53f852778", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 58, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 59, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u4e8c\u4e2d6044", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.87746", 
+      "meter": 59, 
+      "lng": "118.430259", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 60, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u78a7\u9f99\u6e7e\u623f\u5730\u4ea7\u5f00\u53d1\u6709\u9650\u516c\u53f852006", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 60, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 61, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u65b0\u5b89\u4e2d\u5b6627740", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.877952", 
+      "meter": 61, 
+      "lng": "118.414501", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 62, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ad8\u94c1\u5317\u7ad9\u538b\u529b\u70b9", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "", 
+      "meter": 62, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 63, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u4e5d\u661f\u73af\u4fdd\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.84857", 
+      "meter": 63, 
+      "lng": "118.393226", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 64, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u8317\u6c5f\u7eb8\u5236\u54c1\u5305\u88c5\u6709\u9650\u516c\u53f852777", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 64, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 65, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5370\u8c61\u5fbd\u5dde33\u5e62\u5e7f\u573a\u6d88\u9632\u886855631", 
+      "usertype": "\u5546\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.861765", 
+      "meter": 65, 
+      "lng": "118.429446", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 66, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u57ce\u5e02\u5efa\u8bbe\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f852801", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 66, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 67, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u5353\u8d8a\u4eea\u5668\u6709\u9650\u516c\u53f852781", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 67, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u6b63\u6770\u65b0\u6750\u6599\u6709\u9650\u516c\u53f850226", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.845338", 
+      "meter": 68, 
+      "lng": "118.386932", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 69, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u57ce\u5e02\u5efa\u8bbe\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f851464", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.872035", 
+      "meter": 69, 
+      "lng": "118.433891", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 70, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u5f3a\u529b\u5316\u5de5\u6709\u9650\u516c\u53f856194", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.842075", 
+      "meter": 70, 
+      "lng": "118.378189", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 71, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u6765\u660e\u7269\u6d41\u6709\u9650\u516c\u53f850322", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.844007", 
+      "meter": 71, 
+      "lng": "118.391952", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 72, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u9707\u5fb7\u7535\u5b5052595", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.902027", 
+      "meter": 72, 
+      "lng": "118.444274", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 73, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u535a\u6676\u7eba\u7ec721530", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.900863", 
+      "meter": 73, 
+      "lng": "118.45858", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 74, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u4e2d\u5b667705", 
+      "usertype": "\u5c45\u6c11\u7528\u6237", 
+      "description": "", 
+      "lat": "29.864654", 
+      "meter": 74, 
+      "lng": "118.443801", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 75, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5fbd\u5dde\u5e9c\u885928883", 
+      "usertype": "\u5546\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.865018", 
+      "meter": 75, 
+      "lng": "118.435111", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 76, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u5fb7\u5e73\u5316\u5de531186", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 76, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 77, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u535a\u5347\u7eba\u7ec7\u6709\u9650\u516c\u53f830097", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.897739", 
+      "meter": 77, 
+      "lng": "118.446281", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 78, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u963f\u5c14\u6cd5\u7c89\u4f53\u6750\u6599\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.84243", 
+      "meter": 78, 
+      "lng": "118.379532", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 79, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u56fd\u5bb6\u7cae\u98df\u50a8\u5907\u5e93\u90d1\u6751\u5206\u5e93", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.857955", 
+      "meter": 79, 
+      "lng": "118.378593", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 80, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ad8\u94c1\u7ad9\u524d\u5e7f\u573a52709", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 80, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 81, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u62ab\u4e91\u5c71\u5e84\u6c61\u6c34\u5904\u7406\u5382\u538b\u529b\u76d1\u63a7\u70b9", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "", 
+      "meter": 81, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 82, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5fbd\u5e08\u6cf5\u623f\u538b\u529b\u70b9", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.871515", 
+      "meter": 82, 
+      "lng": "118.438781", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 83, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u56fd\u91d1\u7f6e\u4e1a2", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.875627", 
+      "meter": 83, 
+      "lng": "118.421752", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 84, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u9521\u6765\u4eea\u8868\u79d1\u6280\u6709\u9650\u516c\u53f852596", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.903051", 
+      "meter": 84, 
+      "lng": "118.44461", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 85, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4f73\u8bfa\u7eba\u7ec7\u4e8c\u671f36734", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.898248", 
+      "meter": 85, 
+      "lng": "118.441688", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5929\u9999\u79d1\u6280\u80a1\u4efd\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.840921", 
+      "meter": 86, 
+      "lng": "118.376655", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 87, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5927\u94ed\u5bb6\u5c45\u9986\uff08\u5927\u94ed\u623f\u5730\u4ea7\uff09", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "", 
+      "meter": 87, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4e0a\u6d77\u725b\u5976\u7ec3\u6c5f\u9c9c\u5976\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.90966", 
+      "meter": 88, 
+      "lng": "118.45449", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 89, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5bcc\u5bb8\u79be\u56ed\u76d1\u63a7\u8868", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.875204", 
+      "meter": 89, 
+      "lng": "118.422615", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4eac\u798f\u94c1\u8def\u5ba2\u8fd0\u4e13\u7ebf\u5b89\u5fbd\u6709\u9650\u8d23\u4efb\u516c\u53f852615", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.915802", 
+      "meter": 90, 
+      "lng": "118.404327", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 91, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u57ce\u5e02\u5efa\u8bbe\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f852599", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.861764", 
+      "meter": 91, 
+      "lng": "118.41365", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 92, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6f6d\u77f3\u6751\u6751\u59d4\u4f1a52644", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.894489", 
+      "meter": 92, 
+      "lng": "118.46627", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 93, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5965\u9f99\u673a\u753522065", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.896171", 
+      "meter": 93, 
+      "lng": "118.454544", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 94, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u5dde\u5b66\u6821\u51851491", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.865631", 
+      "meter": 94, 
+      "lng": "118.413688", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 95, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u79d1\u7acb\u5fb7\u751f\u7269\u79d1\u6280\u6709\u9650\u516c\u53f852699", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.840469", 
+      "meter": 95, 
+      "lng": "118.374748", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 96, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u56fd\u7f51\u5b89\u5fbd\u7701\u7535\u529b\u516c\u53f8\u9ec4\u5c71\u4f9b\u7535\u516c\u53f8\uff08\u6d69\u6751\uff0952654", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.839761", 
+      "meter": 96, 
+      "lng": "118.374366", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 97, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u4f4f\u623f\u4fdd\u969c\u5efa\u8bbe\u4e2d\u5fc39-14\u53f7\u697c", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 97, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 98, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5faa\u73af\u56ed\u6d88\u9632\u7ad952598", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.843357", 
+      "meter": 98, 
+      "lng": "118.390554", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 99, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u82cf\u626c\u7f6e\u4e1a\u6709\u9650\u516c\u53f8(\u6587\u6b23\u82d1)\u76d1\u63a7\u8868", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "3306618.612", 
+      "meter": 99, 
+      "lng": "490997.3583", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "CGCS2000"
+    }
+  }, 
+  {
+    "pk": 100, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u5dde\u5b66\u682116774", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.865207", 
+      "meter": 100, 
+      "lng": "118.416313", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 101, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u7701\u6b59\u53bf\u4eba\u6c11\u6cd5\u966253901", 
+      "usertype": "\u5c45\u6c11\u7528\u6237", 
+      "description": "", 
+      "lat": "29.867618", 
+      "meter": 101, 
+      "lng": "118.39048", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 102, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6c61\u6c34\u5904\u7406\u538232168", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.84835", 
+      "meter": 102, 
+      "lng": "118.393798", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 103, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u946b\u6b23\u7f6e\u4e1a", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 103, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 104, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u897f\u8857\u6587\u5316\u4ea7\u4e1a\u53d1\u5c55\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.885307", 
+      "meter": 104, 
+      "lng": "118.438575", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 105, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u827e\u745e\u514b\u5fb7\u79d1\u6280\u6709\u9650\u516c\u53f849260", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.843896", 
+      "meter": 105, 
+      "lng": "118.383644", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 106, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u57ce\u5e02\u5efa\u8bbe\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f842513", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.877147", 
+      "meter": 106, 
+      "lng": "118.41883", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 107, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u4eba\u6c11\u533b\u966225970", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.878143", 
+      "meter": 107, 
+      "lng": "118.440567", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 108, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u90a6\u548c\u5408\u6210\u6750\u6599\u6709\u9650\u516c\u53f849315", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.843347", 
+      "meter": 108, 
+      "lng": "118.380737", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 109, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u7ee9\u7532\u4f20\u52a8\u673a\u68b0\u6709\u9650\u516c\u53f845529", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.902538", 
+      "meter": 109, 
+      "lng": "118.447036", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 110, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": " \u8d85\u9650\u68c0\u6d4b\u7ad9", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.920164", 
+      "meter": 110, 
+      "lng": "118.482307", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 111, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u5dde\u5e7f\u573aB\u573a", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.877124", 
+      "meter": 111, 
+      "lng": "118.430961", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 112, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5370\u8c61\u5fbd\u5dde42\u5e621005\u5546\u94fa\u8fb9\u6d88\u9632\u886855618", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.861963", 
+      "meter": 112, 
+      "lng": "118.429321", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 113, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5370\u8c61\u5fbd\u5dde39\u5e621006\u5546\u94fa\u8fb9\u6d88\u9632\u886855620", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.861402", 
+      "meter": 113, 
+      "lng": "118.431632", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 114, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5fbd\u5dde\u5e08\u8303\uff08\u7389\u5c4f\u5e9c\uff095114", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.871376", 
+      "meter": 114, 
+      "lng": "118.438117", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 115, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5370\u8c61\u5fbd\u5dde42\u5e621006\u5546\u94fa\u8fb9\u6d88\u9632\u886855623", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.861608", 
+      "meter": 115, 
+      "lng": "118.431922", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 116, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5fbd\u68a6\u9ad8\u5206\u5b50\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.8718", 
+      "meter": 116, 
+      "lng": "118.412325", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 117, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5370\u8c61\u5fbd\u5dde42\u5e621006\u5546\u94fa\u8fb9\u6d88\u9632\u886855619", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.861605", 
+      "meter": 117, 
+      "lng": "118.432073", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 118, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u57ce\u5e02\u5efa\u8bbe\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f8C", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 118, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 119, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5927\u94ed\u5c71\u5e84\u5cad\u4e2d\u76d1\u63a7\u8868", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.863075", 
+      "meter": 119, 
+      "lng": "118.420028", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 120, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u957f\u9752\u8defDN300\u76d1\u63a7\u8868", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.86001", 
+      "meter": 120, 
+      "lng": "118.441703", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 121, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5fbd\u5e08\u6cf5\u623f\u6c34\u4f4d", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "", 
+      "meter": 121, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 122, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5faa\u73af\u56ed\u76d1\u63a7\u603b\u8868", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "3303548.774", 
+      "meter": 122, 
+      "lng": "489168.7032", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "CGCS2000"
+    }
+  }, 
+  {
+    "pk": 123, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5929\u7136\u6c14(\u4e8c\u73af\u8def\u6865\u5317\u897f\u4fa7)", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.8445338294", 
+      "meter": 123, 
+      "lng": "118.3817625046", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 124, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u7fd4\u6656\u6c7d\u8f66\u96f6\u90e8\u4ef6\u6709\u9650\u516c\u53f8", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.8608226312", 
+      "meter": 124, 
+      "lng": "118.3817625946", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 125, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u57ce\u4e1c\u5f00\u53d1\u533a\u4e3b\u7ba1\u76d1\u63a7\u8868", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "3307211.74", 
+      "meter": 125, 
+      "lng": "493386.7088", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "CGCS2000"
+    }
+  }, 
+  {
+    "pk": 126, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e0c\u5c14\u534e\u5bb6\u5c45\u6709\u9650\u516c\u53f8", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "29.8445338294", 
+      "meter": 126, 
+      "lng": "118.3817625946", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "GCJ-02"
+    }
+  }, 
+  {
+    "pk": 127, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9e3f\u57fa\u4e3b\u7ba1\u76d1\u63a7\u8868", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "3305259.922", 
+      "meter": 127, 
+      "lng": "493039.6931", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "CGCS2000"
+    }
+  }, 
+  {
+    "pk": 128, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4eba\u6b66\u90e8\u5bf9\u9762\u6d88\u9632\u8868", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "3305427.525", 
+      "meter": 128, 
+      "lng": "490986.13", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "CGCS2000"
+    }
+  }, 
+  {
+    "pk": 129, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u65b0\u5b89\u8def\u4e0e\u7d2b\u971e\u8def\u4ea4\u53e3\u76d1\u63a7\u8868", 
+      "usertype": "", 
+      "description": "", 
+      "lat": "3305866.872", 
+      "meter": 129, 
+      "lng": "491833.6502", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": "CGCS2000"
+    }
+  }, 
+  {
+    "pk": 130, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u6b59\u53bf\u5b9d\u8bda\u7f6e\u4e1a\u6709\u9650\u516c\u53f81", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 130, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 131, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u633a\u8fbe\u673a\u68b0\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.89961", 
+      "meter": 131, 
+      "lng": "118.443901", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 132, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u7acb\u56fd\u673a\u8f66\u90e8\u4ef6\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.904043", 
+      "meter": 132, 
+      "lng": "118.446723", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 133, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u4f69\u5b89\u673a\u52a8\u8f66\u5b89\u5168\u68c0\u6d4b\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.870815", 
+      "meter": 133, 
+      "lng": "118.382352", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 134, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u5e02\u4e50\u8fea\u5a31\u4e50\u6587\u5316\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 134, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 135, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u987a\u901a\u8d44\u4ea7\u6295\u8d44\u7ba1\u7406\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 135, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 136, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u53f8\u6cd5\u884c\u653f\u7cfb\u7edf\u4e1a\u52a1\u7528\u623f\u9879\u76ee", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 136, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 137, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u4e2d\u56fd\u77f3\u6cb9\u5929\u7136\u6c14\u80a1\u4efd\u6709\u9650\u516c\u53f8\u5b89\u5fbd\u9ec4\u5c71\u9500\u552e\u5206\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 137, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 138, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u884c\u77e5\u4e2d\u5b66\u5185", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.879943", 
+      "meter": 138, 
+      "lng": "118.452331", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 139, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6587\u6b23\u82d1\u6d88\u9632\u603b\u8868", 
+      "usertype": "\u5546\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 139, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 140, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6f6d\u6e21\u6751\u6751\u6c11\u59d4\u5458\u4f1a", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 140, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 141, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u7ecf\u6d4e\u5f00\u53d1\u533a\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f8\u5382\u623f", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 141, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 142, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5bcc\u5828\u9547\u627f\u72ee\u6751\u6751\u6c11\u59d4\u5458\u4f1a", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 142, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 143, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5468\u8238", 
+      "usertype": "\u5546\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 143, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 144, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u7ecf\u6d4e\u5f00\u53d1\u533a\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f8\u5382\u623f", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 144, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 145, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u7ecf\u6d4e\u5f00\u53d1\u533a\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f8\u5382\u623f", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 145, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 146, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u6b59\u53bf\u7ecf\u6d4e\u5f00\u53d1\u533a\u6295\u8d44\u5f00\u53d1\u6709\u9650\u516c\u53f8\u5382\u623f", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 146, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 147, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5b89\u5fbd\u957f\u547d\u6469\u64e6\u6750\u6599\u79d1\u6280\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.899225", 
+      "meter": 147, 
+      "lng": "118.444488", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 148, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5fbd\u5dde\u533a\u81ea\u6765\u6c34\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.873622", 
+      "meter": 148, 
+      "lng": "118.373641", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 149, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u90d1\u6751\u5c0f\u5b661", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 149, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 150, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u9526\u7ee3\u623f\u5730\u4ea7\u5f00\u53d1\u6709\u9650\u516c\u53f8\u65bd\u5de5\u8868", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.880475", 
+      "meter": 150, 
+      "lng": "118.447685", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 151, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u56fd\u7f51\u5b89\u5fbd\u7701\u7535\u529b\u516c\u53f8\u6b59\u53bf\u4f9b\u7535\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.885318", 
+      "meter": 151, 
+      "lng": "118.413429", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 152, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u5fbd\u745e\u667a\u80fd\u88c5\u5907\u6709\u9650\u8d23\u4efb\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "", 
+      "meter": 152, 
+      "lng": "", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }, 
+  {
+    "pk": 153, 
+    "model": "dmam.station", 
+    "fields": {
+      "username": "\u9ec4\u5c71\u535a\u76db\u7eba\u7ec7\u6709\u9650\u516c\u53f8", 
+      "usertype": "\u5de5\u4e1a\u7528\u6237", 
+      "description": "", 
+      "lat": "29.893459", 
+      "meter": 153, 
+      "lng": "118.443771", 
+      "madedate": "2018-08-02", 
+      "locate": "None", 
+      "belongto": 1, 
+      "coortype": ""
+    }
+  }
+]
