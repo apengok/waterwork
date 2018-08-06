@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^meter/edit/(?P<pk>\w+)/?$',views.MeterEditView.as_view(),name='meteredit'),
     url(r'^meter/delete/(?P<pk>[0-9]+)/?$',views.MeterDeleteView.as_view(),name='meterdelete'),
     url(r'^meter/deletemore',views.meterdeletemore,name='meterdeletemore'),
+    url(r'^meter/getMeterSelect/$',views.getMeterSelect,name='getMeterSelect'),
     
     #simcards   
     url(r'^simcard/repetition/$',views.simcard_repetition,name='simcard_repetition'),

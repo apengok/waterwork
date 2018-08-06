@@ -1,6 +1,10 @@
 (function($,window){
     var isAdminStr = $("#isAdmin").attr("value");//是否是admin
     var AuthorizedDeadline = $("#userAuthorizationDate").attr("value");//获取当前用户授权截止日期
+
+    var meterInput = $("#relate_meter");
+    var meterId = $("#meterID").val();
+    
     
     var stationAdd = {
         //初始化
@@ -41,6 +45,8 @@
                 }   
               }
            });
+
+            stationAdd.InitCallback()
            
         },
         beforeClick: function(treeId, treeNode){
@@ -213,6 +219,106 @@
                 layer.msg(data.msg,{move:false});
             }
         },
+        //newwee
+        //显示或隐藏输入框
+        showHideValueCase: function(type,dataInput){
+            var dataInputType = dataInput.selector;
+            if (type == 0) {//限制输入
+                
+                if ("#relate_meter" == dataInputType) { //sim卡限制
+                    $(".simsList").attr("readonly",true);
+                    $("#simParentGroupName").css("background-color","");
+                    $("#simGroupDiv").css("display","block");
+                    $("#operatorTypeDiv").css("display","block");
+                    simFlag = false;
+                }
+            } else if (type == 1) {//放开输入
+                
+                if ("#relate_meter" == dataInputType) { //sim卡放开
+                    $(".simsList").removeAttr("readonly");
+                    $("#simParentGroupName").css("background-color","#fafafa");
+                    $("#simGroupDiv").css("display","none");
+                    $("#operatorTypeDiv").css("display","none");
+                    simFlag = true;
+                }
+            }
+        },
+        hideErrorMsg: function(){
+            $("#error_label").hide();
+        },
+        InitCallback: function(){
+            //sim卡
+            stationAdd.initMeter("/devm/meter/getMeterSelect/");
+            
+        },
+        initMeter: function (url) {
+            stationAdd.initDataList(meterInput, url, meterId,stationAdd.meterChange);
+        },
+        meterChange: function (keyword) {
+            console.log("meter change",keyword);
+            var meterid = keyword.id;
+            var url="/dmam/station/getmeterParam/";
+            var parameter={"mid": meterid};
+            json_ajax("POST",url,"json",true,parameter, stationAdd.setMeterParam);
+        },
+        simsChangeCallback: function(data){
+            if(data.success){
+                console.log("simsChangeCallback");
+                // $("#iccidSim").val(data.obj.simcardInfo.ICCID);
+                // $("#simParentGroupName").val(data.obj.simcardInfo.groupName);
+                // $("#operator").val(data.obj.simcardInfo.operator);
+                // $("#simFlow").val(data.obj.simcardInfo.simFlow);
+                // $("#openCardTime").val(data.obj.simcardInfo.openCardTime);
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        initDataList: function (dataInput, urlString, id, callback,moreCallback) {
+            console.log(dataInput,id);
+            // if(id.indexOf('#')<0){
+            //     dataInput.attr('data-id',id);
+            // }
+            //if(dataInput.attr('name').indexOf('_')<0){
+            //  dataInput.attr('name',dataInput.attr('name')+'__');
+            //}
+            $.ajax({
+                type: "POST",
+                url: urlString,
+                data: {},   //{configId: $("#configId").val()},
+                dataType: "json",
+                success: function (data) {
+                    var itemList = data.obj;
+                    // console.log(itemList);
+                    // console.log({value:itemList});
+                    var suggest=dataInput.bsSuggest({
+                        indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+                        indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+                        data: {value:itemList},
+                        idField: "id",
+                        keyField: "name",
+                        effectiveFields: ["name"]
+                    }).on('onDataRequestSuccess', function (e, result) {
+                    }).on("click",function(){
+                    }).on('onSetSelectValue', function (e, keyword, data) {
+                        if(callback){
+                            dataInput.closest('.form-group').find('.dropdown-menu').hide()
+                            callback(keyword)
+                        }
+                        //限制输入
+                        stationAdd.showHideValueCase(0,dataInput);
+                        stationAdd.hideErrorMsg();
+                    }).on('onUnsetSelectValue', function () {
+                        //放开输入
+                        stationAdd.showHideValueCase(1,dataInput);
+                    });
+                    
+                    dataInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
+                    if(moreCallback){
+                        moreCallback()
+                    }
+                }
+            });
+        },
 
         doSubmit: function(){
         
@@ -361,7 +467,7 @@
         var myTable;
         stationAdd.init();
         stationAdd.initUsertype();
-        stationAdd.initRefer();
+        // stationAdd.initRefer();
         $('input').inputClear();
         var userId = $("#currentUserId").val();
         console.log('userId',$("#userId").val());

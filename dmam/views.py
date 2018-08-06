@@ -49,11 +49,10 @@ logger_error = logging.getLogger('error_logger')
 
 def dmatree(request):   
     organtree = []
-    print('dmatree:',request.POST)
+    
     stationflag = request.POST.get("isStation") or ''
-    dmaflag = request.POST.get("isDma") or ''
     user = request.user
-    print('dmatree:',user)
+    
     # if user.is_anonymous:
     if not user.is_authenticated:
         organs = Organizations.objects.first()
@@ -77,18 +76,17 @@ def dmatree(request):
         })
 
         #dma
-        if dmaflag == '1':
-            for d in o.dma.all():
-                organtree.append({
-                "name":d.dma_name,
-                "id":d.pk,
-                "districtid":d.pk,
-                "pId":o.cid,
-                "type":"dma",
-                "dma_no":d.dma_no,
-                "icon":"/static/virvo/resources/img/dma.png",
-                "uuid":''
-            })
+        for d in o.dma.all():
+            organtree.append({
+            "name":d.dma_name,
+            "id":d.pk,
+            "districtid":d.pk,
+            "pId":o.cid,
+            "type":"dma",
+            "dma_no":d.dma_no,
+            "icon":"/static/virvo/resources/img/dma.png",
+            "uuid":''
+        })
 
         #station
         if stationflag == '1':
@@ -148,7 +146,7 @@ def getmeterlist(request):
         
         return {
             "id":m.pk,
-            "name":m.serialnumber,
+            "serialnumber":m.serialnumber,
             
         }
     data = []
@@ -195,7 +193,7 @@ def stationlist(request):
     draw = 1
     length = 0
     start=0
-    print('userlist:',request.user)
+    
     if request.method == "GET":
         draw = int(request.GET.get("draw", 1))
         length = int(request.GET.get("length", 10))
@@ -223,7 +221,7 @@ def stationlist(request):
         print("districtId:",districtId)
         # print("post simpleQueryParam",simpleQueryParam)
 
-    print("get userlist:",draw,length,start,search_value)
+    
 
     #当前登录用户
     current_user = request.user
@@ -310,7 +308,7 @@ def stationlist(request):
     result["start"] = 0
     result["end"] = 0
 
-    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
     
     return HttpResponse(json.dumps(result))
 
@@ -320,7 +318,7 @@ def dmastationlist(request):
     draw = 1
     length = 0
     start=0
-    print('userlist:',request.user)
+    
     if request.method == "GET":
         draw = int(request.GET.get("draw", 1))
         length = int(request.GET.get("length", 10))
@@ -348,7 +346,7 @@ def dmastationlist(request):
         print("districtId:",districtId)
         # print("post simpleQueryParam",simpleQueryParam)
 
-    print("get userlist:",draw,length,start,search_value)
+    
 
     #当前登录用户
     current_user = request.user
@@ -401,7 +399,7 @@ def dmastationlist(request):
     result["start"] = 0
     result["end"] = 0
 
-    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
     
     return HttpResponse(json.dumps(result))
 
@@ -411,7 +409,7 @@ def dmastationlist(request):
 def dmabaseinfo(request):
 
     if request.method == 'GET':
-        print('dmabaseinfo get:',request.GET)
+        
         data = []
         dma_no = request.GET.get("dma_no")
         if dma_no == '':
@@ -1230,7 +1228,7 @@ class StationMangerView(LoginRequiredMixin,TemplateView):
         context = super(StationMangerView, self).get_context_data(*args, **kwargs)
         context["page_menu"] = "dma管理"
         # context["page_submenu"] = "组织和用户管理"
-        context["page_title"] = "站点信息"
+        context["page_title"] = "站点管理"
 
         # context["user_list"] = User.objects.all()
         
@@ -1279,8 +1277,7 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print("station  add here?:",self.request.POST)
-        print(self.kwargs,self.args)
+        
         # print(form)
         # do something
         user = self.request.user
@@ -1300,7 +1297,7 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     def get_context_data(self, *args, **kwargs):
         context = super(StationAddView, self).get_context_data(*args, **kwargs)
 
-        print('useradd context',args,kwargs,self.request)
+        
         uuid = self.request.GET.get('uuid') or ''
         
         groupId = self.request.user.belongto.cid
@@ -1317,7 +1314,6 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         context["groupId"] = groupId
         context["groupname"] = groupname
 
-        print("user add context data gourpId and groupname:",groupId,groupname)
         
 
         return context  
@@ -1365,8 +1361,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        print(form)
-        print(self.request.POST)
+        
 
         
         instance = form.save(commit=False)

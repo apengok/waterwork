@@ -209,9 +209,7 @@
         
             //meter list
             var meterlist = data;
-            
-
-            // var dataList = {value: data.obj};
+            console.log('meterlist:',meterlist);
 
             // 初始化车辆数据
             var dataList = {value: []};
@@ -219,12 +217,13 @@
                 for (var i=0; i< meterlist.length; i++) {
                     var obj = {};
                     obj.id = meterlist[i].id;
-                    obj.name = meterlist[i].name;
-                    dataList.value.push(obj);
+                    obj.name = meterlist[i].serialnumber;
+                    if(obj.name != ""){
+                        dataList.value.push(obj);
+                    }
                 }
                 
             }
-            console.log('meterlist:',dataList);
             
             $("#relate_meter").bsSuggest({
                 indexId: 1,  //data.value 的第几个数据，作为input输入框的内容

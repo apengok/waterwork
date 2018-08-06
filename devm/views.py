@@ -802,5 +802,34 @@ def getSimcardSelect(request):
         "success":True
     }
    
-    print(operarions_list)
+    # print(operarions_list)
+    return JsonResponse(operarions_list)
+
+
+
+def getMeterSelect(request):
+    # meters = Meter.objects.all()
+    meters = request.user.meter_list_queryset()
+
+    def m_info(m):
+        
+        return {
+            "id":m.pk,
+            "name":m.serialnumber,
+            
+        }
+    data = []
+
+    for m in meters:
+        if len(m.serialnumber) > 2:
+            data.append(m_info(m))
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":data,
+        "success":True
+    }
+   
+    # print(operarions_list)
     return JsonResponse(operarions_list)

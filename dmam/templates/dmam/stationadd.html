@@ -70,7 +70,27 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label class="text-danger">*</label> 关联表具：</label>
-                    <div class="col-md-7">
+                    <div class="col-sm-7 col-md-7 form-group" style="padding-top:10px; margin:0px;">
+                        <div style="position:relative;">
+                            <span style="overflow:hidden;">
+                                <input type="hidden" id="meterID" name="meterID" value=""/>
+                                </span>
+                                <div class="input-group">
+                                    <input value=""  type="text" placeholder="" class="form-control" maxlength="20" id="relate_meter" name="meter">
+                                    
+                                    <div class="input-group-btn">
+                                        <!-- <input type="hidden" class="hidenSubmitControl"/> -->
+                                      <button type="button" id="button" class="btn btn-white dropdown-toggle disabled loading-state-button" data-toggle="dropdown">
+                                          <i class="fa fa-spinner loading-state"></i>
+                                      </button>
+                                      <ul class="dropdown-menu dropdown-menu-right" role="menu"  style="width:100%">
+                                      </ul>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-md-7">
                         <div class="input-group">
                             <input name="meter" type="text" class="form-control" id="relate_meter">
                             <div class="input-group-btn">
@@ -82,16 +102,8 @@
                                 </ul>
                             </div>
                         </div>
-                        <!-- <select class="form-control" id="state" name="meter">
-                            <option value = "1" selected="selected" >启用</option>
-                            <option value = "0" >停用</option>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>30</option>
-                            <option>40</option>
-                            <option>50</option>
-                        </select> -->
-                    </div>
+                        
+                    </div> -->
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 表具编号：</label>
