@@ -33,6 +33,7 @@
     var user_num = $("#id_user_num").val();
     var pipe_private = $("#id_pipe_private").val();
     var flag1 = false;
+    var modify_flag = false;
     var DMABaseEdit = {
         //初始化
         init:function(){
@@ -44,6 +45,10 @@
                     autoParam : [ "id" ],
                     contentType : "application/json",
                     dataType : "json",
+                    otherParam : {  // 是否可选 Organization
+                        "isDma" : "1",
+                        // "csrfmiddlewaretoken": "{{ csrf_token }}"
+                    },
                 },
                 view : {
                     dblClickExpand : false
@@ -97,7 +102,9 @@
                     var width = $(e).parent().width();
                     $("#zTreeContentEdit").css("width",width + "px");
                 })
-                $("#zTreeContentEdit").show();
+                if(modify_flag){
+                    $("#zTreeContentEdit").show();
+                }
             } else {
                 $("#zTreeContentEdit").hide();
             }
@@ -139,12 +146,14 @@
             }
         },
         Alterdma:function(){
+            modify_flag = true;
             $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").removeAttr("readonly");
             $("#zTreeOrganSelEdit").attr("disabled",false);
         },
         restore:function(){
             $("#id_pepoles_num,#id_acreage,#id_user_num,#id_pipe_texture,#id_pipe_length,#id_pipe_links,#id_pipe_years,#id_pipe_private,#id_ifc,#id_aznp,#id_night_use,#id_cxc_value,#id_belongto").attr("readonly","readonly");
             $("#zTreeOrganSelEdit").attr("disabled","disabled");
+            modify_flag = false;
         },
         doSubmit: function(){
             
@@ -169,6 +178,7 @@
                                     // $("#commonLgWin").modal("hide");
                                     layer.msg(publicEditSuccess,{move:false});
                                     // myTable.refresh()
+                                    modify_flag = false;
                                 }else{
                                     if(date != null){
                                         layer.msg(publicEditError,{move:false});
@@ -276,6 +286,8 @@
                     data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
                         "isOrg" : "1",
+                        "isDma" : "1",
+
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: dmaManage.ajaxDataFilter
@@ -390,7 +402,7 @@
                                          zTree.expandNode(nodes[j], true, true, true);
                                     }
                                     // pengwl delete group and user refresh tabale
-                                    myTable.requestData();
+                                    // myTable.requestData();
                                 },      
                             });
                         }
@@ -501,7 +513,7 @@
                     $.ajax({
                         url: 'district/dmatree/',
                         type: 'POST',
-                        data: {"isOrg" : "1"},
+                        data: {"isOrg" : "1","isDma":"1"},
                         async:false,
                         dataType: 'json',
                         success: function (data) {
@@ -516,7 +528,7 @@
                         $.ajax({
                             url: 'district/dmatree/',
                             type: 'POST',
-                            data: {"isOrg" : "1"},
+                            data: {"isOrg" : "1","isDma":"1"},
                             async:false,
                             dataType: 'json',
                             success: function (data) {
@@ -552,7 +564,7 @@
                         $.ajax({
                             url: 'district/dmatree/',
                             type: 'POST',
-                            data: {"isOrg" : "1"},
+                            data: {"isOrg" : "1","isDma":"1"},
                             async:false,
                             dataType: 'json',
                             success: function (data) {
@@ -746,7 +758,7 @@
             var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             zTree.selectNode("");
             zTree.cancelSelectedNode();
-            myTable.requestData();
+            // myTable.requestData();
         },
         // 批量删除
         delModel: function(){
@@ -1236,7 +1248,8 @@
                 subChk.length == subChk.filter(":checked").length ? true: false);
         });
         //basic dma infor invole
-        $("#zTreeOrganSelEdit").attr("disabled","disabled"); // 禁用选择组织控件 
+        $("#zTreeOrganSelEdit").attr("disabled","disabled"); // 禁用选择组织控件 zTreeOrganSelSpan
+        $("#zTreeContentEdit").hide();
         $("#zTreeOrganSelEdit").on("click",function(){DMABaseEdit.showMenu(this)});
         $("#baseinfomMdify").on("click",DMABaseEdit.Alterdma);
         $("#baseinfoCommit").on("click",DMABaseEdit.doSubmit);

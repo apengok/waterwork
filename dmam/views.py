@@ -51,6 +51,7 @@ def dmatree(request):
     organtree = []
     print('dmatree:',request.POST)
     stationflag = request.POST.get("isStation") or ''
+    dmaflag = request.POST.get("isDma") or ''
     user = request.user
     print('dmatree:',user)
     # if user.is_anonymous:
@@ -76,17 +77,18 @@ def dmatree(request):
         })
 
         #dma
-        for d in o.dma.all():
-            organtree.append({
-            "name":d.dma_name,
-            "id":d.pk,
-            "districtid":d.pk,
-            "pId":o.cid,
-            "type":"dma",
-            "dma_no":d.dma_no,
-            "icon":"/static/virvo/resources/img/dma.png",
-            "uuid":''
-        })
+        if dmaflag == '1':
+            for d in o.dma.all():
+                organtree.append({
+                "name":d.dma_name,
+                "id":d.pk,
+                "districtid":d.pk,
+                "pId":o.cid,
+                "type":"dma",
+                "dma_no":d.dma_no,
+                "icon":"/static/virvo/resources/img/dma.png",
+                "uuid":''
+            })
 
         #station
         if stationflag == '1':
@@ -1228,7 +1230,7 @@ class StationMangerView(LoginRequiredMixin,TemplateView):
         context = super(StationMangerView, self).get_context_data(*args, **kwargs)
         context["page_menu"] = "dma管理"
         # context["page_submenu"] = "组织和用户管理"
-        context["page_title"] = "站点管理"
+        context["page_title"] = "站点信息"
 
         # context["user_list"] = User.objects.all()
         
