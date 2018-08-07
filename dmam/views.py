@@ -51,6 +51,7 @@ def dmatree(request):
     organtree = []
     
     stationflag = request.POST.get("isStation") or ''
+    dmaflag = request.POST.get("isDma") or ''
     user = request.user
     
     # if user.is_anonymous:
@@ -76,17 +77,18 @@ def dmatree(request):
         })
 
         #dma
-        for d in o.dma.all():
-            organtree.append({
-            "name":d.dma_name,
-            "id":d.pk,
-            "districtid":d.pk,
-            "pId":o.cid,
-            "type":"dma",
-            "dma_no":d.dma_no,
-            "icon":"/static/virvo/resources/img/dma.png",
-            "uuid":''
-        })
+        if dmaflag == '1':
+            for d in o.dma.all():
+                organtree.append({
+                "name":d.dma_name,
+                "id":d.pk,
+                "districtid":d.pk,
+                "pId":o.cid,
+                "type":"dma",
+                "dma_no":d.dma_no,
+                "icon":"/static/virvo/resources/img/dma.png",
+                "uuid":''
+            })
 
         #station
         if stationflag == '1':

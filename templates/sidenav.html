@@ -135,7 +135,7 @@
                     </a>
                     <ul class="second-menu-ul">
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'analysis:dailyuse' %}">
                                 <i class="fa fa-location-arrow"></i><span>日用水分析</span> 
                                 <i></i> 
                             </a>
@@ -597,7 +597,7 @@
 
                         {% if  'dailyuse_datanalys' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'analysis:dailyuse' %}">
                                 <i class="fa fa-location-arrow"></i><span>日用水分析</span> 
                                 <i></i> 
                             </a>

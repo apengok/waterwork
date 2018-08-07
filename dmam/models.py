@@ -5,7 +5,8 @@ from django.db import models
 from django.urls import reverse
 from entm.models import Organizations
 import datetime
-# from legacy.models import Bigmeter
+from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataHour,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
+
 # Create your models here.
 
 '''
@@ -139,6 +140,12 @@ class Meter(models.Model):
     def __unicode__(self):
         return '%s'%(self.serialnumber)    
 
+
+
+# station manager
+
+
+
 class Station(models.Model):
     username    = models.CharField(db_column='UserName', max_length=30, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -167,3 +174,35 @@ class Station(models.Model):
 
     def __unicode__(self):
         return '%s'%(self.username)        
+
+    @property
+    def commaddr(self):
+        if not self.meter and not selr.meter.simid and self.meter.simid.simcardNumber == "":
+            return None
+        return self.meter.simid.simcardNumber
+
+    def flowData(self,startTime,endTime):
+        flow_data = []
+        if self.commaddr is None:
+            return flow_data
+        flows = HdbFlowData.objects.filter(commaddr=self.commaddr).filter(readtime__range=[startTime,endTime]).values_list("readtime","flux")
+
+        return flows
+
+    def flowData_Hour(self,startTime,endTime):
+        flow_data = []
+        if self.commaddr is None:
+            return flow_data
+
+        startTime = '2018-08-04'
+        endTime = '2018-08-06'
+        flows = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).values_list("hdate","dosage")
+
+        dates = ['1','2','3','4','5','6','7','8','9,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23','24']
+
+        cnt = 0
+        for k,v in flows:
+            print(k,v)
+            cnt += float(v)
+        print(cnt)
+        return flows

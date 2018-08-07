@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'flowdata_cxc/?$',views.flowdata_cxc,name='flowdata_cxc'),
     # url(r'analysisCxc/dmastations//?$',views.dmastations,name='dmastations'),
 
+    url(r'^dailyuse/?$',views.DailyUseView.as_view(),name='dailyuse'),
+    url(r'flowdata_dailyuse/?$',views.flowdata_dailyuse,name='flowdata_dailyuse'),
     
         
 ]
