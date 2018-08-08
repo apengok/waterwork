@@ -190,19 +190,70 @@ class Station(models.Model):
         return flows
 
     def flowData_Hour(self,startTime,endTime):
-        flow_data = []
+        flow_data = {}
         if self.commaddr is None:
             return flow_data
 
-        startTime = '2018-08-04'
-        endTime = '2018-08-06'
         flows = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).values_list("hdate","dosage")
+        if flows.count() == 0:
+            return flow_data
+        flow_dict = dict(flows)
+        print('flow_dict',flow_dict)
+        flows_keys = [k[11:] for k,v in flows ]
+        dates = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
+        print("print first",flows.first())
+        tmp=flows.first()[0]
+        for h in dates:
+            if h in flows_keys:
+                fh = tmp[:11]+h
+                flow_data[h] = round(float(flow_dict[fh]),2)
+            else:
+                flow_data[h] = 0
+        
+        return flow_data
 
-        dates = ['1','2','3','4','5','6','7','8','9,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23','24']
 
-        cnt = 0
-        for k,v in flows:
-            print(k,v)
-            cnt += float(v)
-        print(cnt)
-        return flows
+    def press_Data(self,startTime,endTime):
+        press_data = {}
+        if self.commaddr is None:
+            return press_data
+        pressures = HdbPressureData.objects.filter(commaddr=self.commaddr).filter(readtime__range=[startTime,endTime]).values_list("readtime","pressure")
+
+        if pressures.count() == 0:
+            return press_data
+        print('pressures:',pressures)
+        press_data = dict(pressures)
+        
+
+        
+        return press_data
+
+    def daterange(self,start, end, step=datetime.timedelta(1)):
+        curr = start
+        while curr <= end:
+            yield curr.strftime("%d")
+            curr += step
+        
+    def flowData_Day(self,startTime,endTime):
+        flow_data = {}
+        if self.commaddr is None:
+            return flow_data
+
+        flows = HdbFlowDataDay.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).values_list("hdate","dosage")
+        print('flowdata day:',flows)
+        if flows.count() == 0:
+            return flow_data
+        flow_dict = dict(flows)
+        print('flow_dict',flow_dict)
+        flows_keys = [k[11:] for k,v in flows ]
+        dates = self.daterange(startTime,endTime)
+        print("print first",flows.first())
+        tmp=flows.first()[0]
+        for h in dates:
+            if h in flows_keys:
+                fh = tmp[:11]+h
+                flow_data[h] = round(float(flow_dict[fh]),2)
+            else:
+                flow_data[h] = 0
+        
+        return flow_dict

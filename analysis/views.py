@@ -619,45 +619,26 @@ def flowdata_dailyuse(request):
     
     station = Station.objects.get(pk=int(stationid))
 
+    today = datetime.date.today()
+    today_str = today.strftime("%Y-%m-%d")
     
-    flowdata = station.flowData_Hour(startTime,endTime)
-    print(flowdata)
+    yestoday = today - datetime.timedelta(days=1)
+    yestoday_str = yestoday.strftime("%Y-%m-%d")
     
-    comaddr = station.commaddr
-    # if comaddr:
-        # comaddr = bigmeter.commaddr
-    flowday_stastic = HdbFlowDataDay.objects.filter(commaddr=comaddr)
-    flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
 
-    #pressure
-    pressures = HdbPressureData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
-    press = [round(float(f.pressure),2) for f in pressures]
-    # print('pressures:',pressures)
-
-    flows = [f.flux for f in flowday]
-    hdates = [f.readtime for f in flowday]
-
-    # print('mnf hdates',hdates)
-    show_flag=1
-    tmp = ''
-    count_cnt = 1
-    for i in range(len(hdates)):
-        if i == 0:
-            continue
-        h = hdates[i]
-        if tmp != h[:10]:
-            tmp = h[:10]
-            count_cnt += 1
-            if count_cnt == 5:
-                hdates[i] = h[:10] + " 00:00:00"
-            else:
-                hdates[i]=''
-        
-
-
-    flows_float = [round(float(f),2) for f in flows]
-    flows_float = flows_float[::-1]
+    startTime = yestoday_str + " 23:59:59"
+    endTime = today_str + " 23:59:59"
+    # startTime = "2018-08-04 23:59:59"
+    # endTime = "2018-08-05 23:59:59"
+    flowdata_hour = station.flowData_Hour(startTime,endTime)
+    print(flowdata_hour)
     
+    fh_today = [flowdata_hour[k] for k in flowdata_hour]
+
+    pressdata_hour = station.press_Data(startTime,endTime)
+    press_today = [pressdata_hour[k] for k in pressdata_hour]
+    # print("press_today",press_today)
+    pree_time = [k[11:] for k in pressdata_hour]
 
     #参考MNF
     ref_mnf = 4.46
@@ -691,71 +672,166 @@ def flowdata_dailyuse(request):
     #平均值
     average = 0
 
-    maxflow = max(flows_float) if len(flows_float)>0 else 0
-    minflow = min(flows_float) if len(flows_float)>0 else 0
-    average = sum(flows_float)/len(flows) if len(flows_float)>0 else 0
-    mnf = minflow
-    ref_mnf = mnf/2
-    back_leak = ref_mnf * 0.8
-
-    for i in range(len(flows_float)):
+    hdates = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
+    
+    #today_flow data
+    for i in range(len(fh_today)):
         data.append({
             "hdate":hdates[i],
-            "dosage":flows_float[i],
+            "flow":fh_today[i],
             "assignmentName":station.username,
             "color":"红色",
-            "ratio":"null",
-            "maxflow":maxflow,
-            "average":average,
-            "mnf":mnf,
-            "ref_mnf":ref_mnf,
-            "press":press[i] if len(press)>0 else 0
-            })
+            "ratio":"null"
             
-    
-
-    today = datetime.date.today()
-    today_str = today.strftime("%Y-%m-%d")
-    today_flow = HdbFlowDataDay.objects.filter(hdate=today_str)
-    
-    if today_flow.exists():
-        today_use = today_flow.first().dosage
-
-    yestoday = today - datetime.timedelta(days=1)
-    yestoday_str = yestoday.strftime("%Y-%m-%d")
-    yestoday_flow = HdbFlowDataDay.objects.filter(hdate=yestoday_str)
-    if yestoday_flow.exists():
-        yestoday_use = yestoday_flow.first().dosage
-
-    lastyear = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
-    lastyear_str = lastyear.strftime("%Y-%m-%d")
-    lastyear_flow = HdbFlowDataDay.objects.filter(hdate=lastyear_str)
-    if lastyear_flow.exists():
-        last_year_same = lastyear_flow.first().dosage
-    tongbi = float(today_use) - float(last_year_same)
-    huanbi = float(today_use) - float(yestoday_use)
-    
-
-
+            })
+    #pressure data
+    p_data = []
+    for i in range(len(press_today)):
+        p_data.append({
+            "hdate":pree_time[i],
+            "press":press_today[i],
+            "assignmentName":station.username,
+            "color":"green",
+            "ratio":"null"
+            
+            })
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                "online":data, #reverse
-                "today_use":round(float(today_use),2),
-                "yestoday_use":round(float(yestoday_use),2),
-                "last_year_same":round(float(last_year_same),2),
-                "tongbi":round(tongbi,2),
-                "huanbi":round(huanbi,2),
-                "maxflow":round(maxflow,2),
-                "minflow":round(minflow,2),
-                "average":round(average,2),
-                "mnf":round(mnf,2),
-                "mnf_add":round(mnf_add,2),
-                "ref_mnf":round(ref_mnf,2),
-                "back_leak":round(back_leak,2),
-                "alarm_set":round(alarm_set,2),
+                "flow_tody":data, #reverse
+                "pressure":p_data
 
+            },
+            "success":1}
+
+    
+    
+    return HttpResponse(json.dumps(ret))
+
+
+#日用水分析        
+class MonthUseView(TemplateView):
+    template_name = "analysis/monthuse.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(MonthUseView, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据分析"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "月用水分析"
+
+        station_name = ""
+        organ = ""
+        stations = self.request.user.station_list_queryset()
+        station = stations.first()
+        if station:
+            station_name = station.username
+            organ = station.belongto.name
+            station_id = station.pk
+        
+        context["station"] = station_name
+        context["organ"] = organ
+        context["station_id"] = station_id
+        
+
+        return context      
+
+
+def flowdata_monthuse(request):
+    print("flowdata_monthuse:",request.POST)
+
+    stationid = request.POST.get("station_id") # DMABaseinfo pk
+    treetype = request.POST.get("treetype")
+    startTime = request.POST.get("startTime")
+    endTime = request.POST.get("endTime")
+
+    data = []
+
+    
+    station = Station.objects.get(pk=int(stationid))
+
+    today = datetime.date.today()
+    today_str = today.strftime("%Y-%m-%d")
+    
+    yestoday = today - datetime.timedelta(days=28)
+    yestoday_str = yestoday.strftime("%Y-%m-%d")
+    
+
+    startTime = yestoday
+    endTime = today
+    # startTime = "2018-08-04 23:59:59"
+    # endTime = "2018-08-05 23:59:59"
+    flowdata_hour = station.flowData_Day(startTime,endTime)
+    print(flowdata_hour)
+    
+    fh_today = [flowdata_hour[k] for k in flowdata_hour]
+
+    pressdata_hour = station.press_Data(startTime,endTime)
+    press_today = [pressdata_hour[k] for k in pressdata_hour]
+    # print("press_today",press_today)
+    pree_time = [k[11:] for k in pressdata_hour]
+
+    #参考MNF
+    ref_mnf = 4.46
+    #MNF
+    mnf = 8.63
+    #表具信息
+    
+    #MNF/ADD
+    mnf_add = 51
+    #背景漏损
+    back_leak = 4.46
+    
+    #设定报警
+    alarm_set = 12
+
+    #staticstic data
+    #当天用水量
+    today_use = 0
+    #昨日用水量
+    yestoday_use = 0
+    #去年同期用水量
+    last_year_same = 0
+    #同比增长
+    tongbi = 0
+    #环比增长
+    huanbi = 0
+    #最大值
+    maxflow = 0
+    #最小值
+    minflow = 0
+    #平均值
+    average = 0
+
+    hdates = [k for k in flowdata_hour]
+    
+    #today_flow data
+    for i in range(len(fh_today)):
+        data.append({
+            "hdate":hdates[i],
+            "flow":fh_today[i],
+            "assignmentName":station.username,
+            "color":"红色",
+            "ratio":"null"
+            
+            })
+    #pressure data
+    p_data = []
+    for i in range(len(press_today)):
+        p_data.append({
+            "hdate":pree_time[i],
+            "press":press_today[i],
+            "assignmentName":station.username,
+            "color":"green",
+            "ratio":"null"
+            
+            })
+
+    ret = {"exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":{
+                "flow_tody":data, #reverse
+                "pressure":p_data
 
             },
             "success":1}

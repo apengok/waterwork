@@ -27,5 +27,7 @@ urlpatterns = [
     url(r'^dailyuse/?$',views.DailyUseView.as_view(),name='dailyuse'),
     url(r'flowdata_dailyuse/?$',views.flowdata_dailyuse,name='flowdata_dailyuse'),
     
+    url(r'^monthuse/?$',views.MonthUseView.as_view(),name='monthuse'),
+    url(r'flowdata_monthuse/?$',views.flowdata_monthuse,name='flowdata_monthuse'),
         
 ]

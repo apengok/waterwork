@@ -423,7 +423,7 @@
             dailyUse.estimate();
             dataListArray = [];
             dataListArray2 = [];
-            var url = "/analysis/flowdata_dailyuse/";
+            var url = "/analysis/flowdata_monthuse/";
 
             var station_id = $("#station_id").val();
             // var data = {"organ": organ,"treetype":selectTreeType,"station_id":station_id,"qmonth":number, 'startTime': sTime, "endTime": eTime};
@@ -534,7 +534,7 @@
                     dataListArray.push(list);                                       //组装完成，传入  表格
                 };
                 for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
-                    // hdates.push(dataListArray[j][1]);
+                    hdates.push(dataListArray[j][1]);
                     dosages.push(dataListArray[j][3]);
                     
                 }
@@ -652,7 +652,7 @@
                             width: 1
                         }
                     },
-                    data: ['1','2','3','4','5','6','7','8','9,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23','24'] //dailyUse.platenumbersplitYear(hdates)
+                    data: hdates
                 },
                 {
                     type: 'category',
