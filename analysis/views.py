@@ -752,8 +752,8 @@ def flowdata_monthuse(request):
 
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
-    
-    yestoday = today - datetime.timedelta(days=28)
+    w=today.weekday()
+    yestoday = today - datetime.timedelta(days=28+w)
     yestoday_str = yestoday.strftime("%Y-%m-%d")
     
 
@@ -817,10 +817,10 @@ def flowdata_monthuse(request):
             })
     #pressure data
     p_data = []
-    for i in range(len(press_today)):
+    for i in range(len(fh_today)):
         p_data.append({
-            "hdate":pree_time[i],
-            "press":press_today[i],
+            "hdate":hdates[i],
+            "press":"-",
             "assignmentName":station.username,
             "color":"green",
             "ratio":"null"

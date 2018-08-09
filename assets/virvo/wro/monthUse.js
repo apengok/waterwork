@@ -603,6 +603,7 @@
             //carLicense = dailyUse.platenumbersplitFun(carLicense);
             var option = {
                 tooltip: {
+                    show:true,
                     trigger: 'axis',
                     textStyle: {
                         fontSize: 20
@@ -626,14 +627,14 @@
                     // }
                 },
                 legend: {
-                    data: ['今日曲线',"压力曲线"],
+                    data: ['当月曲线',"压力曲线"],
                     left: 'auto',
                 },
                 toolbox: {
                     show: false
                 },
                 grid: {
-                    left: '120',
+                    left: '80',
                     bottom:'100'
                 },
                 xAxis: [{
@@ -652,30 +653,45 @@
                             width: 1
                         }
                     },
-                    data: hdates
+                    splitArea : {
+                        show: true,
+                        areaStyle:{
+                            color:dailyUse.splitAreaColor(hdates)
+                        }
+                    },
+                    data: dailyUse.platenumbersplitYear(hdates)
                 },
                 {
-                    type: 'category',
-                    boundaryGap: false,  // 让折线图从X轴0刻度开始
-                    name: "",
-                    axisLabel: {
-                        show: true,
-                        rotate: 0
+                    type:'category',
+                    show:true,
+                    position:'bottom',
+                    interval:0,
+                    offset:20,
+                    tooltip:{
+                        show:false
+                    },
+                    axisTick:{
+                        show:false
                     },
                     splitLine: {
-                        show: true,
+                        show: false,
                         lineStyle: {
                             color: '#483d8b',
                             type: 'dashed',
                             width: 1
                         }
                     },
-                    data: hdates //dailyUse.platenumbersplitYear(hdates)
+                    axisLabel: {
+                        show: true,
+                        interval:0,
+                        rotate: 0
+                    },
+                    data:dailyUse.weekshowsplitFun(hdates)
                 }],
                 yAxis: [
                     {
                         type: 'value',
-                        name: '时用水量 （m³/h）',
+                        name: '月用水量 （m³）',
                         nameTextStyle:{
                             color: 'black',
                             fontFamily: '微软雅黑 Bold',
@@ -787,7 +803,7 @@
                 // }],
                 series: [
                     {
-                        name: '今日曲线',
+                        name: '当月曲线',
                         yAxisIndex: 0,
                         xAxisIndex:0,
                         type: 'line',
@@ -796,7 +812,7 @@
                         sampling: 'average',
                         itemStyle: {
                             normal: {
-                                color: '#6dcff6'
+                                color: 'rgba(22, 155, 213, 1)'  //#6dcff6
                             }
                         },
                         data: dosages,
@@ -808,6 +824,9 @@
                         yAxisIndex: 1,
                         xAxisIndex: 1,
                         type: 'line',
+                        tooltip:{
+                            show:false
+                        },
                         smooth: true,
                         symbol: 'none',
                         sampling: 'average',
@@ -842,34 +861,91 @@
         },
         platenumbersplitYear:function(arr){
 
-            var newArr = [ '08','09','10','11',
-                {
-                    value:'12',
-                    textStyle: {
-                        color: 'red',
-                        fontSize: 30,
-                        fontStyle: 'normal',
-                        fontWeight: 'bold'
-                    }
-                },
-                '01','02','03','04','05','06','07'];
-            // arr.forEach(function(item){
-            //     if (item.length > 8) {
-            //         item = item.substring(0,7) + '...'
-            //     }
-            //     newArr.push(item)
-            // })
-            return newArr
-        },
-        platenumbersplitFun:function(arr){
+            
+            var today = arr[arr.length - 1].substring(8,10);
+            
             var newArr = [];
+            var subitem = "";
+            var new_item = "";
             arr.forEach(function(item){
                 if (item.length > 8) {
-                    item = item.substring(0,7) + '...'
+                    subitem = item.substring(8,10)
+                    weekday = new Date(item).getDay();
+                    if (parseInt(subitem,10) >= parseInt(today,10)) {
+                        if(weekday == 1){
+                            new_item = {
+                                value:subitem,// + '\n\n星\n期\n一',
+                                textStyle:{
+                                    color:'red',
+                                    
+                                }
+                            }
+                        }else{
+                            new_item = {
+                                value:subitem,
+                                textStyle:{
+                                    color:'red',
+                                    
+                                }
+                            }
+                        }
+                    }else{
+                        if(weekday == 1){
+                            new_item = subitem;// + monday;
+                        }else{
+                            new_item = subitem;
+                        }
+                    }
                 }
-                newArr.push(item)
+                newArr.push(new_item)
             })
             return newArr
+        },
+        weekshowsplitFun:function(arr){
+            this_month = parseInt(arr[arr.length - 1],10);
+            // alert(new Date('2018/08/09').getDay());
+            var today = arr[arr.length - 1].substring(8,10);
+            var monday = '\n星\n期\n一';
+
+            var statistext = '\n 本周用水量:284m3\n最大值：64m3\n最小值：12m3';
+
+            var newArr = [];
+            var subitem = "";
+            var new_item = "";
+            arr.forEach(function(item){
+                if (item.length > 8) {
+                    subitem = item.substring(8,10)
+                    weekday = new Date(item).getDay();
+                    
+                    if(weekday == 1){
+                        new_item = monday;
+                    }else if(weekday == 4){
+                        new_item = statistext;
+                    }else{
+                        new_item="";
+                    }
+                    
+                }
+                newArr.push(new_item)
+            })
+            return newArr
+        },
+        splitAreaColor:function(arr){
+            var week1color = 'rgba(204, 153, 255, 1)';
+            var week2color = 'rgba(153, 255, 255, 1)';
+            var week3color = 'rgba(204, 204, 204, 1)';
+            var week4color = 'rgba(153, 204, 153, 1)';
+            var weekcnt = 0;
+            var newArr = [];
+
+            arr.forEach(function(item){
+
+            })
+            return ['rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)',
+                    'rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)',
+                    'rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)',
+                    'rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)'
+                    ];
         }
     }
     $(function(){

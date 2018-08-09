@@ -231,7 +231,7 @@ class Station(models.Model):
     def daterange(self,start, end, step=datetime.timedelta(1)):
         curr = start
         while curr <= end:
-            yield curr.strftime("%d")
+            yield curr.strftime("%Y-%m-%d")
             curr += step
         
     def flowData_Day(self,startTime,endTime):
@@ -245,15 +245,15 @@ class Station(models.Model):
             return flow_data
         flow_dict = dict(flows)
         print('flow_dict',flow_dict)
-        flows_keys = [k[11:] for k,v in flows ]
+        flows_keys = [k for k,v in flows ]
         dates = self.daterange(startTime,endTime)
         print("print first",flows.first())
         tmp=flows.first()[0]
         for h in dates:
             if h in flows_keys:
-                fh = tmp[:11]+h
-                flow_data[h] = round(float(flow_dict[fh]),2)
+                print (h,flow_dict[h])
+                flow_data[h] = round(float(flow_dict[h]),2)
             else:
                 flow_data[h] = 0
         
-        return flow_dict
+        return flow_data
