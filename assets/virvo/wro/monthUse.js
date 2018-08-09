@@ -17,6 +17,8 @@
     var vagueSearchlast = $("#operationType").val();
 
     var dataListArray = [];
+    var dataListArray3 = [];
+    var dataListArray4 = [];
     var dataListArray2 = [];
     var endTime;// 当天时间
     var sTime;
@@ -34,6 +36,13 @@
     var checkFlag = false; //判断组织节点是否是勾选操作
     var size;//当前权限监控对象数量
     var online_length;
+
+    var week1color = 'rgba(204, 153, 255, 1)';
+    var week2color = 'rgba(153, 255, 255, 1)';
+    var week3color = 'rgba(204, 204, 204, 1)';
+    var week4color = 'rgba(153, 204, 153, 1)';
+    var week5color = 'rgba(153, 123, 235, 1)';
+
     dailyUse = {
         init: function(){
             console.log("dailyUse init");
@@ -506,11 +515,13 @@
             var list = [];
             var myChart = echarts.init(document.getElementById('onlineGraphics'));
             var flow_tody = "";
+            var flow_lastmoth = "";
             
             
             if (data.obj != null && data.obj != "") {
                 flow_tody = data.obj.flow_tody;
                 pressure = data.obj.pressure;
+                flow_lastmoth = data.obj.flow_lastm;
             }
             if (data.success == true) {
                 // carLicense = [];
@@ -518,7 +529,9 @@
                 hdates = [];
                 dosages = [];
                 press = [];
-                
+                flastmoth = [];
+                //当月
+                list=[];
                 for (var i = 0; i < flow_tody.length; i++) {
                     list =
                         [i + 1, 
@@ -533,10 +546,26 @@
 
                     dataListArray.push(list);                                       //组装完成，传入  表格
                 };
+                //上月
+                list=[];
+                for (var i = 0; i < flow_lastmoth.length; i++) {
+                    list =
+                        [i + 1, 
+                            flow_lastmoth[i].hdate,
+                            flow_lastmoth[i].color,
+                            flow_lastmoth[i].flow,
+                            // online[i].allDays == null ? "0" : online[i].allDays,
+                            flow_lastmoth[i].ratio == null ? "0" : flow_lastmoth[i].ratio,
+                            flow_lastmoth[i].assignmentName == null ? "无" : flow_lastmoth[i].assignmentName,
+                            
+                        ]
+
+                    dataListArray3.push(list);                                       //组装完成，传入  表格
+                };
                 for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
                     hdates.push(dataListArray[j][1]);
                     dosages.push(dataListArray[j][3]);
-                    
+                    flastmoth.push(dataListArray3[j][3]);
                 }
 
                 // #press
@@ -572,6 +601,8 @@
                 dosages = [];
                 hdates.push("");
                 dosages.push("");
+                flastmoth=[];
+                flastmoth.push("");
                 
                 press=[];
                 press.push("");
@@ -627,7 +658,7 @@
                     // }
                 },
                 legend: {
-                    data: ['当月曲线',"压力曲线"],
+                    data: ['当月曲线','上月曲线',"压力曲线"],
                     left: 'auto',
                 },
                 toolbox: {
@@ -818,7 +849,22 @@
                         data: dosages,
                         
                     },
-                    
+                    {
+                        name: '上月曲线',
+                        yAxisIndex: 0,
+                        xAxisIndex:0,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: 'rgba(220, 76, 132, 1)'  //#6dcff6
+                            }
+                        },
+                        data: flastmoth,
+                        
+                    },
                     {
                         name: '压力曲线',
                         yAxisIndex: 1,
@@ -871,7 +917,7 @@
                 if (item.length > 8) {
                     subitem = item.substring(8,10)
                     weekday = new Date(item).getDay();
-                    if (parseInt(subitem,10) >= parseInt(today,10)) {
+                    if (parseInt(subitem,10) > parseInt(today,10)) {
                         if(weekday == 1){
                             new_item = {
                                 value:subitem,// + '\n\n星\n期\n一',
@@ -912,17 +958,29 @@
             var newArr = [];
             var subitem = "";
             var new_item = "";
+            var weekcnt = 0;
+            var weekcolor = [week1color,week2color,week3color,week4color,week5color]
             arr.forEach(function(item){
                 if (item.length > 8) {
                     subitem = item.substring(8,10)
                     weekday = new Date(item).getDay();
+
                     
                     if(weekday == 1){
                         new_item = monday;
+                        
                     }else if(weekday == 4){
-                        new_item = statistext;
+                        new_item = {
+                            value:statistext,
+                            textStyle:{
+                                color:weekcolor[weekcnt],
+                                
+                            }
+                        
+                        };
+                        weekcnt += 1;
                     }else{
-                        new_item="";
+                        new_item = "";
                     }
                     
                 }
@@ -931,10 +989,7 @@
             return newArr
         },
         splitAreaColor:function(arr){
-            var week1color = 'rgba(204, 153, 255, 1)';
-            var week2color = 'rgba(153, 255, 255, 1)';
-            var week3color = 'rgba(204, 204, 204, 1)';
-            var week4color = 'rgba(153, 204, 153, 1)';
+            
             var weekcnt = 0;
             var newArr = [];
 
@@ -944,7 +999,8 @@
             return ['rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)',
                     'rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)',
                     'rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)',
-                    'rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)'
+                    'rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)',
+                    week5color,week5color,week5color,week5color,week5color,week5color,week5color
                     ];
         }
     }

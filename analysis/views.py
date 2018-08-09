@@ -753,16 +753,17 @@ def flowdata_monthuse(request):
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
     w=today.weekday()
-    yestoday = today - datetime.timedelta(days=28+w)
-    yestoday_str = yestoday.strftime("%Y-%m-%d")
+    yestmonth = today - datetime.timedelta(days=28+w)
+    yestoday_str = yestmonth.strftime("%Y-%m-%d")
     
 
-    startTime = yestoday
+    startTime = yestmonth
     endTime = today
     # startTime = "2018-08-04 23:59:59"
     # endTime = "2018-08-05 23:59:59"
     flowdata_hour = station.flowData_Day(startTime,endTime)
     print(flowdata_hour)
+
     
     fh_today = [flowdata_hour[k] for k in flowdata_hour]
 
@@ -771,37 +772,12 @@ def flowdata_monthuse(request):
     # print("press_today",press_today)
     pree_time = [k[11:] for k in pressdata_hour]
 
-    #参考MNF
-    ref_mnf = 4.46
-    #MNF
-    mnf = 8.63
-    #表具信息
-    
-    #MNF/ADD
-    mnf_add = 51
-    #背景漏损
-    back_leak = 4.46
-    
-    #设定报警
-    alarm_set = 12
-
-    #staticstic data
-    #当天用水量
-    today_use = 0
-    #昨日用水量
-    yestoday_use = 0
-    #去年同期用水量
-    last_year_same = 0
-    #同比增长
-    tongbi = 0
-    #环比增长
-    huanbi = 0
-    #最大值
-    maxflow = 0
-    #最小值
-    minflow = 0
-    #平均值
-    average = 0
+     # 上个月
+    llastmonth = yestmonth - datetime.timedelta(days=28+w)
+    startTime = llastmonth
+    endTime = yestmonth
+    flowdata_lastmonth = station.flowData_Day(startTime,endTime)
+    fh_lastmonth = [flowdata_lastmonth[k] for k in flowdata_lastmonth]
 
     hdates = [k for k in flowdata_hour]
     
@@ -812,8 +788,18 @@ def flowdata_monthuse(request):
             "flow":fh_today[i],
             "assignmentName":station.username,
             "color":"红色",
-            "ratio":"null"
-            
+            "ratio":"null",
+            })
+
+    #last month
+    last_m = []
+    for i in range(len(fh_today)):
+        last_m.append({
+            "hdate":hdates[i],
+            "flow":fh_lastmonth[i],
+            "assignmentName":station.username,
+            "color":"红色",
+            "ratio":"null",
             })
     #pressure data
     p_data = []
@@ -831,8 +817,8 @@ def flowdata_monthuse(request):
             "msg":"null",
             "obj":{
                 "flow_tody":data, #reverse
-                "pressure":p_data
-
+                "pressure":p_data,
+                "flow_lastm":last_m
             },
             "success":1}
 
