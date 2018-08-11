@@ -43,9 +43,9 @@
     var week4color = 'rgba(153, 204, 153, 1)';
     var week5color = 'rgba(153, 123, 235, 1)';
 
-    dailyUse = {
+    monthUse = {
         init: function(){
-            console.log("dailyUse init");
+            console.log("monthUse init");
         },
         userTree : function(){
             // 初始化文件树
@@ -62,11 +62,11 @@
                         "isStation":"1",
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
-                    dataFilter: dailyUse.ajaxDataFilter
+                    dataFilter: monthUse.ajaxDataFilter
                 },
                 view : {
-                    // addHoverDom : dailyUse.addHoverDom,
-                    // removeHoverDom : dailyUse.removeHoverDom,
+                    // addHoverDom : monthUse.addHoverDom,
+                    // removeHoverDom : monthUse.removeHoverDom,
                     selectedMulti : false,
                     nameIsHTML: true,
                     fontCss: setFontCss_ztree
@@ -74,7 +74,7 @@
                 edit : {
                     enable : true,
                     editNameSelectAll : true,
-                    showRemoveBtn : false,//dailyUse.showRemoveBtn,
+                    showRemoveBtn : false,//monthUse.showRemoveBtn,
                     showRenameBtn : false
                 },
                 data : {
@@ -83,13 +83,13 @@
                     }
                 },
                 callback : {
-                    // beforeDrag : dailyUse.beforeDrag,
-                    // beforeEditName : dailyUse.beforeEditName,
-                    // beforeRemove : dailyUse.beforeRemove,
-                    // beforeRename : dailyUse.beforeRename,
-                    // onRemove : dailyUse.onRemove,
-                    // onRename : dailyUse.onRename,
-                    onClick : dailyUse.zTreeOnClick
+                    // beforeDrag : monthUse.beforeDrag,
+                    // beforeEditName : monthUse.beforeEditName,
+                    // beforeRemove : monthUse.beforeRemove,
+                    // beforeRename : monthUse.beforeRename,
+                    // onRemove : monthUse.onRemove,
+                    // onRename : monthUse.onRename,
+                    onClick : monthUse.zTreeOnClick
                 }
             };
             $.fn.zTree.init($("#treeDemo"), treeSetting, zNodes);
@@ -142,7 +142,7 @@
                 $("#station_id").attr("value",treeNode.id);
                 organ = pNode.id;
                 
-                dailyUse.inquireClick(1);
+                monthUse.inquireClick(1);
             }
 
             
@@ -164,7 +164,7 @@
                         var list=[
                                  ++s,
                                  '<input type="checkbox" id="checkAllTwo" name="subChkTwo" value="'+calldata[i].id+'">',
-                                 '<button onclick="dailyUse.findOperationById(\''+calldata[i].id+'\')" data-target="#updateType" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp<button type="button"  onclick="dailyUse.deleteType(\''+calldata[i].id+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>',    
+                                 '<button onclick="monthUse.findOperationById(\''+calldata[i].id+'\')" data-target="#updateType" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp<button type="button"  onclick="monthUse.deleteType(\''+calldata[i].id+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>',    
                                  calldata[i].operationType,
                                  calldata[i].explains
                                  ];
@@ -177,7 +177,7 @@
             }
         },
          doSubmit:function () {
-            if(dailyUse.validates()){
+            if(monthUse.validates()){
                 $("#eadOperation").ajaxSubmit(function(data) {
                     console.log('sdfe:',data);
                     if (data != null && typeof(data) == "object" &&
@@ -186,9 +186,9 @@
                             if(data.success == true){
                                 $("#addType").modal("hide");//关闭窗口
                                 layer.msg(publicAddSuccess,{move:false});
-                                dailyUse.closeClean();//清空文本框
+                                monthUse.closeClean();//清空文本框
                                 $("#operationType").val("");
-                                dailyUse.findOperation();
+                                monthUse.findOperation();
                             }else{
                                 layer.msg(data.msg,{move:false});
                             }
@@ -198,8 +198,8 @@
                                     $("#addType").modal("hide");//关闭窗口
                                     layer.msg(publicAddSuccess,{move:false});
                                     $("#operationType").val("");
-                                    dailyUse.closeClean();//清空文本框
-                                    dailyUse.findOperation();
+                                    monthUse.closeClean();//清空文本框
+                                    monthUse.findOperation();
                             }else{
                                 layer.msg(result.msg,{move:false});
                             }
@@ -208,367 +208,196 @@
             }
         },
         updateDoSubmit:function () {
-            dailyUse.init();
-            if(dailyUse.upDateValidates()){
+            monthUse.init();
+            if(monthUse.upDateValidates()){
                 var operationType=$("#updateOperationType").val();// 运营资质类型
                 var explains=$("#updateDescription").val();// 说明
                 var data={"id":OperationId,"operationType":operationType,"explains":explains};
                 var url="group/updateOperation";
-                json_ajax("POST", url, "json", true,data,dailyUse.updateCallback);
+                json_ajax("POST", url, "json", true,data,monthUse.updateCallback);
             }
         },
-        closeClean:function(){
-            $("#addproperationtype").val("");
-            $("#adddescription").val("");
-            $("#addproperationtype-error").hide();//隐藏上次新增时未清除的validate样式
-            $("#adddescription-error").hide();
-        },
-        updateClean:function () {
-            $("#updateOperationType-error").hide();
-            $("#updateDescription-error").hide();
-        },
-        updateCallback:function(data){
-            if(data.success == true){
-                $("#updateType").modal('hide');
-                layer.msg("修改成功");
-                dailyUse.findOperation();
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
-        deleteType:function(id){
-            layer.confirm(publicDelete, {
-                title :'操作确认',
-                icon : 3, // 问号图标
-                btn: [ '确定', '取消'] // 按钮
-            }, function(){
-                var url="group/deleteOperation";
-                var data={"id" : id}
-                json_ajax("POST", url, "json", false,data,dailyUse.deleteCallback);
-            });
-        },
-        deleteCallback:function(data){
-            if(data.success==true){
-                layer.closeAll('dialog');
-                dailyUse.findOperation();
-            }else{
-                layer.msg(publicError,{move:false});
-            }
-        },
-        deleteTypeMore : function(){
-            // 判断是否至少选择一项
-            var chechedNum = $("input[name='subChkTwo']:checked").length;
-            if (chechedNum == 0) {
-                layer.msg(selectItem);
-                return
-            }
-            var ids="";
-            $("input[name='subChkTwo']:checked").each(function() {
-                ids+=($(this).val())+",";
-            });
-            var url="group/deleteOperationMore";
-            var data={"ids" : ids};
-            layer.confirm(publicDelete, {
-                title :'操作确认',
-                icon : 3, // 问号图标
-                btn: [ '确定', '取消'] // 按钮
-            }, function(){
-                json_ajax("POST", url, "json", false,data,dailyUse.deleteOperationMoreCallback);
-                layer.closeAll('dialog');
-            });
-        },
-        deleteOperationMoreCallback : function(data){
-            if(data.success){
-                layer.msg(publicDeleteSuccess);
-                dailyUse.findOperation();
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
-        findOperationByVague:function(){
-            dailyUse.findOperation();
-        },
-        findDownKey:function(event){
-            if(event.keyCode==13){
-                dailyUse.findOperation();
-            }
-        },
-        checkAll : function(e){
-            $("input[name='subChk']").not(':disabled').prop("checked", e.checked);
-
-        },
-        checkAllTwo : function(e){
-            $("input[name='subChkTwo']").prop("checked", e.checked);
-        },
-        addId : function (){
-            $("#addId").attr("href","stations/add/newuser?uuid="+selectTreeIdAdd+"");
-        },
-
-        //开始时间
-        startDay: function (day) {
-            var timeInterval = $('#timeInterval').val().split('--');
-            var startValue = timeInterval[0];
-            var endValue = timeInterval[1];
-            if (startValue == "" || endValue == "") {
-                var today = new Date();
-                var targetday_milliseconds = today.getTime() + 1000 * 60 * 60
-                    * 24 * day;
-
-                today.setTime(targetday_milliseconds); //注意，这行是关键代码
-
-                var tYear = today.getFullYear();
-                var tMonth = today.getMonth();
-                var tDate = today.getDate();
-                tMonth = dailyUse.doHandleMonth(tMonth + 1);
-                tDate = dailyUse.doHandleMonth(tDate);
-                var num = -(day + 1);
-                startTime = tYear + "-" + tMonth + "-" + tDate + " "
-                    + "00:00:00";
-                var end_milliseconds = today.getTime() + 1000 * 60 * 60 * 24
-                    * parseInt(num);
-                today.setTime(end_milliseconds); //注意，这行是关键代码
-                var endYear = today.getFullYear();
-                var endMonth = today.getMonth();
-                var endDate = today.getDate();
-                endMonth = dailyUse.doHandleMonth(endMonth + 1);
-                endDate = dailyUse.doHandleMonth(endDate);
-                endTime = endYear + "-" + endMonth + "-" + endDate + " "
-                    + "23:59:59";
-            } else {
-                var startTimeIndex = startValue.slice(0, 10).replace("-", "/").replace("-", "/");
-                var vtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * day;
-                var dateList = new Date();
-                dateList.setTime(vtoday_milliseconds);
-                var vYear = dateList.getFullYear();
-                var vMonth = dateList.getMonth();
-                var vDate = dateList.getDate();
-                vMonth = dailyUse.doHandleMonth(vMonth + 1);
-                vDate = dailyUse.doHandleMonth(vDate);
-                startTime = vYear + "-" + vMonth + "-" + vDate + " "
-                    + "00:00:00";
-                if (day == 1) {
-                    endTime = vYear + "-" + vMonth + "-" + vDate + " "
-                        + "23:59:59";
-                } else {
-                    var endNum = -1;
-                    var vendtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * parseInt(endNum);
-                    var dateEnd = new Date();
-                    dateEnd.setTime(vendtoday_milliseconds);
-                    var vendYear = dateEnd.getFullYear();
-                    var vendMonth = dateEnd.getMonth();
-                    var vendDate = dateEnd.getDate();
-                    vendMonth = dailyUse.doHandleMonth(vendMonth + 1);
-                    vendDate = dailyUse.doHandleMonth(vendDate);
-                    endTime = vendYear + "-" + vendMonth + "-" + vendDate + " "
-                        + "23:59:59";
-                }
-            }
-        },
-        doHandleMonth: function (month) {
-            var m = month;
-            if (month.toString().length == 1) {
-                m = "0" + month;
-            }
-            return m;
-        },
-        //当前时间
-        getsTheCurrentTime: function () {
-            var nowDate = new Date();
-            startTime = nowDate.getFullYear()
-                + "-"
-                + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
-                    + parseInt(nowDate.getMonth() + 1)
-                    : parseInt(nowDate.getMonth() + 1))
-                + "-"
-                + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
-                    : nowDate.getDate()) + " " + "00:00:00";
-            endTime = nowDate.getFullYear()
-                + "-"
-                + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
-                    + parseInt(nowDate.getMonth() + 1)
-                    : parseInt(nowDate.getMonth() + 1))
-                + "-"
-                + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
-                    : nowDate.getDate())
-                + " "
-                + ("23")
-                + ":"
-                + ("59")
-                + ":"
-                + ("59");
-            var atime = $("#atime").val();
-            if (atime != undefined && atime != "") {
-                startTime = atime;
-            }
-        },
-        unique: function (arr) {
-            var result = [], hash = {};
-            for (var i = 0, elem; (elem = arr[i]) != null; i++) {
-                if (!hash[elem]) {
-                    result.push(elem);
-                    hash[elem] = true;
-                }
-            }
-            return result;
-        },
+        
+        
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
             number = num;
             // if (number == 0) {
-            //     dailyUse.getsTheCurrentTime();
+            //     monthUse.getsTheCurrentTime();
             // } else if (number == -1) {
-            //     dailyUse.startDay(-1)
+            //     monthUse.startDay(-1)
             // } else if (number == -3) {
-            //     dailyUse.startDay(-3)
+            //     monthUse.startDay(-3)
             // } else if (number == -7) {
-            //     dailyUse.startDay(-7)
+            //     monthUse.startDay(-7)
             // };
-            if (num != 1) {
-                $('#timeInterval').val(startTime + '--' + endTime);
-            }
-            if (!dailyUse.validates()) {
-                return;
-            }
-            dailyUse.estimate();
+            
             dataListArray = [];
             dataListArray2 = [];
             var url = "/analysis/flowdata_monthuse/";
 
             var station_id = $("#station_id").val();
             // var data = {"organ": organ,"treetype":selectTreeType,"station_id":station_id,"qmonth":number, 'startTime': sTime, "endTime": eTime};
-            var data = {"station_id":station_id};
-            json_ajax("POST", url, "json", false, data, dailyUse.findOnline);     //发送请求
+            var data = {"station_id":station_id,"month":num};
+            json_ajax("POST", url, "json", false, data, monthUse.processFlows);     //发送请求
         },
-        validates: function () {
-            return $("#hourslist").validate({
-                rules: {
-                    organ_name: {
-                        required: true
-                    },
-                    stationname: {
-                        required: true,
-                        // compareDate: "#timeInterval",
+        fillSeriaData:function(name,lcolor,xind,yind,data){
+            return  {
+                        name: name,
+                        yAxisIndex: yind,
+                        xAxisIndex:xind,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: lcolor //#6dcff6
+                            }
+                        },
+                        data: data,
+                        
                     }
-                },
-                messages: {
-                    organ_name: {
-                        required: "所属组织不能为空",
-                    },
-                    stationname: {
-                        required: "站点不能为空",
-                        // compareDate: endtimeComStarttime,
-                    }
-                }
-            }).form();
         },
-
-        estimate: function () {
-            var timeInterval = $('#timeInterval').val().split('--');
-            sTime = timeInterval[0];
-            eTime = timeInterval[1];
-            dailyUse.getsTheCurrentTime();
-            if (eTime > endTime) {                              //查询判断
-                layer.msg(endTimeGtNowTime, {move: false});
-                key = false
-                return;
-            }
-            if (sTime > eTime) {
-                layer.msg(endtimeComStarttime, {move: false});
-                key = false;
-                return;
-            }
-            var nowdays = new Date();                       // 获取当前时间  计算上个月的第一天
-            var year = nowdays.getFullYear();
-            var month = nowdays.getMonth();
-            if (month == 0) {
-                month = 12;
-                year = year - 1;
-            }
-            if (month < 10) {
-                month = "0" + month;
-            }
-            var firstDay = year + "-" + month + "-" + "01 00:00:00";//上个月的第一天
-            if (sTime < firstDay) {                                 //查询判断开始时间不能超过       上个月的第一天
-                $("#timeInterval-error").html(starTimeExceedOne).show();
-                /*layer.msg(starTimeExceedOne, {move: false});
-                key = false;*/
-                return;
-            }
-            $("#timeInterval-error").hide();
-            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");       //遍历树节点，获取vehicleID 存入集合
-            var nodes = treeObj.getCheckedNodes(true);
-            vid = "";
-            for (var j = 0; j < nodes.length; j++) {
-                if (nodes[j].type == "vehicle") {
-                    vid += nodes[j].id + ",";
-                }
-            }
-            key = true;
-        },
-        reloadData: function (dataList) {
-            var currentPage = myTable.page()
-            myTable.clear()
-            myTable.rows.add(dataList)
-            myTable.page(currentPage).draw(false);
-        },
-        findOnline: function (data) {//回调函数    数据组装
+        processFlows: function (data) {//回调函数    数据组装
             var list = [];
-            var myChart = echarts.init(document.getElementById('onlineGraphics'));
-            var flow_tody = "";
-            var flow_lastmoth = "";
+            var myChart = echarts.init(document.getElementById('monthFlowGraphics'));
+            var current_month = "";
+            var last_month = "";
+            var before_last_month = "";
+            var history = "";
+            var hdates = [];
+            var legend_list = [];
+            var serias_list = [];
             
             
             if (data.obj != null && data.obj != "") {
-                flow_tody = data.obj.flow_tody;
+                current_month = data.obj.current_month;
+                last_month = data.obj.last_month;
+                before_last_month = data.obj.before_last_month;
+                history = data.obj.history;
                 pressure = data.obj.pressure;
-                flow_lastmoth = data.obj.flow_lastm;
+                
             }
             if (data.success == true) {
-                // carLicense = [];
-                // activeDays = [];
-                hdates = [];
-                dosages = [];
-                press = [];
-                flastmoth = [];
+                
                 //当月
-                list=[];
-                for (var i = 0; i < flow_tody.length; i++) {
-                    list =
-                        [i + 1, 
-                            flow_tody[i].hdate,
-                            flow_tody[i].color,
-                            flow_tody[i].flow,
-                            // online[i].allDays == null ? "0" : online[i].allDays,
-                            flow_tody[i].ratio == null ? "0" : flow_tody[i].ratio,
-                            flow_tody[i].assignmentName == null ? "无" : flow_tody[i].assignmentName,
-                            
-                        ]
+                dataListArray=[];
+                if(current_month.length > 0){
+                    flow_current_month = []
+                    list=[];
+                    for (var i = 0; i < current_month.length; i++) {
+                        list =
+                            [i + 1, 
+                                current_month[i].hdate,
+                                current_month[i].color,
+                                current_month[i].flow,
+                                // online[i].allDays == null ? "0" : online[i].allDays,
+                                current_month[i].ratio == null ? "0" : current_month[i].ratio,
+                                current_month[i].assignmentName == null ? "无" : current_month[i].assignmentName,
+                                
+                            ]
 
-                    dataListArray.push(list);                                       //组装完成，传入  表格
-                };
+                        dataListArray.push(list);                                       //组装完成，传入  表格
+                    };
+                    for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
+                        hdates.push(dataListArray[j][1]);
+                        flow_current_month.push(dataListArray[j][3]);
+                        
+                    }
+                    legend_list.push("当月曲线");
+                    var tmp = monthUse.fillSeriaData("当月曲线",'rgba(22, 155, 213, 1)',0,0,flow_current_month);
+                    serias_list.push(tmp);
+                }
                 //上月
-                list=[];
-                for (var i = 0; i < flow_lastmoth.length; i++) {
-                    list =
-                        [i + 1, 
-                            flow_lastmoth[i].hdate,
-                            flow_lastmoth[i].color,
-                            flow_lastmoth[i].flow,
-                            // online[i].allDays == null ? "0" : online[i].allDays,
-                            flow_lastmoth[i].ratio == null ? "0" : flow_lastmoth[i].ratio,
-                            flow_lastmoth[i].assignmentName == null ? "无" : flow_lastmoth[i].assignmentName,
-                            
-                        ]
+                dataListArray=[];
+                if(last_month.length > 0){
+                    flow_last_month = []
+                    list=[];
+                    for (var i = 0; i < last_month.length; i++) {
+                        list =
+                            [i + 1, 
+                                last_month[i].hdate,
+                                last_month[i].color,
+                                last_month[i].flow,
+                                // online[i].allDays == null ? "0" : online[i].allDays,
+                                last_month[i].ratio == null ? "0" : last_month[i].ratio,
+                                last_month[i].assignmentName == null ? "无" : last_month[i].assignmentName,
+                                
+                            ]
 
-                    dataListArray3.push(list);                                       //组装完成，传入  表格
-                };
-                for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
-                    hdates.push(dataListArray[j][1]);
-                    dosages.push(dataListArray[j][3]);
-                    flastmoth.push(dataListArray3[j][3]);
+                        dataListArray.push(list);                                       //组装完成，传入  表格
+                    };
+                    for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
+                        // hdates.push(dataListArray[j][1]);
+                        flow_last_month.push(dataListArray[j][3]);
+                        
+                    }
+                    legend_list.push("上月曲线");
+                    var tmp = monthUse.fillSeriaData("上月曲线",'rgba(220, 76, 132, 1)',0,0,flow_last_month);
+                    serias_list.push(tmp);
+                }
+
+                //前月
+                dataListArray=[];
+                if(before_last_month.length > 0){
+                    before_flow_last_month = []
+                    list=[];
+                    for (var i = 0; i < before_last_month.length; i++) {
+                        list =
+                            [i + 1, 
+                                before_last_month[i].hdate,
+                                before_last_month[i].color,
+                                before_last_month[i].flow,
+                                // online[i].allDays == null ? "0" : online[i].allDays,
+                                before_last_month[i].ratio == null ? "0" : before_last_month[i].ratio,
+                                before_last_month[i].assignmentName == null ? "无" : before_last_month[i].assignmentName,
+                                
+                            ]
+
+                        dataListArray.push(list);                                       //组装完成，传入  表格
+                    };
+                    for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
+                        // hdates.push(dataListArray[j][1]);
+                        before_flow_last_month.push(dataListArray[j][3]);
+                        
+                    }
+                    legend_list.push("前月曲线");
+                    var tmp = monthUse.fillSeriaData("前月曲线",'rgba(123, 45, 67, 8)',0,0,before_flow_last_month);
+                    serias_list.push(tmp);
+                }
+
+                //历史同期
+                dataListArray=[];
+                if(history.length > 0){
+                    flow_history_month = []
+                    list=[];
+                    for (var i = 0; i < history.length; i++) {
+                        list =
+                            [i + 1, 
+                                history[i].hdate,
+                                history[i].color,
+                                history[i].flow,
+                                // online[i].allDays == null ? "0" : online[i].allDays,
+                                history[i].ratio == null ? "0" : history[i].ratio,
+                                history[i].assignmentName == null ? "无" : history[i].assignmentName,
+                                
+                            ]
+
+                        dataListArray.push(list);                                       //组装完成，传入  表格
+                    };
+                    for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
+                        // hdates.push(dataListArray[j][1]);
+                        flow_history_month.push(dataListArray[j][3]);
+                        
+                    }
+                    legend_list.push("历史同期");
+                    var tmp = monthUse.fillSeriaData("历史同期",'rgba(23, 145, 167, 8)',0,0,flow_history_month);
+                    serias_list.push(tmp);
                 }
 
                 // #press
+                press=[];
                 for (var i = 0; i < pressure.length; i++) {
                     list =
                         [i + 1, 
@@ -589,8 +418,11 @@
                     press.push(dataListArray2[j][3]);
                     
                 }
+                legend_list.push("压力曲线");
+                var tmp = monthUse.fillSeriaData("压力曲线",'rgba(22, 155, 213, 1)',1,1,press);
+                serias_list.push(tmp);
 
-                // dailyUse.reloadData(dataListArray);
+                // monthUse.reloadData(dataListArray);
                 $("#simpleQueryParam").val("");
                 $("#search_button").click();
             } else {
@@ -601,13 +433,14 @@
                 dosages = [];
                 hdates.push("");
                 dosages.push("");
-                flastmoth=[];
-                flastmoth.push("");
+                last_moth=[];
+                last_moth.push("");
                 
                 press=[];
                 press.push("");
                 
             }
+
             var start;
             var end;
             var length;
@@ -631,7 +464,7 @@
             }
             ;
             // wjk
-            //carLicense = dailyUse.platenumbersplitFun(carLicense);
+            //carLicense = monthUse.platenumbersplitFun(carLicense);
             var option = {
                 tooltip: {
                     show:true,
@@ -658,7 +491,7 @@
                     // }
                 },
                 legend: {
-                    data: ['当月曲线','上月曲线',"压力曲线"],
+                    data: legend_list,   //['当月曲线','上月曲线',"压力曲线"],
                     left: 'auto',
                 },
                 toolbox: {
@@ -687,10 +520,10 @@
                     splitArea : {
                         show: true,
                         areaStyle:{
-                            color:dailyUse.splitAreaColor(hdates)
+                            color:monthUse.splitAreaColor(hdates)
                         }
                     },
-                    data: dailyUse.platenumbersplitYear(hdates)
+                    data: monthUse.platenumbersplitYear(hdates)
                 },
                 {
                     type:'category',
@@ -717,7 +550,7 @@
                         interval:0,
                         rotate: 0
                     },
-                    data:dailyUse.weekshowsplitFun(hdates)
+                    data:monthUse.weekshowsplitFun(hdates)
                 }],
                 yAxis: [
                     {
@@ -832,58 +665,7 @@
                 //     start : 0,
                 //     end : 100
                 // }],
-                series: [
-                    {
-                        name: '当月曲线',
-                        yAxisIndex: 0,
-                        xAxisIndex:0,
-                        type: 'line',
-                        smooth: true,
-                        symbol: 'none',
-                        sampling: 'average',
-                        itemStyle: {
-                            normal: {
-                                color: 'rgba(22, 155, 213, 1)'  //#6dcff6
-                            }
-                        },
-                        data: dosages,
-                        
-                    },
-                    {
-                        name: '上月曲线',
-                        yAxisIndex: 0,
-                        xAxisIndex:0,
-                        type: 'line',
-                        smooth: true,
-                        symbol: 'none',
-                        sampling: 'average',
-                        itemStyle: {
-                            normal: {
-                                color: 'rgba(220, 76, 132, 1)'  //#6dcff6
-                            }
-                        },
-                        data: flastmoth,
-                        
-                    },
-                    {
-                        name: '压力曲线',
-                        yAxisIndex: 1,
-                        xAxisIndex: 1,
-                        type: 'line',
-                        tooltip:{
-                            show:false
-                        },
-                        smooth: true,
-                        symbol: 'none',
-                        sampling: 'average',
-                        itemStyle: {
-                            normal: {
-                                color: '#cc1cae'
-                            }
-                        },
-                        data: press
-                    }
-                ]
+                series: serias_list
             };
             myChart.setOption(option);
             
@@ -1012,37 +794,20 @@
             };
         });
         
-        dailyUse.userTree();
+        monthUse.userTree();
         
-        dailyUse.init();
-        $('#timeInterval').dateRangePicker({dateLimit:30});
-        dailyUse.getsTheCurrentTime();  
-        dailyUse.startDay(-7);  
-        $('#timeInterval').val(startTime + '--' + endTime);
-        dailyUse.inquireClick(1);
-        // dailyUse.findOperation();
-        // IE9
-        if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
-            dailyUse.refreshTable();
-            var search;
-            $("#search_condition").bind("focus",function(){
-                search = setInterval(function(){
-                    search_ztree('treeDemo', 'search_condition','group');
-                },500);
-            }).bind("blur",function(){
-                clearInterval(search);
-            });
-        }
+        monthUse.init();
+        
+        monthUse.inquireClick(1);
+        
         // IE9 end
-        // $("#selectAll").bind("click", dailyUse.selectAll);
+        // $("#selectAll").bind("click", monthUse.selectAll);
         // 组织架构模糊搜索
         $("#search_condition").on("input oninput",function(){
             search_ztree('treeDemo', 'search_condition','group');
         });       
         
         
-        $("#addId").on("click",dailyUse.addId);
-        $("#closeAdd").on("click",dailyUse.closeClean);
-        $("#updateClose").on("click",dailyUse.updateClean);
+        
     })
 })($,window)

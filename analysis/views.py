@@ -607,31 +607,53 @@ class DailyUseView(TemplateView):
 
 
 def flowdata_dailyuse(request):
-    print("flowdata_mnf:",request.POST)
+    print("flowdata_dailyuse:",request.POST)
 
     stationid = request.POST.get("station_id") # DMABaseinfo pk
-    treetype = request.POST.get("treetype")
-    startTime = request.POST.get("startTime")
-    endTime = request.POST.get("endTime")
-
+    days = int(request.POST.get("days") or '1' )
     data = []
-
     
     station = Station.objects.get(pk=int(stationid))
 
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
-    
     yestoday = today - datetime.timedelta(days=1)
     yestoday_str = yestoday.strftime("%Y-%m-%d")
-    
-
     startTime = yestoday_str + " 23:59:59"
     endTime = today_str + " 23:59:59"
-    # startTime = "2018-08-04 23:59:59"
-    # endTime = "2018-08-05 23:59:59"
-    flowdata_hour = station.flowData_Hour(startTime,endTime)
-    print(flowdata_hour)
+
+    avg = station.flow_hour_max(startTime,endTime)
+    print("avg",avg)
+
+    # print(startTime,endTime)
+
+    days_flows = []
+
+    for i in range(days):
+        print(startTime,endTime)
+        flowdata_hour = station.flowData_Hour(startTime,endTime)
+        print(flowdata_hour)
+
+        days_flows.append(flowdata_hour)
+        today = yestoday
+        yestoday = today - datetime.timedelta(days=1)
+
+        
+        yestoday_str = yestoday.strftime("%Y-%m-%d")
+        today_str = today.strftime("%Y-%m-%d")
+        startTime = yestoday_str + " 23:59:59"
+        endTime = today_str + " 23:59:59"
+
+        avg = station.flow_hour_max(startTime,endTime)
+        print("avg",avg)
+
+
+        
+    print(days_flows)
+        # startTime = "2018-08-04 23:59:59"
+        # endTime = "2018-08-05 23:59:59"
+        
+    
     
     fh_today = [flowdata_hour[k] for k in flowdata_hour]
 
@@ -675,15 +697,18 @@ def flowdata_dailyuse(request):
     hdates = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
     
     #today_flow data
-    for i in range(len(fh_today)):
-        data.append({
-            "hdate":hdates[i],
-            "flow":fh_today[i],
-            "assignmentName":station.username,
-            "color":"红色",
-            "ratio":"null"
-            
-            })
+    for d_flow in days_flows:
+        fdates = [k for k in d_flow]
+        flows = [d_flow[k] for k in d_flow]
+        for i in range(len(flows)):
+            data.append({
+                "hdate":fdates[i],
+                "flow":flows[i],
+                "assignmentName":station.username,
+                "color":"红色",
+                "ratio":"null"
+                
+                })
     #pressure data
     p_data = []
     for i in range(len(press_today)):
@@ -699,7 +724,7 @@ def flowdata_dailyuse(request):
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                "flow_tody":data, #reverse
+                "flow_data":data, #reverse
                 "pressure":p_data
 
             },
@@ -741,14 +766,15 @@ def flowdata_monthuse(request):
     print("flowdata_monthuse:",request.POST)
 
     stationid = request.POST.get("station_id") # DMABaseinfo pk
-    treetype = request.POST.get("treetype")
-    startTime = request.POST.get("startTime")
-    endTime = request.POST.get("endTime")
+    month = request.POST.get("month")
+    station = Station.objects.get(pk=int(stationid))
 
-    data = []
+    month_data1 = {}
+    month_data2 = {}
+    month_data3 = {}
+    history_data = {}
 
     
-    station = Station.objects.get(pk=int(stationid))
 
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
@@ -759,51 +785,108 @@ def flowdata_monthuse(request):
 
     startTime = yestmonth
     endTime = today
-    # startTime = "2018-08-04 23:59:59"
-    # endTime = "2018-08-05 23:59:59"
-    flowdata_hour = station.flowData_Day(startTime,endTime)
-    print(flowdata_hour)
 
-    
-    fh_today = [flowdata_hour[k] for k in flowdata_hour]
-
+    # pressure data
     pressdata_hour = station.press_Data(startTime,endTime)
     press_today = [pressdata_hour[k] for k in pressdata_hour]
     # print("press_today",press_today)
     pree_time = [k[11:] for k in pressdata_hour]
 
-     # 上个月
-    llastmonth = yestmonth - datetime.timedelta(days=28+w)
-    startTime = llastmonth
-    endTime = yestmonth
-    flowdata_lastmonth = station.flowData_Day(startTime,endTime)
-    fh_lastmonth = [flowdata_lastmonth[k] for k in flowdata_lastmonth]
-
-    hdates = [k for k in flowdata_hour]
+    #history
+    lastyear_start = datetime.datetime(year=yestmonth.year-1,month=yestmonth.month,day=yestmonth.day)
+    lastyear_end = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
+    history_data = station.flowData_Day(lastyear_start,lastyear_end)
     
-    #today_flow data
-    for i in range(len(fh_today)):
-        data.append({
-            "hdate":hdates[i],
-            "flow":fh_today[i],
-            "assignmentName":station.username,
-            "color":"红色",
-            "ratio":"null",
-            })
+    # startTime = "2018-08-04 23:59:59"
+    # endTime = "2018-08-05 23:59:59"
+    if month == "1":
+        month_data1 = station.flowData_Day(startTime,endTime)
+    
+
+    if month == "2":
+        month_data1 = station.flowData_Day(startTime,endTime)
+        llastmonth = yestmonth - datetime.timedelta(days=28+w)
+        startTime = llastmonth
+        endTime = yestmonth
+        month_data2 = station.flowData_Day(startTime,endTime)
+
+    if month == "3":
+        month_data1 = station.flowData_Day(startTime,endTime)
+
+        llastmonth = yestmonth - datetime.timedelta(days=28+w)
+        startTime = llastmonth
+        endTime = yestmonth
+        month_data2 = station.flowData_Day(startTime,endTime)
+
+        blastmonth = llastmonth - datetime.timedelta(days=28+w)
+        startTime = blastmonth
+        endTime = llastmonth
+        month_data3 = station.flowData_Day(startTime,endTime)
+    
+    
+
+    
+    
+    #current moth
+    data1 = []
+    if len(month_data1) > 0:
+        dates1 = [k for k in month_data1]
+        flow_data1 = [month_data1[k] for k in month_data1]
+        for i in range(len(flow_data1)):
+            data1.append({
+                "hdate":dates1[i],
+                "flow":flow_data1[i],
+                "assignmentName":station.username,
+                "color":"红色",
+                "ratio":"null",
+                })
 
     #last month
-    last_m = []
-    for i in range(len(fh_today)):
-        last_m.append({
-            "hdate":hdates[i],
-            "flow":fh_lastmonth[i],
-            "assignmentName":station.username,
-            "color":"红色",
-            "ratio":"null",
-            })
+    data2 = []
+    if len(month_data2) > 0:
+        dates2 = [k for k in month_data2]
+        flow_data2 = [month_data2[k] for k in month_data2]
+        for i in range(len(flow_data2)):
+            data2.append({
+                "hdate":dates2[i],
+                "flow":flow_data2[i],
+                "assignmentName":station.username,
+                "color":"黄色",
+                "ratio":"null",
+                })
+
+    #last month
+    data3 = []
+    if len(month_data3) > 0:
+        dates3 = [k for k in month_data3]
+        flow_data3 = [month_data3[k] for k in month_data3]
+        for i in range(len(flow_data3)):
+            data3.append({
+                "hdate":dates3[i],
+                "flow":flow_data3[i],
+                "assignmentName":station.username,
+                "color":"蓝色",
+                "ratio":"null",
+                })
+
+    #history last year month
+    data4 = []
+    if len(history_data) > 0:
+        dates4 = [k for k in history_data]
+        flow_data4 = [history_data[k] for k in history_data]
+        for i in range(len(history_data)):
+            data4.append({
+                "hdate":dates4[i],
+                "flow":flow_data4[i],
+                "assignmentName":station.username,
+                "color":"蓝色",
+                "ratio":"null",
+                })
+
     #pressure data
+    hdates = [k for k in month_data1]
     p_data = []
-    for i in range(len(fh_today)):
+    for i in range(len(hdates)):
         p_data.append({
             "hdate":hdates[i],
             "press":"-",
@@ -816,9 +899,12 @@ def flowdata_monthuse(request):
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                "flow_tody":data, #reverse
+                "current_month":data1, #reverse
+                "last_month":data2, #reverse
+                "before_last_month":data3, #reverse
+                "history":data4,
                 "pressure":p_data,
-                "flow_lastm":last_m
+                
             },
             "success":1}
 

@@ -7,6 +7,8 @@ from entm.models import Organizations
 import datetime
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataHour,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 
+from django.db.models import Avg, Max, Min, Sum
+
 # Create your models here.
 
 '''
@@ -194,21 +196,26 @@ class Station(models.Model):
         if self.commaddr is None:
             return flow_data
 
+        hours = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
         flows = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).values_list("hdate","dosage")
         if flows.count() == 0:
+            for h in hours:
+                fh = endTime[:11] + h
+                flow_data[fh] = '-'
             return flow_data
         flow_dict = dict(flows)
         print('flow_dict',flow_dict)
         flows_keys = [k[11:] for k,v in flows ]
-        dates = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
+        
         print("print first",flows.first())
         tmp=flows.first()[0]
-        for h in dates:
+        for h in hours:
             if h in flows_keys:
                 fh = tmp[:11]+h
-                flow_data[h] = round(float(flow_dict[fh]),2)
+                flow_data[fh] = round(float(flow_dict[fh]),2)
             else:
-                flow_data[h] = 0
+                fh = tmp[:11]+h
+                flow_data[fh] = 0
         
         return flow_data
 
@@ -257,3 +264,9 @@ class Station(models.Model):
                 flow_data[h] = 0
         
         return flow_data
+
+
+    def flow_hour_max(self,startTime,endTime):
+
+        avg = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Avg('dosage'),Max('dosage'),Min('dosage'))
+        return avg

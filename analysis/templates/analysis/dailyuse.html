@@ -50,19 +50,19 @@
                                     <div class="col-md-3">
                                       <input id="station_name" class="form-control" value="{{ station }}" readonly="" type="text">
                                     </div>
-                                    <label class="col-md-1 col-sm-3 control-label searchListSelect">时间：</label>
+                                    <!-- <label class="col-md-1 col-sm-3 control-label searchListSelect">时间：</label>
                                     <div class="col-md-4 col-sm-8 searchListSelect">
                                         <input style="cursor: pointer; background-color: #fafafa;"
                                             class="form-control layer-date laydate-icon"
                                             id="timeInterval" name="timeInterval" readonly />
                                         <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
-                                    </div>
-                                    <div class="col-md-1 control-label pull-right" id="dateSearchData">
+                                    </div> -->
+                                    <div class="col-md-4 control-label pull-right" id="dateSearchData">
                                         
-                                        <!-- <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="analysisMnf.inquireClick(-2)">两月内  </button>
-                                        <button id="nearlyThreeDays" type="button"class="btn btn-primary" name="-3" onclick="analysisMnf.inquireClick(-3)">三月内  </button> -->
-                                        <!--<button id="nearlySevenDays" type="button"class="btn btn-primary" name="-7" onclick="analysisMnf.inquireClick(-7)">前七天 </button>-->
-                                        <button id="inquireClick" type="button" class="btn btn-primary search-btn" name="1" onclick="analysisMnf.inquireClick(1)"><i class="glyphicon glyphicon-search"></i>  查询</button>
+                                        <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="dailyUse.inquireClick(2)">昨日  </button>
+                                        <button id="nearlyThreeDays" type="button"class="btn btn-primary" name="-3" onclick="dailyUse.inquireClick(3)">三天内  </button>
+                                        <button id="nearlySevenDays" type="button"class="btn btn-primary" name="-7" onclick="dailyUse.inquireClick(7)">七天内 </button>
+                                        <button id="inquireClick" type="button" class="btn btn-primary search-btn" name="1" onclick="dailyUse.inquireClick(1)"><i class="glyphicon glyphicon-search"></i>  查询</button>
                                         
                                     </div>
                                 </div>
@@ -84,18 +84,12 @@
                     </div>
                     <div class="panel-body mileage-Content"  id="stretch2-body">
                       <div class="col-md-12">
-                        <div class="col-md-10">
-                          <div id="onlineGraphics" style="height:600px;width:100%;"></div>
+                        <div class="col-md-11">
+                          <div id="dailyUseGraphics" style="height:600px;width:100%;"></div>
                         </div>
-                        <div class="col-md-2" style="margin-top: 100px;">
+                        <div class="col-md-1" style="margin-top: 100px;">
                           <h5>时变化系数</h5>
-                          <div><label id="maxflow" >最大流量：<span>-</span></label></div>
-                          <div><label id="averflow">平均流量：<span>-</span></label></div>
-                          <div><label id="mnf">MNF：<span>-</span></label></div>
-                          <div><label id="mnf_add">MNF/ADD：<span>-</span></label></div>
-                          <div><label id="back_leak">背景漏损：<span>-</span></label></div>
-                          <div><label id="ref_mnf">参考MNF：<span>-</span></label></div>
-                          <div><label id="alarm_set">设定报警：<span>-</span></label></div>
+                          
                           
                           
                         </div>

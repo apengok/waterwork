@@ -17,6 +17,8 @@
     var vagueSearchlast = $("#operationType").val();
 
     var dataListArray = [];
+    var dataListArray3 = [];
+    var dataListArray4 = [];
     var dataListArray2 = [];
     var endTime;// 当天时间
     var sTime;
@@ -34,6 +36,13 @@
     var checkFlag = false; //判断组织节点是否是勾选操作
     var size;//当前权限监控对象数量
     var online_length;
+
+    var week1color = 'rgba(204, 153, 255, 1)';
+    var week2color = 'rgba(153, 255, 255, 1)';
+    var week3color = 'rgba(204, 204, 204, 1)';
+    var week4color = 'rgba(153, 204, 153, 1)';
+    var week5color = 'rgba(153, 123, 235, 1)';
+
     dailyUse = {
         init: function(){
             console.log("dailyUse init");
@@ -208,200 +217,8 @@
                 json_ajax("POST", url, "json", true,data,dailyUse.updateCallback);
             }
         },
-        closeClean:function(){
-            $("#addproperationtype").val("");
-            $("#adddescription").val("");
-            $("#addproperationtype-error").hide();//隐藏上次新增时未清除的validate样式
-            $("#adddescription-error").hide();
-        },
-        updateClean:function () {
-            $("#updateOperationType-error").hide();
-            $("#updateDescription-error").hide();
-        },
-        updateCallback:function(data){
-            if(data.success == true){
-                $("#updateType").modal('hide');
-                layer.msg("修改成功");
-                dailyUse.findOperation();
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
-        deleteType:function(id){
-            layer.confirm(publicDelete, {
-                title :'操作确认',
-                icon : 3, // 问号图标
-                btn: [ '确定', '取消'] // 按钮
-            }, function(){
-                var url="group/deleteOperation";
-                var data={"id" : id}
-                json_ajax("POST", url, "json", false,data,dailyUse.deleteCallback);
-            });
-        },
-        deleteCallback:function(data){
-            if(data.success==true){
-                layer.closeAll('dialog');
-                dailyUse.findOperation();
-            }else{
-                layer.msg(publicError,{move:false});
-            }
-        },
-        deleteTypeMore : function(){
-            // 判断是否至少选择一项
-            var chechedNum = $("input[name='subChkTwo']:checked").length;
-            if (chechedNum == 0) {
-                layer.msg(selectItem);
-                return
-            }
-            var ids="";
-            $("input[name='subChkTwo']:checked").each(function() {
-                ids+=($(this).val())+",";
-            });
-            var url="group/deleteOperationMore";
-            var data={"ids" : ids};
-            layer.confirm(publicDelete, {
-                title :'操作确认',
-                icon : 3, // 问号图标
-                btn: [ '确定', '取消'] // 按钮
-            }, function(){
-                json_ajax("POST", url, "json", false,data,dailyUse.deleteOperationMoreCallback);
-                layer.closeAll('dialog');
-            });
-        },
-        deleteOperationMoreCallback : function(data){
-            if(data.success){
-                layer.msg(publicDeleteSuccess);
-                dailyUse.findOperation();
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
-        findOperationByVague:function(){
-            dailyUse.findOperation();
-        },
-        findDownKey:function(event){
-            if(event.keyCode==13){
-                dailyUse.findOperation();
-            }
-        },
-        checkAll : function(e){
-            $("input[name='subChk']").not(':disabled').prop("checked", e.checked);
-
-        },
-        checkAllTwo : function(e){
-            $("input[name='subChkTwo']").prop("checked", e.checked);
-        },
-        addId : function (){
-            $("#addId").attr("href","stations/add/newuser?uuid="+selectTreeIdAdd+"");
-        },
-
-        //开始时间
-        startDay: function (day) {
-            var timeInterval = $('#timeInterval').val().split('--');
-            var startValue = timeInterval[0];
-            var endValue = timeInterval[1];
-            if (startValue == "" || endValue == "") {
-                var today = new Date();
-                var targetday_milliseconds = today.getTime() + 1000 * 60 * 60
-                    * 24 * day;
-
-                today.setTime(targetday_milliseconds); //注意，这行是关键代码
-
-                var tYear = today.getFullYear();
-                var tMonth = today.getMonth();
-                var tDate = today.getDate();
-                tMonth = dailyUse.doHandleMonth(tMonth + 1);
-                tDate = dailyUse.doHandleMonth(tDate);
-                var num = -(day + 1);
-                startTime = tYear + "-" + tMonth + "-" + tDate + " "
-                    + "00:00:00";
-                var end_milliseconds = today.getTime() + 1000 * 60 * 60 * 24
-                    * parseInt(num);
-                today.setTime(end_milliseconds); //注意，这行是关键代码
-                var endYear = today.getFullYear();
-                var endMonth = today.getMonth();
-                var endDate = today.getDate();
-                endMonth = dailyUse.doHandleMonth(endMonth + 1);
-                endDate = dailyUse.doHandleMonth(endDate);
-                endTime = endYear + "-" + endMonth + "-" + endDate + " "
-                    + "23:59:59";
-            } else {
-                var startTimeIndex = startValue.slice(0, 10).replace("-", "/").replace("-", "/");
-                var vtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * day;
-                var dateList = new Date();
-                dateList.setTime(vtoday_milliseconds);
-                var vYear = dateList.getFullYear();
-                var vMonth = dateList.getMonth();
-                var vDate = dateList.getDate();
-                vMonth = dailyUse.doHandleMonth(vMonth + 1);
-                vDate = dailyUse.doHandleMonth(vDate);
-                startTime = vYear + "-" + vMonth + "-" + vDate + " "
-                    + "00:00:00";
-                if (day == 1) {
-                    endTime = vYear + "-" + vMonth + "-" + vDate + " "
-                        + "23:59:59";
-                } else {
-                    var endNum = -1;
-                    var vendtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * parseInt(endNum);
-                    var dateEnd = new Date();
-                    dateEnd.setTime(vendtoday_milliseconds);
-                    var vendYear = dateEnd.getFullYear();
-                    var vendMonth = dateEnd.getMonth();
-                    var vendDate = dateEnd.getDate();
-                    vendMonth = dailyUse.doHandleMonth(vendMonth + 1);
-                    vendDate = dailyUse.doHandleMonth(vendDate);
-                    endTime = vendYear + "-" + vendMonth + "-" + vendDate + " "
-                        + "23:59:59";
-                }
-            }
-        },
-        doHandleMonth: function (month) {
-            var m = month;
-            if (month.toString().length == 1) {
-                m = "0" + month;
-            }
-            return m;
-        },
-        //当前时间
-        getsTheCurrentTime: function () {
-            var nowDate = new Date();
-            startTime = nowDate.getFullYear()
-                + "-"
-                + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
-                    + parseInt(nowDate.getMonth() + 1)
-                    : parseInt(nowDate.getMonth() + 1))
-                + "-"
-                + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
-                    : nowDate.getDate()) + " " + "00:00:00";
-            endTime = nowDate.getFullYear()
-                + "-"
-                + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
-                    + parseInt(nowDate.getMonth() + 1)
-                    : parseInt(nowDate.getMonth() + 1))
-                + "-"
-                + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
-                    : nowDate.getDate())
-                + " "
-                + ("23")
-                + ":"
-                + ("59")
-                + ":"
-                + ("59");
-            var atime = $("#atime").val();
-            if (atime != undefined && atime != "") {
-                startTime = atime;
-            }
-        },
-        unique: function (arr) {
-            var result = [], hash = {};
-            for (var i = 0, elem; (elem = arr[i]) != null; i++) {
-                if (!hash[elem]) {
-                    result.push(elem);
-                    hash[elem] = true;
-                }
-            }
-            return result;
-        },
+        
+        
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
             number = num;
@@ -414,132 +231,127 @@
             // } else if (number == -7) {
             //     dailyUse.startDay(-7)
             // };
-            if (num != 1) {
-                $('#timeInterval').val(startTime + '--' + endTime);
-            }
-            if (!dailyUse.validates()) {
-                return;
-            }
-            dailyUse.estimate();
+            
             dataListArray = [];
             dataListArray2 = [];
             var url = "/analysis/flowdata_dailyuse/";
 
             var station_id = $("#station_id").val();
             // var data = {"organ": organ,"treetype":selectTreeType,"station_id":station_id,"qmonth":number, 'startTime': sTime, "endTime": eTime};
-            var data = {"station_id":station_id};
-            json_ajax("POST", url, "json", false, data, dailyUse.findOnline);     //发送请求
+            var data = {"station_id":station_id,"days":num};
+            json_ajax("POST", url, "json", false, data, dailyUse.processFlows);     //发送请求
         },
-        validates: function () {
-            return $("#hourslist").validate({
-                rules: {
-                    organ_name: {
-                        required: true
-                    },
-                    stationname: {
-                        required: true,
-                        // compareDate: "#timeInterval",
+        fillSeriaData:function(name,lcolor,xind,yind,data){
+            return  {
+                        name: name,
+                        yAxisIndex: yind,
+                        xAxisIndex:xind,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: lcolor //#6dcff6
+                            }
+                        },
+                        data: data,
+                        
                     }
-                },
-                messages: {
-                    organ_name: {
-                        required: "所属组织不能为空",
-                    },
-                    stationname: {
-                        required: "站点不能为空",
-                        // compareDate: endtimeComStarttime,
-                    }
-                }
-            }).form();
         },
-
-        estimate: function () {
-            var timeInterval = $('#timeInterval').val().split('--');
-            sTime = timeInterval[0];
-            eTime = timeInterval[1];
-            dailyUse.getsTheCurrentTime();
-            if (eTime > endTime) {                              //查询判断
-                layer.msg(endTimeGtNowTime, {move: false});
-                key = false
-                return;
-            }
-            if (sTime > eTime) {
-                layer.msg(endtimeComStarttime, {move: false});
-                key = false;
-                return;
-            }
-            var nowdays = new Date();                       // 获取当前时间  计算上个月的第一天
-            var year = nowdays.getFullYear();
-            var month = nowdays.getMonth();
-            if (month == 0) {
-                month = 12;
-                year = year - 1;
-            }
-            if (month < 10) {
-                month = "0" + month;
-            }
-            var firstDay = year + "-" + month + "-" + "01 00:00:00";//上个月的第一天
-            if (sTime < firstDay) {                                 //查询判断开始时间不能超过       上个月的第一天
-                $("#timeInterval-error").html(starTimeExceedOne).show();
-                /*layer.msg(starTimeExceedOne, {move: false});
-                key = false;*/
-                return;
-            }
-            $("#timeInterval-error").hide();
-            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");       //遍历树节点，获取vehicleID 存入集合
-            var nodes = treeObj.getCheckedNodes(true);
-            vid = "";
-            for (var j = 0; j < nodes.length; j++) {
-                if (nodes[j].type == "vehicle") {
-                    vid += nodes[j].id + ",";
-                }
-            }
-            key = true;
-        },
-        reloadData: function (dataList) {
-            var currentPage = myTable.page()
-            myTable.clear()
-            myTable.rows.add(dataList)
-            myTable.page(currentPage).draw(false);
-        },
-        findOnline: function (data) {//回调函数    数据组装
+        processFlows: function (data) {//回调函数    数据组装
             var list = [];
-            var myChart = echarts.init(document.getElementById('onlineGraphics'));
-            var flow_tody = "";
-            
+            var myChart = echarts.init(document.getElementById('dailyUseGraphics'));
+            var flow_data = "";
+            var last_month = "";
+            var before_last_month = "";
+            var history = "";
+            var hdates = [];
+            var legend_list = [];
+            var serias_list = [];
+            var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 55, 119, 1)']
             
             if (data.obj != null && data.obj != "") {
-                flow_tody = data.obj.flow_tody;
+                flow_data = data.obj.flow_data;
+                
                 pressure = data.obj.pressure;
+                
             }
             if (data.success == true) {
-                // carLicense = [];
-                // activeDays = [];
-                hdates = [];
-                dosages = [];
-                press = [];
                 
-                for (var i = 0; i < flow_tody.length; i++) {
-                    list =
-                        [i + 1, 
-                            flow_tody[i].hdate,
-                            flow_tody[i].color,
-                            flow_tody[i].flow,
-                            // online[i].allDays == null ? "0" : online[i].allDays,
-                            flow_tody[i].ratio == null ? "0" : flow_tody[i].ratio,
-                            flow_tody[i].assignmentName == null ? "无" : flow_tody[i].assignmentName,
-                            
-                        ]
+                //当月
+                dataListArray=[];
+                if(flow_data.length > 0){
+                    flow_current = []
+                    list=[];
+                    for (var i = 0; i < flow_data.length; i++) {
+                        list =
+                            [i + 1, 
+                                flow_data[i].hdate,
+                                flow_data[i].color,
+                                flow_data[i].flow,
+                                // online[i].allDays == null ? "0" : online[i].allDays,
+                                flow_data[i].ratio == null ? "0" : flow_data[i].ratio,
+                                flow_data[i].assignmentName == null ? "无" : flow_data[i].assignmentName,
+                                
+                            ]
 
-                    dataListArray.push(list);                                       //组装完成，传入  表格
-                };
-                for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
-                    // hdates.push(dataListArray[j][1]);
-                    dosages.push(dataListArray[j][3]);
+                        dataListArray.push(list);                                       //组装完成，传入  表格
+                    };
+                    data_cnt = 0;
+                    ci = 0
+                    for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
+                        hdates.push(dataListArray[j][1]);
+                        flow_current.push(dataListArray[j][3]);
+                        data_cnt += 1;
+                        //每24个数据为一天
+                        if(data_cnt == 24){
+                            data_cnt = 0;
+                            var datestr = hdates[j].substring(0,10);
+                            
+                            var nowDate = new Date();
+                            var today = nowDate.getFullYear()
+                            + "-"
+                            + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                                + parseInt(nowDate.getMonth() + 1)
+                                : parseInt(nowDate.getMonth() + 1))
+                            + "-"
+                            + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                                : nowDate.getDate());
+
+                            nowDate.setDate(nowDate.getDate() - 1);
+                            var yestoday = nowDate.getFullYear()
+                            + "-"
+                            + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                                + parseInt(nowDate.getMonth() + 1)
+                                : parseInt(nowDate.getMonth() + 1))
+                            + "-"
+                            + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                                : nowDate.getDate());
+
+
+                            if(datestr == today){
+                                datestr = "今日曲线";
+                            }
+                            if(datestr == yestoday){
+                                datestr = "昨日曲线";
+                            }
+
+                            legend_list.push(datestr);
+                            var tmp = dailyUse.fillSeriaData(datestr,color_list[ci],0,0,flow_current);
+                            serias_list.push(tmp);
+                            console.log(datestr,flow_current);
+                            flow_current = []
+                            ci += 1;
+                        }
+                        
+                    }
                     
                 }
+                
 
                 // #press
+                press=[];
                 for (var i = 0; i < pressure.length; i++) {
                     list =
                         [i + 1, 
@@ -560,6 +372,9 @@
                     press.push(dataListArray2[j][3]);
                     
                 }
+                legend_list.push("压力曲线");
+                var tmp = dailyUse.fillSeriaData("压力曲线",'rgba(22, 155, 213, 1)',1,1,press);
+                serias_list.push(tmp);
 
                 // dailyUse.reloadData(dataListArray);
                 $("#simpleQueryParam").val("");
@@ -572,11 +387,14 @@
                 dosages = [];
                 hdates.push("");
                 dosages.push("");
+                last_moth=[];
+                last_moth.push("");
                 
                 press=[];
                 press.push("");
                 
             }
+
             var start;
             var end;
             var length;
@@ -603,6 +421,7 @@
             //carLicense = dailyUse.platenumbersplitFun(carLicense);
             var option = {
                 tooltip: {
+                    show:true,
                     trigger: 'axis',
                     textStyle: {
                         fontSize: 20
@@ -626,14 +445,14 @@
                     // }
                 },
                 legend: {
-                    data: ['今日曲线',"压力曲线"],
+                    data: legend_list,   //['当月曲线','上月曲线',"压力曲线"],
                     left: 'auto',
                 },
                 toolbox: {
                     show: false
                 },
                 grid: {
-                    left: '120',
+                    left: '80',
                     bottom:'100'
                 },
                 xAxis: [{
@@ -652,30 +471,45 @@
                             width: 1
                         }
                     },
-                    data: ['1','2','3','4','5','6','7','8','9,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23','24'] //dailyUse.platenumbersplitYear(hdates)
+                    // splitArea : {
+                    //     show: true,
+                    //     areaStyle:{
+                    //         color:dailyUse.splitAreaColor(hdates)
+                    //     }
+                    // },
+                    data: ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23'] //dailyUse.platenumbersplitYear(hdates)
                 },
                 {
-                    type: 'category',
-                    boundaryGap: false,  // 让折线图从X轴0刻度开始
-                    name: "",
-                    axisLabel: {
-                        show: true,
-                        rotate: 0
+                    type:'category',
+                    show:true,
+                    position:'bottom',
+                    interval:0,
+                    offset:20,
+                    tooltip:{
+                        show:false
+                    },
+                    axisTick:{
+                        show:false
                     },
                     splitLine: {
-                        show: true,
+                        show: false,
                         lineStyle: {
                             color: '#483d8b',
                             type: 'dashed',
                             width: 1
                         }
                     },
-                    data: hdates //dailyUse.platenumbersplitYear(hdates)
+                    axisLabel: {
+                        show: true,
+                        interval:0,
+                        rotate: 0
+                    },
+                    data:dailyUse.weekshowsplitFun(hdates)
                 }],
                 yAxis: [
                     {
                         type: 'value',
-                        name: '时用水量 （m³/h）',
+                        name: '时用水量 （m³）',
                         nameTextStyle:{
                             color: 'black',
                             fontFamily: '微软雅黑 Bold',
@@ -684,7 +518,7 @@
                             fontWeight: 700
                         },
                         nameLocation:'middle',
-                        nameGap:80,
+                        nameGap:50,
                         scale: false,
                         position: 'left',
                         axisLabel : {
@@ -785,40 +619,7 @@
                 //     start : 0,
                 //     end : 100
                 // }],
-                series: [
-                    {
-                        name: '今日曲线',
-                        yAxisIndex: 0,
-                        xAxisIndex:0,
-                        type: 'line',
-                        smooth: true,
-                        symbol: 'none',
-                        sampling: 'average',
-                        itemStyle: {
-                            normal: {
-                                color: '#6dcff6'
-                            }
-                        },
-                        data: dosages,
-                        
-                    },
-                    
-                    {
-                        name: '压力曲线',
-                        yAxisIndex: 1,
-                        xAxisIndex: 1,
-                        type: 'line',
-                        smooth: true,
-                        symbol: 'none',
-                        sampling: 'average',
-                        itemStyle: {
-                            normal: {
-                                color: '#cc1cae'
-                            }
-                        },
-                        data: press
-                    }
-                ]
+                series: serias_list
             };
             myChart.setOption(option);
             
@@ -842,34 +643,101 @@
         },
         platenumbersplitYear:function(arr){
 
-            var newArr = [ '08','09','10','11',
-                {
-                    value:'12',
-                    textStyle: {
-                        color: 'red',
-                        fontSize: 30,
-                        fontStyle: 'normal',
-                        fontWeight: 'bold'
-                    }
-                },
-                '01','02','03','04','05','06','07'];
-            // arr.forEach(function(item){
-            //     if (item.length > 8) {
-            //         item = item.substring(0,7) + '...'
-            //     }
-            //     newArr.push(item)
-            // })
-            return newArr
-        },
-        platenumbersplitFun:function(arr){
+            
+            var today = arr[arr.length - 1].substring(8,10);
+            
             var newArr = [];
+            var subitem = "";
+            var new_item = "";
             arr.forEach(function(item){
                 if (item.length > 8) {
-                    item = item.substring(0,7) + '...'
+                    subitem = item.substring(8,10)
+                    weekday = new Date(item).getDay();
+                    if (parseInt(subitem,10) > parseInt(today,10)) {
+                        if(weekday == 1){
+                            new_item = {
+                                value:subitem,// + '\n\n星\n期\n一',
+                                textStyle:{
+                                    color:'red',
+                                    
+                                }
+                            }
+                        }else{
+                            new_item = {
+                                value:subitem,
+                                textStyle:{
+                                    color:'red',
+                                    
+                                }
+                            }
+                        }
+                    }else{
+                        if(weekday == 1){
+                            new_item = subitem;// + monday;
+                        }else{
+                            new_item = subitem;
+                        }
+                    }
                 }
-                newArr.push(item)
+                newArr.push(new_item)
             })
             return newArr
+        },
+        weekshowsplitFun:function(arr){
+            this_month = parseInt(arr[arr.length - 1],10);
+            // alert(new Date('2018/08/09').getDay());
+            var today = arr[arr.length - 1].substring(8,10);
+            var monday = '\n星\n期\n一';
+
+            var statistext = '\n 本周用水量:284m3\n最大值：64m3\n最小值：12m3';
+
+            var newArr = [];
+            var subitem = "";
+            var new_item = "";
+            var weekcnt = 0;
+            var weekcolor = [week1color,week2color,week3color,week4color,week5color]
+            arr.forEach(function(item){
+                if (item.length > 8) {
+                    subitem = item.substring(8,10)
+                    weekday = new Date(item).getDay();
+
+                    
+                    if(weekday == 1){
+                        new_item = monday;
+                        
+                    }else if(weekday == 4){
+                        new_item = {
+                            value:statistext,
+                            textStyle:{
+                                color:weekcolor[weekcnt],
+                                
+                            }
+                        
+                        };
+                        weekcnt += 1;
+                    }else{
+                        new_item = "";
+                    }
+                    
+                }
+                newArr.push(new_item)
+            })
+            return newArr
+        },
+        splitAreaColor:function(arr){
+            
+            var weekcnt = 0;
+            var newArr = [];
+
+            arr.forEach(function(item){
+
+            })
+            return ['rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)','rgba(204, 153, 255, 1)',
+                    'rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)','rgba(153, 255, 255, 1)',
+                    'rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)','rgba(204, 204, 204, 1)',
+                    'rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)',
+                    week5color,week5color,week5color,week5color,week5color,week5color,week5color
+                    ];
         }
     }
     $(function(){
@@ -883,24 +751,9 @@
         dailyUse.userTree();
         
         dailyUse.init();
-        $('#timeInterval').dateRangePicker({dateLimit:30});
-        dailyUse.getsTheCurrentTime();  
-        dailyUse.startDay(-7);  
-        $('#timeInterval').val(startTime + '--' + endTime);
+        
         dailyUse.inquireClick(1);
-        // dailyUse.findOperation();
-        // IE9
-        if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
-            dailyUse.refreshTable();
-            var search;
-            $("#search_condition").bind("focus",function(){
-                search = setInterval(function(){
-                    search_ztree('treeDemo', 'search_condition','group');
-                },500);
-            }).bind("blur",function(){
-                clearInterval(search);
-            });
-        }
+        
         // IE9 end
         // $("#selectAll").bind("click", dailyUse.selectAll);
         // 组织架构模糊搜索
@@ -909,8 +762,6 @@
         });       
         
         
-        $("#addId").on("click",dailyUse.addId);
-        $("#closeAdd").on("click",dailyUse.closeClean);
-        $("#updateClose").on("click",dailyUse.updateClean);
+        
     })
 })($,window)
