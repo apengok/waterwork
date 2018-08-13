@@ -265,8 +265,81 @@ class Station(models.Model):
         
         return flow_data
 
+        '''
+            querydate --- datetime object
+            return 日用水量
+        '''
+    def flow_day_dosage(self,querydate):
+        ret_str = "-"
+        datestr = querydate.strftime("%Y-%m-%d")
+        startTime = datestr + " 00:00:00"
+        endTime = datestr + " 23:59:59"
 
-    def flow_hour_max(self,startTime,endTime):
+        flow = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Sum('dosage'))
+        flow_value = flow['dosage__sum']
+        if flow_value is not None:
+            ret_str = "{} m³".format(round(float(flow_value),2))
+        return ret_str
 
-        avg = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Avg('dosage'),Max('dosage'),Min('dosage'))
-        return avg
+# 按小时统计的聚合
+    def flow_hour_aggregate(self,startTime,endTime):
+
+        avg_str = "-"
+        max_str = "-"
+        min_str = "-"
+        avg_flow = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Avg('dosage'))
+        avg_value = avg_flow['dosage__avg']
+        if avg_value is not None:
+            avg_str = "{} m³".format(round(float(avg_value),2))
+
+        max_flow = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Max('dosage'))
+        max_value = max_flow['dosage__max']
+        # 最大值instance
+        max_date = ""
+        if max_value is not None:
+            max_item = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).filter(dosage=max_value)
+            max_date = max_item[0].hdate
+            max_str = "{} m³ ({}:00)".format(round(float(max_value),2),max_date[-2:])
+
+        min_flow = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Min('dosage'))
+        min_value = min_flow['dosage__min']
+        # 最xiao值instance
+        min_date = ""
+        if min_value is not None:
+            min_item = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).filter(dosage=min_value)
+            min_date = min_item[0].hdate
+            min_str = "{} m³ ({}:00)".format(round(float(min_value),2),min_date[-2:])
+
+        return avg_str,max_str,min_str
+
+
+    # 按日统计的聚合
+    def flow_day_aggregate(self,startTime,endTime):
+
+        avg_str = "-"
+        max_str = "-"
+        min_str = "-"
+        avg_flow = HdbFlowDataDay.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Avg('dosage'))
+        avg_value = avg_flow['dosage__avg']
+        if avg_value is not None:
+            avg_str = "{} m³".format(round(float(avg_value),2))
+
+        max_flow = HdbFlowDataDay.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Max('dosage'))
+        max_value = max_flow['dosage__max']
+        # 最大值instance
+        max_date = ""
+        if max_value is not None:
+            max_item = HdbFlowDataDay.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).filter(dosage=max_value)
+            max_date = max_item[0].hdate
+            max_str = "{} m³ ({}:00)".format(round(float(max_value),2),max_date[-2:])
+
+        min_flow = HdbFlowDataDay.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).aggregate(Min('dosage'))
+        min_value = min_flow['dosage__min']
+        # 最xiao值instance
+        min_date = ""
+        if min_value is not None:
+            min_item = HdbFlowDataDay.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).filter(dosage=min_value)
+            min_date = min_item[0].hdate
+            min_str = "{} m³ ({}:00)".format(round(float(min_value),2),min_date[-2:])
+
+        return avg_str,max_str,min_str

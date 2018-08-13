@@ -622,17 +622,25 @@ def flowdata_dailyuse(request):
     startTime = yestoday_str + " 23:59:59"
     endTime = today_str + " 23:59:59"
 
-    avg = station.flow_hour_max(startTime,endTime)
-    print("avg",avg)
-
-    # print(startTime,endTime)
+    #staticstic data
+    #当天用水量
+    today_use = station.flow_day_dosage(today)
+    #昨日用水量
+    yestoday_use = station.flow_day_dosage(yestoday)
+    #前日用水量
+    before_yestoday = today - datetime.timedelta(days=2)
+    before_yestoday_use = station.flow_day_dosage(before_yestoday)
+    
+    #最大值,最小值,平均值
+    average,maxflow,minflow = station.flow_hour_aggregate(startTime,endTime)
+    
 
     days_flows = []
 
     for i in range(days):
         print(startTime,endTime)
         flowdata_hour = station.flowData_Hour(startTime,endTime)
-        print(flowdata_hour)
+        # print(flowdata_hour)
 
         days_flows.append(flowdata_hour)
         today = yestoday
@@ -644,15 +652,7 @@ def flowdata_dailyuse(request):
         startTime = yestoday_str + " 23:59:59"
         endTime = today_str + " 23:59:59"
 
-        avg = station.flow_hour_max(startTime,endTime)
-        print("avg",avg)
-
-
-        
-    print(days_flows)
-        # startTime = "2018-08-04 23:59:59"
-        # endTime = "2018-08-05 23:59:59"
-        
+               
     
     
     fh_today = [flowdata_hour[k] for k in flowdata_hour]
@@ -662,37 +662,9 @@ def flowdata_dailyuse(request):
     # print("press_today",press_today)
     pree_time = [k[11:] for k in pressdata_hour]
 
-    #参考MNF
-    ref_mnf = 4.46
-    #MNF
-    mnf = 8.63
-    #表具信息
     
-    #MNF/ADD
-    mnf_add = 51
-    #背景漏损
-    back_leak = 4.46
-    
-    #设定报警
-    alarm_set = 12
 
-    #staticstic data
-    #当天用水量
-    today_use = 0
-    #昨日用水量
-    yestoday_use = 0
-    #去年同期用水量
-    last_year_same = 0
-    #同比增长
-    tongbi = 0
-    #环比增长
-    huanbi = 0
-    #最大值
-    maxflow = 0
-    #最小值
-    minflow = 0
-    #平均值
-    average = 0
+    
 
     hdates = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
     
@@ -725,7 +697,13 @@ def flowdata_dailyuse(request):
             "msg":"null",
             "obj":{
                 "flow_data":data, #reverse
-                "pressure":p_data
+                "pressure":p_data,
+                "today_use":today_use,
+                "yestoday_use":yestoday_use,
+                "before_yestoday_use":before_yestoday_use,
+                "maxflow":maxflow,
+                "minflow":minflow,
+                "average":average
 
             },
             "success":1}

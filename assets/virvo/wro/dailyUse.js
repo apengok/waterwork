@@ -269,12 +269,25 @@
             var hdates = [];
             var legend_list = [];
             var serias_list = [];
+            var today_use = "-";
+            var yestoday_use = "-";
+            var before_yestoday_use = "-";
+            var average = "-";
+            var maxflow = "-";
+            var minflow = "-";
             var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 55, 119, 1)']
             
             if (data.obj != null && data.obj != "") {
                 flow_data = data.obj.flow_data;
                 
                 pressure = data.obj.pressure;
+
+                today_use = data.obj.today_use;
+                yestoday_use = data.obj.yestoday_use;
+                before_yestoday_use = data.obj.before_yestoday_use;
+                maxflow = data.obj.maxflow;
+                minflow = data.obj.minflow;
+                average = data.obj.average;
                 
             }
             if (data.success == true) {
@@ -623,21 +636,14 @@
             };
             myChart.setOption(option);
             
-            // $("#maxflow span").html( maxflow);
-            // $("#averflow span").html( average);
-            // $("#today_use span").html( today_use);
-            // $("#yestoday_use span").html( yestoday_use);
-            // $("#last_year_same span").html( last_year_same);
-            // $("#tongbi span").html( tongbi);
-            // $("#huanbi span").html( huanbi);
-            // $("#average span").html( average);
-            // $("#max_flow span").html( maxflow);
-            // $("#min_flow span").html( minflow);
-            // $("#mnf span").html( mnf);
-            // $("#mnf_add span").html( mnf_add);
-            // $("#back_leak span").html( back_leak);
-            // $("#ref_mnf span").html( ref_mnf);
-            // $("#alarm_set span").html( alarm_set);
+            
+            $("#today_use span").html( today_use);
+            $("#yestoday_use span").html( yestoday_use);
+            $("#before_yestoday_use span").html( before_yestoday_use);
+            $("#average span").html( average);
+            $("#max_flow span").html( maxflow);
+            $("#min_flow span").html( minflow);
+            
 
             window.onresize = myChart.resize;
         },
