@@ -761,8 +761,10 @@ def flowdata_monthuse(request):
     yestoday_str = yestmonth.strftime("%Y-%m-%d")
     
 
-    startTime = yestmonth
-    endTime = today
+    # startTime = yestmonth
+    # endTime = today
+    startTime = today - datetime.timedelta(days=21+w)
+    endTime = today + datetime.timedelta(days=6-w)
 
     # pressure data
     pressdata_hour = station.press_Data(startTime,endTime)
@@ -863,6 +865,7 @@ def flowdata_monthuse(request):
 
     #pressure data
     hdates = [k for k in month_data1]
+    print(hdates)
     p_data = []
     for i in range(len(hdates)):
         p_data.append({

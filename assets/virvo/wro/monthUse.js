@@ -392,7 +392,7 @@
                         
                     }
                     legend_list.push("历史同期");
-                    var tmp = monthUse.fillSeriaData("历史同期",'rgba(23, 145, 167, 8)',0,0,flow_history_month);
+                    var tmp = monthUse.fillSeriaData("历史同期",'rgba(23, 0, 167, 8)',0,0,flow_history_month);
                     serias_list.push(tmp);
                 }
 
@@ -414,12 +414,12 @@
                 };
                 
                 for (var j = 0; j < dataListArray2.length; j++) {// 排序后组装到图表
-                    hdates.push(dataListArray2[j][1]);
+                    // hdates.push(dataListArray2[j][1]);
                     press.push(dataListArray2[j][3]);
                     
                 }
                 legend_list.push("压力曲线");
-                var tmp = monthUse.fillSeriaData("压力曲线",'rgba(22, 155, 213, 1)',1,1,press);
+                var tmp = monthUse.fillSeriaData("压力曲线",'rgba(22, 155, 0, 1)',1,1,press);
                 serias_list.push(tmp);
 
                 // monthUse.reloadData(dataListArray);
@@ -526,6 +526,7 @@
                     data: monthUse.platenumbersplitYear(hdates)
                 },
                 {
+
                     type:'category',
                     show:true,
                     position:'bottom',
@@ -668,6 +669,18 @@
                 series: serias_list
             };
             myChart.setOption(option);
+
+            // myChart.on('legendselectchanged',function(obj){
+            //     var selected = obj.selected;
+            //     var name = obj.name;
+
+                
+            //     if(name == "压力曲线" && selected[name] == false ){
+            //         console.log(selected,name);
+            //         option.xAxis[1].data.push(hdates);
+            //         //myChart.setOption(option);
+            //     }
+            // })
             
             // $("#maxflow span").html( maxflow);
             // $("#averflow span").html( average);

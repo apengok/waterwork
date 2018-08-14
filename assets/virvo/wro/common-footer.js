@@ -18823,6 +18823,14 @@ $(function(){
         return this.optional(element) || tel.test(value) || (length==11 && mobile.test(value));
     }, "请正确填写您的联系方式");
 
+    // sim卡号验证
+    jQuery.validator.addMethod("isSim", function (value, element) {
+        var length = value.length;
+        var tel = /^(\d{3,4}-?)?\d{7,9}$/g;
+        var mobile = /^((13[0-9]{1})|(14[5,7,9]{1})|(15[^4]{1})|(166)|(18[0-9]{1})|(19[8-9]{1})|(17[0,1,3,5,6,7,8]{1}))+\d{8}$/;
+        return this.optional(element) || tel.test(value) || (length == 11 && mobile.test(value));
+    }, "请输入SIM卡号数字，范围：7~13");
+
     // 匹配qq      
     jQuery.validator.addMethod("isQq", function(value, element) {
         return this.optional(element) || /^[1-9]\d{4,12}$/;

@@ -129,10 +129,78 @@ class Meter(models.Model):
     manufacturer= models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
     protocol    = models.CharField(db_column='Protocol', max_length=64, blank=True, null=True)  # Field name made lowercase.
     R           = models.CharField(db_column='R', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    q4          = models.CharField(db_column='Q4', max_length=64, blank=True, null=True)  # Field name made lowercase.
     q3          = models.CharField(db_column='Q3', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    q2          = models.CharField(db_column='Q2', max_length=64, blank=True, null=True)  # Field name made lowercase.
     q1          = models.CharField(db_column='Q1', max_length=64, blank=True, null=True)  # Field name made lowercase.
     check_cycle = models.CharField(db_column='check cycle', max_length=64, blank=True, null=True)  # Field name made lowercase.
     state       = models.CharField(db_column='state', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+    # 通讯参数
+    # TCP消息重发次数：
+    tcpresendcount           = models.CharField(db_column='tcpresendcount', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # TCP消息应答超时时间（s）
+    tcpresponovertime           = models.CharField(db_column='tcpresponovertime', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # UDP消息重发次数
+    udpresendcount           = models.CharField(db_column='udpresendcount', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # UDP消息应答超时时间（s）
+    udpresponovertime           = models.CharField(db_column='udpresponovertime', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # SMS消息重发次数
+    smsresendcount           = models.CharField(db_column='smsresendcount', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # SMS消息应答超时时间（s）
+    smsresponovertime           = models.CharField(db_column='smsresponovertime', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 终端心跳发送间隔（s）
+    heartbeatperiod           = models.CharField(db_column='heartbeatperiod', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+    # 终端参数
+    # IP地址
+    ipaddr           = models.CharField(db_column='ipaddr', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 端口号
+    port           = models.CharField(db_column='port', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 接入点
+    entrypoint           = models.CharField(db_column='entrypoint', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 流量零点修正值
+    flowzerovalue           = models.CharField(db_column='flowzerovalue', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+    # 采集指令
+    # 上报起始时间
+    updatastarttime           = models.CharField(db_column='updatastarttime', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 上报方式选择 -- 间隔 定时 实时
+    updatamode           = models.CharField(db_column='updatamode', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 采集间隔（分钟）5 10 15 30
+    collectperiod           = models.CharField(db_column='collectperiod', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 上报间隔（小时）2 4 6 8 12
+    updataperiod           = models.CharField(db_column='updataperiod', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 上报时间一
+    updatatime1           = models.CharField(db_column='updatatime1', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 上报时间二
+    updatatime2           = models.CharField(db_column='updatatime2', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 上报时间三
+    updatatime3           = models.CharField(db_column='updatatime3', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 上报时间四
+    updatatime4           = models.CharField(db_column='updatatime4', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+    # 基表设置
+    # 仪表口径
+    # dn           = models.CharField(db_column='dn', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 传感器系数
+    transimeterfactor           = models.CharField(db_column='transimeterfactor', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 厂商标识代码
+    manufacturercode           = models.CharField(db_column='manufacturercode', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 流量零点修正值
+    # flowzerovalue           = models.CharField(db_column='flowzerovalue', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 小信号切除点
+    smallsignalcutpoint           = models.CharField(db_column='smallsignalcutpoint', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 压力测量允许
+    pressurepermit           = models.CharField(db_column='pressurepermit', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 流体测量方向
+    flowdorient           = models.CharField(db_column='flowdorient', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 仪表维护日期
+    maintaindate           = models.CharField(db_column='maintaindate', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 正向累积预置
+    plusaccumupreset           = models.CharField(db_column='plusaccumupreset', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 流量测量单位
+    flowmeasureunit           = models.CharField(db_column='flowmeasureunit', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
 
     class Meta:

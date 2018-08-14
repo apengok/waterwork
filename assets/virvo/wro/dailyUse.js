@@ -241,12 +241,12 @@
             var data = {"station_id":station_id,"days":num};
             json_ajax("POST", url, "json", false, data, dailyUse.processFlows);     //发送请求
         },
-        fillSeriaData:function(name,lcolor,xind,yind,data){
+        fillSeriaData:function(name,etype,lcolor,xind,yind,data){
             return  {
                         name: name,
                         yAxisIndex: yind,
                         xAxisIndex:xind,
-                        type: 'line',
+                        type: etype,
                         smooth: true,
                         symbol: 'none',
                         sampling: 'average',
@@ -275,8 +275,8 @@
             var average = "-";
             var maxflow = "-";
             var minflow = "-";
-            var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 55, 119, 1)']
-            
+            var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 0, 119, 1)']
+            var today_bar = [];
             if (data.obj != null && data.obj != "") {
                 flow_data = data.obj.flow_data;
                 
@@ -345,13 +345,14 @@
 
                             if(datestr == today){
                                 datestr = "今日曲线";
+                                today_bar = flow_current;
                             }
                             if(datestr == yestoday){
                                 datestr = "昨日曲线";
                             }
 
                             legend_list.push(datestr);
-                            var tmp = dailyUse.fillSeriaData(datestr,color_list[ci],0,0,flow_current);
+                            var tmp = dailyUse.fillSeriaData(datestr,'line',color_list[ci],0,0,flow_current);
                             serias_list.push(tmp);
                             console.log(datestr,flow_current);
                             flow_current = []
@@ -386,7 +387,11 @@
                     
                 }
                 legend_list.push("压力曲线");
-                var tmp = dailyUse.fillSeriaData("压力曲线",'rgba(22, 155, 213, 1)',1,1,press);
+                var tmp = dailyUse.fillSeriaData("压力曲线",'line','rgba(22, 155, 213, 1)',1,1,press);
+                serias_list.push(tmp);
+
+                legend_list.push("当日柱状图");
+                var tmp = dailyUse.fillSeriaData("当日柱状图",'bar','rgba(22, 55, 13, 1)',1,1,today_bar);
                 serias_list.push(tmp);
 
                 // dailyUse.reloadData(dataListArray);

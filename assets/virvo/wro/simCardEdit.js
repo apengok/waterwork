@@ -97,7 +97,7 @@
                 rules : {
                 simcardNumber : {
                     required : true,
-                    // isSim:true,
+                    isSim:true,
                     remote: {
                         type:"post",
                         async:false,
@@ -191,7 +191,7 @@
              messages : {
                     simcardNumber : {
                         required:simNumberError,
-                        // isSim:simNumberError,
+                        isSim:simNumberError,
                         remote:simNumberExists
                     },
                  groupName: {

@@ -20,7 +20,7 @@ class MeterAddForm(forms.ModelForm):
 
     class Meta:
         model = Meter
-        fields = ['serialnumber','version','dn','metertype','mtype','manufacturer','protocol','R','q3','q1','check_cycle','state']
+        fields = ['serialnumber','version','dn','metertype','mtype','manufacturer','protocol','R','q4','q3','q2','q1','check_cycle','state']
 
     # def __init__(self,*args,**kwargs):
     #     super(MeterAddForm, self).__init__(*args, **kwargs)
@@ -35,7 +35,7 @@ class MeterEditForm(forms.ModelForm):
 
     class Meta:
         model = Meter
-        fields = ['serialnumber','version','dn','metertype','mtype','manufacturer','protocol','R','q3','q1','check_cycle','state']
+        fields = ['serialnumber','version','dn','metertype','mtype','manufacturer','protocol','R','q4','q3','q2','q1','check_cycle','state']
 
     def __init__(self,*args,**kwargs):
         super(MeterEditForm, self).__init__(*args, **kwargs)

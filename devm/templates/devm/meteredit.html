@@ -89,10 +89,11 @@
                         class="text-danger">*</label> 检修周期：</label>
                     <div class="col-md-4">
                         <select name="check_cycle" id="check_cycle" value="{{ form.check_cycle.value|default:'' }}" autocomplete="off" class="form-control">
-                            <option  value="10">10</option>
-                            <option  value="30">30</option>
-                            <option  value="40">40</option>
-                            <option  value="50">50</option>
+                            <option  value="1">1年</option>
+                            <option  value="2">2年</option>
+                            <option  value="3">3年</option>
+                            <option  value="4">4年</option>
+                            <option  value="5">5年</option>
                             
                         </select>
                     </div>
@@ -135,7 +136,40 @@
                     </div>
                     <label class="col-md-2 control-label"><label class="text-danger">*</label>Q3：</label>
                     <div class="col-md-4">
-                        <input name="q3" value="{{ form.q3.value|default:'' }}"  type="text" class="form-control" />
+                        
+                        <select name="q3" id="q3" autocomplete="off" value="{{ form.q3.value|default:'' }}" class="form-control">
+                            <option  value="1">1</option>
+                            <option  value="10">10</option>
+                            <option  value="100">100</option>
+                            <option  value="1000">1000</option>
+                            <option  value="1.6">1.6</option>
+                            <option  value="16">16</option>
+                            <option  value="160">160</option>
+                            <option  value="1600">1600</option>
+                            <option  value="2.5">2.5</option>
+                            <option  value="25">25</option>
+                            <option  value="250">250</option>
+                            <option  value="2500">2500</option>
+                            <option  value="4">4</option>
+                            <option  value="40">40</option>
+                            <option  value="400">400</option>
+                            <option  value="4000">4000</option>
+                            <option  value="6.3">6.3</option>
+                            <option  value="63">63</option>
+                            <option  value="630">630</option>
+                            <option  value="6300">6300</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Q2：</label>
+                    <div class="col-md-4">
+                        <input name="q2" value="{{ form.q2.value|default:'' }}"  type="text" class="form-control" />
+                    </div>
+                    <label class="col-md-2 control-label"><label class="text-danger">*</label>Q4：</label>
+                    <div class="col-md-4">
+                        <input name="q4" value="{{ form.q4.value|default:'' }}"  type="text" class="form-control" />
                     </div>
                 </div>
                 
