@@ -57,6 +57,9 @@
                                             id="timeInterval" name="timeInterval" readonly />
                                         <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
                                     </div> -->
+                                    <div class="col-md-2">
+                                    <p style="margin-top: 10px; margin-left: 10px;   color: #1E1E1E;"><input type="checkbox" id="checkbox1" name="compare_date" >多日期对比分析</p>
+                                  </div>
                                     <div class="col-md-4 control-label pull-right" id="dateSearchData">
                                         
                                         <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="dailyUse.inquireClick(2)">昨日  </button>
@@ -73,6 +76,45 @@
                     </div>
                 </div>
             </div>
+
+            <div id="compare_div" class="col-md-10 real-time-command-list" style="padding-right: 0px; padding-left:10px;">
+                <div class="panel panel-default">
+                    
+                    <div class="panel-body mileage-Content"  id="stretch3-body">
+                      <div class="form-group">
+                        <div class="col-md-2">
+                            <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
+                                   id="compare_date1" name="compare_date1" placeholder=""/>
+                        </div>
+                        <div class="col-md-2">
+                            <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
+                                   id="compare_date2" name="compare_date2" placeholder=""/>
+                        </div>
+                        <div class="col-md-2">
+                            <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
+                                   id="compare_date3" name="compare_date13" placeholder=""/>
+                        </div>
+                        <div class="col-md-2">
+                            <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
+                                   id="compare_date4" name="compare_date4" placeholder=""/>
+                        </div>
+                        <div class="col-md-2">
+                            <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
+                                   id="compare_date5" name="compare_date5" placeholder=""/>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="col-md-11">
+                          <div id="dailyCompareGraphics" style="height:400px;width:100%;"></div>
+                        </div>
+                        
+                        
+                       </div> 
+                        
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-2" style="padding-right: 0px; padding-left:0px;"></div>
             <div class="col-md-10 real-time-command-list" style="padding-right: 0px; padding-left:10px;">
                 <div class="panel panel-default">

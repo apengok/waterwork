@@ -46,7 +46,49 @@
     dailyUse = {
         init: function(){
             console.log("dailyUse init");
+
+            laydate.render({elem: '#compare_date1',
+                theme: '#6dcff6',
+                done: function(value, date, endDate){
+                    $("#compare_date1-error").hide();
+                    console.log("comparedate 1 selected done",value,date,endDate);
+                    dailyUse.inquireBydateselected(value);
+                }
+            });
+
+            laydate.render({elem: '#compare_date2',
+                theme: '#6dcff6',
+                done: function(value, date, endDate){
+                    $("#compare_date2-error").hide();
+                    dailyUse.inquireBydateselected(value);
+                }
+            });
+
+            laydate.render({elem: '#compare_date3',
+                theme: '#6dcff6',
+                done: function(value, date, endDate){
+                    $("#compare_date3-error").hide();
+                    dailyUse.inquireBydateselected(value);
+                }
+            });
+
+            laydate.render({elem: '#compare_date4',
+                theme: '#6dcff6',
+                done: function(value, date, endDate){
+                    $("#compare_date4-error").hide();
+                    dailyUse.inquireBydateselected(value);
+                }
+            });
+
+            laydate.render({elem: '#compare_date5',
+                theme: '#6dcff6',
+                done: function(value, date, endDate){
+                    $("#compare_date5-error").hide();
+                    dailyUse.inquireBydateselected(value);
+                }
+            });
         },
+        
         userTree : function(){
             // 初始化文件树
             treeSetting = {
@@ -749,7 +791,297 @@
                     'rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)','rgba(153, 204, 153, 1)',
                     week5color,week5color,week5color,week5color,week5color,week5color,week5color
                     ];
+        },
+        compareshow:function(){
+        
+          if($('#checkbox1').is(":checked") == true){
+            $('#compare_div').show();
+            dailyUse.inquireCompare(1);
         }
+          else
+            $('#compare_div').hide();
+
+        
+        },
+        inquireBydateselected:function(queryday){
+            var url = "/analysis/flowdata_queryday/";
+
+            var station_id = $("#station_id").val();
+            // var data = {"organ": organ,"treetype":selectTreeType,"station_id":station_id,"qmonth":number, 'startTime': sTime, "endTime": eTime};
+            var data = {"station_id":station_id,"queryday":queryday};
+            json_ajax("POST", url, "json", false, data, dailyUse.processFlowsDayappend);     //发送请求
+        },
+        processFlowsDayappend:function(data){
+
+        },
+        inquireCompare: function (num) {
+            $(".mileage-Content").css("display", "block");  //显示图表主体
+            number = num;
+            
+            
+            dataListArray = [];
+            dataListArray2 = [];
+            var url = "/analysis/flowdata_dailyuse_compare/";
+
+            var station_id = $("#station_id").val();
+            // var data = {"organ": organ,"treetype":selectTreeType,"station_id":station_id,"qmonth":number, 'startTime': sTime, "endTime": eTime};
+            var data = {"station_id":station_id,"month":num};
+            json_ajax("POST", url, "json", false, data, dailyUse.processFlowsCompare);     //发送请求
+        },
+        processFlowsCompare: function (data) {//回调函数    数据组装
+            var list = [];
+            var myChart2 = echarts.init(document.getElementById('dailyCompareGraphics'));
+            var flow_data = "";
+            var last_month = "";
+            var before_last_month = "";
+            var history = "";
+            var hdates = [];
+            var legend_list = [];
+            var serias_list = [];
+            var today_use = "-";
+            var yestoday_use = "-";
+            var before_yestoday_use = "-";
+            var average = "-";
+            var maxflow = "-";
+            var minflow = "-";
+            var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 0, 119, 1)']
+            var today_bar = [];
+            if (data.obj != null && data.obj != "") {
+                flow_data = data.obj.current_month;
+                
+               
+                
+            }
+            if (data.success == true) {
+                
+                //当月
+                dataListArray=[];
+                if(flow_data.length > 0){
+                    flow_current = []
+                    list=[];
+                    for (var i = 0; i < flow_data.length; i++) {
+                        list =
+                            [i + 1, 
+                                flow_data[i].hdate,
+                                flow_data[i].color,
+                                flow_data[i].flow,
+                                // online[i].allDays == null ? "0" : online[i].allDays,
+                                flow_data[i].ratio == null ? "0" : flow_data[i].ratio,
+                                flow_data[i].assignmentName == null ? "无" : flow_data[i].assignmentName,
+                                
+                            ]
+
+                        dataListArray.push(list);                                       //组装完成，传入  表格
+                    };
+                    data_cnt = 0;
+                    ci = 0
+                    for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
+                        hdates.push(dataListArray[j][1]);
+                        flow_current.push(dataListArray[j][3]);
+                        data_cnt += 1;
+                        
+                        
+                    }
+                    
+                }
+                // legend_list.push("压力曲线");
+                var tmp = dailyUse.fillSeriaData("压力曲线",'line','rgba(22, 155, 213, 1)',0,0,flow_current);
+                serias_list.push(tmp);
+
+                
+
+                // dailyUse.reloadData(dataListArray);
+                $("#simpleQueryParam").val("");
+                $("#search_button").click();
+            } else {
+                if (data.msg != null) {
+                    layer.msg(data.msg, {move: false});
+                }
+                hdates = [];
+                dosages = [];
+                hdates.push("");
+                dosages.push("");
+                last_moth=[];
+                last_moth.push("");
+                
+                press=[];
+                press.push("");
+                
+            }
+
+            var start;
+            var end;
+            var length;
+            
+            
+            if (length < 4) {
+                barWidth = "30%";
+            } else if (length < 6) {
+                barWidth = "20%";
+            } else {
+                barWidth = null;
+            }
+            ;
+            if (length <= 200) {
+                start = 0;
+                end = 100;
+            } else {
+                start = 0;
+                // end = 100 * (200 / length);
+                end = 100;
+            }
+            ;
+            // wjk
+            //carLicense = dailyUse.platenumbersplitFun(carLicense);
+            var option = {
+                tooltip: {
+                    show:true,
+                    trigger: 'axis',
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    // formatter: function (a) {
+                    //     console.log(a);
+                    //     var relVal = "";
+                    //     //var relValTime = a[0].name;
+                    //     var relValTime  =hdates[a[0].dataIndex];
+                    //     if (a[0].data == 0) {
+                    //         relVal = "无相关数据";
+                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
+                    //         // relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;'></span>" + a[1].seriesName + "：" + a[1].value + " Mpa";
+                    //     } else {
+                    //         relVal = relValTime;
+                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
+                    //         // relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[1].color + "'></span>" + a[1].seriesName + "：" + a[1].value + " Mpa";
+                    //     }
+                    //     ;
+                    //     return relVal;
+                    // }
+                },
+                legend: {
+                    data: legend_list,   //['当月曲线','上月曲线',"压力曲线"],
+                    left: 'auto',
+                },
+                toolbox: {
+                    show: false
+                },
+                grid: {
+                    left: '80',
+                    bottom:'100'
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,  // 让折线图从X轴0刻度开始
+                    name: "",
+                    axisLabel: {
+                        show: true,
+                        'interval':7,
+                        rotate: 0
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#483d8b',
+                            type: 'dashed',
+                            width: 1
+                        }
+                    },
+                    // splitArea : {
+                    //     show: true,
+                    //     areaStyle:{
+                    //         color:dailyUse.splitAreaColor(hdates)
+                    //     }
+                    // },
+                    data: hdates //dailyUse.platenumbersplitYear(hdates)
+                },
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'm³',
+                        // nameTextStyle:{
+                        //     color: 'black',
+                        //     fontFamily: '微软雅黑 Bold',
+                        //     fontSize: 14,
+                        //     fontStyle: 'normal',
+                        //     fontWeight: 700
+                        // },
+                        // nameLocation:'middle',
+                        // nameGap:50,
+                        scale: false,
+                        position: 'left',
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'black',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        splitLine: {
+                            show: true
+                        }
+                    },
+
+                    
+                ],
+                // dataZoom : [{
+                //     show : true,
+                //     realtime : true,
+                //     //orient: 'vertical',   // 'horizontal'
+                //     //x: 0,
+                //     y: 550,
+                //     //width: 400,
+                //     height: 20,
+                //     //backgroundColor: 'rgba(221,160,221,0.5)',
+                //     //dataBackgroundColor: 'rgba(138,43,226,0.5)',
+                //     //fillerColor: 'rgba(38,143,26,0.6)',
+                //     //handleColor: 'rgba(128,43,16,0.8)',
+                //     //xAxisIndex:[],
+                //     //yAxisIndex:[],
+                //     type: 'inside',
+                //     start : start,
+                //     end : end
+                // },
+                // {
+                //     show : true,
+                //     realtime : true,
+                //     //orient: 'vertical',   // 'horizontal'
+                //     //x: 0,
+                //     y: 550,
+                //     //width: 400,
+                //     height: 20,
+                //     //backgroundColor: 'rgba(221,160,221,0.5)',
+                //     //dataBackgroundColor: 'rgba(138,43,226,0.5)',
+                //     //fillerColor: 'rgba(38,143,26,0.6)',
+                //     //handleColor: 'rgba(128,43,16,0.8)',
+                //     //xAxisIndex:[],
+                //     //yAxisIndex:[],
+                //     type: 'slider',
+                //     start : 0,
+                //     end : 100
+                // }],
+                series: serias_list
+            };
+            myChart2.setOption(option);
+            
+            window.onresize = myChart2.resize;
+        },
     }
     $(function(){
         $('input').inputClear().on('onClearEvent',function(e,data){
@@ -764,7 +1096,7 @@
         dailyUse.init();
         
         dailyUse.inquireClick(1);
-        
+        $('#compare_div').hide();
         // IE9 end
         // $("#selectAll").bind("click", dailyUse.selectAll);
         // 组织架构模糊搜索
@@ -772,7 +1104,7 @@
             search_ztree('treeDemo', 'search_condition','group');
         });       
         
-        
+        $('#checkbox1').bind('click',dailyUse.compareshow);
         
     })
 })($,window)

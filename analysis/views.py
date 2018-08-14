@@ -605,6 +605,10 @@ class DailyUseView(TemplateView):
 
         return context      
 
+def flowdata_queryday(request):
+
+    return
+
 
 def flowdata_dailyuse(request):
     print("flowdata_dailyuse:",request.POST)
@@ -885,6 +889,70 @@ def flowdata_monthuse(request):
                 "before_last_month":data3, #reverse
                 "history":data4,
                 "pressure":p_data,
+                
+            },
+            "success":1}
+
+    
+    
+    return HttpResponse(json.dumps(ret))
+
+
+
+def flowdata_dailyuse_compare(request):
+    print("flowdata_dailyuse_compare:",request.POST)
+
+    stationid = request.POST.get("station_id") # DMABaseinfo pk
+    month = request.POST.get("month")
+    station = Station.objects.get(pk=int(stationid))
+
+    month_data1 = {}
+    month_data2 = {}
+    month_data3 = {}
+    history_data = {}
+
+    
+
+    today = datetime.date.today()
+    today_str = today.strftime("%Y-%m-%d")
+    
+    yestmonth = today - datetime.timedelta(days=28)
+    yestoday_str = yestmonth.strftime("%Y-%m-%d")
+    
+
+    # startTime = yestmonth
+    # endTime = today
+    startTime = today - datetime.timedelta(days=28)
+    endTime = today
+
+    
+    # startTime = "2018-08-04 23:59:59"
+    # endTime = "2018-08-05 23:59:59"
+    if month == "1":
+        month_data1 = station.flowData_Day(startTime,endTime)
+    
+    
+    #current moth
+    data1 = []
+    if len(month_data1) > 0:
+        dates1 = [k for k in month_data1]
+        flow_data1 = [month_data1[k] for k in month_data1]
+        for i in range(len(flow_data1)):
+            data1.append({
+                "hdate":dates1[i],
+                "flow":flow_data1[i],
+                "assignmentName":station.username,
+                "color":"红色",
+                "ratio":"null",
+                })
+
+    
+
+    ret = {"exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":{
+                "current_month":data1, #reverse
+                
                 
             },
             "success":1}

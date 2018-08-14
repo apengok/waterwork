@@ -26,6 +26,8 @@ urlpatterns = [
 
     url(r'^dailyuse/?$',views.DailyUseView.as_view(),name='dailyuse'),
     url(r'flowdata_dailyuse/?$',views.flowdata_dailyuse,name='flowdata_dailyuse'),
+    url(r'flowdata_dailyuse_compare/?$',views.flowdata_dailyuse_compare,name='flowdata_dailyuse_compare'),
+    url(r'flowdata_queryday/?$',views.flowdata_queryday,name='flowdata_queryday'),
     
     url(r'^monthuse/?$',views.MonthUseView.as_view(),name='monthuse'),
     url(r'flowdata_monthuse/?$',views.flowdata_monthuse,name='flowdata_monthuse'),
