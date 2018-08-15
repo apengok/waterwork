@@ -8,4 +8,4 @@ from .models import Personalized
 class logoPagesPhotoForm(forms.ModelForm):
     class Meta:
         model = Personalized
-        fields = ('logoPagesPhoto',  )
+        fields = ('loginLogo', 'webIco','homeLogo','topTitle','copyright','websiteName','recordNumber','frontPageMsg' )

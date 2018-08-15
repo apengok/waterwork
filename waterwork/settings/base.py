@@ -122,7 +122,7 @@ DATABASES = {
         'NAME': 'waterwork',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': 'localhost',    #120.78.255.129 192.168.197.134
+        'HOST': '192.168.197.134',    #120.78.255.129 192.168.197.134
         'PORT': '5432',
     },
     'zncb': {
