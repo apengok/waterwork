@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'legacy',
     'analysis',
     'devm',
+    'sysm',
     # 'channels',
 ]
 
@@ -94,7 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'django.template.context_processors.media',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -121,7 +122,7 @@ DATABASES = {
         'NAME': 'waterwork',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '192.168.197.134',    #120.78.255.129 http://120.78.255.129
+        'HOST': 'localhost',    #120.78.255.129 192.168.197.134
         'PORT': '5432',
     },
     'zncb': {
@@ -204,6 +205,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
     
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'data/') # 'data' is my media folder
 # MEDIA_URL = '/media/'

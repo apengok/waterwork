@@ -793,7 +793,8 @@ def getSimcardSelect(request):
     data = []
 
     for m in simcards:
-        data.append(m_info(m))
+        if m.meter.count() == 0:
+            data.append(m_info(m))
 
     operarions_list = {
         "exceptionDetailMsg":"null",
@@ -821,7 +822,7 @@ def getMeterSelect(request):
     data = []
 
     for m in meters:
-        if len(m.serialnumber) > 2:
+        if m.station_set.count() == 0:    #len(m.serialnumber) > 2
             data.append(m_info(m))
 
     operarions_list = {

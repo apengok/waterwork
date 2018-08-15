@@ -318,7 +318,7 @@
                     </a>
                     <ul class="second-menu-ul">
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'sysm:personalizedList' %}">
                                 <i class="fa fa-location-arrow"></i><span>平台个性化管理</span> 
                                 <i></i> 
                             </a>
@@ -822,7 +822,7 @@
 
                         {% if  'personality_systemconfig' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'sysm:personalizedList' %}">
                                 <i class="fa fa-location-arrow"></i><span>平台个性化管理</span> 
                                 <i></i> 
                             </a>

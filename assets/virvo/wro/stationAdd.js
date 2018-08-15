@@ -360,7 +360,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"user/verification" ,
+                                url:"/dmam/station/verifyusername/" ,
                                 data:{
                                     username:function(){return $("#username").val();}
                                 },

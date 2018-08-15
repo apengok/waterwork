@@ -22,7 +22,8 @@ from entm.views import i18n_javascript,error_404,error_500,StaticView
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 from django.contrib.auth.views import LogoutView
-
+from django.conf import settings
+from django.conf.urls.static import static
 from accounts.views import LoginView, RegisterView
 
 urlpatterns = [
@@ -54,11 +55,16 @@ urlpatterns = [
 
     url(r'^devm/', include('devm.urls', namespace='devm')),
 
+    url(r'^sysm/', include('sysm.urls', namespace='sysm')),
+
     # url(r'^testapp/', include('testapp.urls')),
 
     # url(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
     
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = error_404
 handler500 = error_500

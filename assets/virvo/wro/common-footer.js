@@ -18831,6 +18831,13 @@ $(function(){
         return this.optional(element) || tel.test(value) || (length == 11 && mobile.test(value));
     }, "请输入SIM卡号数字，范围：7~13");
 
+    // 表具编号验证
+    jQuery.validator.addMethod("isMeterSN", function (value, element) {
+        var length = value.length;
+        var sn = /^[A-Z0-9]+$/;
+        return this.optional(element) ||  (length == 7 && sn.test(value));
+    }, "请输入表具编号，长度7，大写字母或数字");
+
     // 匹配qq      
     jQuery.validator.addMethod("isQq", function(value, element) {
         return this.optional(element) || /^[1-9]\d{4,12}$/;
@@ -21699,28 +21706,28 @@ function getCookie(name) {
 })(jQuery); 
 
 $(function(){	
-		// var userGroupId=$("#userGroupId").val();
-		// var data={"uuid":userGroupId};
-		// var url="/clbs/m/intercomplatform/personalized/find";
-  //    	json_ajax("POST", url, "json", false,data,function(data){
-  //    		if(data.success==true){
-  //    			var list =data.obj.list;
-  //    			var topTitleMsg=list.topTitle;
-  //    			$("#personalizedTitle").html(topTitleMsg);
+		var userGroupId=$("#userGroupId").val();
+		var data={"uuid":userGroupId};
+		var url="/sysm/personalized/find/";
+     	json_ajax("POST", url, "json", false,data,function(data){
+     		if(data.success==true){
+     			var list =data.obj.list;
+     			var topTitleMsg=list.topTitle;
+     			$("#personalizedTitle").html(topTitleMsg);
      			
-  //    			var copyright=list.copyright;
-		// 		var websiteName=list.websiteName;
-		// 		var recordNumber=list.recordNumber;
-		// 		$("#copyRight").html(copyright);
-		// 		$("#website").html(websiteName);
-		// 		$("#website").attr("href","http://"+websiteName);
-		// 		$("#record").html(recordNumber);
-  //    			var homeLogo="/clbs/resources/img/logo/"+list.homeLogo;
-  //    			$(".brand").attr("style","background:url("+homeLogo+") no-repeat 0px 0px !important;");
-  //    			var webIco=list.webIco;
-  //    			$("#icoLink").attr("href","/clbs/resources/img/logo/"+webIco+"");
-  //    		}
-  //    	});  
+     			var copyright=list.copyright;
+				var websiteName=list.websiteName;
+				var recordNumber=list.recordNumber;
+				$("#copyRight").html(copyright);
+				$("#website").html(websiteName);
+				$("#website").attr("href","http://"+websiteName);
+				$("#record").html(recordNumber);
+     			var homeLogo="/static/virvo/resources/img/logo/"+list.homeLogo;
+     			$(".brand").attr("style","background:url("+homeLogo+") no-repeat 0px 0px !important;");
+     			var webIco=list.webIco;
+     			$("#icoLink").attr("href","/static/virvo/resources/img/logo/"+webIco+"");
+     		}
+     	});  
      	$(".panel-heading").bind("click",function(){
              	var id=$(this).context.id;
             	if($("#"+id+"-body").is(":hidden")){

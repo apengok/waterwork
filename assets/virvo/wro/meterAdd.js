@@ -241,19 +241,18 @@
         },
         serialnumberValidates: function () {
         
-            // var regName = /^(?=.*[0-9a-zA-Z])[0-9a-zA-Z]{1,20}$/;
-            // if (serialnumber != "" && !regName.test(serialnumber)) {
-            //     serialnumberError.html("请输入字母/数字，范围（车）7~15（人）1~20");
-            //     serialnumberError.show();
-            //     deviceFlag = false;
-            // }
-            // else 
+            var serialnumber = $("#serialnumber").val();
+            var sn = /^[A-Z0-9]+$/;;
+            
             if (serialnumber == "") {
-                serialnumberError.html("请输入终端号，范围：1~20");
+                serialnumberError.html("请输入表具编号，长度7，大写字母或数字");
                 serialnumberError.show();
                 deviceFlag = false;
-            }
-            else {
+            }else if (!(serialnumber.length == 7 && sn.test(serialnumber))) {
+                serialnumberError.html("请输入表具编号，长度7，大写字母或数字");
+                serialnumberError.show();
+                deviceFlag = false;
+            }else {
                 console.log("deviceAjax")
                 addMeterManagement.deviceAjax();
             }
@@ -308,9 +307,17 @@
                     R: {
                         maxlength: 100
                     },
+                    q4: {
+                        required: true,
+                    },
                     q3: {
                         required: true,
-                        maxlength: 50
+                    },
+                    q2: {
+                        required: true,
+                    },
+                    q1: {
+                        required: true,
                     }
                 },
                 messages: {
@@ -344,9 +351,17 @@
                     R: {
                         maxlength: publicSize10
                     },
+                    q4: {
+                        required: "q4 值不能为空",
+                    },
                     q3: {
                         required: "q3 值不能为空",
-                        maxlength: publicSize6
+                    },
+                    q2: {
+                        required: "q2 值不能为空",
+                    },
+                    q1: {
+                        required: "q1 值不能为空",
                     }
                 },
                 submitHandler: function (form) {
@@ -414,19 +429,40 @@
                     }
                 }
             )
+        },
+        initQR:function(){
+            rvalue = $("#R").val();
+            q3v = $("#q3").val();
+            r = parseFloat(rvalue);
+            q3 = parseFloat(q3v)
+            q1 =  q3/r;
+            q2 = q1 * 1.6;
+            q4 = q3 * 1.25;
+            $("#q1").attr("value",q1);
+            $("#q2").attr("value",q2);
+            $("#q4").attr("value",q4);
         }
     }
     $(function () {
         $('input').inputClear();
         //初始化
         addMeterManagement.init();
+        addMeterManagement.initQR();
         $('input').inputClear();
 
-        // $("#deviceType").on("change", function () {
-        //     deviceType = $(this).val();
-        //     serialnumber = $("#serialnumber").val();
-        //     addMeterManagement.serialnumberValidates();
-        // })
+        $("#serialnumber").on("change", function () {
+            deviceType = $(this).val();
+            serialnumber = $("#serialnumber").val();
+            addMeterManagement.serialnumberValidates();
+        });
+        $("#R").on("change", function () {
+            addMeterManagement.initQR();
+
+        });
+        $("#q3").on("change", function () {
+            addMeterManagement.initQR();
+
+        });
         $("#serialnumber").bind("input propertychange change", function (event) {
             // deviceType = $("#deviceType").val();
             serialnumber = $(this).val();

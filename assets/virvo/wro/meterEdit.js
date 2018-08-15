@@ -106,12 +106,19 @@
             }
         },
         serialnumberValidates: function () {
+            var serialnumber = $("#serialnumber").val();
+            var sn = /^[A-Z0-9]+$/;;
+            
             if (serialnumber == "") {
-                serialnumberError.html("请输入终端号，范围：1~20");
+                serialnumberError.html("请输入表具编号，长度7，大写字母或数字");
                 serialnumberError.show();
                 deviceFlag = false;
-            }
-            else {
+            }else if (!(serialnumber.length == 7 && sn.test(serialnumber))) {
+                serialnumberError.html("请输入表具编号，长度7，大写字母或数字");
+                serialnumberError.show();
+                deviceFlag = false;
+            }else {
+                console.log("deviceAjax")
                 editMeterManagement.deviceAjax();
             }
             
@@ -383,6 +390,18 @@
         },
         functionalTypeInit:function(){
             $("#functionalType").val(fts);
+        },
+        initQR:function(){
+            rvalue = $("#R").val();
+            q3v = $("#q3").val();
+            r = parseFloat(rvalue);
+            q3 = parseFloat(q3v)
+            q1 =  q3/r;
+            q2 = q1 * 1.6;
+            q4 = q3 * 1.25;
+            $("#q1").attr("value",q1);
+            $("#q2").attr("value",q2);
+            $("#q4").attr("value",q4);
         }
     }
     $(function(){
@@ -400,6 +419,14 @@
         //     serialnumber = $("#serialnumber").val();
         //     editMeterManagement.serialnumberValidates();
         // })
+        $("#R").on("change", function () {
+            editMeterManagement.initQR();
+
+        });
+        $("#q3").on("change", function () {
+            editMeterManagement.initQR();
+
+        });
         $("#serialnumber").bind("input propertychange change", function (event) {
             deviceType = $("#deviceType").val();
             serialnumber = $(this).val();
