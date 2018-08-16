@@ -24,7 +24,9 @@ from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 from dmam.models import DMABaseinfo,DmaStations,Station
 from entm.models import Organizations
+from .forms import logoPagesPhotoForm
 
+from django.core.files.storage import FileSystemStorage
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -55,6 +57,7 @@ def logoPagesPhotoUpdate(request):
 
 
 def personalizedUpdate(request):
+    print("update:",request.POST)
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
@@ -64,9 +67,22 @@ def personalizedUpdate(request):
 
 def personalizedUpdate_img(request):
 
+    print("update_img:",request.FILES)
+    # form = logoPagesPhotoForm(request.POST,request.FILES)
+    # print (form)
+    imgName = ''
+    if request.method == 'POST' and request.FILES['file']:
+        myfile = request.FILES['file']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        imgName = filename
+        print(filename,uploaded_file_url)
+
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":"null",
+            "imgName":imgName,
             "success":1}
     return HttpResponse(json.dumps(ret))
 

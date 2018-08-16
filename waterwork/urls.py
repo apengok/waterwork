@@ -27,7 +27,7 @@ from django.conf.urls.static import static
 from accounts.views import LoginView, RegisterView
 
 urlpatterns = [
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/virvo/resources/img/favicon.ico')),
     url(r'^admin/jsi18n', i18n_javascript),
     url(r'^admin/', admin.site.urls),
     url(r'^$',LoginView.as_view(), name='login'),

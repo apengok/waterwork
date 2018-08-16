@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^personalized/logoPagesPhoto/update/?$',views.logoPagesPhotoUpdate,name='logoPagesPhotoUpdate'),
     
     url(r'^personalized/update/?$',views.personalizedUpdate,name='personalizedUpdate'),
-    url(r'^personalized/update_img/?$',views.personalizedUpdate_img,name='personalizedUpdate_img'),
+    url(r'^personalized/upload_img/?$',views.personalizedUpdate_img,name='personalizedUpdate_img'),
     url(r'^personalized/find/?$',views.personalizedFind,name='personalizedFind'),
     url(r'^personalized/default/?$',views.personalizedDefault,name='personalizedDefault'),
         

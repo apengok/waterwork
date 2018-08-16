@@ -28,7 +28,10 @@ class Personalized(models.Model):
     recordNumber  = models.CharField(max_length=256,null=True,blank=True)
     # 平台登录页设置
     frontPageMsg    = models.CharField(max_length=256,null=True,blank=True)
-
+    frontPageMsgUrl    = models.CharField(max_length=256,null=True,blank=True)
+    updateDataUsername = models.CharField(max_length=256,null=True,blank=True)
+    updateDataTime = models.DateTimeField(db_column='updateDataTime', auto_now=True)  # Field name made lowercase.
+    
     belongto        = models.ForeignKey(Organizations,on_delete=models.CASCADE,blank=True,null=True)
 
 
