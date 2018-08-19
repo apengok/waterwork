@@ -36,7 +36,8 @@ class MyRoles(Group):
     notes           = models.CharField(max_length=156,blank=True)   
     rid             = models.CharField(max_length=1000,blank=True)   #name
     uid             = models.CharField(max_length=100,blank=True)
-    permissionTree  = models.CharField(max_length=50000,blank=True)
+    permissionTree  = models.TextField(blank=True)
+    # permissionTree  = models.CharField(max_length=50000,blank=True)
 
     belongto     = models.ForeignKey(Organizations,related_name='roles',null=True, blank=True,on_delete=models.CASCADE)
 

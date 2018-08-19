@@ -66,3 +66,67 @@ try:
     cursor.execute("CREATE EXTENSION IF NOT EXISTS postgis")
 except:
     pass
+
+
+
+
+apache virtualhost
+
+
+
+LoadModule wsgi_module "c:/users/hp/envs/djproject/lib/site-packages/mod_wsgi/server/mod_wsgi.pyd"
+WSGIPythonHome "c:/users/hp/envs/djproject"
+
+#Django项目的路径
+WSGIPythonPath D:/pengwl/webapp/waterwork
+
+
+NameVirtualHost *:8099
+
+<VirtualHost *:8099>
+    #ServerAdmin admin@bsc2000.com
+    ServerName bsc2000.com
+    ServerAlias bsc2000
+
+    
+    #WSGIPythonHome "c:/users/hp/envs/djproject"
+
+
+    #Django项目中wsgi.py的路径
+    WSGIScriptAlias / D:/pengwl/webapp/waterwork/waterwork/wsgi.py
+
+
+
+    #配置wsgi.py的访问权限
+    <Directory D:/pengwl/webapp/waterwork/waterwork >
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+    #Alias /robots.txt /path/to/waterwork/static/robots.txt
+    #Alias /favicon.ico /path/to/myproject/static/favicon.ico
+
+    Alias /media/ D:/pengwl/webapp/waterwork/media/
+    Alias /static/ D:/pengwl/webapp/waterwork/static/
+    <Directory D:/pengwl/webapp/waterwork/static>
+        Require all granted
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    <Directory D:/pengwl/webapp/waterwork/media>
+        Require all granted
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    #WSGIDaemonProcess www.myproject.com display-name=myproject user=myuser group=myuser processes=2 threads=15
+    #WSGIDaemonProcess django processes=2 threads=12 python-path=c:/users/hp/envs/djproject
+
+   
+    #WSGIProcessGroup www.myproject.com
+    ErrorLog "D:/pengwl/webapp/waterwork/apache_logs/error_log
+    CustomLog "D:/pengwl/webapp/waterwork/apache_logs/access_log" common
+</VirtualHost>
+create database waterwork character set utf8mb4 collate utf8mb4_general_ci;

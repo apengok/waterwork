@@ -1,0 +1,627 @@
+[Sun Aug 19 19:41:06.465295 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.470293 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.478286 2018] [authz_core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.478286 2018] [authz_core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.480285 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.481285 2018] [core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.482284 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.485284 2018] [authz_core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.489281 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.492280 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.493279 2018] [core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.498276 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.498276 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.501273 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.502273 2018] [core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.504272 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.506272 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.509270 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.509270 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.512268 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.516266 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.517265 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.519264 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.521263 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.526260 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.529258 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.531257 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.534256 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.534256 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.538255 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.538255 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.542250 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.546248 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.550246 2018] [authz_core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.550246 2018] [authz_core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.552244 2018] [authz_core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.553243 2018] [core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.553243 2018] [core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.556242 2018] [core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.558242 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.563239 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.564238 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.573233 2018] [authz_core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.573233 2018] [authz_core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.574232 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.575232 2018] [core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.576231 2018] [core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.577231 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.580230 2018] [authz_core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.581229 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.584227 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.586226 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.588224 2018] [authz_core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.588224 2018] [authz_core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.589224 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.591222 2018] [core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.591222 2018] [core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.593221 2018] [core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.595220 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.596219 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.596219 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.599217 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.599217 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.601218 2018] [authz_core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.604215 2018] [authz_core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.606214 2018] [core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.607214 2018] [core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.608213 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.609212 2018] [authz_core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.611211 2018] [core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.611211 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.614209 2018] [authz_core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.614209 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.619206 2018] [core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.621206 2018] [authz_core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.624204 2018] [core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.627203 2018] [authz_core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.630200 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.633199 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.633199 2018] [authz_core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.634198 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.635198 2018] [core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.638196 2018] [core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.638196 2018] [authz_core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.641194 2018] [core:error] [pid 75724:tid 1500] [client 127.0.0.1:13664] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.642194 2018] [authz_core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.645192 2018] [authz_core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.646191 2018] [authz_core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.648189 2018] [core:error] [pid 75724:tid 1476] [client 127.0.0.1:13671] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.649189 2018] [core:error] [pid 75724:tid 1460] [client 127.0.0.1:13673] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.650189 2018] [authz_core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.654187 2018] [core:error] [pid 75724:tid 1468] [client 127.0.0.1:13672] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.654187 2018] [core:error] [pid 75724:tid 1484] [client 127.0.0.1:13670] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.655186 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.740137 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.743136 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.757127 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.759127 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.767123 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.770127 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:41:06.857069 2018] [authz_core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:41:06.858069 2018] [core:error] [pid 75724:tid 1492] [client 127.0.0.1:13665] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.251614 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.254612 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.254612 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.258608 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.259607 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.262607 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.263606 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.265604 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.265604 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.266603 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.268602 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.268602 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.272600 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.272600 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.276598 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.276598 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.286592 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.289591 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.301583 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.301583 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.304581 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.304581 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.304581 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.304581 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.307580 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.307580 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.309580 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.310579 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.314577 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.316575 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.317575 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.319573 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.320573 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.320573 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.321572 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.323571 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.323571 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.329568 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.335564 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.336563 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.336563 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.338562 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.349557 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.351556 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.354554 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.362560 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.363549 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.363549 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.365546 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.365546 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.365546 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.366546 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.368546 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.369547 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.377540 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.379539 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.380538 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.380538 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.381537 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.382537 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.383537 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.384536 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.385535 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.388534 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.391532 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.393531 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.394530 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.394530 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.395529 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.396529 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.398528 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.400527 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.402526 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.403525 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.405524 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.405524 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.408522 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.409522 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.412519 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.412519 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.415518 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.415518 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.415518 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.418516 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.419516 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.419516 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.421516 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.422514 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.432508 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.434507 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:44.522457 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:44.528458 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.386670 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.389674 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.390668 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.391668 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.392666 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.393667 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.394666 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.397664 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.397664 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.399663 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.400662 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.407659 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.410656 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.410656 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.411656 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.413654 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.415654 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.416654 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.417653 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.422649 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.423649 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.425648 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.427647 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.429645 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.433643 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.433643 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.433643 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.438649 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.440639 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.452633 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.458629 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.459628 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.459628 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.462626 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.462626 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.463626 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.465625 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.467624 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.467624 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.469622 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.474620 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.476619 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.480616 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.481615 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.481615 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.483614 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.485613 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.486612 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.488621 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.492610 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.494608 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.496607 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.497607 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.504602 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.506601 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.507600 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.507600 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.507600 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.509599 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.510598 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.517596 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.520593 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.521601 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.522598 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.525591 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.525591 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.527589 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.527589 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.530587 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.530587 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.535585 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.535585 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.535585 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.538584 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.538584 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.542581 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.544579 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.545578 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.546578 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.549577 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.550576 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.550576 2018] [authz_core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.552575 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.553574 2018] [core:error] [pid 71228:tid 1484] [client 127.0.0.1:13682] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.553574 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.555573 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.557572 2018] [authz_core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.558571 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.560570 2018] [core:error] [pid 71228:tid 1492] [client 127.0.0.1:13681] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.565569 2018] [authz_core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.567566 2018] [authz_core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.568566 2018] [core:error] [pid 71228:tid 1460] [client 127.0.0.1:13685] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.569565 2018] [core:error] [pid 71228:tid 1468] [client 127.0.0.1:13684] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.576562 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.584557 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.598549 2018] [authz_core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.599549 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.601547 2018] [core:error] [pid 71228:tid 1500] [client 127.0.0.1:13680] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.618537 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.623535 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:42:49.684499 2018] [authz_core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/waterwork/static, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:42:49.690504 2018] [core:error] [pid 71228:tid 1476] [client 127.0.0.1:13683] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:50.979046 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/css/style.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:50.982043 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:50.989038 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/images/all.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:50.989038 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/component.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:50.991037 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/js/animate.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:50.991037 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/content.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:50.993037 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:50.994037 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:50.995036 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:50.996036 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.001032 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/js/jquery.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.006029 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.008028 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-1-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.009027 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/logo.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.010027 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/verifying.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.011026 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.013025 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.015024 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.017023 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/js/animate.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.020022 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.023019 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/modernizr.custom.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.025019 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/classie.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.026018 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.027018 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.032014 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/component.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.037011 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/images/all.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.039011 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/fixed.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.042008 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/slide.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.042008 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/content.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.044007 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.045006 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.045006 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.051003 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.053002 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/verifying.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.056001 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.057999 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-2-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.057999 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-3-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.059999 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.060999 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-4-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.060999 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/modernizr.custom.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.062996 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.067994 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-5-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.069992 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-6-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.070992 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.070992 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.070992 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.071991 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.072991 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.081986 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\x9c\xb0\xe5\x9b\xbe\xe7\x9b\x91\xe6\x8e\xa7.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.089981 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe7\x94\xa8\xe6\xb0\xb4\xe5\x88\x86\xe6\x9e\x902.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.090981 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\xa4\x9c\xe9\x97\xb4\xe6\x9c\x80\xe5\xb0\x8f\xe6\xb5\x81\xe9\x87\x8f.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.096977 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.097977 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.097977 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\xaf\xb9\xe6\xaf\x94\xe5\x88\x86\xe6\x9e\x90.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.101974 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.103973 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/classie.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.103973 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.105972 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/images/a.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.106972 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.110981 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.113967 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe4\xba\xa7\xe9\x94\x80\xe5\xb7\xae\xe7\xbb\x9f\xe8\xae\xa1\xe8\xa1\xa8.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.113967 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe9\x85\x8d\xe8\xa1\xa8\xe5\x88\x86\xe6\x9e\x90.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.117965 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.117965 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.122962 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe6\x99\xba\xe8\x83\xbd\xe5\x88\x86\xe6\x9e\x90.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.124961 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.126964 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe8\xbf\x90\xe7\xbb\xb4\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.130958 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.130958 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe7\xb3\xbb\xe7\xbb\x9f\xe6\x95\xb4\xe5\x90\x88.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.130958 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/s2-title.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.134956 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.134956 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.135955 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/software-manage.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.137954 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.140952 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\xa4\xa7\xe7\x94\xa8\xe6\x88\xb7\xe6\x9c\x88\xe7\x94\xa8\xe6\xb0\xb4\xe5\x88\x86\xe6\x9e\x90\xe6\xa8\xa1\xe6\x9d\xbf\xe5\x8e\x9f\xe5\x9e\x8b.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.149947 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/dma\xe7\xbb\x9f\xe8\xae\xa1\xe6\x8a\xa5\xe8\xa1\xa8.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.150946 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/title-32.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.152945 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.153944 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.154944 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe6\x95\xb0\xe6\x8d\xae\xe9\x87\x87\xe9\x9b\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.155943 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe7\xab\x99\xe7\x82\xb9\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.159941 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.164939 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe8\xa1\xa8\xe5\x85\xb7\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.165938 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe8\xa7\x92\xe8\x89\xb2\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.167937 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.167937 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.171935 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.182927 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/float-radius.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.182927 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/mini.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.182927 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/float-window-bottom.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.183927 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/fixed.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.185926 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.185926 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.185926 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.185926 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.187925 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.189924 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/box-fonts.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.192923 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.214910 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/slide.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.217910 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:51.294864 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/img/favicon.ico, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:51.296862 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.882469 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/js/jquery.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.884468 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/js/animate.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.885466 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/css/style.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.885466 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.887466 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.889465 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.899459 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/logo.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.900459 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/verifying.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.902457 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.903456 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-1-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.908453 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/content.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.910452 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.911451 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/js/animate.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.911451 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.913451 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.919447 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/modernizr.custom.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.925443 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/images/all.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.925443 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/content.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.925443 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/component.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.926443 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/assets/css/verifying.css, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.926443 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.928441 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.928441 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.929441 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.933440 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.944432 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/slide.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.945432 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-2-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.946431 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-3-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.947431 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.948431 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.950429 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.961423 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-5-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.962423 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-6-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.964421 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.965421 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.969419 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/classie.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.972418 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.973417 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/fixed.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.976415 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.978413 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe7\x94\xa8\xe6\xb0\xb4\xe5\x88\x86\xe6\x9e\x902.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.980412 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/modernizr.custom.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.981412 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.983411 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.985410 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/tab-4-font.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.985410 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\xa4\x9c\xe9\x97\xb4\xe6\x9c\x80\xe5\xb0\x8f\xe6\xb5\x81\xe9\x87\x8f.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:53.990411 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:53.992406 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.001400 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.001400 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\x9c\xb0\xe5\x9b\xbe\xe7\x9b\x91\xe6\x8e\xa7.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.002399 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe4\xba\xa7\xe9\x94\x80\xe5\xb7\xae\xe7\xbb\x9f\xe8\xae\xa1\xe8\xa1\xa8.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.003399 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/images/a.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.008396 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.008396 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.010396 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.010396 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe9\x85\x8d\xe8\xa1\xa8\xe5\x88\x86\xe6\x9e\x90.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.011395 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\xaf\xb9\xe6\xaf\x94\xe5\x88\x86\xe6\x9e\x90.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.015392 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.015392 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.023388 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/software-manage.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.028385 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe8\xbf\x90\xe7\xbb\xb4\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.029384 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe6\x99\xba\xe8\x83\xbd\xe5\x88\x86\xe6\x9e\x90.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.030384 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.032383 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.045375 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.047374 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/s2-title.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.047374 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe7\xb3\xbb\xe7\xbb\x9f\xe6\x95\xb4\xe5\x90\x88.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.048374 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe6\x95\xb0\xe6\x8d\xae\xe9\x87\x87\xe9\x9b\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.049373 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe5\xa4\xa7\xe7\x94\xa8\xe6\x88\xb7\xe6\x9c\x88\xe7\x94\xa8\xe6\xb0\xb4\xe5\x88\x86\xe6\x9e\x90\xe6\xa8\xa1\xe6\x9d\xbf\xe5\x8e\x9f\xe5\x9e\x8b.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.050372 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.052371 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/classie.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.052371 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.054370 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/dma\xe7\xbb\x9f\xe8\xae\xa1\xe6\x8a\xa5\xe8\xa1\xa8.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.057375 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.058368 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.063365 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/title-32.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.064365 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/box-fonts.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.066363 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.067363 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.075358 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.079355 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe8\xa1\xa8\xe5\x85\xb7\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.081354 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.082354 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/mini.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.082354 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13711] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.084353 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe8\xa7\x92\xe8\x89\xb2\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.084353 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13712] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.087351 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.091349 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/float-window-bottom.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.093347 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/\xe7\xab\x99\xe7\x82\xb9\xe7\xae\xa1\xe7\x90\x86.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.094347 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/style/images/float-radius.png, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.094347 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13713] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.096346 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13710] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.097345 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13714] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.097345 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/fixed.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.100344 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.115335 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/logins/js/slide.js, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.118336 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:46:54.201286 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/img/favicon.ico, referer: http://bsc2000.com:8099/
+[Sun Aug 19 19:46:54.204284 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13715] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:09.147263 2018] [wsgi:error] [pid 53508:tid 1464] [client 127.0.0.1:13729] Not Found: /analysys/mnf\r
+[Sun Aug 19 19:49:09.288164 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13729] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/img/favicon.ico, referer: http://bsc2000.com:8099/analysys/mnf
+[Sun Aug 19 19:49:09.289164 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13729] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.081635 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/bootstrap/css/bootstrap.min.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.084633 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.097625 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/animate.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.097625 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/css/font-awesome.min.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.099623 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/dataTables.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.102623 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.103622 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.104621 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.105621 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/wizard.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.109619 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.112616 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/adaptiveStyle.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.114615 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/main.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.114615 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/css/twinkle.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.115614 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.117614 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.118613 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.123611 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/layui/layer/skin/layer.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.123611 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/laydate/theme/default/laydate.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.126608 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.127608 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.128607 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery-1.10.2.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.131606 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.134604 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery.cookie.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.136602 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/layui/layer/layer.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.137602 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.138602 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/laydate/laydate.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.139601 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.143600 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/clockPlugins.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.146597 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/zTree/css/zTreeStyle.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.147596 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/ungzip/pako.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.148595 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.148595 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/sendAjax.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.148595 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.150595 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.151594 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.153593 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.153593 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/modernizr-2.6.2.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.157590 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/sockjs-1.1.1.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.158590 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.159589 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/stomp.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.160590 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.165586 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.167585 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/webSocket.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.168586 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery.nanoscroller.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.170583 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.170583 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/waypoints.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.171582 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.173582 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.180577 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/bootstrap-toggle.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.180577 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/ungzip/ungzip.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.180577 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/bootstrap/js/bootstrap.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.182576 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/toastr.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.182576 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/bootstrap-suggest.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.183575 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.183575 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.185575 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.186574 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery.validate.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.195569 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.195569 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.196569 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/zTree/js/ztreeSearch.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.199567 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.200566 2018] [authz_core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/common-footer.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.201565 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/inputClear.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.201565 2018] [authz_core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/bd-echatrs.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.204564 2018] [core:error] [pid 53508:tid 1464] [client 127.0.0.1:13737] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.207562 2018] [core:error] [pid 53508:tid 1480] [client 127.0.0.1:13742] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.208562 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery-1.10.2.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.210560 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.211559 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.211559 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.213559 2018] [authz_core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/mnf.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.220555 2018] [core:error] [pid 53508:tid 1496] [client 127.0.0.1:13744] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.229549 2018] [authz_core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery-1.10.2.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.230549 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/layui/layer/skin/layer.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.230549 2018] [authz_core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/laydate/theme/default/laydate.css, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.231548 2018] [core:error] [pid 53508:tid 1500] [client 127.0.0.1:13738] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.234552 2018] [core:error] [pid 53508:tid 1472] [client 127.0.0.1:13741] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.234552 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.249538 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery.cookie.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.251536 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.262551 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/layui/layer/layer.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.264550 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.271527 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/laydate/laydate.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.272527 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.282518 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/sendAjax.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.283518 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.290514 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/ungzip/pako.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.294519 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.300508 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/ungzip/ungzip.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.302507 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.310503 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/sockjs-1.1.1.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.312501 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.318498 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/stomp.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.319497 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.326494 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/webSocket.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.328492 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.336487 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/bootstrap/js/bootstrap.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.338487 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.344484 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/waypoints.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.346482 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.367473 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery.nanoscroller.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.371469 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.379463 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/bootstrap-toggle.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.380462 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.387460 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/jquery.validate.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.389457 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.396453 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/toastr.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.398452 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.405449 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/bootstrap-suggest.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.406447 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.414443 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/inputClear.min.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.416441 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.421439 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/common-footer.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.423437 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.432433 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/zTree/js/ztreeSearch.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.434432 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.440428 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/bd-echatrs.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.442429 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.448424 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/wro/mnf.js, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.450422 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:25.491399 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/img/favicon.ico, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:25.493398 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13743] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:34.326792 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13752] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/img/favicon.ico, referer: http://bsc2000.com:8099/analysis/mnf
+[Sun Aug 19 19:49:34.329791 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13752] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:42.467505 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13753] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/js/layui/layer/layer.js
+[Sun Aug 19 19:49:42.471502 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13753] AH00082: an unknown filter was not added: includes
+[Sun Aug 19 19:49:42.796316 2018] [authz_core:error] [pid 53508:tid 1484] [client 127.0.0.1:13753] AH01630: client denied by server configuration: D:/pengwl/webapp/waterwork/static/virvo/resources/img/favicon.ico, referer: http://bsc2000.com:8099/static/virvo/resources/js/layui/layer/layer.js
+[Sun Aug 19 19:49:42.798315 2018] [core:error] [pid 53508:tid 1484] [client 127.0.0.1:13753] AH00082: an unknown filter was not added: includes
