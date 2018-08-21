@@ -19,5 +19,6 @@ urlpatterns = [
     
     url(r'^mapstation/?$',views.MapStationView.as_view(),name='mapstation'),
     
+    url(r'^realtimedata/?$',views.RealTimeDataView.as_view(),name='realtimedata'),
         
 ]

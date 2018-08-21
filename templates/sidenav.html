@@ -49,7 +49,7 @@
                         </li>
                         
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'monitor:realtimedata' %}">
                                 <i class="fa fa-location-arrow"></i><span>实时数据</span> 
                                 <i></i> 
                             </a>
@@ -486,7 +486,7 @@
                         {% endif %}
                         {% if  'realdata_datamonitor' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'monitor:realtimedata' %}">
                                 <i class="fa fa-location-arrow"></i><span>实时数据</span> 
                                 <i></i> 
                             </a>

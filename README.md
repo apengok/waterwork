@@ -130,3 +130,10 @@ NameVirtualHost *:8099
     CustomLog "D:/pengwl/webapp/waterwork/apache_logs/access_log" common
 </VirtualHost>
 create database waterwork character set utf8mb4 collate utf8mb4_general_ci;
+
+
+
+pip install virtualenvwrapper-win
+mkvirtualenv djproject
+
+mod_wsgi-express module-config 
