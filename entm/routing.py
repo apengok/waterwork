@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 # chat/routing.py
 from django.conf.urls import url
 

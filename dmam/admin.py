@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from django.contrib import admin
 from . models import WaterUserType,DMABaseinfo,DmaStations,Meter,Station,SimCard
 # Register your models here.

@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 PROGRESS_NUM=1
 PROGRESS_COUNT=0
 

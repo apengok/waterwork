@@ -411,3 +411,31 @@ class Station(models.Model):
             min_str = "{} m³ ({}:00)".format(round(float(min_value),2),min_date[-2:])
 
         return avg_str,max_str,min_str
+
+
+
+    def realtimedata(self):
+
+        rtflow = HdbFlowData.objects.filter(commaddr=self.commaddr).last()
+        press = HdbPressureData.objects.filter(commaddr=self.commaddr).last()
+        # obj= Model.objects.filter(testfield=12).order_by('-id')[0]
+
+        return {
+            "stationname":self.username,
+            "belongto":self.belongto.name,
+            "serialnumber":self.meter.serialnumber,
+            "alarm":0,
+            "status":self.meter.state,
+            "dn":self.meter.dn,
+            "readtime":rtflow.readtime if rtflow else '-',
+            "collectperiod":self.meter.collectperiod,
+            "updataperiod":self.meter.updataperiod,
+            "influx":rtflow.flux if rtflow else '-',
+            "plusflux":rtflow.plustotalflux if rtflow else '-',
+            "revertflux":rtflow.reversetotalflux if rtflow else '-',
+            "press":press.pressure if press else 0,
+            "baseelectricity":0,
+            "remoteelectricity":0,
+            "signal":0,
+            
+        }

@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 def decide_on_model(model):
     """Small helper function to pipe all DB operations of a worlddata model to the world_data DB"""
     return 'zncb' if model._meta.app_label == 'legacy' else None

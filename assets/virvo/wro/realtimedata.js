@@ -29,7 +29,7 @@
                         "class" : "text-center"
                     },
                     {
-                        "data" : stationname,
+                        "data" : "stationname",
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
                             if (data != null) {
@@ -69,7 +69,13 @@
                     {
                         "data" : "status",
                         "class" : "text-center",
-                        
+                        render : function(data, type, row, meta) {
+                            if (data == "1") {
+                                return "在线";
+                            } else{
+                                return "离线";
+                            }
+                        }
                     }, 
                     {
                         "data" : "dn",
@@ -136,12 +142,12 @@
             //表格setting
             var setting = {
                 suffix  : '/',
-                listUrl : '/devm/meter/list/',
-                editUrl : '/devm/meter/edit/',
-                deleteUrl : '/devm/meter/delete/',
-                deletemoreUrl : '/devm/meter/deletemore/',
-                enableUrl : '/devm/meter/enable_',
-                disableUrl : '/devm/meter/disable_',
+                listUrl : '/monitor/station/list/',
+                // editUrl : '/devm/meter/edit/',
+                // deleteUrl : '/devm/meter/delete/',
+                // deletemoreUrl : '/devm/meter/deletemore/',
+                // enableUrl : '/devm/meter/enable_',
+                // disableUrl : '/devm/meter/disable_',
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
                 dataTableDiv : 'dataTable', //表格
@@ -192,20 +198,21 @@
         groupListTree : function(){
             var treeSetting = {
                 async : {
-                    url : "/entm/user/oranizationtree/",
+                    url : "/dmam/district/dmatree/",
                     tyoe : "post",
                     enable : true,
                     autoParam : [ "id" ],
                     dataType : "json",
                     otherParam : {  // 是否可选  Organization
-                        "isOrg" : "1"
+                        "isOrg" : "1",
+                        "isStation":"1"
                     },
                     dataFilter: realtimeData.groupAjaxDataFilter
                 },
                 view : {
                     selectedMulti : false,
                     nameIsHTML: true,
-                    fontCss: setFontCss_ztree
+                    // fontCss: setFontCss_ztree
                 },
                 data : {
                     simpleData : {
@@ -233,9 +240,10 @@
             if(treeNode.type=="group"){
                 selectTreepId=treeNode.id;
                 selectTreeId = treeNode.uuid;
+                $("#simpleQueryParam").val("");
             }else {
                 selectTreepId=treeNode.pId;
-                selectTreeId = treeNode.id;
+                // selectTreeId = treeNode.id;
             }
             selectTreeType = treeNode.type;
             myTable.requestData();
