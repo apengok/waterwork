@@ -23,5 +23,14 @@ urlpatterns = [
     url(r'^personalized/upload_img/?$',views.personalizedUpdate_img,name='personalizedUpdate_img'),
     url(r'^personalized/find/?$',views.personalizedFind,name='personalizedFind'),
     url(r'^personalized/default/?$',views.personalizedDefault,name='personalizedDefault'),
+
+
+    url(r'^commconfig/?$',views.CommConfigView.as_view(),name='commlist'),
+    url(r'^commconfig/list/?$',views.getmetercommlist,name='getmetercommlist'),
+    url(r'^commconfig/add/?$',views.CommConfigAddView.as_view(),name='mcadd'),
+    url(r'^commconfig/edit/(?P<pk>\w+)/?$',views.CommConfigEditView.as_view(),name='mcedit'),
+    url(r'^commconfig/delete/(?P<pk>\w+)/?$',views.CommConfigDeleteView.as_view(),name='mcdelete'),
+    url(r'^commconfig/getProtocolSelect/?$',views.getProtocolSelect,name='getProtocolSelect'),
+
         
 ]

@@ -135,7 +135,7 @@ DATABASES = {
         'NAME': 'zncb',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '220.179.118.150',
+        'HOST': '120.78.255.129',  #120.78.255.129   220.179.118.150--shexian
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",

@@ -128,20 +128,20 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                     <div class="col-md-12 realtime-content">
                         <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
                             <div style="background-color: rgba(0, 153, 204, 1);" >
-                                <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(1251)
+                                <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点({{ total_station_num }})
                                 </div>
                             </div>
                             <div style="background:#fff;">
                                 <div class="form-group">
-                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #1627e0;">在线(6)</label>
-                                  <label class="col-md-6 control-label" style="margin-top:10px;color: grey;">离线(0)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #1627e0;">在线({{ online_station_num }})</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: grey;">离线({{ offline_station_num }})</label>
                                 </div>
                                 <div class="form-group">
-                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #f20804;">报警站点(0)</label>
-                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #02470e;">关注站点(0)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #f20804;">报警站点({{ alarm_station_num }})</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;color: #02470e;">关注站点({{ focus_station_num }})</label>
                                 </div>
                                 <div class="form-group">
-                                  <label class="col-md-6 control-label" style="margin-top:10px;margin-bottom:20px;color: #8c4380;">大用户站点(0)</label>
+                                  <label class="col-md-6 control-label" style="margin-top:10px;margin-bottom:20px;color: #8c4380;">大用户站点({{ biguser_station_num }})</label>
                                   
                                 </div>
                             </div>
@@ -341,7 +341,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 {% block javascript %}
   <script type="text/javascript">
      
-    var  statsinfo = {{ dmastasticinfo|safe }};
+    //var  statsinfo = {{ dmastasticinfo|safe }};
     
  </script>
  

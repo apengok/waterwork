@@ -153,11 +153,24 @@ class RealTimeDataView(TemplateView):
         # context["page_submenu"] = "组织和用户管理"
         context["page_title"] = "实时数据"
 
-        stat_list = dmastasticinfo()
-        statsinfo = json.dumps({"statsinfo":stat_list})
-        
-        context["dmastasticinfo"] = statsinfo
-        
+        stations = self.request.user.station_list_queryset()
+
+        total_station_num = len(stations)
+        online_station = stations.filter(meter__state=1)
+        online_station_num = len(online_station)
+        biguser_station = stations.filter(biguser=1)
+        biguser_station_num = len(biguser_station)
+        focus_station = stations.filter(focus=1)
+        focus_station_num = len(focus_station)
+
+        alarm_station_num = 0
+
+        context["total_station_num"] = total_station_num
+        context["online_station_num"] = online_station_num
+        context["offline_station_num"] = total_station_num - online_station_num
+        context["biguser_station_num"] = biguser_station_num
+        context["focus_station_num"] = focus_station_num
+        context["alarm_station_num"] = alarm_station_num
 
         return context          
 

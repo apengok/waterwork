@@ -245,11 +245,11 @@
             var sn = /^[A-Z0-9]+$/;;
             
             if (serialnumber == "") {
-                serialnumberError.html("请输入表具编号，长度7，大写字母或数字");
+                serialnumberError.html("请输入表具编号，长度11，大写字母或数字");
                 serialnumberError.show();
                 deviceFlag = false;
-            }else if (!(serialnumber.length == 7 && sn.test(serialnumber))) {
-                serialnumberError.html("请输入表具编号，长度7，大写字母或数字");
+            }else if (!(serialnumber.length == 11 && sn.test(serialnumber))) {
+                serialnumberError.html("请输入表具编号，长度11，大写字母或数字");
                 serialnumberError.show();
                 deviceFlag = false;
             }else {
