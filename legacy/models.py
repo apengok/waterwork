@@ -472,6 +472,16 @@ class Metercomm(models.Model):
     def __unicode__(self):
         return '%s%s'%(self.name)
 
+    def mclist(self):
+
+        return {
+            "id":self.pk,
+            "commname":self.name,
+            "commtype":self.commtype,
+            "tcpport":self.tcpport,
+            "commprotocol":self.commprotocol
+        }
+
 class Meterprotocol(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
@@ -484,6 +494,12 @@ class Meterprotocol(models.Model):
 
     def __unicode__(self):
         return '%s%s'%(self.name)
+
+    def protocol(self):
+        return {
+            "id":self.id,
+            "name":self.name
+        }
 
 
 class PipeMapNode(models.Model):
