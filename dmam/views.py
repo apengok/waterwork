@@ -59,7 +59,7 @@ def dmatree(request):
         organs = Organizations.objects.first()
     else:
         organs = user.belongto #Organizations.objects.all()
-    
+    print("dmatree",organs)
     for o in organs.get_descendants(include_self=True):
         if o.dma.exists():
             p_dma_no = o.dma.first().dma_no
@@ -1467,7 +1467,11 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
 
-        
+        # 删除抄表系统中对应的大表
+        commaddr = self.object.commaddr
+        bigm = Bigmeter.objects.filter(commaddr=commaddr)
+        if bigm.exists():
+            bigm.first().delete()
 
         self.object.delete()
         result = dict()

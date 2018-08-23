@@ -6,8 +6,11 @@ from django.urls import reverse
 from entm.models import Organizations
 import datetime
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataHour,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.db.models.signals import pre_save
 from django.db.models import Avg, Max, Min, Sum
+from legacy.models import Bigmeter
 
 # Create your models here.
 
@@ -237,6 +240,7 @@ class Station(models.Model):
 
     dmametertype     = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
 
+    # bgm = models.OneToOneField(Bigmeter,related_name='bigm',on_delete=models.CASCADE)
 
     class Meta:
         managed = True
@@ -439,3 +443,35 @@ class Station(models.Model):
             "signal":0,
             
         }
+
+
+
+@receiver(post_save, sender=Station)
+def ensure_bigmeter_exists(sender, **kwargs):
+    if kwargs.get('created', False):
+        instance=kwargs.get('instance')
+        username= instance.username
+        lng=instance.lng
+        lat=instance.lat
+        commaddr=instance.commaddr
+        simid = instance.commaddr
+        Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)   
+    else:
+        # print("ensure_bigmeter_exists edit")
+        instance=kwargs.get('instance')
+        username= instance.username
+        lng=instance.lng
+        lat=instance.lat
+        commaddr=instance.commaddr
+        simid = instance.commaddr
+        bigm = Bigmeter.objects.filter(commaddr=instance.commaddr)
+        if bigm.exists():
+        
+            bigm.first().username= instance.username
+            bigm.first().lng=instance.lng
+            bigm.first().lat=instance.lat
+            bigm.first().commaddr=instance.commaddr
+            bigm.first().simid = instance.commaddr
+            bigm.first().save()
+        else:
+            Bigmeter.objects.create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  

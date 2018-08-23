@@ -17,8 +17,16 @@
                       <div class="form-group">
                         <label class="col-md-4 control-label">通讯类型：</label>
                         <div class=" col-md-7">
-                          <input type="text" value="{{ form.commtype.value }}"  class="form-control" name="commtype" id = "commtype"/>
+                          
+                          <select name="commtype" id="commtype" autocomplete="off"  class="form-control" >
+                            <option  value="0">集中器</option>
+                            <option  value="1">大表</option>
+                            <!-- <option  value="2">导入</option>
+                            <option  value="3">导出</option> -->
+                            
+                            </select>
                         </div>
+                        
                       </div>
                       <div class="form-group">
                         <label class="col-md-4 control-label">TCP端口：</label>
@@ -28,9 +36,14 @@
                       </div>
                       <div class="form-group">
                         <label class="col-md-4 control-label">通讯规约：</label>
+                        
                         <div class=" col-md-7">
-                          <input type="text" value="{{ form.commprotocol.value }}"  class="form-control" name="commprotocol" id = "commprotocol"/>
+                            <select name="commprotocol" id="commprotocol" autocomplete="off"  class="form-control" >
+                                
+                                
+                            </select>
                         </div>
+                        
                       </div>
                     </div>
         </div>
@@ -51,10 +64,12 @@
 
 
     (function($,window){
+        var commprotocolInput = $("#commprotocol");
         var name = $("#name").val();
-        var commtype = $("#commtype").val();
+        var commtype = "{{ form.commtype.value }}";
         var tcpport = $("#tcpport").val();
-        var commprotocol = $("commprotocol").val();
+        var commprotocol = "{{ form.commprotocol.value }}";
+        
         var edit_name = '';
         var edit_commtype = '';
         var edit_tcpport = '';
@@ -84,6 +99,42 @@
                 //     },
                 // });
                 // laydate.render({elem: '#registerDate',max: commConfigEdit.getsTheMaxTime(),theme: '#6dcff6'});
+                commConfigEdit.InitCallback();
+                
+                $("#commtype option").each(function (){
+                    
+                    if($(this).val()==commtype){ 
+                    $(this).attr("selected","selected"); 
+                 }});
+
+            },
+            InitCallback: function(){
+                //sim卡
+                // commConfigAdd.initProtocolType("/sysm/commconfig/getProtocolSelect/");
+                
+                json_ajax("POST", "/sysm/commconfig/getProtocolSelect/", "json", true,
+                    {commtype: commtype}, commConfigEdit.protocolTypeChangeCallback);
+            },
+            protocolTypeChangeCallback: function(data){
+                if(data.success){
+                    
+                    var itemList = data.obj;
+                    
+                    // commprotocolInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
+                    for(var i=0;i<itemList.length;i++){
+                        
+                        if(commprotocol == itemList[i].name){
+                            
+                            commprotocolInput.append('<option  value="'+itemList[i].name+'" selected="selected" >'+itemList[i].name+'</option>');
+
+                        }else{
+                            commprotocolInput.append('<option  value="'+itemList[i].name+'">'+itemList[i].name+'</option>');
+                        }
+                    }
+                    
+                }else{
+                    layer.msg(data.msg);
+                }
             },
             valuechange:function(){
                 edit_name = $("#name").val();
@@ -190,8 +241,15 @@
         $(function() {
             commConfigEdit.init();
             $("#submitEdit").on("click",commConfigEdit.doSubmit);
+            $("#commtype").bind("propertychange change", function (event) {
+                commtype = $("#commtype").val();
+                $("#commprotocol").find('option').remove();
+                commConfigEdit.InitCallback();
+                
+            });
             $('input').inputClear();
             $("#name,#commtype,#tcpport,#commprotocol,#cursor").on("change",commConfigEdit.clearPreviousValue);
+            console.log('commtype',commtype,'protocol',commprotocol);
         });
     })($,window)
 </script>

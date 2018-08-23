@@ -89,8 +89,8 @@ class Bigmeter(models.Model):
     coortype = models.CharField(db_column='CoorType', max_length=30, blank=True, null=True)  # Field name made lowercase.
     commaddr = models.CharField(db_column='CommAddr', primary_key=True, max_length=30)  # Field name made lowercase.
     simid = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    # districtid = models.IntegerField(db_column='DistrictId', blank=True, null=True)  # Field name made lowercase.
-    districtid = models.ForeignKey(District,db_column='DistrictId',related_name='bigmeter',blank=True, null=True,on_delete=models.CASCADE) 
+    districtid = models.IntegerField(db_column='DistrictId', blank=True, null=True)  # Field name made lowercase.
+    # districtid = models.ForeignKey(District,db_column='DistrictId',related_name='bigmeter',blank=True, null=True,on_delete=models.CASCADE) 
     field_metabinding = models.CharField(db_column='\r\nMetaBinding', max_length=20, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'.
     gpflow = models.CharField(db_column='GPFlow', max_length=64, blank=True, null=True)  # Field name made lowercase.
     uplimitflow = models.CharField(db_column='UpLimitFlow', max_length=64, blank=True, null=True)  # Field name made lowercase.

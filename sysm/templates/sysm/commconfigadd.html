@@ -37,7 +37,13 @@
                       </div>
                       <div class="form-group">
                         <label class="col-md-4 control-label">通讯规约：</label>
-                        <div class="col-sm-7 col-md-7 form-group" style="padding-top:10px; margin:0px;">
+                        <div class=" col-md-7">
+                            <select name="commprotocol" id="commprotocol" autocomplete="off"  class="form-control">
+                                
+                                
+                            </select>
+                        </div>
+                        <!-- <div class="col-sm-7 col-md-7 form-group" style="padding-top:10px; margin:0px;">
                             <div style="position:relative;">
                                 <span style="overflow:hidden;">
                                     <input type="hidden" id="commprotocolID" name="commprotocolID" value=""/>
@@ -46,7 +52,7 @@
                                         <input value=""  type="text" placeholder="" class="form-control" maxlength="20" id="commprotocol" name="commprotocol">
                                         
                                         <div class="input-group-btn">
-                                            <!-- <input type="hidden" class="hidenSubmitControl"/> -->
+                                            
                                           <button type="button" id="button" class="btn btn-white dropdown-toggle disabled loading-state-button" data-toggle="dropdown">
                                               <i class="fa fa-spinner loading-state"></i>
                                           </button>
@@ -55,7 +61,7 @@
                                         </div>
                                     </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- <div class=" col-md-7">
                           <input type="text"  class="form-control" name="commprotocol" id = "commprotocol"/>
                         </div> -->
@@ -135,11 +141,14 @@
             },
             InitCallback: function(){
                 //sim卡
-                commConfigAdd.initProtocolType("/sysm/commconfig/getProtocolSelect/");
+                // commConfigAdd.initProtocolType("/sysm/commconfig/getProtocolSelect/");
                 
+                json_ajax("POST", "/sysm/commconfig/getProtocolSelect/", "json", true,
+                    {commtype: $("#commtype").val()}, commConfigAdd.protocolTypeChangeCallback);
             },
             initProtocolType: function (url) {
-                commConfigAdd.initDataList(commprotocolInput, url, commprotocolId,commConfigAdd.protocolTypeChange);
+                commConfigAdd.initDataList(commprotocolInput, url, commprotocolId);
+                // commConfigAdd.initDataList(commprotocolInput, url, commprotocolId,commConfigAdd.protocolTypeChange);
             },
             protocolTypeChange: function (keyword) {
                 // datas = keyword.key;
@@ -149,6 +158,31 @@
             protocolTypeChangeCallback: function(data){
                 if(data.success){
                     console.log("protocolTypeChangeCallback");
+                    console.log(data);
+                    var itemList = data.obj;
+                    console.log(itemList);
+                    commprotocolInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
+                    for(var i=0;i<itemList.length;i++){
+                        commprotocolInput.append('<option  value="'+itemList[i].name+'">'+itemList[i].name+'</option>');
+                    }
+                    // var suggest=commprotocolInput.bsSuggest({
+                    //     indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+                    //     indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+                    //     data: {value:itemList},
+                    //     idField: "id",
+                    //     keyField: "name",
+                    //     effectiveFields: ["name"]
+                    // }).on('onDataRequestSuccess', function (e, result) {
+                    // }).on("click",function(){
+                    // }).on('onSetSelectValue', function (e, keyword, data) {
+                        
+                    // }).on('onUnsetSelectValue', function () {
+                    //     //放开输入
+                    //     commConfigAdd.showHideValueCase(1,dataInput);
+                    // });
+                    
+                    // commprotocolInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
+                        
                     // $("#iccidSim").val(data.obj.simcardInfo.ICCID);
                     // $("#simParentGroupName").val(data.obj.simcardInfo.groupName);
                     // $("#operator").val(data.obj.simcardInfo.operator);
@@ -189,8 +223,8 @@
                                 callback(keyword)
                             }
                             //限制输入
-                            commConfigAdd.showHideValueCase(0,dataInput);
-                            commConfigAdd.hideErrorMsg();
+                            // commConfigAdd.showHideValueCase(0,dataInput);
+                            // commConfigAdd.hideErrorMsg();
                         }).on('onUnsetSelectValue', function () {
                             //放开输入
                             commConfigAdd.showHideValueCase(1,dataInput);
@@ -294,7 +328,7 @@
             commConfigAdd.init();
             $("#submitEdit").on("click",commConfigAdd.doSubmit);
             $('input').inputClear();
-            $("#commtype").bind("input propertychange change", function (event) {
+            $("#commtype").bind("propertychange change", function (event) {
                 $("#commprotocol").find('option').remove();
                 commConfigAdd.InitCallback();
                 
