@@ -34,12 +34,16 @@ class StationAdmin(admin.ModelAdmin):
         # rows_updated = queryset.update(meterstate='正常')
         rows_updated = queryset.count()
         for q in queryset:
-            username= q.username
-            lng=q.lng
-            lat=q.lat
-            commaddr=q.commaddr
-            simid = q.commaddr
-            Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid) 
+            try:
+                username= q.username
+                lng=q.lng
+                lat=q.lat
+                commaddr=q.commaddr
+                simid = q.commaddr
+                Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid) 
+            except:
+                print('error appear:',username)
+                pass
         if rows_updated == 1:
             message_bit = "1 item was"
         else:

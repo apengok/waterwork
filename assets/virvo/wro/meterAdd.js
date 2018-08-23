@@ -242,7 +242,7 @@
         serialnumberValidates: function () {
         
             var serialnumber = $("#serialnumber").val();
-            var sn = /^[A-Z0-9]+$/;;
+            var sn = /^[A-Za-z0-9]+$/;;
             
             if (serialnumber == "") {
                 serialnumberError.html("请输入表具编号，长度12，大写字母或数字");

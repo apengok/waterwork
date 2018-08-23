@@ -122,9 +122,9 @@ DATABASES = {
     'default': { 
         'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
         'NAME': 'waterwork',
-        'USER': 'root',
+        'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': 'localhost',    #120.78.255.129 192.168.197.134
+        'HOST': '120.78.255.129',    #120.78.255.129 192.168.197.134
         'PORT': '3306',
         'STORAGE_ENGINE': 'INNODB',
         'OPTIONS': {'charset': 'utf8mb4'},

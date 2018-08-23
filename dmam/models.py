@@ -119,6 +119,9 @@ class SimCard(models.Model):
     def __unicode__(self):
         return '%s'%(self.simcardNumber)    
 
+    def __str__(self):
+        return '%s'%(self.simcardNumber)    
+
 
 class Meter(models.Model):
     serialnumber= models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -211,6 +214,9 @@ class Meter(models.Model):
         db_table = 'meter'
 
     def __unicode__(self):
+        return '%s'%(self.serialnumber)   
+
+    def __str__(self):
         return '%s'%(self.serialnumber)    
 
 
@@ -247,6 +253,9 @@ class Station(models.Model):
         db_table = 'station'
 
     def __unicode__(self):
+        return '%s'%(self.username)  
+
+    def __str__(self):
         return '%s'%(self.username)        
 
     @property

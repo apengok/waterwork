@@ -1,0 +1,163 @@
+[
+{
+  "model": "dmam.dmabaseinfo",
+  "pk": 3,
+  "fields": {
+    "dma_no": "dma0001",
+    "dma_name": "\u53e4\u57ce\u7247\u533a",
+    "pepoles_num": null,
+    "acreage": null,
+    "user_num": null,
+    "pipe_texture": null,
+    "pipe_length": null,
+    "pipe_links": null,
+    "pipe_years": null,
+    "pipe_private": null,
+    "ifc": null,
+    "aznp": null,
+    "night_use": null,
+    "cxc_value": null,
+    "creator": "admin",
+    "create_date": "2018-07-17",
+    "belongto": 4
+  }
+},
+{
+  "model": "dmam.dmabaseinfo",
+  "pk": 4,
+  "fields": {
+    "dma_no": "dma0002",
+    "dma_name": "\u7ecf\u6d4e\u5f00\u53d1\u533a",
+    "pepoles_num": null,
+    "acreage": null,
+    "user_num": null,
+    "pipe_texture": null,
+    "pipe_length": null,
+    "pipe_links": null,
+    "pipe_years": null,
+    "pipe_private": null,
+    "ifc": null,
+    "aznp": null,
+    "night_use": null,
+    "cxc_value": null,
+    "creator": "admin",
+    "create_date": "2018-07-17",
+    "belongto": 5
+  }
+},
+{
+  "model": "dmam.dmabaseinfo",
+  "pk": 5,
+  "fields": {
+    "dma_no": "dma0003",
+    "dma_name": "\u7696\u8d63\u94c1\u8def\u4ee5\u897f\u7247\u533a",
+    "pepoles_num": null,
+    "acreage": null,
+    "user_num": null,
+    "pipe_texture": null,
+    "pipe_length": null,
+    "pipe_links": null,
+    "pipe_years": null,
+    "pipe_private": null,
+    "ifc": null,
+    "aznp": null,
+    "night_use": null,
+    "cxc_value": null,
+    "creator": "admin",
+    "create_date": "2018-07-17",
+    "belongto": 6
+  }
+},
+{
+  "model": "dmam.dmabaseinfo",
+  "pk": 6,
+  "fields": {
+    "dma_no": "dma0004",
+    "dma_name": "\u57ce\u897f\u4e3b\u57ce\u533a\u7247\u533a",
+    "pepoles_num": null,
+    "acreage": null,
+    "user_num": null,
+    "pipe_texture": null,
+    "pipe_length": null,
+    "pipe_links": null,
+    "pipe_years": null,
+    "pipe_private": null,
+    "ifc": null,
+    "aznp": null,
+    "night_use": null,
+    "cxc_value": null,
+    "creator": "admin",
+    "create_date": "2018-07-17",
+    "belongto": 7
+  }
+},
+{
+  "model": "dmam.dmabaseinfo",
+  "pk": 7,
+  "fields": {
+    "dma_no": "dma0005",
+    "dma_name": "\u57ce\u897f\u5de5\u4e1a\u533a\u7247\u533a",
+    "pepoles_num": null,
+    "acreage": null,
+    "user_num": null,
+    "pipe_texture": null,
+    "pipe_length": null,
+    "pipe_links": null,
+    "pipe_years": null,
+    "pipe_private": null,
+    "ifc": null,
+    "aznp": null,
+    "night_use": null,
+    "cxc_value": null,
+    "creator": "admin",
+    "create_date": "2018-07-17",
+    "belongto": 8
+  }
+},
+{
+  "model": "dmam.dmabaseinfo",
+  "pk": 8,
+  "fields": {
+    "dma_no": "dma0006",
+    "dma_name": "\u62ab\u4e91\u8def\u7247\u533a",
+    "pepoles_num": null,
+    "acreage": null,
+    "user_num": null,
+    "pipe_texture": null,
+    "pipe_length": null,
+    "pipe_links": null,
+    "pipe_years": null,
+    "pipe_private": null,
+    "ifc": null,
+    "aznp": null,
+    "night_use": null,
+    "cxc_value": null,
+    "creator": "admin",
+    "create_date": "2018-07-17",
+    "belongto": 9
+  }
+},
+{
+  "model": "dmam.dmabaseinfo",
+  "pk": 10,
+  "fields": {
+    "dma_no": "123",
+    "dma_name": "\u4e1c\u90e8",
+    "pepoles_num": null,
+    "acreage": null,
+    "user_num": null,
+    "pipe_texture": null,
+    "pipe_length": null,
+    "pipe_links": null,
+    "pipe_years": null,
+    "pipe_private": null,
+    "ifc": null,
+    "aznp": null,
+    "night_use": null,
+    "cxc_value": null,
+    "creator": "\u7533",
+    "create_date": "2018-07-27",
+    "belongto": 7
+  }
+}
+]
