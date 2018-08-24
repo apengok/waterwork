@@ -3,7 +3,7 @@
 from django.contrib import admin
 from . models import WaterUserType,DMABaseinfo,DmaStations,Meter,Station,SimCard
 # Register your models here.
-from legacy.models import Bigmeter
+from legacy.models import Bigmeter,District
 
 @admin.register(WaterUserType)
 class WaterUserTypeAdmin(admin.ModelAdmin):
@@ -33,6 +33,8 @@ class StationAdmin(admin.ModelAdmin):
     def sync_bigmeter(self,request,queryset):
         # rows_updated = queryset.update(meterstate='正常')
         rows_updated = queryset.count()
+        district = District.objects.first()
+        districtid = district.id
         for q in queryset:
             try:
                 username= q.username
@@ -40,7 +42,8 @@ class StationAdmin(admin.ModelAdmin):
                 lat=q.lat
                 commaddr=q.commaddr
                 simid = q.commaddr
-                Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid) 
+                Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid,districtid=districtid,alarmoffline=1,alarmonline=1,
+            alarmgprsvlow=1,alarmmetervlow=1,alarmuplimitflow=1,alarmgpflow=1,pressurealarm=1,dosagealarm=1) 
             except:
                 print('error appear:',username)
                 pass

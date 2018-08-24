@@ -10,7 +10,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
 from django.db.models import Avg, Max, Min, Sum
-from legacy.models import Bigmeter
+from legacy.models import Bigmeter,District
 
 # Create your models here.
 
@@ -457,6 +457,8 @@ class Station(models.Model):
 
 @receiver(post_save, sender=Station)
 def ensure_bigmeter_exists(sender, **kwargs):
+    district = District.objects.first()
+    districtid = district.id
     if kwargs.get('created', False):
         instance=kwargs.get('instance')
         username= instance.username
@@ -464,7 +466,9 @@ def ensure_bigmeter_exists(sender, **kwargs):
         lat=instance.lat
         commaddr=instance.commaddr
         simid = instance.commaddr
-        Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)   
+
+        Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid,districtid=districtid,alarmoffline=1,alarmonline=1,
+            alarmgprsvlow=1,alarmmetervlow=1,alarmuplimitflow=1,alarmgpflow=1,pressurealarm=1,dosagealarm=1)   
     else:
         # print("ensure_bigmeter_exists edit")
         instance=kwargs.get('instance')
@@ -481,6 +485,14 @@ def ensure_bigmeter_exists(sender, **kwargs):
             bigm.first().lat=instance.lat
             bigm.first().commaddr=instance.commaddr
             bigm.first().simid = instance.commaddr
+            # bigm.first().alarmoffline = 1
+            # bigm.first().alarmonline = 1
+            # bigm.first().alarmgprsvlow = 1
+            # bigm.first().alarmmetervlow = 1
+            # bigm.first().alarmuplimitflow = 1
+            # bigm.first().alarmgpflow = 1
+            # bigm.first().pressurealarm = 1
+            # bigm.first().dosagealarm = 1
             bigm.first().save()
         else:
             Bigmeter.objects.create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
