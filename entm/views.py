@@ -265,6 +265,44 @@ def buildbasetree():
     return ctree    
 
 
+def buildFrontbasetree():
+    ctree = []
+    
+
+    for key in choicetreedict.keys():
+        pname = choicetreedict[key]["name"]
+        pid = key
+        
+
+        tmp1 = {}
+        tmp1["name"] = pname
+        tmp1["pId"] = 0
+        tmp1["id"] = pid
+        # tmp1["checked"] = "true"    #nocheck
+        tmp1["nocheck"] = "true"
+        
+        ctree.append(tmp1)
+        
+        submenu = choicetreedict[key]["submenu"][0]
+        for sub_key in submenu.keys():
+            name = submenu[sub_key]["name"]
+            idstr = "{id}_{pid}".format(id=sub_key,pid=pid)
+            cid = pid
+
+            tmp2 = {}
+            tmp2["name"] = name
+            tmp2["pId"] = cid
+            tmp2["id"] = idstr
+            # tmp2["checked"] = "true"
+            
+            ctree.append(tmp2)
+
+        
+
+            
+
+    return ctree    
+
 def buildchoicetree(request,permstree=None):
     ctree = []
     # print("buildtree permm:",permstree,type(permstree))
@@ -328,6 +366,37 @@ def buildchoicetree(request,permstree=None):
 
     return ctree
 
+
+
+def personlizedFrontTree(request):
+
+    
+    rid = request.POST.get("roleId") or ''
+    print(" get choicePermissionTree",rid)
+
+    
+    # print('buildtree:',buildtree)
+
+    if len(rid) <= 0:
+        user = request.user
+        if user.is_admin:
+            return HttpResponse(json.dumps(buildFrontbasetree()))
+        permissiontree = user.Role.permissionTree
+
+    else:
+        instance = MyRoles.objects.get(rid=rid)
+        permissiontree = instance.permissionTree
+
+
+    if len(permissiontree) > 0:
+        ptree = json.loads(permissiontree)
+        buildtree = buildchoicetree(request,ptree)
+            
+
+
+    # return JsonResponse(dicts,safe=False)
+
+    return HttpResponse(json.dumps(buildtree))
 
 
 def choicePermissionTree(request):

@@ -747,3 +747,658 @@
 [Tue Aug 21 20:03:39.657138 2018] [wsgi:error] [pid 116528:tid 1460] [client ::1:23238] districtId: None\r, referer: http://localhost:8099/devm/simcardmanager
 [Tue Aug 21 20:03:39.657138 2018] [wsgi:error] [pid 116528:tid 1460] [client ::1:23238] get simcardlist: 1 10 0 \r, referer: http://localhost:8099/devm/simcardmanager
 [Tue Aug 21 20:03:39.850026 2018] [wsgi:error] [pid 116528:tid 1460] [client ::1:23238] 1 10 24.6 246\r, referer: http://localhost:8099/devm/simcardmanager
+[Fri Aug 24 23:47:05.664473 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] Internal Server Error: /\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] Traceback (most recent call last):\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\base\\base.py", line 216, in ensure_connection\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self.connect()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\base\\base.py", line 194, in connect\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self.connection = self.get_new_connection(conn_params)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\mysql\\base.py", line 227, in get_new_connection\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return Database.connect(**conn_params)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\MySQLdb\\__init__.py", line 86, in Connect\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return Connection(*args, **kwargs)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\MySQLdb\\connections.py", line 204, in __init__\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     super(Connection, self).__init__(*args, **kwargs2)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] _mysql_exceptions.OperationalError: (2003, "Can't connect to MySQL server on '192.168.1.27' (10060)")\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] \r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] The above exception was the direct cause of the following exception:\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] \r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] Traceback (most recent call last):\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.665472 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\handlers\\exception.py", line 34, in inner\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     response = get_response(request)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\handlers\\base.py", line 126, in _get_response\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     response = self.process_exception_by_middleware(e, request)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\handlers\\base.py", line 124, in _get_response\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     response = wrapped_callback(request, *callback_args, **callback_kwargs)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\views\\generic\\base.py", line 68, in view\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return self.dispatch(request, *args, **kwargs)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\views\\generic\\base.py", line 88, in dispatch\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return handler(request, *args, **kwargs)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\views\\generic\\edit.py", line 141, in post\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     if form.is_valid():\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\forms\\forms.py", line 185, in is_valid\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return self.is_bound and not self.errors\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\forms\\forms.py", line 180, in errors\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self.full_clean()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\forms\\forms.py", line 382, in full_clean\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self._clean_form()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\forms\\forms.py", line 409, in _clean_form\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     cleaned_data = self.clean()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "D:\\pengwl\\webapp\\waterwork\\accounts\\forms.py", line 109, in clean\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     if qs.exists():\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\models\\query.py", line 715, in exists\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return self.query.has_results(using=self.db)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\models\\sql\\query.py", line 516, in has_results\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return compiler.has_results()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\models\\sql\\compiler.py", line 1031, in has_results\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return bool(self.execute_sql(SINGLE))\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.666470 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\models\\sql\\compiler.py", line 1059, in execute_sql\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     cursor = self.connection.cursor()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\base\\base.py", line 255, in cursor\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return self._cursor()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\base\\base.py", line 232, in _cursor\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self.ensure_connection()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\base\\base.py", line 216, in ensure_connection\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self.connect()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\utils.py", line 89, in __exit__\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     raise dj_exc_value.with_traceback(traceback) from exc_value\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\base\\base.py", line 216, in ensure_connection\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self.connect()\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\base\\base.py", line 194, in connect\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     self.connection = self.get_new_connection(conn_params)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\db\\backends\\mysql\\base.py", line 227, in get_new_connection\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return Database.connect(**conn_params)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\MySQLdb\\__init__.py", line 86, in Connect\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     return Connection(*args, **kwargs)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\MySQLdb\\connections.py", line 204, in __init__\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506]     super(Connection, self).__init__(*args, **kwargs2)\r, referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] django.db.utils.OperationalError: (2003, "Can't connect to MySQL server on '192.168.1.27' (10060)"), referer: http://localhost/
+[Fri Aug 24 23:47:05.667471 2018] [wsgi:error] [pid 174036:tid 1588] [client ::1:6506] \r, referer: http://localhost/
+[Sat Aug 25 13:43:42.059883 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] mod_wsgi (pid=158652): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 13:43:42.061883 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] mod_wsgi (pid=158652): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] Traceback (most recent call last):\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     result = factory(**kwargs)\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 13:43:42.070916 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] \r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] \r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] Traceback (most recent call last):\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     application = get_wsgi_application()\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     django.setup(set_prefix=False)\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     logging_config_func(logging_settings)\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     dictConfigClass(config).configure()\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315]     '%r: %s' % (name, e))\r
+[Sat Aug 25 13:43:42.071914 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9315] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 13:43:42.072918 2018] [authz_core:error] [pid 158652:tid 1600] [client ::1:9315] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 14:57:19.963484 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] mod_wsgi (pid=158652): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 14:57:19.963484 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] mod_wsgi (pid=158652): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 14:57:19.966479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] Traceback (most recent call last):\r
+[Sat Aug 25 14:57:19.966479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 14:57:19.966479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     result = factory(**kwargs)\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] \r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] \r
+[Sat Aug 25 14:57:19.967479 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] Traceback (most recent call last):\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     application = get_wsgi_application()\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     django.setup(set_prefix=False)\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     logging_config_func(logging_settings)\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     dictConfigClass(config).configure()\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991]     '%r: %s' % (name, e))\r
+[Sat Aug 25 14:57:19.968478 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9991] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 14:57:19.969477 2018] [authz_core:error] [pid 158652:tid 1600] [client ::1:9991] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 14:57:20.064420 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] mod_wsgi (pid=158652): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.064420 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] mod_wsgi (pid=158652): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] Traceback (most recent call last):\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     handler = self.configure_handler(handlers[name])\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     result = factory(**kwargs)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.066418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     StreamHandler.__init__(self, self._open())\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] \r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] During handling of the above exception, another exception occurred:\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] \r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] Traceback (most recent call last):\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     application = get_wsgi_application()\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.067417 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     django.setup(set_prefix=False)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     logging_config_func(logging_settings)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     dictConfigClass(config).configure()\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992]     '%r: %s' % (name, e))\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.068418 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9992] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:20.069416 2018] [authz_core:error] [pid 158652:tid 1600] [client ::1:9992] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.731439 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] mod_wsgi (pid=158652): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 14:57:25.731439 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] mod_wsgi (pid=158652): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 14:57:25.735442 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] Traceback (most recent call last):\r
+[Sat Aug 25 14:57:25.736442 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 14:57:25.736442 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 14:57:25.736442 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     result = factory(**kwargs)\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] \r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] \r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] Traceback (most recent call last):\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     application = get_wsgi_application()\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     django.setup(set_prefix=False)\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     logging_config_func(logging_settings)\r
+[Sat Aug 25 14:57:25.737438 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 14:57:25.738436 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     dictConfigClass(config).configure()\r
+[Sat Aug 25 14:57:25.738436 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 14:57:25.738436 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993]     '%r: %s' % (name, e))\r
+[Sat Aug 25 14:57:25.738436 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9993] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 14:57:25.738436 2018] [authz_core:error] [pid 158652:tid 1600] [client ::1:9993] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 14:57:25.823389 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] mod_wsgi (pid=158652): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.824384 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] mod_wsgi (pid=158652): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] Traceback (most recent call last):\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     handler = self.configure_handler(handlers[name])\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     result = factory(**kwargs)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     StreamHandler.__init__(self, self._open())\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.826383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] \r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] During handling of the above exception, another exception occurred:\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] \r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] Traceback (most recent call last):\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     application = get_wsgi_application()\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     django.setup(set_prefix=False)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     logging_config_func(logging_settings)\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     dictConfigClass(config).configure()\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994]     '%r: %s' % (name, e))\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.827383 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:9994] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 14:57:25.828382 2018] [authz_core:error] [pid 158652:tid 1600] [client ::1:9994] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://localhost/dmam/stationsmanager
+[Sat Aug 25 15:10:36.609770 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] mod_wsgi (pid=158652): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 15:10:36.609770 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] mod_wsgi (pid=158652): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] Traceback (most recent call last):\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     result = factory(**kwargs)\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 15:10:36.611769 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] \r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] \r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] Traceback (most recent call last):\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     application = get_wsgi_application()\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     django.setup(set_prefix=False)\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     logging_config_func(logging_settings)\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     dictConfigClass(config).configure()\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 15:10:36.612768 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128]     '%r: %s' % (name, e))\r
+[Sat Aug 25 15:10:36.613767 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10128] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 15:10:36.613767 2018] [authz_core:error] [pid 158652:tid 1600] [client ::1:10128] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 15:10:36.725705 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] mod_wsgi (pid=158652): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/
+[Sat Aug 25 15:10:36.725705 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] mod_wsgi (pid=158652): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/
+[Sat Aug 25 15:10:36.726705 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] Traceback (most recent call last):\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.726705 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.726705 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     handler = self.configure_handler(handlers[name])\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.726705 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.726705 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     result = factory(**kwargs)\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     StreamHandler.__init__(self, self._open())\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] \r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] During handling of the above exception, another exception occurred:\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] \r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] Traceback (most recent call last):\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     application = get_wsgi_application()\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     django.setup(set_prefix=False)\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     logging_config_func(logging_settings)\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     dictConfigClass(config).configure()\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129]     '%r: %s' % (name, e))\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.727704 2018] [wsgi:error] [pid 158652:tid 1600] [client ::1:10129] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/
+[Sat Aug 25 15:10:36.728704 2018] [authz_core:error] [pid 158652:tid 1600] [client ::1:10129] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://localhost/
+[Sat Aug 25 15:11:00.899387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] mod_wsgi (pid=182720): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 15:11:00.900390 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] mod_wsgi (pid=182720): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] Traceback (most recent call last):\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     result = factory(**kwargs)\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] \r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] \r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] Traceback (most recent call last):\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 15:11:00.906387 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     application = get_wsgi_application()\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     django.setup(set_prefix=False)\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     logging_config_func(logging_settings)\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     dictConfigClass(config).configure()\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134]     '%r: %s' % (name, e))\r
+[Sat Aug 25 15:11:00.907386 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10134] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 15:11:00.907386 2018] [authz_core:error] [pid 182720:tid 1600] [client ::1:10134] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 15:11:00.999316 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] mod_wsgi (pid=182720): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/
+[Sat Aug 25 15:11:00.999316 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] mod_wsgi (pid=182720): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://localhost/
+[Sat Aug 25 15:11:01.000316 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] Traceback (most recent call last):\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.000316 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.000316 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     handler = self.configure_handler(handlers[name])\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     result = factory(**kwargs)\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     StreamHandler.__init__(self, self._open())\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] \r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] During handling of the above exception, another exception occurred:\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] \r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] Traceback (most recent call last):\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     application = get_wsgi_application()\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     django.setup(set_prefix=False)\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "C:\\Users\\HP\\Envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     logging_config_func(logging_settings)\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     dictConfigClass(config).configure()\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.001315 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135]     '%r: %s' % (name, e))\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.002314 2018] [wsgi:error] [pid 182720:tid 1600] [client ::1:10135] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'C:\\\\WINDOWS\\\\system32\\\\logs\\\\ErrorLoggers.log'\r, referer: http://localhost/
+[Sat Aug 25 15:11:01.002314 2018] [authz_core:error] [pid 182720:tid 1600] [client ::1:10135] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://localhost/
+[Sat Aug 25 15:42:22.333225 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] mod_wsgi (pid=181580): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 15:42:22.336222 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] mod_wsgi (pid=181580): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 15:42:22.346216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] Traceback (most recent call last):\r
+[Sat Aug 25 15:42:22.346216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 15:42:22.346216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 15:42:22.346216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     result = factory(**kwargs)\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] \r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] \r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] Traceback (most recent call last):\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 15:42:22.347216 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     application = get_wsgi_application()\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     django.setup(set_prefix=False)\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     logging_config_func(logging_settings)\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     dictConfigClass(config).configure()\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767]     '%r: %s' % (name, e))\r
+[Sat Aug 25 15:42:22.348215 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 15:42:22.349214 2018] [authz_core:error] [pid 181580:tid 1476] [client 127.0.0.1:10767] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 15:42:22.492134 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] mod_wsgi (pid=181580): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.492134 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] mod_wsgi (pid=181580): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.495131 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.495131 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.495131 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     handler = self.configure_handler(handlers[name])\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.495131 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.495131 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     result = factory(**kwargs)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     StreamHandler.__init__(self, self._open())\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] During handling of the above exception, another exception occurred:\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.496130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     application = get_wsgi_application()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     django.setup(set_prefix=False)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     logging_config_func(logging_settings)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     dictConfigClass(config).configure()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768]     '%r: %s' % (name, e))\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.497130 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 15:42:22.498129 2018] [authz_core:error] [pid 181580:tid 1476] [client 127.0.0.1:10768] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:53.988453 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] mod_wsgi (pid=181580): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 16:26:53.988453 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] mod_wsgi (pid=181580): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] Traceback (most recent call last):\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     result = factory(**kwargs)\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] \r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] \r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] Traceback (most recent call last):\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     application = get_wsgi_application()\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     django.setup(set_prefix=False)\r
+[Sat Aug 25 16:26:53.990452 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     logging_config_func(logging_settings)\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     dictConfigClass(config).configure()\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185]     '%r: %s' % (name, e))\r
+[Sat Aug 25 16:26:53.991451 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 16:26:53.991451 2018] [authz_core:error] [pid 181580:tid 1476] [client 127.0.0.1:11185] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 16:26:54.116360 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] mod_wsgi (pid=181580): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.116360 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] mod_wsgi (pid=181580): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.119356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.119356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     handler = self.configure_handler(handlers[name])\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     result = factory(**kwargs)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.120356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     StreamHandler.__init__(self, self._open())\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] During handling of the above exception, another exception occurred:\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     application = get_wsgi_application()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     django.setup(set_prefix=False)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.121356 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.122358 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.122358 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     logging_config_func(logging_settings)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.122358 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.122358 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     dictConfigClass(config).configure()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.122358 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.122358 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186]     '%r: %s' % (name, e))\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.122358 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:54.124354 2018] [authz_core:error] [pid 181580:tid 1476] [client 127.0.0.1:11186] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.105468 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] mod_wsgi (pid=181580): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 16:26:59.105468 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] mod_wsgi (pid=181580): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] Traceback (most recent call last):\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     result = factory(**kwargs)\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] \r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 16:26:59.109465 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] \r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] Traceback (most recent call last):\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     application = get_wsgi_application()\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     django.setup(set_prefix=False)\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     logging_config_func(logging_settings)\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     dictConfigClass(config).configure()\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191]     '%r: %s' % (name, e))\r
+[Sat Aug 25 16:26:59.110464 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 16:26:59.111464 2018] [authz_core:error] [pid 181580:tid 1476] [client 127.0.0.1:11191] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 16:26:59.198414 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] mod_wsgi (pid=181580): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.198414 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] mod_wsgi (pid=181580): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     handler = self.configure_handler(handlers[name])\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     result = factory(**kwargs)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     StreamHandler.__init__(self, self._open())\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.200416 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] During handling of the above exception, another exception occurred:\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     application = get_wsgi_application()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     django.setup(set_prefix=False)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     logging_config_func(logging_settings)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     dictConfigClass(config).configure()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192]     '%r: %s' % (name, e))\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.201415 2018] [wsgi:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'D:\\\\pengwl\\\\webapp\\\\Apache2.4\\\\bin\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:26:59.202413 2018] [authz_core:error] [pid 181580:tid 1476] [client 127.0.0.1:11192] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.347511 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] mod_wsgi (pid=187552): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 16:28:18.347511 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] mod_wsgi (pid=187552): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'.
+[Sat Aug 25 16:28:18.357506 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] Traceback (most recent call last):\r
+[Sat Aug 25 16:28:18.357506 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r
+[Sat Aug 25 16:28:18.357506 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     handler = self.configure_handler(handlers[name])\r
+[Sat Aug 25 16:28:18.357506 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r
+[Sat Aug 25 16:28:18.357506 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     result = factory(**kwargs)\r
+[Sat Aug 25 16:28:18.357506 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     StreamHandler.__init__(self, self._open())\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] FileNotFoundError: [Errno 2] No such file or directory: 'c:\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] \r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] During handling of the above exception, another exception occurred:\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] \r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] Traceback (most recent call last):\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r
+[Sat Aug 25 16:28:18.358505 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     application = get_wsgi_application()\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     django.setup(set_prefix=False)\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     logging_config_func(logging_settings)\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     dictConfigClass(config).configure()\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198]     '%r: %s' % (name, e))\r
+[Sat Aug 25 16:28:18.359504 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'c:\\\\logs\\\\ErrorLoggers.log'\r
+[Sat Aug 25 16:28:18.360503 2018] [authz_core:error] [pid 187552:tid 1472] [client 127.0.0.1:11198] AH01630: client denied by server configuration: D:/Apache2.4
+[Sat Aug 25 16:28:18.460459 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] mod_wsgi (pid=187552): Failed to exec Python script file 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.460459 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] mod_wsgi (pid=187552): Exception occurred processing WSGI script 'D:/pengwl/webapp/waterwork/waterwork/wsgi.py'., referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 558, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     handler = self.configure_handler(handlers[name])\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 731, in configure_handler\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     result = factory(**kwargs)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 202, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.464452 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\handlers.py", line 57, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     logging.FileHandler.__init__(self, filename, mode, encoding, delay)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1030, in __init__\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     StreamHandler.__init__(self, self._open())\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\__init__.py", line 1059, in _open\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     return open(self.baseFilename, self.mode, encoding=self.encoding)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] FileNotFoundError: [Errno 2] No such file or directory: 'c:\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] During handling of the above exception, another exception occurred:\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] Traceback (most recent call last):\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "D:/pengwl/webapp/waterwork/waterwork/wsgi.py", line 18, in <module>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     application = get_wsgi_application()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\core\\wsgi.py", line 12, in get_wsgi_application\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     django.setup(set_prefix=False)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\__init__.py", line 19, in setup\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "c:\\users\\hp\\envs\\venpy36\\lib\\site-packages\\django\\utils\\log.py", line 76, in configure_logging\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     logging_config_func(logging_settings)\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 795, in dictConfig\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     dictConfigClass(config).configure()\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]   File "d:\\pengwl\\webapp\\python36-32\\Lib\\logging\\config.py", line 566, in configure\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199]     '%r: %s' % (name, e))\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.465445 2018] [wsgi:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] ValueError: Unable to configure handler 'errors_file': [Errno 2] No such file or directory: 'c:\\\\logs\\\\ErrorLoggers.log'\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:28:18.466463 2018] [authz_core:error] [pid 187552:tid 1472] [client 127.0.0.1:11199] AH01630: client denied by server configuration: D:/Apache2.4, referer: http://www.bsc200.com/
+[Sat Aug 25 16:37:08.963233 2018] [wsgi:error] [pid 175920:tid 1484] [client 127.0.0.1:11288] login form\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:37:08.963233 2018] [wsgi:error] [pid 175920:tid 1484] [client 127.0.0.1:11288] <QueryDict: {'csrfmiddlewaretoken': ['RASeiZnfpY8s81LwNb3LAYmYP3DLbM5H0QcqmREiFNzewFJH4Dby3xDtknUUhodX'], 'user_name': ['admin'], 'password': ['hardtoguess'], 'captchaCode': ['sdfds_da234_df']}>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:37:08.981222 2018] [wsgi:error] [pid 175920:tid 1484] [client 127.0.0.1:11288] <tr><th><label for="id_user_name">user name:</label></th><td><input type="text" name="user_name" value="admin" required id="id_user_name"></td></tr>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:37:08.981222 2018] [wsgi:error] [pid 175920:tid 1484] [client 127.0.0.1:11288] <tr><th><label for="id_password">Password:</label></th><td><input type="password" name="password" required id="id_password"><input type="hidden" name="captchaCode" value="sdfds_da234_df" id="id_captchaCode"></td></tr>, referer: http://www.bsc200.com/
+[Sat Aug 25 16:37:08.982221 2018] [wsgi:error] [pid 175920:tid 1484] [client 127.0.0.1:11288] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 16:37:18.651058 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] userlist: admin\r, referer: http://www.bsc200.com/devm/metermanager
+[Sat Aug 25 16:37:18.651058 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] groupName \r, referer: http://www.bsc200.com/devm/metermanager
+[Sat Aug 25 16:37:18.651058 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] districtId: None\r, referer: http://www.bsc200.com/devm/metermanager
+[Sat Aug 25 16:37:18.652058 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] get userlist: 1 10 0 \r, referer: http://www.bsc200.com/devm/metermanager
+[Sat Aug 25 16:37:18.836952 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] 1 10 39.4 394\r, referer: http://www.bsc200.com/devm/metermanager

@@ -13,6 +13,7 @@ from entm.models import Organizations
 class Personalized(models.Model):
     """docstring for Personalized"""
     # topTitle loginLogo homeLogo webIco copyright websiteName recordNumber groupId type frontPage
+    ptype   =   models.CharField(max_length=10)   #default or custom
     # 登录页面
     loginLogo  = models.ImageField(upload_to='resources/img/logo/')
     # 平台网页标题ico

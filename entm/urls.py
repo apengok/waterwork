@@ -23,6 +23,7 @@ urlpatterns = [
 
     # tree list etc
     url(r'^role/choicePermissionTree',views.choicePermissionTree,name='choicePermissionTree'),
+    url(r'^role/personlizedFrontTree',views.personlizedFrontTree,name='personlizedFrontTree'),
     url(r'^user/oranizationtree/',views.oranizationtree,name='oranizationtree'),
 
     # 企业管理 --角色管理

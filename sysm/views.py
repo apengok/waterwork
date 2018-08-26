@@ -26,7 +26,7 @@ from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDa
 from dmam.models import DMABaseinfo,DmaStations,Station
 from entm.models import Organizations
 from .forms import logoPagesPhotoForm,MetercommForm
-
+from .models import Personalized
 from django.core.files.storage import FileSystemStorage
 # from django.core.urlresolvers import reverse_lazy
 from waterwork.mixins import AjaxableResponseMixin
@@ -42,6 +42,7 @@ class personalizedView(TemplateView):
         # context["page_submenu"] = "组织和用户管理"
         context["page_title"] = "个性化设置"
 
+        
         return context      
 
 
@@ -60,6 +61,36 @@ def logoPagesPhotoUpdate(request):
 
 def personalizedUpdate(request):
     print("update:",request.POST)
+
+    user = request.user
+    
+    belongto = user.belongto
+
+    topTitle = request.POST.get('topTitle')
+    loginLogo = request.POST.get('loginLogo')
+    homeLogo = request.POST.get('homeLogo')
+    webIco = request.POST.get('webIco')
+    copyright = request.POST.get('copyright')
+    websiteName = request.POST.get('websiteName')   
+    recordNumber = request.POST.get('recordNumber')
+    frontPageMsgUrl = request.POST.get('frontPage')
+    updateDataUsername = user.user_name
+    
+    
+
+    obj = Personalized.objects.filter(belongto=belongto)
+    if obj.exists():
+        p = obj.first()
+        p.topTitle = topTitle
+        p.save()
+    else:
+        Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsgUrl=frontPageMsgUrl,
+            ptype='default',belongto=belongto,updateDataUsername=updateDataUsername)
+        Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsgUrl=frontPageMsgUrl,
+            ptype='custom',belongto=belongto,updateDataUsername=updateDataUsername)
+    
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
@@ -103,7 +134,7 @@ def personalizedFind(request):
                     "frontPage":"",
                     "frontPageUrl":"null",
                     "groupId":"338c7dc2-384a-1037-8466-cb3a0ec2dddf",
-                    "homeLogo":"indexLogo.png",
+                    "homeLogo":"LOGO3.png",
                     "id":"afa33228-1f5d-4f6d-8183-888bf6ff01f9",
                     "loginLogo":"loginLogo.png",
                     "priority":1,

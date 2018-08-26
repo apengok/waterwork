@@ -52,7 +52,7 @@
                 // 树结构 
                 var setting = {
                     async:{
-                        url:"/entm/role/choicePermissionTree/",
+                        url:"/entm/role/personlizedFrontTree/",
                         type:"post",
                         enable:true,
                         autoParam:["id"],
