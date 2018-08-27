@@ -473,6 +473,7 @@
         onClick : function(e, treeId, treeNode){
             var zTree = $.fn.zTree.getZTreeObj("ztreeDemo"),
                 nodes = zTree.getSelectedNodes();
+            console.log('onClick',treeNode);
             if(treeNode.type == 0){     // 按钮菜单 
                 zTree.checkNode(nodes[0], true, false,true);
             }
@@ -481,6 +482,8 @@
             var type = treeNode.type;
             var zTree = $.fn.zTree.getZTreeObj("ztreeDemo"), nodes = zTree
                 .getCheckedNodes(true), v = "";
+            console.log('onCheck',treeNode);
+            
             if (type == 0) {
                 zTree.selectNode(treeNode,false,true);
                 $("#frontPage").attr("value", nodes[0].id);
@@ -493,6 +496,7 @@
         },
         zTreeOnAsyncSuccess: function(event, treeId, treeNode, msg){
             var defautPage = $("#frontPage").val();
+            console.log("zTreeOnAsyncSuccess",frontPage);
             if(defautPage != undefined && defautPage != null && defautPage != ""){
                 var treeObj = $.fn.zTree.getZTreeObj("ztreeDemo");
                 var allNode = treeObj.transformToArray(treeObj.getNodes());

@@ -265,7 +265,7 @@ def buildbasetree():
     return ctree    
 
 
-def buildFrontbasetree():
+def buildFrontbasetree2():
     ctree = []
     
 
@@ -302,6 +302,76 @@ def buildFrontbasetree():
             
 
     return ctree    
+
+def buildFrontbasetree(request,permstree=None):
+    ctree = []
+    # print("buildtree permm:",permstree,type(permstree))
+    user = request.user
+    pt_dict = {}
+    for pt in permstree:
+        # print(pt["id"],pt["edit"])
+        pt_dict[pt["id"]] = pt["edit"]
+
+
+    for key in choicetreedict.keys():
+        pname = choicetreedict[key]["name"]
+        pid = key
+        
+
+        tmp1 = {}
+        tmp1["name"] = pname
+        tmp1["pId"] = 0
+        tmp1["id"] = pid
+        tmp1["type"] = 1
+        if key in pt_dict.keys():
+            # tmp1["checked"] = "true"
+            tmp1["nocheck"] = "true"
+            # tmp1["type"] = 1
+        else:
+            if not user.has_menu_permission(pid):
+                tmp1["chkDisabled"] = "true" 
+        ctree.append(tmp1)
+        
+        submenu = choicetreedict[key]["submenu"][0]
+        for sub_key in submenu.keys():
+            name = submenu[sub_key]["name"]
+            idstr = "{id}_{pid}".format(id=sub_key,pid=pid)
+            cid = pid
+
+            tmp2 = {}
+            tmp2["name"] = name
+            tmp2["pId"] = cid
+            tmp2["id"] = idstr
+            tmp2["type"] = 0
+            if not user.has_menu_permission(idstr):
+                tmp2["chkDisabled"] = "true" 
+            # if idstr in pt_dict.keys():
+            #     # tmp2["checked"] = "true"
+            #     # tmp1["type"] = 0
+            # else:
+            #     if not user.has_menu_permission(idstr):
+            #         tmp2["chkDisabled"] = "true" 
+            ctree.append(tmp2)
+
+        
+            
+            # #可写
+            # edit_id = "{pid}_edit".format(pid=idstr)
+            # tmp3 = {}
+            # tmp3["name"] = "可写"
+            # tmp3["pId"] = idstr
+            # tmp3["id"] = edit_id
+            # tmp3["type"] = "premissionEdit"
+            # if idstr in pt_dict.keys() and pt_dict[idstr] == True:
+            #     tmp3["checked"] = "true"
+            # else:
+            #     if not user.has_menu_permission_edit(idstr):
+            #         tmp3["chkDisabled"] = "true" 
+            # ctree.append(tmp3)
+
+    print(ctree)
+
+    return ctree
 
 def buildchoicetree(request,permstree=None):
     ctree = []
@@ -370,8 +440,9 @@ def buildchoicetree(request,permstree=None):
 
 def personlizedFrontTree(request):
 
-    
-    rid = request.POST.get("roleId") or ''
+    user = request.user
+    rid = user.Role.rid
+    # rid = request.POST.get("roleId") or ''
     print(" get choicePermissionTree",rid)
 
     
@@ -380,7 +451,7 @@ def personlizedFrontTree(request):
     if len(rid) <= 0:
         user = request.user
         if user.is_admin:
-            return HttpResponse(json.dumps(buildFrontbasetree()))
+            return HttpResponse(json.dumps(buildFrontbasetree2()))
         permissiontree = user.Role.permissionTree
 
     else:
@@ -390,7 +461,7 @@ def personlizedFrontTree(request):
 
     if len(permissiontree) > 0:
         ptree = json.loads(permissiontree)
-        buildtree = buildchoicetree(request,ptree)
+        buildtree = buildFrontbasetree(request,ptree)
             
 
 
