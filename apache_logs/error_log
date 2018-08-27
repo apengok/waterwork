@@ -1402,3 +1402,10 @@
 [Sat Aug 25 16:37:18.651058 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] districtId: None\r, referer: http://www.bsc200.com/devm/metermanager
 [Sat Aug 25 16:37:18.652058 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] get userlist: 1 10 0 \r, referer: http://www.bsc200.com/devm/metermanager
 [Sat Aug 25 16:37:18.836952 2018] [wsgi:error] [pid 175920:tid 1460] [client 127.0.0.1:11305] 1 10 39.4 394\r, referer: http://www.bsc200.com/devm/metermanager
+[Sat Aug 25 21:36:31.754742 2018] [wsgi:error] [pid 175920:tid 1448] [client 127.0.0.1:14560] login form\r, referer: http://www.bsc200.com/
+[Sat Aug 25 21:36:31.754742 2018] [wsgi:error] [pid 175920:tid 1448] [client 127.0.0.1:14560] <QueryDict: {'csrfmiddlewaretoken': ['gcjAs1FGMoadRffISwkmo2pEBA6zaFOTJRFjKztSMKf6M4cyfrZv7Oj3bPPhdwWe'], 'user_name': ['admin'], 'password': ['hardtoguess'], 'captchaCode': ['sdfds_da234_df']}>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 21:36:31.765745 2018] [wsgi:error] [pid 175920:tid 1448] [client 127.0.0.1:14560] <tr><th><label for="id_user_name">user name:</label></th><td><input type="text" name="user_name" value="admin" required id="id_user_name"></td></tr>\r, referer: http://www.bsc200.com/
+[Sat Aug 25 21:36:31.765745 2018] [wsgi:error] [pid 175920:tid 1448] [client 127.0.0.1:14560] <tr><th><label for="id_password">Password:</label></th><td><input type="password" name="password" required id="id_password"><input type="hidden" name="captchaCode" value="sdfds_da234_df" id="id_captchaCode"></td></tr>, referer: http://www.bsc200.com/
+[Sat Aug 25 21:36:31.765745 2018] [wsgi:error] [pid 175920:tid 1448] [client 127.0.0.1:14560] \r, referer: http://www.bsc200.com/
+[Sat Aug 25 21:36:36.473081 2018] [wsgi:error] [pid 175920:tid 1452] [client 127.0.0.1:14567]  get choicePermissionTree \r, referer: http://www.bsc200.com/sysm/personalized/list
+[Sat Aug 25 23:00:15.904503 2018] [wsgi:error] [pid 175920:tid 1452] [client 127.0.0.1:15382]  get choicePermissionTree \r, referer: http://www.bsc200.com/sysm/personalized/list

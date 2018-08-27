@@ -433,6 +433,7 @@
             personalizedConfiguration.popupWindow(1);
         },
         defaultIndexTitle : function(){
+            console.log("defaultIndexTitle");
             personalizedConfiguration.popupWindow(2);
         },
         defaultBottomTitle : function(){
@@ -445,6 +446,7 @@
             personalizedConfiguration.popupWindow(5);
         },
         popupWindow : function(type){
+            console.log("popupWindow",type);
             var url="/sysm/personalized/default"
             var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"type":type,"frontPage":frontPage};
             layer.confirm('是否恢复默认信息', {

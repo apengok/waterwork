@@ -7,4 +7,4 @@ from . models import Personalized
 
 @admin.register(Personalized)
 class PersonalizedAdmin(admin.ModelAdmin):
-    list_display = ['belongto','loginLogo', 'webIco','homeLogo','topTitle','copyright','websiteName','recordNumber','frontPageMsg']
+    list_display = ['belongto','ptype','loginLogo', 'webIco','homeLogo','topTitle','copyright','websiteName','recordNumber','frontPageMsg']

@@ -73,15 +73,24 @@ def personalizedUpdate(request):
     copyright = request.POST.get('copyright')
     websiteName = request.POST.get('websiteName')   
     recordNumber = request.POST.get('recordNumber')
-    frontPageMsgUrl = request.POST.get('frontPage')
+    frontPageMsg = request.POST.get('frontPage')
     updateDataUsername = user.user_name
     
     
 
-    obj = Personalized.objects.filter(belongto=belongto)
+    obj = Personalized.objects.filter(belongto=belongto).filter(ptype="custom")
     if obj.exists():
         p = obj.first()
         p.topTitle = topTitle
+        p.loginLogo = loginLogo
+        p.homeLogo = homeLogo
+        p.webIco = webIco
+        p.copyright = copyright
+        p.websiteName = websiteName
+        p.recordNumber = recordNumber
+        p.frontPageMsg = frontPageMsg
+        p.updateDataUsername = updateDataUsername
+
         p.save()
     else:
         Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
@@ -119,39 +128,127 @@ def personalizedUpdate_img(request):
             "success":1}
     return HttpResponse(json.dumps(ret))
 
+
+def personalizedUpdate_ico(request):
+
+    print("update_img:",request.FILES)
+    # form = logoPagesPhotoForm(request.POST,request.FILES)
+    # print (form)
+    imgName = ''
+    if request.method == 'POST' and request.FILES['file']:
+        myfile = request.FILES['file']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        imgName = filename
+        print(filename,uploaded_file_url)
+
+    ret = {"exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":"null",
+            "imgName":imgName,
+            "success":1}
+    return HttpResponse(json.dumps(ret))
+
 def personalizedFind(request):
+
+    user = request.user
+    ubelongto = user.belongto
+    p = Personalized.objects.filter(belongto=ubelongto).filter(ptype="custom")[0]
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
                 "list":{
-                    "copyright":"?2015-2017威尔沃自动化设备（深圳）有限公司",
-                    "createDataTime":"2017-10-22 10:51:16",
-                    "createDataUsername":"13911755733",
+                    "copyright":p.copyright,
+                    "createDataTime":p.updateDataTime.strftime("%Y-%m-%d"),
+                    "createDataUsername":p.updateDataUsername,
                     "editable":1,
                     "enabled":1,
                     "flag":1,
-                    "frontPage":"",
-                    "frontPageUrl":"null",
+                    "frontPage":p.frontPageMsg,
+                    "frontPageUrl":p.frontPageMsgUrl,
                     "groupId":"338c7dc2-384a-1037-8466-cb3a0ec2dddf",
-                    "homeLogo":"LOGO3.png",
+                    "homeLogo":str(p.homeLogo),
                     "id":"afa33228-1f5d-4f6d-8183-888bf6ff01f9",
-                    "loginLogo":"loginLogo.png",
+                    "loginLogo":str(p.loginLogo),
                     "priority":1,
-                    "recordNumber":"京ICP备15041746号-1",
+                    "recordNumber":p.recordNumber,
                     "sortOrder":1,
-                    "topTitle":"智慧水务管控一体化",
-                    "updateDataTime":"2018-08-15 15:47:57",
-                    "updateDataUsername":"13911755733",
-                    "webIco":"favicon.ico",
-                    "websiteName":"www.virvo.com.cn"
+                    "topTitle":p.topTitle,
+                    "updateDataTime":p.updateDataTime.strftime("%Y-%m-%d"),
+                    "updateDataUsername":p.updateDataUsername,
+                    "webIco":str(p.webIco),
+                    "websiteName":p.websiteName
                     }
                 },
             "success":1}
+    # ret = {"exceptionDetailMsg":"null",
+    #         "msg":"null",
+    #         "obj":{
+    #             "list":{
+    #                 "copyright":"?2015-2017威尔沃自动化设备（深圳）有限公司",
+    #                 "createDataTime":"2017-10-22 10:51:16",
+    #                 "createDataUsername":"13911755733",
+    #                 "editable":1,
+    #                 "enabled":1,
+    #                 "flag":1,
+    #                 "frontPage":"",
+    #                 "frontPageUrl":"null",
+    #                 "groupId":"338c7dc2-384a-1037-8466-cb3a0ec2dddf",
+    #                 "homeLogo":"LOGO3.png",
+    #                 "id":"afa33228-1f5d-4f6d-8183-888bf6ff01f9",
+    #                 "loginLogo":"loginLogo.png",
+    #                 "priority":1,
+    #                 "recordNumber":"京ICP备15041746号-1",
+    #                 "sortOrder":1,
+    #                 "topTitle":"智慧水务管控一体化",
+    #                 "updateDataTime":"2018-08-15 15:47:57",
+    #                 "updateDataUsername":"13911755733",
+    #                 "webIco":"favicon.ico",
+    #                 "websiteName":"www.virvo.com.cn"
+    #                 }
+    #             },
+    #         "success":1}
     return HttpResponse(json.dumps(ret))
 
 def personalizedDefault(request):
+    print("set default:",request.POST)
 
+    user = request.user
+    
+    belongto = user.belongto
+    #0-defaultLoginLogo 1-defaultIndexLogo 2-defaultIndexTitle 3-defaultBottomTitle 4-defaultResourceName 5-defaultWebIco
+    dtype = request.POST.get("type")
+    topTitle = request.POST.get('topTitle')
+    loginLogo = request.POST.get('loginLogo')
+    homeLogo = request.POST.get('homeLogo')
+    webIco = request.POST.get('webIco')
+    copyright = request.POST.get('copyright')
+    websiteName = request.POST.get('websiteName')   
+    recordNumber = request.POST.get('recordNumber')
+    frontPageMsg = request.POST.get('frontPage')
+    updateDataUsername = user.user_name
+
+    default = Personalized.objects.filter(belongto=belongto).filter(ptype="default").first()
+    custom = Personalized.objects.filter(belongto=belongto).filter(ptype="custom").first()
+    if dtype == "0":
+        custom.loginLogo = default.loginLogo
+    elif dtype == "1":
+        custom.homeLogo = default.homeLogo
+    elif dtype == "2":
+        custom.topTitle = default.topTitle
+    elif dtype =="3":
+        custom.websiteName = default.websiteName
+        custom.copyright = default.copyright
+        custom.recordNumber = default.recordNumber
+    elif dtype == "4":
+        custom.frontPageMsg = default.frontPageMsg
+    elif dtype == "5":
+        custom.webIco = default.webIco
+    else:
+        print(" type is null ")
+    custom.save()
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":"null",

@@ -369,8 +369,7 @@ def buildFrontbasetree(request,permstree=None):
             #         tmp3["chkDisabled"] = "true" 
             # ctree.append(tmp3)
 
-    print(ctree)
-
+    
     return ctree
 
 def buildchoicetree(request,permstree=None):

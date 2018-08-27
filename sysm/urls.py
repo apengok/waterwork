@@ -21,6 +21,7 @@ urlpatterns = [
     
     url(r'^personalized/update/?$',views.personalizedUpdate,name='personalizedUpdate'),
     url(r'^personalized/upload_img/?$',views.personalizedUpdate_img,name='personalizedUpdate_img'),
+    url(r'^personalized/upload_ico/?$',views.personalizedUpdate_ico,name='personalizedUpdate_ico'),
     url(r'^personalized/find/?$',views.personalizedFind,name='personalizedFind'),
     url(r'^personalized/default/?$',views.personalizedDefault,name='personalizedDefault'),
 
