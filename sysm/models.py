@@ -14,12 +14,18 @@ class Personalized(models.Model):
     """docstring for Personalized"""
     # topTitle loginLogo homeLogo webIco copyright websiteName recordNumber groupId type frontPage
     ptype   =   models.CharField(max_length=10)   #default or custom
+    # # 登录页面
+    # loginLogo  = models.ImageField(upload_to='resources/img/logo/')
+    # # 平台网页标题ico
+    # webIco          = models.ImageField(upload_to='resources/img/logo/')
+    # # 平台首页Logo
+    # homeLogo = models.ImageField(upload_to='resources/img/logo/')
     # 登录页面
-    loginLogo  = models.ImageField(upload_to='resources/img/logo/')
+    loginLogo  = models.CharField(max_length=256,null=True,blank=True)
     # 平台网页标题ico
-    webIco          = models.ImageField(upload_to='resources/img/logo/')
+    webIco          = models.CharField(max_length=256,null=True,blank=True)
     # 平台首页Logo
-    homeLogo = models.ImageField(upload_to='resources/img/logo/')
+    homeLogo = models.CharField(max_length=256,null=True,blank=True)
     # 平台首页登录标题
     topTitle     = models.CharField(max_length=256,null=True,blank=True)
     # 平台首页置底信息

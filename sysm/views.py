@@ -117,6 +117,7 @@ def personalizedUpdate_img(request):
     if request.method == 'POST' and request.FILES['file']:
         myfile = request.FILES['file']
         new_path =  os.path.join(settings.MEDIA_ROOT, 'resources','img','logo')
+        # fs = FileSystemStorage()
         fs = FileSystemStorage(new_path)
         filename = fs.save(myfile.name, myfile)
         initial_path = fs.path(filename)
@@ -160,13 +161,16 @@ def default_default(organ):
     pers = Personalized.objects.filter(belongto=oparent).filter(ptype="default")
     if pers.exists():
         p = pers.first()
-        Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
-            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
-            ptype='default',belongto=belongto,updateDataUsername=updateDataUsername)
-        Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
-            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
-            ptype='custom',belongto=belongto,updateDataUsername=updateDataUsername)
-    return
+        pp = Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
+            copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
+            ptype='default',belongto=organ,updateDataUsername=p.updateDataUsername)
+        Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
+            copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
+            ptype='custom',belongto=organ,updateDataUsername=p.updateDataUsername)
+    else:
+        pp = default_default(oparent)
+    
+    return pp
 
 def personalizedFind(request):
 
@@ -177,8 +181,8 @@ def personalizedFind(request):
     if pers.exists():
         p = pers.first()
     else:
-        # p = default_default(ubelongto)
-        p = Personalized.objects.first()
+        p = default_default(ubelongto)
+        # p = Personalized.objects.first()
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
@@ -207,6 +211,8 @@ def personalizedFind(request):
                     }
                 },
             "success":1}
+
+    
     # ret = {"exceptionDetailMsg":"null",
     #         "msg":"null",
     #         "obj":{

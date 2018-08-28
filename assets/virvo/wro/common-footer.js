@@ -21722,10 +21722,10 @@ $(function(){
 				$("#website").html(websiteName);
 				$("#website").attr("href","http://"+websiteName);
 				$("#record").html(recordNumber);
-     			var homeLogo="/static/virvo/resources/img/logo/"+list.homeLogo;
+     			var homeLogo="/media/resources/img/logo/"+list.homeLogo;
      			$(".brand").attr("style","background:url("+homeLogo+") no-repeat 0px 0px !important;");
      			var webIco=list.webIco;
-     			$("#icoLink").attr("href","/static/virvo/resources/img/logo/"+webIco+"");
+     			$("#icoLink").attr("href","/media/resources/img/logo/"+webIco+"");
      		}
      	});  
      	$(".panel-heading").bind("click",function(){
