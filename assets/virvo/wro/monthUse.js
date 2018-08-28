@@ -701,7 +701,8 @@
             window.onresize = myChart.resize;
         },
         platenumbersplitYear:function(arr){
-
+            if(arr.length == 0)
+                return
             
             var today = arr[arr.length - 1].substring(8,10);
             
@@ -743,6 +744,8 @@
             return newArr
         },
         weekshowsplitFun:function(arr){
+            if(arr.length == 0)
+                return
             this_month = parseInt(arr[arr.length - 1],10);
             // alert(new Date('2018/08/09').getDay());
             var today = arr[arr.length - 1].substring(8,10);

@@ -193,7 +193,7 @@ class MeterAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
                     
             }
         # return HttpResponse(json.dumps(err_data))
-        return render(self.request,"devm/permission_error.html",data)
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_valid(self, form):
         """
@@ -275,7 +275,7 @@ class MeterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
                     
             }
         # return HttpResponse(json.dumps(err_data))
-        return render(self.request,"devm/permission_error.html",data)
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_invalid(self, form):
         """
@@ -373,7 +373,7 @@ class MeterDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
                     
             }
         HttpResponse(json.dumps(data))
-        # return render(self.request,"devm/permission_error.html",data)
+        # return render(self.request,"entm/permission_error.html",data)
 
     def dispatch(self, *args, **kwargs):
         # self.comment_id = kwargs["pk"]
@@ -577,7 +577,7 @@ class SimCardAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
                     
             }
         # return HttpResponse(json.dumps(err_data))
-        return render(self.request,"devm/permission_error.html",data)
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_valid(self, form):
         """
@@ -653,7 +653,7 @@ class SimCardEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
                     
             }
         # return HttpResponse(json.dumps(err_data))
-        return render(self.request,"devm/permission_error.html",data)
+        return render(self.request,"entm/permission_error.html",data)
 
     def form_invalid(self, form):
         """
@@ -746,7 +746,7 @@ class SimCardDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
                     
             }
         HttpResponse(json.dumps(data))
-        # return render(self.request,"devm/permission_error.html",data)
+        # return render(self.request,"entm/permission_error.html",data)
 
     def dispatch(self, *args, **kwargs):
         # self.comment_id = kwargs["pk"]

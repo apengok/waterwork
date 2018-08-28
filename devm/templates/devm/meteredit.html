@@ -102,7 +102,7 @@
                 <div class="form-group">
                     <div class="col-md-2"></div>
                     <div class="col-md-4">
-                        <label class="radio-inline"> <input type="radio" name="metertype" id="isRadio" value="水表" checked> 水表</label>
+                        <label class="radio-inline"> <input type="radio" name="metertype" id="isRadio" value="水表" > 水表</label>
                         <label class="radio-inline"> <input type="radio" name="metertype" id="noRadio" value="流量计"> 流量计</label>
                     </div>
                     <div class="col-md-6"></div>
@@ -111,10 +111,19 @@
                     <label class="col-md-2 control-label"><label class="text-danger">*</label> 口径：</label>
                     <div class="col-md-4">
                         <select name="dn" id="dn" value="{{ form.dn.value|default:'' }}" autocomplete="off"  class="form-control">
-                            <option  value="10">10</option>
-                            <option  value="30">30</option>
                             <option  value="40">40</option>
                             <option  value="50">50</option>
+                            <option  value="65">65</option>
+                            <option  value="80">80</option>
+                            <option  value="100">100</option>
+                            <option  value="125">125</option>
+                            <option  value="150">150</option>
+                            <option  value="200">200</option>
+                            <option  value="250">250</option>
+                            <option  value="300">300</option>
+                            <option  value="400">400</option>
+                            <option  value="500">500</option>
+                            <option  value="600">600</option>
                             
                         </select>
                     </div>
@@ -182,7 +191,7 @@
         </div> -->
         <div class=" pull-left" style="margin-left: 100px;">
 
-            <label class="radio-inline"> <input type="radio" name="state" id="isRadio" value="1" checked> 启用</label>
+            <label class="radio-inline"> <input type="radio" name="state" id="isRadio" value="1" > 启用</label>
             <label class="radio-inline"> <input type="radio" name="state" id="noRadio" value="0"> 停用</label>
         </div>
         <button class="btn btn-primary" type="button" id="doSubmit">
@@ -208,5 +217,13 @@
     var publicSize100="\u957F\u5EA6\u4E0D\u8D85\u8FC7100\u4F4D";
     var phoneError = "\u770B\u8D77\u6765\u4E0D\u50CF\u624B\u673A\u53F7\u5462";
     var publicNull = "\u4E0D\u80FD\u4E3A\u7A7A";
+    var mtype = "{{ form.mtype.value }}"
+    var protocol = "{{ form.protocol.value }}"
+    var check_cycle = "{{ form.check_cycle.value }}"
+    var dn = "{{ form.dn.value }}"
+    var R = "{{ form.R.value }}"
+    var q3 = "{{ form.q3.value }}"
+    var metertype = "{{ form.metertype.value }}"
+    var state = "{{ form.state.value }}"
 </script>
 <script src="{% static 'virvo/wro/meterEdit.js' %}"></script>

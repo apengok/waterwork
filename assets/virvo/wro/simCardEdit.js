@@ -32,6 +32,13 @@
             $.fn.zTree.init($("#ztreeDemo"), setting, null);
             laydate.render({elem: '#openCardTimeEdit',theme: '#6dcff6'});
             laydate.render({elem: '#endTimeEdit',theme: '#6dcff6'});
+
+            //init form value
+            $('input:radio[name="isStart"]').filter('[value="'+isStart+'"]').attr('checked', true);
+            $("#operator option").each(function (){
+                if($(this).val()==operator){ 
+                $(this).attr("selected","selected"); 
+            }});
         },
         beforeClick: function (treeId, treeNode){
             var check = (treeNode);

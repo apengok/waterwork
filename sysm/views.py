@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404,render,redirect
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.contrib import messages
 
+import os
 import json
 import random
 import datetime
@@ -30,7 +31,7 @@ from .models import Personalized
 from django.core.files.storage import FileSystemStorage
 # from django.core.urlresolvers import reverse_lazy
 from waterwork.mixins import AjaxableResponseMixin
-
+from django.conf import settings
 
         
 class personalizedView(TemplateView):
@@ -94,10 +95,10 @@ def personalizedUpdate(request):
         p.save()
     else:
         Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
-            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsgUrl=frontPageMsgUrl,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
             ptype='default',belongto=belongto,updateDataUsername=updateDataUsername)
         Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
-            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsgUrl=frontPageMsgUrl,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
             ptype='custom',belongto=belongto,updateDataUsername=updateDataUsername)
     
 
@@ -115,11 +116,14 @@ def personalizedUpdate_img(request):
     imgName = ''
     if request.method == 'POST' and request.FILES['file']:
         myfile = request.FILES['file']
-        fs = FileSystemStorage()
+        new_path =  os.path.join(settings.MEDIA_ROOT, 'resources','img','logo')
+        fs = FileSystemStorage(new_path)
         filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
+        initial_path = fs.path(filename)
+        
+        # os.rename(initial_path, new_path)
         imgName = filename
-        print(filename,uploaded_file_url)
+        print(filename,initial_path,new_path)
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
@@ -137,7 +141,8 @@ def personalizedUpdate_ico(request):
     imgName = ''
     if request.method == 'POST' and request.FILES['file']:
         myfile = request.FILES['file']
-        fs = FileSystemStorage()
+        new_path =  os.path.join(settings.MEDIA_ROOT, 'resources','img','logo')
+        fs = FileSystemStorage(new_path)
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
         imgName = filename
@@ -150,11 +155,30 @@ def personalizedUpdate_ico(request):
             "success":1}
     return HttpResponse(json.dumps(ret))
 
+def default_default(organ):
+    oparent = organ.parent
+    pers = Personalized.objects.filter(belongto=oparent).filter(ptype="default")
+    if pers.exists():
+        p = pers.first()
+        Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
+            ptype='default',belongto=belongto,updateDataUsername=updateDataUsername)
+        Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
+            ptype='custom',belongto=belongto,updateDataUsername=updateDataUsername)
+    return
+
 def personalizedFind(request):
 
     user = request.user
     ubelongto = user.belongto
-    p = Personalized.objects.filter(belongto=ubelongto).filter(ptype="custom")[0]
+    pers = Personalized.objects.filter(belongto=ubelongto).filter(ptype="custom")
+
+    if pers.exists():
+        p = pers.first()
+    else:
+        # p = default_default(ubelongto)
+        p = Personalized.objects.first()
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",

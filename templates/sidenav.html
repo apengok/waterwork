@@ -572,7 +572,7 @@
                         {% endif %}
                         {% if  'simcard_devicemanager' in user.permissiontree %}
                         <li class="second-menu">
-                            <a href="#">
+                            <a href="{% url 'devm:simcardmanager' %}">
                                 <i class="fa fa-location-arrow"></i><span>SIM卡管理</span> 
                                 <i></i> 
                             </a>

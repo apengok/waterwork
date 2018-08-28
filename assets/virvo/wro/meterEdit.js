@@ -10,6 +10,7 @@
     var serialnumberError = $("#serialnumber-error");
     var deviceFlag = false;
     var fts="";
+    
     editMeterManagement = {
         init: function () {
             if (bindId != null && bindId != '') {
@@ -44,6 +45,34 @@
             // laydate.render({elem: '#installDateEdit', theme: '#6dcff6'});
             // laydate.render({elem: '#procurementDateEdit', theme: '#6dcff6'});
             editMeterManagement.InitCallback();
+
+            $("#mtype option").each(function (){
+                if($(this).val()==mtype){ 
+                $(this).attr("selected","selected"); 
+            }});
+            $("#protocol option").each(function (){
+                if($(this).val()==protocol){ 
+                $(this).attr("selected","selected"); 
+            }});
+            $("#check_cycle option").each(function (){
+                if($(this).val()==check_cycle){ 
+                $(this).attr("selected","selected"); 
+            }});
+            $("#dn option").each(function (){
+                if($(this).val()==dn){ 
+                $(this).attr("selected","selected"); 
+            }});
+            $("#R option").each(function (){
+                if($(this).val()==R){ 
+                $(this).attr("selected","selected"); 
+            }});
+            $("#q3 option").each(function (){
+                if($(this).val()==q3){ 
+                $(this).attr("selected","selected"); 
+            }});
+
+            $('input:radio[name="metertype"]').filter('[value="'+metertype+'"]').attr('checked', true);
+            $('input:radio[name="metertype"]').filter('[value="'+state+'"]').attr('checked', true);
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);

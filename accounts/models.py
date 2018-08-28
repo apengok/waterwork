@@ -188,6 +188,7 @@ class User(AbstractBaseUser,PermissionsMixin):
         return False
 
     def has_menu_permission_edit(self,perm):
+        return True
         if self.is_admin:
             return True
         if self.Role is None:
@@ -250,10 +251,10 @@ class User(AbstractBaseUser,PermissionsMixin):
 
         stationlist = Station.objects.none()
         #下级组织的用户
-        sub_organs = self.belongto.sub_organizations(include_self=False)
+        sub_organs = self.belongto.sub_organizations(include_self=True)
         # user | merge two QuerySet
         for g in sub_organs:
-            stationlist |= g.station.all()
+            stationlist |= g.station_set.all()
             
         return stationlist
 
@@ -265,10 +266,10 @@ class User(AbstractBaseUser,PermissionsMixin):
 
         meterlist = Meter.objects.none()
         #下级组织的用户
-        sub_organs = self.belongto.sub_organizations(include_self=False)
+        sub_organs = self.belongto.sub_organizations(include_self=True)
         # user | merge two QuerySet
         for g in sub_organs:
-            meterlist |= g.meter.all()
+            meterlist |= g.meter_set.all()
             
         return meterlist
 
@@ -280,10 +281,10 @@ class User(AbstractBaseUser,PermissionsMixin):
 
         simcardlist = SimCard.objects.none()
         #下级组织的用户
-        sub_organs = self.belongto.sub_organizations(include_self=False)
+        sub_organs = self.belongto.sub_organizations(include_self=True)
         # user | merge two QuerySet
         for g in sub_organs:
-            simcardlist |= g.simcard.all()
+            simcardlist |= g.simcard_set.all()
             
         return simcardlist
 

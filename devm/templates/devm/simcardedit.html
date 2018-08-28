@@ -35,7 +35,7 @@
                     <label class="col-md-2 control-label">启停状态：</label>
                     <div class="col-md-4">
                         <label class="radio-inline"> 
-                            <input type="radio" name="isStart" id="isRadio" value="1" checked> 启用
+                            <input type="radio" name="isStart" id="isRadio" value="1" > 启用
                         </label> 
                         <label class="radio-inline"> 
                             <input type="radio" name="isStart" id="noRadio" value="0"> 停用
@@ -65,8 +65,8 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">运营商：</label>
                     <div class="col-md-4">
-                        <select name="operator" value="{{ form.operator.value|default:'' }}" class="form-control">
-                            <option selected="selected" value="中国移动">中国移动</option>
+                        <select id="operator"  name="operator" value="{{ form.operator.value|default:'' }}" class="form-control">
+                            <option value="中国移动">中国移动</option>
                             <option value="中国联通">中国联通</option>
                             <option value="中国电信">中国电信</option>
                         </select>
@@ -187,7 +187,8 @@
     var publicNull = "\u4E0D\u80FD\u4E3A\u7A7A";
     var publicNumberFloat = "\u5FC5\u987B\u4E3A\u6570\u5B57";
     var publicNumberInt = "\u5FC5\u987B\u4E3A\u6B63\u6574\u6570";
-
+    var isStart = "{{ form.isStart.value }}"
+    var operator = "{{ form.operator.value }}"
 
 </script>
 <script src="{% static 'virvo/wro/simCardEdit.js' %}"></script>

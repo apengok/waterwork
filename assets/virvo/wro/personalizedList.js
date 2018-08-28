@@ -24,9 +24,9 @@
                 beforeLoginLogo=list.loginLogo;
                 beforeHomeLogo=list.homeLogo;
                 beforeWebIco=list.webIco;
-                var loginLogo="/static/virvo/resources/img/logo/"+list.loginLogo;
-                var homeLogo="/static/virvo/resources/img/logo/"+list.homeLogo;
-                var webIco="/static/virvo/resources/img/logo/"+list.webIco;
+                var loginLogo="/media/resources/img/logo/"+list.loginLogo;
+                var homeLogo="/media/resources/img/logo/"+list.homeLogo;
+                var webIco="/media/resources/img/logo/"+list.webIco;
                 var copyright=list.copyright;
                 var websiteName=list.websiteName;
                 var recordNumber=list.recordNumber;

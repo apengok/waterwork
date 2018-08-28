@@ -14,7 +14,7 @@
     var madedate = $("#madedate").val();
     var lng = $("#lng").val();
     var lat = $("#lat").val();
-    var locate = $("#locate").val();
+    // var locate = $("#locate").val();
 
     var flag1 = false;
     var stationEdit = {
