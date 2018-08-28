@@ -12,6 +12,7 @@
     var beforeHomeLogo;//修改前Logo
     var beforeWebIco;
     var frontPage;
+    var frontPageUrl;
     personalizedConfiguration = {
         init: function(){
             var url="/sysm/personalized/find";
@@ -33,6 +34,7 @@
                 var bottomTitleMsg=copyright+","+websiteName+","+recordNumber;
                 var topTitleMsg=list.topTitle;
                 frontPage = list.frontPage; // 默认首页id
+                frontPageUrl = list.frontPageUrl; // 默认首页id
                 $("#topTitleMsg").html(topTitleMsg);
                 $("#indexTitle").val(topTitleMsg);
                 $("#bottomTitleMsg").html(bottomTitleMsg);
@@ -49,6 +51,7 @@
                 $("#homeLogo").attr('src',homeLogo);
                 $("#photograph-index").val(list.homeLogo);
                 $("#frontPage").attr("value",frontPage);
+                $("#frontPageUrl").attr("value",frontPageUrl);
                 // 树结构 
                 var setting = {
                     async:{
@@ -319,7 +322,7 @@
         topTitle : function(){
             personalizedConfiguration.updateAll();
             var url="/sysm/personalized/update";
-            var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"frontPage":frontPage};
+            var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"frontPage":frontPage,"frontPageUrl":frontPageUrl};
             json_ajax("POST", url, "json", false,data,personalizedConfiguration.topTitleCallback);
         },
         topTitleCallback : function(data){
@@ -333,7 +336,7 @@
         BottomTitle : function(){
             personalizedConfiguration.updateAll();
             var url="/sysm/personalized/update";
-            var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"frontPage":frontPage};
+            var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"frontPage":frontPage,"frontPageUrl":frontPageUrl};
             json_ajax("POST", url, "json", false,data,personalizedConfiguration.BottomTitleCallback);
         },
         BottomTitleCallback : function(data){
@@ -342,7 +345,7 @@
         frontPage : function(){
             personalizedConfiguration.updateAll();
             var url="/sysm/personalized/update";
-            var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"frontPage":frontPage};
+            var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"frontPage":frontPage,"frontPageUrl":frontPageUrl};
             json_ajax("POST", url, "json", false,data,personalizedConfiguration.frontPageCallback);
         },
         frontPageCallback : function(data){
@@ -353,7 +356,7 @@
             if (homeLogo != beforeHomeLogo) {
                 var imgSrc = $("#preview-index").attr("src");
                 var url="/sysm/personalized/update";
-                var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"name":beforeHomeLogo,"frontPage":frontPage};
+                var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"name":beforeHomeLogo,"frontPage":frontPage,"frontPageUrl":frontPageUrl};
                 personalizedConfiguration.getImageWidth(imgSrc,function(width,height){
                     if(width>240&&height>80){
                         layer.msg("图片大小不要超过240x80");
@@ -373,7 +376,7 @@
             if (webIco != beforeWebIco) {
                 var imgSrc = $("#preview-ico").attr("src");
                 var url="/sysm/personalized/update";
-                var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"name":beforeWebIco,"frontPage":frontPage};
+                var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"name":beforeWebIco,"frontPage":frontPage,"frontPageUrl":frontPageUrl};
                 json_ajax("POST", url, "json", false,data,personalizedConfiguration.webIcoCallback);
             } else {
                 $("#editWebIco").modal("hide");
@@ -387,7 +390,7 @@
             if (loginLogo != beforeLoginLogo) {
                 var imgSrc = $("#preview").attr("src");
                 var url="/sysm/personalized/update";
-                var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"name":beforeLoginLogo,"frontPage":frontPage};
+                var data={"topTitle" : indexTitle,"loginLogo":loginLogo,"homeLogo":homeLogo,"webIco":webIco,"copyright":copyright,"websiteName":websiteName,"recordNumber":recordNumber,"groupId":userGroupId,"name":beforeLoginLogo,"frontPage":frontPage,"frontPageUrl":frontPageUrl};
                 personalizedConfiguration.getImageWidth(imgSrc,function(width,height){
                     if(width>689&&height>123){
                         layer.msg("图片大小不要超过689x123");
@@ -489,7 +492,9 @@
             if (type == 0) {
                 zTree.selectNode(treeNode,false,true);
                 $("#frontPage").attr("value", nodes[0].id);
+                $("#frontPageUrl").attr("value", nodes[0].url);
                 frontPage = nodes[0].id;
+                frontPageUrl = nodes[0].url;
                 v = nodes[0].name;
                 var cityObj = $("#resourceName");
                 cityObj.val(v);

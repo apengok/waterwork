@@ -6,7 +6,7 @@
             //操作权限 
             var setpermissionEdit = {
                 async : {
-                    url : "role/choicePermissionTree",
+                    url : "/entm/role/choicePermissionTree",
                     type : "post",
                     enable : true,
                     autoParam : [ "id" ],

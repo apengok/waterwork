@@ -104,12 +104,12 @@
             //表格setting
             var setting = {
                 suffix  : '/',
-                listUrl : 'role/list/',
-                editUrl : 'role/edit/',
-                deleteUrl : 'role/delete_/',
-                deletemoreUrl : 'role/deletemore',
-                enableUrl : 'user/enable_',
-                disableUrl : 'user/disable_',
+                listUrl : '/entm/role/list/',
+                editUrl : '/entm/role/edit/',
+                deleteUrl : '/entm/role/delete_/',
+                deletemoreUrl : '/entm/role/deletemore',
+                enableUrl : '/entm/user/enable_',
+                disableUrl : '/entm/user/disable_',
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
                 dataTableDiv : 'dataTable', //表格
@@ -192,7 +192,7 @@
         //点击预览 
         showPermission: function(id){
             $('#showPermissionDiv').modal('show');
-            var url="role/choicePermissionTree/";
+            var url="/entm/role/choicePermissionTree/";
             var parameter={ "roleId": id};
             json_ajax("POST",url,"json",true,parameter, roleList.showPermissionCallback);
         },

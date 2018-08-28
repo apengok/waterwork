@@ -65,8 +65,8 @@
                         // var arrayObj = row.id.all;
                         // var idStr = arrayObj.join(",");
                         var editUrlPath = myTable.editUrl + idStr + "/"; // 修改地址
-                        var roleUrlPre = 'user/roleList_/{id}/';
-                        var VehicleUrlPre = 'user/assign_stn/{id}/';
+                        var roleUrlPre = '/entm/user/roleList_/{id}/';
+                        var VehicleUrlPre = '/entm/user/assign_stn/{id}/';
                         var result = '';
                         var userId = $("#currentUserId").val();
                         var userId2 = $("#currentUserId").attr("value");
@@ -188,12 +188,12 @@
             // 表格setting
             setting = {
                 suffix  : '/',
-                listUrl : "user/list/",
-                editUrl : "user/edit/",
-                deleteUrl : "user/delete/",
-                deletemoreUrl : "user/deletemore",
-                enableUrl : "user/enable_",
-                disableUrl : "user/disable_",
+                listUrl : "/entm/user/list/",
+                editUrl : "/entm/user/edit/",
+                deleteUrl : "/entm/user/delete/",
+                deletemoreUrl : "/entm/user/deletemore",
+                enableUrl : "/entm/user/enable_",
+                disableUrl : "/entm/user/disable_",
                 columnDefs : columnDefs, // 表格列定义
                 columns : columns, // 表格列
                 dataTableDiv : 'dataTable', // 表格
@@ -212,7 +212,7 @@
             // 初始化文件树
             treeSetting = {
                 async : {
-                    url : "user/oranizationtree/",
+                    url : "/entm/user/oranizationtree/",
                     type : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -296,7 +296,7 @@
                 var parentNode = nodes[0].getParentNode();
                 $.ajax({
                     type: 'POST',
-                    url: 'user/group/delete/',
+                    url: '/entm/user/group/delete/',
                     data: {"pId": treeNode.id},
                     async:false,
                     dataType: 'json',
@@ -310,7 +310,7 @@
                         	selectTreeId = "";
                             $.ajax({
                                 type: 'POST',
-                                url: 'user/oranizationtree/',
+                                url: '/entm/user/oranizationtree/',
                                 data: {"isOrg" : "1"},
                                 async:false,
                                 dataType: 'json',
@@ -404,19 +404,19 @@
             
             var addStr = "<span class='button add' id='addBtn_"
                     + treeNode.tId
-                    + "' title='增加' href='user/group/add/?id="
+                    + "' title='增加' href='/entm/user/group/add/?id="
                     + id
                     + "&pid="
                     + pid
                     + "' data-target='#commonWin' data-toggle='modal'></span>";
             var editStr = "<span class='button edit' id='editBtn_"
                     + treeNode.tId
-                    + "' title='编辑' href='user/group/edit/"
+                    + "' title='编辑' href='/entm/user/group/edit/"
                     + pid
                     + "/' data-target='#commonWin' data-toggle='modal'></span>";
             var detailsStr = "<span class='button details' id='detailsBtn_"
                     + treeNode.tId
-                    + "' title='详情'  href='user/group/detail/"
+                    + "' title='详情'  href='/entm/user/group/detail/"
                     + pid
                     + "/' data-target='#commonWin' data-toggle='modal'</span>";
             sDetails.after(detailsStr);
@@ -427,7 +427,7 @@
                 btn.bind("click", function() {
                     var oldData;
                     $.ajax({
-                        url: 'user/oranizationtree/',
+                        url: '/entm/user/oranizationtree/',
                         type: 'POST',
                         data: {"isOrg" : "1"},
                         async:false,
@@ -442,7 +442,7 @@
                     $("#" + windowId).on("hidden.bs.modal", function(data) {
                         $(this).removeData("bs.modal");                     
                         $.ajax({
-                            url: 'user/oranizationtree/',
+                            url: '/entm/user/oranizationtree/',
                             type: 'POST',
                             data: {"isOrg" : "1"},
                             async:false,
@@ -477,7 +477,7 @@
                         var nodes = treeObj.getSelectedNodes();        
                         $(this).removeData("bs.modal");
                         $.ajax({
-                            url: 'user/oranizationtree/',
+                            url: '/entm/user/oranizationtree/',
                             type: 'POST',
                             data: {"isOrg" : "1"},
                             async:false,
@@ -690,7 +690,7 @@
                 var operationType=$("#updateOperationType").val();// 运营资质类型
                 var explains=$("#updateDescription").val();// 说明
                 var data={"id":OperationId,"operationType":operationType,"explains":explains};
-                var url="group/updateOperation";
+                var url="/entm/group/updateOperation";
                 json_ajax("POST", url, "json", true,data,groupUserManage.updateCallback);
             }
         },
@@ -707,7 +707,7 @@
       	findOperationById:function(id){
       		OperationId=id;
       		var data={"id":OperationId};
-      		var url="group/findOperationById";
+      		var url="/entm/group/findOperationById";
       		json_ajax("POST",url,"json",true,data,groupUserManage.findByIdback);
       	},
 	    findByIdback:function(data){
@@ -735,7 +735,7 @@
          		icon : 3, // 问号图标
          		btn: [ '确定', '取消'] // 按钮
       		}, function(){
-      			var url="group/deleteOperation";
+      			var url="/entm/group/deleteOperation";
               	var data={"id" : id}
               	json_ajax("POST", url, "json", false,data,groupUserManage.deleteCallback);
       		});
@@ -759,7 +759,7 @@
        		$("input[name='subChkTwo']:checked").each(function() {
        			ids+=($(this).val())+",";
        		});
-       		var url="group/deleteOperationMore";
+       		var url="/entm/group/deleteOperationMore";
        		var data={"ids" : ids};
        		layer.confirm(publicDelete, {
        			title :'操作确认',
@@ -794,7 +794,7 @@
    	   		$("input[name='subChkTwo']").prop("checked", e.checked);
       	},
       	addId : function (){
-      		$("#addId").attr("href","user/add/newuser?uuid="+selectTreeIdAdd+"");
+      		$("#addId").attr("href","/entm/user/add/newuser?uuid="+selectTreeIdAdd+"");
       	},
         validates:function () {//增加运营资质类别时的数据验证
       	   return $("#eadOperation").validate({
@@ -807,7 +807,7 @@
                        remote: {
                            type:"post",
                            async:false,
-                           url:"group/findOperationByoperation" ,
+                           url:"/entm/group/findOperationByoperation" ,
                            data:{
                                type:function(){return $("#addproperationtype").val();}
                            },
@@ -873,7 +873,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"group/findOperationCompare" ,
+                                url:"/entm/group/findOperationCompare" ,
                                 data:{
                                     type:function(){
                                         return $("#updateOperationType").val();

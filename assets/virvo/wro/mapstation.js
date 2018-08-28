@@ -316,7 +316,7 @@
                             selectDistrictId = "";
                             $.ajax({
                                 type: 'POST',
-                                url: 'district/dmatree/',
+                                url: '/dmam/district/dmatree/',
                                 data: {"isOrg" : "1"},
                                 async:false,
                                 dataType: 'json',

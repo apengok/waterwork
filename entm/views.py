@@ -133,86 +133,87 @@ choicetreedict=OrderedDict()
 choicetreedict["datamonitor"]={
         "name":"数据监控",
         "submenu":[{
-            "mapmonitor":{"name":"地图监控","sub":{"name":"可写"}},
-            "realcurlv":{"name":"实时曲线","sub":{"name":"可写"}},
-            "realdata":{"name":"实时数据","sub":{"name":"可写"}},
-            "dmaonline":{"name":"DMA在线监控","sub":{"name":"可写"}},
+            "mapmonitor":{"name":"地图监控","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "realcurlv":{"name":"实时曲线","url":"/monitor/realcurlv/","sub":{"name":"可写"}},
+            "realdata":{"name":"实时数据","url":"/monitor/realtimedata/","sub":{"name":"可写"}},
+            "dmaonline":{"name":"DMA在线监控","url":"/monitor/dmaonline/","sub":{"name":"可写"}},
         }],
     }
 choicetreedict["firmmanager"] = {
         "name":"企业管理",
         "submenu":[{
-            "rolemanager":{"name":"角色管理","sub":{"name":"可写"}},
-            "organusermanager":{"name":"组织和用户管理","sub":{"name":"可写"}},
+            "rolemanager":{"name":"角色管理","url":"/entm/rolemanager/","sub":{"name":"可写"}},
+            "organusermanager":{"name":"组织和用户管理","url":"/entm/usermanager/","sub":{"name":"可写"}},
         }],
     }
 choicetreedict["devicemanager"] = {
         "name":"设备管理",
         "submenu":[{
-            "meters":{"name":"表具管理","sub":{"name":"可写"}},
-            "simcard":{"name":"SIM卡管理","sub":{"name":"可写"}},
-            "params":{"name":"参数指令","sub":{"name":"可写"}},
+            "meters":{"name":"表具管理","url":"/devm/metermanager/","sub":{"name":"可写"}},
+            "simcard":{"name":"SIM卡管理","url":"/devm/simcardmanager/","sub":{"name":"可写"}},
+            "params":{"name":"参数指令","url":"/devm/","sub":{"name":"可写"}},
         }],
     }
 
 choicetreedict["datanalys"] = {
         "name":"数据分析",
         "submenu":[{
-            "dailyuse":{"name":"日用水分析","sub":{"name":"可写"}},
-            "monthlyuse":{"name":"月用水分析","sub":{"name":"可写"}},
-            "dmacxc":{"name":"DMA产销差分析","sub":{"name":"可写"}},
-            "flownalys":{"name":"流量分析","sub":{"name":"可写"}},
-            "comparenalys":{"name":"对比分析","sub":{"name":"可写"}},
-            "peibiao":{"name":"配表分析","sub":{"name":"可写"}},
-            "rawdata":{"name":"原始数据","sub":{"name":"可写"}},
-            "mnf":{"name":"夜间最小流量","sub":{"name":"可写"}},
+            "dailyuse":{"name":"日用水分析","url":"/analysis/dailyuse/","sub":{"name":"可写"}},
+            "monthlyuse":{"name":"月用水分析","url":"/analysis/monthuse/","sub":{"name":"可写"}},
+            "dmacxc":{"name":"DMA产销差分析","url":"/analysis/cxc2/","sub":{"name":"可写"}},
+            "flownalys":{"name":"流量分析","url":"/analysis/cxc2/","sub":{"name":"可写"}},
+            "comparenalys":{"name":"对比分析","url":"/analysis/cxc2/","sub":{"name":"可写"}},
+            "peibiao":{"name":"配表分析","url":"/analysis/cxc2/","sub":{"name":"可写"}},
+            "rawdata":{"name":"原始数据","url":"/analysis/cxc2/","sub":{"name":"可写"}},
+            "mnf":{"name":"夜间最小流量","url":"/analysis/mnf2/","sub":{"name":"可写"}},
         }],
     }
 choicetreedict["alarmcenter"] = {
         "name":"报警中心",
         "submenu":[{
-            "stationalarm":{"name":"站点报警设置","sub":{"name":"可写"}},
-            "dmaalarm":{"name":"DMA报警设置","sub":{"name":"可写"}},
-            "queryalarm":{"name":"报警查询","sub":{"name":"可写"}},
+            "stationalarm":{"name":"站点报警设置","url":"/alarm/mapmonitor2/","sub":{"name":"可写"}},
+            "dmaalarm":{"name":"DMA报警设置","url":"/alarm/mapmonitor2/","sub":{"name":"可写"}},
+            "queryalarm":{"name":"报警查询","url":"/alarm/mapmonitor2/","sub":{"name":"可写"}},
         }],
     }
 choicetreedict["basemanager"] = {
         "name":"基础管理",
         "submenu":[{
-            "dmamanager":{"name":"dma管理","sub":{"name":"可写"}},
-            "stationmanager":{"name":"站点管理","sub":{"name":"可写"}},
+            "dmamanager":{"name":"dma管理","url":"/dmam/districtmanager/","sub":{"name":"可写"}},
+            "stationmanager":{"name":"站点管理","url":"/dmam/stationsmanager/","sub":{"name":"可写"}},
         }],
     }
 
 choicetreedict["basenalys"] = {
         "name":"基准分析",
         "submenu":[{
-            "dma":{"name":"DMA基准分析","sub":{"name":"可写"}},
-            "mf":{"name":"最小流量分析","sub":{"name":"可写"}},
-            "day":{"name":"日基准流量分析","sub":{"name":"可写"}},
+            "dma":{"name":"DMA基准分析","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "mf":{"name":"最小流量分析","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "day":{"name":"日基准流量分析","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
         }],
     }
 choicetreedict["systemconfig"] = {
         "name":"系统管理",
         "submenu":[{
-            "personality":{"name":"平台个性化管理","sub":{"name":"可写"}},
-            "system":{"name":"系统设置","sub":{"name":"可写"}},
-            "retransit":{"name":"转发设置","sub":{"name":"可写"}},
-            "icons":{"name":"图标配置","sub":{"name":"可写"}},
-            "querylog":{"name":"日志查询","sub":{"name":"可写"}},
+            "personality":{"name":"平台个性化管理","url":"/sysm/personalized/list/","sub":{"name":"可写"}},
+            "communication":{"name":"通讯管理","url":"/sysm/commconfig/","sub":{"name":"可写"}},
+            "system":{"name":"系统设置","url":"/sysm/mapmonitor2/","sub":{"name":"可写"}},
+            "retransit":{"name":"转发设置","url":"/sysm/mapmonitor2/","sub":{"name":"可写"}},
+            "icons":{"name":"图标配置","url":"/sysm/mapmonitor2/","sub":{"name":"可写"}},
+            "querylog":{"name":"日志查询","url":"/sysm/mapmonitor2/","sub":{"name":"可写"}},
         }],
     }
 choicetreedict["reporttable"] = {
         "name":"报表统计",
         "submenu":[{
-            "querylog":{"name":"日志查询","sub":{"name":"可写"}},
-            "alarm":{"name":"报警报表","sub":{"name":"可写"}},
-            "dmastatics":{"name":"DMA统计报表","sub":{"name":"可写"}},
-            "biguser":{"name":"大用户报表","sub":{"name":"可写"}},
-            "flows":{"name":"流量报表","sub":{"name":"可写"}},
-            "waters":{"name":"水量报表","sub":{"name":"可写"}},
-            "biaowu":{"name":"表务报表","sub":{"name":"可写"}},
-            "bigdata":{"name":"大数据报表","sub":{"name":"可写"}},
+            "querylog":{"name":"日志查询","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "alarm":{"name":"报警报表","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "dmastatics":{"name":"DMA统计报表","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "biguser":{"name":"大用户报表","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "flows":{"name":"流量报表","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "waters":{"name":"水量报表","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "biaowu":{"name":"表务报表","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
+            "bigdata":{"name":"大数据报表","url":"/monitor/mapmonitor2/","sub":{"name":"可写"}},
         }],
     }
 
@@ -335,6 +336,7 @@ def buildFrontbasetree(request,permstree=None):
         submenu = choicetreedict[key]["submenu"][0]
         for sub_key in submenu.keys():
             name = submenu[sub_key]["name"]
+            url = submenu[sub_key]["url"]
             idstr = "{id}_{pid}".format(id=sub_key,pid=pid)
             cid = pid
 
@@ -343,6 +345,7 @@ def buildFrontbasetree(request,permstree=None):
             tmp2["pId"] = cid
             tmp2["id"] = idstr
             tmp2["type"] = 0
+            tmp2["url"] = url
             if not user.has_menu_permission(idstr):
                 tmp2["chkDisabled"] = "true" 
             # if idstr in pt_dict.keys():

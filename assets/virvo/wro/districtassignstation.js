@@ -431,7 +431,7 @@
             var now_dma_pk = $("#dma_pk").val();
 
             var dma_id = 1;
-            var url="dmaStation/saveDmaStation/";
+            var url="/dmam/dmaStation/saveDmaStation/";
             // var parameter={"dma_id":dma_id};
             var data = {"dma_pk": dma_pk,"stationassign":dmastation_json};
             json_ajax("POST",url,"json",true,data,function(data) {
@@ -551,7 +551,7 @@
         
         inquireDmastations: function (number) {
             var dma_id = 1;
-            var url="dmaStation/getdmastationsbyId/";
+            var url="/dmam/dmaStation/getdmastationsbyId/";
             // var parameter={"dma_id":dma_id};
             var data = {"dma_pk": dma_pk};
             json_ajax("POST",url,"json",true,data,dmaStation.getCallback);

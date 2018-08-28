@@ -255,7 +255,7 @@
                 var operationType=$("#updateOperationType").val();// 运营资质类型
                 var explains=$("#updateDescription").val();// 说明
                 var data={"id":OperationId,"operationType":operationType,"explains":explains};
-                var url="group/updateOperation";
+                var url="/entm/group/updateOperation";
                 json_ajax("POST", url, "json", true,data,dailyUse.updateCallback);
             }
         },

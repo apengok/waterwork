@@ -75,6 +75,7 @@ def personalizedUpdate(request):
     websiteName = request.POST.get('websiteName')   
     recordNumber = request.POST.get('recordNumber')
     frontPageMsg = request.POST.get('frontPage')
+    frontPageUrl = request.POST.get('frontPageUrl')
     updateDataUsername = user.user_name
     
     
@@ -90,15 +91,16 @@ def personalizedUpdate(request):
         p.websiteName = websiteName
         p.recordNumber = recordNumber
         p.frontPageMsg = frontPageMsg
+        p.frontPageMsgUrl = frontPageUrl
         p.updateDataUsername = updateDataUsername
 
         p.save()
     else:
         Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
-            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,frontPageMsgUrl=frontPageUrl,
             ptype='default',belongto=belongto,updateDataUsername=updateDataUsername)
         Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
-            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,
+            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,frontPageMsgUrl=frontPageUrl,
             ptype='custom',belongto=belongto,updateDataUsername=updateDataUsername)
     
 

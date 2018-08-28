@@ -17,7 +17,7 @@
         init:function(){
             var setting = {
                 async : {
-                    url : "user/oranizationtree/",
+                    url : "/entm/user/oranizationtree/",
                     tyoe : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -277,7 +277,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"user/verification" ,
+                                url:"/entm/user/verification" ,
                                 data:{
                                     expire_date:function(){return $("#authorizationDateEdit").val();}
                                 },

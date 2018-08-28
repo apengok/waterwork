@@ -5,7 +5,7 @@
             //操作权限 
             var setpermission = {
                 async : {
-                    url : "role/choicePermissionTree",
+                    url : "/entm/role/choicePermissionTree",
                     type : "post",
                     enable : true,
                     autoParam : [ "id" ],

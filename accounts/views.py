@@ -8,7 +8,7 @@ from django.utils.http import is_safe_url
 from django.views.generic import CreateView,DetailView,UpdateView,FormView
 from .forms import LoginForm,RegisterForm ,UserDetailChangeForm  #,GuestForm
 from waterwork.mixins import NextUrlMixin, RequestFormAttachMixin
-
+from sysm.models import Personalized
 # Create your views here.
 
 #LoginRequiredMixin,
@@ -128,7 +128,14 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
         # context = super(LoginView, self).get_context_data(*args, **kwargs)
         # if form.cleaned_data['captchaCode'] == '':
         #     context['errmsg'] = "请滑动滑块到右边"
-        next_path = self.get_next_url()
+        user = self.request.user
+        p = Personalized.objects.filter(belongto=user.belongto).filter(ptype="custom")
+        if p.exists():
+            next_path = p.first().frontPageMsgUrl
+            print("next path:",next_path)
+        else:
+            next_path = self.get_next_url()
+
         return redirect(to=next_path)
         # return render(self.request,next_path,{})
 

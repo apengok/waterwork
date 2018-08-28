@@ -278,7 +278,7 @@
             // 初始化文件树
             treeSetting = {
                 async : {
-                    url : "district/dmatree/",
+                    url : "/dmam/district/dmatree/",
                     type : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -365,7 +365,7 @@
                 var parentNode = nodes[0].getParentNode();
                 $.ajax({
                     type: 'POST',
-                    url: 'district/delete/',
+                    url: '/dmam/district/delete/',
                     data: {"pId": treeNode.id},
                     async:false,
                     dataType: 'json',
@@ -380,7 +380,7 @@
                             selectDistrictId = "";
                             $.ajax({
                                 type: 'POST',
-                                url: 'district/dmatree/',
+                                url: '/dmam/district/dmatree/',
                                 data: {"isOrg" : "1"},
                                 async:false,
                                 dataType: 'json',
@@ -477,14 +477,14 @@
             
             var addStr = "<span class='button add' id='addBtn_"
                     + treeNode.tId
-                    + "' title='增加' href='district/add/?id="
+                    + "' title='增加' href='/dmam/district/add/?id="
                     + id
                     + "&pid="
                     + pid
                     + "' data-target='#commonSmWin' data-toggle='modal' style='background-image:url(/static/virvo/images/add.png)'><img  src='/static/virvo/images/add.png' style='outline: none;'></span>";
             var editStr = "<span class='button edit' id='editBtn_"
                     + treeNode.tId
-                    + "' title='编辑' href='district/edit/"
+                    + "' title='编辑' href='/dmam/district/edit/"
                     + pid
                     + "/' data-target='#commonSmWin' data-toggle='modal' style='background-image:url(/static/virvo/images/edit.png)' >"
                     + "<img  src='/static/virvo/images/edit.png' style='outline: none;'>"
@@ -492,7 +492,7 @@
             
             var detailsStr = "<span class='button details' id='detailsBtn_"
                     + treeNode.tId
-                    + "' title='详情'  href='district/detail/"
+                    + "' title='详情'  href='/dmam/district/detail/"
                     + pid
                     + "/' data-target='#commonSmWin' data-toggle='modal' style='background-image:url(/static/virvo/images/detail.png)'><img  src='/static/virvo/images/detail.png' style='outline: none;'></span>";
             // sDetails.after(detailsStr);
@@ -511,7 +511,7 @@
                 btn.bind("click", function() {
                     var oldData;
                     $.ajax({
-                        url: 'district/dmatree/',
+                        url: '/dmam/district/dmatree/',
                         type: 'POST',
                         data: {"isOrg" : "1","isDma":"1"},
                         async:false,
@@ -526,7 +526,7 @@
                     $("#" + windowId).on("hidden.bs.modal", function(data) {
                         $(this).removeData("bs.modal");                     
                         $.ajax({
-                            url: 'district/dmatree/',
+                            url: '/dmam/district/dmatree/',
                             type: 'POST',
                             data: {"isOrg" : "1","isDma":"1"},
                             async:false,
@@ -562,7 +562,7 @@
                         var nodes = treeObj.getSelectedNodes();        
                         $(this).removeData("bs.modal");
                         $.ajax({
-                            url: 'district/dmatree/',
+                            url: '/dmam/district/dmatree/',
                             type: 'POST',
                             data: {"isOrg" : "1","isDma":"1"},
                             async:false,
@@ -792,7 +792,7 @@
         },
         findOperation:function(){
             var vagueSearch = $("#userType").val();
-            var url="station/findOperations";
+            var url="/dmam/station/findOperations";
             var data={"type":vagueSearch};
             json_ajax("POST", url, "json", true,data,dmaManage.findCallback);
         },
@@ -978,7 +978,7 @@
                 var userType=$("#updateuserType").val();// 运营资质类型
                 var explains=$("#updateDescription").val();// 说明
                 var data={"id":OperationId,"userType":userType,"explains":explains};
-                var url="station/updateOperation";
+                var url="/dmam/station/updateOperation";
                 json_ajax("POST", url, "json", true,data,dmaManage.updateCallback);
             }
         },
@@ -995,7 +995,7 @@
         findOperationById:function(id){
             OperationId=id;
             var data={"id":OperationId};
-            var url="station/findOperationById";
+            var url="/dmam/station/findOperationById";
             json_ajax("POST",url,"json",true,data,dmaManage.findByIdback);
         },
         findByIdback:function(data){
@@ -1024,7 +1024,7 @@
                 icon : 3, // 问号图标
                 btn: [ '确定', '取消'] // 按钮
             }, function(){
-                var url="station/deleteOperation";
+                var url="/dmam/station/deleteOperation";
                 var data={"id" : id}
                 json_ajax("POST", url, "json", false,data,dmaManage.deleteCallback);
             });
@@ -1048,7 +1048,7 @@
             $("input[name='subChkTwo']:checked").each(function() {
                 ids+=($(this).val())+",";
             });
-            var url="station/deleteOperationMore";
+            var url="/dmam/station/deleteOperationMore";
             var data={"ids" : ids};
             layer.confirm(publicDelete, {
                 title :'操作确认',
@@ -1083,7 +1083,7 @@
             $("input[name='subChkTwo']").prop("checked", e.checked);
         },
         assignstation : function (){
-            $("#assignstation").attr("href","district/assignstation/"+current_dma_pk+"/");
+            $("#assignstation").attr("href","/dmam/district/assignstation/"+current_dma_pk+"/");
         },
         validates:function () {//增加运营资质类别时的数据验证
            return $("#adduserType").validate({
@@ -1096,7 +1096,7 @@
                        remote: {
                            type:"post",
                            async:false,
-                           url:"station/findusertypeByusertype/" ,
+                           url:"/dmam/station/findusertypeByusertype/" ,
                            data:{
                                type:function(){return $("#addpruserType").val();}
                            },
@@ -1162,7 +1162,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"station/findOperationCompare" ,
+                                url:"/dmam/station/findOperationCompare" ,
                                 data:{
                                     type:function(){
                                         return $("#updateuserType").val();

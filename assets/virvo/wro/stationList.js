@@ -168,12 +168,12 @@
             // 表格setting
             setting = {
                 suffix  : '/',
-                listUrl : "stations/list/",
-                editUrl : "stations/edit/",
-                deleteUrl : "stations/delete/",
-                deletemoreUrl : "stations/deletemore",
-                enableUrl : "stations/enable_",
-                disableUrl : "stations/disable_",
+                listUrl : "/dmam/stations/list/",
+                editUrl : "/dmam/stations/edit/",
+                deleteUrl : "/dmam/stations/delete/",
+                deletemoreUrl : "/dmam/stations/deletemore",
+                enableUrl : "/dmam/stations/enable_",
+                disableUrl : "/dmam/stations/disable_",
                 columnDefs : columnDefs, // 表格列定义
                 columns : columns, // 表格列
                 dataTableDiv : 'dataTable', // 表格
@@ -192,7 +192,7 @@
             // 初始化文件树
             treeSetting = {
                 async : {
-                    url : "district/dmatree/",
+                    url : "/dmam/district/dmatree/",
                     type : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -277,7 +277,7 @@
                 var parentNode = nodes[0].getParentNode();
                 $.ajax({
                     type: 'POST',
-                    url: 'district/delete/',
+                    url: '/dmam/district/delete/',
                     data: {"pId": treeNode.id},
                     async:false,
                     dataType: 'json',
@@ -292,7 +292,7 @@
                             selectDistrictId = "";
                             $.ajax({
                                 type: 'POST',
-                                url: 'district/dmatree/',
+                                url: '/dmam/district/dmatree/',
                                 data: {"isOrg" : "1"},
                                 async:false,
                                 dataType: 'json',
@@ -386,19 +386,19 @@
             
             var addStr = "<span class='button add' id='addBtn_"
                     + treeNode.tId
-                    + "' title='增加' href='district/add/?id="
+                    + "' title='增加' href='/dmam/district/add/?id="
                     + id
                     + "&pid="
                     + pid
                     + "' data-target='#commonWin' data-toggle='modal'></span>";
             var editStr = "<span class='button edit' id='editBtn_"
                     + treeNode.tId
-                    + "' title='编辑' href='district/edit/"
+                    + "' title='编辑' href='/dmam/district/edit/"
                     + pid
                     + "/' data-target='#commonWin' data-toggle='modal'></span>";
             var detailsStr = "<span class='button details' id='detailsBtn_"
                     + treeNode.tId
-                    + "' title='详情'  href='district/detail/"
+                    + "' title='详情'  href='/dmam/district/detail/"
                     + pid
                     + "/' data-target='#commonWin' data-toggle='modal'</span>";
             sDetails.after(detailsStr);
@@ -409,7 +409,7 @@
                 btn.bind("click", function() {
                     var oldData;
                     $.ajax({
-                        url: 'district/dmatree/',
+                        url: '/dmam/district/dmatree/',
                         type: 'POST',
                         data: {"isOrg" : "1"},
                         async:false,
@@ -424,7 +424,7 @@
                     $("#" + windowId).on("hidden.bs.modal", function(data) {
                         $(this).removeData("bs.modal");                     
                         $.ajax({
-                            url: 'district/dmatree/',
+                            url: '/dmam/district/dmatree/',
                             type: 'POST',
                             data: {"isOrg" : "1"},
                             async:false,
@@ -459,7 +459,7 @@
                         var nodes = treeObj.getSelectedNodes();        
                         $(this).removeData("bs.modal");
                         $.ajax({
-                            url: 'district/dmatree/',
+                            url: '/dmam/district/dmatree/',
                             type: 'POST',
                             data: {"isOrg" : "1"},
                             async:false,
@@ -560,7 +560,7 @@
         },
         findUsertype:function(){
             var vagueSearch = $("#userType").val();
-            var url="station/findUsertypes";
+            var url="/dmam/station/findUsertypes";
             var data={"type":vagueSearch};
             json_ajax("POST", url, "json", true,data,stationManage.findCallback);
         },
@@ -794,7 +794,7 @@
                        remote: {
                            type:"post",
                            async:false,
-                           url:"station/findusertypeByusertype/" ,
+                           url:"/dmam/station/findusertypeByusertype/" ,
                            data:{
                                type:function(){return $("#addpruserType").val();}
                            },
@@ -860,7 +860,7 @@
                             remote: {
                                 type:"post",
                                 async:false,
-                                url:"station/findUsertypeCompare" ,
+                                url:"/dmam/station/findUsertypeCompare" ,
                                 data:{
                                     type:function(){
                                         return $("#updateuserType").val();

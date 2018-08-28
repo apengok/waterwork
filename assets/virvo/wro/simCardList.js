@@ -182,8 +182,8 @@
                 editUrl: '/devm/simcard/edit/',
                 deleteUrl: '/devm/simcard/delete/',
                 deletemoreUrl: '/devm/simcard/deletemore/',
-                enableUrl: '/clbs/c/user/enable_',
-                disableUrl: '/clbs/c/user/disable_',
+                enableUrl: '/devm/user/enable_',
+                disableUrl: '/devm/user/disable_',
                 columnDefs: columnDefs, //表格列定义
                 columns: columns, //表格列
                 dataTableDiv: 'dataTable', //表格
