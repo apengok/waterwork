@@ -80,7 +80,7 @@ def personalizedUpdate(request):
     
     
 
-    obj = Personalized.objects.filter(belongto=belongto).filter(ptype="custom")
+    obj = Personalized.objects.filter(belongto=belongto)
     if obj.exists():
         p = obj.first()
         p.topTitle = topTitle
@@ -98,10 +98,10 @@ def personalizedUpdate(request):
     else:
         Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
             copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,frontPageMsgUrl=frontPageUrl,
-            ptype='default',belongto=belongto,updateDataUsername=updateDataUsername)
-        Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
-            copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,frontPageMsgUrl=frontPageUrl,
             ptype='custom',belongto=belongto,updateDataUsername=updateDataUsername)
+        # Personalized.objects.create(topTitle=topTitle,loginLogo=loginLogo,homeLogo=homeLogo,webIco=webIco,
+        #     copyright=copyright,websiteName=websiteName,recordNumber=recordNumber,frontPageMsg=frontPageMsg,frontPageMsgUrl=frontPageUrl,
+        #     ptype='custom',belongto=belongto,updateDataUsername=updateDataUsername)
     
 
     ret = {"exceptionDetailMsg":"null",
@@ -160,15 +160,18 @@ def personalizedUpdate_ico(request):
 
 def default_default(organ):
     oparent = organ.parent
-    pers = Personalized.objects.filter(belongto=oparent).filter(ptype="default")
+    if oparent is None:
+        pers = Personalized.objects.filter(ptype="default")
+    else:
+        pers = Personalized.objects.filter(belongto=oparent)
     if pers.exists():
         p = pers.first()
         pp = Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
             copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
-            ptype='default',belongto=organ,updateDataUsername=p.updateDataUsername)
-        Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
-            copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
             ptype='custom',belongto=organ,updateDataUsername=p.updateDataUsername)
+        # Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
+        #     copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
+        #     ptype='custom',belongto=organ,updateDataUsername=p.updateDataUsername)
     else:
         pp = default_default(oparent)
     
@@ -178,7 +181,7 @@ def personalizedFind(request):
 
     user = request.user
     ubelongto = user.belongto
-    pers = Personalized.objects.filter(belongto=ubelongto).filter(ptype="custom")
+    pers = Personalized.objects.filter(belongto=ubelongto)
 
     if pers.exists():
         p = pers.first()
@@ -244,6 +247,17 @@ def personalizedFind(request):
     #         "success":1}
     return HttpResponse(json.dumps(ret))
 
+DEFAULT_PERSONLIZED = {
+    "topTitle":"智慧水务管控一体化",
+    "websiteName":"www.virvo.com.cn",
+    "copyright":"?2015-2017威尔沃自动化设备（深圳）有限公司",
+    "recordNumber":"京ICP备15041746号-1",
+    "webIco":"favicon.ico",
+    "homeLogo":"LOGO3.png",
+    "frontPage":"",
+    "frontPageUrl":"null",
+}
+
 def personalizedDefault(request):
     print("set default:",request.POST)
 
@@ -262,8 +276,12 @@ def personalizedDefault(request):
     frontPageMsg = request.POST.get('frontPage')
     updateDataUsername = user.user_name
 
-    default = Personalized.objects.filter(belongto=belongto).filter(ptype="default").first()
-    custom = Personalized.objects.filter(belongto=belongto).filter(ptype="custom").first()
+    # 恢复默认---恢复成上级的设置
+    if belongto.parent is not None:
+        default = Personalized.objects.filter(belongto=belongto.parent).first()
+    else:
+        default = Personalized.objects.filter(ptype="default").first()
+    custom = Personalized.objects.filter(belongto=belongto).first()
     if dtype == "0":
         custom.loginLogo = default.loginLogo
     elif dtype == "1":

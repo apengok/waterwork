@@ -129,7 +129,7 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
         # if form.cleaned_data['captchaCode'] == '':
         #     context['errmsg'] = "请滑动滑块到右边"
         user = self.request.user
-        p = Personalized.objects.filter(belongto=user.belongto).filter(ptype="custom")
+        p = Personalized.objects.filter(belongto=user.belongto) #.filter(ptype="custom")
 
         if p.exists():
             next_path = p.first().frontPageMsgUrl

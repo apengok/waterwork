@@ -18,7 +18,7 @@ Including another URLconf
 from django.conf.urls import url,include,handler404,handler500
 from django.contrib import admin
 
-from entm.views import i18n_javascript,error_404,error_500,StaticView
+from entm.views import i18n_javascript,error_404,error_500,StaticView,faviconredirect
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 from django.contrib.auth.views import LogoutView
@@ -27,7 +27,8 @@ from django.conf.urls.static import static
 from accounts.views import LoginView, RegisterView
 
 urlpatterns = [
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/virvo/resources/img/favicon.ico')),
+    # url(r'^favicon\.ico$', RedirectView.as_view(url='/static/virvo/resources/img/favicon.ico')),
+    url(r'^favicon\.ico$', faviconredirect,name='faviconredirect'),
     url(r'^admin/jsi18n', i18n_javascript),
     url(r'^admin/', admin.site.urls),
     url(r'^$',LoginView.as_view(), name='login'),
