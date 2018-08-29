@@ -167,7 +167,7 @@ def default_default(organ):
     if pers.exists():
         p = pers.first()
         pp = Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
-            copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
+            copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,,frontPageMsgUrl=p.frontPageMsgUrl,
             ptype='custom',belongto=organ,updateDataUsername=p.updateDataUsername)
         # Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
         #     copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
@@ -293,7 +293,8 @@ def personalizedDefault(request):
         custom.copyright = default.copyright
         custom.recordNumber = default.recordNumber
     elif dtype == "4":
-        custom.frontPageMsg = default.frontPageMsg
+        custom.frontPageMsg = ''    #default.frontPageMsg
+        custom.frontPageMsgUrl = '/entm/' #default.frontPageMsgUrl
     elif dtype == "5":
         custom.webIco = default.webIco
     else:
