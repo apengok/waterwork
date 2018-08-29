@@ -167,7 +167,7 @@ def default_default(organ):
     if pers.exists():
         p = pers.first()
         pp = Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
-            copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,,frontPageMsgUrl=p.frontPageMsgUrl,
+            copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,frontPageMsgUrl=p.frontPageMsgUrl,
             ptype='custom',belongto=organ,updateDataUsername=p.updateDataUsername)
         # Personalized.objects.create(topTitle=p.topTitle,loginLogo=p.loginLogo,homeLogo=p.homeLogo,webIco=p.webIco,
         #     copyright=p.copyright,websiteName=p.websiteName,recordNumber=p.recordNumber,frontPageMsg=p.frontPageMsg,
