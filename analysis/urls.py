@@ -32,4 +32,7 @@ urlpatterns = [
     url(r'^monthuse/?$',views.MonthUseView.as_view(),name='monthuse'),
     url(r'flowdata_monthuse/?$',views.flowdata_monthuse,name='flowdata_monthuse'),
         
+    url(r'^historydata/?$',views.HistoryDataView.as_view(),name='historydata'),
+    url(r'historydata/list/?$',views.historydatalist,name='historydatalist'),
+
 ]

@@ -72,7 +72,7 @@
             }});
 
             $('input:radio[name="metertype"]').filter('[value="'+metertype+'"]').attr('checked', true);
-            $('input:radio[name="metertype"]').filter('[value="'+state+'"]').attr('checked', true);
+            $('input:radio[name="state"]').filter('[value="'+state+'"]').attr('checked', true);
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);

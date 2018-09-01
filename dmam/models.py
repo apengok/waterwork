@@ -453,6 +453,26 @@ class Station(models.Model):
             
         }
 
+    def historydata(self,startTime,endTime):
+        flow_data = []
+        if self.commaddr is None:
+            return flow_data
+        rtflow = HdbFlowData.objects.filter(commaddr=self.commaddr).filter(readtime__range=[startTime,endTime])
+        press = HdbPressureData.objects.filter(commaddr=self.commaddr).filter(readtime__range=[startTime,endTime])
+        # obj= Model.objects.filter(testfield=12).order_by('-id')[0]
+
+        return {
+            
+            "readtime":rtflow.readtime if rtflow else '-',
+            
+            "influx":rtflow.flux if rtflow else '-',
+            "plusflux":rtflow.plustotalflux if rtflow else '-',
+            "revertflux":rtflow.reversetotalflux if rtflow else '-',
+            "totalflux":rtflow.totalflux if rtflow else '-',
+            "press":press.pressure if press else 0,
+            
+        }
+
 
 
 @receiver(post_save, sender=Station)

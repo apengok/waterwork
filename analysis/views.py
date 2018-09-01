@@ -960,3 +960,96 @@ def flowdata_dailyuse_compare(request):
     
     
     return HttpResponse(json.dumps(ret))
+
+
+
+class HistoryDataView(TemplateView):
+    template_name = "analysis/historydata.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(HistoryDataView, self).get_context_data(*args, **kwargs)
+        context["page_menu"] = "数据监控"
+        # context["page_submenu"] = "组织和用户管理"
+        context["page_title"] = "历史数据"
+
+        bigmeter = Bigmeter.objects.first()
+        dma = DMABaseinfo.objects.first()
+        context["station"] = dma.dma_name
+        context["organ"] = dma.belongto
+        
+
+        return context      
+
+
+def historydatalist(request):
+    stationid = request.POST.get("station") # DMABaseinfo pk
+    treetype = request.POST.get("treetype")
+    startTime = request.POST.get("startTime")
+    endTime = request.POST.get("endTime")
+
+    print('historydaaaaa list',startTime,endTime)
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    print("get userlist:",draw,length,start,search_value)
+
+    user = request.user
+    organs = user.belongto
+
+    stations = user.station_list_queryset()
+    # meters = Meter.objects.all()
+    if groupName != "":
+        stations = stations.filter(belongto__uuid=groupName)
+    
+    data = []
+
+    # for m in stations[start:start+length]:
+    #     data.append(m.historydata(startTime,endTime))
+
+    data.append(stations[0].historydata(startTime,endTime))
+
+    recordsTotal = len(stations)
+    # recordsTotal = len(data)
+    
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))

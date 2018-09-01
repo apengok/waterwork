@@ -135,6 +135,15 @@
                     </a>
                     <ul class="second-menu-ul">
                         <li class="second-menu">
+                            <a href="{% url 'analysis:historydata' %}">
+                                <i class="fa fa-location-arrow"></i><span>历史数据</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        <li class="second-menu">
                             <a href="{% url 'analysis:dailyuse' %}">
                                 <i class="fa fa-location-arrow"></i><span>日用水分析</span> 
                                 <i></i> 
@@ -603,6 +612,16 @@
                         <i class="arrow fa fa-angle-right pull-right"></i>
                     </a>
                     <ul class="second-menu-ul">
+
+                        <li class="second-menu">
+                            <a href="{% url 'analysis:historydata' %}">
+                                <i class="fa fa-location-arrow"></i><span>历史数据</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
 
                         {% if  'dailyuse_datanalys' in user.permissiontree %}
                         <li class="second-menu">
