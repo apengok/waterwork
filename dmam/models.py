@@ -461,17 +461,20 @@ class Station(models.Model):
         press = HdbPressureData.objects.filter(commaddr=self.commaddr).filter(readtime__range=[startTime,endTime])
         # obj= Model.objects.filter(testfield=12).order_by('-id')[0]
 
-        return {
-            
-            "readtime":rtflow.readtime if rtflow else '-',
-            
-            "influx":rtflow.flux if rtflow else '-',
-            "plusflux":rtflow.plustotalflux if rtflow else '-',
-            "revertflux":rtflow.reversetotalflux if rtflow else '-',
-            "totalflux":rtflow.totalflux if rtflow else '-',
-            "press":press.pressure if press else 0,
-            
-        }
+        if rtflow.exists():
+            for r in rtflow:
+                flow_data.append( {
+                
+                "readtime":r.readtime,
+                
+                "influx":r.flux,
+                "plusflux":r.plustotalflux,
+                "revertflux":r.reversetotalflux,
+                "totalflux":r.totalflux,
+                # "press":press.pressure if press else 0,
+                
+            })
+        return flow_data
 
 
 

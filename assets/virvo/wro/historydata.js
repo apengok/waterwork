@@ -4,6 +4,7 @@
     var selectTreeType = '';
     var organ = $("#organ_name").val();
     var station = $("station_name").val();
+    var station_id = $("#station_id").val();
     var startTime = '';
     var endTime = endTime;
 
@@ -37,6 +38,12 @@
                         "data" : "readtime",
                         "class" : "text-center",
                         
+                    }, {
+                        "data" : "totalflux",
+                        "class" : "text-center",
+                        render:function(data){
+                            return html2Escape(data)
+                        }
                     }, 
                     
                      {
@@ -58,12 +65,6 @@
                         render:function(data){
                             return html2Escape(data)
                         }
-                    }, {
-                        "data" : "totalflux",
-                        "class" : "text-center",
-                        render:function(data){
-                            return html2Escape(data)
-                        }
                     }
                     ];
             //ajax参数
@@ -75,7 +76,7 @@
                 d.startTime = startTime;
                 d.endTime = endTime;
                 d.organ = organ;
-                d.station = station;
+                d.station_id = station_id;
 
             };
             //表格setting
@@ -257,6 +258,8 @@
                 }
             }
             key = true;
+            startTime=sTime;
+            endTime=eTime;
         },
         validates: function () {
             return $("#hourslist").validate({
@@ -337,16 +340,32 @@
                     }
                 },
                 callback : {
+                    // onAsyncSuccess:historyData.zTreeOnAsyncSuccess,
                     onClick : historyData.zTreeOnClick
                 }
             };
             $.fn.zTree.init($("#treeDemo"), treeSetting, null);
         },
+        zTreeOnAsyncSuccess:function(event, treeId, treeNode, msg) {
+            // alert(msg);
+            console.log(event);
+            console.log(treeId);
+            console.log(treeNode);
+            console.log(msg);
+        },
         //组织树预处理函数
         groupAjaxDataFilter: function(treeId, parentNode, responseData){
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var flag0 = 0;
+            $("#organ_name").attr("value",responseData[0].name);
             if (responseData) {
                 for (var i = 0; i < responseData.length; i++) {
+                    if(responseData[i].type == "station" && flag0 == 0){
+                        $("#station_name").attr("value",responseData[i].name);
+                        station_id = responseData[i].id;
+                        flag0 = 1;
+                    }
+                    // console.log(i,responseData[i].id,responseData[i].name);
                     responseData[i].open = true;
                 }
             }
@@ -360,6 +379,11 @@
                 $("#simpleQueryParam").val("");
             }else {
                 selectTreepId=treeNode.pId;
+                station_id = treeNode.id;
+                var pNode = treeNode.getParentNode();
+                $("#station_id").attr("value",station_id);
+                $("#organ_name").attr("value",pNode.name);
+                $("#station_name").attr("value",treeNode.name);
                 // selectTreeId = treeNode.id;
             }
             selectTreeType = treeNode.type;

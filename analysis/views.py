@@ -972,22 +972,18 @@ class HistoryDataView(TemplateView):
         # context["page_submenu"] = "组织和用户管理"
         context["page_title"] = "历史数据"
 
-        bigmeter = Bigmeter.objects.first()
-        dma = DMABaseinfo.objects.first()
-        context["station"] = dma.dma_name
-        context["organ"] = dma.belongto
         
 
         return context      
 
 
 def historydatalist(request):
-    stationid = request.POST.get("station") # DMABaseinfo pk
+    stationid = request.POST.get("station_id") or "1" # DMABaseinfo pk
     treetype = request.POST.get("treetype")
     startTime = request.POST.get("startTime")
     endTime = request.POST.get("endTime")
 
-    print('historydaaaaa list',startTime,endTime)
+    print('historydaaaaa list',startTime,endTime,stationid)
     draw = 1
     length = 0
     start=0
@@ -1024,23 +1020,22 @@ def historydatalist(request):
     user = request.user
     organs = user.belongto
 
-    stations = user.station_list_queryset()
-    # meters = Meter.objects.all()
-    if groupName != "":
-        stations = stations.filter(belongto__uuid=groupName)
+    
     
     data = []
 
     # for m in stations[start:start+length]:
     #     data.append(m.historydata(startTime,endTime))
 
-    data.append(stations[0].historydata(startTime,endTime))
+    station  = Station.objects.get(id=int(stationid))
 
-    recordsTotal = len(stations)
+    data = station.historydata(startTime,endTime)
+
+    recordsTotal = len(data)
     # recordsTotal = len(data)
     
     result = dict()
-    result["records"] = data
+    result["records"] = data[start:start+length]
     result["draw"] = draw
     result["success"] = "true"
     result["pageSize"] = pageSize
