@@ -493,7 +493,7 @@ def ensure_bigmeter_exists(sender, **kwargs):
         Bigmeter.objects.get_or_create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid,districtid=districtid,alarmoffline=1,alarmonline=1,
             alarmgprsvlow=1,alarmmetervlow=1,alarmuplimitflow=1,alarmgpflow=1,pressurealarm=1,dosagealarm=1)   
     else:
-        # print("ensure_bigmeter_exists edit")
+        print("ensure_bigmeter_exists edit")
         instance=kwargs.get('instance')
         username= instance.username
         lng=instance.lng
@@ -502,12 +502,13 @@ def ensure_bigmeter_exists(sender, **kwargs):
         simid = instance.commaddr
         bigm = Bigmeter.objects.filter(commaddr=instance.commaddr)
         if bigm.exists():
-        
-            bigm.first().username= instance.username
-            bigm.first().lng=instance.lng
-            bigm.first().lat=instance.lat
-            bigm.first().commaddr=instance.commaddr
-            bigm.first().simid = instance.commaddr
+            # print(instance.username,bigm.first().username)
+            b=bigm.first()
+            b.username= instance.username
+            b.lng=instance.lng
+            b.lat=instance.lat
+            b.commaddr=instance.commaddr
+            b.simid = instance.commaddr
             # bigm.first().alarmoffline = 1
             # bigm.first().alarmonline = 1
             # bigm.first().alarmgprsvlow = 1
@@ -516,6 +517,6 @@ def ensure_bigmeter_exists(sender, **kwargs):
             # bigm.first().alarmgpflow = 1
             # bigm.first().pressurealarm = 1
             # bigm.first().dosagealarm = 1
-            bigm.first().save()
+            b.save()
         else:
             Bigmeter.objects.create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
