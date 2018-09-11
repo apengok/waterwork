@@ -17,11 +17,15 @@
             $("#Ul-menu-text").html(menu_text);
             //表格列定义
             var columnDefs = [ {
-                //第一列，用来显示序号
-                "searchable" : false,
-                "orderable" : false,
-                "targets" : 0
-            } ];
+            targets: [ 0 ],
+            orderData: [ 0, 1 ]
+        }, {
+            targets: [ 1 ],
+            orderData: [ 1, 0 ]
+        }, {
+            targets: [ 4 ],
+            orderData: [ 4, 0 ]
+        } ];
             var columns = [
                     {
                         //第一列，用来显示序号
@@ -52,6 +56,7 @@
                     }, {
                         "data" : "serialnumber",
                         "class" : "text-center",
+                        
                         render : function(data, type, row, meta) {
                             if (data != null) {
                                 return data;

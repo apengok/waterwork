@@ -610,7 +610,7 @@
             "bPaginate": true, // 翻页功能
             "bFilter": false, // 列筛序功能
             "searching": true,// 本地搜索
-            "ordering": false, // 排序功能
+            "ordering": true, // 排序功能
             "Info": true,// 页脚信息
            // "autoWidth": true,// 自动宽度
             // "scrollX": "100%",
