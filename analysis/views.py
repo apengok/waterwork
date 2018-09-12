@@ -591,7 +591,7 @@ class DailyUseView(TemplateView):
 
         station_name = ""
         organ = ""
-        stations = self.request.user.station_list_queryset()
+        stations = self.request.user.station_list_queryset('')
         station = stations.first()
         if station:
             station_name = station.username
@@ -729,7 +729,7 @@ class MonthUseView(TemplateView):
 
         station_name = ""
         organ = ""
-        stations = self.request.user.station_list_queryset()
+        stations = self.request.user.station_list_queryset('')
         station = stations.first()
         if station:
             station_name = station.username
