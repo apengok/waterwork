@@ -85,7 +85,7 @@ def meterlist(request):
     user = request.user
     organs = user.belongto
 
-    meters = user.meter_list_queryset()
+    meters = user.meter_list_queryset(simpleQueryParam)
     # meters = Meter.objects.all()
 
     def m_info(m):
@@ -442,7 +442,7 @@ def simcardlist(request):
     user = request.user
     organs = user.belongto
 
-    simcards = user.simcard_list_queryset()
+    simcards = user.simcard_list_queryset(simpleQueryParam)
     # simcards = SimCard.objects.all()
 
     def m_info(s):
@@ -777,7 +777,7 @@ class SimCardDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
 def getSimcardSelect(request):
     # meters = Meter.objects.all()
-    simcards = request.user.simcard_list_queryset()
+    simcards = request.user.simcard_list_queryset('')
 
     def m_info(m):
         
@@ -810,7 +810,7 @@ def getSimcardSelect(request):
 
 def getMeterSelect(request):
     # meters = Meter.objects.all()
-    meters = request.user.meter_list_queryset()
+    meters = request.user.meter_list_queryset('')
 
     def m_info(m):
         

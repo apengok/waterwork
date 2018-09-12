@@ -153,7 +153,7 @@ class RealTimeDataView(TemplateView):
         # context["page_submenu"] = "组织和用户管理"
         context["page_title"] = "实时数据"
 
-        stations = self.request.user.station_list_queryset()
+        stations = self.request.user.station_list_queryset('')
 
         total_station_num = len(stations)
         online_station = stations.filter(meter__state=1)
@@ -198,8 +198,8 @@ def stationlist(request):
         start = int(request.POST.get("start", 0))
         pageSize = int(request.POST.get("pageSize", 10))
         search_value = request.POST.get("search[value]", None)
-        # order_column = request.POST.get("order[0][column]", None)[0]
-        # order = request.POST.get("order[0][dir]", None)[0]
+        order_column = int(request.POST.get("order[0][column]", None))
+        order = request.POST.get("order[0][dir]", None)
         groupName = request.POST.get("groupName")
         districtId = request.POST.get("districtId")
         simpleQueryParam = request.POST.get("simpleQueryParam")
@@ -207,21 +207,35 @@ def stationlist(request):
         print("groupName",groupName)
         print("districtId:",districtId)
         # print("post simpleQueryParam",simpleQueryParam)
+    print("order_column:",order_column)
+    print("order:",order)
 
     print("get userlist:",draw,length,start,search_value)
 
     user = request.user
     organs = user.belongto
 
-    stations = user.station_list_queryset()
+    stations = user.station_list_queryset(simpleQueryParam) 
+    # if order == "asc":
+    #     stations = user.station_list_queryset(simpleQueryParam).order_by("meter__serialnumber")
+    # else:
+    #     stations = user.station_list_queryset(simpleQueryParam).order_by("-meter__serialnumber")
+
     # meters = Meter.objects.all()
     if groupName != "":
         stations = stations.filter(belongto__uuid=groupName)
     
     data = []
 
-    for m in stations[start:start+length]:
-        data.append(m.realtimedata())
+    for m in stations:  #[start:start+length]
+        ret=m.realtimedata
+        if ret is not None:
+            data.append(ret)
+
+    # sorted_data = sorted(data, key=lambda x: x["readtime"])
+    # # print(sorted_data)
+    # if order == "desc":
+    #     sorted_data = sorted_data[::-1]
 
     recordsTotal = len(stations)
     # recordsTotal = len(data)

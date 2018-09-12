@@ -5,13 +5,14 @@ from django.db import models
 from django.urls import reverse
 from entm.models import Organizations
 import datetime
+from django.db.models import Q
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataHour,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
 from django.db.models import Avg, Max, Min, Sum
 from legacy.models import Bigmeter,District
-
+from django.utils.functional import cached_property
 # Create your models here.
 
 '''
@@ -96,6 +97,26 @@ class DmaStations(models.Model):
         return self.dmaid.dma_name   
 
 
+class SimCardQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(meter__station__username__icontains=query)|
+                Q(meter__serialnumber__icontains=query)|
+                Q(simcardNumber__icontains=query)
+                # Q(meter__simid__simcardNumber__iexact=query)
+                ).distinct()
+        return self
+
+
+class SimCardManager(models.Manager):
+    def get_queryset(self):
+        return SimCardQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
 class SimCard(models.Model):
     simcardNumber       = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
     belongto            = models.ForeignKey(Organizations,on_delete=models.CASCADE)
@@ -111,6 +132,8 @@ class SimCard(models.Model):
     update_date         = models.DateTimeField(db_column='update_date', auto_now=True)  # Field name made lowercase.
     remark              = models.CharField(db_column='remark', max_length=64, blank=True, null=True)  # Field name made lowercase.
     
+    objects = SimCardManager()
+
 
     class Meta:
         managed = True
@@ -122,6 +145,25 @@ class SimCard(models.Model):
     def __str__(self):
         return '%s'%(self.simcardNumber)    
 
+
+class MeterQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(station__username__icontains=query)|
+                Q(serialnumber__icontains=query)|
+                Q(simid__simcardNumber__icontains=query)
+                ).distinct()
+        return self
+
+
+class MeterManager(models.Manager):
+    def get_queryset(self):
+        return MeterQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
 
 class Meter(models.Model):
     serialnumber= models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -208,6 +250,7 @@ class Meter(models.Model):
     # 流量测量单位
     flowmeasureunit           = models.CharField(db_column='flowmeasureunit', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
+    objects = MeterManager()
 
     class Meta:
         managed = True
@@ -223,6 +266,25 @@ class Meter(models.Model):
 
 # station manager
 
+
+class StationQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(username__icontains=query)|
+                Q(meter__serialnumber__icontains=query)|
+                Q(meter__simid__simcardNumber__icontains=query)
+                ).distinct()
+        return self
+
+
+class StationManager(models.Manager):
+    def get_queryset(self):
+        return StationQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
 
 
 class Station(models.Model):
@@ -248,6 +310,8 @@ class Station(models.Model):
 
     # bgm = models.OneToOneField(Bigmeter,related_name='bigm',on_delete=models.CASCADE)
 
+    objects = StationManager()
+
     class Meta:
         managed = True
         db_table = 'station'
@@ -260,7 +324,11 @@ class Station(models.Model):
 
     @property
     def commaddr(self):
-        if not self.meter and not selr.meter.simid and self.meter.simid.simcardNumber == "":
+        if self.meter is None:
+            return None
+        if self.meter.simid is None:
+            return None
+        if self.meter.simid.simcardNumber == "":
             return None
         return self.meter.simid.simcardNumber
 
@@ -426,23 +494,31 @@ class Station(models.Model):
         return avg_str,max_str,min_str
 
 
-
+    @cached_property 
     def realtimedata(self):
 
-        rtflow = HdbFlowData.objects.filter(commaddr=self.commaddr).last()
-        press = HdbPressureData.objects.filter(commaddr=self.commaddr).last()
+        if self.commaddr is None:
+            return None
+
+        if self.commaddr is not None:
+            rtflow = HdbFlowData.objects.filter(commaddr=self.commaddr).last()
+            press = HdbPressureData.objects.filter(commaddr=self.commaddr).last()
+        else:
+            print("commaddr is None",self.username)
+            rtflow = None
+            press = None
         # obj= Model.objects.filter(testfield=12).order_by('-id')[0]
 
         return {
             "stationname":self.username,
-            "belongto":self.belongto.name,
-            "serialnumber":self.meter.serialnumber,
+            "belongto":self.belongto.name if self.belongto else '-',
+            "serialnumber":self.meter.serialnumber if self.meter else '-',
             "alarm":0,
-            "status":self.meter.state,
-            "dn":self.meter.dn,
-            "readtime":rtflow.readtime if rtflow else '-',
-            "collectperiod":self.meter.collectperiod,
-            "updataperiod":self.meter.updataperiod,
+            "status":self.meter.state if self.meter else '-',
+            "dn":self.meter.dn if self.meter else '-',
+            "readtime":rtflow.readtime if rtflow is not None else '-',
+            "collectperiod":self.meter.collectperiod if self.meter else '-',
+            "updataperiod":self.meter.updataperiod if self.meter else '-',
             "influx":rtflow.flux if rtflow else '-',
             "plusflux":rtflow.plustotalflux if rtflow else '-',
             "revertflux":rtflow.reversetotalflux if rtflow else '-',

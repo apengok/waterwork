@@ -244,47 +244,47 @@ class User(AbstractBaseUser,PermissionsMixin):
         return userlist
 
     #组织及下属组织下的所有站点
-    def station_list_queryset(self):
+    def station_list_queryset(self,q):
         # userlist = []
         if self.is_admin:
-            return Station.objects.all()
+            return Station.objects.search(q)
 
         stationlist = Station.objects.none()
         #下级组织的用户
         sub_organs = self.belongto.sub_organizations(include_self=True)
         # user | merge two QuerySet
         for g in sub_organs:
-            stationlist |= g.station_set.all()
+            stationlist |= g.station_set.search(q)
             
         return stationlist
 
     #组织及下属组织下的所有表具
-    def meter_list_queryset(self):
+    def meter_list_queryset(self,q):
         # userlist = []
         if self.is_admin:
-            return Meter.objects.all()
+            return Meter.objects.search(q)
 
         meterlist = Meter.objects.none()
         #下级组织的用户
         sub_organs = self.belongto.sub_organizations(include_self=True)
         # user | merge two QuerySet
         for g in sub_organs:
-            meterlist |= g.meter_set.all()
+            meterlist |= g.meter_set.search(q)
             
         return meterlist
 
     #组织及下属组织下的所有simcard
-    def simcard_list_queryset(self):
+    def simcard_list_queryset(self,q):
         # userlist = []
         if self.is_admin:
-            return SimCard.objects.all()
+            return SimCard.objects.search(q)
 
         simcardlist = SimCard.objects.none()
         #下级组织的用户
         sub_organs = self.belongto.sub_organizations(include_self=True)
         # user | merge two QuerySet
         for g in sub_organs:
-            simcardlist |= g.simcard_set.all()
+            simcardlist |= g.simcard_set.search(q)
             
         return simcardlist
 

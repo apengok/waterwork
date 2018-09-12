@@ -19638,7 +19638,7 @@ function tg_createTable(tg_table) {
         "info": info,
         "pageLength": pageNumber == null ? 10 : pageNumber, // 默认每页数据量
         "lengthMenu": [10, 20, 50, 100, 200],
-        "ordering": true, // 禁用排序
+        // "ordering": false, // 禁用排序
         // 服务端
         "processing": false,
         "serverSide": true,

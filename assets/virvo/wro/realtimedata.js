@@ -16,16 +16,14 @@
             };
             $("#Ul-menu-text").html(menu_text);
             //表格列定义
-            var columnDefs = [ {
-            targets: [ 0 ],
-            orderData: [ 0, 1 ]
-        }, {
-            targets: [ 1 ],
-            orderData: [ 1, 0 ]
-        }, {
-            targets: [ 4 ],
-            orderData: [ 4, 0 ]
-        } ];
+            var columnDefs = [ 
+                { "orderable": false, "targets": [ 0 ] },
+                { "orderSequence": [ "asc","desc" ], "targets": [ 1 ] },
+                { "orderable": false, "targets": [ 2 ] },
+                // { "orderable": false, "targets": [ 3 ] },
+                // { "orderSequence": [ "desc", "asc", "asc" ], "targets": [ 2 ] },
+                { "orderSequence": [ "asc","desc" ], "targets": [ 3 ] }
+            ];
             var columns = [
                     {
                         //第一列，用来显示序号

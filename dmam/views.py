@@ -257,7 +257,7 @@ def stationlist(request):
 
     # bigmeters = Bigmeter.objects.all()
     # stations = Station.objects.all()
-    stations = current_user.station_list_queryset()
+    stations = current_user.station_list_queryset(simpleQueryParam)
 
     if districtId != '': #dma
         dma = DMABaseinfo.objects.get(pk=int(districtId))
@@ -268,14 +268,6 @@ def stationlist(request):
         stations = [s for s in stations if s.belongto == filter_group]
     
     
-    # # print("user all:",userl)
-    # if districtId != "":
-    #     #查询的组织
-    #     query_district = District.objects.get(id=districtId)
-    #     bigmeters = [u for u in bigmeters if u.districtid == query_district]
-    #     # print("query organ user,",userl)
-    # for m in bigmeters[start:start+length]:
-    #     data.append(u_info(m))
     
     
     # def search_user(u):
