@@ -23,7 +23,7 @@ class LegacyRouter:
         Allow relations if a model in the auth app is involved.
         """
         if obj1._meta.app_label == 'legacy' or \
-           obj2._meta.app_label == 'legacy':
+           obj2._meta.app_label == 'dmam':
            return True
         return None
 

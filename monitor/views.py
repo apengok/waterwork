@@ -226,18 +226,21 @@ def stationlist(request):
         stations = stations.filter(belongto__uuid=groupName)
     
     data = []
-
+    import time
+    time_start=time.time()
     for m in stations:  #[start:start+length]
         ret=m.realtimedata
         if ret is not None:
             data.append(ret)
+    elapsed_time = time.time() - time_start
+    print("elapsed_time ",elapsed_time)
 
     # sorted_data = sorted(data, key=lambda x: x["readtime"])
     # # print(sorted_data)
     # if order == "desc":
     #     sorted_data = sorted_data[::-1]
 
-    recordsTotal = len(stations)
+    recordsTotal = stations.count()
     # recordsTotal = len(data)
     
     result = dict()

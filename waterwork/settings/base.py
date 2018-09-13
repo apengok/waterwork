@@ -26,7 +26,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+INTERNAL_IPS =['192.168.1.110']
 # Celery settings
 
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'analysis',
     'devm',
     'sysm',
+    'debug_toolbar',
     # 'channels',
 ]
 
@@ -80,6 +81,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'waterwork.urls'
@@ -130,7 +132,7 @@ DATABASES = {
         'NAME': 'waterwork',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '120.78.255.129',
+        'HOST': '192.168.1.27',
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
@@ -142,7 +144,7 @@ DATABASES = {
         'NAME': 'zncb',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '120.78.255.129', #220.179.118.150-shexian 120.78.255.129-virvo
+        'HOST': '192.168.1.27', #220.179.118.150-shexian 120.78.255.129-virvo
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",

@@ -23,6 +23,8 @@ from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
+from django.urls import  path  # For django versions from 2.0 and up
+
 from django.conf.urls.static import static
 from accounts.views import LoginView, RegisterView
 
@@ -59,10 +61,21 @@ urlpatterns = [
     url(r'^sysm/', include('sysm.urls', namespace='sysm')),
 
     # url(r'^testapp/', include('testapp.urls')),
-
+    
     # url(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
     
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+
+        # For django versions before 2.0:
+        # url(r'^__debug__/', include(debug_toolbar.urls)),
+
+    ] + urlpatterns
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

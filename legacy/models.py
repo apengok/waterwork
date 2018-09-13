@@ -9,6 +9,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
+# from dmam.models import Station
 
 class District(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -126,8 +127,10 @@ class Bigmeter(models.Model):
     dosageup = models.CharField(db_column='DosageUp', max_length=64, blank=True, null=True)  # Field name made lowercase.
     dosagedown = models.CharField(db_column='DosageDown', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
+    station = models.OneToOneField('dmam.Station',on_delete=models.CASCADE)
+
     class Meta:
-        managed = False
+        managed = True
         db_table = 'bigmeter'
 
     def __unicode__(self):

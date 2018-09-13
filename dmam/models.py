@@ -13,6 +13,7 @@ from django.db.models.signals import pre_save
 from django.db.models import Avg, Max, Min, Sum
 from legacy.models import Bigmeter,District
 from django.utils.functional import cached_property
+import time
 # Create your models here.
 
 '''
@@ -308,7 +309,7 @@ class Station(models.Model):
 
     dmametertype     = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
 
-    # bgm = models.OneToOneField(Bigmeter,related_name='bigm',on_delete=models.CASCADE)
+    # bigmeter = models.OneToOneField(Bigmeter,on_delete=models.CASCADE,null=True)
 
     objects = StationManager()
 
@@ -496,7 +497,7 @@ class Station(models.Model):
 
     @cached_property 
     def realtimedata(self):
-
+        t1=time.time()
         if self.commaddr is None:
             return None
 
@@ -508,7 +509,8 @@ class Station(models.Model):
             rtflow = None
             press = None
         # obj= Model.objects.filter(testfield=12).order_by('-id')[0]
-
+        t2=time.time()-t1
+        print("one query time",t2)
         return {
             "stationname":self.username,
             "belongto":self.belongto.name if self.belongto else '-',
