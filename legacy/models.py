@@ -127,7 +127,7 @@ class Bigmeter(models.Model):
     dosageup = models.CharField(db_column='DosageUp', max_length=64, blank=True, null=True)  # Field name made lowercase.
     dosagedown = models.CharField(db_column='DosageDown', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
-    station = models.OneToOneField('dmam.Station',on_delete=models.CASCADE)
+    # station = models.OneToOneField('dmam.Station',on_delete=models.CASCADE)
 
     class Meta:
         managed = True
