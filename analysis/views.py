@@ -488,9 +488,15 @@ def flowdata_cxc(request):
         uncharg /=10000
         sale = total - leak - uncharg
         cxc = total - sale
-        cxc_percent = (cxc / total)*100
+        if total != 0:
+            cxc_percent = (cxc / total)*100 
+        else:
+            cxc_percent = 0
         huanbi=0
-        leak_percent = (leak * 100)/total
+        if total != 0 :
+            leak_percent = (leak * 100)/total
+        else:
+            leak_percent = 0
         tongbi=0
         mnf=1.2
         back_leak=1.8

@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="{% static 'gis/assets/css/ol.css' %}" type = "text/css"/>
 <link rel="stylesheet" href="{% static 'gis/assets/css/jquery-ui.css' %}" type = "text/css"/>
 
+{% block stylesheet %}
 <style type="text/css">
         #container {
             background-color: white !important;
@@ -82,7 +83,7 @@
     float: right;
 }
     </style>
-
+{% endblock %}
 </head>
 <body>
     <section id="container">

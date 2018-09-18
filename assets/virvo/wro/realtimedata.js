@@ -66,7 +66,8 @@
                         "data" : "alarm",
                         "class" : "text-center",
                         render:function(data){
-                            return html2Escape(data)
+                            ret_html='<button  data-target="#showalarm" data-toggle="modal"  type="button" class="btn-danger">'+data+'</button>&nbsp;';
+                            return ret_html;
                         }
                     },
                     {
@@ -115,15 +116,11 @@
                     }, {
                         "data" : "press",
                         "class" : "text-center",
-                        render:function(data){
-                            return html2Escape(data)
-                        }
+                        
                     }, {
                         "data" : "baseelectricity",
                         "class" : "text-center",
-                        render:function(data){
-                            return html2Escape(data)
-                        }
+                        
                     },{
                         "data" : "remoteelectricity",
                         "class" : "text-center",

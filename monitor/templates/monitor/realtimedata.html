@@ -2,6 +2,40 @@
 
 {% load staticfiles %}
 
+{% block stylesheet %}
+
+<style type="text/css">
+  /* created a TESTBOX class as a PARENT ELEMENT (DIV) */
+.testbox {
+    background: #000000;
+    color: #FFFFFF;
+    padding: 10px;
+    min-height: 200px;
+}
+.testbox .modal{ 
+    color: #333;
+}
+
+/* overwriting default behaviour of Modal Popup in Bootstrap  */
+body{ 
+    overflow: auto !important;
+}
+.modal{ 
+    overflow: hidden; 
+}
+
+/* created new class for targetting purpose - named ".modal2", ".modal1" */
+.modal2.in{ 
+    position: absolute; 
+    bottom: 0; 
+    right:0; 
+    left: auto; 
+    top: auto; 
+    bottom: 0; 
+    overflow: auto;
+}
+</style>
+{% endblock %}
 
 {% block main_content %}
 
@@ -84,6 +118,82 @@
       </div>
   </div>
 <!-- </div>    -->
+
+<div class="testbox col-lg-6"> 
+  <h3><strong>Test Box</strong></h3>
+    
+    <blockquote>
+      Modal Popup should <br />open inside (or aligned to) <br />this balck DIV area.
+    </blockquote>
+    <button  data-target="#showalarm" data-toggle="modal"  type="button" class="btn-danger">mm</button>&nbsp;
+    <!-- .modal1 -->
+    <div id="showalarm" class="modal fade bs-modal-sm modal1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content"> 
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Default Modal Popup</h4>
+                  </div>
+                  
+                  <div class="modal-body">
+                    Modal 1 Popup Content
+                  </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- .modal2 -->
+    <div class="modal bs-modal-sm col-sm-12 col-xs-12 modal2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content"> 
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Bound to <strong>Test Box</strong> DIV</h4>
+                  </div>
+                  
+                  <div class="modal-body">
+                    Modal 2 Popup Content 
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 报警信息 -->
+  <div class="modal fade" id="showalarm2" tabindex="-1" aria-hidden="true" data-backdrop="static" position="absolute" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog form-horizontal" role="document">
+      <div class="modal-content">
+      <form id="adduserType" role="form" action="{% url 'dmam:usertypeadd' %}" method="post" class="form-horizontal">{% csrf_token %}
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+          <h4 class="modal-title">报警信息</h4>
+                      <!-- <input class="hidden" id="vid9" name="vid" value="">
+                      <input class="hidden" name="orderType" value="9"> -->
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="form-group">
+              <label class="col-md-4 control-label">
+              <label class="text-danger">*</label> 用水性质：</label>
+              <div class=" col-md-7">
+                <input type="text" placeholder="请输入用水性质"  name="usertype" class="form-control"  id = "addpruserType"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-4 control-label">备注：</label>
+              <div class=" col-md-7">
+                <textarea rows="3" cols="20" placeholder="请输入用水性质说明" name="explains" class="form-control" id = "adddescription"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="addoperation" class="btn btn-primary">提交</button>
+          <button type="button" class="btn btn-default btn-off" data-dismiss="modal" id="closeAddDialog">关闭</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
 
 
     
