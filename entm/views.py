@@ -744,7 +744,7 @@ class UserGroupAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(UserGroupAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 
@@ -808,7 +808,7 @@ class UserGroupEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(UserGroupEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 
@@ -874,7 +874,7 @@ class UserGroupDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         return super(UserGroupDeleteView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 
@@ -975,7 +975,7 @@ class RolesAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(RolesAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('rolemanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('rolemanager_entm'):
             return True
         return False
 
@@ -1036,7 +1036,7 @@ class RoleEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(RoleEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('rolemanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('rolemanager_entm'):
             return True
         return False
 
@@ -1090,7 +1090,7 @@ def roledeletemore(request):
     deltems = request.POST.get("deltems")
     deltems_list = deltems.split(';')
 
-    if not request.user.has_menu_permission_edit('rolemanager_firmmanager'):
+    if not request.user.has_menu_permission_edit('rolemanager_entm'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     #被分配了的角色不可以删除
@@ -1125,7 +1125,7 @@ class RoleDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         return super(RoleDeleteView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('rolemanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('rolemanager_entm'):
             return True
         return False
 
@@ -1208,7 +1208,7 @@ class UserAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(UserAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 
@@ -1305,7 +1305,7 @@ class UserEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(UserEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 
@@ -1375,7 +1375,7 @@ class AssignRoleView(TemplateView,UserPassesTestMixin):
     template_name = "entm/assignrole.html"
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 
@@ -1440,7 +1440,7 @@ class AssignStnView(TemplateView,UserPassesTestMixin):
         
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 
@@ -1488,7 +1488,7 @@ class AssignStnView(TemplateView,UserPassesTestMixin):
 def userdeletemore(request):
     # print('userdeletemore',request,request.POST)
 
-    if not request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+    if not request.user.has_menu_permission_edit('usermanager_entm'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -1572,7 +1572,7 @@ class UserImportView(TemplateView,UserPassesTestMixin):
         
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('organusermanager_firmmanager'):
+        if self.request.user.has_menu_permission_edit('usermanager_entm'):
             return True
         return False
 

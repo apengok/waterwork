@@ -182,7 +182,7 @@ class MeterAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(MeterAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('metermanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('metermanager_devm'):
             return True
         return False
 
@@ -264,7 +264,7 @@ class MeterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return Meter.objects.get(id=self.kwargs["pk"])
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('metermanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('metermanager_devm'):
             return True
         return False
 
@@ -337,7 +337,7 @@ class MeterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 def meterdeletemore(request):
     # print('userdeletemore',request,request.POST)
 
-    if not request.user.has_menu_permission_edit('dmamanager_basemanager'):
+    if not request.user.has_menu_permission_edit('metermanager_devm'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -362,7 +362,7 @@ class MeterDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('metermanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('metermanager_devm'):
             return True
         return False
 
@@ -566,7 +566,7 @@ class SimCardAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(SimCardAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('simcardmanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('simcardmanager_devm'):
             return True
         return False
 
@@ -642,7 +642,7 @@ class SimCardEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return SimCard.objects.get(id=self.kwargs["pk"])
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('simcardmanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('simcardmanager_devm'):
             return True
         return False
 
@@ -712,7 +712,7 @@ class SimCardEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 def simcarddeletemore(request):
     # print('userdeletemore',request,request.POST)
 
-    if not request.user.has_menu_permission_edit('dmamanager_basemanager'):
+    if not request.user.has_menu_permission_edit('simcardmanager_devm'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -735,7 +735,7 @@ class SimCardDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('simcardmanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('simcardmanager_devm'):
             return True
         return False
 

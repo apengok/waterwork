@@ -571,7 +571,7 @@ class DMABaseinfoEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(DMABaseinfoEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('districtmanager_dmam'):
             return True
         return False
 
@@ -676,7 +676,7 @@ class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(DistrictAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('districtmanager_dmam'):
             return True
         return False
 
@@ -747,7 +747,7 @@ class DistrictEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(DistrictEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('districtmanager_dmam'):
             return True
         return False
 
@@ -813,7 +813,7 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         return super(DistrictDeleteView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('districtmanager_dmam'):
             return True
         return False
 
@@ -855,7 +855,7 @@ class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,Update
         return super(DistrictAssignStationView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('districtmanager_dmam'):
             return True
         return False
 
@@ -1049,7 +1049,7 @@ def findUsertypes(request):
 
 
 def usertypeadd(request):
-    if not request.user.has_menu_permission_edit('stationmanager_basemanager'):
+    if not request.user.has_menu_permission_edit('stationsmanager_dmam'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     print('usertypeadd:',request.POST)
@@ -1128,7 +1128,7 @@ def usertypeedit(request):
 
 
 def usertypedeletemore(request):
-    if not request.user.has_menu_permission_edit('stationmanager_basemanager'):
+    if not request.user.has_menu_permission_edit('stationsmanager_dmam'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -1148,7 +1148,7 @@ def usertypedeletemore(request):
 def userdeletemore(request):
     # print('userdeletemore',request,request.POST)
 
-    if not request.user.has_menu_permission_edit('dmamanager_basemanager'):
+    if not request.user.has_menu_permission_edit('districtmanager_dmam'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -1173,7 +1173,7 @@ class UsertypeDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
             return True
         return False
 
@@ -1254,7 +1254,7 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(StationAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
             return True
         return False
 
@@ -1331,7 +1331,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return Station.objects.get(id=self.kwargs["pk"])
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
             return True
         return False
 
@@ -1402,7 +1402,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 def userdeletemore(request):
     # print('userdeletemore',request,request.POST)
 
-    if not request.user.has_menu_permission_edit('dmamanager_basemanager'):
+    if not request.user.has_menu_permission_edit('districtmanager_dmam'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -1427,7 +1427,7 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('stationmanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
             return True
         return False
 

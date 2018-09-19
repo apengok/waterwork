@@ -426,7 +426,7 @@ class CommConfigAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(CommConfigAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('commconfig_sysm'):
             return True
         return False
 
@@ -459,7 +459,7 @@ class CommConfigEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return super(CommConfigEditView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('commconfig_sysm'):
             return True
         return False
 
@@ -499,7 +499,7 @@ class CommConfigDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView)
         return super(CommConfigDeleteView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('dmamanager_basemanager'):
+        if self.request.user.has_menu_permission_edit('commconfig_sysm'):
             return True
         return False
 
