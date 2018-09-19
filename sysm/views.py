@@ -528,3 +528,36 @@ class CommConfigDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView)
         self.object.delete()
         return HttpResponse(json.dumps({"success":1}))
         # return JsonResponse("true", safe=False)
+
+
+
+class SystemView(LoginRequiredMixin,TemplateView):
+    template_name = "sysm/system.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SystemView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "系统设置"
+        context["page_menu"] = "系统管理"
+        
+        return context  
+
+class RetransitView(LoginRequiredMixin,TemplateView):
+    template_name = "sysm/retransit.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RetransitView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "转发设置"
+        context["page_menu"] = "系统管理"
+        
+        return context  
+
+
+class IconscfgView(LoginRequiredMixin,TemplateView):
+    template_name = "sysm/iconscfg.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(IconscfgView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "图标配置"
+        context["page_menu"] = "系统管理"
+        
+        return context  

@@ -53,14 +53,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mptt',
-    'entm',
-    'accounts',
-    'monitor',
     'import_export',
-    'dmam',
+    'accounts',
     'legacy',
+    
+    'prodschedule',
+    'monitor',
     'analysis',
+    'alarm',
+    'baseanalys',
+    'gis',
+    'entm',
     'devm',
+    'dmam',
+    'reports',
     'sysm',
     # 'debug_toolbar',
     # 'channels',
@@ -132,7 +138,7 @@ DATABASES = {
         'NAME': 'waterwork',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '120.78.255.129',
+        'HOST': '192.168.1.27',
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
@@ -144,7 +150,7 @@ DATABASES = {
         'NAME': 'zncb',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '120.78.255.129', #220.179.118.150-shexian 120.78.255.129-virvo
+        'HOST': '192.168.1.27', #220.179.118.150-shexian 120.78.255.129-virvo
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",

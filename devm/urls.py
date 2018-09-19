@@ -16,7 +16,7 @@ urlpatterns = [
 
 
 
-    #meters   
+    #meters   表具管理
     url(r'^meter/repetition/$',views.repetition,name='repetition'),
 
     url(r'^metermanager/?$', views.MeterMangerView.as_view(), name='metermanager'),#组织和用户管理
@@ -44,6 +44,14 @@ urlpatterns = [
     # url(r'^stations/download',views.download,name='download'),
 
     # url(r'^infoconfig/infoinput/importProgress',views.importProgress,name='importProgress'),
+
+    # 压力管理
+    url(r'^pressuremanager/?$', views.PressureMangerView.as_view(), name='pressuremanager'),
+
+    # 消防栓管理
+    url(r'^fireboltmanager/?$', views.FireboltMangerView.as_view(), name='fireboltmanager'),
+    # 参数指令
+    url(r'^paramsmanager/?$', views.ParamsMangerView.as_view(), name='paramsmanager'),
 
     
 ]

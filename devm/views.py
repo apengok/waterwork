@@ -834,3 +834,36 @@ def getMeterSelect(request):
    
     # print(operarions_list)
     return JsonResponse(operarions_list)
+
+
+class PressureMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "devm/pressuremanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PressureMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "压力管理"
+        context["page_menu"] = "设备管理"
+        
+        return context  
+
+
+class FireboltMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "devm/fireboltmanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(FireboltMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "消防栓管理"
+        context["page_menu"] = "设备管理"
+        
+        return context  
+
+class ParamsMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "devm/paramsmanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ParamsMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "参数指令"
+        context["page_menu"] = "设备管理"
+        
+        return context  
+

@@ -70,5 +70,11 @@ urlpatterns = [
 
     # url(r'^infoconfig/infoinput/importProgress',views.importProgress,name='importProgress'),
 
-    
+    # 二供管理
+    url(r'^secondmanager/?$', views.SecondMangerView.as_view(), name='secondmanager'),
+    # 视频管理
+    url(r'^vediomanager/?$', views.VedioMangerView.as_view(), name='vediomanager'),
+    # 车辆管理
+    url(r'^vehiclemanager/?$', views.VehicleMangerView.as_view(), name='vehiclemanager'),
+
 ]

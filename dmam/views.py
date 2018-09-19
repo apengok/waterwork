@@ -1470,3 +1470,38 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         # result["success"] = 1
         return HttpResponse(json.dumps({"success":1}))
         
+
+
+class SecondMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "dmam/secondmanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SecondMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "二供管理"
+        context["page_menu"] = "基础管理"
+        
+        return context  
+
+
+
+class VedioMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "dmam/vediomanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VedioMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "视频管理"
+        context["page_menu"] = "基础管理"
+        
+        return context  
+
+
+
+class VehicleMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "dmam/vehiclemanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VehicleMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "车辆管理"
+        context["page_menu"] = "基础管理"
+        
+        return context  

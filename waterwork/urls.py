@@ -47,17 +47,20 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     
+
     #monitor
-    url(r'^monitor/', include('monitor.urls', namespace='monitor')),
 
     #waterwork
-    url(r'^entm/', include('entm.urls', namespace='entm')),
-    url(r'^dmam/', include('dmam.urls', namespace='dmam')),
-
+    url(r'^prodschedule/', include('prodschedule.urls', namespace='prodschedule')),
+    url(r'^monitor/', include('monitor.urls', namespace='monitor')),
     url(r'^analysis/', include('analysis.urls', namespace='analysis')),
-
+    url(r'^alarm/', include('alarm.urls', namespace='alarm')),
+    url(r'^baseanalys/', include('baseanalys.urls', namespace='baseanalys')),
+    url(r'^gis/', include('gis.urls', namespace='gis')),
+    url(r'^entm/', include('entm.urls', namespace='entm')),
     url(r'^devm/', include('devm.urls', namespace='devm')),
-
+    url(r'^dmam/', include('dmam.urls', namespace='dmam')),
+    url(r'^reports/', include('reports.urls', namespace='reports')),
     url(r'^sysm/', include('sysm.urls', namespace='sysm')),
 
     # url(r'^testapp/', include('testapp.urls')),

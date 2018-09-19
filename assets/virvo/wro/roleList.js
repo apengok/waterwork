@@ -61,11 +61,11 @@
                         var isAdmin = isAdminStr == 'true';
                         console.log('idstr:',idStr,current_role_rid);
                         if (isAdmin && idStr == 'ROLE_ADMIN') { // 若为超级管理员，禁用超级管理员角色的修改按钮 
-                        	result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
+                        	result += '<button  href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         }else if (!isAdmin && (idStr == 'ROLE_ADMIN' || idStr == 'POWER_USER')) {  // 若为普通管理员，禁用超级管理员角色和普通管理员角色的修改按钮  
-                        	result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
+                        	result += '<button  href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         }else if (current_role_rid == idStr) {  // 当前用户不可修改自己被分配的角色 
-                            result += '<button disabled href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
+                            result += '<button  href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn btn-default deleteButton"><i class="fa fa-ban"></i>修改</button>&nbsp;';
                         }else{
                         	result += '<button href="'+editUrlPath+'" data-target="#commonSmWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                         }

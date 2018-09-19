@@ -232,7 +232,10 @@ def stationlist(request):
         commaddr = b.commaddr
         alarm_count = Alarm.objects.filter(commaddr=commaddr).count()
         print('alarm_count',alarm_count)
-        s = stations.get(meter__simid__simcardNumber=commaddr)
+        try:
+            s = stations.get(meter__simid__simcardNumber=commaddr)
+        except:
+            s = None
         if s:
         
             return {
@@ -282,3 +285,58 @@ def stationlist(request):
     print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
     
     return HttpResponse(json.dumps(result))
+
+
+
+
+
+class RealcurlvView(LoginRequiredMixin,TemplateView):
+    template_name = "monitor/realcurlv.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RealcurlvView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "实时曲线"
+        context["page_menu"] = "数据监控"
+        
+        return context  
+
+
+
+
+class VehicleView(LoginRequiredMixin,TemplateView):
+    template_name = "monitor/vehicle.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VehicleView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "车辆监控"
+        context["page_menu"] = "数据监控"
+        
+        return context  
+
+ 
+
+class VedioView(LoginRequiredMixin,TemplateView):
+    template_name = "monitor/vedio.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VedioView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "实时视频"
+        context["page_menu"] = "数据监控"
+        
+        return context  
+
+ 
+
+class SecondwaterView(LoginRequiredMixin,TemplateView):
+    template_name = "monitor/secondwater.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SecondwaterView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "二次供水"
+        context["page_menu"] = "数据监控"
+        
+        return context  
+
+ 
+
+

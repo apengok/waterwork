@@ -1054,3 +1054,36 @@ def historydatalist(request):
     print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
     
     return HttpResponse(json.dumps(result))
+
+
+
+class FlownalysView(LoginRequiredMixin,TemplateView):
+    template_name = "analysis/flownalys.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(FlownalysView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "流量分析"
+        context["page_menu"] = "数据分析"
+        
+        return context  
+
+class ComparenalysView(LoginRequiredMixin,TemplateView):
+    template_name = "analysis/comparenalys.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ComparenalysView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "对比分析"
+        context["page_menu"] = "数据分析"
+        
+        return context  
+
+
+class PeibiaoView(LoginRequiredMixin,TemplateView):
+    template_name = "analysis/peibiao.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PeibiaoView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "配表分析"
+        context["page_menu"] = "数据分析"
+        
+        return context  

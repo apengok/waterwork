@@ -13,7 +13,7 @@ urlpatterns = [
 
     
 
-    # 数据监控 --地图监控
+    # 系统管理 --平台个性化配置
     url(r'^personalized/list/?$',views.personalizedView.as_view(),name='personalizedList'),
     
     
@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^personalized/find/?$',views.personalizedFind,name='personalizedFind'),
     url(r'^personalized/default/?$',views.personalizedDefault,name='personalizedDefault'),
 
-
+    # 通讯管理
     url(r'^commconfig/?$',views.CommConfigView.as_view(),name='commlist'),
     url(r'^commconfig/list/?$',views.getmetercommlist,name='getmetercommlist'),
     url(r'^commconfig/add/?$',views.CommConfigAddView.as_view(),name='mcadd'),
@@ -33,5 +33,11 @@ urlpatterns = [
     url(r'^commconfig/delete/(?P<pk>\w+)/?$',views.CommConfigDeleteView.as_view(),name='mcdelete'),
     url(r'^commconfig/getProtocolSelect/?$',views.getProtocolSelect,name='getProtocolSelect'),
 
+    # 系统设置
+    url(r'^system/?$',views.SystemView.as_view(),name='system'),
+    # 转发设置
+    url(r'^retransit/?$',views.RetransitView.as_view(),name='retransit'),
+    # 图标配置
+    url(r'^iconscfg/?$',views.IconscfgView.as_view(),name='iconscfg'),
         
 ]
