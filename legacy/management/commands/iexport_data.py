@@ -23,7 +23,8 @@ class Command(BaseCommand):
         #     models.Product.objects.all().delete()
         # factories.ProductFactory.create_batch(size=count)
         t1=time.time()
-        data_qset=HdbFlowData.objects.using("shex").filter(readtime__range=[sTime,'2018-09-20'])
+        # data_qset=HdbFlowData.objects.using("virvo").filter(readtime__range=[sTime,'2018-09-20'])
+        data_qset=HdbFlowData.objects.using("virvo").all()
         count = data_qset.count()
         for d in data_qset:
             d.save(using='zncb')
