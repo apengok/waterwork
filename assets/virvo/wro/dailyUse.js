@@ -613,11 +613,11 @@
                         type : 'value',
                         splitNumber: 1,
                         name: 'Mpa',
-                        nameLocation:'middle',
+                        // nameLocation:'top',
                         nameGap:30,
                         scale: false,
                         axisLabel: {
-                            formatter: '{value}' + 'Mpa'
+                            formatter: '{value}' //+ 'Mpa'
                         },
                         axisLine : {    // 轴线
                             show: true,
