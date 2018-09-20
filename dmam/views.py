@@ -1049,7 +1049,7 @@ def findUsertypes(request):
 
 
 def usertypeadd(request):
-    if not request.user.has_menu_permission_edit('stationsmanager_dmam'):
+    if not request.user.has_menu_permission_edit('stationmanager_dmam'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     print('usertypeadd:',request.POST)
@@ -1128,7 +1128,7 @@ def usertypeedit(request):
 
 
 def usertypedeletemore(request):
-    if not request.user.has_menu_permission_edit('stationsmanager_dmam'):
+    if not request.user.has_menu_permission_edit('stationmanager_dmam'):
         return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
 
     deltems = request.POST.get("deltems")
@@ -1173,7 +1173,7 @@ class UsertypeDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
+        if self.request.user.has_menu_permission_edit('stationmanager_dmam'):
             return True
         return False
 
@@ -1254,7 +1254,7 @@ class StationAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         return super(StationAddView, self).dispatch(*args, **kwargs)
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
+        if self.request.user.has_menu_permission_edit('stationmanager_dmam'):
             return True
         return False
 
@@ -1331,7 +1331,7 @@ class StationEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         return Station.objects.get(id=self.kwargs["pk"])
 
     def test_func(self):
-        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
+        if self.request.user.has_menu_permission_edit('stationmanager_dmam'):
             return True
         return False
 
@@ -1427,7 +1427,7 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
 
     def test_func(self):
         
-        if self.request.user.has_menu_permission_edit('stationsmanager_dmam'):
+        if self.request.user.has_menu_permission_edit('stationmanager_dmam'):
             return True
         return False
 

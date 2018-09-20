@@ -341,6 +341,15 @@ class Station(models.Model):
 
         return flows
 
+    def flowData_day_hourly(self,startTime,endTime):
+        flow_data = []
+        if self.commaddr is None:
+            return flow_data
+        flows = HdbFlowData.objects.filter(commaddr=self.commaddr).filter(readtime__range=[startTime,endTime]).values_list("readtime","flux","plustotalflux")
+        hours = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
+
+        return flows
+
     def flowData_Hour(self,startTime,endTime):
         flow_data = {}
         if self.commaddr is None:
