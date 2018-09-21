@@ -293,9 +293,9 @@ class CXCView2(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CXCView2, self).get_context_data(*args, **kwargs)
-        context["page_menu"] = "数据监控"
+        context["page_menu"] = "数据监分析"
         # context["page_submenu"] = "组织和用户管理"
-        context["page_title"] = "DMA综合统计"
+        context["page_title"] = "产销差分析"
 
         bigmeter = Bigmeter.objects.first()
         context["station"] = bigmeter.username

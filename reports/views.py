@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin,UserPassesTestMixin
 
 from waterwork.mixins import AjaxableResponseMixin
+from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 
 # Create your views here.
 
@@ -46,6 +47,10 @@ class DmastaticsView(LoginRequiredMixin,TemplateView):
         context = super(DmastaticsView, self).get_context_data(*args, **kwargs)
         context["page_title"] = "DMA报表"
         context["page_menu"] = "统计报表"
+
+        bigmeter = Bigmeter.objects.first()
+        context["station"] = bigmeter.username
+        context["organ"] = "歙县自来水公司"
         
         return context  
 
