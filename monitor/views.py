@@ -8,7 +8,7 @@ from django.contrib import messages
 import json
 import random
 import datetime
-
+import time
 from django.template.loader import render_to_string
 from django.shortcuts import render,HttpResponse
 from django.views import View
@@ -239,19 +239,20 @@ def stationlist(request):
         commaddr = b.commaddr
         alarm_count = Alarm.objects.filter(commaddr=commaddr).count()
         # print('alarm_count',alarm_count,commaddr)
+        
         try:
-            s = stations.get(meter__simid__simcardNumber=commaddr)
-        except:
+            s = stations.select_related("meter__simid").select_related("belongto").get(meter__simid__simcardNumber=commaddr)   #meter__simid__simcardNumber
+        except :
             s = None
         if s:
         
             return {
-                "stationname":s.username,
-                "belongto":s.belongto.name if s else '-',
-                "serialnumber":s.meter.serialnumber if s.meter else '-',
+                "stationname":'-',#s.username,
+                "belongto":'-',#s.belongto.name if s else '-',
+                "serialnumber":'-',#s.meter.serialnumber if s.meter else '-',#
                 "alarm":alarm_count,
                 "status":b.commstate,
-                "dn":s.meter.dn if s.meter else '-',
+                "dn":'-',#s.meter.dn if s.meter else '-',
                 "readtime":b.fluxreadtime ,
                 "collectperiod":0,
                 "updataperiod":0,
@@ -270,7 +271,10 @@ def stationlist(request):
     
     
     for b in tmp_bgms:  #[start:start+length]
+        t1=time.time()
         ret=bgm_data(b)
+        t2=time.time()-t1
+        print("---t---",t2)
         if ret is not None:
             data.append(ret)
     
