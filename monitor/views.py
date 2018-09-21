@@ -216,6 +216,7 @@ def stationlist(request):
     organs = user.belongto
 
     stations = user.station_list_queryset(simpleQueryParam) 
+    # stations = stations[start:start+length]
     # if order == "asc":
     #     stations = user.station_list_queryset(simpleQueryParam).order_by("meter__serialnumber")
     # else:
@@ -226,12 +227,18 @@ def stationlist(request):
         stations = stations.filter(belongto__uuid=groupName)
     
     bgms = Bigmeter.objects.all().order_by('-fluxreadtime')
+    # stations = stations[start:start+length]
 
+    commaddrs = [s.commaddr for s in stations[start:start+length] ]
+    # print("commaddrs",commaddrs)
+    tmp_bgms = [b for b in bgms if b.commaddr in commaddrs]
+    # print("tmp_bgms",tmp_bgms)
+    # print("stations",stations)
     def bgm_data(b):
         # query station from bigmeter commaddrss
         commaddr = b.commaddr
         alarm_count = Alarm.objects.filter(commaddr=commaddr).count()
-        print('alarm_count',alarm_count)
+        # print('alarm_count',alarm_count,commaddr)
         try:
             s = stations.get(meter__simid__simcardNumber=commaddr)
         except:
@@ -262,7 +269,7 @@ def stationlist(request):
     data = []
     
     
-    for b in bgms[start:start+length]:  #[start:start+length]
+    for b in tmp_bgms:  #[start:start+length]
         ret=bgm_data(b)
         if ret is not None:
             data.append(ret)
