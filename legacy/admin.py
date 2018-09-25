@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import Bigmeter
+from . models import Bigmeter,HdbFlowData
 # Register your models here.
 
 
@@ -32,3 +32,11 @@ class BigmeterAdmin(admin.ModelAdmin):
             message_bit = "%s items were" % rows_updated
         self.message_user(request, "%s successfully updated as nomal." % message_bit)
     update_default.short_description = 'update default ' 
+
+
+
+@admin.register(HdbFlowData)
+class HdbFlowDataAdmin(admin.ModelAdmin):
+    list_display = ["commaddr","readtime","flux","plustotalflux"]
+
+    list_filter = ("commaddr","readtime")
