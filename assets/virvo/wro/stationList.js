@@ -781,7 +781,7 @@
             $("input[name='subChkTwo']").prop("checked", e.checked);
         },
         addStation : function (){
-            $("#addStation").attr("href","stations/add/newstation?uuid="+selectTreeIdAdd+"");
+            $("#addStation").attr("href","/dmam/stations/add/newstation?uuid="+selectTreeIdAdd+"");
         },
         validates:function () {//增加运营资质类别时的数据验证
            return $("#adduserType").validate({
