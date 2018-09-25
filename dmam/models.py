@@ -346,7 +346,7 @@ class Station(models.Model):
         if self.commaddr is None:
             return flow_data
         flows = HdbFlowData.objects.filter(commaddr=self.commaddr).filter(readtime__range=[startTime,endTime]).values_list("readtime","flux","plustotalflux")
-        hours = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
+        hours = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23']
 
         return flows
 
@@ -355,7 +355,8 @@ class Station(models.Model):
         if self.commaddr is None:
             return flow_data
 
-        hours = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
+        # print(self.commaddr,startTime,endTime)
+        hours = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','00']
         flows = HdbFlowDataHour.objects.filter(commaddr=self.commaddr).filter(hdate__range=[startTime,endTime]).values_list("hdate","dosage")
         if flows.count() == 0:
             for h in hours:
@@ -363,10 +364,10 @@ class Station(models.Model):
                 flow_data[fh] = '-'
             return flow_data
         flow_dict = dict(flows)
-        print('flow_dict',flow_dict)
+        # print('flow_dict',flow_dict)
         flows_keys = [k[11:] for k,v in flows ]
         
-        print("print first",flows.first())
+        # print("print first",flows.first())
         tmp=flows.first()[0]
         for h in hours:
             if h in flows_keys:
@@ -387,7 +388,7 @@ class Station(models.Model):
 
         if pressures.count() == 0:
             return press_data
-        print('pressures:',pressures)
+        # print('pressures:',pressures)
         press_data = dict(pressures)
         
 

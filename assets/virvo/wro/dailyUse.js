@@ -294,7 +294,11 @@
                         sampling: 'average',
                         itemStyle: {
                             normal: {
-                                color: lcolor //#6dcff6
+                                color: lcolor, //#6dcff6
+                                 lineStyle: {        // 系列级个性化折线样式
+                                    width: 0.8,
+                                    // type: 'dashed'
+                                }
                             }
                         },
                         data: data,
@@ -429,11 +433,11 @@
                     
                 }
                 legend_list.push("压力曲线");
-                var tmp = dailyUse.fillSeriaData("压力曲线",'line','rgba(22, 155, 213, 1)',1,1,press);
+                var tmp = dailyUse.fillSeriaData("压力曲线",'line','rgba(220, 155, 21, 1)',1,1,press);
                 serias_list.push(tmp);
 
                 legend_list.push("当日柱状图");
-                var tmp = dailyUse.fillSeriaData("当日柱状图",'bar','rgba(22, 55, 13, 1)',1,1,today_bar);
+                var tmp = dailyUse.fillSeriaData("当日柱状图",'bar','rgba(22, 55, 13, 1)',0,0,today_bar);
                 serias_list.push(tmp);
 
                 // dailyUse.reloadData(dataListArray);
@@ -526,9 +530,9 @@
                     splitLine: {
                         show: true,
                         lineStyle: {
-                            color: '#483d8b',
-                            type: 'dashed',
-                            width: 1
+                            color: 'grey',
+                            type: 'dotted',
+                            width: 0.2
                         }
                     },
                     // splitArea : {
@@ -537,7 +541,7 @@
                     //         color:dailyUse.splitAreaColor(hdates)
                     //     }
                     // },
-                    data: ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23'] //dailyUse.platenumbersplitYear(hdates)
+                    data: ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'] //dailyUse.platenumbersplitYear(hdates)
                 },
                 {
                     type:'category',
@@ -556,7 +560,7 @@
                         lineStyle: {
                             color: '#483d8b',
                             type: 'dashed',
-                            width: 1
+                            width: 0.5
                         }
                     },
                     axisLabel: {
@@ -983,7 +987,7 @@
                         lineStyle: {
                             color: '#483d8b',
                             type: 'dashed',
-                            width: 1
+                            width: 0.5
                         }
                     },
                     // splitArea : {

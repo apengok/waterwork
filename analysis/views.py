@@ -29,7 +29,7 @@ from entm.models import Organizations
 
 
         
-class MnfView(TemplateView):
+class MnfView(LoginRequiredMixin,TemplateView):
     template_name = "analysis/mnf.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -46,7 +46,7 @@ class MnfView(TemplateView):
 
         return context      
 
-class MnfView2(TemplateView):
+class MnfView2(LoginRequiredMixin,TemplateView):
     template_name = "analysis/mnf2.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -288,7 +288,7 @@ def flowdata_mnf(request):
     
     return HttpResponse(json.dumps(ret))
         # LoginRequiredMixin,
-class CXCView2(TemplateView):
+class CXCView2(LoginRequiredMixin,TemplateView):
     template_name = "analysis/dmacxc2.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -307,7 +307,7 @@ class CXCView2(TemplateView):
         return context                  
 
 
-class CXCView(TemplateView):
+class CXCView(LoginRequiredMixin,TemplateView):
     template_name = "analysis/dmacxc.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -586,7 +586,7 @@ def flowdata_cxc(request):
 
 
 #日用水分析        
-class DailyUseView(TemplateView):
+class DailyUseView(LoginRequiredMixin,TemplateView):
     template_name = "analysis/dailyuse.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -617,7 +617,7 @@ def flowdata_queryday(request):
 
 
 def flowdata_dailyuse(request):
-    print("flowdata_dailyuse:",request.POST)
+    # print("flowdata_dailyuse:",request.POST)
 
     stationid = request.POST.get("station_id") # DMABaseinfo pk
     days = int(request.POST.get("days") or '1' )
@@ -648,7 +648,7 @@ def flowdata_dailyuse(request):
     days_flows = []
 
     for i in range(days):
-        print(startTime,endTime)
+        # print(startTime,endTime)
         flowdata_hour = station.flowData_Hour(startTime,endTime)
         # print(flowdata_hour)
 
@@ -676,7 +676,7 @@ def flowdata_dailyuse(request):
 
     
 
-    hdates = ['00','01','02','03','04','05','06','07','08','09,','10','11','12','13','14','15','16','17','18','19,','20','21','22','23']
+    hdates = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','00']
     
     #today_flow data
     for d_flow in days_flows:

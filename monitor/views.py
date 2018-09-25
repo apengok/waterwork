@@ -87,7 +87,7 @@ def dmastasticinfo():
     return data
 
         
-class MapMonitorView(TemplateView):
+class MapMonitorView(LoginRequiredMixin,TemplateView):
     template_name = "monitor/mapmonitor.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -106,7 +106,7 @@ class MapMonitorView(TemplateView):
         return context          
 
 
-class MapMonitorView2(TemplateView):
+class MapMonitorView2(LoginRequiredMixin,TemplateView):
     template_name = "monitor/mapmonitor2.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -125,7 +125,7 @@ class MapMonitorView2(TemplateView):
 
 
 
-class MapStationView(TemplateView):
+class MapStationView(LoginRequiredMixin,TemplateView):
     template_name = "monitor/mapstation.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -144,7 +144,7 @@ class MapStationView(TemplateView):
         return context          
 
 
-class RealTimeDataView(TemplateView):
+class RealTimeDataView(LoginRequiredMixin,TemplateView):
     template_name = "monitor/realtimedata.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -247,22 +247,22 @@ def stationlist(request):
         if s:
         
             return {
-                "stationname":'-',#s.username,
-                "belongto":'-',#s.belongto.name if s else '-',
-                "serialnumber":'-',#s.meter.serialnumber if s.meter else '-',#
+                "stationname":s.username,
+                "belongto":s.belongto.name if s else '-',
+                "serialnumber":s.meter.serialnumber if s.meter else '-',#
                 "alarm":alarm_count,
                 "status":b.commstate,
-                "dn":'-',#s.meter.dn if s.meter else '-',
+                "dn":s.meter.dn if s.meter else '-',
                 "readtime":b.fluxreadtime ,
                 "collectperiod":0,
                 "updataperiod":0,
-                "influx":b.flux,
-                "plusflux":b.plustotalflux ,
-                "revertflux":b.reversetotalflux,
-                "press":b.pressure,
-                "baseelectricity":b.meterv,
-                "remoteelectricity":b.gprsv,
-                "signal":b.signlen,
+                "influx":round(float(b.flux),2) if b.flux else '',
+                "plusflux":round(float(b.plustotalflux),2)  if b.plustotalflux else '',
+                "revertflux":round(float(b.reversetotalflux),2) if b.reversetotalflux else '',
+                "press":round(float(b.pressure),2) if b.pressure else '',
+                "baseelectricity":round(float(b.meterv),2) if b.meterv else '',
+                "remoteelectricity":round(float(b.gprsv),2) if b.gprsv else '',
+                "signal":round(float(b.signlen),2) if b.signlen else '',
                 
             }
         else:

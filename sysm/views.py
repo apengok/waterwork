@@ -34,7 +34,7 @@ from waterwork.mixins import AjaxableResponseMixin
 from django.conf import settings
 
         
-class personalizedView(TemplateView):
+class personalizedView(LoginRequiredMixin,TemplateView):
     template_name = "sysm/personalizedList.html"
 
     def get_context_data(self, *args, **kwargs):
