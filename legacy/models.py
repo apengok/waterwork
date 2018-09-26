@@ -8,6 +8,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.db.models import Q
 
 # from dmam.models import Station
 
@@ -315,6 +316,28 @@ class HdbCommunityRdc(models.Model):
     def __unicode__(self):
         return '%s%s'%(self.community)
 
+
+class HdbFlowDataQuerySet(models.query.QuerySet):
+    def search(self, query,day): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query) &
+                Q(readtime__icontains=day)
+                
+                ).distinct()
+        return self
+
+
+class HdbFlowDataManager(models.Manager):
+    def get_queryset(self):
+        return HdbFlowDataQuerySet(self.model, using=self._db)
+
+    def search(self, query,day): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query,day)
+
+
+
 class HdbFlowData(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     commaddr = models.CharField(db_column='CommAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -327,6 +350,8 @@ class HdbFlowData(models.Model):
     gprsv = models.CharField(db_column='GprsV', max_length=64, blank=True, null=True)  # Field name made lowercase.
     meterv = models.CharField(db_column='MeterV', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
+    day_hourly = HdbFlowDataManager()
+
     class Meta:
         managed = False
         db_table = 'hdb_flow_data'
@@ -334,6 +359,8 @@ class HdbFlowData(models.Model):
 
     def __unicode__(self):
         return '%s%s'%(self.commaddr)
+
+
 
 
 class HdbFlowDataDay(models.Model):
