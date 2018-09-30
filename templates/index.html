@@ -99,15 +99,21 @@
                                     <dl class="xl_info clearfix">
                                     <form method='POST'>{% csrf_token %}
                                         <dt>平台登录</dt>
-                                        <dd><input name="user_name" type="text" class="srh" placeholder="请输入用户名" required></dd>
-                                        <dd><input name="password" type="password" class="srh" placeholder="请输入密码" required></dd>
-                                        <dd><input type="hidden" class="form-control inputW100"
+									<div class="form-group mg-t20 border-black radius4">
+										<i class="icon-user icon_font"></i>
+										<input type="text" class="login_input " name="user_name" placeholder="请输入用户名" />
+									</div>
+									<div class="form-group mg-t20 border-black radius4">
+										<i class="icon-lock icon_font"></i>
+										<input type="password" name="password" class="login_input" id="Password" placeholder="请输入密码" />
+									</div>
+										<dd><input type="hidden" class="form-control inputW100"
                                                id="captchaCode" name="captchaCode" autocomplete="off" value="" ></dd>
-                                        <div class="verify" onselectstart="return false">
-                                            <span></span>
-                                            <div id="verify_box">
-                                                <div id="verify_xbox">
-                                                    <div id="btn">
+									<div class="verify " onselectstart="return false">
+										<span></span>
+										<div id="verify_box" class="radius4">
+											<div id="verify_xbox" class="radius4">
+												<div id="btn" class="radius4">
                                                         <img id="ded1" src="/static/virvo/logins/style/images/a.png">
                                                     </div>
                                                 </div>
@@ -128,7 +134,7 @@
         </div>
     {% endfor %}
 {% endif %}</span></dd>
-                                        <dd><input class="button white radius4 dl" type="submit" value="登录"
+                                        <dd><input class="button white radius4 " type="submit" value="登录"
                                                    style="width: 250px;margin-top: 5px"/></dd>
                                     </form>
                                     <dd>

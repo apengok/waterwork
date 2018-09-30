@@ -53,6 +53,11 @@ urlpatterns = [
 
     # 集中器管理
     url(r'^concentratormanager/?$', views.ConcentratorMangerView.as_view(), name='concentratormanager'),
+    url(r'^concentrator/list/$',views.concentratorlist,name='concentratorlist'),
+    # url(r'^concentrator/add',views.ConcentratorAddView.as_view(),name='concentratoradd'),
+    # url(r'^concentrator/edit/(?P<pk>\w+)/?$',views.ConcentratorEditView.as_view(),name='concentratoredit'),
+    # url(r'^concentrator/delete/(?P<pk>[0-9]+)/?$',views.ConcentratorDeleteView.as_view(),name='concentratordelete'),
+    # url(r'^concentrator/deletemore',views.concentratordeletemore,name='concentratordeletemore'),
 
     # 参数指令
     url(r'^paramsmanager/?$', views.ParamsMangerView.as_view(), name='paramsmanager'),

@@ -78,6 +78,7 @@ choicetreedict["devm"] = {
             "metermanager":{"name":"表具管理","url":"/devm/metermanager/","sub":{"name":"可写"}},
             "pressuremanager":{"name":"压力管理","url":"/devm/pressuremanager/","sub":{"name":"可写"}},
             "fireboltmanager":{"name":"消防栓管理","url":"/devm/fireboltmanager/","sub":{"name":"可写"}},
+            "concentratormanager":{"name":"集中器管理","url":"/devm/concentratormanager/","sub":{"name":"可写"}},
             "simcardmanager":{"name":"SIM卡管理","url":"/devm/simcardmanager/","sub":{"name":"可写"}},
             "paramsmanager":{"name":"参数指令","url":"/devm/paramsmanager/","sub":{"name":"可写"}},
         }],

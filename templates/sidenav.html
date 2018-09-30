@@ -456,6 +456,17 @@
                             </ul>
                         </li>
                         {% endif %}
+                        {% if  'concentratormanager_devm' in user.permissiontree %}
+                        <li class="second-menu">
+                            <a href="/devm/concentratormanager/">
+                                <i class="fa fa-location-arrow"></i><span>集中器管理</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        {% endif %}
                         {% if  'simcardmanager_devm' in user.permissiontree %}
                         <li class="second-menu">
                             <a href="/devm/simcardmanager/">
@@ -506,7 +517,7 @@
                         {% if  'districtmanager_dmam' in user.permissiontree %}
                         <li class="second-menu">
                             <a href="/dmam/districtmanager/">
-                                <i class="fa fa-location-arrow"></i><span>dma管理</span> 
+                                <i class="fa fa-location-arrow"></i><span>DMA管理</span> 
                                 <i></i> 
                             </a>
                             <ul>

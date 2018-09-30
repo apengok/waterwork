@@ -21,7 +21,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User,MyRoles
-from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
+from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
 from dmam.models import DMABaseinfo,DmaStations,Station
 from entm.models import Organizations
 
@@ -387,7 +387,7 @@ def flowdata_cxc(request):
                 dmas = o.dma.all()
             else:
                 dmas |= o.dma.all()
-    # print('dmas:',dmas)
+    print('dmas:',dmas)
 
     
 
@@ -433,17 +433,107 @@ def flowdata_cxc(request):
     
     
         return HttpResponse(json.dumps(ret))
+
+    
+    if dmas.first().dma_name == '文欣苑' or dmas.first().dma_no== '301':
+        print('special process 文欣苑')
+
+        dma = dmas.first()
+        flowday = HdbWatermeterMonth.objects.filter(communityid=105).filter(hdate__range=[startTime,endTime])
+        print("wm_flowday count",flowday.count())
+
+        #fill echart data
+        for de,value in flowday.values_list('hdate','dosage'):
+            if de in echart_data.keys():
+                o_data = echart_data[de]
+                echart_data[de] = o_data + float(value)/10000
+
+        # print('comaddr:',comaddr)
+        # print('echart_data:',echart_data)
+        
+        # flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
+
+        #pressure
+        # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
+
+        # flows = [f.flux for f in flowday]
+        # hdates = [f.readtime for f in flowday]
+
+        flows = [f.dosage for f in flowday]
+        hdates = [f.hdate[-2:] for f in flowday]
+        hdates = hdates[::-1]
+
+        flows_float = [float(f) for f in flows]
+        flows_float = flows_float[::-1]
+        flows_leak = [random.uniform(float(f)/10,float(f)/5 ) for f in flows]
+        uncharged =[random.uniform(float(f)/10,float(f)/5 ) for f in flows]
+
+        #表具信息
+        
+        total = sum(flows_float)
+        total /= 10000
+        influx = sum(flows_float)
+        influx /=10000
+        leak = sum(flows_leak)
+        leak /=10000
+        uncharg = sum(uncharged)
+        uncharg /=10000
+        sale = total - leak - uncharg
+        cxc = total - sale
+        if total != 0:
+            cxc_percent = (cxc / total)*100 
+        else:
+            cxc_percent = 0
+        huanbi=0
+        if total != 0 :
+            leak_percent = (leak * 100)/total
+        else:
+            leak_percent = 0
+        tongbi=0
+        mnf=1.2
+        back_leak=1.8
+        broken_pipe=0
+        other_leak = 0
+
+        total_influx += influx
+        total_total += total
+        total_leak += leak
+        total_uncharg += uncharg
+        total_sale += sale
+        total_cxc += cxc
+        # total_cxc_percent += cxc_percent
+        # total_leak_percent += leak_percent
+
+        #记录每个dma分区的统计信息
+        sub_dma_list.append({
+                    "organ":dma.dma_name,
+                    # "influx":round(influx,2),
+                    "total":round(total,2),
+                    "sale":round(sale,2),
+                    "uncharg":round(uncharg,2),
+                    "leak":round(leak,2),
+                    "cxc":round(cxc,2),
+                    "cxc_percent":round(cxc_percent,2),
+                    "huanbi":round(huanbi,2),
+                    "leak_percent":round(leak_percent,2),
+                    "tongbi":round(tongbi,2),
+                    "mnf":round(mnf,2),
+                    "back_leak":round(back_leak,2),
+                    "other_leak":round(other_leak,2),
+                    "statis_date":endTime,
+                })
     
     for dma in dmas:
+        print('dma station is',dma.dmastation.all())
         if dma.dmastation.exists():
             dmastation = dma.dmastation.first()
+            print("dmastation:",dmastation)
             comaddr = dmastation.station_id
         else:
             continue
 
         if comaddr == '':
             comaddr = '4892354820'
-        
         
         
         # if comaddr:
