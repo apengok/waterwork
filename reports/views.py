@@ -54,6 +54,21 @@ class DmastaticsView(LoginRequiredMixin,TemplateView):
         
         return context  
 
+
+class WenxinyuanView(TemplateView):
+    template_name = "reports/wenxinyuan.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(WenxinyuanView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "DMA报表"
+        context["page_menu"] = "统计报表"
+
+        bigmeter = Bigmeter.objects.first()
+        context["station"] = bigmeter.username
+        context["organ"] = "歙县自来水公司"
+        
+        return context  
+
 class FlowsView(LoginRequiredMixin,TemplateView):
     template_name = "reports/flows.html"
 
