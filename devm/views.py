@@ -857,6 +857,17 @@ class FireboltMangerView(LoginRequiredMixin,TemplateView):
         
         return context  
 
+
+class ConcentratorMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "devm/concentratormanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ConcentratorMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "集中器管理"
+        context["page_menu"] = "设备管理"
+        
+        return context  
+
 class ParamsMangerView(LoginRequiredMixin,TemplateView):
     template_name = "devm/paramsmanager.html"
 

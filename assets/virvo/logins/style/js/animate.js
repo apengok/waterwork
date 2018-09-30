@@ -8,6 +8,21 @@ $(function() {
         });
     });
 
+    $('#DMA').on('click', function() {
+        // $(window).scrollTop
+        $('html,body').animate({
+            scrollTop : $('#screenIphoneImage').offset().top - 150
+        });
+    });
+
+
+    $('#PT').on('click', function() {
+        // $(window).scrollTop
+        $('html,body').animate({
+            scrollTop : $('#s6TitleImage').offset().top - 350
+        });
+    });
+
     //setting default
     //S2
     $('#screen2Image1, #screen2Image2, #screen2Image3, #screen2Image4').css({
@@ -79,7 +94,7 @@ $(function() {
 
     //S6-1
     $('#screen6Image1').css({
-        left : 150,
+        left : 100,
         top : 120,
         opacity : 0,
         zIndex : 3
@@ -87,7 +102,7 @@ $(function() {
 
     //S6-2
     $('#screen6Image2').css({
-        left : 250,
+        left : 200,
         top : 30,
         opacity : 0,
         zIndex : 2
@@ -95,7 +110,7 @@ $(function() {
 
     //S6-3
     $('#screen6Image3').css({
-        left : 350,
+        left : 300,
         top : -53,
         opacity : 0,
         zIndex : 1
@@ -119,7 +134,7 @@ $(function() {
         opacity : 0
     }).hide();
 
-    //S7-2
+   /* //S7-2
     $('#screen7Image2').css({
         top : '-70px',
         opacity : 0
@@ -128,8 +143,9 @@ $(function() {
     //S7-3
     $('#screen7Image3').css({
         top : '-30px',
+        left : -148,
         opacity : 0
-    }).hide();
+    }).hide();*/
 });
 
 var setScreen2Animate = function(id) {
@@ -191,9 +207,31 @@ var scrollSet = function() {
         }, 450);
     }
 
+    //S3
+    if (windowScrollTop > 980 && $('#screen3Image').data('animate') == "0") {
+
+        $('#screen3Image').animate({
+         'margin-left' : '-15px',
+         'opacity' : 1
+         }, 1000).show().data('animate', 1);
+         
+         $('#s3IconShandle').animate({
+             top: 243,
+             opacity: 1
+         });
+         
+        $('#s3TitleImage').animate({
+            top : 150,
+            opacity : 1
+        });
+        $('#s3Description').animate({
+            top : 253,
+            opacity : 1
+        });
+    }
 
     //S4
-    if (windowScrollTop > 980 && $('#screen4Image').data('animate') == "0") {
+    if (windowScrollTop > 1680 && $('#screen4Image').data('animate') == "0") {
         $('#screen4Image').animate({
             'left' : '0px',
             'opacity' : 1
@@ -209,14 +247,14 @@ var scrollSet = function() {
         });
     }
     
-    //add iphone clean
+    //add iphone clean 
     if (windowScrollTop > ( $('#screenIphoneOffset').offset().top - screenHeight + 400 ) && $('#screenIphoneImage').data('animate') == "0") {
-
+        
         $('#screenIphoneImage').animate({
             left : '0px',
             opacity : 1
         }, 1000).show().data('animate', 1);
-
+        
         $('#IphoneTitleImage').animate({
             top : 0,
             opacity : 1
@@ -229,11 +267,11 @@ var scrollSet = function() {
     }
 
     //S5
-    if (windowScrollTop >  1680 && $('#screen5Image').data('animate') == "0") {
+    if (windowScrollTop > ( $('#screen5Offset').offset().top - screenHeight + 400 ) && $('#screen5Image').data('animate') == "0") {
         $('#screen5Image').animate({
             left : '0px',
             opacity : 1
-
+            
         }, 1000).show().data('animate', 1);
         $('#s5TitleImage').animate({
             top : 0,
@@ -284,7 +322,7 @@ var scrollSet = function() {
     }
 
     //S7
-    if (windowScrollTop > ($('#screen7AnimateOffset').offset().top - screenHeight + 150 ) && $('#screen7Image2').data('animate') == "0") {
+    if (windowScrollTop > ($('#screen7AnimateOffset').offset().top - screenHeight + 150 ) /*&& $('#screen7Image2').data('animate') == "0"*/) {
 
         $('#s7TitleImage').animate({
             top : 90,
@@ -302,10 +340,10 @@ var scrollSet = function() {
                 top : 100,
                 left : 0,
                 opacity : 1
-            }, 1000).show();
-        }, 800);
+            }, 700).show();
+        }, 300);
 
-        //S7-2
+    /*    //S7-2
         $('#screen7Image2').animate({
             top : 0,
             opacity : 1
@@ -315,9 +353,10 @@ var scrollSet = function() {
         setTimeout(function() {
             $('#screen7Image3').animate({
                 top : 0,
+                left : 0,
                 opacity : 1
             }, 1000).show();
-        }, 800);
+        }, 800);*/
     }
 };
 
@@ -370,7 +409,7 @@ $(function() {
                     //zoom:1
                 }, _setting.mainDuration);
                 $('#tab-show-1-font').animate({
-                    top : 0,
+                    top : 150,
                     left : 52,
                     opacity : 1
                 }, _setting.mainDuration);
@@ -414,7 +453,7 @@ $(function() {
                     opacity : 1
                 }, _setting.mainDuration);
                 $('#tab-show-2-font').stop().animate({
-                    top : 0,
+                    top : 150,
                     left : 52,
                     opacity : 1
                 }, _setting.mainDuration);
@@ -441,7 +480,7 @@ $(function() {
             mouseIn : function() {
                 $('#tab-show-3').css({
                     left : 230,
-                    top : 21,
+                    top : 31,
                     opacity : 0
                 }).show();
                 $('#tab-show-3-font').css({
@@ -451,19 +490,19 @@ $(function() {
                 }).show();
 
                 $('#tab-show-3').stop().animate({
-                    top : 21,
-                    left : 184,
+                    top : 31,
+                    left : 114,
                     opacity : 1
                 }, _setting.mainDuration);
                 $('#tab-show-3-font').stop().animate({
-                    top : 0,
+                    top : 150,
                     left : 52,
                     opacity : 1
                 }, _setting.mainDuration);
             },
             mouseOut : function() {
                 $('#tab-show-3').stop().animate({
-                    top : 21,
+                    top : 31,
                     left : 100,
                     opacity : 0
                 }, _setting.mainDuration, '', function() {
@@ -492,20 +531,20 @@ $(function() {
                 }).show();
 
                 $('#tab-show-4').stop().animate({
-                    top : 21,
-                    left : 184,
+                    top : 20,
+                    left : 236,
                     opacity : 1
                 }, _setting.mainDuration);
                 $('#tab-show-4-font').stop().animate({
-                    top : 0,
+                    top : 150,
                     left : 52,
                     opacity : 1
                 }, _setting.mainDuration );
             },
             mouseOut : function() {
                 $('#tab-show-4').stop().animate({
-                	left : 100,
-                    top : 21,
+                	left : 106,
+                    top : 20,
                     opacity : 0
                 }, _setting.mainDuration, '', function() {
                     $('#tab-show-4').hide();
@@ -522,8 +561,8 @@ $(function() {
         tab5 : {
             mouseIn : function() {
                 $('#tab-show-5').css({
-                    left : 300,
-                    top : 21,
+                    left : 270,
+                    top : 41,
                     opacity : 0
                 }).show();
                 $('#tab-show-5-font').css({
@@ -533,19 +572,19 @@ $(function() {
                 }).show();
 
                 $('#tab-show-5').stop().animate({
-                    top : 21,
-                    left : 184,
+                    top : 41,
+                    left : 154,
                     opacity : 1
                 }, _setting.mainDuration);
                 $('#tab-show-5-font').stop().animate({
-                    top : 0,
+                    top : 150,
                     left : 52,
                     opacity : 1
                 }, _setting.mainDuration);
             },
             mouseOut : function() {
                 $('#tab-show-5').stop().animate({
-                    top : 21,
+                    top : 41,
                     left : 100,
                     opacity : 0
                 }, _setting.mainDuration, '', function() {
@@ -574,19 +613,19 @@ $(function() {
                 }).show();
 
                 $('#tab-show-6').stop().animate({
-                    top : 21,
-                    left : 184,
+                    top : 26,
+                    left : 174,
                     opacity : 1
                 }, _setting.mainDuration);
                 $('#tab-show-6-font').stop().animate({
-                    top : 0,
+                    top : 150,
                     left : 52,
                     opacity : 1
                 }, _setting.mainDuration);
             },
             mouseOut : function() {
                 $('#tab-show-6').stop().animate({
-                    top : 21,
+                    top : 26,
                     left : 100,
                     opacity : 0
                 }, _setting.mainDuration, '', function() {
@@ -605,7 +644,7 @@ $(function() {
 
     var debug = function(string) {
         try {
-            console.log(string);
+            // console.log(string);
         } catch(e) {
             return;
         }
@@ -616,7 +655,7 @@ $(function() {
         if (_setting.moving) {
             return;
         };
-        // debug("当前实例：" + (_setting.movingIndex + 1));
+        debug("当前实例：" + (_setting.movingIndex + 1));
 
         //set button style
         $('#bannerTab li').each(function(i, el) {
@@ -673,7 +712,7 @@ $(function() {
         stopTimer();
         var elIndex = parseInt($(el.currentTarget).data('index'), 10);
 
-        // debug('Mouseenter: ' + _setting.movingIndex + ' ' + elIndex);
+        debug('Mouseenter: ' + _setting.movingIndex + ' ' + elIndex);
 
         //当鼠标移动到已经是焦点的元素时,直接返回
         if (_setting.movingIndexLast == elIndex)
@@ -757,19 +796,19 @@ $(function() {
     var s3 = {
         debug : function(string) {
             try {
-                console.log(string);
+                // console.log(string);
             } catch( e) {
             }
         },
         show : function() {
-            // s3.debug('show: ' + _options.defaultIndex);
+            s3.debug('show: ' + _options.defaultIndex);
             
             var shandleId = "shandle-" + _options.defaultIndex;
             var histogramId = "histogram-" + _options.defaultIndex;
             var histogramIconId = "histogram-icon-" + _options.defaultIndex;
             
             $('.s3-icon .list .icon').css({
-                background: 'url(../images/screen-3/bg-gray.png)'
+                background: 'url(/static/virvo/logins/style/images/bg-gray.png)'
             });
             $('.histogram div').hide();
             $('.histogram-icon div').css({
@@ -778,7 +817,7 @@ $(function() {
             
             
             $('.s3-icon .list #' + shandleId).css({
-                background: 'url(../images/screen-3/bg-green.png)'
+                background: 'url(/static/virvo/logins/style/images/bg-green.png)'
             });
             $('.histogram #' + histogramId).fadeIn(200);
             $('.histogram-icon #' + histogramIconId ).css({

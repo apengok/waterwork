@@ -50,6 +50,10 @@ urlpatterns = [
 
     # 消防栓管理
     url(r'^fireboltmanager/?$', views.FireboltMangerView.as_view(), name='fireboltmanager'),
+
+    # 集中器管理
+    url(r'^concentratormanager/?$', views.ConcentratorMangerView.as_view(), name='concentratormanager'),
+
     # 参数指令
     url(r'^paramsmanager/?$', views.ParamsMangerView.as_view(), name='paramsmanager'),
 

@@ -7,14 +7,14 @@ body, div, p, ul, li, span {
 
 .screen-line {
     border-top: solid 1px #d5dfe7;
-    width: 1300px;
+    width: 1200px;
     margin: auto;
     
 }
 
 .screen {
-    min-height: 100px;
-    width: 1300px;
+    min-height: 80px;
+    width: 1200px;
     margin: auto;
     overflow: hidden;
 }
@@ -47,17 +47,7 @@ body, div, p, ul, li, span {
 }
 
 .top .main .banner-top .logo, .top .main .banner-top .link {
-    float: left;
-    padding-top: 58px;
-    height: 127px;
-    position:relative;
-}
-.demo_img_font{
-    margin-top: 150px;margin-left:100px;position:absolute;
-}
-
-.demo_img{
-    width: 100%;height: 100%;margin-left: -183px;margin-top: -20px
+ height: 127px;
 }
 
 .top .main .banner-top .logo {
@@ -99,7 +89,6 @@ body, div, p, ul, li, span {
     width: 100%;
     height: auto;
 }
-
 .top .main .banner .banner-animation, .top .main .banner .banner-download {
     float: left;
     height: 759px;
@@ -115,7 +104,7 @@ body, div, p, ul, li, span {
     position: absolute;
     width: 684px;
     height: 484px;
-    background: url(img/banner-bg.png) no-repeat center center;
+
     margin: -21px 0px 0px 27px;
 }
 
@@ -137,7 +126,7 @@ body, div, p, ul, li, span {
     position: absolute;
     height: 400px;
     width: 518px;
-    left: 150px;
+    left: -50px;
 }
 
 .banner-right-block div{
@@ -373,7 +362,6 @@ body, div, p, ul, li, span {
 
 .screen .left-block, .screen .right-block {
     float: left;
-
 }
 
 .screen .s3-left {
@@ -450,7 +438,7 @@ body, div, p, ul, li, span {
 .screen .s3-left .image .graph .histogram-icon {
     height: 20px; 
     width: 20px;
-    top: 119px;  
+    top: 189px;  
     width: 348px;
 }
 
@@ -558,8 +546,6 @@ body, div, p, ul, li, span {
 }
 
 .screen .s4-left .s4-title {
-
-
 }
 
 .s4-title-line, .s5-title-line {
@@ -604,7 +590,7 @@ body, div, p, ul, li, span {
 }
 
 .screen .s4-right .s4-image {
-    padding: 108px 0 112px 0;
+    padding: 148px 0 112px 0;
     position: relative;
 }
 
@@ -632,7 +618,6 @@ body, div, p, ul, li, span {
 	color: #8698a7;
     line-height: 24px;
     font-size: 14px;
-    text-align: justify;
 }
 
 .s6-left {
@@ -661,11 +646,8 @@ body, div, p, ul, li, span {
     margin-left: 0px;
 }
 .s6-desc .part {
-    line-height: 24px;
-    font-size: 14px;
 	color: #8698a7;
     margin-right: 0px;
-    text-align: justify;
 }
 
 .s6-title-line {
@@ -702,7 +684,6 @@ body, div, p, ul, li, span {
 	color: #FFF;
     line-height: 24px;
     font-size: 14px;
-    text-align: justify;
 }
 
 .s7-left {
@@ -710,6 +691,7 @@ body, div, p, ul, li, span {
 	width: 525px;
     margin-left:90px;
 }
+
 
 .s7-right .img-radius, .s7-right .img-ri{
 	float:left;
@@ -719,7 +701,7 @@ body, div, p, ul, li, span {
     width: 257px;
     height: 66px;
 }
-.s7-right .img-ri .img-top img {
+.s7-right .img-ri1 .img-top img {
     position: absolute;    
 }
 
@@ -737,8 +719,12 @@ body, div, p, ul, li, span {
 .s7-right .img-ri {
 	padding: 70px 0 0 0;
 }
+.s7-right .img-ri1 {
+    padding: 70px 30px 0 10px;
+}
+
 .s7-right .img_7 {
-    margin:-36px 0 0 26px;
+    margin:36px 0 0 476px;
     position: relative;
 }
 
@@ -749,13 +735,13 @@ body, div, p, ul, li, span {
 .screen-s8-bg {
 	width: 100%;
 	background: url(img/bg2_2_repeat.png) ;
-	height: 105px;
+    height: 90px;
 }
 
 .screen-s8 {
 	width: 100%;
 	background: url(img/bottom-bg-2.jpg) no-repeat top center;
-	min-height:105px;
+	min-height:157px;
 }
 .screen .s8-title, .screen .s8-desc, .screen .s8-download, .screen .copyright{
 	text-align: center;
@@ -783,7 +769,121 @@ body, div, p, ul, li, span {
 }
 
 .screen .copyright{
-	padding: 40px 0 0 0;
+	padding: 20px 0 0 0;
 	color: #FFF;
-	font-size: 14px;
+	font-size: 15px;
+
+}
+
+
+@font-face {
+    font-family: 'icomoon';
+    src:  url('fonts/icomoon.eot?u4m6fy');
+    src:  url('fonts/icomoon.eot?u4m6fy#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?u4m6fy') format('truetype'),
+    url('fonts/icomoon.woff?u4m6fy') format('woff'),
+    url('fonts/icomoon.svg?u4m6fy#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-logg:before {
+    content: "\e915";
+}
+.icon-manager:before {
+    content: "\e916";
+}
+.icon-user:before {
+    content: "\e917";
+}
+.icon-data:before {
+    content: "\e918";
+}
+.icon-sysmanager:before {
+    content: "\e919";
+}
+.icon-list:before {
+    content: "\e91a";
+}
+.icon-passagewaymanager:before {
+    content: "\e91b";
+}
+.icon-base:before {
+    content: "\e91c";
+}
+.icon-agentlist:before {
+    content: "\e91d";
+}
+.icon-configure:before {
+    content: "\e91e";
+}
+.icon-flow:before {
+    content: "\e91f";
+}
+.icon-orderlist:before {
+    content: "\e920";
+}
+.icon-ydlist:before {
+    content: "\e921";
+}
+.icon-agentpay:before {
+    content: "\e922";
+}
+.icon-agentsum:before {
+    content: "\e923";
+}
+.icon-passagewaysum:before {
+    content: "\e924";
+}
+.icon-custom:before {
+    content: "\e925";
+}
+.icon-address:before {
+    content: "\e926";
+}
+.icon-lock:before {
+    content: "\e927";
+}
+.icon_font{position:absolute; bottom:15px; left:10px; font-size:18px; color: #cdcfcb;}
+
+.wrap1{position:absolute; top:0; right:0; bottom:0; left:0 ; margin:auto }/*把整个屏幕真正撑开--而且能自己实现居中*/
+
+.form-group{position:relative;}
+.login_btn{display:block; background: #000000; color:#fff; font-size:15px; width:100%; line-height:50px; border-radius:3px; border:none; }
+.login_input{width:85%; border:0px ; border-radius:3px;    line-height:35px; padding:2px 5px 2px 35px; background:none; font-size:15px; outline:none;}
+.icon_font{position:absolute; bottom:15px; left:10px; font-size:18px; color: #cdcfcb;top: 10px}
+.font16{font-size:16px;}
+.mg-t20{margin-top:20px;}
+.border-black{border:1px solid #0a0a0c;background-color:rgba(14,19,22,.8);}
+@media (min-width:200px){.pd-xs-20{padding:20px;}}
+@media (min-width:768px){.pd-sm-50{padding:50px;}}
+.login_input{ color: #fdfffb
+}
+.wrap2{position:absolute; top:0; right:0; bottom:0; left:0 ; margin:auto }/*把整个屏幕真正撑开--而且能自己实现居中*/
+
+.form-group1{position:relative;}
+.login_btn1{display:block; background: #000000; color:#fff; font-size:15px; width:100%; line-height:50px; border-radius:3px; border:none; }
+.login_input1{width:85%; border:0px ; border-radius:3px;    line-height:35px; padding:2px 5px 2px 10px; background:none; font-size:15px; outline:none;}
+.icon_font1{position:absolute; bottom:15px; left:10px; font-size:18px; color: #00a4ff;top: 10px}
+.font161{font-size:16px;}
+.mg-t201{margin-top:5px;}
+.border-black1{border:1px solid #0a0a0c;background-color:rgba(14,19,22,.8);}
+@media (min-width:200px){.pd-xs-201{padding:20px;}}
+@media (min-width:768px){.pd-sm-501 {padding:50px;}}
+.login_input1{ color: #fdfffb
 }

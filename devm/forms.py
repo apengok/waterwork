@@ -42,7 +42,7 @@ class MeterEditForm(forms.ModelForm):
 
         # self.fields['password'].widget = forms.PasswordInput()
         self.fields['belongto'].initial = self.instance.belongto.name
-        self.fields['simid'].initial = self.instance.simid.simcardNumber
+        self.fields['simid'].initial = self.instance.simid.simcardNumber if self.instance.simid else ''
 
 
 class SimCardAddForm(forms.ModelForm):

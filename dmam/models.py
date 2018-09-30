@@ -370,7 +370,6 @@ class Station(models.Model):
         return diff_value
 
     def flowData_Hour(self,startTime,endTime):
-        self.flowData_day_hourly(startTime,endTime)
         flow_data = {}
         if self.commaddr is None:
             return flow_data

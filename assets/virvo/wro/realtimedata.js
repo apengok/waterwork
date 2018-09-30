@@ -76,9 +76,12 @@
                         render : function(data, type, row, meta) {
                             if (data == "1") {
                                 return "在线";
-                            } else{
+                            } else if (data == "0"){
                                 return "离线";
+                            } else {
+                                return data;
                             }
+
                         }
                     }, 
                     {
