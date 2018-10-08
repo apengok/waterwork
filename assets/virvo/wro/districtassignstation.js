@@ -400,6 +400,7 @@
             d.districtId = selectDistrictId;
         },
         saveDmaStation:function(){
+            console.log("saveDmaStation click",change_flag);
             if(change_flag == false){
                 return
             }
@@ -649,7 +650,7 @@
                     {
                         "data": "metertype",
                         "render": function (data, type, row, meta) {
-                        
+                            console.log(row);
                             var $select = $("<select></select>", {"id": "meter_type"+data,
                                 "value": data
                             });
@@ -664,6 +665,7 @@
                                 }
                                 $select.append($option);
                             });
+                            console.log($select.prop("outerHTML"));
                             return $select.prop("outerHTML");
                         }
                     }
@@ -671,12 +673,13 @@
                 'rowCallback': function(row, data, dataIndex){
                      // Get row ID
                      var rowId = data[0];
-
+                     console.log("rowCallback",row)
                      // If row ID is in the list of selected row IDs
                      if($.inArray(rowId, rows_selected) !== -1){
                         $(row).find('input[type="checkbox"]').prop('checked', true);
                         $(row).addClass('selected');
                      }
+                        change_flag = true;
                   },
               "pagingType" : "full_numbers", // 分页样式
               "dom" : "t" + "<'row'<'col-md-3 col-sm-12 col-xs-12'l><'col-md-4 col-sm-12 col-xs-12'i><'col-md-5 col-sm-12 col-xs-12'p>>",

@@ -659,7 +659,7 @@ def verifyusername(request):
 
     return HttpResponse(json.dumps({"success":bflag}))  
 
-class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
+class DistrictAddView(LoginRequiredMixin,AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = Organizations
     template_name = "dmam/districtadd.html"
     form_class = DMACreateForm
@@ -735,7 +735,7 @@ class DistrictAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 """
 Group edit, manager
 """
-class DistrictEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+class DistrictEditView(LoginRequiredMixin,AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = DMABaseinfo
     form_class = DMACreateForm
     template_name = "dmam/districtedit.html"
@@ -780,7 +780,7 @@ class DistrictEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
 """
 Group Detail, manager
 """
-class DistrictDetailView(DetailView):
+class DistrictDetailView(LoginRequiredMixin,DetailView):
     model = DMABaseinfo
     form_class = DMABaseinfoForm
     template_name = "dmam/districtdetail.html"
@@ -799,7 +799,7 @@ class DistrictDetailView(DetailView):
 """
 Assets comment deletion, manager
 """
-class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
+class DistrictDeleteView(LoginRequiredMixin,AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
     model = DMABaseinfo
     # template_name = "aidsbank/asset_comment_confirm_delete.html"
 
@@ -843,7 +843,7 @@ class DistrictDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         return JsonResponse({"success":True})
 
 
-class DistrictAssignStationView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+class DistrictAssignStationView(LoginRequiredMixin,AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     model = DMABaseinfo
     form_class = StationAssignForm
     template_name = "dmam/districtassignstation.html"

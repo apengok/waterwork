@@ -74,6 +74,23 @@ class Amrsparam(models.Model):
         db_table = 'amrsparam'
 
 
+class BigmeterQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query)
+                ).distinct()
+        return self
+
+
+class BigmeterManager(models.Manager):
+    def get_queryset(self):
+        return BigmeterQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
 class Bigmeter(models.Model):
     username = models.CharField(db_column='UserName', max_length=30, blank=True, null=True)  # Field name made lowercase.
     usertype = models.CharField(db_column='UserType', max_length=128, blank=True, null=True)  # Field name made lowercase.
@@ -129,6 +146,7 @@ class Bigmeter(models.Model):
     dosagedown = models.CharField(db_column='DosageDown', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
     # station = models.OneToOneField('dmam.Station',on_delete=models.CASCADE)
+    objects = BigmeterManager()
 
     class Meta:
         managed = True
@@ -350,7 +368,7 @@ class HdbFlowData(models.Model):
     gprsv = models.CharField(db_column='GprsV', max_length=64, blank=True, null=True)  # Field name made lowercase.
     meterv = models.CharField(db_column='MeterV', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
-    day_hourly = HdbFlowDataManager()
+    objects = HdbFlowDataManager()
 
     class Meta:
         managed = False

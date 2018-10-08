@@ -1,0 +1,99 @@
+# -*- coding:utf-8 -*-
+
+import json
+import datetime
+from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
+
+
+# .exclude(plustotalflux__icontains='429490176') 因为抄表系统处理负数的问题，数据库写入很多不正确的数据，负值貌似都写入了429490176，所以排除这些数据
+
+
+def HdbFlow_day_use(commaddr,day):
+    '''
+        返回日用水量
+        取出当日所有数据，用最后一笔数据的正向流量值减去第一条数据的差值得出当日用水量的值
+    '''
+    day_use = 0
+    flows = HdbFlowData.objects.search(commaddr,day).exclude(plustotalflux__icontains='429490176').values_list('readtime','plustotalflux')
+    print(flows)
+    n=flows.count()
+    if n > 0:
+        day_use = float(flows[n-1][1]) - float(flows[0][1])
+    return round(day_use,2)
+
+def HdbFlow_day_hourly(commaddr,day):
+    '''
+        返回日整点用水量
+        当前整点正向流量-上一整点正向流量
+    '''
+    flow_data = []
+    
+    etime = datetime.datetime.strptime(day.strip(),"%Y-%m-%d")
+    stime = etime + datetime.timedelta(days=1)
+    startTime =day + ' 00:00:00'
+    endTime = stime.strftime("%Y-%m-%d") + ' 00:00:00'
+    flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[startTime,endTime]).values_list("readtime","plustotalflux")
+    f_dict =dict(flows)
+    hours = ['00:00:00','01:00:00','02:00:00','03:00:00','04:00:00','05:00:00','06:00:00','07:00:00','08:00:00','09:00:00','10:00:00','11:00:00','12:00:00','13:00:00','14:00:00','15:00:00','16:00:00','17:00:00','18:00:00','19:00:00','20:00:00','21:00:00','22:00:00','23:00:00']
+    zhengdian_value = []
+    for h in hours:
+        th=startTime[:11] + h
+        v=f_dict[th]
+        zhengdian_value.append(v)
+
+    end_value = f_dict[endTime[:11]+"00:00:00"]
+    zhengdian_value.append(end_value)
+    # print('zhengdian_value',zhengdian_value)
+    diff_value=[]
+    for i in range(len(zhengdian_value)-1):
+        v = float(zhengdian_value[i+1]) - float(zhengdian_value[i])
+        diff_value.append(round(v,2))
+
+    # print('diff_value',diff_value)
+
+    return diff_value
+
+def HdbFlow_month_use(commaddr,day):
+    '''
+        返回月用水量
+        取出当月所有数据，用最后一笔数据的正向流量值减去第一条数据的差值得出当月用水量的值
+    '''
+    month_use = 0
+    flows = HdbFlowData.objects.search(commaddr,day).exclude(plustotalflux__icontains='429490176').values_list('readtime','plustotalflux')
+    # print(flows)
+    n=flows.count()
+    if n > 0:
+        month_use = float(flows[n-1][1]) - float(flows[0][1])
+    return round(month_use,2)
+
+
+
+def HdbFlow_monthly(commaddr):
+    '''
+        返回过去一年内每月用水量
+        取出当月所有数据，用最后一笔数据的正向流量值减去第一条数据的差值得出当月用水量的值
+    '''
+    today = datetime.date.today()
+    endTime = today.strftime("%Y-%m")
+    
+    lastyear = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
+    startTime = lastyear.strftime("%Y-%m")
+
+    data = []
+    sub_dma_list = []
+    
+    monthly_data = {}
+    def month_year_iter( start_month, start_year, end_month, end_year ):
+        ym_start= 12*start_year + start_month
+        ym_end= 12*end_year + end_month
+        for ym in range( ym_start, ym_end ):
+            y, m = divmod( ym, 12 )
+            # yield y, m+1
+            yield '{}-{:02d}'.format(y,m+1)
+
+    month_list = month_year_iter(lastyear.month,lastyear.year,today.month,today.year)
+    # print(month_list)
+    for m in month_list:
+        month_use = HdbFlow_month_use(commaddr,m)
+        monthly_data[m] = round(month_use,2)
+    return monthly_data

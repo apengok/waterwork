@@ -24,6 +24,7 @@ urlpatterns = [
     
     # DMA报表
     url(r'^dmastatics/?$',views.DmastaticsView.as_view(),name='dmastatics'),
+    url(r'^dmareport/?$',views.dmareport,name='dmareport'),
     url(r'^wenxinyuan/?$',views.WenxinyuanView.as_view(),name='wenxinyuan'),
     # 流量报表
     url(r'^flows/?$',views.FlowsView.as_view(),name='flows'),

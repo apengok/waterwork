@@ -155,13 +155,13 @@ class RealTimeDataView(LoginRequiredMixin,TemplateView):
 
         stations = self.request.user.station_list_queryset('')
 
-        total_station_num = len(stations)
+        total_station_num = stations.count()
         online_station = stations.filter(meter__state=1)
-        online_station_num = len(online_station)
+        online_station_num = online_station.count()
         biguser_station = stations.filter(biguser=1)
-        biguser_station_num = len(biguser_station)
+        biguser_station_num = biguser_station.count()
         focus_station = stations.filter(focus=1)
-        focus_station_num = len(focus_station)
+        focus_station_num = focus_station.count()
 
         alarm_station_num = 0
 

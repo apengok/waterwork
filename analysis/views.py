@@ -439,6 +439,7 @@ def flowdata_cxc(request):
         print('special process 文欣苑')
 
         dma = dmas.first()
+        dmareport = dma.dma_statistic()
         flowday = HdbWatermeterMonth.objects.filter(communityid=105).filter(hdate__range=[startTime,endTime])
         print("wm_flowday count",flowday.count())
 
@@ -448,16 +449,7 @@ def flowdata_cxc(request):
                 o_data = echart_data[de]
                 echart_data[de] = o_data + float(value)/10000
 
-        # print('comaddr:',comaddr)
-        # print('echart_data:',echart_data)
         
-        # flowday = HdbFlowData.objects.filter(commaddr=comaddr).filter(readtime__range=[startTime,endTime])
-
-        #pressure
-        # pressures = HdbPressureData.objects.filter(commaddr=comaddr)
-
-        # flows = [f.flux for f in flowday]
-        # hdates = [f.readtime for f in flowday]
 
         flows = [f.dosage for f in flowday]
         hdates = [f.hdate[-2:] for f in flowday]
