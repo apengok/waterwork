@@ -94,6 +94,9 @@ def HdbFlow_monthly(commaddr):
     month_list = month_year_iter(lastyear.month,lastyear.year,today.month,today.year)
     # print(month_list)
     for m in month_list:
+        
+        if m not in monthly_data.keys():
+            monthly_data[m] = 0
         month_use = HdbFlow_month_use(commaddr,m)
         monthly_data[m] = round(month_use,2)
     return monthly_data

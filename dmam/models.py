@@ -83,33 +83,62 @@ class DMABaseinfo(models.Model):
         # meter_types = ["出水表","进水表","贸易结算表","未计费水表","官网检测表"] 管网监测表
         # 进水表  加和---> 进水总量
         water_in = 0
+        monthly_in = {}
         meter_in = dmastations_list.filter(dmametertype='进水表')
         for m in meter_in:
             commaddr = m.commaddr
-            monthly_in = HdbFlow_monthly(commaddr)
-            water_in += sum([monthly_in[k] for k in monthly_in.keys()])
-        print('water_in',water_in)
+            monthly_use = HdbFlow_monthly(commaddr)
+            for k in monthly_use.keys():
+                if k in monthly_in.keys():
+                    monthly_in[k] += monthly_use[k]
+                else:
+                    monthly_in[k] = monthly_use[k]
+        water_in = sum([monthly_in[k] for k in monthly_in.keys()])
+        
         # 出水表 加和--->出水总量
         water_out = 0
+        monthly_out = {}
         meter_out = dmastations_list.filter(dmametertype='出水表')
         for m in meter_out:
             commaddr = m.commaddr
-            monthly_out = HdbFlow_monthly(commaddr)
-            water_out += sum([monthly_out[k] for k in monthly_out.keys()])
+            monthly_use = HdbFlow_monthly(commaddr)
+            for k in monthly_use.keys():
+                if k in monthly_out.keys():
+                    monthly_out[k] += monthly_use[k]
+                else:
+                    monthly_out[k] = monthly_use[k]
+        water_out = sum([monthly_out[k] for k in monthly_out.keys()])
+        
         # 售水量 = 所有贸易结算表的和
         water_sale = 0
+        monthly_sale = {}
         meter_sale = dmastations_list.filter(dmametertype='贸易结算表')
+
         for m in meter_sale:
             commaddr = m.commaddr
-            monthly_sale = HdbFlow_monthly(commaddr)
-            water_sale += sum([monthly_sale[k] for k in monthly_sale.keys()])
+            monthly_use = HdbFlow_monthly(commaddr)
+            for k in monthly_use.keys():
+                if k in monthly_sale.keys():
+                    monthly_sale[k] += monthly_use[k]
+                else:
+                    monthly_sale[k] = monthly_use[k]
+
+        water_sale += sum([monthly_sale[k] for k in monthly_sale.keys()])
+        
         # 未计量水量 = 所有未计费水表的和
         water_uncount = 0
-        meter_uncount = dmastations_list.filter(dmametertype='贸易结算表')
+        monthly_uncount = {}
+        meter_uncount = dmastations_list.filter(dmametertype='未计费水表')
         for m in meter_uncount:
             commaddr = m.commaddr
-            monthly_uncount = HdbFlow_monthly(commaddr)
-            water_uncount += sum([monthly_uncount[k] for k in monthly_uncount.keys()])
+            monthly_use = HdbFlow_monthly(commaddr)
+            for k in monthly_use.keys():
+                if k in monthly_uncount.keys():
+                    monthly_uncount[k] += monthly_use[k]
+                else:
+                    monthly_uncount[k] = monthly_use[k]
+        water_uncount = sum([monthly_uncount[k] for k in monthly_uncount.keys()])
+        
         # 漏损量 = 供水量-售水量-未计费水量 分区内部进水表要减去自己内部出水表才等于这个分区的供水量
 
         return {

@@ -585,6 +585,7 @@
             var myChart = echarts.init(document.getElementById('onlineGraphics'));
             var online = "";
             var influx;
+            var outflux;
             var total;
             var leak;
             var uncharg;
@@ -602,6 +603,7 @@
                 online = data.obj.online;
                 stasticinfo = data.obj.stationsstastic;
                 influx = data.obj.influx;
+                outflux = data.obj.outflux;
                 total = data.obj.total;
                 leak = data.obj.leak;
                 uncharg = data.obj.uncharg;
@@ -953,6 +955,7 @@
             myChart.setOption(option);
             
             $("#influx").html( influx);
+            $("#outflux").html( outflux);
             $("#total").html( total);
             $("#leak").html( leak);
             $("#uncharg").html( uncharg);

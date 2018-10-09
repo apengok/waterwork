@@ -85,3 +85,5 @@ if settings.DEBUG:
 
 handler404 = error_404
 handler500 = error_500
+
+import waterwork.jobs
