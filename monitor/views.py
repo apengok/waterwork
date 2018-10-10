@@ -174,13 +174,13 @@ class RealTimeDataView(LoginRequiredMixin,TemplateView):
 
         return context          
 
-
+# 返回实时数据页面站点列表
 def stationlist(request):
     
     draw = 1
     length = 0
     start=0
-    print('userlist:',request.user)
+    
     if request.method == "GET":
         draw = int(request.GET.get("draw", 1))
         length = int(request.GET.get("length", 10))
@@ -204,44 +204,31 @@ def stationlist(request):
         districtId = request.POST.get("districtId")
         simpleQueryParam = request.POST.get("simpleQueryParam")
         # print(request.POST.get("draw"))
-        print("groupName",groupName)
-        print("districtId:",districtId)
+        # print("groupName",groupName)
+        # print("districtId:",districtId)
         # print("post simpleQueryParam",simpleQueryParam)
-    print("order_column:",order_column)
-    print("order:",order)
-
-    print("get userlist:",draw,length,start,search_value)
-    t0=time.time()
+    
+    
     user = request.user
     organs = user.belongto
 
     stations = user.station_list_queryset(simpleQueryParam) 
-    print('1.',time.time()-t0)
-    # stations = stations[start:start+length]
-    # if order == "asc":
-    #     stations = user.station_list_queryset(simpleQueryParam).order_by("meter__serialnumber")
-    # else:
-    #     stations = user.station_list_queryset(simpleQueryParam).order_by("-meter__serialnumber")
-
-    # meters = Meter.objects.all()
+    
     if groupName != "":
         stations = stations.filter(belongto__uuid=groupName)
-    print('2.',time.time()-t0)
-    # 一次获取全部数据，减少读取数据库耗时
+    
+    # 一次获取全部所需数据，减少读取数据库耗时
     stations_value_list = stations.values_list('meter__simid__simcardNumber','username','belongto__name','meter__serialnumber','meter__dn')
-    print('3.',time.time()-t0)
+    
     bgms = Bigmeter.objects.all().order_by('-fluxreadtime').values_list('commaddr','commstate','fluxreadtime','pickperiod','reportperiod',
         'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen')
-    print('4.',time.time()-t0)
+    
     alams_sets = Alarm.objects.values('commaddr').annotate(Count('id'))
     alarm_dict = {}
     for alm in alams_sets:
         alarm_dict[alm['commaddr']] = alm['id__count']
     
-    print('4.5.',time.time()-t0)
-    # alams_list = [a[0] for a in alams_sets]
-    print('5.',time.time()-t0)
-    # stations = stations[start:start+length]
+    
 
     # 用户权限拥有的站点通讯识别号
     commaddrs = [s[0] for s in stations_value_list ]
@@ -249,7 +236,7 @@ def stationlist(request):
     tmp_bgms = [b for b in bgms if b[0] in commaddrs]
     # print("tmp_bgms",tmp_bgms)
     # print("stations",stations)
-    print('6.',time.time()-t0)
+    
     def bgm_data(b):
         # query station from bigmeter commaddrss
         commaddr = b[0]
@@ -289,18 +276,15 @@ def stationlist(request):
             return None
     data = []
     
-    t=0
+    
     for b in tmp_bgms[start:start+length]:  #[start:start+length]
         
-        t1=time.time()
         ret=bgm_data(b)
-        t2=time.time()-t1
         
-        t+=t2
         if ret is not None:
             data.append(ret)
     
-    print('time elapse ',t)
+    
     recordsTotal = stations.count()
     # recordsTotal = bgms.count()
     
@@ -315,8 +299,8 @@ def stationlist(request):
     result["start"] = 0
     result["end"] = 0
 
-    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
-    print('whole time elpase ',time.time()-t0)
+    # print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
     return HttpResponse(json.dumps(result))
 
 
