@@ -19,7 +19,7 @@ from django.contrib.auth.models import Permission
 from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.db.models import Count
 from accounts.models import User,MyRoles
 
 from legacy.models import HdbFlowDataDay,HdbFlowDataMonth,Bigmeter,Alarm
@@ -211,11 +211,12 @@ def stationlist(request):
     print("order:",order)
 
     print("get userlist:",draw,length,start,search_value)
-
+    t0=time.time()
     user = request.user
     organs = user.belongto
 
     stations = user.station_list_queryset(simpleQueryParam) 
+    print('1.',time.time()-t0)
     # stations = stations[start:start+length]
     # if order == "asc":
     #     stations = user.station_list_queryset(simpleQueryParam).order_by("meter__serialnumber")
@@ -225,60 +226,81 @@ def stationlist(request):
     # meters = Meter.objects.all()
     if groupName != "":
         stations = stations.filter(belongto__uuid=groupName)
+    print('2.',time.time()-t0)
+    # 一次获取全部数据，减少读取数据库耗时
+    stations_value_list = stations.values_list('meter__simid__simcardNumber','username','belongto__name','meter__serialnumber','meter__dn')
+    print('3.',time.time()-t0)
+    bgms = Bigmeter.objects.all().order_by('-fluxreadtime').values_list('commaddr','commstate','fluxreadtime','pickperiod','reportperiod',
+        'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen')
+    print('4.',time.time()-t0)
+    alams_sets = Alarm.objects.values('commaddr').annotate(Count('id'))
+    alarm_dict = {}
+    for alm in alams_sets:
+        alarm_dict[alm['commaddr']] = alm['id__count']
     
-    bgms = Bigmeter.objects.all().order_by('-fluxreadtime')
+    print('4.5.',time.time()-t0)
+    # alams_list = [a[0] for a in alams_sets]
+    print('5.',time.time()-t0)
     # stations = stations[start:start+length]
 
-    commaddrs = [s.commaddr for s in stations[start:start+length] ]
+    # 用户权限拥有的站点通讯识别号
+    commaddrs = [s[0] for s in stations_value_list ]
     # print("commaddrs",commaddrs)
-    tmp_bgms = [b for b in bgms if b.commaddr in commaddrs]
+    tmp_bgms = [b for b in bgms if b[0] in commaddrs]
     # print("tmp_bgms",tmp_bgms)
     # print("stations",stations)
+    print('6.',time.time()-t0)
     def bgm_data(b):
         # query station from bigmeter commaddrss
-        commaddr = b.commaddr
-        alarm_count = Alarm.objects.filter(commaddr=commaddr).count()
+        commaddr = b[0]
+        alarm_count = alarm_dict[commaddr]
+
         # print('alarm_count',alarm_count,commaddr)
-        
-        try:
-            s = stations.select_related("meter__simid").select_related("belongto").get(meter__simid__simcardNumber=commaddr)   #meter__simid__simcardNumber
-        except :
-            s = None
+        s=None
+        for s0 in stations_value_list:
+            if s0[0] == commaddr:
+                s=s0
+        # try:
+        #     s =  stations.select_related("meter__simid").select_related("belongto").get(meter__simid__simcardNumber=commaddr)   #meter__simid__simcardNumber
+        # except :
+        #     s = None
         if s:
         
             return {
-                "stationname":s.username,
-                "belongto":s.belongto.name if s else '-',
-                "serialnumber":s.meter.serialnumber if s.meter else '-',#
+                "stationname":s[1],
+                "belongto":s[2],
+                "serialnumber":s[3],#
                 "alarm":alarm_count,
-                "status":b.commstate,
-                "dn":s.meter.dn if s.meter else '-',
-                "readtime":b.fluxreadtime ,
-                "collectperiod":0,
-                "updataperiod":0,
-                "influx":round(float(b.flux),2) if b.flux else '',
-                "plusflux":round(float(b.plustotalflux),2)  if b.plustotalflux else '',
-                "revertflux":round(float(b.reversetotalflux),2) if b.reversetotalflux else '',
-                "press":round(float(b.pressure),2) if b.pressure else '',
-                "baseelectricity":round(float(b.meterv),2) if b.meterv else '',
-                "remoteelectricity":round(float(b.gprsv),2) if b.gprsv else '',
-                "signal":round(float(b.signlen),2) if b.signlen else '',
+                "status":b[1],
+                "dn":s[4],
+                "readtime":b[2] ,
+                "collectperiod":b[3],
+                "updataperiod":b[4],
+                "influx":round(float(b[5]),2) if b[5] else '',
+                "plusflux":round(float(b[6]),2)  if b[6] else '',
+                "revertflux":round(float(b[7]),2) if b[7] else '',
+                "press":round(float(b[8]),2) if b[8] else '',
+                "baseelectricity":round(float(b[9]),2) if b[9] else '',
+                "remoteelectricity":round(float(b[10]),2) if b[10] else '',
+                "signal":round(float(b[11]),2) if b[11] else '',
                 
             }
         else:
             return None
     data = []
     
-    
-    for b in tmp_bgms:  #[start:start+length]
+    t=0
+    for b in tmp_bgms[start:start+length]:  #[start:start+length]
+        
         t1=time.time()
         ret=bgm_data(b)
         t2=time.time()-t1
-        print("---t---",t2)
+        
+        t+=t2
         if ret is not None:
             data.append(ret)
     
-
+    print('time elapse ',t)
     recordsTotal = stations.count()
     # recordsTotal = bgms.count()
     
@@ -294,7 +316,7 @@ def stationlist(request):
     result["end"] = 0
 
     print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
-    
+    print('whole time elpase ',time.time()-t0)
     return HttpResponse(json.dumps(result))
 
 

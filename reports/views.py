@@ -3,6 +3,7 @@
 import json
 import random
 import datetime
+import time 
 
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView,DeleteView,FormView
@@ -66,7 +67,7 @@ class DmastaticsView(LoginRequiredMixin,TemplateView):
 
 
 def dmareport(request):
-    print("dmareport:",request.POST)
+    # print("dmareport:",request.POST)
 
     stationid = request.POST.get("station") or '' # DMABaseinfo pk
     endTime = request.POST.get("endTime") or ''
@@ -80,10 +81,7 @@ def dmareport(request):
 
     data = []
     sub_dma_list = []
-    print(startTime,'-',endTime)
-    # etime = datetime.datetime.strptime(endTime.strip(),"%Y-%m-%d")
-    # stime = etime - datetime.timedelta(days=10)
-    # startTime = stime.strftime("%Y-%m-%d")
+    
     echart_data = {}
     def month_year_iter( start_month, start_year, end_month, end_year ):
         ym_start= 12*start_year + start_month
@@ -94,7 +92,7 @@ def dmareport(request):
             yield '{}-{:02d}'.format(y,m+1)
 
     month_list = month_year_iter(lastyear.month,lastyear.year,today.month,today.year)
-    print(month_list)
+    # print(month_list)
     for m in month_list:
         # print (m)
         if m not in echart_data.keys():
@@ -178,12 +176,12 @@ def dmareport(request):
     
     # if dmas.first().dma_name == '文欣苑' or dmas.first().dma_no== '301':
     for dma in dmas:
-        print('dma static',dma)
-
+        
         # dma = dmas.first()
+        t1 = time.time()
         dmareport = dma.dma_statistic()
-        print('dmareport',dmareport)
-
+        print('time elapse ',time.time() - t1)
+        
         water_in = dmareport['water_in']
         water_out = dmareport['water_out']
         water_sale = dmareport['water_sale']
@@ -259,13 +257,13 @@ def dmareport(request):
         total_uncharg += uncharg
         total_sale += sale
         total_cxc += cxc
-        print('total_influx',total_influx,water_in)
-        print('total_outflux',total_outflux,water_out)
-        print('total_total',total_total)
-        print('total_leak',total_leak)
-        print('total_uncharg',total_uncharg,water_uncount)
-        print('total_sale',total_sale,water_sale)
-        print('total_cxc',total_cxc)
+        # print('total_influx',total_influx,water_in)
+        # print('total_outflux',total_outflux,water_out)
+        # print('total_total',total_total)
+        # print('total_leak',total_leak)
+        # print('total_uncharg',total_uncharg,water_uncount)
+        # print('total_sale',total_sale,water_sale)
+        # print('total_cxc',total_cxc)
         
 
         #记录每个dma分区的统计信息

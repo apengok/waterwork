@@ -2,6 +2,7 @@
 
 import json
 import datetime
+import time
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
 
 
@@ -59,7 +60,10 @@ def HdbFlow_month_use(commaddr,day):
         取出当月所有数据，用最后一笔数据的正向流量值减去第一条数据的差值得出当月用水量的值
     '''
     month_use = 0
+    t1=time.time()
     flows = HdbFlowData.objects.search(commaddr,day).exclude(plustotalflux__icontains='429490176').values_list('readtime','plustotalflux')
+    t2=time.time()
+    # print('HdbFlow_month_use time elpse',t2-t1)
     # print(flows)
     n=flows.count()
     if n > 0:
@@ -90,13 +94,26 @@ def HdbFlow_monthly(commaddr):
             y, m = divmod( ym, 12 )
             # yield y, m+1
             yield '{}-{:02d}'.format(y,m+1)
-
-    month_list = month_year_iter(lastyear.month,lastyear.year,today.month,today.year)
-    # print(month_list)
+    
+    month_list = list(month_year_iter(lastyear.month,lastyear.year,today.month,today.year))
+    # mon = ['2017-11', '2017-12', '2018-01', '2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', '2018-08', '2018-09', '2018-10']
+    today = datetime.date.today()
+    flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[month_list[0],today]).exclude(plustotalflux__icontains='429490176').values_list('readtime','plustotalflux')
+    # 一次获取整年的数据再按月统计，减少查询数据库次数，查询数据库比较耗时
+    # print(list(month_list))
+    t=0
     for m in month_list:
-        
+
         if m not in monthly_data.keys():
             monthly_data[m] = 0
-        month_use = HdbFlow_month_use(commaddr,m)
+        
+        month_flow_list = [float(f[1]) for f in flows if f[0][:7] == m]
+        
+        if len(month_flow_list) == 0:
+            month_use = 0
+        else:
+            month_use = month_flow_list[-1] - month_flow_list[0] #HdbFlow_month_use(commaddr,m)
+        
         monthly_data[m] = round(month_use,2)
+    
     return monthly_data

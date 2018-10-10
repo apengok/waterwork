@@ -144,8 +144,9 @@ class Bigmeter(models.Model):
     dosagealarm = models.IntegerField(db_column='DosageAlarm', blank=True, null=True)  # Field name made lowercase.
     dosageup = models.CharField(db_column='DosageUp', max_length=64, blank=True, null=True)  # Field name made lowercase.
     dosagedown = models.CharField(db_column='DosageDown', max_length=64, blank=True, null=True)  # Field name made lowercase.
-
-    # station = models.OneToOneField('dmam.Station',on_delete=models.CASCADE)
+    pickperiod = models.CharField(db_column='PickPeriod', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    reportperiod = models.CharField(db_column='ReportPeriod', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    
     objects = BigmeterManager()
 
     class Meta:

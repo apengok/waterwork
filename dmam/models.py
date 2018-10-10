@@ -79,15 +79,24 @@ class DMABaseinfo(models.Model):
         return self.dma_name        
 
     def dma_statistic(self):
+        
         dmastations_list = self.station_set.all()
+        
+        # dmastations_list2 = self.station_set.values_list('meter__simid__simcardNumber','dmametertype')
+        
+
+        
         # meter_types = ["出水表","进水表","贸易结算表","未计费水表","官网检测表"] 管网监测表
         # 进水表  加和---> 进水总量
         water_in = 0
         monthly_in = {}
         meter_in = dmastations_list.filter(dmametertype='进水表')
+        
         for m in meter_in:
             commaddr = m.commaddr
+            
             monthly_use = HdbFlow_monthly(commaddr)
+            
             for k in monthly_use.keys():
                 if k in monthly_in.keys():
                     monthly_in[k] += monthly_use[k]
@@ -537,7 +546,7 @@ class Station(models.Model):
             ret_str = "{} m³".format(round(float(flow_value),2))
         return ret_str
 
-# 按小时统计的聚合
+# 按小时统计的聚合Alarm.objects.values('commaddr').annotate(Count('id'))
     def flow_hour_aggregate(self,startTime,endTime):
 
         avg_str = "-"

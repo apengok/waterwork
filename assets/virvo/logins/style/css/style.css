@@ -27,12 +27,14 @@ body, div, p, ul, li, span {
 .top {
     height: 744px;
     width: 100%;
+    min-width:1200px;
     background: url(img/top-bg.jpg) no-repeat center center;
 }
 .top-bg {
 	background: url(img/bg1_repeat.png);
 	height: 744px;
 	width: 100%;
+
 }
 .top .main {
     width: 1200px;
@@ -659,6 +661,7 @@ body, div, p, ul, li, span {
 
 .screen-s7-bg {
 	width: 100%;
+    min-width:1200px;
 	background:#FFF url(img/bg2_1_repeat.png);
 	height: 434px;
 }
@@ -734,12 +737,14 @@ body, div, p, ul, li, span {
 
 .screen-s8-bg {
 	width: 100%;
+    min-width:1200px;
 	background: url(img/bg2_2_repeat.png) ;
     height: 90px;
 }
 
 .screen-s8 {
 	width: 100%;
+    min-width:1200px;
 	background: url(img/bottom-bg-2.jpg) no-repeat top center;
 	min-height:157px;
 }
