@@ -240,7 +240,7 @@ def stationlist(request):
     def bgm_data(b):
         # query station from bigmeter commaddrss
         commaddr = b[0]
-        alarm_count = alarm_dict[commaddr]
+        alarm_count = alarm_dict.get(commaddr,0)
 
         # print('alarm_count',alarm_count,commaddr)
         s=None
