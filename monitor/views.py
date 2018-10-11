@@ -14,6 +14,7 @@ from django.shortcuts import render,HttpResponse
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView,DeleteView,FormView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 from django.contrib.auth.models import Permission
 from django.utils.safestring import mark_safe
@@ -142,6 +143,75 @@ class MapStationView(LoginRequiredMixin,TemplateView):
         
 
         return context          
+
+# 返回站点地图组织树下站点信息
+@login_required
+def getmapstationlist(request):
+    print('getmapstationlist:',request.POST)
+
+    groupName = request.POST.get("groupName")
+    user = request.user
+    organs = user.belongto
+
+    stations = user.station_list_queryset('') 
+    
+    if groupName != "":
+        stations = stations.filter(belongto__cid=groupName)
+    
+    # 一次获取全部所需数据，减少读取数据库耗时
+    stations_value_list = stations.values_list('meter__simid__simcardNumber','username','belongto__name',
+        'meter__serialnumber','meter__metertype','meter__dn','lng','lat')
+    
+    bgms = Bigmeter.objects.all().values_list('commaddr','commstate','fluxreadtime','flux','totalflux','pressure','signlen')
+    
+    def append_data(s):
+        # query station from bigmeter commaddrss
+        commaddr = s[0]
+        b=None
+        for b0 in bgms:
+            if b0[0] == commaddr:
+                b = b0
+        if s[5] is None:
+            return None
+        if s[6] is None:
+            return None
+        if b:
+        
+            return {
+                "stationname":s[1],
+                "belongto":s[2],
+                "serialnumber":s[3],#
+                "metertype":s[4],
+                "dn":s[5],
+                "lng":s[6],
+                "lat":s[7],
+                "status":b[1],
+                "readtime":b[2] ,
+                "flux":b[3],
+                "totalflux":b[4],
+                "press":round(float(b[5]),2) if b[5] else '',
+                "signal":round(float(b[6]),2) if b[6] else '',
+                
+            }
+        else:
+            return None
+
+    data = []
+    # s:station b:bigmeter
+    for s in stations_value_list:
+
+        ret=append_data(s)
+        
+        if ret is not None:
+            data.append(ret)
+
+
+    result = dict()
+    result["success"] = "true"
+    result["obj"] = data
+    
+    
+    return HttpResponse(json.dumps(result))
 
 
 class RealTimeDataView(LoginRequiredMixin,TemplateView):

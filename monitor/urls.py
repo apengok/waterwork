@@ -13,6 +13,7 @@ urlpatterns = [
 
     # 站点地图
     url(r'^mapstation/?$',views.MapStationView.as_view(),name='mapstation'),
+    url(r'^getmapstationlist/$',views.getmapstationlist,name='getmapstationlist'),
     
     # 实时曲线
     url(r'^realcurlv/?$',views.RealcurlvView.as_view(),name='realcurlv'),

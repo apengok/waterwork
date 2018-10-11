@@ -122,18 +122,13 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
     default_next = '/entm/'
 
     def form_valid(self, form):
-        print('login form')
-        print(self.request.POST)
-        print(form)
-        # context = super(LoginView, self).get_context_data(*args, **kwargs)
-        # if form.cleaned_data['captchaCode'] == '':
-        #     context['errmsg'] = "请滑动滑块到右边"
+        
         user = self.request.user
         p = Personalized.objects.filter(belongto=user.belongto) #.filter(ptype="custom")
 
         if p.exists():
             next_path = p.first().frontPageMsgUrl
-            print("next path:",next_path)
+            
             if next_path is None or len(next_path) == 0:
                 next_path = self.get_next_url()
         else:

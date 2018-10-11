@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-
+{% block stylesheet %}
 <style type="text/css">
         #container {
             background-color: white !important;
@@ -51,11 +51,21 @@
     border-top-color: rgba(255,255,255,0.9);
 }
 
+
 .overlay button + button {
     float: right;
 }
-    </style>
 
+.info {
+    /*display: none;*/
+    /*position: absolute;*/
+    background: rgba(255,255,255,0.9);
+    
+}
+
+
+    </style>
+{% endblock %}
 
 {% block main_content %}
 
@@ -63,7 +73,7 @@
     <div >
         <!-- <div id="js-map" class="map"></div> -->
       <div id="map-container" ></div> 
-      <div id="js-overlay" class="overlay" >
+      <div id="js-overlay" class="overlay2" >
           <div>站点名称:<span class="map_span" style="color: #0099CC;">东门小学</span></div>
           <div>所属组织:<span class="map_span">龙岗分公司</span></div>
           <div>关联表具:<span class="map_span">170524</span></div>
@@ -78,43 +88,7 @@
           <div>管网压力:<span class="map_span">0.054MPa</span></div>
           <div>信号强度:<span class="map_span">25</span></div>
         </div>
-        <div id="js-overlay2" class="overlay2" >
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区名称:</label>
-                  <label class="col-md-7 control-label" id="dma_name"><span style="color: #0099CC;"></span></label>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">所属组织:</label>
-                  <label class="col-md-7 control-label" id="belongto"><span "></span></label>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区层级:</label>
-                  <label class="col-md-7 control-label" id="dma_level"><span "></span></label>
-                </div>
-                <br>
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">状态:</label>
-                  <label class="col-md-7 control-label" id="dma_status"><span style="color: #2ce80b;"></span></label>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区流量:</label>
-                  <label class="col-md-7 control-label" id="dmaflow"><span ></span></label>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">当月售水量:</label>
-                  <label class="col-md-7 control-label" id="month_sale"><span ></span></label>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">上月售水量:</label>
-                  <label class="col-md-7 control-label" id="lastmonth_sale"><span ></span></label>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-5 control-label" style="margin-left: 0,margin-right: 0;text-align: right;">上月增长比例:</label>
-                  <label class="col-md-7 control-label" id="bili"><span ></span></label>
-                </div>
-              
-              
-        </div>
+        
 
     </div>
     <!-- <div class="panel panel-default contPanelMargin">
