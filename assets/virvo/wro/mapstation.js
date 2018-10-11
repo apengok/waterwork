@@ -86,11 +86,11 @@
         infoWindow:function(){
             // overlay = document.getElementById('js-overlay');
             markerInfoWindow = new AMap.InfoWindow({
-                // isCustom: true,  //使用自定义窗体
+                isCustom: true,  //使用自定义窗体
                 // content: mapStation.createInfoWindow("title", overlay.innerHTML),
                 // size:new AMap.Size(400,300),
-                // offset: new AMap.Pixel(16, -50),
-                // autoMove: true
+                offset: new AMap.Pixel(16, -45),
+                autoMove: true
             });
             return markerInfoWindow;
         },
@@ -126,31 +126,35 @@
             //info.style.width = "400px";
             // 定义顶部标题
             var stationname = document.createElement("div");
-            stationname.innerHTML = "站点名称:" + content.stationname;
+            stationname.innerHTML = "站点名称:" ;
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.stationname;
+            stationname.appendChild(span);
             info.appendChild(stationname);
             
             var belongto = document.createElement("div");
-            belongto.innerHTML = "所属组织:" + content.belongto;;
+            belongto.innerHTML = "所属组织:" + content.belongto;
             info.appendChild(belongto);
             
             var relatemeter = document.createElement("div");
-            relatemeter.innerHTML = "关联表具:" + content.serialnumber;;
+            relatemeter.innerHTML = "关联表具:" + content.serialnumber;
             info.appendChild(relatemeter);
             
             var metertype = document.createElement("div");
-            metertype.innerHTML = "表具类型:" + content.metertype;;
+            metertype.innerHTML = "表具类型:" + content.metertype;
             info.appendChild(metertype);
             
             var meterdn = document.createElement("div");
-            meterdn.innerHTML = "表具口径:" + content.dn;;
+            meterdn.innerHTML = "表具口径:" + content.dn;
             info.appendChild(meterdn);
             
             var meterstate = document.createElement("div");
-            meterstate.innerHTML = "状态:" + content.status;;
+            meterstate.innerHTML = "状态:" + content.status;
             info.appendChild(meterstate);
             
             var readtime = document.createElement("div");
-            readtime.innerHTML = "采集时间:" + content.readtime;;
+            readtime.innerHTML = "采集时间:" + content.readtime;
             info.appendChild(readtime);
             
             var flux = document.createElement("div");
@@ -158,18 +162,28 @@
             info.appendChild(flux);
             
             var accumuflux = document.createElement("div");
-            accumuflux.innerHTML = "累积流量:" + content.totalflux;;
+            accumuflux.innerHTML = "累积流量:" + content.totalflux;
             info.appendChild(accumuflux);
             
             var press = document.createElement("div");
-            press.innerHTML = "管网压力:" + content.press;;
+            press.innerHTML = "管网压力:" + content.press;
             info.appendChild(press);
             
             var signlen = document.createElement("div");
-            signlen.innerHTML = "信号强度:" + content.signal;;
+            signlen.innerHTML = "信号强度:" + content.signal;
             info.appendChild(signlen);
             
-            console.log(info);
+            
+            // 定义底部内容
+            var bottom = document.createElement("div");
+            bottom.className = "info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '0px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "http://webapi.amap.com/images/sharp.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
             return info;
         },
         //关闭信息窗体
