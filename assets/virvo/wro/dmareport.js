@@ -78,6 +78,7 @@
                     data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
                         "isOrg" : "1",
+                        "isDma" : "1"
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: dmaReport.ajaxDataFilter

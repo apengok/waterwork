@@ -80,6 +80,7 @@ AUTHENTICATION_BACKENDS = (
     # 'guardian.backends.ObjectPermissionBackend',
 )
 
+X_FRAME_OPTIONS = 'ALLOW-FROM http://220.179.118.150:8082/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

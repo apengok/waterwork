@@ -71,13 +71,14 @@
             treeSetting = {
                 async : {
                     url : "/shexian/district/dmatree/",
-                    type : "post",
+                    type : "get",
                     enable : true,
                     autoParam : [ "id" ],
                     dataType : "json",
                     data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
                         "isOrg" : "1",
+                        "isDma" : "1"
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: dmaReport.ajaxDataFilter
@@ -436,7 +437,7 @@
             var endTime = $("#endtime").val()
 
             var data = {"organ": organ,"treetype":selectTreeType,"station":station,"endTime": endTime};
-            json_ajax("POST", url, "json", false, data, dmaReport.findOnline);     //发送请求
+            json_ajax("GET", url, "json", false, data, dmaReport.findOnline);     //发送请求
         },
         validates: function () {
             return $("#hourslist").validate({

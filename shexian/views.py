@@ -24,8 +24,8 @@ from entm.models import Organizations
 def dmatree(request):   
     organtree = []
     
-    stationflag = request.POST.get("isStation") or ''
-    dmaflag = request.POST.get("isDma") or ''
+    stationflag = request.GET.get("isStation") or ''
+    dmaflag = request.GET.get("isDma") or ''
     
     
     organs = Organizations.objects.get(name="歙县自来水公司")
@@ -57,7 +57,7 @@ def dmatree(request):
                 "pId":o.cid,
                 "type":"dma",
                 "dma_no":d.dma_no,
-                "icon":"/static/virvo/resources/img/dma.png",
+                "icon":"/static/virvo/rGETesources/img/dma.png",
                 "uuid":''
             })
 
@@ -129,9 +129,9 @@ class DmastaticsView(TemplateView):
 def dmareport(request):
     # print("dmareport:",request.POST)
 
-    stationid = request.POST.get("station") or '' # DMABaseinfo pk
-    endTime = request.POST.get("endTime") or ''
-    treetype = request.POST.get("treetype") or ''
+    stationid = request.GET.get("station") or '' # DMABaseinfo pk
+    endTime = request.GET.get("endTime") or ''
+    treetype = request.GET.get("treetype") or ''
 
     today = datetime.date.today()
     endTime = today.strftime("%Y-%m")
@@ -434,10 +434,10 @@ def flowdata_mnf(request):
 
     print("shexian flowdata_mnf:",request.POST)
 
-    stationid = request.POST.get("station") # DMABaseinfo pk
-    treetype = request.POST.get("treetype")
-    startTime = request.POST.get("startTime")
-    endTime = request.POST.get("endTime")
+    stationid = request.GET.get("station") # DMABaseinfo pk
+    treetype = request.GET.get("treetype")
+    startTime = request.GET.get("startTime")
+    endTime = request.GET.get("endTime")
 
     data = []
 
@@ -515,7 +515,7 @@ def flowdata_mnf(request):
                     dmastation = None
     if dmastation is None:
         return HttpResponse(json.dumps(ret))
-    
+
     comaddr = dmastation.meter.simid.simcardNumber
     
     
