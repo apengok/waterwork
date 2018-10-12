@@ -57,7 +57,7 @@ def dmatree(request):
                 "pId":o.cid,
                 "type":"dma",
                 "dma_no":d.dma_no,
-                "icon":"/static/virvo/rGETesources/img/dma.png",
+                "icon":"/static/virvo/resources/img/dma.png",
                 "uuid":''
             })
 
