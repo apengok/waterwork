@@ -157,6 +157,69 @@ class Bigmeter(models.Model):
         return '%s%s'%(self.username)
 
 
+class Bigmeter2(models.Model):
+    username = models.CharField(db_column='UserName', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    usertype = models.CharField(db_column='UserType', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    userid = models.CharField(db_column='UserId', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    installationsite = models.CharField(db_column='InstallationSite', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    metertype = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    manufacturer = models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    model = models.CharField(db_column='Model', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    dn = models.CharField(db_column='Dn', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    material = models.CharField(db_column='Material', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    serialnumber = models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    madedate = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    lng = models.CharField(db_column='Lng', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    lat = models.CharField(db_column='Lat', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    coortype = models.CharField(db_column='CoorType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    commaddr = models.CharField(db_column='CommAddr', primary_key=True, max_length=30)  # Field name made lowercase.
+    simid = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    districtid = models.IntegerField(db_column='DistrictId', blank=True, null=True)  # Field name made lowercase.
+    # districtid = models.ForeignKey(District,db_column='DistrictId',related_name='bigmeter',blank=True, null=True,on_delete=models.CASCADE) 
+    field_metabinding = models.CharField(db_column='\r\nMetaBinding', max_length=20, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'.
+    gpflow = models.CharField(db_column='GPFlow', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    uplimitflow = models.CharField(db_column='UpLimitFlow', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    monthupflow = models.CharField(db_column='MonthUpFlow', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    monthdownflow = models.CharField(db_column='MonthDownFlow', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    commstate = models.IntegerField(db_column='CommState', blank=True, null=True)  # Field name made lowercase.
+    meterstate = models.CharField(db_column='MeterState', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    gprsv = models.CharField(db_column='GprsV', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    meterv = models.CharField(db_column='MeterV', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    downlimitv = models.CharField(db_column='DownLimitV', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    t = models.CharField(db_column='T', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    hearttime = models.CharField(db_column='HeartTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    signlen = models.CharField(db_column='SignLen', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    lastonlinetime = models.CharField(db_column='LastOnLineTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    createdate = models.CharField(db_column='CreateDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    alarmoffline = models.IntegerField(db_column='AlarmOffLine', blank=True, null=True)  # Field name made lowercase.
+    alarmonline = models.IntegerField(db_column='AlarmOnLine', blank=True, null=True)  # Field name made lowercase.
+    alarmgprsvlow = models.IntegerField(db_column='AlarmGprsVLow', blank=True, null=True)  # Field name made lowercase.
+    alarmmetervlow = models.IntegerField(db_column='AlarmMeterVLow', blank=True, null=True)  # Field name made lowercase.
+    alarmuplimitflow = models.IntegerField(db_column='AlarmUpLimitFlow', blank=True, null=True)  # Field name made lowercase.
+    alarmgpflow = models.IntegerField(db_column='AlarmGPFlow', blank=True, null=True)  # Field name made lowercase.
+    pressure = models.CharField(db_column='Pressure', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    plustotalflux = models.CharField(db_column='PlusTotalFlux', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    reversetotalflux = models.CharField(db_column='ReverseTotalFlux', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    flux = models.CharField(db_column='Flux', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    totalflux = models.CharField(db_column='TotalFlux', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    pressurereadtime = models.CharField(db_column='PressureReadTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    fluxreadtime = models.CharField(db_column='FluxReadTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    pressurealarm = models.IntegerField(db_column='PressureAlarm', blank=True, null=True)  # Field name made lowercase.
+    pressureup = models.CharField(db_column='PressureUp', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    pressuredown = models.CharField(db_column='PressureDown', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    dosagealarm = models.IntegerField(db_column='DosageAlarm', blank=True, null=True)  # Field name made lowercase.
+    dosageup = models.CharField(db_column='DosageUp', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    dosagedown = models.CharField(db_column='DosageDown', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    
+    # objects = BigmeterManager()
+
+    class Meta:
+        managed = False
+        db_table = 'bigmeter'
+
+    def __unicode__(self):
+        return '%s%s'%(self.username)
+
 class BindBigmeter(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     groupid = models.IntegerField(db_column='GroupId', blank=True, null=True)  # Field name made lowercase.

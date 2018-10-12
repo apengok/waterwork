@@ -101,32 +101,15 @@ def flowdata_mnf(request):
             else:
                 dmas |= o.dma.all()
     print('dmas:',dmas)
-
-    if len(dmas) == 0:
-        ret = {"exceptionDetailMsg":"null",
+    ret = {"exceptionDetailMsg":"null",
             "msg":"没有dma分区信息",
             "obj":{
                 "online":data, #reverse
-                # "today_use":round(float(today_use),2),
-                # "yestoday_use":round(float(yestoday_use),2),
-                # "last_year_same":round(float(last_year_same),2),
-                # "tongbi":round(tongbi,2),
-                # "huanbi":round(huanbi,2),
-                # "maxflow":round(maxflow,2),
-                # "minflow":round(minflow,2),
-                # "average":round(average,2),
-                # "mnf":round(mnf,2),
-                # "mnf_add":round(mnf_add,2),
-                # "ref_mnf":round(ref_mnf,2),
-                # "back_leak":round(back_leak,2),
-                # "alarm_set":round(alarm_set,2),
-
-
+                
             },
             "success":0}
 
-    
-    
+    if len(dmas) == 0:
         return HttpResponse(json.dumps(ret))
 
     # if stationid != '':
@@ -143,8 +126,12 @@ def flowdata_mnf(request):
 
 
     dma = dmas.first()
-    dmastation = dma.dmastation.first()
-    comaddr = dmastation.station_id
+    dmastation = dma.station_set.first()
+    
+    if dmastation is None:
+        return HttpResponse(json.dumps(ret))
+        
+    comaddr = dmastation.meter.simid.simcardNumber
     
     
     

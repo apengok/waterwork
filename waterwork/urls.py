@@ -63,6 +63,7 @@ urlpatterns = [
     url(r'^reports/', include('reports.urls', namespace='reports')),
     url(r'^sysm/', include('sysm.urls', namespace='sysm')),
 
+    url(r'^shexian/', include('shexian.urls', namespace='shexian')),
     # url(r'^testapp/', include('testapp.urls')),
     
     # url(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable

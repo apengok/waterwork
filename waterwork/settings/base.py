@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     # 'debug_toolbar',
     # 'channels',
     'django_apscheduler',
+    'shexian',
 ]
 
 

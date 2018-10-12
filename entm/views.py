@@ -76,10 +76,11 @@ def faviconredirect(request):
     print("fivaeon redirect")
     favicon_url = '/static/virvo/resources/img/favicon.ico'
     user = request.user
-    p = Personalized.objects.filter(belongto=user.belongto)
-    if p.exists():
-        if p.first().webIco is not None:
-            favicon_url = "/media/resources/img/logo/" + p.first().webIco
+    if user.is_authenticated:
+        p = Personalized.objects.filter(belongto=user.belongto)
+        if p.exists():
+            if p.first().webIco is not None:
+                favicon_url = "/media/resources/img/logo/" + p.first().webIco
 
     return HttpResponseRedirect(favicon_url)
 
