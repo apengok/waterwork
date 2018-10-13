@@ -12,9 +12,35 @@ def test_job():
     # print("I'm a test job!")
     logger_info.info("synchronize data from shexian")
     count = 0
-    bigmeters_qset = Bigmeter.objects.using("shexian").only('commaddr')
+    bigmeters_qset = Bigmeter.objects.using("shexian").values_list('commaddr','commstate','meterstate','gprsv','meterv',
+                'signlen','lastonlinetime','pressure','plustotalflux','reversetotalflux','flux','totalflux','pressurereadtime',
+                'fluxreadtime','username')
+
     for b in bigmeters_qset:
-        commaddr = b.commaddr
+        commaddr = b[0]
+
+        try:
+            d2=Bigmeter.objects.using("zncb").get(commaddr=commaddr)
+        except:
+            logger_info.info("{} {} not exists in virovo db".format(b[14],b[0]))
+            continue
+        if d2:
+            d2.commstate = b[1]
+            d2.meterstate = b[2]
+            d2.gprsv = b[3]
+            d2.meterv = b[4]
+            d2.signlen = b[5]
+            d2.lastonlinetime = b[6]
+            d2.pressure = b[7]
+            d2.plustotalflux = b[8]
+            d2.reversetotalflux = b[9]
+            d2.flux = b[10]
+            d2.totalflux = b[11]
+            d2.pressurereadtime = b[12]
+            d2.fluxreadtime = b[13]
+            
+            d2.save(using='zncb')
+
         # logger_info.info("1.hdb_flow_data")
         # 威尔沃数据库最后一条数据记录
         zncb_last = HdbFlowData.objects.using("zncb").filter(commaddr=commaddr).last()

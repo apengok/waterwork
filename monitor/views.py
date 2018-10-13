@@ -185,7 +185,7 @@ def getmapstationlist(request):
                 "dn":s[5],
                 "lng":s[6],
                 "lat":s[7],
-                "status":b[1],
+                "status":"在线" if b[1] == '1' else "离线",
                 "readtime":b[2] ,
                 "flux":b[3],
                 "totalflux":b[4],

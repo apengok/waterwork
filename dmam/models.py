@@ -713,3 +713,13 @@ def ensure_bigmeter_exists(sender, **kwargs):
             b.save()
         else:
             Bigmeter.objects.create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
+
+
+# class VConcentrator(models.Model):
+#     commaddr = models.CharField('通讯识别码',max_length=50, null=True,blank=True)
+#     belongto = models.ForeignKey(
+#         Organizations,
+#         on_delete=models.CASCADE,
+#         related_name='concentrator',
+#         # primary_key=True,
+#     )

@@ -128,49 +128,97 @@
             var stationname = document.createElement("div");
             stationname.innerHTML = "站点名称:" ;
             var span = document.createElement("span");
-            span.className = "span1";
+            span.className = "span2";
             span.innerHTML = content.stationname;
             stationname.appendChild(span);
             info.appendChild(stationname);
             
             var belongto = document.createElement("div");
-            belongto.innerHTML = "所属组织:" + content.belongto;
+            belongto.innerHTML = "所属组织:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.belongto;
+            belongto.appendChild(span);
             info.appendChild(belongto);
             
             var relatemeter = document.createElement("div");
-            relatemeter.innerHTML = "关联表具:" + content.serialnumber;
+            relatemeter.innerHTML = "关联表具:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.serialnumber;
+            relatemeter.appendChild(span);
             info.appendChild(relatemeter);
             
             var metertype = document.createElement("div");
-            metertype.innerHTML = "表具类型:" + content.metertype;
+            metertype.innerHTML = "表具类型:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.metertype;
+            metertype.appendChild(span);
             info.appendChild(metertype);
             
             var meterdn = document.createElement("div");
-            meterdn.innerHTML = "表具口径:" + content.dn;
+            meterdn.innerHTML = "表具口径:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.dn;
+            meterdn.appendChild(span);
             info.appendChild(meterdn);
             
             var meterstate = document.createElement("div");
-            meterstate.innerHTML = "状态:" + content.status;
+            meterstate.innerHTML = "状&nbsp; &nbsp; &nbsp; 态:";
+            var span = document.createElement("span");
+            if(content.status == "在线"){
+                span.className = "span3";
+            }else{
+                span.className = "span4";
+            }
+            span.innerHTML = content.status;
+            meterstate.appendChild(span);
             info.appendChild(meterstate);
             
+            var split = document.createElement("img");
+            split.src = "/static/virvo/images/u3922.png";
+            info.appendChild(split);
+
             var readtime = document.createElement("div");
-            readtime.innerHTML = "采集时间:" + content.readtime;
+            readtime.innerHTML = "采集时间:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.readtime;
+            readtime.appendChild(span);
             info.appendChild(readtime);
             
             var flux = document.createElement("div");
-            flux.innerHTML = "瞬时流量:" + content.flux;;
+            flux.innerHTML = "瞬时流量:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.flux;
+            flux.appendChild(span);
             info.appendChild(flux);
             
             var accumuflux = document.createElement("div");
-            accumuflux.innerHTML = "累积流量:" + content.totalflux;
+            accumuflux.innerHTML = "累积流量:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.totalflux;
+            accumuflux.appendChild(span);
             info.appendChild(accumuflux);
             
             var press = document.createElement("div");
-            press.innerHTML = "管网压力:" + content.press;
+            press.innerHTML = "管网压力:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.press;
+            press.appendChild(span);
             info.appendChild(press);
             
             var signlen = document.createElement("div");
-            signlen.innerHTML = "信号强度:" + content.signal;
+            signlen.innerHTML = "信号强度:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.signal;
+            signlen.appendChild(span);
             info.appendChild(signlen);
             
             
@@ -178,7 +226,7 @@
             var bottom = document.createElement("div");
             bottom.className = "info-bottom";
             bottom.style.position = 'relative';
-            bottom.style.top = '0px';
+            bottom.style.top = '10px';
             bottom.style.margin = '0 auto';
             var sharp = document.createElement("img");
             sharp.src = "http://webapi.amap.com/images/sharp.png";

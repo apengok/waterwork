@@ -18,7 +18,7 @@ scheduler.add_jobstore(DjangoJobStore(), "default")
 
 
 # 大表数据 从歙县服务器数据库同步到威尔沃服务器数据库
-@register_job(scheduler, "interval", seconds=3600, replace_existing=True)
+@register_job(scheduler, "interval", seconds=300, replace_existing=True)
 def test_job():
     time.sleep(random.randrange(1, 100, 1)/100.)
     # print("I'm a test job!")
@@ -34,22 +34,22 @@ def test_job():
         try:
             d2=Bigmeter.objects.using("zncb").get(commaddr=commaddr)
         except:
-            info_logger.info("{} {} not exists in virovo db".format(d[14],d[0]))
+            logger_info.info("{} {} not exists in virovo db".format(b[14],b[0]))
             continue
         if d2:
-            d2.commstate = d[1]
-            d2.meterstate = d[2]
-            d2.gprsv = d[3]
-            d2.meterv = d[4]
-            d2.signlen = d[5]
-            d2.lastonlinetime = d[6]
-            d2.pressure = d[7]
-            d2.plustotalflux = d[8]
-            d2.reversetotalflux = d[9]
-            d2.flux = d[10]
-            d2.totalflux = d[11]
-            d2.pressurereadtime = d[12]
-            d2.fluxreadtime = d[13]
+            d2.commstate = b[1]
+            d2.meterstate = b[2]
+            d2.gprsv = b[3]
+            d2.meterv = b[4]
+            d2.signlen = b[5]
+            d2.lastonlinetime = b[6]
+            d2.pressure = b[7]
+            d2.plustotalflux = b[8]
+            d2.reversetotalflux = b[9]
+            d2.flux = b[10]
+            d2.totalflux = b[11]
+            d2.pressurereadtime = b[12]
+            d2.fluxreadtime = b[13]
             
             d2.save(using='zncb')
 
