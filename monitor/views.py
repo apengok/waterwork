@@ -187,7 +187,7 @@ def getmapstationlist(request):
                 "lat":s[7],
                 "status":"在线" if b[1] == '1' else "离线",
                 "readtime":b[2] ,
-                "flux":b[3],
+                "flux":round(float(b[3]),2) if b[3] else '',
                 "totalflux":b[4],
                 "press":round(float(b[5]),2) if b[5] else '',
                 "signal":round(float(b[6]),2) if b[6] else '',

@@ -21411,8 +21411,8 @@ function error(XMLHttpRequest, textStatus, errorThrown){
 
 function beforeSend(XMLHttpRequest){
     
-    console.log('beforeSend?sdf');
     var csrftoken = getCookie('csrftoken');
+    console.log('beforeSend?sdf',csrftoken);
     XMLHttpRequest.setRequestHeader("X-CSRFToken", csrftoken);
     
     layer.load(2);
@@ -21636,7 +21636,7 @@ function getCookie(name) {
 (function($){  
 
     var csrftoken = getCookie('csrftoken');
-
+    console.log(csrftoken);
     function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));

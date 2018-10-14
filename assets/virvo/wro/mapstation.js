@@ -312,6 +312,7 @@
             mapStation.requireStation();
         },
         requireStation:function(){
+
             var data={"groupName":selectTreeId};
             var url="/monitor/getmapstationlist/";
             json_ajax("POST", url, "json", true,data,mapStation.buildstationinfo);

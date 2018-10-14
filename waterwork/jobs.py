@@ -18,7 +18,7 @@ scheduler.add_jobstore(DjangoJobStore(), "default")
 
 
 # 大表数据 从歙县服务器数据库同步到威尔沃服务器数据库
-@register_job(scheduler, "interval", seconds=300, replace_existing=True)
+@register_job(scheduler, "interval", seconds=3600, replace_existing=True)
 def test_job():
     time.sleep(random.randrange(1, 100, 1)/100.)
     # print("I'm a test job!")
