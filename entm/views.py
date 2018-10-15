@@ -232,6 +232,7 @@ def gettree(request):
 #         }],
 #     }
 
+# 基本权限树 ，默认全部勾选
 def buildbasetree():
     ctree = []
     
@@ -279,6 +280,8 @@ def buildbasetree():
             
 
     return ctree    
+
+
 
 
 def buildFrontbasetree2():
@@ -390,6 +393,7 @@ def buildFrontbasetree(request,permstree=None):
     
     return ctree
 
+# 根据角色本身的权限判断权限树是否勾选
 def buildchoicetree(request,permstree=None):
     ctree = []
     # print("buildtree permm:",permstree,type(permstree))
@@ -499,15 +503,19 @@ def choicePermissionTree(request):
     if len(rid) <= 0:
         user = request.user
         if user.is_admin:
+            print("i'm admin")
             return HttpResponse(json.dumps(buildbasetree()))
         permissiontree = user.Role.permissionTree
 
     else:
         instance = MyRoles.objects.get(rid=rid)
+        if instance.name == "超级管理员":    #超级用户直接返回全部权限
+            return HttpResponse(json.dumps(buildbasetree()))
         permissiontree = instance.permissionTree
 
 
     if len(permissiontree) > 0:
+
         ptree = json.loads(permissiontree)
         buildtree = buildchoicetree(request,ptree)
             

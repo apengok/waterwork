@@ -60,6 +60,7 @@ urlpatterns = [
     url(r'^entm/', include('entm.urls', namespace='entm')),
     url(r'^devm/', include('devm.urls', namespace='devm')),
     url(r'^dmam/', include('dmam.urls', namespace='dmam')),
+    url(r'^wirelessm/', include('wirelessm.urls', namespace='wirelessm')),
     url(r'^reports/', include('reports.urls', namespace='reports')),
     url(r'^sysm/', include('sysm.urls', namespace='sysm')),
 

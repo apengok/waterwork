@@ -1505,3 +1505,14 @@ class VehicleMangerView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "基础管理"
         
         return context  
+
+
+class NeighborhoodMangerView(LoginRequiredMixin,TemplateView):
+    template_name = "dmam/neighborhoodmanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(NeighborhoodMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "小区管理"
+        context["page_menu"] = "基础管理"
+        
+        return context  

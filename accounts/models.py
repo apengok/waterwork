@@ -176,6 +176,8 @@ class User(AbstractBaseUser,PermissionsMixin):
             return True
         if self.Role is None:
             return False
+        if self.Role.name == "超级管理员":
+            return True
         permissiontree = self.Role.permissionTree
 
         ptree = json.loads(permissiontree)
@@ -193,6 +195,8 @@ class User(AbstractBaseUser,PermissionsMixin):
             return True
         if self.Role is None:
             return False
+        if self.Role.name == "超级管理员":
+            return True
         permissiontree = self.Role.permissionTree
 
         ptree = json.loads(permissiontree)

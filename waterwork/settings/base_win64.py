@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     'reports',
     'sysm',
     'django_apscheduler',
-    # 'channels',
+    'wirelessm',
 ]
 
 

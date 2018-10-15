@@ -93,6 +93,18 @@ choicetreedict["dmam"] = {
             "secondmanager":{"name":"二供管理","url":"/dmam/secondmanager/","sub":{"name":"可写"}},
             "vediomanager":{"name":"视频管理","url":"/dmam/vediomanager/","sub":{"name":"可写"}},
             "vehiclemanager":{"name":"车辆管理","url":"/dmam/vehiclemanager/","sub":{"name":"可写"}},
+            "neighborhoodmanager":{"name":"小区管理","url":"/dmam/neighborhoodmanager/","sub":{"name":"可写"}},
+        }],
+    }
+
+choicetreedict["wirelessm"] = {
+        "name":"无线抄表",
+        "submenu":[{
+            "wlquerydata":{"name":"数据查询","url":"/dmam/wlquerydata/","sub":{"name":"可写"}},
+            "neighborhoodusedayly":{"name":"小区日用水","url":"/dmam/neighborhoodusedayly/","sub":{"name":"可写"}},
+            "neighborhoodusemonthly":{"name":"小区月用水","url":"/dmam/neighborhoodusemonthly/","sub":{"name":"可写"}},
+            "neighborhoodmetermanager":{"name":"户表管理","url":"/dmam/neighborhoodmetermanager/","sub":{"name":"可写"}},
+            
         }],
     }
 
