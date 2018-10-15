@@ -605,7 +605,7 @@ def flowdata_mnf(request):
             "average":average,
             "mnf":mnf,
             "ref_mnf":ref_mnf,
-            "press":press[i] if len(press)>0 else 0
+            "press":press[i] if i < len(press) else 0
             })
             
     
