@@ -98,7 +98,8 @@ def HdbFlow_monthly(commaddr):
     month_list = list(month_year_iter(lastyear.month,lastyear.year,today.month,today.year))
     # mon = ['2017-11', '2017-12', '2018-01', '2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', '2018-08', '2018-09', '2018-10']
     today = datetime.date.today()
-    flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[month_list[0],today]).exclude(plustotalflux__icontains='429490176').values_list('readtime','plustotalflux')
+    # flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[month_list[0],today]).exclude(plustotalflux__icontains='429490176').values_list('readtime','plustotalflux')
+    flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[month_list[0],today]).values_list('readtime','plustotalflux')
     # 一次获取整年的数据再按月统计，减少查询数据库次数，查询数据库比较耗时
     # print(list(month_list))
     t=0
