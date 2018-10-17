@@ -1,9 +1,12 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from legacy.models import HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,Bigmeter2
+from legacy.models import HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,Concentrator,Community
 import time
 import datetime
 import logging
+
+from dmam.models import VConcentrator,VWatermeter,VCommunity
+from entm.models import Organizations
 
 logger_info = logging.getLogger('info_logger')
 
@@ -195,6 +198,23 @@ class Command(BaseCommand):
             help='import bigmeter to new db'
         )
 
+
+        parser.add_argument(
+            '--concentrator',
+            action='store_true',
+            dest='concentrator',
+            default=False,
+            help='import concentrator to new db'
+        )
+
+        parser.add_argument(
+            '--community',
+            action='store_true',
+            dest='community',
+            default=False,
+            help='import community to new db'
+        )
+
         
 
     def handle(self, *args, **options):
@@ -382,8 +402,38 @@ class Command(BaseCommand):
                     
                     d2.save(using='zncb')
                     
+        if options['concentrator']:
+            
+            
+            # data_qset=HdbFlowData.objects.using("virvo").filter(readtime__range=[sTime,'2018-09-20'])
+            data_qset=Concentrator.objects.using("zncb").values_list('name','commaddr')
+            organ = Organizations.objects.get(name="歙县自来水公司")
+            for d in data_qset:
+                name = d[0]
+                commaddr = d[1]
+                
+                d2=VConcentrator.objects.filter(name=name)
+                
+                if not d2.exists():
+                    VConcentrator.objects.create(name=name,commaddr=commaddr,belongto=organ)
+                    
 
-        
+        if options['community']:
+            
+            
+            # data_qset=HdbFlowData.objects.using("virvo").filter(readtime__range=[sTime,'2018-09-20'])
+            data_qset=Community.objects.using("zncb").all()
+            organ = Organizations.objects.get(name="歙县自来水公司")
+            for d in data_qset:
+                name = d.name
+                address = d.address
+                
+                d2=VCommunity.objects.filter(name=name)
+                
+                if not d2.exists():
+                    count += 1
+                    VCommunity.objects.create(name=name,address=address,belongto=organ)
+                    
                 
         t2 = time.time() - t1
         self.stdout.write(self.style.SUCCESS(f'total {count}  Affected {aft} row(s)!,elapsed {t2}'))

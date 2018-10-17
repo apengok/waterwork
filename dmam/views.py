@@ -32,7 +32,7 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
-from . models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter
+from . models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter,VCommunity
 from .forms import StationsForm,StationsEditForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssignForm
 import os
@@ -1516,3 +1516,83 @@ class NeighborhoodMangerView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "基础管理"
         
         return context  
+
+# 小区列表
+def communitylist(request):
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    print("get userlist:",draw,length,start,search_value)
+
+    user = request.user
+    organs = user.belongto
+
+    # meters = user.meter_list_queryset(simpleQueryParam)
+    meters = Community.objects.all() #.filter(communityid=105)  #文欣苑105
+
+    def m_info(m):
+        
+        v=VCommunity.objects.filter(name=m.name).first()
+
+        return {
+            "id":m.pk,
+            # "simid":m.simid,
+            # "dn":m.dn,
+            # "belongto":m.belongto.name,#current_user.belongto.name,
+            # "metertype":m.metertype,
+            "name":v.name,
+            "belongto":v.belongto.name,
+            "address":m.address,
+            "concentrator":''
+            # "station":m.station_set.first().username if m.station_set.count() > 0 else ""
+        }
+    data = []
+
+    for m in meters[start:start+length]:
+        data.append(m_info(m))
+
+    recordsTotal = len(meters)
+    # recordsTotal = len(data)
+    
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))

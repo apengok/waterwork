@@ -15,6 +15,7 @@ from legacy.models import Bigmeter,District
 from django.utils.functional import cached_property
 import time
 from legacy.utils import HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,HdbFlow_monthly
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 
@@ -715,11 +716,80 @@ def ensure_bigmeter_exists(sender, **kwargs):
             Bigmeter.objects.create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
 
 
-# class VConcentrator(models.Model):
-#     commaddr = models.CharField('通讯识别码',max_length=50, null=True,blank=True)
-#     belongto = models.ForeignKey(
-#         Organizations,
-#         on_delete=models.CASCADE,
-#         related_name='concentrator',
-#         # primary_key=True,
-#     )
+
+# 小区
+class VCommunity(MPTTModel):
+    name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    parent  = TreeForeignKey('self', null=True, blank=True,on_delete=models.CASCADE, related_name='children', db_index=True)
+    
+    address = models.CharField(db_column='Address', max_length=128, blank=True, null=True)  # Field name made lowercase.
+
+    belongto = models.ForeignKey(
+        Organizations,
+        on_delete=models.CASCADE,
+        related_name='community',
+        # primary_key=True,
+    )
+
+    class Meta:
+        managed = True
+        db_table = 'vcommunity'
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+
+# 集中器
+class VConcentrator(models.Model):
+    name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    commaddr = models.CharField('通讯识别码',max_length=50, null=True,blank=True)
+    belongto = models.ForeignKey(
+        Organizations,
+        on_delete=models.CASCADE,
+        related_name='concentrator',
+        # primary_key=True,
+    )
+
+    communityid = models.ManyToManyField( VCommunity )
+
+    class Meta:
+        managed = True
+        db_table = 'vconcentrator'
+
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+
+# 水表 小表
+class VWatermeter(models.Model):
+    name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 适应歙县小表watermeterid
+    waterid = models.IntegerField(db_column='WaterId', blank=True, null=True)  # Field name made lowercase.
+    wateraddr = models.CharField(db_column='WaterAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    belongto = models.ForeignKey(
+        Organizations,
+        on_delete=models.CASCADE,
+        related_name='watermeter',
+        # primary_key=True,
+    )
+
+    communityid = models.ForeignKey( VCommunity ,on_delete=models.CASCADE,
+        related_name='watermeter',)
+
+    class Meta:
+        managed = True
+        db_table = 'vwatermeter'
+
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name

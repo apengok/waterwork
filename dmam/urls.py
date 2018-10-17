@@ -79,6 +79,8 @@ urlpatterns = [
 
     # 小区管理
     url(r'^neighborhoodmanager/?$', views.NeighborhoodMangerView.as_view(), name='neighborhoodmanager'),
+    url(r'^community/list/$',views.communitylist,name='communitylist'),
+
 
 
 ]
