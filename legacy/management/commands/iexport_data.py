@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from legacy.models import HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,Bigmeter2
+from legacy.models import HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,Watermeter,HdbWatermeterDay,HdbWatermeterMonth
 import time
 import datetime
 import logging
@@ -195,7 +195,37 @@ class Command(BaseCommand):
             help='import bigmeter to new db'
         )
 
-        
+        parser.add_argument(
+            '--concentrator',
+            action='store_true',
+            dest='concentrator',
+            default=False,
+            help='import concentrator to new db'
+        )
+
+        parser.add_argument(
+            '--hdb_watermeter_day',
+            action='store_true',
+            dest='hdb_watermeter_day',
+            default=False,
+            help='import hdb_watermeter_day to new db'
+        )
+
+        parser.add_argument(
+            '--hdb_watermeter_month',
+            action='store_true',
+            dest='hdb_watermeter_month',
+            default=False,
+            help='import hdb_watermeter_month to new db'
+        )
+
+        parser.add_argument(
+            '--watermeter',
+            action='store_true',
+            dest='watermeter',
+            default=False,
+            help='import watermeter to new db'
+        )
 
     def handle(self, *args, **options):
         # sTime = options['sTime']
@@ -382,8 +412,100 @@ class Command(BaseCommand):
                     
                     d2.save(using='zncb')
                     
+        if options['watermeter']:
+            
+            wmeters_qset = Watermeter.objects.using("shexian").values_list("id","communityid","rvalue","fvalue","meterstate","commstate",
+                "rtime","lastrvalue","lastrtime","dosage","valvestate","lastwritedate","lastwritevalue","meterv","wateraddr")
+            print("watermeter count",wmeters_qset.count())
+            cnt = 0
+            cnt2 = 0
+            for w in wmeters_qset:
+                waterid = w[0]
+                communityid = w[1]
+                wateraddr = w[14]
+                # watermeter data
+                try:
+                    v = Watermeter.objects.using("zncb").get(wateraddr=wateraddr)
+                except:
+                    # print("{} not exists in bsc2000".format(waterid))
+                    cnt += 1
+                    continue
 
-        
+                if v:
+                    if v.id != w[0]:
+                        v.id = w[0]
+                        cnt2 += 1
+                    v.rvalue = w[2]
+                    v.fvalue = w[3]
+                    v.meterstate = w[4]
+                    v.commstate = w[5]
+                    v.rtime = w[6]
+                    v.lastrvalue = w[7]
+                    v.lastrtime = w[8]
+                    v.dosage = w[9]
+                    v.valvestate = w[10]
+                    v.lastwritedate = w[11]
+                    v.lastwritevalue = w[12]
+                    v.meterv = w[13]
+                    v.save(using='zncb')
+
+
+                # hdb_watermeter_day
+                # 威尔沃数据库最后一条数据记录
+                zncb_last = HdbWatermeterDay.objects.using("zncb").filter(waterid=waterid).order_by("hdate").filter(communityid=communityid).last()
+                # print('zncb_last',zncb_last.waterid,zncb_last.hdate,zncb_last.communityid)
+                if zncb_last:
+                    last_readtime = zncb_last.rtime
+
+                    if last_readtime is None:
+                        continue
+                    # 取歙县服务器该条数据记录对比
+                    sx_last = HdbWatermeterDay.objects.using("shexian").filter(waterid=waterid).filter(communityid=communityid).filter(rtime=last_readtime).first()
+                    # 取出上次最后一条数据记录之后增加的记录
+                    # print('sx_last',sx_last.waterid,sx_last.hdate,sx_last.communityid)
+                    if sx_last:
+                        # print('last_readtime',last_readtime,zncb_last)
+                        # print('sx_last',sx_last)
+                        added = HdbWatermeterDay.objects.using("shexian").filter(waterid=waterid).filter(communityid=communityid).filter(rtime__gt=datetime.datetime.strptime(last_readtime.strip(),"%Y-%m-%d %H:%M:%S")).all()
+                        if added.exists():
+                            # print(added.count(),waterid,communityid)
+                            count += added.count()
+                            for d in added:
+                                try:
+                                    HdbWatermeterDay.objects.create(waterid=d.waterid,rvalue=d.rvalue,fvalue=d.fvalue,rtime=d.rtime,hdate=d.hdate,
+                                        meterstate=d.meterstate,commstate=d.commstate,dosage=d.dosage,communityid=d.communityid)
+                                except:
+                                    pass
+
+                # hdb_watermeter_month
+                # 威尔沃数据库最后一条数据记录
+                zncb_last = HdbWatermeterMonth.objects.using("zncb").filter(waterid=waterid).filter(communityid=communityid).order_by("hdate").last()
+                # print('zncb_last',zncb_last.waterid,zncb_last.hdate,zncb_last.communityid)
+                if zncb_last:
+                    last_readtime = zncb_last.hdate
+
+                    if last_readtime is None:
+                        continue
+                    # 取歙县服务器该条数据记录对比
+                    sx_last = HdbWatermeterMonth.objects.using("shexian").filter(waterid=waterid).filter(communityid=communityid).filter(hdate=last_readtime).first()
+                    # 取出上次最后一条数据记录之后增加的记录
+                    # print('sx_last',sx_last.waterid,sx_last.hdate,sx_last.communityid)
+                    if sx_last:
+                        # print('last_readtime',last_readtime,zncb_last)
+                        # print('sx_last',sx_last)
+                        added = HdbWatermeterMonth.objects.using("shexian").filter(waterid=waterid).filter(communityid=communityid).filter(hdate__gt=datetime.datetime.strptime(last_readtime.strip(),"%Y-%m")).all()
+                        if added.exists():
+                            # print(added.count(),waterid,communityid)
+                            count= added.count()
+                            
+                            for d in added:
+                                try:
+                                    HdbWatermeterMonth.objects.create(waterid=d.waterid,hdate=d.hdate,
+                                    dosage=d.dosage,communityid=d.communityid)
+                                except:
+                                    pass
                 
+        
+            print('cnt=',cnt,cnt2)
         t2 = time.time() - t1
         self.stdout.write(self.style.SUCCESS(f'total {count}  Affected {aft} row(s)!,elapsed {t2}'))

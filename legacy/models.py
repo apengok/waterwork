@@ -536,7 +536,9 @@ class HdbWatermeterDay(models.Model):
     class Meta:
         managed = False
         db_table = 'hdb_watermeter_day'
-        unique_together = (('waterid', 'hdate', 'communityid'),)
+        # unique_together = (('waterid', 'hdate', 'communityid'),)
+
+    
 
 
 class HdbWatermeterMonth(models.Model):
@@ -884,7 +886,7 @@ class UserRole(models.Model):
 
 
 class Watermeter(models.Model):
-    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
+    # id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     numbersth = models.CharField(db_column='NumberSth', max_length=30, blank=True, null=True)  # Field name made lowercase.
     buildingname = models.CharField(db_column='BuildingName', max_length=128, blank=True, null=True)  # Field name made lowercase.
     roomname = models.CharField(db_column='RoomName', max_length=128, blank=True, null=True)  # Field name made lowercase.
