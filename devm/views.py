@@ -32,7 +32,7 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Concentrator
-from dmam.models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter,SimCard
+from dmam.models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter,SimCard,VConcentrator
 import os
 from django.conf import settings
 
@@ -907,17 +907,19 @@ def concentratorlist(request):
     organs = user.belongto
 
     # meters = user.meter_list_queryset(simpleQueryParam)
-    meters = Concentrator.objects.all().filter(communityid=105)  #文欣苑105
+    meters = Concentrator.objects.all() #.filter(communityid=105)  #文欣苑105
 
     def m_info(m):
-        
+        commaddr = m.commaddr
+        v=VConcentrator.objects.get(commaddr=commaddr)
         return {
             "id":m.pk,
             # "simid":m.simid,
             # "dn":m.dn,
             # "belongto":m.belongto.name,#current_user.belongto.name,
             # "metertype":m.metertype,
-            "name":m.name,
+            "name":v.name,
+            "belongto":v.belongto.name,
             "installationsite":m.installationsite,
             "manufacturer":m.manufacturer,
             "model":m.model,
