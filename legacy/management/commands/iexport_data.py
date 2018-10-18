@@ -236,6 +236,14 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
+            '--vwatermeter',
+            action='store_true',
+            dest='vwatermeter',
+            default=False,
+            help='import vwatermeter to new db'
+        )
+
+        parser.add_argument(
             '--community',
             action='store_true',
             dest='community',
@@ -555,10 +563,31 @@ class Command(BaseCommand):
                 
                 if not d2.exists():
                     count += 1
-                    VCommunity.objects.create(name=name,address=address,belongto=organ)
+                    VCommunity.objects.create(name=name,address=address,belongto=organ,commutid=d.id)
+
+
+        if options['vwatermeter']:
+            
+            
+            # data_qset=HdbFlowData.objects.using("virvo").filter(readtime__range=[sTime,'2018-09-20'])
+            data_qset=Watermeter.objects.using("zncb").all()
+            print("watermeter count",data_qset.count())
+            organ = Organizations.objects.get(name="歙县自来水公司")
+            for d in data_qset:
+                name = d.roomname
+                waterid = d.id
+                wateraddr = d.wateraddr
+                commutid = d.communityid
+                Vcomut = VCommunity.objects.get(commutid=commutid)
+                
+                d2=VWatermeter.objects.filter(waterid=waterid)
+                
+                if not d2.exists():
+                    count += 1
+                    VWatermeter.objects.create(name=name,waterid=waterid,wateraddr=wateraddr,belongto=organ,communityid=Vcomut)
                     
                 
         
-            print('cnt=',cnt,cnt2)
+        # print('cnt=',cnt,cnt2)
         t2 = time.time() - t1
         self.stdout.write(self.style.SUCCESS(f'total {count}  Affected {aft} row(s)!,elapsed {t2}'))

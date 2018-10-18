@@ -14,7 +14,7 @@ from django.db.models import Avg, Max, Min, Sum
 from legacy.models import Bigmeter,District
 from django.utils.functional import cached_property
 import time
-from legacy.utils import HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,HdbFlow_monthly
+from legacy.utils import HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,HdbFlow_monthly,hdb_watermeter_flow_monthly,Hdbflow_from_hdbflowmonth
 from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
@@ -96,8 +96,9 @@ class DMABaseinfo(models.Model):
         for m in meter_in:
             commaddr = m.commaddr
             
-            monthly_use = HdbFlow_monthly(commaddr)
+            monthly_use = Hdbflow_from_hdbflowmonth(commaddr) #HdbFlow_monthly(commaddr)
             
+            print(m.username,commaddr,monthly_use)
             for k in monthly_use.keys():
                 if k in monthly_in.keys():
                     monthly_in[k] += monthly_use[k]
@@ -111,7 +112,8 @@ class DMABaseinfo(models.Model):
         meter_out = dmastations_list.filter(dmametertype='出水表')
         for m in meter_out:
             commaddr = m.commaddr
-            monthly_use = HdbFlow_monthly(commaddr)
+            monthly_use = Hdbflow_from_hdbflowmonth(commaddr) #HdbFlow_monthly(commaddr)
+            print(m.username,commaddr,monthly_use)
             for k in monthly_use.keys():
                 if k in monthly_out.keys():
                     monthly_out[k] += monthly_use[k]
@@ -126,7 +128,12 @@ class DMABaseinfo(models.Model):
 
         for m in meter_sale:
             commaddr = m.commaddr
-            monthly_use = HdbFlow_monthly(commaddr)
+            if m.username == "文欣苑户表总表":
+                monthly_use = hdb_watermeter_flow_monthly(105)
+                
+            else:
+                monthly_use = Hdbflow_from_hdbflowmonth(commaddr) #HdbFlow_monthly(commaddr)
+            print(m.username,commaddr,monthly_use)
             for k in monthly_use.keys():
                 if k in monthly_sale.keys():
                     monthly_sale[k] += monthly_use[k]
@@ -141,7 +148,8 @@ class DMABaseinfo(models.Model):
         meter_uncount = dmastations_list.filter(dmametertype='未计费水表')
         for m in meter_uncount:
             commaddr = m.commaddr
-            monthly_use = HdbFlow_monthly(commaddr)
+            monthly_use = Hdbflow_from_hdbflowmonth(commaddr) #HdbFlow_monthly(commaddr)
+            print(m.username,commaddr,monthly_use)
             for k in monthly_use.keys():
                 if k in monthly_uncount.keys():
                     monthly_uncount[k] += monthly_use[k]
@@ -730,6 +738,8 @@ class VCommunity(MPTTModel):
         related_name='community',
         # primary_key=True,
     )
+
+    commutid = models.IntegerField( blank=True, null=True) #对应抄表系统Community表的id
 
     class Meta:
         managed = True
