@@ -306,7 +306,7 @@ table.table-hover tbody tr .dataTables_empty{text-align:left!important}
 .videoArea{height:200px;background-color:#ffb9b9}
 .frameLeft{padding-right:7px!important}
 .frameRight{padding-left:7px!important}
-#commonWin .modal-lg{width:60%}
+#commonWin .modal-lg{width:80%}
 .infoinputCon{margin-top:10px}
 .dataTableMileageList tbody tr td:nth-child(22),.dataTableMileageList tbody tr td:nth-child(23),.dataTableQueryByDatePage tbody tr td:nth-child(18),.dataTableQueryByDatePage tbody tr td:nth-child(19){display:none!important}
 .layui-layer-content{margin:0 auto}

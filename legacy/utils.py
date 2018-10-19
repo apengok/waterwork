@@ -13,6 +13,48 @@ from legacy.models import (District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowD
 # .exclude(plustotalflux__icontains='429490176') 因为抄表系统处理负数的问题，数据库写入很多不正确的数据，负值貌似都写入了429490176，所以排除这些数据
 
 
+def generat_year_month():
+    today = datetime.date.today()
+    endTime = today.strftime("%Y-%m")
+    
+    lastyear = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
+    startTime = lastyear.strftime("%Y-%m")
+
+    def month_year_iter( start_month, start_year, end_month, end_year ):
+        ym_start= 12*start_year + start_month
+        ym_end= 12*end_year + end_month
+        for ym in range( ym_start, ym_end ):
+            y, m = divmod( ym, 12 )
+            # yield y, m+1
+            yield '{}-{:02d}'.format(y,m+1)
+    
+    month_list = list(month_year_iter(lastyear.month,lastyear.year,today.month,today.year))
+
+    return month_list
+
+def generat_year_month_from(start_month, start_year):
+    today = datetime.date.today()
+    endTime = today.strftime("%Y-%m")
+    
+    def month_year_iter( start_month, start_year, end_month, end_year ):
+        ym_start= 12*start_year + start_month
+        ym_end= 12*end_year + end_month
+        for ym in range( ym_start, ym_end ):
+            y, m = divmod( ym, 12 )
+            # yield y, m+1
+            yield '{}-{:02d}'.format(y,m+1)
+    
+    month_list = list(month_year_iter(start_month-1, start_year,today.month,today.year))
+
+    return month_list
+
+def ZERO_monthly_dict(month_list):
+    # month_list = generat_year_month()
+    month_dict = {}
+    for m in month_list:
+        month_dict[m] = 0
+    return month_dict
+
 def HdbFlow_day_use(commaddr,day):
     '''
         返回日用水量
@@ -126,45 +168,26 @@ def HdbFlow_monthly(commaddr):
 
 
 # 直接从hdb_flow_month读取月用水量返回
-def Hdbflow_from_hdbflowmonth(commaddr):
+def Hdbflow_from_hdbflowmonth(commaddr,month_list):
     '''
         返回过去一年内每月用水量
         取出当月所有数据，用最后一笔数据的正向流量值减去第一条数据的差值得出当月用水量的值
     '''
-    today = datetime.date.today()
-    endTime = today.strftime("%Y-%m")
-    
-    lastyear = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
-    startTime = lastyear.strftime("%Y-%m")
-
     data = []
     sub_dma_list = []
     
     monthly_data = {}
-    def month_year_iter( start_month, start_year, end_month, end_year ):
-        ym_start= 12*start_year + start_month
-        ym_end= 12*end_year + end_month
-        for ym in range( ym_start, ym_end ):
-            y, m = divmod( ym, 12 )
-            # yield y, m+1
-            yield '{}-{:02d}'.format(y,m+1)
-    
-    month_list = list(month_year_iter(lastyear.month,lastyear.year,today.month,today.year))
-    # mon = ['2017-11', '2017-12', '2018-01', '2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', '2018-08', '2018-09', '2018-10']
     today = datetime.date.today()
     # flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[month_list[0],today]).exclude(plustotalflux__icontains='429490176').values_list('readtime','plustotalflux')
     flows = HdbFlowDataMonth.objects.filter(commaddr=commaddr).filter(hdate__range=[month_list[0],today]).values_list('hdate','dosage')
     # 一次获取整年的数据再按月统计，减少查询数据库次数，查询数据库比较耗时
     # print(list(month_list))
     dict_month = dict(flows)
+    # print('dict_month',dict_month)
     t=0
     for m in month_list:
 
-        if m not in monthly_data.keys():
-            monthly_data[m] = 0
-        
-        
-        if dict_month[m] is None:
+        if m not in dict_month.keys():
             month_use = 0
         else:
             month_use = float(dict_month[m]) #HdbFlow_month_use(commaddr,m)
@@ -181,24 +204,9 @@ def hdb_watermeter_month(communityid,hdate):
         flow = 0
     return round(float(flow),2)
 
-def hdb_watermeter_flow_monthly(communityid):
-    today = datetime.date.today()
-    endTime = today.strftime("%Y-%m")
-    
-    lastyear = datetime.datetime(year=today.year-1,month=today.month,day=today.day)
-    startTime = lastyear.strftime("%Y-%m")
+def hdb_watermeter_flow_monthly(communityid,month_list):
     monthly_data = {}
-    def month_year_iter( start_month, start_year, end_month, end_year ):
-        ym_start= 12*start_year + start_month
-        ym_end= 12*end_year + end_month
-        for ym in range( ym_start, ym_end ):
-            y, m = divmod( ym, 12 )
-            # yield y, m+1
-            yield '{}-{:02d}'.format(y,m+1)
     
-    month_list = list(month_year_iter(lastyear.month,lastyear.year,today.month,today.year))
-    # mon = ['2017-11', '2017-12', '2018-01', '2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', '2018-08', '2018-09', '2018-10']
-    today = datetime.date.today()
     
     for m in month_list:
         f = hdb_watermeter_month(communityid,m)

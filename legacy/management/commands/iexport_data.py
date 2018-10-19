@@ -2,7 +2,8 @@ from django.core.management.base import BaseCommand, CommandError
 
 
 from legacy.models import (HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,
-    Watermeter,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Community)
+    Watermeter,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Community,
+    HdbFlowDataMonth)
 
 import time
 import datetime
@@ -251,7 +252,14 @@ class Command(BaseCommand):
             help='import community to new db'
         )
 
-        
+        parser.add_argument(
+            '--update_hdb_flow_month',
+            action='store_true',
+            dest='update_hdb_flow_month',
+            default=False,
+            help='import update_hdb_flow_month to new db'
+        )
+
 
 
     def handle(self, *args, **options):
@@ -262,6 +270,30 @@ class Command(BaseCommand):
             
             test_job()
             # 
+
+        if options['update_hdb_flow_month']:
+            today = datetime.date.today()
+            current_month = today.strftime("%Y-%m")
+            bigmeters_qset = Bigmeter.objects.using("shexian").only('commaddr')
+            print('bigmeter count',bigmeters_qset.count())
+            # current_month = '2018-09'
+            for b in bigmeters_qset:
+                commaddr = b.commaddr
+                sx_flow_month = HdbFlowDataMonth.objects.using("shexian").filter(commaddr=commaddr,hdate=current_month).all()
+                if sx_flow_month.exists():
+                    vx_flow_month = HdbFlowDataMonth.objects.using("zncb").filter(commaddr=commaddr,hdate=current_month).all()
+                    if vx_flow_month.exists():
+                        sx = sx_flow_month.first()
+                        vx = vx_flow_month.first()
+                        sx_flow = sx.dosage
+                        vx_flow = vx.dosage
+                        if sx_flow != vx_flow:
+                            print("month:",sx_flow,vx_flow)
+                            vx.dosage = sx_flow
+                            vx.save()
+
+
+
 
         if options['hdb_pressure_data']:
             

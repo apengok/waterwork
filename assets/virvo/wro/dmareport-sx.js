@@ -735,20 +735,32 @@
                     textStyle: {
                         fontSize: 20
                     },
-                    // formatter: function (a) {
-                    //     var relVal = "";
-                    //     //var relValTime = a[0].name;
-                    //     var relValTime  =hdates[a[0].dataIndex];
-                    //     if (a[0].data == 0) {
-                    //         relVal = "无相关数据";
-                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                    //     } else {
-                    //         relVal = relValTime;
-                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                    //     }
-                    //     ;
-                    //     return relVal;
-                    // }
+                    formatter: function (a) {
+                        // console.log(a);
+                        var tsale = parseFloat(a[0].value)*10000;
+                        var tuncount = parseFloat(a[1].value)*10000;
+                        var tleak = parseFloat(a[2].value)*10000;
+                        var ttotal = tsale + tuncount + tleak;
+                        var tleak_percent = 0;
+                        if (ttotal == 0){
+                            tleak_percent = 0
+                        }else{
+                            tleak_percent = (tleak/ttotal)*100;
+                        }
+                        
+                        var relVal = "";
+                        //var relValTime = a[0].name;
+                        relVal = hdates[a[0].dataIndex] + ' 月';
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:grey'></span>供水量:" + ttotal.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + tsale.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[1].color + "'></span>" + a[1].seriesName + "：" + tuncount.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[2].color + "'></span>" + a[2].seriesName + "：" + tleak.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[3].color + "'></span>" + a[3].seriesName + "：" + a[3].value[1] + "%";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:red'></span>漏损率:" + tleak_percent.toFixed(2) + "%";
+
+                        
+                        return relVal;
+                    }
                 },
                 legend: {
                     data: ['售水量','未计量水量','漏水量','产销差率'],
