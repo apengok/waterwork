@@ -18,6 +18,7 @@ from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
 from dmam.models import DMABaseinfo,DmaStations,Station
 from entm.models import Organizations
+from legacy.utils import generat_year_month,generat_year_month_from
 
 # Create your views here.
 
@@ -127,11 +128,11 @@ class DmastaticsView(TemplateView):
 
 
 def dmareport(request):
-    # print("dmareport:",request.POST)
+    print("dmareport:",request.POST)
 
-    stationid = request.GET.get("station") or '' # DMABaseinfo pk
-    endTime = request.GET.get("endTime") or ''
-    treetype = request.GET.get("treetype") or ''
+    stationid = request.POST.get("station") or '' # DMABaseinfo pk
+    endTime = request.POST.get("endTime") or ''
+    treetype = request.POST.get("treetype") or ''
 
     today = datetime.date.today()
     endTime = today.strftime("%Y-%m")
@@ -142,23 +143,23 @@ def dmareport(request):
     data = []
     sub_dma_list = []
     
-    echart_data = {}
-    def month_year_iter( start_month, start_year, end_month, end_year ):
-        ym_start= 12*start_year + start_month
-        ym_end= 12*end_year + end_month
-        for ym in range( ym_start, ym_end ):
-            y, m = divmod( ym, 12 )
-            # yield y, m+1
-            yield '{}-{:02d}'.format(y,m+1)
+    # echart_data = {}
+    # def month_year_iter( start_month, start_year, end_month, end_year ):
+    #     ym_start= 12*start_year + start_month
+    #     ym_end= 12*end_year + end_month
+    #     for ym in range( ym_start, ym_end ):
+    #         y, m = divmod( ym, 12 )
+    #         # yield y, m+1
+    #         yield '{}-{:02d}'.format(y,m+1)
 
-    month_list = month_year_iter(lastyear.month,lastyear.year,today.month,today.year)
-    # print(month_list)
-    for m in month_list:
-        # print (m)
-        if m not in echart_data.keys():
-            echart_data[m] = 0
+    # month_list = list(month_year_iter(lastyear.month,lastyear.year,today.month,today.year))
+    # # print(month_list)
+    # for m in month_list:
+    #     # print (m)
+    #     if m not in echart_data.keys():
+    #         echart_data[m] = 0
     
-    hdates = [f[-2:] for f in echart_data.keys()]
+    # hdates = [f[-2:] for f in echart_data.keys()]
     # hdates = hdates[::-1]
     if treetype == 'dma':
         # distict = District.objects.get(id=int(stationid))
@@ -190,7 +191,7 @@ def dmareport(request):
     
 
     total_influx       = 0
-    total_outflux       = 0
+    total_outflux      = 0
     total_total        = 0
     total_leak         = 0
     total_uncharg      = 0
@@ -233,12 +234,21 @@ def dmareport(request):
     
         return HttpResponse(json.dumps(ret))
 
-    
+    month_list = generat_year_month()
+    hdates = [f[-2:] for f in month_list]
     # if dmas.first().dma_name == '文欣苑' or dmas.first().dma_no== '301':
     for dma in dmas:
         
         # dma = dmas.first()
-        dmareport = dma.dma_statistic()
+        t1 = time.time()
+        # cre_data = datetime.datetime.strptime("2018-06-01","%Y-%m-%d")
+        # # cre_data = datetime.datetime.strptime(dma.create_date,"%Y-%m-%d")
+        # month_list = generat_year_month()
+        # print("create data month_list",month_list)
+        
+
+        dmareport = dma.dma_statistic(month_list)
+        print('time elapse ',time.time() - t1)
         
         water_in = dmareport['water_in']
         water_out = dmareport['water_out']
@@ -323,9 +333,49 @@ def dmareport(request):
         # print('total_sale',total_sale,water_sale)
         # print('total_cxc',total_cxc)
         
+        # dma 每个月统计
+        if treetype == "dma":
+            print("treetype processsdf")
+            print(month_list)
+            for m in month_list:
+                print(m)
+                m_in = monthly_in[m]/10000
+                m_out = monthly_out[m]/10000
+                m_sale = monthly_sale[m]/10000
+                m_uncount = monthly_uncount[m]/10000
+                m_total = m_in - m_out #供水量=进水总量-出水总量
+                m_leak= m_total - m_sale - m_uncount # 漏损量 = 供水量-售水量-未计费水量
+                m_cxc = m_total - m_sale    #产销差 = 供水量-售水量
+                if m_total == 0:
+                    m_cxc_percent = 0
+                else:
+                    m_cxc_percent = (m_cxc/m_total) * 100     #产销差率 = （供水量-售水量）/供水量*100%
 
-        #记录每个dma分区的统计信息
-        sub_dma_list.append({
+                if m_total != 0 :
+                    m_leak_percent = (m_leak * 100)/m_total
+                else:
+                    m_leak_percent = 0
+
+                sub_dma_list.append({
+                    "organ":dma.dma_name,
+                    # "influx":round(influx,2),
+                    "total":round(m_total,2),#供水量
+                    "sale":round(m_sale,2),#售水量
+                    "uncharg":round(m_uncount,2),#未计费水量
+                    "leak":round(m_leak,2),#漏损量
+                    "cxc":round(m_cxc,2),#产销差 = 供水量-售水量
+                    "cxc_percent":round(m_cxc_percent,2),#产销差率
+                    "huanbi":round(huanbi,2),
+                    "leak_percent":round(m_leak_percent,2),
+                    "tongbi":round(tongbi,2),
+                    "mnf":round(mnf,2),
+                    "back_leak":round(back_leak,2),
+                    "other_leak":round(other_leak,2),
+                    "statis_date":m,
+                })
+        else:
+            #记录每个dma分区的统计信息
+            sub_dma_list.append({
                     "organ":dma.dma_name,
                     # "influx":round(influx,2),
                     "total":round(total,2),
@@ -386,7 +436,7 @@ def dmareport(request):
                 "back_leak":back_leak,
                 "mnf":mnf,
                 "leak_percent":round(total_leak_percent,2),
-                "stationsstastic":sub_dma_list
+                "stationsstastic":sub_dma_list[::-1]
 
             },
             "success":1}

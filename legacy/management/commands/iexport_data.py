@@ -2,7 +2,8 @@ from django.core.management.base import BaseCommand, CommandError
 
 
 from legacy.models import (HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,
-    Watermeter,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Community)
+    Watermeter,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Community,
+    HdbFlowDataMonth)
 
 import time
 import datetime
@@ -253,15 +254,14 @@ class Command(BaseCommand):
 
 
         parser.add_argument(
-            '--update_flowmonth',
+            '--update_hdb_flow_month',
             action='store_true',
-            dest='update_flowmonth',
+            dest='update_hdb_flow_month',
             default=False,
-            help='update flow month period'
+            help='import update_hdb_flow_month to new db'
         )
 
-        
-        
+
 
 
     def handle(self, *args, **options):
@@ -273,26 +273,28 @@ class Command(BaseCommand):
             test_job()
             # 
 
-        #update hdb_flow_month
-        if options['update_flowmonth']:
-            
-            bigmeters_qset = Bigmeter.objects.using("shexian").only('commaddr')
-            print('bigmeters_qset count is',bigmeters_qset.count())
+
+        if options['update_hdb_flow_month']:
             today = datetime.date.today()
             current_month = today.strftime("%Y-%m")
-            current_day = today.strftime("%Y-%m-%d")
+            bigmeters_qset = Bigmeter.objects.using("shexian").only('commaddr')
+            print('bigmeter count',bigmeters_qset.count())
+            # current_month = '2018-09'
             for b in bigmeters_qset:
                 commaddr = b.commaddr
-                # 歙县数据库当月dosage
-                sx_dosage = HdbFlowDataMonth.objects.using("shexian").filter(commaddr=commaddr,hdate=current_month)
-                if sx_dosage.exists():
-                    v_dosage = HdbFlowDataMonth.objects.using("zncb").filter(commaddr=commaddr,hdate=current_month)
-                    if v_dosage.exists():
-                        sx = sx_dosage[0].dosage
-                        vx = v_dosage[0].dosage
-                        if sx != vx:
-                            print('mon:virvo sx:',commaddr,sx,vx)
-                            count += 1
+                sx_flow_month = HdbFlowDataMonth.objects.using("shexian").filter(commaddr=commaddr,hdate=current_month).all()
+                if sx_flow_month.exists():
+                    vx_flow_month = HdbFlowDataMonth.objects.using("zncb").filter(commaddr=commaddr,hdate=current_month).all()
+                    if vx_flow_month.exists():
+                        sx = sx_flow_month.first()
+                        vx = vx_flow_month.first()
+                        sx_flow = sx.dosage
+                        vx_flow = vx.dosage
+                        if sx_flow != vx_flow:
+                            print("month:",sx_flow,vx_flow)
+                            vx.dosage = sx_flow
+                            vx.save()
+
 
                 # 歙县数据库当日日统 dosage
                 sx_dosage = HdbFlowDataDay.objects.using("shexian").filter(commaddr=commaddr,hdate=current_day)
@@ -304,6 +306,7 @@ class Command(BaseCommand):
                         if sx != vx:
                             print('day:virvo sx:',commaddr,sx,vx)
                             count += 1
+
 
 
 

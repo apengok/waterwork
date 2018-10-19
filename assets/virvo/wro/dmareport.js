@@ -519,7 +519,7 @@
               "Info": true,// 页脚信息
               "autoWidth": true,// 自动宽度
               "stripeClasses" : [],
-              "lengthMenu" : [ 10, 20, 50, 100, 200 ],
+              "lengthMenu" : [ 12, 24, 50, 100, 200 ],
               "pagingType" : "full_numbers", // 分页样式
               "dom" : "t" + "<'row'<'col-md-3 col-sm-12 col-xs-12'l><'col-md-4 col-sm-12 col-xs-12'i><'col-md-5 col-sm-12 col-xs-12'p>>",
               "oLanguage": {// 国际语言转化
@@ -655,6 +655,7 @@
                     var dateList=
                         [
                           i+1,
+                          stasticinfo[i].statis_date,
                           stasticinfo[i].organ,
                           stasticinfo[i].total,
                           stasticinfo[i].sale,
@@ -669,7 +670,6 @@
                           stasticinfo[i].mnf,
                           stasticinfo[i].back_leak,
                           stasticinfo[i].other_leak,
-                          stasticinfo[i].statis_date
                         ];
 //                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
 //                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
@@ -735,20 +735,32 @@
                     textStyle: {
                         fontSize: 20
                     },
-                    // formatter: function (a) {
-                    //     var relVal = "";
-                    //     //var relValTime = a[0].name;
-                    //     var relValTime  =hdates[a[0].dataIndex];
-                    //     if (a[0].data == 0) {
-                    //         relVal = "无相关数据";
-                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                    //     } else {
-                    //         relVal = relValTime;
-                    //         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + a[0].value + " m³/h";
-                    //     }
-                    //     ;
-                    //     return relVal;
-                    // }
+                    formatter: function (a) {
+                        // console.log(a);
+                        var tsale = parseFloat(a[0].value)*10000;
+                        var tuncount = parseFloat(a[1].value)*10000;
+                        var tleak = parseFloat(a[2].value)*10000;
+                        var ttotal = tsale + tuncount + tleak;
+                        var tleak_percent = 0;
+                        if (ttotal == 0){
+                            tleak_percent = 0
+                        }else{
+                            tleak_percent = (tleak/ttotal)*100;
+                        }
+                        
+                        var relVal = "";
+                        //var relValTime = a[0].name;
+                        relVal = hdates[a[0].dataIndex] + ' 月';
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:grey'></span>供水量:" + ttotal.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + tsale.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[1].color + "'></span>" + a[1].seriesName + "：" + tuncount.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[2].color + "'></span>" + a[2].seriesName + "：" + tleak.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[3].color + "'></span>" + a[3].seriesName + "：" + a[3].value[1] + "%";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:red'></span>漏损率:" + tleak_percent.toFixed(2) + "%";
+
+                        
+                        return relVal;
+                    }
                 },
                 legend: {
                     data: ['售水量','未计量水量','漏水量','产销差率'],
