@@ -776,15 +776,27 @@
                 },
                 xAxis: {
                     type: 'category',
-                    boundaryGap: false,  // 让折线图从X轴0刻度开始
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
                     name: "",
                     axisLabel: {
                         show: true,
                         interval: 0,
                         rotate: 0
                     },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:200,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
                     splitLine: {
-                        show: true,
+                        show: false,
+                        offset:5,
                         lineStyle: {
                             color: 'grey',
                             type: 'dashed',

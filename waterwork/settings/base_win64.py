@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'sysm',
     'django_apscheduler',
     'wirelessm',
+    'shexian'
 ]
 
 

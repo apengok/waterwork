@@ -519,7 +519,7 @@
               "Info": true,// 页脚信息
               "autoWidth": true,// 自动宽度
               "stripeClasses" : [],
-              "lengthMenu" : [ 10, 20, 50, 100, 200 ],
+              "lengthMenu" : [ 12, 24, 50, 100, 200 ],
               "pagingType" : "full_numbers", // 分页样式
               "dom" : "t" + "<'row'<'col-md-3 col-sm-12 col-xs-12'l><'col-md-4 col-sm-12 col-xs-12'i><'col-md-5 col-sm-12 col-xs-12'p>>",
               "oLanguage": {// 国际语言转化
@@ -655,6 +655,7 @@
                     var dateList=
                         [
                           i+1,
+                          stasticinfo[i].statis_date,
                           stasticinfo[i].organ,
                           stasticinfo[i].total,
                           stasticinfo[i].sale,
@@ -669,7 +670,6 @@
                           stasticinfo[i].mnf,
                           stasticinfo[i].back_leak,
                           stasticinfo[i].other_leak,
-                          stasticinfo[i].statis_date
                         ];
 //                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
 //                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
@@ -776,15 +776,27 @@
                 },
                 xAxis: {
                     type: 'category',
-                    boundaryGap: false,  // 让折线图从X轴0刻度开始
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
                     name: "",
                     axisLabel: {
                         show: true,
                         interval: 0,
                         rotate: 0
                     },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:200,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
                     splitLine: {
-                        show: true,
+                        show: false,
+                        offset:5,
                         lineStyle: {
                             color: 'grey',
                             type: 'dashed',
