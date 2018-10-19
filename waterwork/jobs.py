@@ -16,6 +16,9 @@ logger_info = logging.getLogger('info_logger')
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), "default")
 
+# ('scheduler',"interval", seconds=1)  #用interval方式循环，每一秒执行一次  
+# @register_job(scheduler, 'cron', day_of_week='mon-fri', hour='9', minute='30', second='10',id='task_time')  
+        
 
 # 大表数据 从歙县服务器数据库同步到威尔沃服务器数据库
 @register_job(scheduler, "interval", seconds=3600, replace_existing=True)

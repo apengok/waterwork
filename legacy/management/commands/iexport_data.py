@@ -251,6 +251,16 @@ class Command(BaseCommand):
             help='import community to new db'
         )
 
+
+        parser.add_argument(
+            '--update_flowmonth',
+            action='store_true',
+            dest='update_flowmonth',
+            default=False,
+            help='update flow month period'
+        )
+
+        
         
 
 
@@ -262,6 +272,40 @@ class Command(BaseCommand):
             
             test_job()
             # 
+
+        #update hdb_flow_month
+        if options['update_flowmonth']:
+            
+            bigmeters_qset = Bigmeter.objects.using("shexian").only('commaddr')
+            print('bigmeters_qset count is',bigmeters_qset.count())
+            today = datetime.date.today()
+            current_month = today.strftime("%Y-%m")
+            current_day = today.strftime("%Y-%m-%d")
+            for b in bigmeters_qset:
+                commaddr = b.commaddr
+                # 歙县数据库当月dosage
+                sx_dosage = HdbFlowDataMonth.objects.using("shexian").filter(commaddr=commaddr,hdate=current_month)
+                if sx_dosage.exists():
+                    v_dosage = HdbFlowDataMonth.objects.using("zncb").filter(commaddr=commaddr,hdate=current_month)
+                    if v_dosage.exists():
+                        sx = sx_dosage[0].dosage
+                        vx = v_dosage[0].dosage
+                        if sx != vx:
+                            print('mon:virvo sx:',commaddr,sx,vx)
+                            count += 1
+
+                # 歙县数据库当日日统 dosage
+                sx_dosage = HdbFlowDataDay.objects.using("shexian").filter(commaddr=commaddr,hdate=current_day)
+                if sx_dosage.exists():
+                    v_dosage = HdbFlowDataDay.objects.using("zncb").filter(commaddr=commaddr,hdate=current_day)
+                    if v_dosage.exists():
+                        sx = sx_dosage[0].dosage
+                        vx = v_dosage[0].dosage
+                        if sx != vx:
+                            print('day:virvo sx:',commaddr,sx,vx)
+                            count += 1
+
+
 
         if options['hdb_pressure_data']:
             
