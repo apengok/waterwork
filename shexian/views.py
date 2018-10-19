@@ -18,7 +18,7 @@ from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
 from dmam.models import DMABaseinfo,DmaStations,Station
 from entm.models import Organizations
-from legacy.utils import generat_year_month_from
+from legacy.utils import generat_year_month,generat_year_month_from
 
 # Create your views here.
 
@@ -191,7 +191,7 @@ def dmareport(request):
     
 
     total_influx       = 0
-    total_outflux       = 0
+    total_outflux      = 0
     total_total        = 0
     total_leak         = 0
     total_uncharg      = 0
@@ -234,17 +234,18 @@ def dmareport(request):
     
         return HttpResponse(json.dumps(ret))
 
-    hdates=[]
+    month_list = generat_year_month()
+    hdates = [f[-2:] for f in month_list]
     # if dmas.first().dma_name == '文欣苑' or dmas.first().dma_no== '301':
     for dma in dmas:
         
         # dma = dmas.first()
         t1 = time.time()
-        cre_data = datetime.datetime.strptime("2018-06-01","%Y-%m-%d")
-        # cre_data = datetime.datetime.strptime(dma.create_date,"%Y-%m-%d")
-        month_list = generat_year_month_from(cre_data.month,cre_data.year)
-        print("create data month_list",month_list)
-        hdates = [f[-2:] for f in month_list]
+        # cre_data = datetime.datetime.strptime("2018-06-01","%Y-%m-%d")
+        # # cre_data = datetime.datetime.strptime(dma.create_date,"%Y-%m-%d")
+        # month_list = generat_year_month()
+        # print("create data month_list",month_list)
+        
 
         dmareport = dma.dma_statistic(month_list)
         print('time elapse ',time.time() - t1)

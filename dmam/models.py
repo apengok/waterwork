@@ -81,19 +81,22 @@ class DMABaseinfo(models.Model):
     def __str__(self):
         return self.dma_name        
 
-    def dma_statistic(self,month_list):
-        
+    def dma_statistic(self,month_list1):
+        """
+            month_list1 是一整年的月份列表
+            month_list 是dma创建日期的月份其实列表，统计数据是从创建日期开始计算的
+        """
         dmastations_list = self.station_set.all()
         
         # dmastations_list2 = self.station_set.values_list('meter__simid__simcardNumber','dmametertype')
-        # cre_data = datetime.datetime.strptime(self.create_date,"%Y-%m-%d")
-        # month_list = generat_year_month_from(cre_data.month,cre_data.year)
+        cre_data = datetime.datetime.strptime(self.create_date,"%Y-%m-%d")
+        month_list = generat_year_month_from(cre_data.month,cre_data.year)
         # print("create data month_list",month_list)
         
         # meter_types = ["出水表","进水表","贸易结算表","未计费水表","官网检测表"] 管网监测表
         # 进水表  加和---> 进水总量
         water_in = 0
-        monthly_in = ZERO_monthly_dict(month_list)
+        monthly_in = ZERO_monthly_dict(month_list1)
         meter_in = dmastations_list.filter(dmametertype='进水表')
         
         for m in meter_in:
@@ -101,32 +104,32 @@ class DMABaseinfo(models.Model):
             
             monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
             
-            print(m.username,commaddr,monthly_use)
-            for k in monthly_use.keys():
-                if k in monthly_in.keys():
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_in.keys():
+                if k in monthly_use.keys():
                     monthly_in[k] += monthly_use[k]
-                else:
-                    monthly_in[k] = monthly_use[k]
+                # else:
+                #     monthly_in[k] = 0
         water_in = sum([monthly_in[k] for k in monthly_in.keys()])
         
         # 出水表 加和--->出水总量
         water_out = 0
-        monthly_out = ZERO_monthly_dict(month_list)
+        monthly_out = ZERO_monthly_dict(month_list1)
         meter_out = dmastations_list.filter(dmametertype='出水表')
         for m in meter_out:
             commaddr = m.commaddr
             monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
-            print(m.username,commaddr,monthly_use)
-            for k in monthly_use.keys():
-                if k in monthly_out.keys():
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_out.keys():
+                if k in monthly_use.keys():
                     monthly_out[k] += monthly_use[k]
-                else:
-                    monthly_out[k] = monthly_use[k]
+                # else:
+                #     monthly_out[k] = monthly_use[k]
         water_out = sum([monthly_out[k] for k in monthly_out.keys()])
         
         # 售水量 = 所有贸易结算表的和
         water_sale = 0
-        monthly_sale = ZERO_monthly_dict(month_list)
+        monthly_sale = ZERO_monthly_dict(month_list1)
         meter_sale = dmastations_list.filter(dmametertype='贸易结算表')
 
         for m in meter_sale:
@@ -136,28 +139,28 @@ class DMABaseinfo(models.Model):
 
             else:
                 monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
-            print(m.username,commaddr,monthly_use)
-            for k in monthly_use.keys():
-                if k in monthly_sale.keys():
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_sale.keys():
+                if k in monthly_use.keys():
                     monthly_sale[k] += monthly_use[k]
-                else:
-                    monthly_sale[k] = monthly_use[k]
+                # else:
+                #     monthly_sale[k] = monthly_use[k]
 
         water_sale += sum([monthly_sale[k] for k in monthly_sale.keys()])
         
         # 未计量水量 = 所有未计费水表的和
         water_uncount = 0
-        monthly_uncount = ZERO_monthly_dict(month_list)
+        monthly_uncount = ZERO_monthly_dict(month_list1)
         meter_uncount = dmastations_list.filter(dmametertype='未计费水表')
         for m in meter_uncount:
             commaddr = m.commaddr
             monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
-            print(m.username,commaddr,monthly_use)
-            for k in monthly_use.keys():
-                if k in monthly_uncount.keys():
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_uncount.keys():
+                if k in monthly_use.keys():
                     monthly_uncount[k] += monthly_use[k]
-                else:
-                    monthly_uncount[k] = monthly_use[k]
+                # else:
+                #     monthly_uncount[k] = monthly_use[k]
         water_uncount = sum([monthly_uncount[k] for k in monthly_uncount.keys()])
         
         # 漏损量 = 供水量-售水量-未计费水量 分区内部进水表要减去自己内部出水表才等于这个分区的供水量

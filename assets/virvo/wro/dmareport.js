@@ -655,6 +655,7 @@
                     var dateList=
                         [
                           i+1,
+                          stasticinfo[i].statis_date,
                           stasticinfo[i].organ,
                           stasticinfo[i].total,
                           stasticinfo[i].sale,
@@ -669,7 +670,6 @@
                           stasticinfo[i].mnf,
                           stasticinfo[i].back_leak,
                           stasticinfo[i].other_leak,
-                          stasticinfo[i].statis_date
                         ];
 //                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
 //                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
