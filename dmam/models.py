@@ -520,7 +520,7 @@ class Station(models.Model):
     belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE) #所属组织
     meter       = models.ForeignKey(Meter,on_delete=models.SET_NULL, blank=True, null=True) #关联表具
     # dmaid       = models.ForeignKey(DMABaseinfo,blank=True, null=True,on_delete=models.CASCADE) #所在dma分区
-    dmaid       = models.ManyToManyField(DMABaseinfo,null=True)
+    dmaid       = models.ManyToManyField(DMABaseinfo)
 
     dmametertype     = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
 

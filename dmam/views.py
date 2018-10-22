@@ -101,6 +101,8 @@ def dmatree(request):
                     "pId":o.cid,
                     "type":"station",
                     "dma_no":'',
+                    "commaddr":s.meter.simid.simcardNumber,
+                    "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
                     "icon":"/static/virvo/resources/img/station.png",
                     "uuid":''
                 })
@@ -493,6 +495,7 @@ def dmabaseinfo(request):
         # 从DmaStation获取dma分配的站点
         stations = dmabase.station_assigned()
         for s in stations:
+            print("498:",s)
             data.append(assigned(s))
 
         operarions_list = {
@@ -993,29 +996,39 @@ def saveDmaStation(request):
     stationassign = request.POST.get("stationassign")
     jd = json.loads(stationassign)
 
-    old_dmastations = dma.station_set_all()
-    dmastations = dma.station_set.all()
-    print("dma stations:",dmastations)
+    # old_dmastations = dma.station_set_all()
+    # dmastations = dma.station_set.all() #old
+    # dmastations = dma.station_set_all()
+    old_assigned = dma.station_assigned()
+    # print("dma old stations:",old_dmastations)
 
     refresh_list = []
     # 更新dma分区站点信息，
     for d in jd:
-        print(d["station_id"],d["dma_name"],d["station_name"],d["metertype"])
+        print(d["station_id"],d["dma_name"],d["station_name"],d["metertype"],d["commaddr"],d["station_type"])
         station_id = int(d["station_id"])
-        refresh_list.append(station_id)
         metertype = d["metertype"]
-        station = Station.objects.get(pk=station_id)
-        if station not in dmastations:
-            station.dmaid.add(dma)
+        station_type = d["station_type"]
+        commaddr = d["commaddr"]
+        refresh_list.append(commaddr) # add commaddr in fresh list
+        station = DmaStation.objects.filter(dmaid=dma,station_id=commaddr)
+        if not station.exists():
+            # station.dmaid.add(dma)
+            DmaStation.objects.create(dmaid=dma,station_id=commaddr,meter_type=metertype,station_type=station_type)
+        else:
+            s = station.first()
+            s.station_type = station_type
+            s.meter_type = metertype
+            s.save()
 
-        station.dmametertype = metertype
-        station.save()
+        # station.dmametertype = metertype
+        # station.save()
     
     print("refresh_list:",refresh_list)
-    # 删除不在更新列表里的已分配的站点
-    for s in dmastations:
-        if s.id not in refresh_list:
-            dma.station_set.remove(s)
+    # 删除不在更新列表里的已分配的站点dmastation item
+    for s in old_assigned:
+        if s.station_id not in refresh_list:
+            s.delete()
 
     data = {
             "success": 1,
@@ -1023,24 +1036,29 @@ def saveDmaStation(request):
         }
     return HttpResponse(json.dumps(data)) #JsonResponse(data)   
 
-
+# DMA 分配站点初始化连接
 def getdmastationsbyId(request):
 
     dma_pk = request.POST.get("dma_pk")
     dma = DMABaseinfo.objects.get(pk = int(dma_pk))
 
     #dma station
-    dmastaions = dma.station_set.all()
+    # dmastaions = dma.station_set_all()
+    assigned_station = dma.station_assigned()
 
     data = []
     #dma分区的站点
     
-    for s in dmastaions:
+    for a in assigned_station:
+        commaddr = a.station_id
+        s= Station.objects.get(meter__simid__simcardNumber=commaddr)
         data.append({
             "id":s.pk,
             "username":s.username,
             "pid":dma.belongto.cid,
-            "dmametertype":s.dmametertype
+            "dmametertype":a.meter_type,
+            "commaddr":a.station_id,
+            "station_type":a.station_type
         })
 
     dmastation_list = {

@@ -258,34 +258,7 @@
             }
         },
 
-        initdmastations:function(){
-            console.log(dmastation_list);
-            var data = $.parseJSON(dmastation_list);//转成json对象
-            var stationdataListArray = [];//用来储存显示数据
-            if(data.obj.dmastationlist !=null&&data.obj.dmastationlist.length!=0){
-                var ustasticinfo=data.obj.dmastationlist;
-                console.log(ustasticinfo);
-                for(var i=0;i<ustasticinfo.length;i++){
-                    
-                    var dateList=
-                            {
-                              "pnode_id":ustasticinfo[i].pid,
-                              "station_id":ustasticinfo[i].id,
-                              "dma_name":dma_name,
-                              "station_name":ustasticinfo[i].username,
-                              "metertype":ustasticinfo[i].dmametertype
-                              
-                            };
-                    stationdataListArray.push(dateList);
-                }
-                console.log(dateList);
-                dmaStation.reloadData(stationdataListArray);
-                
-            }else{
-                dmaStation.reloadData(stationdataListArray);
-                
-            }
-        },
+        
         export:function(){
             var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo"), nodes = zTree.getSelectedNodes(), v = "";
 
@@ -324,7 +297,9 @@
                               "station_id":nodes[i].id,
                               "dma_name":dma_name,
                               "station_name":nodes[i].name,
-                              "metertype":""
+                              "metertype":"",
+                              "commaddr":nodes[i].commaddr,
+                              "station_type":nodes[i].dma_station_type
                               
                             };
                 // oTable.row.add(dateList);
@@ -364,6 +339,7 @@
                     var metertype = $(value).find('select').val();
 
                     var sid = $(value).find('input[type="checkbox"]').attr('sid');
+                    var commaddr = $(value).find('td:eq(5)').html();
                     
                     // 站点没有从左侧树删除，所以不用添加到树
                     // var pid = $(value).find('input[type="checkbox"]').attr('pid');
@@ -375,6 +351,7 @@
                     obj.dma_name = dma_name;
                     obj.station_name = station_name;
                     obj.metertype = metertype;
+                    obj.commaddr = commaddr;
 
                     list.push(obj);
                 }
@@ -417,12 +394,17 @@
                 var metertype = $(value).find('select').val();
 
                 var sid = $(value).find('input[type="checkbox"]').attr('sid');
+
+                var commaddr = $(value).find('td:eq(5)').html();
+                var station_type = $(value).find('td:eq(6)').html();
                 
 
                 obj.station_id = sid;
                 obj.dma_name = dma_name;
                 obj.station_name = station_name;
                 obj.metertype = metertype;
+                obj.commaddr = commaddr;
+                obj.station_type = station_type;
 
                 list.push(obj);
                 
@@ -558,6 +540,7 @@
             json_ajax("POST",url,"json",true,data,dmaStation.getCallback);
         },
         getCallback:function(date){
+            
             if(date.success==true){
                 edit_dmastation_list = []; //用来储存当前dma分区站点的id
                 stationdataListArray = [];//用来储存显示数据
@@ -571,8 +554,9 @@
                               "station_id":ustasticinfo[i].id,
                               "dma_name":dma_name,
                               "station_name":ustasticinfo[i].username,
-                              "metertype":ustasticinfo[i].dmametertype
-                              
+                              "metertype":ustasticinfo[i].dmametertype,
+                              "commaddr":ustasticinfo[i].commaddr,
+                              "station_type":ustasticinfo[i].station_type
                             };
 //                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
 //                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
@@ -581,6 +565,7 @@
                             edit_dmastation_list.push(ustasticinfo[i].id);
 //                      }
                     }
+                    console.log(stationdataListArray);
                     dmaStation.reloadData(stationdataListArray);
                     // $("#simpleQueryParam").val("");
                     // $("#search_button").click();
@@ -667,6 +652,26 @@
                             });
                             console.log($select.prop("outerHTML"));
                             return $select.prop("outerHTML");
+                        }
+                    },
+                    {
+                        "data": "commaddr",
+                        "className":"hidevalue",
+                        "render": function (data, type, row, meta) {
+                            if(data == "null" || data == null || data == undefined){
+                                data = "";
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "station_type",
+                        "className":"hidevalue",
+                        "render": function (data, type, row, meta) {
+                            if(data == "null" || data == null || data == undefined){
+                                data = "";
+                            }
+                            return data;
                         }
                     }
                 ],
@@ -773,7 +778,7 @@
             };
         });
 
-        
+        console.log("sdafsdfasdfasd");
         function updateDataTableSelectAllCtrl(table){
            var $table             = myTable.table().node();
            var $chkbox_all        = $('tbody input[type="checkbox"]', $table);
@@ -809,8 +814,7 @@
         
         dmaStation.getTable('#stationdataTable');
 
-        // dmaStation.initdmastations();
-
+        
         dmaStation.inquireDmastations(1);
 
         // Handle click on checkbox
