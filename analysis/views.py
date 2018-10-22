@@ -22,7 +22,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
-from dmam.models import DMABaseinfo,DmaStations,Station
+from dmam.models import DMABaseinfo,DmaStation,Station
 from entm.models import Organizations
 
 # from django.core.urlresolvers import reverse_lazy
@@ -126,7 +126,7 @@ def flowdata_mnf(request):
 
 
     dma = dmas.first()
-    dmastation = dma.station_set.first()
+    dmastation = dma.station_set_all().first() # dma.station_set.first()
     
     if dmastation is None:
         return HttpResponse(json.dumps(ret))

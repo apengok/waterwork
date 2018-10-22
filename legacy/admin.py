@@ -9,6 +9,8 @@ from . models import Bigmeter,HdbFlowData
 class BigmeterAdmin(admin.ModelAdmin):
     list_display = ["username","commaddr","lat","lng"]
 
+    search_fields = ("username","commaddr" )
+
     actions = ['update_districtid','update_default']
 
     def update_districtid(self,request,queryset):

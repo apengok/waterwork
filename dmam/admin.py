@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import WaterUserType,DMABaseinfo,DmaStations,Meter,Station,SimCard
+from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard
 # Register your models here.
 from legacy.models import Bigmeter,District
 
@@ -10,9 +10,9 @@ class WaterUserTypeAdmin(admin.ModelAdmin):
     list_display = ['usertype','explains']
 
 
-@admin.register(DmaStations)
-class DmaStationsAdmin(admin.ModelAdmin):
-    list_display = ['dmaid','station_id','meter_type']
+@admin.register(DmaStation)
+class DmaStationAdmin(admin.ModelAdmin):
+    list_display = ['dmaid','station_id','meter_type','station_type']
 
 
 @admin.register(DMABaseinfo)
@@ -29,6 +29,8 @@ class MeterAdmin(admin.ModelAdmin):
 class StationAdmin(admin.ModelAdmin):
     actions = ['sync_bigmeter']
     list_display = ['username','usertype','biguser','focus','madedate','meter','belongto','dmametertype']
+
+    search_fields = ("username","meter__serialnumber","meter__simid__simcardNumber" )
 
     def sync_bigmeter(self,request,queryset):
         # rows_updated = queryset.update(meterstate='正常')
@@ -53,6 +55,11 @@ class StationAdmin(admin.ModelAdmin):
             message_bit = "%s items were" % rows_updated
         self.message_user(request, "%s successfully updated as nomal." % message_bit)
     sync_bigmeter.short_description = 'create bigmeter' 
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(StationAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['dmaid'].required = False
+        return form
 
 @admin.register(SimCard)
 class SimCardAdmin(admin.ModelAdmin):

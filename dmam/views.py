@@ -32,7 +32,7 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
-from . models import WaterUserType,DMABaseinfo,DmaStations,Station,Meter,VCommunity
+from . models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,VCommunity,VConcentrator
 from .forms import StationsForm,StationsEditForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssignForm
 import os
@@ -369,7 +369,7 @@ def dmastationlist(request):
     # dma_pk = request.POST.get("pk") or 4
     dma_pk=4
     dma = DMABaseinfo.objects.first() #get(pk=int(dma_pk))
-    stations = dma.station_set.all()
+    stations = dma.station_set_all() # dma.station_set.all()
     
     
     
@@ -399,7 +399,7 @@ def dmastationlist(request):
 
 # class DistrictFormView(FormView):
 #     form_class = DMABaseinfoForm
-
+# DMA管理基础页面
 def dmabaseinfo(request):
 
     if request.method == 'GET':
@@ -439,6 +439,7 @@ def dmabaseinfo(request):
         dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
 
         def u_info(u):
+            commaddr = u.stationid
         
             return {
                 "id":u.pk,
@@ -453,11 +454,46 @@ def dmabaseinfo(request):
                 "focus":1,
                 "createdate":u.madedate
             }
+
+        def assigned(a):
+            commaddr = a.station_id     # 大表 通讯地址commaddr 或者 小区关联的集中器commaddr，由station_type 标识
+            station_type = a.station_type # 大表还是小区 1-大表 2-小区
+            if station_type == '1':
+                s = Station.objects.get(meter__simid__simcardNumber=commaddr)
+                edit_id = s.pk
+                username = s.username
+                usertype = s.usertype
+                simid =commaddr
+                dn = s.meter.dn
+                belongto_name = s.meter.belongto.name
+                metertype = s.meter.metertype
+                serialnumber = s.meter.serialnumber
+                createdate = s.madedate
+            elif station_type == '2':
+                d = Community.objects.get(commaddr=commaddr)
+        
+            return {
+                "id":edit_id,
+                "username":username,
+                "usertype":usertype,
+                "simid":simid, #u.meter.simid.simcardNumber if u.meter and u.meter.simid else '',
+                "dn":dn, #u.meter.dn if u.meter else '',
+                "belongto":belongto_name, # u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
+                "metertype":metertype, #u.meter.metertype if u.meter else '',
+                "serialnumber":serialnumber, # u.meter.serialnumber if u.meter else '',
+                "big_user":1,
+                "focus":1,
+                "createdate":createdate, #u.madedate
+            }
         
         #dma分区的站点
-        stations = dmabase.station_set.all()
+        # stations = dmabase.station_set.all()
+        # for s in stations:
+        #     data.append(u_info(s))
+        # 从DmaStation获取dma分配的站点
+        stations = dmabase.station_assigned()
         for s in stations:
-            data.append(u_info(s))
+            data.append(assigned(s))
 
         operarions_list = {
             "exceptionDetailMsg":"null",
@@ -913,17 +949,30 @@ class DistrictAssignStationView(LoginRequiredMixin,AjaxableResponseMixin,UserPas
         context["dma_group"] = self.object.belongto.name
 
         #dma station
-        dmastaions = self.object.station_set.all()
-
+        # dmastaions = self.object.station_set.all()
+        dmastaions = self.object.station_assigned()
         data = []
         #dma分区的站点
         
-        for s in dmastaions:
+        for a in dmastaions:
+            commaddr = a.station_id     # 大表 通讯地址commaddr 或者 小区关联的集中器commaddr，由station_type 标识
+            meter_type = a.meter_type
+            station_type = a.station_type # 大表还是小区 1-大表 2-小区
+            if station_type == '1':
+                s = Station.objects.get(meter__simid__simcardNumber=commaddr)
+                edit_id = s.pk
+                username = s.username
+                
+            elif station_type == '2':
+                d = VConcentrator.objects.get(commaddr=commaddr)
+                edit_id = d.pk
+                username = d.name
+
             data.append({
-                "id":s.pk,
-                "username":s.username,
+                "id":edit_id,  #s.pk,
+                "username":username,  #s.username,
                 "pid":self.object.belongto.cid,
-                "dmametertype":s.dmametertype
+                "dmametertype":meter_type #s.dmametertype
             })
 
         dmastation_list = {
@@ -944,7 +993,7 @@ def saveDmaStation(request):
     stationassign = request.POST.get("stationassign")
     jd = json.loads(stationassign)
 
-    
+    old_dmastations = dma.station_set_all()
     dmastations = dma.station_set.all()
     print("dma stations:",dmastations)
 
@@ -1462,8 +1511,9 @@ class StationDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         # 删除抄表系统中对应的大表
         commaddr = self.object.commaddr
         bigm = Bigmeter.objects.filter(commaddr=commaddr)
-        if bigm.exists():
-            bigm.first().delete()
+        # 如何删除zncb 大表数据，还需慎重考虑
+        # if bigm.exists():
+        #     bigm.first().delete()
 
         self.object.delete()
         result = dict()

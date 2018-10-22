@@ -16,7 +16,7 @@ from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDa
 
 from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
-from dmam.models import DMABaseinfo,DmaStations,Station
+from dmam.models import DMABaseinfo,DmaStation,Station
 from entm.models import Organizations
 from legacy.utils import generat_year_month_from,generat_year_month,ZERO_monthly_dict
 
@@ -190,7 +190,8 @@ def dmareport(request):
     for dma in dmas:
         
         # dma = dmas.first()
-        dmareport = dma.dma_statistic(month_list)
+        # dmareport = dma.dma_statistic(month_list)
+        dmareport = dma.dma_statistic2(month_list)
         
         water_in = dmareport['water_in']
         water_out = dmareport['water_out']

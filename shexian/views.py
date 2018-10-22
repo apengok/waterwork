@@ -16,7 +16,7 @@ from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDa
 
 from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
-from dmam.models import DMABaseinfo,DmaStations,Station
+from dmam.models import DMABaseinfo,DmaStation,Station
 from entm.models import Organizations
 from legacy.utils import generat_year_month,generat_year_month_from,ZERO_monthly_dict
 

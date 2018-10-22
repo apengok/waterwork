@@ -24,7 +24,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin,UserPassesTestMix
 
 from accounts.models import User,MyRoles
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Metercomm,Meterprotocol
-from dmam.models import DMABaseinfo,DmaStations,Station
+from dmam.models import DMABaseinfo,DmaStation,Station
 from entm.models import Organizations
 from .forms import logoPagesPhotoForm,MetercommForm
 from .models import Personalized

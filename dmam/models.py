@@ -81,6 +81,21 @@ class DMABaseinfo(models.Model):
     def __str__(self):
         return self.dma_name        
 
+    def station_assigned(self):
+        dmastations = self.dmastation_set.all()
+        return dmastations
+
+    def station_set_all(self):
+        
+        dmastations = self.dmastation_set.all()
+        commaddr_list = []
+        for d in dmastations:
+            commaddr = d.station_id
+            commaddr_list.append(commaddr)
+        stationlist = Station.objects.filter(meter__simid__simcardNumber__in=commaddr_list)
+            
+        return stationlist
+
     def dma_statistic(self,month_list1):
         """
             month_list1 是一整年的月份列表
@@ -178,19 +193,118 @@ class DMABaseinfo(models.Model):
         }
 
 
+    def dma_statistic2(self,month_list1):
+        """
+            month_list1 是一整年的月份列表
+            month_list 是dma创建日期的月份其实列表，统计数据是从创建日期开始计算的
+        """
+        dmastations_list = self.station_assigned()
+        
+        # dmastations_list2 = self.station_set.values_list('meter__simid__simcardNumber','dmametertype')
+        cre_data = datetime.datetime.strptime(self.create_date,"%Y-%m-%d")
+        month_list = generat_year_month_from(cre_data.month,cre_data.year)
+        # print("create data month_list",month_list)
+        
+        # meter_types = ["出水表","进水表","贸易结算表","未计费水表","官网检测表"] 管网监测表
+        # 进水表  加和---> 进水总量
+        water_in = 0
+        monthly_in = ZERO_monthly_dict(month_list1)
+        meter_in = dmastations_list.filter(meter_type='进水表')
+        
+        for m in meter_in:
+            commaddr = m.station_id
+            
+            monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
+            
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_in.keys():
+                if k in monthly_use.keys():
+                    monthly_in[k] += monthly_use[k]
+                # else:
+                #     monthly_in[k] = 0
+        water_in = sum([monthly_in[k] for k in monthly_in.keys()])
+        
+        # 出水表 加和--->出水总量
+        water_out = 0
+        monthly_out = ZERO_monthly_dict(month_list1)
+        meter_out = dmastations_list.filter(meter_type='出水表')
+        for m in meter_out:
+            commaddr = m.station_id
+            monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_out.keys():
+                if k in monthly_use.keys():
+                    monthly_out[k] += monthly_use[k]
+                # else:
+                #     monthly_out[k] = monthly_use[k]
+        water_out = sum([monthly_out[k] for k in monthly_out.keys()])
+        
+        # 售水量 = 所有贸易结算表的和
+        water_sale = 0
+        monthly_sale = ZERO_monthly_dict(month_list1)
+        meter_sale = dmastations_list.filter(meter_type='贸易结算表')
+
+        for m in meter_sale:
+            commaddr = m.station_id
+            # if m.username == "文欣苑户表总表":
+            if commaddr == '4022':
+                monthly_use = hdb_watermeter_flow_monthly(105,month_list)
+
+            else:
+                monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_sale.keys():
+                if k in monthly_use.keys():
+                    monthly_sale[k] += monthly_use[k]
+                # else:
+                #     monthly_sale[k] = monthly_use[k]
+
+        water_sale += sum([monthly_sale[k] for k in monthly_sale.keys()])
+        
+        # 未计量水量 = 所有未计费水表的和
+        water_uncount = 0
+        monthly_uncount = ZERO_monthly_dict(month_list1)
+        meter_uncount = dmastations_list.filter(meter_type='未计费水表')
+        for m in meter_uncount:
+            commaddr = m.station_id
+            monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
+            # print(m.username,commaddr,monthly_use)
+            for k in monthly_uncount.keys():
+                if k in monthly_use.keys():
+                    monthly_uncount[k] += monthly_use[k]
+                # else:
+                #     monthly_uncount[k] = monthly_use[k]
+        water_uncount = sum([monthly_uncount[k] for k in monthly_uncount.keys()])
+        
+        # 漏损量 = 供水量-售水量-未计费水量 分区内部进水表要减去自己内部出水表才等于这个分区的供水量
+
+        return {
+            'water_in':water_in,
+            'monthly_in':monthly_in,
+            'water_out':water_out,
+            'monthly_out':monthly_out,
+            'water_sale':water_sale,
+            'monthly_sale':monthly_sale,
+            'water_uncount':water_uncount,
+            'monthly_uncount':monthly_uncount,
+
+        }
+
 '''
 obsolete 
 直接在Station 用ManyToManyField关联到dmabaseinfo
+一个站点可能在多个dma中分担角色，‘直接在Station 用ManyToManyField关联到dmabaseinfo’不能区分该站点是数据哪个dma的表，
+所以还是启用该table
 '''
-class DmaStations(models.Model):
-    dmaid       = models.ForeignKey(DMABaseinfo,related_name='dmastation',blank=True, null=True,on_delete=models.CASCADE) 
-    # station_id  = models.ForeignKey(Bigmeter,related_name='underdma',blank=True, null=True,on_delete=models.CASCADE) 
-    station_id  = models.CharField(max_length=30)   #store Bigmeter commaddr 
-    meter_type  = models.CharField(max_length=30)
+class DmaStation(models.Model):
+    dmaid           = models.ForeignKey(DMABaseinfo,blank=True, null=True,on_delete=models.CASCADE) 
+    station_id      = models.CharField(max_length=30)   # 大表 通讯地址commaddr 或者 小区关联的集中器commaddr，由station_type 标识
+    meter_type      = models.CharField(max_length=30)   # dma计算类型 ["出水表","进水表","贸易结算表","未计费水表","管网检测表"]
+    station_type    = models.CharField(max_length=30)   # 大表还是小区 1-大表 2-小区
 
     class Meta:
         managed=True
-        db_table = 'dmastations'  
+        db_table = 'dmastation'  
 
     def __unicode__(self):
         return self.dmaid.dma_name
@@ -406,7 +520,7 @@ class Station(models.Model):
     belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE) #所属组织
     meter       = models.ForeignKey(Meter,on_delete=models.SET_NULL, blank=True, null=True) #关联表具
     # dmaid       = models.ForeignKey(DMABaseinfo,blank=True, null=True,on_delete=models.CASCADE) #所在dma分区
-    dmaid       = models.ManyToManyField(DMABaseinfo)
+    dmaid       = models.ManyToManyField(DMABaseinfo,null=True)
 
     dmametertype     = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
 
