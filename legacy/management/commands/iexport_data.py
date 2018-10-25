@@ -613,6 +613,7 @@ class Command(BaseCommand):
                     VCommunity.objects.create(name=name,address=address,belongto=organ,commutid=d.id)
 
 
+        # 在waterwork数据库中创建zncb对应的小表
         if options['vwatermeter']:
             
             
