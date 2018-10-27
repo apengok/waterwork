@@ -93,6 +93,12 @@ def dmatree(request):
         #station
         if stationflag == '1':
             for s in o.station_set.all():
+                if  s.meter and s.meter.simid:
+                    commaddr = s.meter.simid.simcardNumber
+                else:
+                    commaddr = ""
+                    print(s.username," not related meter.")
+                    continue
                 # if s.dmaid is None: #已分配dma分区的不显示
                 organtree.append({
                     "name":s.username,
@@ -101,7 +107,7 @@ def dmatree(request):
                     "pId":o.cid,
                     "type":"station",
                     "dma_no":'',
-                    "commaddr":s.meter.simid.simcardNumber,
+                    "commaddr":commaddr,
                     "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
                     "icon":"/static/virvo/resources/img/station.png",
                     "uuid":''

@@ -169,19 +169,35 @@ $(function () {
 {% include 'sidenav.html' %}
 <!--sidebar end-->
 <!--权限控制 -->
-<input value="true" id="permission" type="hidden"  />
-<input value="false" id="isAdmin" type="hidden"  />
+<!-- 用户所属组织id -->
+        <input id="userGroupId" value="{{ user.belongto.cid }}" type="text" hidden="true">
+        <!-- 用户所属组织name -->
+        <input id="userGroupName" value="{{ user.belongto }}" type="text" hidden="true">
+        <!-- 用户是否为admin -->
+        <input id="isAdmin" value="{{ user.is_admin|lower }}" type="text" hidden="true">
+        <!-- 用户授权截止日期 -->
+        <input id="userAuthorizationDate" value="{{ user.expire_date }}" type="text" hidden="true">
+        <!-- 用户被分配的角色 -->
+        <input id="allUserRole" value="{{ user.Role.rid }}" type="text" hidden="true">
+        <!-- 用户菜单权限的url -->
+        <input id="permissionUrls" value="{{ user.permissiontree }}" type="text" hidden="true">
+        <!--权限控制 -->
+        <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
+
         <section id="main-content">
             <div class="row eightIsZero">
                 <div class="col-md-12">
                     <ul class="breadcrumb">
-                        <li><a href="{% static 'virvo/">首页</a></li>
-                        <li class="active">报表管理</li>
-                        <li class="active">大数据报表</li>
+                        <li><a href="#">首页</a></li>
+                        {% if page_menu %}
+                            <li class="active">{{ page_menu }}</li>
+                            <li class="active">{{ page_title }}</li>
+                        {% endif %}
                     </ul>
-                    <h1 class="h1 ">大数据报表</h1>
+                    <h1 class="h1 ">{{ page_title }}</h1>
                 </div>
             </div>
+            {% block main_content %}
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -407,6 +423,7 @@ $(function () {
                     </div>
                 </div>
             </div>
+            {% endblock %}
         </section>
     </section>
 </section>
@@ -503,8 +520,10 @@ $(function () {
         /*]]>*/
     </script>
 </div>
-<script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
-<script type="text/javascript" src="{% static 'virvo/wro/js/bigDataReport.js' %}"></script>
-<script type="text/javascript" src="{% static 'virvo/wro/china.js' %}"></script>
+{% block javascript %}
+
+
+{% endblock %}
+
 </body>
 </html>

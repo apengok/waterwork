@@ -54,7 +54,7 @@ div.dataTables_wrapper{overflow:auto;user-select:text!important;-ms-user-select:
 .Inlinesearch{display:inline;height:37px}
 .barsMargin{margin-right:5px}
 .icoPaddingLeft{padding-right:5px}
-.fixed-table-body label{display:inline-block;margin-bottom:10px;font-weight:400}
+.fixed-table-body label{display:inline-block;margin-bottom:10px;font-weight:400,height:100%;}
 .columns label{display:block;padding:3px 18px;clear:both;font-weight:400;line-height:1.428571429}
 .pull-right .dropdown-menu{right:0;left:auto;max-height:300px;overflow:auto}
 .tableFEStyle .dataTables_scroll .dataTables_scrollHead{display:none}
