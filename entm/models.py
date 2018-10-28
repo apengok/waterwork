@@ -6,6 +6,24 @@ from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 # Create your models here.
 
+class OrganizationQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(name__icontains=query)|
+                Q(cid__iexact=query)
+                ).distinct()
+        return self
+
+
+class OrganizationManager(models.Manager):
+    def get_queryset(self):
+        return OrganizationQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
 class Organizations(MPTTModel):
     name               = models.CharField('组织机构名称',max_length=300,null=True)
     attribute          = models.CharField('组织机构性质',max_length=300,null=True,blank=True)
@@ -48,6 +66,9 @@ class Organizations(MPTTModel):
         return self.name 
 
     def sub_organizations(self,include_self=False):
+        return self.get_descendants(include_self)
+
+    def sub_stations(self,include_self=False):
         return self.get_descendants(include_self)
 
 

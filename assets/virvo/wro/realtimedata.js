@@ -9,7 +9,7 @@
     //单选
     var subChk = $("input[name='subChk']");
 
-    var travelLineList,AdministrativeRegionsList,fenceIdList,
+    var travelLineList,AdministrativeRegionsList,fenceIdList,organTree=$("#treeDemo"),
     administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
     newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight, dbclickCheckedId, oldDbclickCheckedId,
     onClickVId, oldOnClickVId, zTree, clickStateChar,logTime,operationLogLength, licensePlateInformation, groupIconSkin, markerListT = [], markerRealTimeT,
@@ -40,54 +40,65 @@
         // ajax_submit("POST", url, "json", true, {}, true, function(data){
         //  hostUrl = 'http://' + data.obj.host + '/F3/sockjs/webSocket';
         // });
-        winHeight = $(window).height();//可视区域高度
+        // winHeight = $(window).height();//可视区域高度
+        winHeight = $(".sidebar").height();//sidebar height
         console.log("wHeight:",winHeight);
         headerHeight = $("#header").height();//头部高度
-        var tabHeight = $myTab.height();//信息列表table选项卡高度
-        var tabContHeight = $("#myTabContent").height();//table表头高度
-        var fenceTreeHeight = winHeight - 193;//围栏树高度
-        $("#fenceZtree").css('height',fenceTreeHeight + "px");//电子围栏树高度
-        //地图高度
-        newMapHeight = winHeight - headerHeight - tabHeight - 10;
-        $MapContainer.css({
-            "height": newMapHeight + 'px'
-        });
+        var stationStateHeight = $("#station_status").height()
+        console.log("station status height",stationStateHeight);
+        var paneHeaderHeight = $(".panel-heading").height();
+        console.log("paneHeaderHeight",paneHeaderHeight);
+
+        // var tabHeight = $myTab.height();//信息列表table选项卡高度
+        // var tabContHeight = $("#myTabContent").height();//table表头高度
+        // var fenceTreeHeight = winHeight - 193;//围栏树高度
+        // $("#fenceZtree").css('height',fenceTreeHeight + "px");//电子围栏树高度
+        // //地图高度
+        // newMapHeight = winHeight - headerHeight - tabHeight - 10;
+        // $MapContainer.css({
+        //     "height": newMapHeight + 'px'
+        // });
         //车辆树高度
-        var newContLeftH = winHeight - headerHeight;
-        //sidebar高度
+        var newContLeftH = winHeight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 80;
+        // //sidebar高度
         $(".sidebar").css('height',newContLeftH + 'px');
+        organTree.css('height',newContLeftH + 'px');
         //计算顶部logo相关padding
         logoWidth = $("#header .brand").width();
         btnIconWidth = $("#header .toggle-navigation").width();
         windowWidth = $(window).width();
-        newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
+        newwidth = (logoWidth + btnIconWidth + 40) / windowWidth * 100;
         //左右自适应宽度
         $contentLeft.css({
-            "width": newwidth + "%"
+            "width": newwidth + "%",
+            "height":newContLeftH + 'px'
         });
         $contentRight.css({
             "width": 100 - newwidth + "%"
         });
+        $contentRight.css({
+            "height": winHeight + "px"
+        });
         //加载时隐藏left同时计算宽度
         $sidebar.attr("class", "sidebar sidebar-toggle");
        $mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
-        //操作树高度自适应
-        var newTreeH = winHeight - headerHeight - 203;
-        $thetree.css({
-            "height": newTreeH + "px"
-        });
-        //视频区域自适应
-        var mainContentHeight = $contentLeft.height();
-        var adjustHeight = $(".adjust-area").height();
-        videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
-        $(".videoArea").css("height", videoHeight + "px");
-        //地图拖动改变大小
-        oldMapHeight = $MapContainer.height();
-        myTabHeight = $myTab.height();
-        wHeight = $(window).height();
-        console.log("wHeight:",wHeight);
-        // 页面区域定位
-        $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
+        // //操作树高度自适应
+        // var newTreeH = winHeight - headerHeight - 203;
+        // $thetree.css({
+        //     "height": newTreeH + "px"
+        // });
+        // //视频区域自适应
+        // var mainContentHeight = $contentLeft.height();
+        // var adjustHeight = $(".adjust-area").height();
+        // videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
+        // $(".videoArea").css("height", videoHeight + "px");
+        // //地图拖动改变大小
+        // oldMapHeight = $MapContainer.height();
+        // myTabHeight = $myTab.height();
+        // wHeight = $(window).height();
+        // console.log("wHeight:",wHeight);
+        // // 页面区域定位
+        // $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
         // 监听浏览器窗口大小变化
         var sWidth = $(window).width();
         if (sWidth < 1200) {
@@ -105,20 +116,18 @@
         $(".defaultFootBg").toggleClass("defaultFootBg-left");
         window.onresize=function(){
             winHeight = $(window).height();//可视区域高度
+            console.log("onresize:",winHeight);
             headerHeight = $("#header").height();//头部高度
-            var tabHeight = $myTab.height();//信息列表table选项卡高度
-            var tabContHeight = $("#myTabContent").height();//table表头高度
-            var fenceTreeHeight = winHeight - 193;//围栏树高度
-            $("#fenceZtree").css('height',fenceTreeHeight + "px");//电子围栏树高度
-            //地图高度
-            newMapHeight = winHeight - headerHeight - tabHeight - 10;
-            $MapContainer.css({
-                "height": newMapHeight + 'px'
-            });
-            //车辆树高度
-            var newContLeftH = winHeight - headerHeight;
+            var stationStateHeight = $("#station_status").height()
+            console.log("station status height",stationStateHeight);
+            var paneHeaderHeight = $(".panel-heading").height();
+            console.log("paneHeaderHeight",paneHeaderHeight);
+            
+            var newContLeftH = winHeight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 80;
             //sidebar高度
             $(".sidebar").css('height',newContLeftH + 'px');
+            organTree.css('height',newContLeftH + 'px');
+
             //计算顶部logo相关padding
             logoWidth = $("#header .brand").width();
             btnIconWidth = $("#header .toggle-navigation").width();
@@ -202,7 +211,11 @@
                         "data" : "alarm",
                         "class" : "text-center",
                         render:function(data){
-                            ret_html='<button  data-target="#showalarm" data-toggle="modal"  type="button" class="btn-danger">'+data+'</button>&nbsp;';
+                            if(data==0){
+                                ret_html= ""
+                            }else{
+                                ret_html='<button  data-target="#showalarm" data-toggle="modal"  type="button" class="btn-danger" style="width:60px;">'+data+'</button>&nbsp;';
+                            }
                             return ret_html;
                         }
                     },
@@ -333,6 +346,7 @@
 //            zTree.selectNode("");
 //            zTree.cancelSelectedNode();
             myTable.requestData();
+            
         },
         groupListTree : function(){
             var treeSetting = {
@@ -392,7 +406,7 @@
 
     $(function(){
         $('input').inputClear();
-        pageLayout.init();
+        
         realtimeData.init();
         realtimeData.groupListTree();
         $('input').inputClear().on('onClearEvent',function(e,data){
@@ -434,5 +448,31 @@
         $("#search_condition").on("input oninput",function(){
             search_ztree('treeDemo', 'search_condition', 'assignment');
         });
+
+        pageLayout.init();
+
+        $('#dataTable').on( 'draw.dt', function ( e, settings, len ) {
+            console.log( 'New page length: '+len );
+            winHeight = $(window).height();
+            var newpageheight = $('#dataTable').height();
+            var sidebarHeight = $('.sidebar').height()
+
+            if(newpageheight > sidebarHeight){
+
+                console.log("winHeight",winHeight,newpageheight);
+                headerHeight = $("#header").height();//头部高度
+                var stationStateHeight = $("#station_status").height()
+                console.log("station status height",stationStateHeight);
+                var paneHeaderHeight = $(".panel-heading").height();
+                console.log("paneHeaderHeight",paneHeaderHeight);
+                
+                var newContLeftH = newpageheight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 100;
+                //sidebar高度
+                $(".sidebar").css('height',newContLeftH + 'px');
+                organTree.css('height',newpageheight + 'px');
+            }
+            // $('#sidebar').css({"height":newpageheight+"px"});
+            // organTree.css('height',newpageheight + 'px');
+        } );
     })
 })(window,$)
