@@ -29,107 +29,6 @@
 <body>
 <section id="container">
     {% include '_vheader.html' %}
-<div id="goTrace9301" class="modal fade" aria-hidden="true" data-backdrop="static"
-     style=" top: 0;  left: 0; right: 0;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title" id="traceParameter"><span id="msgTitle9301"></span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"><span id="question9301"></span></label>
-                        <div class=" col-md-7">
-                            <input type="hidden" id="infoId9301">
-                            <input type="hidden" id="msgDataType9301">
-                            <input type="hidden" id="objectType9301">
-                            <input type="hidden" id="objectId9301">
-                            <input type="hidden" id="serverIp9301">
-                            <input type="hidden" id="groupId9301">
-                            <input type="hidden" id="msgGNSSCenterId9301">
-                            <input type="text" class="form-control" id="answer9301"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="parameters1" class="btn btn-primary" onclick="pagesNav.platformMsgAck(9301)">确定
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="goTrace9302" class="modal fade" aria-hidden="true" data-backdrop="static"
-     style="position: fixed; top: 250px; left: 0; right: 0; z-index: 1050;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title" id="traceParameter"><span id="msgTitle9302"></span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"><span id="question9302"></span></label>
-                        <div class=" col-md-7">
-                            <input type="hidden" id="infoId9302">
-                            <input type="hidden" id="msgDataType9302">
-                            <input type="hidden" id="objectType9302">
-                            <input type="hidden" id="objectId9302">
-                            <input type="hidden" id="serverIp9302">
-                            <input type="hidden" id="groupId9302">
-                            <input type="hidden" id="msgGNSSCenterId9302">
-                            <input type="text" class="form-control" id="answer9302"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="parameters1" class="btn btn-primary" onclick="pagesNav.platformMsgAck(9302)">确定
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="goTrace_alarm" tabindex="-1" aria-hidden="true" data-backdrop="static" role="dialog"
-     aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title" id="traceParameter_alarm"><span id="msgTitle_alarm"></span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group">
-                        <div>
-                        <label class="col-md-4 control-label"><span id="question_alarm"></span></label>
-                        </div>
-                        <div class=" col-md-7">
-                            <select id="alarm_handle">
-                                <option value="0">处理中</option>
-                                <option value="1">已处理完毕</option>
-                                <option value="2">不做处理</option>
-                                <option value="3">将来处理</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-             <input type="hidden" id="alarm_brand"/>
-                <input type="hidden" id="supervisionId9041"/>
-                 <input type="hidden" id="msgGNSSCenterId9041">
-                  <input type="hidden" id="serverIp9041">
-                   <input type="hidden" id="objectType9041">
-                <button type="button" id="parameters_alarm" class="btn btn-primary" onclick="pagesNav.platformAlarmAck()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <label id="_error_label" class='error' style='display: none;'></label>
 <script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
@@ -181,6 +80,7 @@ $(function () {
         <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
 
         <section id="main-content">
+            {% block breadcrumb %}
             <div class="row eightIsZero">
                 <div class="col-md-12">
                     <ul class="breadcrumb">
@@ -193,6 +93,7 @@ $(function () {
                     <h1 class="h1 ">{{ page_title }}</h1>
                 </div>
             </div>
+            {% endblock %}
             {% block main_content %}
             <div class="row">
                 <div class="col-md-12">

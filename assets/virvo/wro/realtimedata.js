@@ -61,8 +61,8 @@
         //车辆树高度
         var newContLeftH = winHeight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 80;
         // //sidebar高度
-        $(".sidebar").css('height',newContLeftH + 'px');
-        organTree.css('height',newContLeftH + 'px');
+        // $(".sidebar").css('height',newContLeftH + 'px');
+        // organTree.css('height',newContLeftH + 'px');
         //计算顶部logo相关padding
         logoWidth = $("#header .brand").width();
         btnIconWidth = $("#header .toggle-navigation").width();
@@ -76,17 +76,16 @@
         $contentRight.css({
             "width": 100 - newwidth + "%"
         });
-        $contentRight.css({
-            "height": winHeight + "px"
-        });
+        
         //加载时隐藏left同时计算宽度
         $sidebar.attr("class", "sidebar sidebar-toggle");
        $mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
         // //操作树高度自适应
-        // var newTreeH = winHeight - headerHeight - 203;
-        // $thetree.css({
-        //     "height": newTreeH + "px"
-        // });
+        var newTreeH = winHeight - headerHeight - 503;
+        // console.log("")
+        organTree.css({
+            "height": newTreeH + "px"
+        });
         // //视频区域自适应
         // var mainContentHeight = $contentLeft.height();
         // var adjustHeight = $(".adjust-area").height();
@@ -125,14 +124,14 @@
             
             var newContLeftH = winHeight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 80;
             //sidebar高度
-            $(".sidebar").css('height',newContLeftH + 'px');
-            organTree.css('height',newContLeftH + 'px');
+            // $(".sidebar").css('height',newContLeftH + 'px');
+            // organTree.css('height',newContLeftH + 'px');
 
             //计算顶部logo相关padding
             logoWidth = $("#header .brand").width();
             btnIconWidth = $("#header .toggle-navigation").width();
             windowWidth = $(window).width();
-            newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
+            newwidth = (logoWidth + btnIconWidth + 40) / windowWidth * 100;
             //左右自适应宽度
             $contentLeft.css({
                 "width": newwidth + "%"
@@ -141,15 +140,11 @@
                 "width": 100 - newwidth + "%"
             });
           //操作树高度自适应
-            var newTreeH = winHeight - headerHeight - 203;
-            $thetree.css({
+            var newTreeH = winHeight - headerHeight - 503;
+            organTree.css({
                 "height": newTreeH + "px"
             });
-            //视频区域自适应
-            var mainContentHeight = $contentLeft.height();
-            var adjustHeight = $(".adjust-area").height();
-            videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
-            $(".videoArea").css("height", videoHeight + "px");
+            
             }
         },
     },
@@ -468,11 +463,17 @@
                 
                 var newContLeftH = newpageheight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 100;
                 //sidebar高度
-                $(".sidebar").css('height',newContLeftH + 'px');
-                organTree.css('height',newpageheight + 'px');
+                // $(".sidebar").css('height',newContLeftH + 'px');
+                // organTree.css('height',newpageheight + 'px');
             }
             // $('#sidebar').css({"height":newpageheight+"px"});
-            // organTree.css('height',newpageheight + 'px');
+            console.log("sidwbar heith",sidebarHeight);
+            var newTreeH = newpageheight - headerHeight - 110;
+            console.log("newpageheight heith",newpageheight);
+
+            console.log("newTreeH heith",newTreeH);
+
+            organTree.css('height',newTreeH + 'px');
         } );
     })
 })(window,$)

@@ -30,107 +30,7 @@
 <body>
 <section id="container">
     {% include '_vheader.html' %}
-<div id="goTrace9301" class="modal fade" aria-hidden="true" data-backdrop="static"
-     style=" top: 0;  left: 0; right: 0;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title" id="traceParameter"><span id="msgTitle9301"></span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"><span id="question9301"></span></label>
-                        <div class=" col-md-7">
-                            <input type="hidden" id="infoId9301">
-                            <input type="hidden" id="msgDataType9301">
-                            <input type="hidden" id="objectType9301">
-                            <input type="hidden" id="objectId9301">
-                            <input type="hidden" id="serverIp9301">
-                            <input type="hidden" id="groupId9301">
-                            <input type="hidden" id="msgGNSSCenterId9301">
-                            <input type="text" class="form-control" id="answer9301"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="parameters1" class="btn btn-primary" onclick="pagesNav.platformMsgAck(9301)">确定
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="goTrace9302" class="modal fade" aria-hidden="true" data-backdrop="static"
-     style="position: fixed; top: 250px; left: 0; right: 0; z-index: 1050;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
 
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title" id="traceParameter"><span id="msgTitle9302"></span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"><span id="question9302"></span></label>
-                        <div class=" col-md-7">
-                            <input type="hidden" id="infoId9302">
-                            <input type="hidden" id="msgDataType9302">
-                            <input type="hidden" id="objectType9302">
-                            <input type="hidden" id="objectId9302">
-                            <input type="hidden" id="serverIp9302">
-                            <input type="hidden" id="groupId9302">
-                            <input type="hidden" id="msgGNSSCenterId9302">
-                            <input type="text" class="form-control" id="answer9302"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="parameters1" class="btn btn-primary" onclick="pagesNav.platformMsgAck(9302)">确定
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="goTrace_alarm" tabindex="-1" aria-hidden="true" data-backdrop="static" role="dialog"
-     aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                <h4 class="modal-title" id="traceParameter_alarm"><span id="msgTitle_alarm"></span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group">
-                        <div>
-                        <label class="col-md-4 control-label"><span id="question_alarm"></span></label>
-                        </div>
-                        <div class=" col-md-7">
-                            <select id="alarm_handle">
-                                <option value="0">处理中</option>
-                                <option value="1">已处理完毕</option>
-                                <option value="2">不做处理</option>
-                                <option value="3">将来处理</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-             <input type="hidden" id="alarm_brand"/>
-                <input type="hidden" id="supervisionId9041"/>
-                 <input type="hidden" id="msgGNSSCenterId9041">
-                  <input type="hidden" id="serverIp9041">
-                   <input type="hidden" id="objectType9041">
-                <button type="button" id="parameters_alarm" class="btn btn-primary" onclick="pagesNav.platformAlarmAck()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <label id="_error_label" class='error' style='display: none;'></label>
 <script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
@@ -163,8 +63,8 @@ $(function () {
 </script>
     <section class="main-content-wrapper">
         <!--sidebar start-->
-{% include 'sidenav.html' %}
-<!--sidebar end-->
+        {% include 'sidenav.html' %}
+        <!--sidebar end-->
 <!--权限控制 -->
 <!-- 用户所属组织id -->
         <input id="userGroupId" value="{{ user.belongto.cid }}" type="text" hidden="true">
@@ -183,9 +83,8 @@ $(function () {
 
         <section id="main-content">
             <div class="row ">
-                <div class="col-md-12 trackPlay-content">
-                    <div id="content-left" class="col-md-2"
-                         style="padding-right: 0px; padding-left: 0px; z-index: 9999999999999999999999999">
+                <div class="col-md-12 ">
+                    <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px; ">
                         <div id="operationMenu" class="panel panel-default panDefMenu">
                             <div class="panel-heading" style="padding:10px;background-color:#ffffff;color:#767676;">
                                 <!-- <h3 class="panel-title fwb">轨迹回放</h3> -->
@@ -193,18 +92,7 @@ $(function () {
                                     <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;">全部站点({{ total_station_num }})
                                     </div>
                                 </div>
-                                <!-- <div class="actions pull-right" style="position: absolute;right:10px;top:10px;">
-                                    <i id="goHidden" class="fa fa-chevron-left"></i>
-                                </div> -->
-                                <!-- <div id="trackBlackToReal" class="actions3 pull-right"
-                                     style="top:-26px!important;left:12px!important" data-toggle="tooltip"
-                                     data-placement="left" title="实时监控">
-                                    <a><img src="/clbs/resources/img/shishijiankong.svg"></a>
-                                </div>
-                                <div id="goHidden" class="actions2 pull-right"
-                                     style="top:-22px!important;left:105px!important">
-                                    <i class="fa fa-chevron-left"></i>
-                                </div> -->
+                                
                             </div>
                             <div class="panel-body fixed-table-body  form-horizontal" style="padding-top:10px;">
                                 <div id="station_status" class="form-group">
@@ -240,7 +128,7 @@ $(function () {
                                               <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
                                             </div>
                                           </div>
-                                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:80%!important">
+                                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" >
                                             <ul id="treeDemo" class="ztreee" style="overflow:auto;height:460px!important"></ul>
                                           </div>
                                         </div>
