@@ -47,7 +47,7 @@ logger_error = logging.getLogger('error_logger')
 from .forms import MeterAddForm,MeterEditForm,SimCardAddForm,SimCardEditForm
 # Create your views here.
 
-
+# 表具管理/表具列表 dataTable
 def meterlist(request):
     draw = 1
     length = 0
@@ -85,39 +85,40 @@ def meterlist(request):
     user = request.user
     organs = user.belongto
 
-    meters = user.meter_list_queryset(simpleQueryParam)
+    meters = user.meter_list_queryset(simpleQueryParam).values("pk","serialnumber","simid__simcardNumber","version","dn",
+        "metertype","belongto__name","mtype","manufacturer","protocol","R","q3","q1","check_cycle","state","station__username")
     # meters = Meter.objects.all()
 
     def m_info(m):
         
         return {
-            "id":m.pk,
+            "id":m["pk"],
             # "simid":m.simid,
             # "dn":m.dn,
             # "belongto":m.belongto.name,#current_user.belongto.name,
             # "metertype":m.metertype,
-            "serialnumber":m.serialnumber,
-            "simid":m.simid.simcardNumber if m.simid else "",
-            "version":m.version,
-            "dn":m.dn,
-            "metertype":m.metertype,
-            "belongto":m.belongto.name,
-            "mtype":m.mtype,
-            "manufacturer":m.manufacturer,
-            "protocol":m.protocol,
-            "R":m.R,
-            "q3":m.q3,
-            "q1":m.q1,
-            "check_cycle":m.check_cycle,
-            "state":m.state,
-            "station":m.station_set.first().username if m.station_set.count() > 0 else ""
+            "serialnumber":m["serialnumber"],
+            "simid":m["simid__simcardNumber"] if m["simid__simcardNumber"] else "",
+            "version":m["version"],
+            "dn":m["dn"],
+            "metertype":m["metertype"],
+            "belongto":m["belongto__name"],
+            "mtype":m["mtype"],
+            "manufacturer":m["manufacturer"],
+            "protocol":m["protocol"],
+            "R":m["R"],
+            "q3":m["q3"],
+            "q1":m["q1"],
+            "check_cycle":m["check_cycle"],
+            "state":m["state"],
+            "station":m["station__username"] #m.station_set.first().username if m.station_set.count() > 0 else ""
         }
     data = []
 
     for m in meters[start:start+length]:
         data.append(m_info(m))
 
-    recordsTotal = len(meters)
+    recordsTotal = meters.count()
     # recordsTotal = len(data)
     
     result = dict()
@@ -438,57 +439,59 @@ def simcardlist(request):
         # print("post simpleQueryParam",simpleQueryParam)
 
     print("get simcardlist:",draw,length,start,search_value)
-
+    import time
+    t1=time.time()
     user = request.user
     organs = user.belongto
 
-    simcards = user.simcard_list_queryset(simpleQueryParam)
+    simcards = user.simcard_list_queryset(simpleQueryParam).values("pk","simcardNumber","isStart","iccid","imei","imsi","belongto__name",
+        "operator","simFlow","openCardTime","endTime","remark","create_date","update_date","meter__serialnumber","meter__station__username")
     # simcards = SimCard.objects.all()
 
     def m_info(s):
 
         #关联表具
-        s_m = ""
-        s_m_t = ""
-        related = "" #是否关联了表具
-        if s.meter.count() > 0:
-            m = s.meter.first()
-            s_m = m.serialnumber
-        else:
-            m = ""
+        # s_m = ""
+        # s_m_t = ""
+        # related = "" #是否关联了表具
+        # if s.meter.count() > 0:
+        #     m = s.meter.first()
+        #     s_m = m.serialnumber
+        # else:
+        #     m = ""
 
-        #关联站点，站点由表具关联，所以取表具关联的站点
-        if m != "":
-            if m.station_set.count() > 0:
-                t = m.station_set.first()
-                s_m_t = t.username
-            else:
-                t = ""
+        # #关联站点，站点由表具关联，所以取表具关联的站点
+        # if m != "":
+        #     if m.station_set.count() > 0:
+        #         t = m.station_set.first()
+        #         s_m_t = t.username
+        #     else:
+        #         t = ""
         
         return {
-            "id":s.pk,
-            "simcardNumber":s.simcardNumber,
-            "isStart":s.isStart,
-            "iccid":s.iccid,
-            "imei":s.imei,
-            "imsi":s.imsi,
-            "belongto":s.belongto.name,
-            "operator":s.operator,
-            "simFlow":s.simFlow,
-            "openCardTime":s.openCardTime,
-            "endTime":s.endTime,
-            "remark":s.remark,
-            "createDataTime":s.create_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "updateDataTime":s.update_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "meter":s_m,
-            "station": s_m_t
+            "id":s["pk"],
+            "simcardNumber":s["simcardNumber"],
+            "isStart":s["isStart"],
+            "iccid":s["iccid"],
+            "imei":s["imei"],
+            "imsi":s["imsi"],
+            "belongto":s["belongto__name"],
+            "operator":s["operator"],
+            "simFlow":s["simFlow"],
+            "openCardTime":s["openCardTime"],
+            "endTime":s["endTime"],
+            "remark":s["remark"],
+            "createDataTime":s["create_date"].strftime("%Y-%m-%d %H:%M:%S"),
+            "updateDataTime":s["update_date"].strftime("%Y-%m-%d %H:%M:%S"),
+            "meter":s["meter__serialnumber"],
+            "station": s["meter__station__username"]
         }
     data = []
 
     for m in simcards[start:start+length]:
         data.append(m_info(m))
 
-    recordsTotal = len(simcards)
+    recordsTotal = simcards.count()
     # recordsTotal = len(data)
     
     result = dict()
@@ -503,7 +506,7 @@ def simcardlist(request):
     result["end"] = 0
 
     print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
-    
+    print("simcard list time elapsed ",time.time()-t1)
     return HttpResponse(json.dumps(result))
 
 def releaseRelate(request):

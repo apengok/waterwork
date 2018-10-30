@@ -140,7 +140,7 @@ DATABASES = {
         'NAME': 'waterwork',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '120.78.255.129',
+        'HOST': '192.168.1.27',
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
@@ -152,25 +152,25 @@ DATABASES = {
         'NAME': 'zncb',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '120.78.255.129', #220.179.118.150-shexian 120.78.255.129-virvo  192.168.1.27
+        'HOST': '192.168.1.27', #220.179.118.150-shexian 120.78.255.129-virvo  192.168.1.27
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
             # 'charset':'utf8mb4',
         }
     },
-    'shexian': {
-        'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
-        'NAME': 'zncb',
-        'USER': 'scada',
-        'PASSWORD': 'scada',
-        'HOST': '220.179.118.150', #220.179.118.150-shexian 120.78.255.129-virvo  192.168.1.27
-        'PORT': '3306',
-        'OPTIONS':{
-            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
-            # 'charset':'utf8mb4',
-        }
-    },
+    # 'shexian': {
+    #     'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
+    #     'NAME': 'zncb',
+    #     'USER': 'scada',
+    #     'PASSWORD': 'scada',
+    #     'HOST': '220.179.118.150', #220.179.118.150-shexian 120.78.255.129-virvo  192.168.1.27
+    #     'PORT': '3306',
+    #     'OPTIONS':{
+    #         'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+    #         # 'charset':'utf8mb4',
+    #     }
+    # },
     # 'gis': { http://120.78.255.129
     #     'ENGINE': 'django.contrib.gis.db.backends.postgis',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
     #     'NAME': 'scada',

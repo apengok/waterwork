@@ -43,7 +43,7 @@ def dmastasticinfo():
     data = []
     for dma in dmas:
 
-        dmastation = dma.dmastation.first()
+        dmastation = dma.dmastation_set.first()
         if dmastation is None:
             continue
         commaddr = dmastation.station_id

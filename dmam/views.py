@@ -60,7 +60,9 @@ def dmatree(request):
     else:
         organs = user.belongto #Organizations.objects.all()
     print("dmatree",organs)
+    # o_lists = organs.get_descendants(include_self=True).values("name","cid","pId","uuid","dma__no")
     for o in organs.get_descendants(include_self=True):
+        # o1 = o.objects.all().values("name","cid","pId","uuid","dma__dma_no")
         if o.dma.exists():
             p_dma_no = o.dma.first().dma_no
         else:
@@ -78,30 +80,30 @@ def dmatree(request):
 
         #dma
         if dmaflag == '1':
-            for d in o.dma.all():
+            for d in o.dma.values("pk","dma_name","dma_no"):
                 organtree.append({
-                "name":d.dma_name,
-                "id":d.pk,
-                "districtid":d.pk,
+                "name":d["dma_name"],
+                "id":d["pk"],
+                "districtid":d["pk"],
                 "pId":o.cid,
                 "type":"dma",
-                "dma_no":d.dma_no,
+                "dma_no":d["dma_no"],
                 "icon":"/static/virvo/resources/img/dma.png",
                 "uuid":''
             })
 
         #station
         if stationflag == '1':
-            for s in o.station_set.all():
+            for s in o.station_set.values("username","pk","meter__simid__simcardNumber"):
                 # if s.dmaid is None: #已分配dma分区的不显示
                 organtree.append({
-                    "name":s.username,
-                    "id":s.pk,
+                    "name":s["username"],
+                    "id":s["pk"],
                     "districtid":'',
                     "pId":o.cid,
                     "type":"station",
                     "dma_no":'',
-                    "commaddr":s.meter.simid.simcardNumber,
+                    "commaddr":s["meter__simid__simcardNumber"],
                     "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
                     "icon":"/static/virvo/resources/img/station.png",
                     "uuid":''
