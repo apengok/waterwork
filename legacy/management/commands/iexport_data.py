@@ -522,7 +522,10 @@ class Command(BaseCommand):
                     v.lastwritedate = w[11]
                     v.lastwritevalue = w[12]
                     v.meterv = w[13]
-                    v.save(using='zncb')
+                    try:
+                        v.save(using='zncb')
+                    except:
+                        print(w)
 
 
                 # hdb_watermeter_day
