@@ -1,7 +1,7 @@
 {% load staticfiles %}<!DOCTYPE html>
 <html class="no-js">
 <head>
-<title>大数据报表</title>
+<title>{% if page_title %} {{ page_title }} {% else %} 首页 {% endif %}</title>
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
 <meta http-equiv="Expires" content="0"/>

@@ -54,9 +54,7 @@ def dmatree(request):
     stationflag = request.POST.get("isStation") or ''
     dmaflag = request.POST.get("isDma") or ''
     user = request.user
-    t1 = time.time()
-    t_dma = 0
-    t_station = 0
+    
     # if user.is_anonymous:
     if not user.is_authenticated:
         organs = Organizations.objects.first()
@@ -96,7 +94,7 @@ def dmatree(request):
                 "uuid":''
             })
             
-            t_dma += time.time()-t3
+            
 
         #station
         if stationflag == '1':
@@ -122,8 +120,7 @@ def dmatree(request):
                     "icon":"/static/virvo/resources/img/station.png",
                     "uuid":''
                 })
-            t_station += time.time()-t4
-
+            
     # district
     # districts = District.objects.all()
     # for d in districts:
@@ -153,10 +150,7 @@ def dmatree(request):
     
     result = dict()
     result["data"] = organtree
-    t2 = time.time()
-    print("dma time elapse ",t_dma)
-    print("dmatree time elapse ",t2-t1)
-    print("station time elapse ",t_station)
+    
     # print(json.dumps(result))
     
     return HttpResponse(json.dumps(organtree))
