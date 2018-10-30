@@ -1,0 +1,529 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html class="no-js">
+<head>
+<title>大数据报表</title>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+<meta http-equiv="Expires" content="0"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-store"/>
+<meta http-equiv="refresh" content="36000; url=/login?type=timeout" />
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" href="{% static 'virvo/resources/js/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/css/font-awesome.min.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/animate.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/main.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/dataTables.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/js/zTree/css/zTreeStyle.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/wizard.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/adaptiveStyle.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/clockPlugins.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/css/twinkle.css' %}">
+<script src="{% static 'virvo/resources/js/modernizr-2.6.2.min.js' %}"></script>
+<script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'virvo/resources/js/layui/layer/skin/layer.css' %}" id="layui_layer_skinlayercss" style="">
+<link rel="stylesheet" href="{% static 'virvo/resources/js/laydate/theme/default/laydate.css' %}" id="layuicss-laydate">
+
+</head>
+<body>
+<section id="container">
+    {% include '_vheader.html' %}
+<div id="goTrace9301" class="modal fade" aria-hidden="true" data-backdrop="static"
+     style=" top: 0;  left: 0; right: 0;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <h4 class="modal-title" id="traceParameter"><span id="msgTitle9301"></span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"><span id="question9301"></span></label>
+                        <div class=" col-md-7">
+                            <input type="hidden" id="infoId9301">
+                            <input type="hidden" id="msgDataType9301">
+                            <input type="hidden" id="objectType9301">
+                            <input type="hidden" id="objectId9301">
+                            <input type="hidden" id="serverIp9301">
+                            <input type="hidden" id="groupId9301">
+                            <input type="hidden" id="msgGNSSCenterId9301">
+                            <input type="text" class="form-control" id="answer9301"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="parameters1" class="btn btn-primary" onclick="pagesNav.platformMsgAck(9301)">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="goTrace9302" class="modal fade" aria-hidden="true" data-backdrop="static"
+     style="position: fixed; top: 250px; left: 0; right: 0; z-index: 1050;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <h4 class="modal-title" id="traceParameter"><span id="msgTitle9302"></span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"><span id="question9302"></span></label>
+                        <div class=" col-md-7">
+                            <input type="hidden" id="infoId9302">
+                            <input type="hidden" id="msgDataType9302">
+                            <input type="hidden" id="objectType9302">
+                            <input type="hidden" id="objectId9302">
+                            <input type="hidden" id="serverIp9302">
+                            <input type="hidden" id="groupId9302">
+                            <input type="hidden" id="msgGNSSCenterId9302">
+                            <input type="text" class="form-control" id="answer9302"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="parameters1" class="btn btn-primary" onclick="pagesNav.platformMsgAck(9302)">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="goTrace_alarm" tabindex="-1" aria-hidden="true" data-backdrop="static" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <h4 class="modal-title" id="traceParameter_alarm"><span id="msgTitle_alarm"></span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div>
+                        <label class="col-md-4 control-label"><span id="question_alarm"></span></label>
+                        </div>
+                        <div class=" col-md-7">
+                            <select id="alarm_handle">
+                                <option value="0">处理中</option>
+                                <option value="1">已处理完毕</option>
+                                <option value="2">不做处理</option>
+                                <option value="3">将来处理</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+             <input type="hidden" id="alarm_brand"/>
+                <input type="hidden" id="supervisionId9041"/>
+                 <input type="hidden" id="msgGNSSCenterId9041">
+                  <input type="hidden" id="serverIp9041">
+                   <input type="hidden" id="objectType9041">
+                <button type="button" id="parameters_alarm" class="btn btn-primary" onclick="pagesNav.platformAlarmAck()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <audio id="laid-off" loop="true" src="{% static 'virvo/resources/voice/laid-off.mp3">
+        您的浏览器不支持 audio 标签。
+    </audio>
+</div>
+<label id="_error_label" class='error' style='display: none;'></label>
+<script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/jquery.cookie.js' %}"></script>
+            <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+            <script src="{% static 'virvo/resources/js/layui/layer/layer.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/laydate/laydate.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/ungzip/pako.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/ungzip/ungzip.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/sockjs-1.1.1.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/stomp.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/webSocket.js' %}"></script> 
+<script>
+    var headers = {"access_token": "6fc2770a-1ef9-47dc-9bc9-5da694726df3"};
+</script>
+<script src="{% static 'virvo/wro/topPublic.js' %}"></script>
+<script>
+$(function () {
+    $('#goTrace9301,#goTrace9302').on('shown.bs.modal',function () {
+        var audio = document.getElementById("laid-off");
+        audio.play();
+    })
+    $('#goTrace9301,#goTrace9302').on('hidden.bs.modal',function () {
+        var audio = document.getElementById("laid-off");
+        audio.pause();
+        audio.currentTime = 0;
+    })
+})
+</script>
+    <section class="main-content-wrapper">
+        <!--sidebar start-->
+{% include 'sidenav.html' %}
+<!--sidebar end-->
+<!--权限控制 -->
+<!-- 用户所属组织id -->
+        <input id="userGroupId" value="{{ user.belongto.cid }}" type="text" hidden="true">
+        <!-- 用户所属组织name -->
+        <input id="userGroupName" value="{{ user.belongto }}" type="text" hidden="true">
+        <!-- 用户是否为admin -->
+        <input id="isAdmin" value="{{ user.is_admin|lower }}" type="text" hidden="true">
+        <!-- 用户授权截止日期 -->
+        <input id="userAuthorizationDate" value="{{ user.expire_date }}" type="text" hidden="true">
+        <!-- 用户被分配的角色 -->
+        <input id="allUserRole" value="{{ user.Role.rid }}" type="text" hidden="true">
+        <!-- 用户菜单权限的url -->
+        <input id="permissionUrls" value="{{ user.permissiontree }}" type="text" hidden="true">
+        <!--权限控制 -->
+        <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
+
+        <section id="main-content">
+            <div class="row eightIsZero">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li><a href="#">首页</a></li>
+                        {% if page_menu %}
+                            <li class="active">{{ page_menu }}</li>
+                            <li class="active">{{ page_title }}</li>
+                        {% endif %}
+                    </ul>
+                    <h1 class="h1 ">{{ page_title }}</h1>
+                </div>
+            </div>
+            {% block main_content %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch">
+                            <h3 class="panel-title fwb">综合报表</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body fixed-table-body" id="stretch-body">
+                            <div class="form-group all-statistics-area">
+                                <div class="col-md-6">
+                                    <div class="col-md-6 report-group">
+                                        <div class="col-md-12 area" style="position:relative;">
+                                            <div class="col-md-12 speedName">
+                                                <div class="col-md-12 groupNameShow">
+                                                    <span id="selectGroup"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 text-right">
+                                                <span id="selectTotalMile"></span>
+                                            </div>
+                                            <div class="col-md-12 selectTotalVehicleCount">
+                                                <div class="col-md-6">
+                                                    <span>平均：</span>
+                                                    <span id="mileageAvg">0km</span>
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    <span class="selectTotalVehicleCount">总数：</span>
+                                                    <span id="selectTotalVehicleCount">0辆</span>
+                                                </div>
+                                            </div>
+                                            <div id="monment">
+                                                <ul id="treeDemo" class="ztreee" style="height:200px !important;"></ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 report-group-more" id="checkGroup" >
+                                            <div class="col-md-6"><span style="cursor:pointer;">更多</span></div>
+                                            <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 report-time">
+                                        <div class="col-md-12 area">
+                                            <div class="col-md-12">
+                                                <div class="col-md-12 speedName">
+                                                    <span class="reportTimeName">行驶时长</span>
+                                                </div>
+                                                <div class="col-md-12 text-right">
+                                                    <span id="selectTotalTravelTime">0秒</span>
+                                                </div>
+                                                <div class="col-md-12 avgTravelTime">
+                                                    <span class="avgTravelTime">平均：</span>
+                                                    <span id="avgTravelTime">0秒</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 report-time-more" id="">
+                                            <a onclick="window.open('{% static 'virvo/m/reportManagement/mileageReport/list')">
+                                                <div class="col-md-6">
+                                                    <span style="cursor:pointer;">详情</span>
+                                                </div>
+                                                <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6 report-stoptime">
+                                        <div class="col-md-12 area">
+                                            <div class="col-md-12 speedName">
+                                                <span class="reportStoptimeName">停驶时长</span>
+                                            </div>
+                                            <div class="col-md-12 text-right sgstvc-center">
+                                                <span id="selectTotalDownTime">0秒</span>
+                                            </div>
+                                            <div class="col-md-12 avgDownTime">
+                                                <span class="avgDownTime">平均：</span>
+                                                <span id="avgDownTime">0秒</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 report-stoptime-more" id="">
+                                            <a onclick="window.open('{% static 'virvo/m/reportManagement/parkingReport/list')">
+                                                <div class="col-md-6" id="skipStop">
+                                                    <span style="cursor:pointer;">详情</span>
+                                                </div>
+                                                <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 report-speed">
+                                        <div class="col-md-12 area">
+                                            <div class="col-md-12 speedName">
+                                                <span class="speedNum">超速次数</span>
+                                            </div>
+                                            <div class="col-md-12 text-right">
+                                                <span id="selectTotalOverSpeedTimes">0次</span>
+                                            </div>
+                                            <div class="col-md-12 reportSpeedAvg">
+                                                <span class="reportSpeedAvg">平均：</span>
+                                                <span id="reportSpeedAvg">0次</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 report-speed-more" id="">
+                                            <a onclick="window.open('{% static 'virvo/m/reportManagement/speedReport/list')">
+                                                <div class="col-md-6">
+                                                    <span style="cursor:pointer;">详情</span>
+                                                </div>
+                                                <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12 cycle-comparison">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="stretch2">
+                                        <h3 class="panel-title">周期对比</h3>
+                                        <div class="actions pull-right">
+                                            <i class="fa chevron-down" id="stretch2-chevron"></i>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="stretch2-body">
+                                        <div id="cycleVS" class="cycleVS"></div>
+                                        <div class="cycleComparisonInfo">
+                                            <ul>
+                                                <li class="col-md-12"><font color="#6dcff6">里程数：<span style="color:#5D5F63" id="totalMile">0</span><span style="color:#5D5F63">km</span></font>丨<font><span id="lastTotalMile">0</span>km</font> <span id="differTotalMile"></span></span> </li>
+                                                <li class="col-md-12"><font color="#78af3a">行驶时间：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalTravelTime">0秒</span></font>丨<font><span id="lastTotalTravelTime">0秒</span></font> <span id="differTotalTravelTime"></span> </li>
+                                                <li class="col-md-12"><font color="#c80002">停驶时长：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalDownTime">0秒</span></font>丨<font><span id="lastTotalDownTime">0秒</span></font> <span id="differTotalDownTime"></span> </li>
+                                                <li class="col-md-12"><font color="#960ba3">超速次数：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalOverSpeedTimes">0</span><span style="color:#5D5F63">次</span></font>丨<font><span id="lastTotalOverSpeedTimes">0</span>次</font> <span id="differTotalOverSpeedTimes"></span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12 mileage-comparison">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="stretch3">
+                                        <h3 class="panel-title">里程对比</h3>
+                                        <div class="actions pull-right">
+                                            <i class="fa chevron-down"  id="stretch3-chevron"></i>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="stretch3-body">
+                                        <div id="mileageVS" class="mileageVS"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12 mileage-statistics">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="stretch4">
+                                        <h3 class="panel-title">里程月统计<span id="curCar"></span></h3>
+                                        <div class="actions pull-right">
+                                            <i class="fa chevron-down" id="stretch4-chevron"></i>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="stretch4-body">
+                                        <div id="mileageStatistics" class="mileageStatistics"></div>
+                                        <div class="mileageStatisticsInfo">
+                                            <ul>
+                                                <li class="col-md-6"><font color="#78af3a">行驶时长：</font><span id = "travelTimeByVehicle">0秒</span></li>
+                                                <li class="col-md-6"><font color="#c80002">停驶时长：</font><span id = "downTimeByVehicle">0秒</span></li>
+                                                <li class="col-md-6"><font color="#6dcff6">行驶里程：</font><span id = "mileByVehicle">0km</span></li>
+                                                <li class="col-md-6"><font color="#78af3a">行驶次数：</font><span id = "travelTimesByVehicle">0次</span></li>
+                                                <li class="col-md-6"><font color="#960ba3">超速次数：</font><span id = "alarmTimesByVehicle">0次</span></li>
+                                                <li class="col-md-12"><font color="#6dcff6">里程数</font>超越了<span id = "milePercent">0%</span>的车辆</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="stretch5">
+                                        <h3 class="panel-title">散点图</h3>
+                                        <div class="actions pull-right">
+                                            <i class="fa chevron-down" id="stretch5-chevron"></i>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="stretch5-body">
+                                        <div class="hotspoteChart" id="hotspoteChart"></div>
+                                        <div class="cityStayTime">
+                                            <ul>
+                                                <li class="col-md-12">城市轨迹信息点月分布排名</li>
+                                                <li class="col-md-12"><span id = "one"></span></li>
+                                                <li class="col-md-12"><span id = "two"></span></li>
+                                                <li class="col-md-12"><span id = "three"></span></li>
+                                                <li class="col-md-12"><span id = "four"></span></li>
+                                                <li class="col-md-12"><span id = "five"></span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="toThePlace">
+                                            <ul>
+                                                <li class="col-md-12">到过最东的地方：<span id = "east"></span></li>
+                                                <li class="col-md-12">到过最西的地方：<span id = "west"></span></li>
+                                                <li class="col-md-12">到过最南的地方：<span id = "south"></span></li>
+                                                <li class="col-md-12">到过最北的地方：<span id = "north"></span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="stretch6">
+                                        <h3 class="panel-title">排行榜</h3>
+                                        <div class="actions pull-right">
+                                            <i class="fa chevron-down" id="stretch6-chevron"></i>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="stretch6-body">
+                                        <ul class="heroRanking">
+                                            <li><i class="bigDataHero mostDiligent">本月最勤奋的车是：<span id="mostDiligent">无</span>，是不是应该给点奖励</i></li>
+                                            <li><i class="bigDataHero mostLazy">本月最懒惰的车是：<span id="mostLazy">无</span>，是不是应该来点电疗处罚了</i></li>
+                                            <li><i class="bigDataHero mostFar">本月开得最多的车是：<span id="mostFar">无</span>，最大里程是<span id="maxMile"></span>km</i></li>
+                                            <li><i class="bigDataHero mintFar">本月几乎没动的车是：<span id="mintFar">无</span>，最小里程是<span id="minMile"></span>km</i></li>
+                                            <li><i class="bigDataHero safe">本月最遵守规则的车是：<span id="safe">无</span>，老哥，稳！</i></li>
+                                            <li><i class="bigDataHero danger">本月最危险的车是：<span id="danger">无</span>，千里之行，慎于足下！</i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+        </section>
+    </section>
+</section>
+{% include 'footer.html' %}
+<!-- <footer>
+    <div class="imitateMenuBg"></div>
+    <div class="defaultFootBg">
+        <p><span id="copyRight"></span>&nbsp;<a href="" target="_blank" id="website"></a><br/><a href="http://www.miitbeian.gov.cn/" target="_blank" id="record"></a>adff</p>
+    </div>
+</footer> -->
+<script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/jquery.nanoscroller.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/bootstrap-toggle.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/toastr.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/bootstrap-suggest.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'virvo/resources/js/inputClear.min.js' %}"></script>
+    <script src="{% static 'virvo/wro/common-footer.js' %}"></script>
+<div id="commonWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="commonLgWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonLgWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="commonSmWin" class="modal fade" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonSmWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="uploaderWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "uploaderWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="chatWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static" >
+    <div class="modal-dialog modal-lg" style="width:990px;max-height:730px">
+        <div class="modal-content" style="box-shadow:none;-webkit-box-shadow:none;background-color:transparent;border:none;border-radius:0px;">
+            <iframe frameborder="0" allowtransparency="true" width="990px" height="720px" id="talk_box" src=""></iframe>
+        </div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "chatWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+{% block javascript %}
+
+
+{% endblock %}
+
+</body>
+</html>

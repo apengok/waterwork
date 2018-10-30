@@ -8,6 +8,146 @@
     var table = $("#dataTable tr th:gt(1)");
     //单选
     var subChk = $("input[name='subChk']");
+
+    var travelLineList,AdministrativeRegionsList,fenceIdList,organTree=$("#treeDemo"),
+    administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
+    newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight, dbclickCheckedId, oldDbclickCheckedId,
+    onClickVId, oldOnClickVId, zTree, clickStateChar,logTime,operationLogLength, licensePlateInformation, groupIconSkin, markerListT = [], markerRealTimeT,
+    zoom = 18, requestStrS, cheakNodec = [], realTimeSet = [], alarmSet = [], neverOline = [], lineVid = [], zTreeIdJson = {}, cheakdiyuealls = [], lineAr = [],
+    lineAs = [], lineAa = [], lineAm = [], lineOs = [], changeMiss = [], diyueall = [], params = [], lineV = [], lineHb = [], cluster, fixedPoint = null, fixedPointPosition = null,
+    flog = true, mapVehicleTimeW, mapVehicleTimeQ, markerMap, mapflog, mapVehicleNum, infoWindow, paths = null, uptFlag = true, flagState = true,
+    videoHeight, addaskQuestionsIndex = 2, dbClickHeighlight = false, checkedVehicles = [], runVidArray = [], stopVidArray = [], msStartTime, msEndTime,
+    videoTimeIndex,voiceTimeIndex,charFlag = true, fanceID = "", newCount = 1, mouseTool, mouseToolEdit, clickRectangleFlag = false, isAddFlag = false, isAreaSearchFlag = false, isDistanceCount = false, fenceIDMap, PolyEditorMap,
+    sectionPointMarkerMap, fenceSectionPointMap, travelLineMap, fenceCheckLength = 0, amendCircle, amendPolygon, amendLine, polyFence, changeArray, trid = [], parametersID, brand, clickFenceCount = 0,
+    clickLogCount = 0, fenceIdArray = [], fenceOpenArray = [], save, moveMarkerBackData, moveMarkerFenceId, monitoringObjMapHeight, carNameMarkerContentMap, carNameMarkerMap, carNameContentLUMap,
+    lineSpotMap, isEdit = true, sectionMarkerPointArray, stateName = [], stateIndex = 1, alarmName = [], alarmIndex = 1, activeIndex = 1, queryFenceId = [], crrentSubV=[], crrentSubName=[],
+    suFlag=true, administrationMap, lineRoute, contextMenu, dragPointMarkerMap, isAddDragRoute = false, misstype=false,misstypes = false, alarmString, saveFenceName, saveFenceType, alarmSub = 0, cancelList = [], hasBegun=[],
+    isDragRouteFlag = false, flagSwitching = true, isCarNameShow = true, notExpandNodeInit,vinfoWindwosClickVid, $myTab = $("#myTab"), $MapContainer = $("#MapContainer"), $panDefLeft = $("#panDefLeft"), 
+    $contentLeft = $("#content-left"), $contentRight = $("#content-right"), $sidebar = $(".sidebar"), $mainContentWrapper = $(".main-content-wrapper"), $thetree = $("#treeDemo"),
+    $realTimeRC = $("#realTimeRC"), $goShow = $("#goShow"), $chooseRun = $("#chooseRun"), $chooseNot = $("#chooseNot"), $chooseAlam = $("#chooseAlam"), $chooseStop = $("#chooseStop"),
+    $chooseOverSeep = $("#chooseOverSeep"), $online = $("#online"), $chooseMiss = $("#chooseMiss"), $scrollBar = $("#scrollBar"), $mapPaddCon = $(".mapPaddCon"), $realTimeVideoReal = $(".realTimeVideoReal"),
+    $realTimeStateTableList = $("#realTimeStateTable"), $alarmTable = $("#alarmTable"), $logging=$("#logging"), $showAlarmWinMark = $("#showAlarmWinMark"), $alarmFlashesSpan = $(".alarmFlashes span"),
+    $alarmSoundSpan = $(".alarmSound span"), $alarmMsgBox = $("#alarmMsgBox"), $alarmSoundFont = $(".alarmSound font"), $alarmFlashesFont = $(".alarmFlashes font"), $alarmMsgAutoOff = $("#alarmMsgAutoOff"),
+    rMenu = $("#rMenu"), alarmNum = 0, carAddress, msgSNAck, setting, ztreeStyleDbclick, $tableCarAll = $("#table-car-all"), $tableCarOnline = $("#table-car-online"), $tableCarOffline = $("#table-car-offline"),
+    $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"), $tableCarOnlinePercent = $("#table-car-online-percent"),longDeviceType,tapingTime,loadInitNowDate = new Date(),loadInitTime,
+    checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
+
+
+    var pageLayout = {
+    // 页面布局
+    init: function(){
+        var url = "/clbs/v/monitoring/getHost";
+        // ajax_submit("POST", url, "json", true, {}, true, function(data){
+        //  hostUrl = 'http://' + data.obj.host + '/F3/sockjs/webSocket';
+        // });
+        // winHeight = $(window).height();//可视区域高度
+        winHeight = $(".sidebar").height();//sidebar height
+        console.log("wHeight:",winHeight);
+        headerHeight = $("#header").height();//头部高度
+        var stationStateHeight = $("#station_status").height()
+        console.log("station status height",stationStateHeight);
+        var paneHeaderHeight = $(".panel-heading").height();
+        console.log("paneHeaderHeight",paneHeaderHeight);
+
+        // var tabHeight = $myTab.height();//信息列表table选项卡高度
+        // var tabContHeight = $("#myTabContent").height();//table表头高度
+        // var fenceTreeHeight = winHeight - 193;//围栏树高度
+        // $("#fenceZtree").css('height',fenceTreeHeight + "px");//电子围栏树高度
+        // //地图高度
+        // newMapHeight = winHeight - headerHeight - tabHeight - 10;
+        // $MapContainer.css({
+        //     "height": newMapHeight + 'px'
+        // });
+        //车辆树高度
+        var newContLeftH = winHeight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 80;
+        // //sidebar高度
+        // $(".sidebar").css('height',newContLeftH + 'px');
+        // organTree.css('height',newContLeftH + 'px');
+        //计算顶部logo相关padding
+        logoWidth = $("#header .brand").width();
+        btnIconWidth = $("#header .toggle-navigation").width();
+        windowWidth = $(window).width();
+        newwidth = (logoWidth + btnIconWidth + 40) / windowWidth * 100;
+        //左右自适应宽度
+        $contentLeft.css({
+            "width": newwidth + "%",
+            "height":newContLeftH + 'px'
+        });
+        $contentRight.css({
+            "width": 100 - newwidth + "%"
+        });
+        
+        //加载时隐藏left同时计算宽度
+        $sidebar.attr("class", "sidebar sidebar-toggle");
+       $mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
+        // //操作树高度自适应
+        var newTreeH = winHeight - headerHeight - 503;
+        // console.log("")
+        organTree.css({
+            "height": newTreeH + "px"
+        });
+        // //视频区域自适应
+        // var mainContentHeight = $contentLeft.height();
+        // var adjustHeight = $(".adjust-area").height();
+        // videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
+        // $(".videoArea").css("height", videoHeight + "px");
+        // //地图拖动改变大小
+        // oldMapHeight = $MapContainer.height();
+        // myTabHeight = $myTab.height();
+        // wHeight = $(window).height();
+        // console.log("wHeight:",wHeight);
+        // // 页面区域定位
+        // $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
+        // 监听浏览器窗口大小变化
+        var sWidth = $(window).width();
+        if (sWidth < 1200) {
+            $("body").css("overflow", "auto");
+            $("#content-left,#panDefLeft").css("height", "auto");
+            $panDefLeft.css("margin-bottom", "0px");
+            if (sWidth <= 414) {
+                $sidebar.removeClass("sidebar-toggle");
+                $mainContentWrapper.removeClass("main-content-toggle-left");
+            }
+        } else {
+            // $("body").css("overflow", "hidden");
+        };
+        $(".imitateMenuBg").toggleClass("imitateMenuBg-left");
+        $(".defaultFootBg").toggleClass("defaultFootBg-left");
+        window.onresize=function(){
+            winHeight = $(window).height();//可视区域高度
+            console.log("onresize:",winHeight);
+            headerHeight = $("#header").height();//头部高度
+            var stationStateHeight = $("#station_status").height()
+            console.log("station status height",stationStateHeight);
+            var paneHeaderHeight = $(".panel-heading").height();
+            console.log("paneHeaderHeight",paneHeaderHeight);
+            
+            var newContLeftH = winHeight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 80;
+            //sidebar高度
+            // $(".sidebar").css('height',newContLeftH + 'px');
+            // organTree.css('height',newContLeftH + 'px');
+
+            //计算顶部logo相关padding
+            logoWidth = $("#header .brand").width();
+            btnIconWidth = $("#header .toggle-navigation").width();
+            windowWidth = $(window).width();
+            newwidth = (logoWidth + btnIconWidth + 40) / windowWidth * 100;
+            //左右自适应宽度
+            $contentLeft.css({
+                "width": newwidth + "%"
+            });
+            $contentRight.css({
+                "width": 100 - newwidth + "%"
+            });
+          //操作树高度自适应
+            var newTreeH = winHeight - headerHeight - 503;
+            organTree.css({
+                "height": newTreeH + "px"
+            });
+            
+            }
+        },
+    },
     realtimeData = {
         init: function(){
             menu_text += "<li><label><input type=\"checkbox\" checked=\"checked\" class=\"toggle-vis\" data-column=\"" + parseInt(2) +"\" disabled />"+ table[0].innerHTML +"</label></li>"
@@ -66,7 +206,11 @@
                         "data" : "alarm",
                         "class" : "text-center",
                         render:function(data){
-                            ret_html='<button  data-target="#showalarm" data-toggle="modal"  type="button" class="btn-danger">'+data+'</button>&nbsp;';
+                            if(data==0){
+                                ret_html= ""
+                            }else{
+                                ret_html='<button  data-target="#showalarm" data-toggle="modal"  type="button" class="btn-danger" style="width:60px;">'+data+'</button>&nbsp;';
+                            }
                             return ret_html;
                         }
                     },
@@ -197,6 +341,7 @@
 //            zTree.selectNode("");
 //            zTree.cancelSelectedNode();
             myTable.requestData();
+            
         },
         groupListTree : function(){
             var treeSetting = {
@@ -256,6 +401,7 @@
 
     $(function(){
         $('input').inputClear();
+        
         realtimeData.init();
         realtimeData.groupListTree();
         $('input').inputClear().on('onClearEvent',function(e,data){
@@ -275,6 +421,16 @@
                 clearInterval(search);
             });
         }
+
+        // $("#toggle-left").bind("click",'button', function(e) {
+        //     $(".sidebarRight").hasClass(".sidebar-toggle-right") || ($(".sidebarRight").removeClass("sidebar-toggle-right"),
+        //     $(".main-content-wrapper").removeClass("main-content-toggle-right")),
+        //     $(".sidebar").toggleClass("sidebar-toggle"),
+        //     $(".main-content-wrapper").toggleClass("main-content-toggle-left"),
+        //     $(".imitateMenuBg").toggleClass("imitateMenuBg-left"),
+        //     $(".defaultFootBg").toggleClass("defaultFootBg-left"),
+        //     e.stopPropagation()
+        // })
         //全选
         $("#checkAll").bind("click",realtimeData.cleckAll);
         //单选
@@ -287,5 +443,37 @@
         $("#search_condition").on("input oninput",function(){
             search_ztree('treeDemo', 'search_condition', 'assignment');
         });
+
+        pageLayout.init();
+
+        $('#dataTable').on( 'draw.dt', function ( e, settings, len ) {
+            console.log( 'New page length: '+len );
+            winHeight = $(window).height();
+            var newpageheight = $('#dataTable').height();
+            var sidebarHeight = $('.sidebar').height()
+
+            if(newpageheight > sidebarHeight){
+
+                console.log("winHeight",winHeight,newpageheight);
+                headerHeight = $("#header").height();//头部高度
+                var stationStateHeight = $("#station_status").height()
+                console.log("station status height",stationStateHeight);
+                var paneHeaderHeight = $(".panel-heading").height();
+                console.log("paneHeaderHeight",paneHeaderHeight);
+                
+                var newContLeftH = newpageheight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 100;
+                //sidebar高度
+                // $(".sidebar").css('height',newContLeftH + 'px');
+                // organTree.css('height',newpageheight + 'px');
+            }
+            // $('#sidebar').css({"height":newpageheight+"px"});
+            console.log("sidwbar heith",sidebarHeight);
+            var newTreeH = newpageheight - headerHeight - 110;
+            console.log("newpageheight heith",newpageheight);
+
+            console.log("newTreeH heith",newTreeH);
+
+            organTree.css('height',newTreeH + 'px');
+        } );
     })
 })(window,$)

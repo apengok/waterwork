@@ -1,8 +1,7 @@
-{% load staticfiles %}
-<!DOCTYPE html>
+{% load staticfiles %}<!DOCTYPE html>
 <html class="no-js">
 <head>
-<title>{% if page_title %} {{ page_title }} {% else %} 首页 {% endif %}</title>
+<title>大数据报表</title>
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
 <meta http-equiv="Expires" content="0"/>
@@ -26,14 +25,13 @@
 <link rel="stylesheet" href="{% static 'virvo/resources/js/layui/layer/skin/layer.css' %}" id="layui_layer_skinlayercss" style="">
 <link rel="stylesheet" href="{% static 'virvo/resources/js/laydate/theme/default/laydate.css' %}" id="layuicss-laydate">
 
-{% block stylesheet %}
-
-{% endblock %}
 </head>
 <body>
-    <section id="container">
+<section id="container">
     {% include '_vheader.html' %}
- <script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
+
+<label id="_error_label" class='error' style='display: none;'></label>
+<script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
             <script src="{% static 'virvo/resources/js/jquery.cookie.js' %}"></script>
             <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
             <script src="{% static 'virvo/resources/js/layui/layer/layer.js' %}"></script>
@@ -45,19 +43,28 @@
             <script src="{% static 'virvo/resources/js/stomp.min.js' %}"></script>
             <script src="{% static 'virvo/resources/js/webSocket.js' %}"></script> 
 <script>
-var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
+    var headers = {"access_token": "6fc2770a-1ef9-47dc-9bc9-5da694726df3"};
 </script>
-{% comment %}
-<script src="/clbs/wro/topPublic.js"></script>
-{% endcomment %}
-      <section class="main-content-wrapper">
-            <!--sidebar start-->
-            
-            {% include 'sidenav.html' %}
-
+<script src="{% static 'virvo/wro/topPublic.js' %}"></script>
+<script>
+$(function () {
+    $('#goTrace9301,#goTrace9302').on('shown.bs.modal',function () {
+        var audio = document.getElementById("laid-off");
+        audio.play();
+    })
+    $('#goTrace9301,#goTrace9302').on('hidden.bs.modal',function () {
+        var audio = document.getElementById("laid-off");
+        audio.pause();
+        audio.currentTime = 0;
+    })
+})
+</script>
+    <section class="main-content-wrapper">
+        <!--sidebar start-->
+{% include 'sidenav.html' %}
 <!--sidebar end-->
-
-        <!-- 用户所属组织id -->
+<!--权限控制 -->
+<!-- 用户所属组织id -->
         <input id="userGroupId" value="{{ user.belongto.cid }}" type="text" hidden="true">
         <!-- 用户所属组织name -->
         <input id="userGroupName" value="{{ user.belongto }}" type="text" hidden="true">
@@ -72,22 +79,23 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
         <!--权限控制 -->
         <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
 
-        
-            <section id="main-content">
-                <div class="row eightIsZero">
-                    <div class="col-md-12">
-                        <ul class="breadcrumb">
-                            <li><a href="#">首页</a></li>
-                            {% if page_menu %}
-                                <li class="active">{{ page_menu }}</li>
-                                <li class="active">{{ page_title }}</li>
-                            {% endif %}
-                        </ul>
-                        <h1 class="h1 ">{{ page_title }}</h1>
-                    </div>
+        <section id="main-content">
+            {% block breadcrumb %}
+            <div class="row eightIsZero">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li><a href="#">首页</a></li>
+                        {% if page_menu %}
+                            <li class="active">{{ page_menu }}</li>
+                            <li class="active">{{ page_title }}</li>
+                        {% endif %}
+                    </ul>
+                    <h1 class="h1 ">{{ page_title }}</h1>
                 </div>
-                {% block main_content %}
-                    <div class="row">
+            </div>
+            {% endblock %}
+            {% block main_content %}
+            <div class="row">
                         <div class="col-md-12">
                             <div class="panel panel-default">
                                 <div class="panel-heading" id="stretch">
@@ -212,11 +220,17 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                             </div>
                         </div>
                     </div>
-                    {% endblock main_content %}
-            </section>
+            {% endblock %}
         </section>
     </section>
-    {% include 'footer.html' %}
+</section>
+{% include 'footer.html' %}
+<!-- <footer>
+    <div class="imitateMenuBg"></div>
+    <div class="defaultFootBg">
+        <p><span id="copyRight"></span>&nbsp;<a href="" target="_blank" id="website"></a><br/><a href="http://www.miitbeian.gov.cn/" target="_blank" id="record"></a>adff</p>
+    </div>
+</footer> -->
 <script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/waypoints.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/jquery.nanoscroller.min.js' %}"></script>
@@ -286,35 +300,27 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
         /*]]>*/
     </script>
 </div>
+<div id="chatWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static" >
+    <div class="modal-dialog modal-lg" style="width:990px;max-height:730px">
+        <div class="modal-content" style="box-shadow:none;-webkit-box-shadow:none;background-color:transparent;border:none;border-radius:0px;">
+            <iframe frameborder="0" allowtransparency="true" width="990px" height="720px" id="talk_box" src=""></iframe>
+        </div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "chatWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
 {% block javascript %}
 
 
-    {% endblock %}
+{% endblock %}
+
 </body>
-    <!-- <script>
-            $(function(){
-                $.ajax({
-                    url: '/clbs/inspectAuthorizationDate',
-                    type: 'POST',
-                    data: null,
-                    async:false,
-                    dataType: 'json',
-                    success: function (data) {
-                        if(data != null){
-                            if(data.success==true){
-                                if(data.obj.errMsg != null && data.obj.errMsg != ""){
-                                    layer.msg(data.obj.errMsg,{move:false});
-                                }
-                            }else{
-                                if(data != null && data != ""){
-                                    if(data.msg != null && data.msg !=""){
-                                        layer.msg(data.msg,{move:false});
-                                    }
-                                }
-                            }
-                        }
-                    },
-                });
-            });
-    </script> -->
 </html>

@@ -8,6 +8,7 @@ from django.template import TemplateDoesNotExist
 import json
 import random
 import datetime
+import time
 
 from mptt.utils import get_cached_trees
 from mptt.templatetags.mptt_tags import cache_tree_children
@@ -53,7 +54,9 @@ def dmatree(request):
     stationflag = request.POST.get("isStation") or ''
     dmaflag = request.POST.get("isDma") or ''
     user = request.user
-    
+    t1 = time.time()
+    t_dma = 0
+    t_station = 0
     # if user.is_anonymous:
     if not user.is_authenticated:
         organs = Organizations.objects.first()
@@ -81,6 +84,7 @@ def dmatree(request):
         #dma
         if dmaflag == '1':
             for d in o.dma.values("pk","dma_name","dma_no"):
+
                 organtree.append({
                 "name":d["dma_name"],
                 "id":d["pk"],
@@ -91,23 +95,34 @@ def dmatree(request):
                 "icon":"/static/virvo/resources/img/dma.png",
                 "uuid":''
             })
+            
+            t_dma += time.time()-t3
 
         #station
         if stationflag == '1':
-            for s in o.station_set.values("username","pk","meter__simid__simcardNumber"):
+
+            for s in o.station_set.values('username','meter__simid__simcardNumber','pk'):
+                if  s['meter__simid__simcardNumber'] :
+                    commaddr = s['meter__simid__simcardNumber']
+                else:
+                    commaddr = ""
+                    print(s['username']," not related meter.")
+                    continue
                 # if s.dmaid is None: #已分配dma分区的不显示
                 organtree.append({
-                    "name":s["username"],
-                    "id":s["pk"],
+                    "name":s['username'],
+                    "id":s['pk'],
                     "districtid":'',
                     "pId":o.cid,
                     "type":"station",
                     "dma_no":'',
-                    "commaddr":s["meter__simid__simcardNumber"],
+
+                    "commaddr":commaddr,
                     "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
                     "icon":"/static/virvo/resources/img/station.png",
                     "uuid":''
                 })
+            t_station += time.time()-t4
 
     # district
     # districts = District.objects.all()
@@ -138,7 +153,10 @@ def dmatree(request):
     
     result = dict()
     result["data"] = organtree
-    
+    t2 = time.time()
+    print("dma time elapse ",t_dma)
+    print("dmatree time elapse ",t2-t1)
+    print("station time elapse ",t_station)
     # print(json.dumps(result))
     
     return HttpResponse(json.dumps(organtree))

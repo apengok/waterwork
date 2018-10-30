@@ -1,0 +1,279 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html class="no-js">
+<head>
+<title>{% if page_title %} {{ page_title }} {% else %} 首页 {% endif %}</title>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+<meta http-equiv="Expires" content="0"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<meta http-equiv="Cache-Control" content="no-store"/>
+<meta http-equiv="refresh" content="36000; url=/login?type=timeout" />
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" href="{% static 'virvo/resources/js/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/css/font-awesome.min.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/animate.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/main.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/dataTables.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/js/zTree/css/zTreeStyle.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/wizard.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/adaptiveStyle.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/wro/clockPlugins.css' %}">
+<link rel="stylesheet" href="{% static 'virvo/resources/css/twinkle.css' %}">
+<script src="{% static 'virvo/resources/js/modernizr-2.6.2.min.js' %}"></script>
+<script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'virvo/resources/js/layui/layer/skin/layer.css' %}" id="layui_layer_skinlayercss" style="">
+<link rel="stylesheet" href="{% static 'virvo/resources/js/laydate/theme/default/laydate.css' %}" id="layuicss-laydate">
+<link rel="stylesheet" href="{% static 'virvo/resources/css/realTimeMonitoring.css' %}">
+
+</head>
+<body>
+<section id="container">
+    {% include '_vheader.html' %}
+
+
+<label id="_error_label" class='error' style='display: none;'></label>
+<script src="{% static 'virvo/resources/js/jquery-1.10.2.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/jquery.cookie.js' %}"></script>
+            <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+            <script src="{% static 'virvo/resources/js/layui/layer/layer.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/laydate/laydate.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/ungzip/pako.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/ungzip/ungzip.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/sockjs-1.1.1.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/stomp.min.js' %}"></script>
+            <script src="{% static 'virvo/resources/js/webSocket.js' %}"></script> 
+<script>
+    var headers = {"access_token": "6fc2770a-1ef9-47dc-9bc9-5da694726df3"};
+</script>
+<script src="{% static 'virvo/wro/topPublic.js' %}"></script>
+<script>
+$(function () {
+    $('#goTrace9301,#goTrace9302').on('shown.bs.modal',function () {
+        var audio = document.getElementById("laid-off");
+        audio.play();
+    })
+    $('#goTrace9301,#goTrace9302').on('hidden.bs.modal',function () {
+        var audio = document.getElementById("laid-off");
+        audio.pause();
+        audio.currentTime = 0;
+    })
+})
+</script>
+    <section class="main-content-wrapper">
+        <!--sidebar start-->
+        {% include 'sidenav.html' %}
+        <!--sidebar end-->
+<!--权限控制 -->
+<!-- 用户所属组织id -->
+        <input id="userGroupId" value="{{ user.belongto.cid }}" type="text" hidden="true">
+        <!-- 用户所属组织name -->
+        <input id="userGroupName" value="{{ user.belongto }}" type="text" hidden="true">
+        <!-- 用户是否为admin -->
+        <input id="isAdmin" value="{{ user.is_admin|lower }}" type="text" hidden="true">
+        <!-- 用户授权截止日期 -->
+        <input id="userAuthorizationDate" value="{{ user.expire_date }}" type="text" hidden="true">
+        <!-- 用户被分配的角色 -->
+        <input id="allUserRole" value="{{ user.Role.rid }}" type="text" hidden="true">
+        <!-- 用户菜单权限的url -->
+        <input id="permissionUrls" value="{{ user.permissiontree }}" type="text" hidden="true">
+        <!--权限控制 -->
+        <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
+
+        <section id="main-content">
+            <div class="row ">
+                <div class="col-md-12 trackPlay-content">
+                    <div id="content-left" class="col-md-2"
+                         style="padding-right: 0px; padding-left: 0px; z-index: 9999999999999999999999999">
+                        <div id="operationMenu" class="panel panel-default panDefMenu">
+                            <div class="panel-heading" style="padding:10px;background-color:#ffffff;color:#767676;">
+                                <!-- <h3 class="panel-title fwb">轨迹回放</h3> -->
+                                <div style="background-color: rgba(0, 153, 204, 1);padding-left: 0;" >
+                                    <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;">全部站点({{ total_station_num }})
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="panel-body fixed-table-body  form-horizontal" style="padding-top:10px;">
+                                <div id="station_status" class="form-group">
+                                    <div class="col-md-12 " id="disable" style="text-align: left;">
+                                        <div style="background:#fff;text-align: left;">
+                                            <div class="form-group">
+                                              <label class="col-md-6 control-label " style="margin-top:10px;color: #1627e0;text-align: left;">在线({{ online_station_num }})</label>
+                                              <label class="col-md-6 control-label" style="margin-top:10px;color: grey;text-align: left;">离线({{ offline_station_num }})</label>
+                                            </div>
+                                            <div class="form-group">
+                                              <label class="col-md-6 control-label" style="margin-top:10px;color: #f20804;text-align: left;">报警站点({{ alarm_station_num }})</label>
+                                              <label class="col-md-6 control-label" style="margin-top:10px;color: #02470e;text-align: left;">关注站点({{ focus_station_num }})</label>
+                                            </div>
+                                            <div class="form-group">
+                                              <label class="col-md-6 control-label" style="margin-top:10px;margin-bottom:20px;color: #8c4380;text-align: left;">大用户站点({{ biguser_station_num }})</label>
+                                              
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" style="padding-right: 0px; padding-left: 0px;">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                          <h3 class="panel-title fwb">组织架构</h3>
+                                          <div class="actions  listActions">
+                                            <i class="fa fa-chevron-down"></i>
+                                          </div>
+                                        </div>
+                                        <div class="panel-body" style="padding: 0px;">
+                                          <div class="form-group" style="margin-top: 15px;">
+                                            <div class="col-md-12">
+                                              <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
+                                            </div>
+                                          </div>
+                                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:80%!important">
+                                            <ul id="treeDemo" class="ztreee" style="overflow:auto;height:460px!important"></ul>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <div class="col-md-12">
+                                        <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
+                                    </div>
+                                    <input id="savePid" value="" type="text" style="display:none;"/>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <ul id="treeDemo" class="ztree ztreeLoadH" style="overflow: auto"></ul>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    {% block main_content %}
+            
+            
+                    {% endblock %}
+                    <!-- <div id="content-right" class="col-md-10 content-right">
+                        <div class="panel panel-default">
+                            <div class="panel-body fixed-table-body form-horizontal btnPaddingTop panBodyPadding">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+
+            </div>
+            
+
+            
+        </section>
+    </section>
+</section>
+{% include 'footer.html' %}
+<!-- <footer>
+    <div class="imitateMenuBg"></div>
+    <div class="defaultFootBg">
+        <p><span id="copyRight"></span>&nbsp;<a href="" target="_blank" id="website"></a><br/><a href="http://www.miitbeian.gov.cn/" target="_blank" id="record"></a>adff</p>
+    </div>
+</footer> -->
+<script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/waypoints.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/jquery.nanoscroller.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/bootstrap-toggle.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/toastr.min.js' %}"></script>
+    <script src="{% static 'virvo/resources/js/bootstrap-suggest.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'virvo/resources/js/inputClear.min.js' %}"></script>
+    
+    <script src="{% static 'virvo/wro/common-footer.js' %}"></script>
+    {% comment %}
+    <script src="{% static 'virvo/wro/trackback-footer.js' %}"></script>
+    {% endcomment %}
+<div id="commonWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="commonLgWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonLgWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="commonSmWin" class="modal fade" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "commonSmWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="uploaderWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"></div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "uploaderWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+<div id="chatWin" tabIndex="-2" class="modal fade bs-example-modal-lg" aria-hidden="true" data-keyboard="false" data-backdrop="static" >
+    <div class="modal-dialog modal-lg" style="width:990px;max-height:730px">
+        <div class="modal-content" style="box-shadow:none;-webkit-box-shadow:none;background-color:transparent;border:none;border-radius:0px;">
+            <iframe frameborder="0" allowtransparency="true" width="990px" height="720px" id="talk_box" src=""></iframe>
+        </div>
+    </div>
+    <script>
+        /*<![CDATA[*/
+        $(function() {
+            var windowId = "chatWin";
+            $("#" + windowId).on("hidden.bs.modal", function() {
+                $(this).removeData("bs.modal");
+            });
+        });
+        /*]]>*/
+    </script>
+</div>
+{% block javascript %}
+
+
+{% endblock %}
+
+</body>
+</html>
