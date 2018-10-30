@@ -5,34 +5,47 @@
 
 {% block stylesheet %}
 <style type="text/css">
-table {
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  /*border: 3px solid purple;*/
+.dmaReport{
+
+    width: 45%;
+    float:left
 }
 
-/*thead th:nth-child(1) {
-  width: 30%;
+
+
+.dmaReport_1{
+
+    text-align: center;
+    font-family:'微软雅黑';
+    font-size:14px;
+
+
 }
 
-thead th:nth-child(2) {
-  width: 20%;
+.dmaReport_1 tr.one{
+    background: #f5f5f5;
+
 }
 
-thead th:nth-child(3) {
-  width: 15%;
+
+.dmaReport_1 tr td{
+    height: 51px;
+    width: 80px;
 }
 
-thead th:nth-child(4) {
-  width: 35%;
-}*/
 
-th, td {
-  padding: 0px;
-  height: 50px;
+.leakRate{
+    background-color:#f70439;color:#ffffff;
 }
+
+.leakRate{
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    width: 110%;border:none;text-align:center;
+
+}
+
 </style>
 {% endblock %}
 
@@ -106,7 +119,7 @@ th, td {
                             </form>
                         </div>
 
-                        <div class="col-md-6" style="height: 300px;">
+                        <!-- <div class="col-md-6" style="height: 300px;">
                             <table border="1" >
                                 <tr ><td colspan="7">水量平衡表</td></tr>
                                 <tr>
@@ -156,7 +169,64 @@ th, td {
                                     
                                 </tr>
                             </table>
-                        </div>
+                        </div> -->
+                        <div class="dmaReport" style="height: 300px;">
+                                    <table border="1" bordercolor="#dddddd">
+                                        <tbody class="dmaReport_1">
+                                        <tr>
+                                            <td colspan="7">水量平衡表</td>
+                                        </tr>
+                                        <tr class="one">
+                                            <td><p>进水总量</p></td>
+                                            <td> 供水量<br>(万m3)</td>
+                                            <td colspan="2"> 水量统计<br>(万m3)</td>
+                                            <td> 产销差水量<br>(万m3)</td>
+                                            <td> 产销差率</td>
+
+                                            <td> 漏损率</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td id="influx">3827.1</td>
+                                            <td id="total" rowspan="3">3779.78</td>
+                                            <td>售水量</td>
+                                            <td id="sale">50.71</td>
+                                            <td>/</td>
+                                            <td>/</td>
+                                            <td id="leak_percent" rowspan="3">98.54</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>出水总量</td>
+                                            <td>未计量水量</td>
+                                            <td id="uncharg">4.49</td>
+                                            <td id="cxc" rowspan="2">3729.08</td>
+                                            <td id="cxc_percent" rowspan="2">98.66</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td id="outflux">47.32</td>
+                                            <td>漏水量</td>
+                                            <td id="leak">3724.59</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="dmaReport_1" border="1" bordercolor="#dddddd" style="margin-top: 10px;">
+                                        <tbody>
+                                        <tr  class="one">
+                                            <td>MNF</td>
+                                            <td id="mnf">1.2</td>
+                                            <td>背景漏水量</td>
+                                            <td id="bg_leak"></td>
+                                            <td>破管漏水量</td>
+                                            <td id="broken_pipe">0</td>
+
+                                            <td> 漏损率</td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                         <div class="col-md-6" style="height: 313px;border: 1px solid grey;">
                             <div id="onlineGraphics" style="height:310px;width:100%;"></div>
                         </div>
