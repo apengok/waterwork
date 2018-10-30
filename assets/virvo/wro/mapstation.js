@@ -19,8 +19,26 @@
     var markerInfoWindow = null;
     var markerList = [];
 
+    var $contentLeft = $("#content-left"), $contentRight = $("#content-right");
+
     mapStation = {
         init: function(){
+
+
+            //计算顶部logo相关padding
+            var logoWidth = $("#header .brand").width();
+            var btnIconWidth = $("#header .toggle-navigation").width();
+            var windowWidth = $(window).width();
+            var newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
+            //左右自适应宽度
+            $contentLeft.css({
+                "width": newwidth + "%",
+            });
+            $contentRight.css({
+                "width": 100 - newwidth + "%"
+            });
+            
+            
             // map
             var layer = new AMap.TileLayer({
                   zooms:[3,20],    //可见级别
@@ -38,8 +56,6 @@
                 lang:'zh_cn',  //设置地图语言类型
             });
 
-            
-            
             
             
             
