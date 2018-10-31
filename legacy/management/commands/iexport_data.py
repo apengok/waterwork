@@ -489,43 +489,37 @@ class Command(BaseCommand):
 
         if options['watermeter']:
             
-            wmeters_qset = Watermeter.objects.using("shexian").values_list("id","communityid","rvalue","fvalue","meterstate","commstate",
+            wmeters_qset = Watermeter.objects.using("shexian").values("id","communityid","rvalue","fvalue","meterstate","commstate",
                 "rtime","lastrvalue","lastrtime","dosage","valvestate","lastwritedate","lastwritevalue","meterv","wateraddr")
             print("watermeter count",wmeters_qset.count())
             cnt = 0
             cnt2 = 0
             for w in wmeters_qset:
-                waterid = w[0]
-                communityid = w[1]
-                wateraddr = w[14]
+                waterid = w["id"]
+                communityid = w["communityid"]
+                wateraddr = w["wateraddr"]
                 # watermeter data
                 try:
-                    v = Watermeter.objects.using("zncb").get(wateraddr=wateraddr)
-                except:
+
+                    Watermeter.objects.using("zncb").filter(wateraddr=wateraddr).update(
+                        rvalue = w["rvalue"],
+                        fvalue = w["fvalue"],
+                        meterstate = w["meterstate"],
+                        commstate = w["commstate"],
+                        rtime = w["rtime"],
+                        lastrvalue = w["lastrvalue"],
+                        lastrtime = w["lastrtime"],
+                        dosage = w["dosage"],
+                        valvestate = w["valvestate"],
+                        lastwritedate = w["lastwritedate"],
+                        lastwritevalue = w["lastwritevalue"],
+                        meterv = w["meterv"])
+                except Exception as e:
                     # print("{} not exists in bsc2000".format(waterid))
-                    cnt += 1
+                    print("0.",e)
                     continue
 
-                if v:
-                    if v.id != w[0]:
-                        v.id = w[0]
-                        cnt2 += 1
-                    v.rvalue = w[2]
-                    v.fvalue = w[3]
-                    v.meterstate = w[4]
-                    v.commstate = w[5]
-                    v.rtime = w[6]
-                    v.lastrvalue = w[7]
-                    v.lastrtime = w[8]
-                    v.dosage = w[9]
-                    v.valvestate = w[10]
-                    v.lastwritedate = w[11]
-                    v.lastwritevalue = w[12]
-                    v.meterv = w[13]
-                    try:
-                        v.save(using='zncb')
-                    except:
-                        print(w)
+                
 
 
                 # hdb_watermeter_day
@@ -548,12 +542,14 @@ class Command(BaseCommand):
                         if added.exists():
                             # print(added.count(),waterid,communityid)
                             count += added.count()
+                            added_list = []
                             for d in added:
-                                try:
-                                    HdbWatermeterDay.objects.create(waterid=d.waterid,rvalue=d.rvalue,fvalue=d.fvalue,rtime=d.rtime,hdate=d.hdate,
-                                        meterstate=d.meterstate,commstate=d.commstate,dosage=d.dosage,communityid=d.communityid)
-                                except:
-                                    pass
+                                added_list.append(HdbWatermeterDay(waterid=d.waterid,rvalue=d.rvalue,fvalue=d.fvalue,rtime=d.rtime,hdate=d.hdate,
+                                        meterstate=d.meterstate,commstate=d.commstate,dosage=d.dosage,communityid=d.communityid) )
+                            try:
+                                HdbWatermeterDay.objects.bulk_create(added_list)
+                            except Exception as e:
+                                print("1.",e)
 
                 # hdb_watermeter_month
                 # 威尔沃数据库最后一条数据记录
@@ -575,13 +571,14 @@ class Command(BaseCommand):
                         if added.exists():
                             # print(added.count(),waterid,communityid)
                             count= added.count()
-                            
+                            added_list = []
                             for d in added:
-                                try:
-                                    HdbWatermeterMonth.objects.create(waterid=d.waterid,hdate=d.hdate,
-                                    dosage=d.dosage,communityid=d.communityid)
-                                except:
-                                    pass
+                                added_list.append(HdbWatermeterMonth(waterid=d.waterid,hdate=d.hdate,
+                                    dosage=d.dosage,communityid=d.communityid) )
+                            try:
+                                HdbWatermeterMonth.objects.bulk_create(added_list)
+                            except Exception as e:
+                                print("2.",e)
 
         if options['concentrator']:
             

@@ -3,9 +3,9 @@
 * @ AUTNOR ZoomWell Team
 * @ LINK WWW.ZWLBS.COM
 */
-html{overflow-y: scroll;}
+/*html{overflow-y: scroll;}
 :root{overflow-y: auto;overflow-x: hidden;}
-:root body{position: absolute;}
+:root body{position: absolute;}*/
 body{user-select:none;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;width: 100vw;}
 select.form-control{padding: 6px 40px 6px 11px}
 #container{
@@ -19,7 +19,7 @@ select.form-control{padding: 6px 40px 6px 11px}
     margin-left:240px;
     margin-right:0;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;
     -o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;background:#f1f2f7;}
-.sidebar{margin-left: -240px;float: left;width:240px;height:100%;background:#32323a;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;z-index:100}
+.sidebar{margin-left: -240px;float: left;width:240px;background:#32323a;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;z-index:100}
 #main-content .eightIsZero{height:0px;}
 footer{max-height:46px;background:red;width:100%;text-align:center}
 footer .imitateMenuBg{background:#32323a;width:240px;height:46px;float:left;-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out}

@@ -24,6 +24,12 @@
     mapStation = {
         init: function(){
 
+            var winHeight = $(window).height();//可视区域高度
+            console.log("winHeight",winHeight);
+            var headerHeight = $("#header").height();//头部高度
+            console.log("headerHeight",headerHeight);
+            console.log("$contentLeft",$contentLeft.height());
+            console.log("$sidebar height",$(".sidebar").height());
 
             //计算顶部logo相关padding
             var logoWidth = $("#header .brand").width();
@@ -37,8 +43,28 @@
             $contentRight.css({
                 "width": 100 - newwidth + "%"
             });
-            
-            
+
+            //地图高度
+            var newMapHeight = winHeight - headerHeight  - 10;
+            $("#map-container").css({
+                "height": newMapHeight + 'px'
+            });
+console.log("$newMapHeight",$("#map-container").height());
+            $contentLeft.css({
+                "height": newMapHeight + "px",
+            });
+            console.log("$contentLeft",$contentLeft.height());
+            var newContLeftH = winHeight - headerHeight ;
+
+            $("#sidebar").css({
+                "height": newMapHeight + "px"
+            });
+            console.log("$sidebar height",$(".sidebar").height());
+
+            $("#treeDemo").css({
+                "height": 388 + "px"
+            });
+
             // map
             var layer = new AMap.TileLayer({
                   zooms:[3,20],    //可见级别

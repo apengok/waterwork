@@ -437,7 +437,7 @@
                 serias_list.push(tmp);
 
                 legend_list.push("当日柱状图");
-                var tmp = dailyUse.fillSeriaData("当日柱状图",'bar','rgba(22, 55, 13, 1)',0,0,today_bar);
+                var tmp = dailyUse.fillSeriaData("当日柱状图",'bar','#7cb4ed',0,0,today_bar);
                 serias_list.push(tmp);
 
                 // dailyUse.reloadData(dataListArray);
@@ -521,14 +521,25 @@
                 },
                 xAxis: [{
                     type: 'category',
-                    boundaryGap: false,  // 让折线图从X轴0刻度开始
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
                     name: "",
                     axisLabel: {
                         show: true,
                         rotate: 0
                     },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:440,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
                     splitLine: {
-                        show: true,
+                        show: false,
                         lineStyle: {
                             color: 'grey',
                             type: 'dotted',
@@ -644,7 +655,7 @@
                         splitLine : {
                             show: false
                         },
-                        offset : 20
+                        offset : 50
                     }
                 ],
                 // dataZoom : [{
@@ -975,7 +986,7 @@
                 },
                 xAxis: [{
                     type: 'category',
-                    boundaryGap: false,  // 让折线图从X轴0刻度开始
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
                     name: "",
                     axisLabel: {
                         show: true,

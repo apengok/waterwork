@@ -37,24 +37,7 @@
             background-color: white !important;
         }
 
-        #thetree {
-            height: 20000px;
-        }
-
-        #MapContainer {
-            height: 20000px;
-        }
-
-        #dataTableBind td {
-            padding: 7px 10px;
-        }
-        .toolOperateClick .map-call::before{
-            content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-off.png)!important;background-size:22px 22px
-        }
-        .toolOperateClick .map-call.active::before{content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-on.png)!important;background-size:22px 22px}
-
-        #map-container {width:1400px; height: 750px; }  
-
+        
 
 .overlay2 {
     display: none;
@@ -112,9 +95,10 @@
 <script>
 var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 </script>
-{% comment %}
-<script src="/clbs/wro/topPublic.js"></script>
-{% endcomment %}
+
+
+<script src="{% static 'virvo/wro/topPublic.js' %}"></script> 
+
       <section class="main-content-wrapper main-content-toggle-left">
             <!--sidebar start-->
             {% include 'sidenav.html' %}
@@ -182,7 +166,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             </section>
         </section>
     </section>
-    {% include 'footer.html' %}
+    
 <script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/waypoints.min.js' %}"></script>
     <script src="{% static 'virvo/resources/js/jquery.nanoscroller.min.js' %}"></script>
