@@ -25,6 +25,8 @@ from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDa
 from dmam.models import DMABaseinfo,DmaStation,Station
 from entm.models import Organizations
 
+from legacy.utils import HdbFlow_day_hourly
+
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -1048,6 +1050,8 @@ def flowdata_dailyuse(request):
     
     station = Station.objects.get(pk=int(stationid))
 
+    commaddr = station.meter.simid.simcardNumber
+    print("commaddr:",commaddr)
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
     yestoday = today - datetime.timedelta(days=1)
@@ -1070,11 +1074,13 @@ def flowdata_dailyuse(request):
 
     days_flows = []
 
+    flowdata_daylist = {}
     for i in range(days):
         # print(startTime,endTime)
         flowdata_hour = station.flowData_Hour(startTime,endTime)
+        # flowdata_hour = HdbFlow_day_hourly(commaddr,startTime)
         # print(flowdata_hour)
-
+        flowdata_daylist[startTime] = flowdata_hour
         days_flows.append(flowdata_hour)
         today = yestoday
         yestoday = today - datetime.timedelta(days=1)
@@ -1088,7 +1094,7 @@ def flowdata_dailyuse(request):
                
     
     
-    fh_today = [flowdata_hour[k] for k in flowdata_hour]
+    # fh_today = flowdata_hour[:] #[flowdata_hour[k] for k in flowdata_hour]
 
     pressdata_hour = station.press_Data(startTime,endTime)
     press_today = [pressdata_hour[k] for k in pressdata_hour]
@@ -1101,7 +1107,7 @@ def flowdata_dailyuse(request):
 
     hdates = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','00']
     
-    #today_flow data
+    # today_flow data
     for d_flow in days_flows:
         fdates = [k for k in d_flow]
         flows = [d_flow[k] for k in d_flow]
@@ -1130,6 +1136,8 @@ def flowdata_dailyuse(request):
             "msg":"null",
             "obj":{
                 "flow_data":data, #reverse
+                "flowdata_daylist":flowdata_daylist,
+                "hdate":fdates[i],
                 "pressure":p_data,
                 "today_use":today_use,
                 "yestoday_use":yestoday_use,

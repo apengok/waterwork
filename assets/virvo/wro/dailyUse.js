@@ -323,6 +323,7 @@
             var minflow = "-";
             var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 0, 119, 1)']
             var today_bar = [];
+            console.log(data);
             if (data.obj != null && data.obj != "") {
                 flow_data = data.obj.flow_data;
                 

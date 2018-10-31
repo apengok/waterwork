@@ -78,17 +78,22 @@ def HdbFlow_day_hourly(commaddr,day):
     etime = datetime.datetime.strptime(day.strip(),"%Y-%m-%d")
     stime = etime + datetime.timedelta(days=1)
     startTime =day + ' 00:00:00'
-    endTime = stime.strftime("%Y-%m-%d") + ' 00:00:00'
+    endTime = stime.strftime("%Y-%m-%d") + ' 00:01:00'
     flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[startTime,endTime]).values_list("readtime","plustotalflux")
     f_dict =dict(flows)
+    return f_dict
+    print('f_dict',f_dict)
     hours = ['00:00:00','01:00:00','02:00:00','03:00:00','04:00:00','05:00:00','06:00:00','07:00:00','08:00:00','09:00:00','10:00:00','11:00:00','12:00:00','13:00:00','14:00:00','15:00:00','16:00:00','17:00:00','18:00:00','19:00:00','20:00:00','21:00:00','22:00:00','23:00:00']
     zhengdian_value = []
     for h in hours:
         th=startTime[:11] + h
-        v=f_dict[th]
+        v=0
+        if th in f_dict.keys():
+            v=f_dict[th]
         zhengdian_value.append(v)
-
-    end_value = f_dict[endTime[:11]+"00:00:00"]
+    end_value = 0
+    if endTime[:11]+"00:00:00" in f_dict.keys():
+        end_value = f_dict[th]
     zhengdian_value.append(end_value)
     # print('zhengdian_value',zhengdian_value)
     diff_value=[]
