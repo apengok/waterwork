@@ -7,7 +7,7 @@ from django.db.models import Avg, Max, Min, Sum
 
 from legacy.models import (District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,
                             HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter,
-                            HdbWatermeterDay,HdbWatermeterMonth)
+                            HdbWatermeterDay,HdbWatermeterMonth,HdbFlowDataHour)
 
 
 # .exclude(plustotalflux__icontains='429490176') 因为抄表系统处理负数的问题，数据库写入很多不正确的数据，负值貌似都写入了429490176，所以排除这些数据
@@ -68,7 +68,8 @@ def HdbFlow_day_use(commaddr,day):
         day_use = float(flows[n-1][1]) - float(flows[0][1])
     return round(day_use,2)
 
-def HdbFlow_day_hourly(commaddr,day):
+# 
+def HdbFlow_day_hourly_static(commaddr,day):
     '''
         返回日整点用水量
         当前整点正向流量-上一整点正向流量
@@ -79,31 +80,119 @@ def HdbFlow_day_hourly(commaddr,day):
     stime = etime + datetime.timedelta(days=1)
     startTime =day + ' 00:00:00'
     endTime = stime.strftime("%Y-%m-%d") + ' 00:01:00'
+    flows = HdbFlowDataHour.objects.filter(commaddr=commaddr).filter(hdate__range=[startTime,endTime]).values_list("hdate","dosage")
+    # f_dict =dict(flows)
+    return flows
+
+def HdbFlow_day_hourly(commaddr,day):
+    '''
+        返回日整点用水量
+        当前整点正向流量-上一整点正向流量
+    '''
+    flow_data = []
+    
+    etime = datetime.datetime.strptime(day.strip(),"%Y-%m-%d")
+    stime = etime + datetime.timedelta(days=1)
+    startTime =day + ' 00:00:00'
+    endTime = stime.strftime("%Y-%m-%d") + ' 00:10:00'
+    # print("start -endtime ",startTime,endTime)
     flows = HdbFlowData.objects.filter(commaddr=commaddr).filter(readtime__range=[startTime,endTime]).values_list("readtime","plustotalflux")
     f_dict =dict(flows)
-    return f_dict
-    print('f_dict',f_dict)
+    # return f_dict
+    # print('f_dict',f_dict)
     hours = ['00:00:00','01:00:00','02:00:00','03:00:00','04:00:00','05:00:00','06:00:00','07:00:00','08:00:00','09:00:00','10:00:00','11:00:00','12:00:00','13:00:00','14:00:00','15:00:00','16:00:00','17:00:00','18:00:00','19:00:00','20:00:00','21:00:00','22:00:00','23:00:00']
     zhengdian_value = []
     for h in hours:
         th=startTime[:11] + h
-        v=0
+        v='-'
         if th in f_dict.keys():
             v=f_dict[th]
         zhengdian_value.append(v)
-    end_value = 0
+    end_value = '-'
     if endTime[:11]+"00:00:00" in f_dict.keys():
-        end_value = f_dict[th]
+        end_value = f_dict[endTime[:11]+"00:00:00"]
     zhengdian_value.append(end_value)
     # print('zhengdian_value',zhengdian_value)
-    diff_value=[]
+    diff_value={}
+    xishu_for = [] #用来计算系数
     for i in range(len(zhengdian_value)-1):
-        v = float(zhengdian_value[i+1]) - float(zhengdian_value[i])
-        diff_value.append(round(v,2))
+        if zhengdian_value[i+1] != '-':
+            v = float(zhengdian_value[i+1]) - float(zhengdian_value[i])
+            fv = round(v,2)
+            xishu_for.append(fv)
+        else:
+            fv = '-'
+        th = day + " %02d"%(i+1)
+        diff_value[th] = fv
+        # diff_value.append(round(v,2))
 
     # print('diff_value',diff_value)
+    # 计算时变化系数
+    x = 0
+    if len(xishu_for) > 0:
+        max_value = max(xishu_for)
+        min_value = min(xishu_for)
+        avg_value = sum(xishu_for) / len(xishu_for)
 
-    return diff_value
+        
+        if avg_value != 0:
+            x1 = max_value - avg_value
+            x2 = avg_value - min_value  
+            # print("x1=",x1,"x2=",x2)
+            if x1 > x2:
+                x = max_value / avg_value
+            else:
+                x = min_value / avg_value
+
+
+    return diff_value,round(x,2)
+
+
+def flow_day_dosage(commaddr,day):
+    f = HdbFlowDataDay.objects.filter(commaddr=commaddr,hdate=day).values_list("dosage")
+    # print("flow_day_dosage",day,f)
+    if f.exists():
+        return round(float(f[0][0]),2)
+    else:
+        return '-'
+
+
+    # 时变化系数
+def flow_hour_xishu(commaddr,day):
+    '''
+    时变化系数：每天中瞬时流量的最大值除以平均值，瞬时流量的最小值除以平均值，这两个数都是个系数，取其中最大的，
+    举例如下：
+        最大值：1.2m³/h，最小值：0.7 m³/h，平均值：1 m³/h
+        那么（1.2-1）<（1-0.7），取最大，时变化系数是：0.7/1=0.7
+        最大值：1.2 m³/h，最小值：0.9 m³/h，平均值：1 m³/h
+        那么（1.2-1）>（1-0.9），取最大，时变化系数是1.2/1=1.2
+    '''
+
+    avg_flow = HdbFlowData.objects.search(commaddr,day).aggregate(Avg('flux'))
+    avg_value = avg_flow['flux__avg']
+    
+
+    max_flow = HdbFlowData.objects.search(commaddr,day).aggregate(Max('flux'))
+    max_value = float(max_flow['flux__max'])
+    
+    min_flow = HdbFlowData.objects.search(commaddr,day).aggregate(Min('flux'))
+    min_value = float(min_flow['flux__min'])
+
+    print(min_value,max_value,avg_value)
+
+    x = 0
+    if avg_value != 0:
+        x1 = max_value - avg_value
+        x2 = avg_value - min_value  
+        print("x1=",x1,"x2=",x2)
+        if x1 > x2:
+            x = max_value / avg_value
+        else:
+            x = min_value / avg_value
+        print("x=",x)
+    
+
+    return round(x,2)
 
 # 统计大表月用水量，从流量历史数据查询当月的数据，最后一条记录减去第一条记录的差值
 def HdbFlow_month_use(commaddr,day):

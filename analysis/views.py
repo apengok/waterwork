@@ -25,7 +25,7 @@ from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDa
 from dmam.models import DMABaseinfo,DmaStation,Station
 from entm.models import Organizations
 
-from legacy.utils import HdbFlow_day_hourly
+from legacy.utils import HdbFlow_day_hourly,flow_day_dosage
 
 # from django.core.urlresolvers import reverse_lazy
 
@@ -1051,7 +1051,8 @@ def flowdata_dailyuse(request):
     station = Station.objects.get(pk=int(stationid))
 
     commaddr = station.meter.simid.simcardNumber
-    print("commaddr:",commaddr)
+    # commaddr = '440333078307' #for test
+    print("commaddr:",commaddr,"days ",days)
     today = datetime.date.today()
     today_str = today.strftime("%Y-%m-%d")
     yestoday = today - datetime.timedelta(days=1)
@@ -1061,37 +1062,47 @@ def flowdata_dailyuse(request):
 
     #staticstic data
     #当天用水量
-    today_use = station.flow_day_dosage(today)
+    today_use = flow_day_dosage(commaddr,today_str)
     #昨日用水量
-    yestoday_use = station.flow_day_dosage(yestoday)
+    yestoday_use = flow_day_dosage(commaddr,yestoday_str)
     #前日用水量
     before_yestoday = today - datetime.timedelta(days=2)
-    before_yestoday_use = station.flow_day_dosage(before_yestoday)
+    before_yestoday_str = before_yestoday.strftime("%Y-%m-%d")
+    before_yestoday_use = flow_day_dosage(commaddr,before_yestoday_str)
     
     #最大值,最小值,平均值
     average,maxflow,minflow = station.flow_hour_aggregate(startTime,endTime)
     
 
     days_flows = []
+    xishu_daylist = {}
 
     flowdata_daylist = {}
     for i in range(days):
         # print(startTime,endTime)
-        flowdata_hour = station.flowData_Hour(startTime,endTime)
-        # flowdata_hour = HdbFlow_day_hourly(commaddr,startTime)
+        # flowdata_hour = station.flowData_Hour(startTime,endTime)
+        day = today - datetime.timedelta(days=i)
+        day_str = day.strftime("%Y-%m-%d")
+        flowdata_hour,x = HdbFlow_day_hourly(commaddr,day_str)
         # print(flowdata_hour)
-        flowdata_daylist[startTime] = flowdata_hour
-        days_flows.append(flowdata_hour)
-        today = yestoday
-        yestoday = today - datetime.timedelta(days=1)
+        flowdata_daylist[day_str] = flowdata_hour
 
-        
-        yestoday_str = yestoday.strftime("%Y-%m-%d")
-        today_str = today.strftime("%Y-%m-%d")
-        startTime = yestoday_str + " 23:59:59"
-        endTime = today_str + " 23:59:59"
+        # x = flow_hour_xishu(commaddr,day_str)
+        xishu_daylist[day_str] = x
+        # days_flows.append(flowdata_hour)
 
-               
+        # today statistic
+        if day_str == today_str:
+            today_flow_vlist = [round(float(flowdata_hour[k]),2) for k in flowdata_hour.keys() if flowdata_hour[k] != '-']
+            if len(today_flow_vlist)>0:
+                maxflow = max(today_flow_vlist)
+                minflow = min(today_flow_vlist)
+                average = round(sum(today_flow_vlist) / len(today_flow_vlist),2)
+                # avg_str = "{} m³".format(round(float(avg_value),2))
+                # max_str = "{} m³ ({}:00)".format(round(float(max_value),2),max_date[-2:])
+                # min_str = "{} m³ ({}:00)".format(round(float(min_value),2),min_date[-2:])
+
+                      
     
     
     # fh_today = flowdata_hour[:] #[flowdata_hour[k] for k in flowdata_hour]
@@ -1108,36 +1119,37 @@ def flowdata_dailyuse(request):
     hdates = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','00']
     
     # today_flow data
-    for d_flow in days_flows:
-        fdates = [k for k in d_flow]
-        flows = [d_flow[k] for k in d_flow]
-        for i in range(len(flows)):
-            data.append({
-                "hdate":fdates[i],
-                "flow":flows[i],
-                "assignmentName":station.username,
-                "color":"红色",
-                "ratio":"null"
+    # for d_flow in days_flows:
+    #     fdates = [k for k in d_flow]
+    #     flows = [d_flow[k] for k in d_flow]
+    #     for i in range(len(flows)):
+    #         data.append({
+    #             "hdate":fdates[i],
+    #             "flow":flows[i],
+    #             "assignmentName":station.username,
+    #             "color":"红色",
+    #             "ratio":"null"
                 
-                })
+    #             })
     #pressure data
     p_data = []
-    for i in range(len(press_today)):
-        p_data.append({
-            "hdate":pree_time[i],
-            "press":press_today[i],
-            "assignmentName":station.username,
-            "color":"green",
-            "ratio":"null"
+    # for i in range(len(press_today)):
+    #     p_data.append({
+    #         "hdate":pree_time[i],
+    #         "press":press_today[i],
+    #         "assignmentName":station.username,
+    #         "color":"green",
+    #         "ratio":"null"
             
-            })
+    #         })
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
                 "flow_data":data, #reverse
-                "flowdata_daylist":flowdata_daylist,
-                "hdate":fdates[i],
+                "flowdata_daylist":flowdata_daylist,#json.dumps(flowdata_daylist),
+                "xishu_daylist":xishu_daylist,
+                "hdate":['2018-10-31 01' , '2018-10-31 02' , '2018-10-31 03' , '2018-10-31 04' , '2018-10-31 05' , '2018-10-31 06' , '2018-10-31 07' , '2018-10-31 08' , '2018-10-31 09' , '2018-10-31 10' , '2018-10-31 11' , '2018-10-31 12' , '2018-10-31 13' , '2018-10-31 14' , '2018-10-31 15' , '2018-10-31 16' , '2018-10-31 17' , '2018-10-31 18' , '2018-10-31 19' , '2018-10-31 20', '2018-10-31 21' , '2018-10-31 22' , '2018-10-31 23' , '2018-10-31 24'],
                 "pressure":p_data,
                 "today_use":today_use,
                 "yestoday_use":yestoday_use,

@@ -321,12 +321,19 @@
             var average = "-";
             var maxflow = "-";
             var minflow = "-";
-            var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 0, 119, 1)']
+            var color_list = ['#0000FF','#FF0000',' #FF7D00',' #FFFF00','#00FF00','#00FFFF','#FF00FF']
+            // var color_list = ['rgba(22, 155, 213, 1)','rgba(122, 55, 13, 1)','rgba(212, 15, 113, 1)','rgba(221, 55, 113, 1)','rgba(122, 45, 85, 1)','rgba(98, 35, 148, 1)','rgba(121, 0, 119, 1)']
             var today_bar = [];
+            var flowdata_daylist;
+            var xishu_daylist;
+            var xishu_str = $("#xishu");
+            xishu_str.empty();
             console.log(data);
             if (data.obj != null && data.obj != "") {
                 flow_data = data.obj.flow_data;
-                
+                flowdata_daylist = data.obj.flowdata_daylist;
+                console.log(typeof(flowdata_daylist));
+                xishu_daylist = data.obj.xishu_daylist;
                 pressure = data.obj.pressure;
 
                 today_use = data.obj.today_use;
@@ -338,6 +345,77 @@
                 
             }
             if (data.success == true) {
+
+                // new pr
+                ci = 0
+                if( typeof(flowdata_daylist) == "object"){
+                    for(var key in flowdata_daylist){
+                        console.log(key,flowdata_daylist[key],typeof(flowdata_daylist[key]));
+
+                        //get flow data
+                        var flows_values = flowdata_daylist[key];
+                        var flow_current = [];
+                        for(key0 in flows_values){
+                            console.log(flows_values[key0],typeof(flows_values[key0]));
+                            flow_current.push(flows_values[key0])
+                            // if(flows_values[key0] > 0){
+                            //     flow_current.push(flows_values[key0])
+                            // }else{
+                            //     if(key0 == "2018-11-01 09" || key0 == "2018-11-01 10" ||key0 == "2018-11-01 11")
+                            //         flow_current.push('4.8')
+                            //     else
+                            //         flow_current.push('-')
+                            // }
+                        }
+
+                        //
+                        var datestr = key;//hdates[j].substring(0,10);
+                            
+                        var nowDate = new Date();
+                        var today = nowDate.getFullYear()
+                        + "-"
+                        + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                            + parseInt(nowDate.getMonth() + 1)
+                            : parseInt(nowDate.getMonth() + 1))
+                        + "-"
+                        + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                            : nowDate.getDate());
+
+                        nowDate.setDate(nowDate.getDate() - 1);
+                        var yestoday = nowDate.getFullYear()
+                        + "-"
+                        + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                            + parseInt(nowDate.getMonth() + 1)
+                            : parseInt(nowDate.getMonth() + 1))
+                        + "-"
+                        + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                            : nowDate.getDate());
+
+
+                        if(datestr == today){
+                            datestr = "今日曲线";
+                            today_bar = flow_current;
+                        }
+                        if(datestr == yestoday){
+                            datestr = "昨日曲线";
+                        }
+
+                        legend_list.push(datestr);
+                        var tmp = dailyUse.fillSeriaData(datestr,'line',color_list[ci],0,0,flow_current);
+                        serias_list.push(tmp);
+                        console.log(datestr,flow_current);
+
+                        //时变化系数
+                        var x = xishu_daylist[key];
+                        console.log("x=",x);
+                        var tmp_str = "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:29px;height:9px;background-color:"+color_list[ci]+"'></span>" + x;
+                        xishu_str.append(tmp_str) 
+                        flow_current = []
+                        ci += 1;
+
+                    }
+
+                }
                 
                 //当月
                 dataListArray=[];
@@ -434,7 +512,7 @@
                     
                 }
                 legend_list.push("压力曲线");
-                var tmp = dailyUse.fillSeriaData("压力曲线",'line','rgba(220, 155, 21, 1)',1,1,press);
+                var tmp = dailyUse.fillSeriaData("压力曲线",'line','rgba(220, 155, 21, 1)',0,1,press);
                 serias_list.push(tmp);
 
                 legend_list.push("当日柱状图");
@@ -555,33 +633,34 @@
                     // },
                     data: ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'] //dailyUse.platenumbersplitYear(hdates)
                 },
-                {
-                    type:'category',
-                    show:true,
-                    position:'bottom',
-                    interval:0,
-                    offset:20,
-                    tooltip:{
-                        show:false
-                    },
-                    axisTick:{
-                        show:false
-                    },
-                    splitLine: {
-                        show: false,
-                        lineStyle: {
-                            color: '#483d8b',
-                            type: 'dashed',
-                            width: 0.5
-                        }
-                    },
-                    axisLabel: {
-                        show: true,
-                        interval:0,
-                        rotate: 0
-                    },
-                    data:dailyUse.weekshowsplitFun(hdates)
-                }],
+                // {
+                //     type:'category',
+                //     show:true,
+                //     position:'bottom',
+                //     interval:0,
+                //     offset:20,
+                //     tooltip:{
+                //         show:false
+                //     },
+                //     axisTick:{
+                //         show:false
+                //     },
+                //     splitLine: {
+                //         show: false,
+                //         lineStyle: {
+                //             color: '#483d8b',
+                //             type: 'dashed',
+                //             width: 0.5
+                //         }
+                //     },
+                //     axisLabel: {
+                //         show: true,
+                //         interval:0,
+                //         rotate: 0
+                //     },
+                //     data:dailyUse.weekshowsplitFun(['2018-10-31 01' , '2018-10-31 02' , '2018-10-31 03' , '2018-10-31 04' , '2018-10-31 05' , '2018-10-31 06' , '2018-10-31 07' , '2018-10-31 08' , '2018-10-31 09' , '2018-10-31 10' , '2018-10-31 11' , '2018-10-31 12' , '2018-10-31 13' , '2018-10-31 14' , '2018-10-31 15' , '2018-10-31 16' , '2018-10-31 17' , '2018-10-31 18' , '2018-10-31 19' , '2018-10-31 20', '2018-10-31 21' , '2018-10-31 22' , '2018-10-31 23' , '2018-10-31 24'])
+                // }
+                ],
                 yAxis: [
                     {
                         type: 'value',
@@ -639,15 +718,16 @@
                             show: true,
                             lineStyle: {
                                 color: 'grey',
-                                type: 'dashed',
+                                // type: 'line',
                                 width: 1
                             }
                         },
                         axisTick : {    // 轴标记
-                            show:false,
+                            show:true,
+                            inside:true,
                             length: 10,
                             lineStyle: {
-                                color: 'green',
+                                color: 'grey',
                                 type: 'solid',
                                 width: 2
                             }
