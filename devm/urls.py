@@ -61,6 +61,7 @@ urlpatterns = [
 
     # 参数指令
     url(r'^paramsmanager/?$', views.ParamsMangerView.as_view(), name='paramsmanager'),
+    url(r'^paramsmanager/command/list/?$', views.commandlist, name='commandlist'),
 
     
 ]
