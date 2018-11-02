@@ -116,7 +116,7 @@ def HdbFlow_day_hourly(commaddr,day):
     diff_value={}
     xishu_for = [] #用来计算系数
     for i in range(len(zhengdian_value)-1):
-        if zhengdian_value[i+1] != '-':
+        if zhengdian_value[i+1] != '-' and zhengdian_value[i] != '-':
             v = float(zhengdian_value[i+1]) - float(zhengdian_value[i])
             fv = round(v,2)
             xishu_for.append(fv)

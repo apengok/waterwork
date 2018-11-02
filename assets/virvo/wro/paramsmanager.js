@@ -241,7 +241,7 @@
             zTree.checkNode(treeNode, !treeNode.checked, false, true);
             return true;
         },
-        //车辆树车牌信息点击事件
+        //组织架构树点击事件
         onClickVehicle: function(e,treeId,treeNode) {
             //判断点击企业及分组以为(车)
             if (treeNode.iconSkin !== "assignmentSkin" && treeNode.iconSkin !== "groupSkin") {
@@ -1054,9 +1054,9 @@
             //表格setting
             var setting = {
                 listUrl : "/devm/paramsmanager/command/list/",
-                editUrl : "/clbs/v/monitoring/command/edit_",
-                deleteUrl : "/clbs/v/monitoring/command/delete_",
-                deletemoreUrl : "/clbs/v/monitoring/command/deletemore",
+                editUrl : "/devm/paramsmanager/command/edit_",
+                deleteUrl : "/devm/paramsmanager/command/delete_",
+                deletemoreUrl : "/devm/paramsmanager/command/deletemore",
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
                 dataTableDiv : 'dataTable', //表格

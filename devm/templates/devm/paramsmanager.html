@@ -76,14 +76,14 @@
                                         TCP消息重发次数：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportMainApn" name="mainServerAPN" class="form-control" />
+                                        <input type="text" id="reportMainApn" name="tcpresendcount" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         TCP消息应答超时时间（s）：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportMainAddress" name="mainServerAddress" class="form-control" />
+                                        <input type="text" id="reportMainAddress" name="tcpresponovertime" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -92,30 +92,30 @@
                                         UDP消息重发次数：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportBackupApn" name="backupsServerAPN" class="form-control" />
+                                        <input type="text" id="reportBackupApn" name="udpresendcount" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         UDP消息应答超时时间（s）：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportBackupAddress" name="backupsServerAddress" class="form-control" />
+                                        <input type="text" id="reportBackupAddress" name="udpresponovertime" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">SMS消息重发次数：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="reportServerTcp" name="serverTCPPort" class="form-control" />
+                                        <input type="text" id="reportServerTcp" name="smsresendcount" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">SMS消息应答超时时间（s）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="reportServerUdp" name="serverUDPPort" class="form-control" />
+                                        <input type="text" id="reportServerUdp" name="smsresponovertime" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">终端心跳发送间隔（s）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="reportServerAccound" name="mainServerCallUserName" class="form-control" />
+                                        <input type="text" id="reportServerAccound" name="heartbeatperiod" class="form-control" />
                                     </div>
                                     
                                 </div>
@@ -147,30 +147,24 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">IP地址：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="terminalSendTime" name="heartSpace" value="5" class="form-control" />
+                                        <input type="text" id="terminalSendTime" name="ipaddr" value="5" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">端口号：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="terminalAnswerTime" name="TCPAckTimeOut" value="10" class="form-control" />
+                                        <input type="text" id="terminalAnswerTime" name="port" value="10" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">接入点：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="terminalAnswerTcp" name="TCPReUpTimes" value="10" class="form-control" />
+                                        <input type="text" id="terminalAnswerTcp" name="entrypoint" value="10" class="form-control" />
                                     </div>
-                                    <label class="col-md-3 control-label">流量零点修正值：</label>
+                                    <!-- <label class="col-md-3 control-label">流量零点修正值：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="terminalAnswerUdp" name="UDPAckTimeOut" value="10" class="form-control" />
-                                    </div>
+                                        <input type="text" id="terminalAnswerUdp" name="flowzerovalue" value="10" class="form-control" />
+                                    </div> -->
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">???：</label>
-                                    <div class="col-md-3">
-                                        <input type="text" id="terminalUdpNum" name="UDPReUpTimes" value="50" class="form-control" />
-                                    </div>
-                                    
-                                </div>
+                                
                                 
                             </div>
                             <!-- 采集指令 -->
@@ -203,44 +197,44 @@
                                         上报起始时间：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="UpgradeDial" name="wDailName" class="form-control" />
+                                        <input type="text" id="UpgradeDial" name="updatastarttime" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">上报方式选择：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeDialName" name="wDailUserName" placeholder="服务器无线通信拨号用户名" class="form-control" />
+                                        <input type="text" id="UpgradeDialName" name="updatamode" placeholder="服务器无线通信拨号用户名" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">采集间隔（分钟）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeDialPwd" name="wDailPwd" placeholder="服务器无线通信拨号密码" class="form-control" />
+                                        <input type="text" id="UpgradeDialPwd" name="collectperiod" placeholder="服务器无线通信拨号密码" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">上报间隔（小时）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeAddress" name="wAddress" placeholder="服务器地址 IP或域名" class="form-control" />
+                                        <input type="text" id="UpgradeAddress" name="updataperiod" placeholder="服务器地址 IP或域名" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">上报时间一：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeTcpTort" name="wTcpPort" placeholder="服务器 TCP 端口" class="form-control" />
+                                        <input type="text" id="UpgradeTcpTort" name="updatatime1" placeholder="服务器 TCP 端口" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">上报时间二：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeUdpTort" name="wUdpPort" placeholder="服务器 UDP 端口" class="form-control" />
+                                        <input type="text" id="UpgradeUdpTort" name="updatatime2" placeholder="服务器 UDP 端口" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">上报时间三：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeManufacturer" name="manufactorId" placeholder="终端制造商编码"  class="form-control" />
+                                        <input type="text" id="UpgradeManufacturer" name="updatatime3" placeholder="终端制造商编码"  class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         上报时间四：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="UpgradeHardware" name="hardwareVersion"  class="form-control" />
+                                        <input type="text" id="UpgradeHardware" name="updatatime4"  class="form-control" />
                                     </div>
                                 </div>
                                 
@@ -274,7 +268,7 @@
                                         仪表口径：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <select id="specifyServerConnect" onchange="realTimeCommand.connectionControlSH();" name="cAccessControl" class="form-control">
+                                        <select id="specifyServerConnect" onchange="realTimeCommand.connectionControlSH();" name="dn" class="form-control">
                                             <option value="0">切换到指定监控平台服务器</option>
                                             <option value="1">切换回原缺省监控平台服务器</option>
                                         </select>
@@ -284,50 +278,50 @@
                                         传感器系数：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="specifyServerDial" name="cDailName" class="form-control" />
+                                        <input type="text" id="specifyServerDial" name="transimeterfactor" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">厂商标识代码：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerDialName" name="cDailUserName" placeholder="服务器无线通信拨号用户名" class="form-control" />
+                                        <input type="text" id="specifyServerDialName" name="manufacturercode" placeholder="服务器无线通信拨号用户名" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">流量零点修正值：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerDialPwd" name="cDailPwd" placeholder="服务器无线通信拨号密码" class="form-control" />
+                                        <input type="text" id="specifyServerDialPwd" name="flowzerovalue" placeholder="服务器无线通信拨号密码" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">小信号切除点：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerAddress" name="cAddress" placeholder="服务器地址,IP或域名" class="form-control" />
+                                        <input type="text" id="specifyServerAddress" name="smallsignalcutpoint" placeholder="服务器地址,IP或域名" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">压力测量允许：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerTcpPort" name="cTcpPort" placeholder="服务器 TCP 端口" class="form-control" />
+                                        <input type="text" id="specifyServerTcpPort" name="pressurepermit" placeholder="服务器 TCP 端口" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">流体测量方向：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerUdpPort" name="cUdpPort" placeholder="服务器 UDP 端口" class="form-control" />
+                                        <input type="text" id="specifyServerUdpPort" name="flowdorient" placeholder="服务器 UDP 端口" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         仪表维护日期：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="specifyServerTimeLimit" name="cTimeLimit" class="form-control" />
+                                        <input type="text" id="specifyServerTimeLimit" name="maintaindate" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">正向累积预置：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerAddress" name="cAddress" placeholder="服务器地址,IP或域名" class="form-control" />
+                                        <input type="text" id="specifyServerAddress" name="plusaccumupreset" placeholder="服务器地址,IP或域名" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">流量测量单位：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerTcpPort" name="cTcpPort" placeholder="服务器 TCP 端口" class="form-control" />
+                                        <input type="text" id="specifyServerTcpPort" name="flowmeasureunit" placeholder="服务器 TCP 端口" class="form-control" />
                                     </div>
                                 </div>
                             </div>
