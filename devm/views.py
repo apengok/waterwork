@@ -1034,3 +1034,110 @@ def commandlist(request):
     print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
     
     return HttpResponse(json.dumps(result))
+
+
+def saveCommand(request):
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":{"commandTypes":[]},
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+
+
+def getCommandTypes(request):
+
+    sid = request.POST.get("sid") #station id
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":{"commandTypes":[]},
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+
+
+def getCommandParam(request):
+    print("getCommandParam",request.POST)
+    vid = request.POST.get("vid")
+    commandType = request.POST.get("commandType")
+    
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":{
+            "vid":"苏C2Q220",
+            "referVehicleList":[
+                {
+                    "updateDataTime":1541254778932,
+                    "commandType":19,
+                    "flag":1,
+                    "editable":1,
+                    "priority":1,
+                    "enabled":1,
+                    "vid":"d05821ab-5446-48f9-a7fe-a4e1f07ca7f0",
+                    "createDataTime":1525928798000,
+                    "sortOrder":1,
+                    "id":"0da146c7-699c-443d-af11-5b8f6ddc4e35",
+                    "createDataUsername":"13188906758",
+                    "paramId":"e5cf0e5d-b7bd-4f8f-b5ba-2a14cba3a064,1f1e70de-308c-4bf8-b0c8-b959227e41aa",
+                    "brand":"鲁A12346"
+                }],
+            "communicationParam":{
+                "mainServerAPN":1234
+            },
+            },
+        "success":True
+    }
+
+    
+    return JsonResponse(operarions_list)
+
+def getReferCommand(request):
+    print("getReferCommand",request.POST)
+    sid = request.POST.get("sid") #station id
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":{"referVehicleList":[{
+                    "updateDataTime":1541254778932,
+                    "commandType":19,
+                    "flag":1,
+                    "editable":1,
+                    "priority":1,
+                    "enabled":1,
+                    "vid":"d05821ab-5446-48f9-a7fe-a4e1f07ca7f0",
+                    "createDataTime":1525928798000,
+                    "sortOrder":1,
+                    "id":"0da146c7-699c-443d-af11-5b8f6ddc4e35",
+                    "createDataUsername":"13188906758",
+                    "paramId":"e5cf0e5d-b7bd-4f8f-b5ba-2a14cba3a064,1f1e70de-308c-4bf8-b0c8-b959227e41aa",
+                    "brand":"鲁A12345"
+                },{
+                    "updateDataTime":1541254778932,
+                    "commandType":19,
+                    "flag":1,
+                    "editable":1,
+                    "priority":1,
+                    "enabled":1,
+                    "vid":"d05821ab-5446-48f9-a7fe-a4e1f07ca7f0",
+                    "createDataTime":1525928798000,
+                    "sortOrder":1,
+                    "id":"0da146c7-699c-443d-af11-5b8f6ddc4e35",
+                    "createDataUsername":"13188906758",
+                    "paramId":"e5cf0e5d-b7bd-4f8f-b5ba-2a14cba3a064,1f1e70de-308c-4bf8-b0c8-b959227e41aa",
+                    "brand":"鲁A12346"
+                }]},
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)

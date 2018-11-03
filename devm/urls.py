@@ -62,6 +62,10 @@ urlpatterns = [
     # 参数指令
     url(r'^paramsmanager/?$', views.ParamsMangerView.as_view(), name='paramsmanager'),
     url(r'^paramsmanager/command/list/?$', views.commandlist, name='commandlist'),
+    url(r'^paramsmanager/command/saveCommand/?$', views.saveCommand, name='saveCommand'),
+    url(r'^paramsmanager/command/getCommandTypes/?$', views.getCommandTypes, name='getCommandTypes'),
+    url(r'^paramsmanager/command/getCommandParam/?$', views.getCommandParam, name='getCommandParam'),
+    url(r'^paramsmanager/command/getReferCommand/?$', views.getReferCommand, name='getReferCommand'),
 
     
 ]

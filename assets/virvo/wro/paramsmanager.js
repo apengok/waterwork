@@ -131,8 +131,8 @@
                     beforeClick:realTimeCommand.beforeClick,
                     onClick: realTimeCommand.onClickVehicle,
                     onAsyncSuccess: realTimeCommand.zTreeOnAsyncSuccess,
-                    beforeCheck: realTimeCommand.zTreeBeforeCheck,
-                    onCheck: realTimeCommand.onCheckVehicle,
+                    // beforeCheck: realTimeCommand.zTreeBeforeCheck,
+                    // onCheck: realTimeCommand.onCheckVehicle,
                     onExpand: realTimeCommand.zTreeOnExpand,
                     onNodeCreated: realTimeCommand.zTreeOnNodeCreated,
                 }
@@ -189,7 +189,7 @@
                 }).on('onSetSelectValue', function (e, keyword, data) {
                     // 当选择参考车牌
                     var vehicleId = keyword.id;
-                    var url="/clbs/v/monitoring/command/getCommandParam";
+                    var url="/devm/paramsmanager/command/getCommandParam";
                     var minotor = realTimeCommand.getMinotorObj(currentCommandType);
                     var parameter={"vid": vehicleId,"commandType":currentCommandType,"isRefer":true,"minotor":minotor};
                     json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
@@ -248,7 +248,7 @@
                 treeClickFlag = true;
                 currentVehicle = treeNode.id;
                 myTable.requestData();
-                var url="/clbs/v/monitoring/command/getCommandTypes";
+                var url="/devm/paramsmanager/command/getCommandTypes";
                 var parameter={"vid": currentVehicle};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.initCommandTypes);
             }
@@ -256,9 +256,9 @@
         initCommandTypes : function(data) {
             var zTreeObj = $.fn.zTree.getZTreeObj("commandTreeDemo");
             zTreeObj.checkAllNodes(false);
-            $("#reportParameters,.report-para-footer,#infoDemandMenu,#phoneBookSetting,#eventSetting," +
-                "#terminalParameters,#terminalControl,#unlimitedUpgrade,#connectSpecifyServer,#locationReporting," +
-                "#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters," +
+            $("#commParameters,.report-para-footer," +
+                "#terminalParameters,#aquiryParameters,#meterbaseParameters," +
+                "#terminalSearch," +
                 ".report-para-footer-control,.report-para-footer-control-1").hide();
             if(data.success === true){
                 if (data.msg === null && data.obj.commandTypes !== null
@@ -303,22 +303,22 @@
             // webSocket.subscribe(headers, '/topic/fencestatus', realTimeCommand.updataFenceData,null, null);
         },
         //车辆树勾选事件
-        onCheckVehicle : function(e, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
-                    .getCheckedNodes(true), v = "";t = "";
-            //若为取消勾选则不展开节点
-            if(treeNode.checked){
-                zTree.expandNode(treeNode, true, true, true, true); // 展开节点
-            }
-            for (var i = 0, l = nodes.length; i < l; i++) {
-                if (nodes[i].type === "vehicle") {
-                    v += nodes[i].name + ",";
-                    t += nodes[i].id + ",";
-                }
-            }
-            vehicleList = v;
-            vehicleIdList = t;
-        },
+        // onCheckVehicle : function(e, treeId, treeNode) {
+        //     var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
+        //             .getCheckedNodes(true), v = "";t = "";
+        //     //若为取消勾选则不展开节点
+        //     if(treeNode.checked){
+        //         zTree.expandNode(treeNode, true, true, true, true); // 展开节点
+        //     }
+        //     for (var i = 0, l = nodes.length; i < l; i++) {
+        //         if (nodes[i].type === "vehicle") {
+        //             v += nodes[i].name + ",";
+        //             t += nodes[i].id + ",";
+        //         }
+        //     }
+        //     vehicleList = v;
+        //     vehicleIdList = t;
+        // },
         zTreeOnExpand : function (event, treeId, treeNode) {
             //判断是否是勾选操作展开的树(是则继续执行，不是则返回)
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
@@ -341,39 +341,39 @@
              }
             realTimeCommand.checkCurrentNodes(treeNode);
         },
-        zTreeBeforeCheck : function(treeId, treeNode){
-            var flag = true;
-            if (!treeNode.checked) {
-                var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
-                .getCheckedNodes(true), v = "";
-                var nodesLength = 0;
-                for (var i=0;i<nodes.length;i++) {
-                    if(nodes[i].type == "people" || nodes[i].type == "vehicle"){
-                        nodesLength += 1;
-                    }
-                }
-                if (treeNode.type == "group" || treeNode.type == "assignment"){ // 判断若勾选节点数大于5000，提示
-                    var zTree = $.fn.zTree.getZTreeObj("treeDemo")
-                    json_ajax("post", "/clbs/m/personalized/ico/getCheckedVehicle", 
-                            "json", false, {"parentId": treeNode.id,"type": treeNode.type,"deviceType":"1"}, function (data) {
-                                nodesLength += data.obj;
-                        })
-                } else if (treeNode.type == "people" || treeNode.type == "vehicle"){
-                    nodesLength += 1;
-                }
-                if(nodesLength > 5000){
-                    layer.msg(treeMaxLength5000);
-                    flag = false;
-                }
-            }
-            if(flag){
-                //若组织节点已被勾选，则是勾选操作，改变勾选操作标识
-                if(treeNode.type == "group" && !treeNode.checked){
-                    checkFlag = true;
-                }
-            }
-            return flag;
-        },
+        // zTreeBeforeCheck : function(treeId, treeNode){
+        //     var flag = true;
+        //     if (!treeNode.checked) {
+        //         var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
+        //         .getCheckedNodes(true), v = "";
+        //         var nodesLength = 0;
+        //         for (var i=0;i<nodes.length;i++) {
+        //             if(nodes[i].type == "people" || nodes[i].type == "vehicle"){
+        //                 nodesLength += 1;
+        //             }
+        //         }
+        //         if (treeNode.type == "group" || treeNode.type == "assignment"){ // 判断若勾选节点数大于5000，提示
+        //             var zTree = $.fn.zTree.getZTreeObj("treeDemo")
+        //             json_ajax("post", "/clbs/m/personalized/ico/getCheckedVehicle", 
+        //                     "json", false, {"parentId": treeNode.id,"type": treeNode.type,"deviceType":"1"}, function (data) {
+        //                         nodesLength += data.obj;
+        //                 })
+        //         } else if (treeNode.type == "people" || treeNode.type == "vehicle"){
+        //             nodesLength += 1;
+        //         }
+        //         if(nodesLength > 5000){
+        //             layer.msg(treeMaxLength5000);
+        //             flag = false;
+        //         }
+        //     }
+        //     if(flag){
+        //         //若组织节点已被勾选，则是勾选操作，改变勾选操作标识
+        //         if(treeNode.type == "group" && !treeNode.checked){
+        //             checkFlag = true;
+        //         }
+        //     }
+        //     return flag;
+        // },
         zTreeOnNodeCreated: function (event, treeId, treeNode) {
             var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             var id = treeNode.id.toString();
@@ -401,11 +401,11 @@
             realTimeCommand.executeCommandShow();
             currentCommandType = treeNode.id;
             if(treeClickFlag){//仅当点击了车辆树某辆车时，才进行指令参数的查询。否则，只是批量新增指令参数。
-                var url="/clbs/v/monitoring/command/getCommandParam";
+                var url="/devm/paramsmanager/command/getCommandParam";
                 var parameter={"vid": currentVehicle,"commandType":treeNode.id,"isRefer":false};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
             }else{
-                var url="/clbs/v/monitoring/command/getReferCommand";
+                var url="/devm/paramsmanager/command/getReferCommand";
                 var parameter={"commandType":treeNode.id};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.setRefer);
             }
@@ -610,6 +610,7 @@
             }
         },
         setCommand: function(data){
+            console.log('setCommand',data);
                 if(data.success == true){
                     $("#phoneBookObject,#infoDemandObject,#eventObject,#gnssObject,#videoCameraObject,#telephoneObject,#locationObject,#specifyServerObject,#UpgradeObject,#terminalObject,#reportObject,#baseStationObject").val(data.obj.vid);
                     if(data.msg == null&&data.obj.referVehicleList!= null){
@@ -817,75 +818,75 @@
             switch(clickTreeNodeName){
                 //通讯参数
                 case "commandTreeDemo_2":
-                    $("#reportParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalParameters,#terminalControl,#unlimitedUpgrade,#connectSpecifyServer,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#commParameters,.report-para-footer").show();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalParameters,#terminalControl,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //终端参数
                 case "commandTreeDemo_3":
                     $("#terminalParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#reportParameters,#terminalControl,#unlimitedUpgrade,#connectSpecifyServer,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#terminalControl,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //终端控制
                 case "commandTreeDemo_4":
                     $("#terminalControl,.report-para-footer-control").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#reportParameters,#terminalParameters,#unlimitedUpgrade,#connectSpecifyServer,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#terminalParameters,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer,.report-para-footer-control-1").hide();
                     break;
                 //无限升级
                 case "commandTreeDemo_5":
-                    $("#unlimitedUpgrade,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#reportParameters,#terminalControl,#terminalParameters,#connectSpecifyServer,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#aquiryParameters,.report-para-footer").show();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#terminalControl,#terminalParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //控制终端连接指定服务器
                 case "commandTreeDemo_6":
-                    $("#connectSpecifyServer,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#reportParameters,#unlimitedUpgrade,#terminalControl,#terminalParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#meterbaseParameters,.report-para-footer").show();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#aquiryParameters,#terminalControl,#terminalParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     realTimeCommand.connectionControlSH();
                     break;
                 //位置汇报参数
                 case "commandTreeDemo_7":
                     $("#locationReporting,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     realTimeCommand.connectionControlSH();
                     break;
                 //终端查询
                 case "commandTreeDemo_8":
                     $("#terminalSearch,.report-para-footer-control-1").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer,.report-para-footer-control").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer,.report-para-footer-control").hide();
                     break;
                 //电话参数
                 case "commandTreeDemo_9":
                     $("#telephoneParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalSearch,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //视频拍照参数
                 case "commandTreeDemo_10":
                     $("#videoCameraParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#telephoneParameters,#terminalSearch,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //GNSS参数
                 case "commandTreeDemo_11":
                     $("#gnssParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //事件设置
                     case "commandTreeDemo_12":
                     $("#eventSetting,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //电话本设置
                 case "commandTreeDemo_13":
                     $("#phoneBookSetting,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#infoDemandMenu,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //信息点播菜单
                 case "commandTreeDemo_14":
                     $("#infoDemandMenu,.report-para-footer").show();
-                    $("#baseStationParameters,#phoneBookSetting,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#baseStationParameters,#phoneBookSetting,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //基站参数设置
                 case "commandTreeDemo_15":
                     $("#baseStationParameters,.report-para-footer").show();
-                    $("#infoDemandMenu,#phoneBookSetting,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#reportParameters,#unlimitedUpgrade,#terminalControl,#connectSpecifyServer,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#infoDemandMenu,#phoneBookSetting,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
             }
         },
@@ -1109,7 +1110,7 @@
           };
           if(realTimeCommand.validateSubmit()){
           $("#saveCommandForm").ajaxSubmit(function() {
-              $("#reportParameters,.report-para-footer,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalParameters,#terminalControl,#unlimitedUpgrade,#connectSpecifyServer,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+              $("#commParameters,.report-para-footer,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalParameters,#terminalControl,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                  myTable.refresh()
             });
           }
@@ -1477,7 +1478,7 @@
          
         connectionControlSH: function(){
             setTimeout(function(){
-                if(!($("#connectSpecifyServer").is(":hidden"))){
+                if(!($("#meterbaseParameters").is(":hidden"))){
                     if($("#specifyServerConnect").val() == 1){
                         $("#specifyServerDial,#specifyServerDialName,#specifyServerDialPwd,#specifyServerAddress,#specifyServerTcpPort,#specifyServerUdpPort,#specifyServerTimeLimit").attr("readonly","readonly");
                     }else{
