@@ -24,7 +24,7 @@
                     </div>
                 </div>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:80%!important">
-                <ul id="treeDemo" class="ztreee" style="overflow:auto;height:438px!important"></ul>
+                <ul id="treeDemo" class="ztreee" style="overflow:auto;height:638px!important"></ul>
               </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                                     <label class="col-md-3 control-label">表具编号：</label>
                                     <div class="col-md-3">
                                         <div class="input-group">
-                                            <input name="brands" type="text" class="form-control" id="reportPlate">
+                                            <input name="brands" type="text" class="form-control" id="commPlate">
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-white dropdown-toggle"
                                                     data-toggle="dropdown">
@@ -66,7 +66,7 @@
                                     </div>
                                     <label class="col-md-3 control-label">站点名称：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="reportObject" class="form-control" readonly/>
+                                        <input type="text" id="commObject" class="form-control" readonly/>
                                     </div>
                                     
                                 </div>
@@ -175,7 +175,7 @@
                                     <label class="col-md-3 control-label"> 表具编号：</label>
                                     <div class="col-md-3">
                                         <div class="input-group">
-                                            <input name="brands" type="text" class="form-control" id="UpgradePlate">
+                                            <input name="brands" type="text" class="form-control" id="aquiryPlate">
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-white dropdown-toggle"
                                                     data-toggle="dropdown">
@@ -188,7 +188,7 @@
                                     </div>
                                     <label class="col-md-3 control-label">站点名称：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeObject" class="form-control" readonly/>
+                                        <input type="text" id="aquiryObject" class="form-control" readonly/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -197,44 +197,64 @@
                                         上报起始时间：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="UpgradeDial" name="updatastarttime" class="form-control" />
+                                        <input type="text" id="updatastarttime" name="updatastarttime" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">上报方式选择：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeDialName" name="updatamode" placeholder="服务器无线通信拨号用户名" class="form-control" />
+                                        <select id="updatamode" name="updatamode" class="form-control" onchange="realTimeCommand.baseStationReportModeCheckFn()">
+                                            <option value="0">间隔上传</option>
+                                            <option value="1">定时上传</option>
+                                            <option value="2">实时上传</option>
+                                        </select>
                                     </div>
+                                    <!-- <div class="col-md-3">
+                                        <input type="text" id="UpgradeDialName" name="updatamode" placeholder="服务器无线通信拨号用户名" class="form-control" />
+                                    </div> -->
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">采集间隔（分钟）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeDialPwd" name="collectperiod" placeholder="服务器无线通信拨号密码" class="form-control" />
+                                        <!-- <input type="text" id="collectperiod" name="collectperiod"  class="form-control" /> -->
+                                        <select id="collectperiod" name="collectperiod" class="form-control" onchange="realTimeCommand.baseStationReportModeCheckFn()">
+                                            <option value="0">5</option>
+                                            <option value="1">10</option>
+                                            <option value="2">15</option>
+                                            <option value="3">30</option>
+                                        </select>
                                     </div>
                                     <label class="col-md-3 control-label">上报间隔（小时）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeAddress" name="updataperiod" placeholder="服务器地址 IP或域名" class="form-control" />
+                                        <!-- <input type="text" id="updataperiod" name="updataperiod"  class="form-control" /> -->
+                                        <select id="updataperiod" name="updataperiod" class="form-control" onchange="realTimeCommand.baseStationReportModeCheckFn()">
+                                            <option value="0">2</option>
+                                            <option value="1">4</option>
+                                            <option value="2">6</option>
+                                            <option value="3">8</option>
+                                            <option value="4">12</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">上报时间一：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeTcpTort" name="updatatime1" placeholder="服务器 TCP 端口" class="form-control" />
+                                        <input type="text" id="updatatime1" name="updatatime1"  class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">上报时间二：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeUdpTort" name="updatatime2" placeholder="服务器 UDP 端口" class="form-control" />
+                                        <input type="text" id="updatatime2" name="updatatime2"  class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">上报时间三：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="UpgradeManufacturer" name="updatatime3" placeholder="终端制造商编码"  class="form-control" />
+                                        <input type="text" id="updatatime3" name="updatatime3"   class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         上报时间四：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="UpgradeHardware" name="updatatime4"  class="form-control" />
+                                        <input type="text" id="updatatime4" name="updatatime4"  class="form-control" />
                                     </div>
                                 </div>
                                 
@@ -246,7 +266,7 @@
                                     <label class="col-md-3 control-label">表具编号：</label>
                                     <div class="col-md-3">
                                         <div class="input-group">
-                                            <input name="brands" type="text" class="form-control" id="specifyServerPlate">
+                                            <input name="brands" type="text" class="form-control" id="meterbasePlate">
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-white dropdown-toggle"
                                                     data-toggle="dropdown">
@@ -259,7 +279,7 @@
                                     </div>
                                     <label class="col-md-3 control-label">站点名称：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerObject" class="form-control" readonly/>
+                                        <input type="text" id="meterbaseObject" class="form-control" readonly/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -268,10 +288,24 @@
                                         仪表口径：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <select id="specifyServerConnect" onchange="realTimeCommand.connectionControlSH();" name="dn" class="form-control">
-                                            <option value="0">切换到指定监控平台服务器</option>
-                                            <option value="1">切换回原缺省监控平台服务器</option>
-                                        </select>
+                                        <input type="text" id="dn" name="dn" class="form-control" />
+
+                                    </div>
+                                    <label class="col-md-3 control-label">
+                                        
+                                        励磁间隔：
+                                    </label>
+                                    <div class="col-md-3 inp-inline-flex">
+                                        <input type="text" id="liciperoid" name="liciperoid" placeholder="输入1-254" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        
+                                        仪表维护日期：
+                                    </label>
+                                    <div class="col-md-3 inp-inline-flex">
+                                        <input type="text" id="specifyServerTimeLimit" name="maintaindate" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
@@ -282,47 +316,67 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-3 control-label">标定系数：</label>
+                                    <div class="col-md-3">
+                                        <input type="text" id="specifyServerDialName" name="manufacturercode"  class="form-control" />
+                                    </div>
                                     <label class="col-md-3 control-label">厂商标识代码：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerDialName" name="manufacturercode" placeholder="服务器无线通信拨号用户名" class="form-control" />
+                                        <input type="text" id="specifyServerDialName" name="manufacturercode"  class="form-control" />
                                     </div>
-                                    <label class="col-md-3 control-label">流量零点修正值：</label>
-                                    <div class="col-md-3">
-                                        <input type="text" id="specifyServerDialPwd" name="flowzerovalue" placeholder="服务器无线通信拨号密码" class="form-control" />
-                                    </div>
+                                    
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">小信号切除点：</label>
+                                    <label class="col-md-3 control-label">小信号切除：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerAddress" name="smallsignalcutpoint" placeholder="服务器地址,IP或域名" class="form-control" />
+                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                            <option value="0">切除</option>
+                                            <option value="1">不切除</option>
+                                        </select>
                                     </div>
-                                    <label class="col-md-3 control-label">压力测量允许：</label>
+                                    <label class="col-md-3 control-label">小信号切除值：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerTcpPort" name="pressurepermit" placeholder="服务器 TCP 端口" class="form-control" />
+                                        <input type="text" id="specifyServerAddress" name="smallsignalcutpoint"  class="form-control" />
                                     </div>
+                                    
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">流体测量方向：</label>
+                                    <label class="col-md-3 control-label">零点修正功能：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerUdpPort" name="flowdorient" placeholder="服务器 UDP 端口" class="form-control" />
+                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                            <option value="0">关</option>
+                                            <option value="1">开</option>
+                                        </select>
                                     </div>
-                                    <label class="col-md-3 control-label">
-                                        
-                                        仪表维护日期：
-                                    </label>
-                                    <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="specifyServerTimeLimit" name="maintaindate" class="form-control" />
+                                    <label class="col-md-3 control-label">零点修正值：</label>
+                                    <div class="col-md-3">
+                                        <input type="text" id="specifyServerUdpPort" name="flowdorient"  class="form-control" />
                                     </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">压力测量功能：</label>
+                                    <div class="col-md-3">
+                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                            <option value="0">关</option>
+                                            <option value="1">开</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-md-3 control-label">方向选择：</label>
+                                    <div class="col-md-3">
+                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                            <option value="0">正向</option>
+                                            <option value="1">反向</option>
+                                        </select>
+                                    </div>
+                                    
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">正向累积预置：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerAddress" name="plusaccumupreset" placeholder="服务器地址,IP或域名" class="form-control" />
+                                        <input type="text" id="specifyServerUdpPort" name="flowdorient"  class="form-control" />
                                     </div>
-                                    <label class="col-md-3 control-label">流量测量单位：</label>
-                                    <div class="col-md-3">
-                                        <input type="text" id="specifyServerTcpPort" name="flowmeasureunit" placeholder="服务器 TCP 端口" class="form-control" />
-                                    </div>
+
                                 </div>
                             </div>
                             

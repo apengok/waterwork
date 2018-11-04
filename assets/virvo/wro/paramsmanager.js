@@ -130,11 +130,11 @@
                 callback: {
                     beforeClick:realTimeCommand.beforeClick,
                     onClick: realTimeCommand.onClickVehicle,
-                    onAsyncSuccess: realTimeCommand.zTreeOnAsyncSuccess,
+                    // onAsyncSuccess: realTimeCommand.zTreeOnAsyncSuccess,
                     // beforeCheck: realTimeCommand.zTreeBeforeCheck,
                     // onCheck: realTimeCommand.onCheckVehicle,
-                    onExpand: realTimeCommand.zTreeOnExpand,
-                    onNodeCreated: realTimeCommand.zTreeOnNodeCreated,
+                    // onExpand: realTimeCommand.zTreeOnExpand,
+                    // onNodeCreated: realTimeCommand.zTreeOnNodeCreated,
                 }
             };
 //            $.ajax({
@@ -175,9 +175,7 @@
                     $("#checkAll").prop('checked',false);
                     $("input[name=subChk]").prop("checked",false);
                 }
-                $("#reportPlate,#terminalPlate,#UpgradePlate,#specifyServerPlate,#locationPlate,#telephonePlate," +
-                    "#videoCameraPlate,#gnssPlate,#eventPlate,#phoneBookPlate,#infoDemandPlate," +
-                    "#baseStationPlate").bsSuggest({
+                $("#commPlate,#terminalPlate,#aquiryPlate,#meterbasePlate,#baseStationPlate").bsSuggest({
                     indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
                     indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
                     idField: "id",
@@ -200,29 +198,15 @@
         getMinotorObj: function(commandType){
               switch (commandType){
                 case 11:
-                    return $("#reportObject").val();
+                    return $("#commObject").val();
                 case 12:
                     return $("#terminalObject").val();
-                case 131:
-                    return $("#UpgradeObject").val();
-                case 132:
-                    return $("#specifyServerObject").val();
+                case 13:
+                    return $("#aquiryObject").val();
                 case 14:
-                    return $("#locationObject").val();
-                case 16:
-                    return $("#telephoneObject").val();
-                case 17:
-                    return $("#videoCameraObject").val();
-                case 18:
-                    return $("#gnssObject").val();
-                case 19:
-                    return $("#eventObject").val();
-                case 20:
-                    return $("#phoneBookObject").val();
-                case 21:
-                    return $("#infoDemandObject").val();
-                case 22:
-                    return $("#baseStationObject").val();
+                    return $("#meterbaseObject").val();
+                // case 22:
+                //     return $("#baseStationObject").val();
                 default: return "";
                 }
         },
@@ -302,78 +286,7 @@
             }
             // webSocket.subscribe(headers, '/topic/fencestatus', realTimeCommand.updataFenceData,null, null);
         },
-        //车辆树勾选事件
-        // onCheckVehicle : function(e, treeId, treeNode) {
-        //     var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
-        //             .getCheckedNodes(true), v = "";t = "";
-        //     //若为取消勾选则不展开节点
-        //     if(treeNode.checked){
-        //         zTree.expandNode(treeNode, true, true, true, true); // 展开节点
-        //     }
-        //     for (var i = 0, l = nodes.length; i < l; i++) {
-        //         if (nodes[i].type === "vehicle") {
-        //             v += nodes[i].name + ",";
-        //             t += nodes[i].id + ",";
-        //         }
-        //     }
-        //     vehicleList = v;
-        //     vehicleIdList = t;
-        // },
-        zTreeOnExpand : function (event, treeId, treeNode) {
-            //判断是否是勾选操作展开的树(是则继续执行，不是则返回)
-            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-            if (treeNode.type == "group" && treeNode.checked){
-                 var url = "/clbs/m/functionconfig/fence/bindfence/putMonitorByGroup";
-                 json_ajax("post", url, "json", false, {"groupId": treeNode.id,"isChecked":treeNode.checked,"monitorType":"vehicle","deviceType":"1"}, function (data) {
-                     var result = data.obj;
-                     if (result != null && result != undefined){
-                         $.each(result, function(i) {
-                              var pid = i; //获取键值
-                              var chNodes = result[i] //获取对应的value
-                              var parentTid = zTreeIdJson[pid][0];
-                              var parentNode = treeObj.getNodeByTId(parentTid);
-                              if (parentNode.children === undefined) {
-                                  treeObj.addNodes(parentNode, chNodes);
-                              }
-                         });
-                     }
-                 })
-             }
-            realTimeCommand.checkCurrentNodes(treeNode);
-        },
-        // zTreeBeforeCheck : function(treeId, treeNode){
-        //     var flag = true;
-        //     if (!treeNode.checked) {
-        //         var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
-        //         .getCheckedNodes(true), v = "";
-        //         var nodesLength = 0;
-        //         for (var i=0;i<nodes.length;i++) {
-        //             if(nodes[i].type == "people" || nodes[i].type == "vehicle"){
-        //                 nodesLength += 1;
-        //             }
-        //         }
-        //         if (treeNode.type == "group" || treeNode.type == "assignment"){ // 判断若勾选节点数大于5000，提示
-        //             var zTree = $.fn.zTree.getZTreeObj("treeDemo")
-        //             json_ajax("post", "/clbs/m/personalized/ico/getCheckedVehicle", 
-        //                     "json", false, {"parentId": treeNode.id,"type": treeNode.type,"deviceType":"1"}, function (data) {
-        //                         nodesLength += data.obj;
-        //                 })
-        //         } else if (treeNode.type == "people" || treeNode.type == "vehicle"){
-        //             nodesLength += 1;
-        //         }
-        //         if(nodesLength > 5000){
-        //             layer.msg(treeMaxLength5000);
-        //             flag = false;
-        //         }
-        //     }
-        //     if(flag){
-        //         //若组织节点已被勾选，则是勾选操作，改变勾选操作标识
-        //         if(treeNode.type == "group" && !treeNode.checked){
-        //             checkFlag = true;
-        //         }
-        //     }
-        //     return flag;
-        // },
+        
         zTreeOnNodeCreated: function (event, treeId, treeNode) {
             var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             var id = treeNode.id.toString();
@@ -409,199 +322,11 @@
                 var parameter={"commandType":treeNode.id};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.setRefer);
             }
-            //判断当前点击的指令类型是否有值(当前未勾选)
-            if(treeNode.checked === false){
-                //事件设置
-                //先清空事件设置里面的网页内容
-                $("#eventSetting").html("");
-                //再定义新的内容
-                var html = 
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>监控对象：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<input type='text' id='eventObject' class='form-control' disabled/>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>参考对象：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<div class='input-group'>"+
-                            "<input name='brands' type='text' class='form-control' id='eventPlate'>"+
-                            "<div class='input-group-btn'>"+
-                                "<button type='button' class='btn btn-white dropdown-toggle' data-toggle='dropdown'>"+
-                                    "<span class='caret'></span>"+
-                                "</button>"+
-                                "<ul class='dropdown-menu dropdown-menu-right' role='menu'>"+
-                                "</ul>"+
-                            "</div>"+
-                        "</div>"+
-                    "</div>"+
-                "</div>"+
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>操作类型：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<select id='eventOperateType' name='eOperationType' class='form-control' onchange='realTimeCommand.eventSettingOperateType()'>"+
-                         "<option value='0'>删除所有</option>"+
-                            "<option value='1'>更新</option>"+
-                            "<option value='2'>追加</option>"+
-                            "<option value='3'>修改</option>"+
-                            "<option value='4'>删除</option>"+
-                        "</select>"+
-                    "</div>"+
-                    "<label class='col-md-3 control-label'></label>"+
-                    "<div class='col-md-3'></div>"+
-                "</div>"+
-                "<div  id='eventMain-container'>"+
-                    "<div class='form-group' >"+
-                        "<label class='col-md-3 control-label'>事件ID：</label>"+
-                        "<div class='col-md-3 eventIdInfo'>"+
-                            "<input id='eventId_2' type='text' name='eventId' value='1' class='form-control' onblur='realTimeCommand.inputBlur()'/>"+
-                        "</div>"+
-                        "<label class='col-md-2 control-label'>事件内容：</label>"+
-                        "<div class='col-md-3'>"+
-                            "<input type='text' id='eventContent_2'  name='eventContent' placeholder='请输入事件内容' class='form-control' onblur='realTimeCommand.inputBlur()'/>"+
-                        "</div>"+
-                        "<div class='col-md-1'>"+
-                            "<button id='event-add-btn' onclick='realTimeCommand.addEventSetting();' type='button' class='btn btn-primary addIcon'>"+
-                                "<span class='glyphicon glyphiconPlus' aria-hidden='true'></span>"+
-                            "</button>"+
-                        "</div>"+
-                    "</div>"+
-                "</div>";
-                //重新写入事件设置内容
-                $("#eventSetting").html(html);
-                //电话本设置
-                //先清空事件设置里面的网页内容
-                $("#phoneBookSetting").html("");
-                //再定义新的内容
-                var phoneHtml =
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>监控对象：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<input type='text' id='phoneBookObject' class='form-control' disabled/>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>参考对象：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<div class='input-group'>"+
-                            "<input name='brands' type='text' class='form-control' id='phoneBookPlate'>"+
-                            "<div class='input-group-btn'>"+
-                                "<button type='button' class='btn btn-white dropdown-toggle' data-toggle='dropdown'>"+
-                                    "<span class='caret'></span>"+
-                                "</button>"+
-                                "<ul class='dropdown-menu dropdown-menu-right' role='menu'>"+
-                                "</ul>"+
-                            "</div>"+
-                        "</div>"+
-                    "</div>"+
-                "</div>"+
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>操作类型：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<select id='phoneBookOperateType' name='pOperationType' class='form-control' onchange='realTimeCommand.phoneBookSettingOperateType()'>"+
-                         "<option value='0'>删除所有</option>"+
-                            "<option value='1'>更新</option>"+
-                            "<option value='2'>追加</option>"+
-                            "<option value='3'>修改</option>"+
-                        "</select>"+
-                    "</div>"+
-                    "<label class='col-md-3 control-label'></label>"+
-                    "<div class='col-md-3'></div>"+
-                "</div>"+
-                "<div id='phoneBook-MainContent'>"+
-                    "<div class='form-group'>"+
-                        "<label class='col-md-3 control-label'>联系人ID：</label>"+
-                        "<div class='col-md-3 phoneBookIdInfo'>"+
-                            "<input type='text' id='phoneBookId_2' name='phoneBookId' value='1' class='form-control' onblur='realTimeCommand.inputBlur()'/>"+
-                        "</div>"+
-                        "<label class='col-md-2 control-label'>联系人：</label>"+
-                        "<div class='col-md-3'>"+
-                            "<input type='text' id='phoneBookContact_2' name='contact' placeholder='请输入联系人' class='form-control' onblur='realTimeCommand.inputBlur()'/>"+
-                        "</div>"+
-                    "</div>"+
-                    "<div class='form-group'>"+
-                        "<label class='col-md-3 control-label'>电话号码：</label>"+
-                        "<div class='col-md-3'>"+
-                            "<input type='text' id='phoneBookNumber_2' name='phoneNo' placeholder='请输入电话号码' class='form-control' onblur='realTimeCommand.inputBlur()'/>"+
-                        "</div>"+
-                        "<label class='col-md-2 control-label'>呼叫类型：</label>"+
-                        "<div class='col-md-3'>"+
-                            "<select id='phoneBookOperateType_2' name='callType' class='form-control'>"+
-                                "<option value='1'>呼入</option>"+
-                                "<option value='2'>呼出</option>"+
-                                "<option value='3'>呼入/呼出</option>"+
-                            "</select>"+
-                        "</div>"+
-                        "<div class='col-md-1'>"+
-                            "<button id='phoneBook-add-btn' onclick='realTimeCommand.addPhoneBookEvent()' type='button' class='btn btn-primary addIcon'>"+
-                                "<span class='glyphicon glyphiconPlus' aria-hidden='true'></span>"+
-                            "</button>"+
-                        "</div>"+
-                    "</div>"+
-                "</div>";
-                //重新写入电话本设置内容
-                $("#phoneBookSetting").html(phoneHtml);
-                //信息点播设置
-                //先清空事件设置里面的网页内容
-                $("#infoDemandMenu").html("");
-                //再定义新的内容
-                var infoHtml =
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>监控对象：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<input type='text' id='infoDemandObject' class='form-control' disabled/>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>参考对象：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<div class='input-group'>"+
-                            "<input name='brands' type='text' class='form-control' id='infoDemandPlate'>"+
-                            "<div class='input-group-btn'>"+
-                                "<button type='button' class='btn btn-white dropdown-toggle' data-toggle='dropdown'>"+
-                                    "<span class='caret'></span>"+
-                                "</button>"+
-                                "<ul class='dropdown-menu dropdown-menu-right' role='menu'>"+
-                                "</ul>"+
-                            "</div>"+
-                        "</div>"+
-                    "</div>"+
-                "</div>"+
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>操作类型：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<select id='infoDemandOperateType' name='iOperationType' class='form-control' onchange='realTimeCommand.infoDemandMenuSettingOperateType()'>"+
-                         "<option value='0'>删除所有</option>"+
-                            "<option value='1'>更新</option>"+
-                            "<option value='2'>追加</option>"+
-                            "<option value='3'>修改</option>"+
-                        "</select>"+
-                    "</div>"+
-                    "<label class='col-md-3 control-label'></label>"+
-                    "<div class='col-md-3'></div>"+
-                "</div>"+
-                "<div class='form-group' id='infoDemand-MainContent'>"+
-                    "<label class='col-md-3 control-label'>信息ID：</label>"+
-                    "<div class='col-md-3 infoDemandMenuId'>"+
-                        "<input type='text' id='infoDemandId_2' name='infoId' value='1' class='form-control' onblur='realTimeCommand.inputBlur()'/>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>信息名称：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<input type='text' id='infoDemandName_2' name='infoContent' placeholder='请输入信息名称' class='form-control' onblur='realTimeCommand.inputBlur()'/>"+
-                    "</div>"+
-                    "<div class='col-md-1'>"+
-                        "<button id='infoDemand-add-btn' onclick='realTimeCommand.addInfoDemandEvent()' type='button' class='btn btn-primary addIcon'>"+
-                            "<span class='glyphicon glyphiconPlus' aria-hidden='true'></span>"+
-                        "</button>"+
-                    "</div>"+
-                "</div>";
-                //重新写入信息点播设置内容
-                $("#infoDemandMenu").html(infoHtml);
-            }
-            //判断当前点击的指令类型是否有值(当前勾选)
-            else{
-                //如果有指令类型有勾选则查询显示
-                  //读取每个指令类型的参数值
-            }
+            
         },
         setRefer: function(data){
             if(data.success == true){
-                $("#phoneBookObject,#infoDemandObject,#eventObject,#gnssObject,#videoCameraObject,#telephoneObject,#locationObject,#specifyServerObject,#UpgradeObject,#terminalObject,#reportObject,#baseStationObject").val(vehicleList);
+                $("#meterbaseObject,#aquiryObject,#terminalObject,#commObject,#baseStationObject").val(vehicleList);
                 if(data.msg == null&&data.obj.referVehicleList!= null){
                     realTimeCommand.initReferVehicleList(data.obj.referVehicleList);
                 }
@@ -612,10 +337,11 @@
         setCommand: function(data){
             console.log('setCommand',data);
                 if(data.success == true){
-                    $("#phoneBookObject,#infoDemandObject,#eventObject,#gnssObject,#videoCameraObject,#telephoneObject,#locationObject,#specifyServerObject,#UpgradeObject,#terminalObject,#reportObject,#baseStationObject").val(data.obj.vid);
+                    $("#meterbaseObject,#aquiryObject,#terminalObject,#commObject,#baseStationObject").val(data.obj.vid);
                     if(data.msg == null&&data.obj.referVehicleList!= null){
                         realTimeCommand.initReferVehicleList(data.obj.referVehicleList);
                     }
+                    // 通讯参数
                     if (data.msg == null&&data.obj.communicationParam!= null) {
                         var communicationParam = data.obj.communicationParam;
                         $("#reportMainApn").val(communicationParam.mainServerAPN);
@@ -631,6 +357,7 @@
                     }else{
 
                     }
+                    // 终端参数
                     if(data.msg == null&&data.obj.deviceParam!= null){
                         var deviceParam = data.obj.deviceParam;
                         $("#terminalSendTime").val(deviceParam.heartSpace);
@@ -641,6 +368,7 @@
                         $("#terminalAnswerSms").val(deviceParam.sMSAckTimeOut);
                         $("#terminalSmsNum").val(deviceParam.sMSReUpTimes);
                     }
+                    // 采集指令
                     if(data.msg == null&&data.obj.wirelessUpdateParam!= null){
                         var wirelessUpdateParam = data.obj.wirelessUpdateParam;
                         $("#UpgradeDialName").val(wirelessUpdateParam.wDailUserName);
@@ -656,6 +384,7 @@
                         $("#UpgradeConnection").val(wirelessUpdateParam.wAccessControl);
                         $("#UpgradeDial").val(wirelessUpdateParam.wDailName);
                     }
+                    // 基表设置
                     if(data.msg == null&&data.obj.deviceConnectServerParam!= null){
                         var deviceConnectServerParam = data.obj.deviceConnectServerParam;
                         $("#specifyServerConnect").val(deviceConnectServerParam.cAccessControl);
@@ -667,138 +396,8 @@
                         $("#specifyServerUdpPort").val(deviceConnectServerParam.cUdpPort);
                         $("#specifyServerTimeLimit").val(deviceConnectServerParam.cTimeLimit);
                     }
-                    if(data.msg == null&&data.obj.positionParam!= null){
-                        var positionParam = data.obj.positionParam;
-                        $("#locationTactics").val(positionParam.positionUpTactics);
-                        $("#locationProgram").val(positionParam.positionUpScheme);
-                        $("#locationNoLogin").val(positionParam.driverLoggingOutUpTimeSpace);
-                        $("#locationSleep").val(positionParam.dormancyUpTimeSpace);
-                        $("#locationAlarmTime").val(positionParam.emergencyAlarmUpTimeSpace);
-                        $("#locationDefaultTime").val(positionParam.defaultTimeUpSpace);
-                        $("#locationDefaultDistance").val(positionParam.defaultDistanceUpSpace);
-                        $("#locationNoLoginDistance").val(positionParam.driverLoggingOutUpDistanceSpace);
-                        $("#locationSleepDistance").val(positionParam.dormancyUpDistanceSpace);
-                        $("#locationAlarmDistance").val(positionParam.emergencyAlarmUpDistanceSpace);
-                    }
-                    if(data.msg == null&&data.obj.phoneParam!= null){
-                        var phoneParam = data.obj.phoneParam;
-                        $("#telephoneNumber").val(phoneParam.platformPhoneNumber);
-                        $("#telephoneResetNumber").val(phoneParam.resetPhoneNumber);
-                        $("#telephoneSetNumber").val(phoneParam.reInitialPhoneNumber);
-                        $("#telephoneSnsNumber").val(phoneParam.platformSMSPhoneNumber);
-                        $("#telephoneSnsAlarm").val(phoneParam.receiveDeviceSMSTxtAlarmPhoneNumber);
-                        $("#telephoneStrategy").val(phoneParam.deviceAnswerPhoneType);
-                        $("#telephoneMaxTime").val(phoneParam.timesMaxCallTime);
-                        $("#telephoneMonthTime").val(phoneParam.monthlyMaxCallTime);
-                        $("#telephoneMonitor").val(phoneParam.listenPhoneNumber);
-                        $("#monitorPrivilege").val(phoneParam.platformPrivilegeSMSNumber);
-                    }
-                    if(data.msg == null&&data.obj.cameraParam!= null){
-                        var cameraParam = data.obj.cameraParam;
-                        $("#videoCameraSwitchOne").val(cameraParam.cameraTimerOpenFlag1);
-                        $("#videoCameraStorageOne").val(cameraParam.cameraTimerSaveFlag1);
-                        $("#videoCameraSwitchTwo").val(cameraParam.cameraTimerOpenFlag2);
-                        $("#videoCameraStorageTwo").val(cameraParam.cameraTimerSaveFlag2);
-                        $("#videoCameraSwitchThree").val(cameraParam.cameraTimerOpenFlag3);
-                        $("#videoCameraStorageThree").val(cameraParam.cameraTimerSaveFlag3);
-                        $("#videoCameraSwitchFour").val(cameraParam.cameraTimerOpenFlag4);
-                        $("#videoCameraStorageFour").val(cameraParam.cameraTimerSaveFlag4);
-                        $("#videoCameraSwitchFive").val(cameraParam.cameraTimerOpenFlag5);
-                        $("#videoCameraStorageFive").val(cameraParam.cameraTimerSaveFlag5);
-                        $("#videoCameraTimeUnit").val(cameraParam.timingUnit);
-                        $("#videoCameraTimeInterval").val(cameraParam.timingSpace);
-                        $("#videoCameraSwitchMarkOne").val(cameraParam.cameraDistanceOpenFlag1);
-                        $("#videoCameraStorageMarkOne").val(cameraParam.cameraDistanceSaveFlag1);
-                        $("#videoCameraSwitchMarkTwo").val(cameraParam.cameraDistanceOpenFlag2);
-                        $("#videoCameraStorageMarkTwo").val(cameraParam.cameraDistanceSaveFlag2);
-                        $("#videoCameraSwitchMarkThree").val(cameraParam.cameraDistanceOpenFlag3);
-                        $("#videoCameraStorageMarkThree").val(cameraParam.cameraDistanceSaveFlag3);
-                        $("#videoCameraSwitchMarkFour").val(cameraParam.cameraDistanceOpenFlag4);
-                        $("#videoCameraStorageMarkFour").val(cameraParam.cameraDistanceSaveFlag4);
-                        $("#videoCameraSwitchMarkFive").val(cameraParam.cameraDistanceOpenFlag5);
-                        $("#videoCameraStorageMarkFive").val(cameraParam.cameraDistanceSaveFlag5);
-                        $("#videoCameraDistanceUnit").val(cameraParam.distanceUnit);
-                        $("#videoCameraDistanceInterval").val(cameraParam.distanceSpace);
-                        $("#videoCameraQuality").val(cameraParam.pictureQuality);
-                        $("#videoCameraBrightness").val(cameraParam.luminance);
-                        $("#videoCameraContrast").val(cameraParam.contrast);
-                        $("#videoCameraSaturation").val(cameraParam.saturation);
-                        $("#videoCameraChroma").val(cameraParam.chroma);
-                    }
-                    if(data.msg == null&&data.obj.gnssParam!= null){
-                        var gnssParam = data.obj.gnssParam;
-                        $("#GPSFlag").val(gnssParam.gPSFlag);
-                        $("#beidouFlag").val(gnssParam.beidouFlag);
-                        $("#GLONASSFlag").val(gnssParam.gLONASSFlag);
-                        $("#GalileoFlag").val(gnssParam.galileoFlag);
-                        $("#GNSSBaudRate").val(gnssParam.gNSSBaudRate);
-                        $("#GNSSPositionOutputRate").val(gnssParam.gNSSPositionOutputRate);
-                        $("#GNSSPositionCollectRate").val(gnssParam.gNSSPositionCollectRate);
-                        $("#GNSSPositionUploadType").val(gnssParam.gNSSPositionUploadType);
-                    }
-                    if(data.msg == null&&data.obj.event!= null&&data.obj.event.length>0){
-                        var event = data.obj.event;
-                        var addEventIndex1;
-                        var html="";
-                        $("#eventOperateType").val(event[0].operationType);
-                        for(var i=0;i<event.length;i++){
-                            if(i>0){
-                                addEventIndex1 = i+2;
-                                html += "<div class='form-group' id='eventMain-container_"+ addEventIndex1 +"'><label class='col-md-3 control-label'>事件ID：</label><div class='col-md-3 eventIdInfo'><input type='text' name='eventId' id='eventId_"+ addEventIndex1 +"'  value='"+ event[i].eventId +"' class='form-control' onblur='realTimeCommand.inputBlur()'></div>" +
-                                "<label class='col-md-2 control-label'>事件内容：</label><div class='col-md-3'><input type='text' name='eventContent' id='eventContent_"+ addEventIndex1 +"' placeholder='请输入事件内容' value='"+ event[i].eventContent +"' class='form-control' onblur='realTimeCommand.inputBlur()'></div><div class='col-md-1'><button type='button' " +
-                                "class='btn btn-danger eventSettingDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div>";
-                            }else{
-                                $("#eventId_2").val(event[i].eventId);
-                                $("#eventContent_2").val(event[i].eventContent);
-                            }
-                        }
-                        if($('input[id ^= "eventId"]').length==1){
-                            addEventIndex = event[event.length-1].eventId+1;
-                            $("#eventMain-container").append(html);
-                        }
-                    }
-                    if(data.msg == null&&data.obj.phone!= null&&data.obj.phone.length>0){
-                        var phone = data.obj.phone;
-                        var addPhoneIndex1;
-                        var html="";
-                        $("#phoneBookOperateType").val(phone[0].operationType);
-                        for(var i=0;i<phone.length;i++){
-                            if(i>0){
-                                addPhoneIndex1 = i+2;
-                                html += "<div id='phoneBook-MainContent_"+ addPhoneIndex1 +"'><div class='form-group'><label class='col-md-3 control-label'>电话本ID：</label><div class='col-md-3 phoneBookIdInfo'><input type='text' id='phoneBookId_"+ addPhoneIndex1 +"' name='phoneBookId'  value='"+ phone[i].phoneBookId +"' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><label class='col-md-2 control-label'>联系人：</label><div class='col-md-3'><input type='text' id='phoneBookContact_"+ addPhoneIndex1 +"' name='contact' placeholder='请输入联系人' value='"+ phone[i].contact +"' class='form-control' onblur='realTimeCommand.inputBlur()'/></div></div><div class='form-group'><label class='col-md-3 control-label'>电话号码：</label><div class='col-md-3'><input type='text' id='phoneBookNumber_"+ addPhoneIndex1 +"' name='phoneNo' value='"+ phone[i].phoneNo +"' placeholder='请输入电话号码' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><label class='col-md-2 control-label'>呼叫类型：</label><div class='col-md-3'><select id='phoneBookOperateType_"+ addPhoneIndex1 +"' value='"+ phone[i].callType +"' name='callType' class='form-control'><option value='1'>呼入</option><option value='2'>呼出</option><option value='3'>呼入/呼出</option></select></div><div class='col-md-1'><button type='button' class='btn btn-danger phoneBookDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div></div>";
-                            }else{
-                                $("#phoneBookId_2").val(phone[i].phoneBookId);
-                                $("#phoneBookContact_2").val(phone[i].contact);
-                                $("#phoneBookNumber_2").val(phone[i].phoneNo);
-                                $("#phoneBookOperateType_2").val(phone[i].callType);
-                            }
-                        }
-                        if($('input[id ^= "phoneBookId"]').length==1){
-                            addPhoneIndex = parseInt(phone[phone.length-1].phoneBookId)+1;
-                            $("#phoneBook-MainContent").append(html);
-                        }
-                    }
-                    if(data.msg == null&&data.obj.info!= null&&data.obj.info.length>0){
-                        var info = data.obj.info;
-                        var addInfoDemandIndex1;
-                        var html="";
-                        $("#infoDemandOperateType").val(info[0].operationType);
-                        for(var i=0;i<info.length;i++){
-                            if(i>0){
-                                addInfoDemandIndex1 = i+2;
-                                html += "<div class='form-group' id='infoDemand-MainContent_"+ addInfoDemandIndex1 +"'><label class='col-md-3 control-label'>信息ID：</label><div class='col-md-3 infoDemandMenuId'><input type='text' id='infoDemandId_"+ addInfoDemandIndex1 +"'   name='infoId' value='"+ info[i].infoId +"' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><label class='col-md-2 control-label'>信息名称：</label><div class='col-md-3'><input type='text' id='infoDemandName"+ addInfoDemandIndex1 +"'  name='infoContent' value='"+ info[i].infoContent +"' placeholder='请输入信息名称' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><div class='col-md-1'><button type='button' class='btn btn-danger infoDemandDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div>";
-                            }else{
-                                $("#infoDemandId_2").val(info[i].infoId);
-                                 $("#infoDemandName_2").val(info[i].infoContent);
-                            }
-
-                        }
-                        if($('input[id ^= "infoId"]').length==1){
-                            addInfoDemandIndex = info[info.length-1].infoId+1;
-                            $("#infoDemand-MainContent").append(html);
-                        }
-
-                    }
+                    
+                    
                 }else{
                     layer.msg(data.msg,{move:false});
                 }
@@ -815,79 +414,29 @@
         },
         //执行类型及参数显示
         executeCommandShow: function(){
+            console.log("clickTreeNodeName:",clickTreeNodeName);
             switch(clickTreeNodeName){
                 //通讯参数
                 case "commandTreeDemo_2":
                     $("#commParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalParameters,#terminalControl,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#terminalParameters,#aquiryParameters,#meterbaseParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //终端参数
                 case "commandTreeDemo_3":
                     $("#terminalParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#terminalControl,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+                    $("#commParameters,#aquiryParameters,#meterbaseParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
-                //终端控制
+                //采集指令
                 case "commandTreeDemo_4":
-                    $("#terminalControl,.report-para-footer-control").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#terminalParameters,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer,.report-para-footer-control-1").hide();
+                    $("#aquiryParameters,.report-para-footer-control").show();
+                    $("#commParameters,#terminalParameters,#meterbaseParameters,.report-para-footer,.report-para-footer-control-1").hide();
                     break;
-                //无限升级
+                //基表设置
                 case "commandTreeDemo_5":
-                    $("#aquiryParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#terminalControl,#terminalParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
-                //控制终端连接指定服务器
-                case "commandTreeDemo_6":
                     $("#meterbaseParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#aquiryParameters,#terminalControl,#terminalParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    realTimeCommand.connectionControlSH();
+                    $("#commParameters,#terminalParameters,#aquiryParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
-                //位置汇报参数
-                case "commandTreeDemo_7":
-                    $("#locationReporting,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    realTimeCommand.connectionControlSH();
-                    break;
-                //终端查询
-                case "commandTreeDemo_8":
-                    $("#terminalSearch,.report-para-footer-control-1").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer,.report-para-footer-control").hide();
-                    break;
-                //电话参数
-                case "commandTreeDemo_9":
-                    $("#telephoneParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
-                //视频拍照参数
-                case "commandTreeDemo_10":
-                    $("#videoCameraParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
-                //GNSS参数
-                case "commandTreeDemo_11":
-                    $("#gnssParameters,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#eventSetting,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
-                //事件设置
-                    case "commandTreeDemo_12":
-                    $("#eventSetting,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#phoneBookSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
-                //电话本设置
-                case "commandTreeDemo_13":
-                    $("#phoneBookSetting,.report-para-footer").show();
-                    $("#baseStationParameters,#infoDemandMenu,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
-                //信息点播菜单
-                case "commandTreeDemo_14":
-                    $("#infoDemandMenu,.report-para-footer").show();
-                    $("#baseStationParameters,#phoneBookSetting,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
-                //基站参数设置
-                case "commandTreeDemo_15":
-                    $("#baseStationParameters,.report-para-footer").show();
-                    $("#infoDemandMenu,#phoneBookSetting,#eventSetting,#gnssParameters,#videoCameraParameters,#telephoneParameters,#terminalSearch,#locationReporting,#commParameters,#aquiryParameters,#terminalControl,#meterbaseParameters,#terminalParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                    break;
+                
             }
         },
         initTable: function(){
@@ -1037,14 +586,31 @@
                         }
 
                     }
-                },{
-                    "data" : "brand",
+                },
+                {
+                    "data" : "sierialnumber", // 表具编号
+                    "class" : "text-center",
+                }, 
+                {
+                    "data" : "station_name", // 站点名称
+                    "class" : "text-center",
+                }, 
+                {
+                    "data" : "simcardnumber", // sim卡号
+                    "class" : "text-center",
+                },  
+                {
+                    "data" : "belongto",   // 所属组织
+                    "class" : "text-center"
+                },
+                {
+                    "data" : "sendparametertime", // 最新下发参数时间
+                    "class" : "text-center",
+                }, {
+                    "data" : "readparametertime", // 最新读取参数时间
                     "class" : "text-center",
                 },  {
-                    "data" : "groupName",
-                    "class" : "text-center"
-                }, {
-                    "data" : "createDataTime",
+                    "data" : "createDataTime",  //安装日期
                     "class" : "text-center"
                 }
             ];//ajax参数
@@ -1110,7 +676,7 @@
           };
           if(realTimeCommand.validateSubmit()){
           $("#saveCommandForm").ajaxSubmit(function() {
-              $("#commParameters,.report-para-footer,#infoDemandMenu,#phoneBookSetting,#eventSetting,#terminalParameters,#terminalControl,#aquiryParameters,#meterbaseParameters,#locationReporting,#terminalSearch,#telephoneParameters,#videoCameraParameters,#gnssParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
+              $("#commParameters,.report-para-footer,#terminalParameters,#aquiryParameters,#meterbaseParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                  myTable.refresh()
             });
           }
@@ -1348,52 +914,53 @@
         },
          //模糊查询
         inputTextAutoSearch: function(param){
-//          search_ztree('treeDemo', 'search_condition', 'vehicle');
-            if (param != null && param != undefined && param != '') {
-                var setQueryChar = {
-                        async: {
-                            url: "/clbs/m/personalized/ico/vehicleTreeFuzzy",
-                            type: "post",
-                            enable: true,
-                            autoParam: ["id"],
-                            dataType: "json",
-                            otherParam: {"type": "multiple","queryParam":param, "deviceType":"1"},
-                            dataFilter: realTimeCommand.ajaxQueryDataFilter
-                        },
-                        check: {
-                            enable: true,
-                            chkStyle: "checkbox",
-                            chkboxType: {
-                                "Y": "s",
-                                "N": "s"
-                            },
-                            radioType: "all"
-                        },
-                        view: {
-                            dblClickExpand: false,
-                            nameIsHTML: true,
-                            fontCss: setFontCss_ztree,
-                            countClass: "group-number-statistics"
-                        },
-                        data: {
-                            simpleData: {
-                                enable: true
-                            }
-                        },
-                        callback: {
-                            beforeClick:realTimeCommand.beforeClick,
-                            onClick: realTimeCommand.onClickVehicle,
-                            onAsyncSuccess: realTimeCommand.fuzzyZTreeOnAsyncSuccess,
-                            //beforeCheck: realTimeCommand.fuzzyZTreeBeforeCheck,
-                            onCheck: realTimeCommand.fuzzyOnCheckVehicle,
-                            //onExpand: realTimeCommand.zTreeOnExpand,
-                            //onNodeCreated: realTimeCommand.zTreeOnNodeCreated,
-                        }
-                    };
-                $.fn.zTree.init($("#treeDemo"), setQueryChar, null);
-            }else{
-                realTimeCommand.initTreeData("1");
-            }
+         search_ztree('treeDemo', 'search_condition', 'group');
+
+            // if (param != null && param != undefined && param != '') {
+            //     var setQueryChar = {
+            //             async: {
+            //                 url: "/clbs/m/personalized/ico/vehicleTreeFuzzy",
+            //                 type: "post",
+            //                 enable: true,
+            //                 autoParam: ["id"],
+            //                 dataType: "json",
+            //                 otherParam: {"type": "multiple","queryParam":param, "deviceType":"1"},
+            //                 dataFilter: realTimeCommand.ajaxQueryDataFilter
+            //             },
+            //             check: {
+            //                 enable: true,
+            //                 chkStyle: "checkbox",
+            //                 chkboxType: {
+            //                     "Y": "s",
+            //                     "N": "s"
+            //                 },
+            //                 radioType: "all"
+            //             },
+            //             view: {
+            //                 dblClickExpand: false,
+            //                 nameIsHTML: true,
+            //                 fontCss: setFontCss_ztree,
+            //                 countClass: "group-number-statistics"
+            //             },
+            //             data: {
+            //                 simpleData: {
+            //                     enable: true
+            //                 }
+            //             },
+            //             callback: {
+            //                 beforeClick:realTimeCommand.beforeClick,
+            //                 onClick: realTimeCommand.onClickVehicle,
+            //                 onAsyncSuccess: realTimeCommand.fuzzyZTreeOnAsyncSuccess,
+            //                 //beforeCheck: realTimeCommand.fuzzyZTreeBeforeCheck,
+            //                 onCheck: realTimeCommand.fuzzyOnCheckVehicle,
+            //                 //onExpand: realTimeCommand.zTreeOnExpand,
+            //                 //onNodeCreated: realTimeCommand.zTreeOnNodeCreated,
+            //             }
+            //         };
+            //     $.fn.zTree.init($("#treeDemo"), setQueryChar, null);
+            // }else{
+            //     realTimeCommand.initTreeData("1");
+            // }
             
         },
         /**
@@ -1934,11 +1501,13 @@
         $('input').inputClear().on('onClearEvent',function(e,data){
             var id = data.id;
             if(id == 'search_condition'){
-//              search_ztree('treeDemo', id, 'vehicle');
-                realTimeCommand.initTreeData("1");
+             search_ztree('treeDemo', id, 'group');
+             // realTimeCommand.initTreeData("1");
             };
         });
         console.log("start..")
+        $("#commParameters,.report-para-footer").show();
+        $("#terminalParameters,#aquiryParameters,#meterbaseParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
         realTimeCommand.init();
         realTimeCommand.getHoursMinuteSeconds();
         realTimeCommand.initTable();
@@ -1985,14 +1554,18 @@
             var search;
             $("#search_condition").bind("focus",function(){
                 search = setInterval(function(){
-//                    search_ztree('treeDemo', 'search_condition','vehicle');
-                    realTimeCommand.inputTextAutoSearch(param);
+                   search_ztree('treeDemo', 'search_condition','station');
+                    // realTimeCommand.inputTextAutoSearch(param);
                 },500);
             }).bind("blur",function(){
                 clearInterval(search);
             });
         }
-        laydate.render({elem: '#baseStationStartTimePoint',type: 'time',theme: '#6dcff6'});
+        laydate.render({elem: '#updatastarttime',type: 'time',theme: '#6dcff6'});
+        laydate.render({elem: '#updatatime1',type: 'time',theme: '#6dcff6'});
+        laydate.render({elem: '#updatatime2',type: 'time',theme: '#6dcff6'});
+        laydate.render({elem: '#updatatime3',type: 'time',theme: '#6dcff6'});
+        laydate.render({elem: '#updatatime4',type: 'time',theme: '#6dcff6'});
         laydate.render({elem: '#baseStationFixedTime',type: 'time',theme: '#6dcff6'});
         // 应答确定
         $('#parametersResponse').on('click', realTimeCommand.platformMsgAck);

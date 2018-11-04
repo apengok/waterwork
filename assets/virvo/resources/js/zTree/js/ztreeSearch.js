@@ -51,16 +51,21 @@ function searchByFlag_ztree(treeId, searchConditionId, flag,type) {
     var treeObj = $.fn.zTree.getZTreeObj(treeId);
     searchParam = searchCondition;
     if (type == "vehicle") {
+        highlightNodes = treeObj.getNodesByFilter(monitorParamFuzzyFilter); 
+        // allNodes = treeObj.getNodesByFilter(monitorFilter); // 所有type型nodes
+        allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
+    }
+    else if (type == "station") {
     	highlightNodes = treeObj.getNodesByFilter(monitorParamFuzzyFilter); 
-    	// allNodes = treeObj.getNodesByFilter(monitorFilter); // 所有type型nodes
-    	allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
+        allNodes = treeObj.getNodesByParam("type",type, null); // 所有type型nodes
+    	
 	}else{
 		highlightNodes = treeObj.getNodesByParamFuzzy("name", searchCondition, null); // 满足搜索条件的节点
         allNodes = treeObj.getNodesByParam("type",type, null); // 所有type型nodes
 	}    
     if (searchCondition != "") {
     	searchParam = searchCondition;
-        if (type == "group") {  // 企业
+        if (type == "group" ) {  // 企业
             // 需要显示是节点（包含父节点）
             var showNodes = [];
             if (highlightNodes != null) {
@@ -72,10 +77,10 @@ function searchByFlag_ztree(treeId, searchConditionId, flag,type) {
                 treeObj.showNodes(showNodes);
                 treeObj.expandAll(true);
             }
-      /*  }else if (type == "vehicle"){
+        }else if (type == "vehicle"){
         	treeObj.hideNodes(allNodes)
             treeObj.showNodes(highlightNodes);
-            treeObj.expandAll(true);*/
+            treeObj.expandAll(true);
         }else{
         	//<2>.得到模糊匹配搜索条件的节点数组集合
 //            treeObj.hideNodes(allNodes);
@@ -103,7 +108,7 @@ function searchByFlag_ztree(treeId, searchConditionId, flag,type) {
 }
 
 function realTimeMonitoringFilter(node){ // 模糊搜索从业人员，终端编号
-	return (node.type == "vehicle" && node.name.indexOf(searchParam) > -1) || 
+	return (node.type == "station" && node.name.indexOf(searchParam) > -1) || 
 			(node.type == "people" && node.name.indexOf(searchParam) > -1) ||
 			(node.professional != undefined && node.professional != null && node.professional.indexOf(searchParam) > -1) ||
 			(node.simcardNumber != undefined && node.simcardNumber != null && node.simcardNumber.indexOf(searchParam) > -1) || 
@@ -112,11 +117,11 @@ function realTimeMonitoringFilter(node){ // 模糊搜索从业人员，终端编
 }
 
 function monitorFilter(node){ // 搜索type等于人或者车
-	return node.type == "vehicle" || node.type == "people" 
+	return node.type == "station" || node.type == "people" 
 }
 
 function monitorParamFuzzyFilter(node){ // 模糊匹配name,type等于人或者车
-	return (node.type == "vehicle" && node.name.indexOf(searchParam) > -1) || (node.type == "people" && node.name.indexOf(searchParam) > -1)
+	return (node.type == "station" && node.name.indexOf(searchParam) > -1) || (node.type == "people" && node.name.indexOf(searchParam) > -1)
 }
 
 /**
@@ -134,7 +139,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
  * @returns
  */
 function moniterFilter(node){ // 搜索type等于人或者车
-    return (node.type == "vehicle" || node.type == "people")&&node.isHidden===false;
+    return (node.type == "station" || node.type == "people")&&node.isHidden===false;
 }
 
 /**
@@ -184,7 +189,7 @@ function high_search_ztree(treeId, searchConditionId,hasBegun) {
 
 function searchTypeFilter(node){ // 模糊搜索从业人员，终端编号
 	var value = node[''+searchTypeValue+''];
-	return ((node.type == "vehicle" || node.type == "people") && value != undefined && value != null && value.indexOf(searchParam) > -1)
+	return ((node.type == "station" || node.type == "people") && value != undefined && value != null && value.indexOf(searchParam) > -1)
 }
 
 /**
@@ -213,7 +218,7 @@ function search_ztree_by_search_type(treeId, searchConditionId,searchType,hasBeg
             for (var i = 0; i < allNodes.length; i++) {
             	var node = allNodes[i];
             	var value = node[''+searchType+''];
-            	if ((node.type == "vehicle" || node.type == "people") && value != undefined && value != null && value.indexOf(searchParam) > -1) {
+            	if ((node.type == "station" || node.type == "people") && value != undefined && value != null && value.indexOf(searchParam) > -1) {
             		//highlightNodes.push(node);
             		//组装显示节点的父节点的父节点....直到根节点，并展示
                     if(hasBegun.indexOf(node.getParentNode().id)==-1){
@@ -258,7 +263,7 @@ function showSearchNodes(treeId, checkedList) {
         for (var i = 0; i < allNodes.length; i++) {
         	var node = allNodes[i];
 //        	var value = node[''+searchType+''];
-        	if ((node.type === "vehicle" || node.type === "people") ) {
+        	if ((node.type === "station" || node.type === "people") ) {
         		// 勾选搜索前勾选的车辆
         		if (checkedList !== null &&　checkedList　!== undefined && checkedList.length > 0
                     && checkedList.indexOf(node.id) !== -1){
@@ -320,7 +325,7 @@ function getAllAvailableNodes(node, result, nodes) {
 }
 
 function isMonitorType(type) {
-    return type === "vehicle" || type === "people";
+    return type === "station" || type === "people";
 }
 
 function zTreeScroll(zTree, scroll) {
