@@ -3,6 +3,11 @@
 
 {% load staticfiles %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'virvo/wro/spectrum.css' %}" >
+
+{% endblock %}
+
 {% block main_content %}
 
         <div class="row">
@@ -204,7 +209,7 @@
 
 
             <div class="col-md-2" style="padding-right: 0px; padding-left:0px;"></div>
-            <div class="col-md-10 " style="padding-right: 0px; padding-left:10px;display: none;">
+            <div class="col-md-10 " style="padding-right: 0px; padding-left:10px;">
               <div class="panel panel-default">
                 <div class="panel-heading" id="stretch3" >
                   <h3 class="panel-title fwb">区域图形配置</h3>
@@ -214,20 +219,24 @@
                 </div>
                 <div class="panel-body fixed-table-body"  id="stretch3-body">
                   <div class="row">
+                    
                     <div class="col-md-2">
-                      <div><button id="inquireClick" type="button" class="btn btn-primary" style="margin-top: 20px;" name="1" onclick="">绘制区域</button>
+                      <div><button id="drawDistrict" type="button" class="btn btn-primary" style="margin-top: 20px;" name="1" onclick="">绘制区域</button>
                       </div>
-                      <div><button id="inquireClick" type="button" class="btn btn-primary " name="1" onclick="">蒙层颜色</button>
+                      <div><button id="getFillColor" type="button" class="btn btn-primary " name="1" onclick="">蒙层颜色</button>
                       </div>
-                      <div><button id="inquireClick" type="button" class="btn btn-primary " name="1" onclick="">边框颜色</button>
+                      <div><button id="getFrameColor" type="button" class="btn btn-primary " name="1" onclick="">边框颜色</button>
                       </div>
+                      <div><button id="saveDmaGisinfo" type="button" class="btn btn-primary " name="1" onclick="">保存</button>
+                      </div>
+                      <input type='text' id="custom" />
                     </div>
                     <div class="col-md-4">
                       <div style="text-align: left;">图形预览：</div>
-                      <div style="height: 400px;border: 1px solid grey;margin-left: -50px;"></div>
+                      <div id="mapContainer" style="height: 400px;border: 1px solid grey;margin-left: -50px;"></div>
                     </div>
                     <div class="col-md-2">
-                      <button id="inquireClick" type="button" class="btn btn-primary search-btn" style="margin-top: 180px;" name="1" onclick=""><i class="glyphicon glyphicon-search"></i>  统计</button>
+                      <button id="statsticData" type="button" class="btn btn-primary search-btn" style="margin-top: 180px;" name="1" onclick=""><i class="glyphicon glyphicon-search"></i>  统计</button>
                       </div>
                     
                     <div class="col-md-4">
@@ -318,8 +327,20 @@
   var userQualificationNull="\u8FD0\u8425\u8D44\u8D28\u7C7B\u522B\u4E0D\u80FD\u4E3A\u7A7A";
   var userQualificationExists="\u8BE5\u8FD0\u8425\u8D44\u8D28\u7C7B\u522B\u5DF2\u7ECF\u5B58\u5728,\u8BF7\u52FF\u91CD\u590D\u6DFB\u52A0";
 </script>
+
+<script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch&plugin=AMap.MouseTool"></script>
+<!-- <script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch&plugin=AMap.PolyEditor"></script> -->
+
 <script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
 
 <script src="{% static 'virvo/wro/districtList.js' %}"></script>
 <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
+<script src="{% static 'virvo/wro/spectrum.js' %}"></script>
+
+<script>
+$("#custom").spectrum({
+    color: "#f00"
+});
+</script>
+
 {% endblock %}

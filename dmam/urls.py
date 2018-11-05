@@ -35,7 +35,9 @@ urlpatterns = [
     url(r'^dmaStation/getdmastationsbyId/?$',views.getdmastationsbyId,name='getdmastationsbyId'),
     url(r'^dmaStation/saveDmaStation/?$',views.saveDmaStation,name='saveDmaStation'),
 
-
+# dma 分区地图信息处理
+    url(r'^district/saveDmaGisinfo/?$',views.saveDmaGisinfo,name='saveDmaGisinfo'),
+    url(r'^district/getDmaGisinfo/?$',views.getDmaGisinfo,name='getDmaGisinfo'),
     
 
     #stations  

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard
+from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo
 # Register your models here.
 from legacy.models import Bigmeter,District
 
@@ -64,3 +64,8 @@ class StationAdmin(admin.ModelAdmin):
 @admin.register(SimCard)
 class SimCardAdmin(admin.ModelAdmin):
     list_display = ['simcardNumber','belongto','isStart','iccid','imei','imsi','operator','simFlow','openCardTime','endTime','remark']
+
+
+@admin.register(DmaGisinfo)
+class DmaGisInfoAdmin(admin.ModelAdmin):
+    list_display = ['dma_no','polygonpath','strokeColor','fillColor']

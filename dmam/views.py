@@ -33,7 +33,7 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
-from . models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,VCommunity,VConcentrator
+from . models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,VCommunity,VConcentrator,DmaGisinfo
 from .forms import StationsForm,StationsEditForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssignForm
 import os
@@ -1678,3 +1678,58 @@ def communitylist(request):
     print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
     
     return HttpResponse(json.dumps(result))
+
+
+def getDmaGisinfo(request):
+    dma_no = request.POST.get("dma_no")
+
+    dma = DmaGisinfo.objects.filter(dma_no=dma_no).values("polygonpath","strokeColor")
+    data = []
+
+    if dma.exists():
+        d = dma.first()
+        data.append({"polygonpath":json.loads(d["polygonpath"]),
+            "strokeColor":d["strokeColor"],
+            "fillColor":d["fillColor"]})
+
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":data,
+        "success":True
+    }
+   
+
+    return JsonResponse(operarions_list)
+
+
+def saveDmaGisinfo(request):
+    dma_no = request.POST.get("dma_no")
+    polygonpath = request.POST.get("polygonpath")
+    strokeColor = request.POST.get("strokeColor")
+    fillColor = request.POST.get("fillColor")
+
+    if dma_no is None:
+        data = {
+            "success": 0,
+            "obj":{"flag":0}
+        }
+        return JsonResponse(data)
+
+    dma = DmaGisinfo.objects.filter(dma_no=dma_no)
+    if dma.exists():
+        d = dma.first()
+        d.polygonpath = polygonpath
+        d.strokeColor = strokeColor
+        d.fillColor = fillColor
+        d.save()
+    else:
+        DmaGisinfo.objects.create(dma_no=dma_no,polygonpath=polygonpath,strokeColor=strokeColor,fillColor=fillColor)
+
+    data = {
+            "success": 1,
+            "obj":{"flag":1}
+        }
+
+    return JsonResponse(data)

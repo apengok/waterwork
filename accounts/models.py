@@ -190,7 +190,6 @@ class User(AbstractBaseUser,PermissionsMixin):
         return False
 
     def has_menu_permission_edit(self,perm):
-        return True
         if self.is_admin:
             return True
         if self.Role is None:

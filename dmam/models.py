@@ -291,7 +291,7 @@ class DMABaseinfo(models.Model):
         }
 
 '''
-obsolete 
+ 
 直接在Station 用ManyToManyField关联到dmabaseinfo
 一个站点可能在多个dma中分担角色，‘直接在Station 用ManyToManyField关联到dmabaseinfo’不能区分该站点是数据哪个dma的表，
 所以还是启用该table
@@ -311,6 +311,23 @@ class DmaStation(models.Model):
 
     def __str__(self):
         return self.dmaid.dma_name   
+
+
+class DmaGisinfo(models.Model):
+    dma_no        = models.CharField('分区编号',max_length=50, unique=True)
+    polygonpath   = models.TextField(blank=True)
+    strokeColor   = models.CharField(max_length=100,blank=True,null=True)
+    fillColor     = models.CharField(max_length=100,blank=True,null=True)
+
+    class Meta:
+        managed=True
+        db_table = 'dmagisinfo'  
+
+    def __unicode__(self):
+        return "{} polygon path".format(self.dma_no)
+
+    def __str__(self):
+        return "{} polygon path".format(self.dma_no)
 
 
 class SimCardQuerySet(models.query.QuerySet):

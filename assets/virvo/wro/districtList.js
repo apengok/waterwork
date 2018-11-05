@@ -261,6 +261,80 @@
                 $("#authorizationDateEdit").val(startTime);
         },
     },
+    amapbase = {
+        init: function(){
+            // map
+            var layer = new AMap.TileLayer({
+                  zooms:[3,20],    //可见级别
+                  visible:true,    //是否可见
+                  opacity:1,       //透明度
+                  zIndex:0         //叠加层级
+            });
+            
+
+            map = new AMap.Map('mapContainer',{
+                zoom: 15,  //设置地图显示的缩放级别
+                center: [118.438781,29.871515],
+                layers:[layer], //当只想显示标准图层时layers属性可缺省
+                viewMode: '2D',  //设置地图模式
+                lang:'zh_cn',  //设置地图语言类型
+            });
+
+            var path = [
+                [116.424124,39.906614],
+                [116.438115,39.911552],
+                [116.447299,39.906745],
+                [116.437771,39.89621],
+                [116.421292,39.903914],
+                [116.420863,39.905231]
+            ]
+
+            var polygon = new AMap.Polygon({
+                path: path,
+                isOutline: true,
+                borderWeight: 3,
+                strokeColor: "#FF33FF", 
+                strokeWeight: 6,
+                strokeOpacity: 0.2,
+                fillOpacity: 0.4,
+                // 线样式还支持 'dashed'
+                fillColor: '#1791fc',
+                zIndex: 50,
+            })
+
+            polygon.setMap(map)
+            // 缩放地图到合适的视野级别
+            map.setFitView([ polygon ])
+
+            mouseTool = new AMap.MouseTool(map);
+
+            mouseTool.on('draw', function(event) {
+              // event.obj 为绘制出来的覆盖物对象
+                pgpath = event.obj.getPath();
+                console.log(pgpath);
+                console.log('覆盖物对象绘制完成')
+            })
+        },
+        drawPolygon:function() {
+            console.log("drawPolygon");
+            if(1){
+                mouseTool.polygon({
+                strokeColor: "#FF33FF", 
+                strokeOpacity: 1,
+                strokeWeight: 6,
+                strokeOpacity: 0.2,
+                fillColor: '#1791fc',
+                fillOpacity: 0.4,
+                // 线样式还支持 'dashed'
+                strokeStyle: "solid",
+                // strokeStyle是dashed时有效
+                // strokeDasharray: [30,10],
+              })
+            } else {
+
+            }
+        },
+    },
     dmaManage = {
         init: function(){
             // 显示隐藏列
@@ -733,15 +807,6 @@
             d.groupName = selectTreeId;
             d.districtId = selectDistrictId;
         },
-        // 删除用户
-        deleteRole: function(id){
-            console.log('删除用户?',id);
-            if (id == "uid=admin,ou=organization") {
-                layer.msg(userSupermanagerDeleteTip,{move:false});
-            }else{
-                myTable.deleteItem(id);
-            }
-        },
         reloadData: function (dataList) {
             var currentPage = myTable.page()
             myTable.clear()
@@ -760,66 +825,8 @@
             zTree.cancelSelectedNode();
             // myTable.requestData();
         },
-        // 批量删除
-        delModel: function(){
-            // 判断是否至少选择一项
-            console.log('批量删除');
-            var chechedNum = $("input[name='subChk']:checked").length;
-            if (chechedNum == 0) {
-                layer.msg(userDeleteChooseNull,{move:false});
-                return
-            }
-            var checkedList = new Array();
-            var flag = true;
-            $("input[name='subChk']:checked").each(function() {
-                console.log("$(this).val():",$(this).val(),$(this).attr("uid"));
-                var uid = $(this).attr("uid"); //pengwl
-                // if ($(this).val() == "uid=admin,ou=organization") {
-                if(uid == "admin"){
-                    flag = false;
-                    return false;
-                }else{
-                    checkedList.push($(this).val());
-                }
-            });
-            if (flag) {
-                myTable.deleteItems({
-                    'deltems' : checkedList.join(";")
-                });
-            }else{
-                layer.msg(userSupermanagerDeleteTip,{move:false});
-            }
-        },
-        findOperation:function(){
-            var vagueSearch = $("#userType").val();
-            var url="/dmam/station/findOperations";
-            var data={"type":vagueSearch};
-            json_ajax("POST", url, "json", true,data,dmaManage.findCallback);
-        },
-        findCallback:function(data){
-            if(data.success){
-                var operations=[];
-                if(data.obj.operation != null || data.obj.operation.length>0){
-                    var calldata = data.obj.operation;
-                    var s=0;
-                    for(var i=0;i<calldata.length;i++){
-                        var list=[
-                                 ++s,
-                                 '<input type="checkbox" id="checkAllTwo" name="subChkTwo" value="'+calldata[i].id+'">',
-                                 '<button onclick="dmaManage.findOperationById(\''+calldata[i].id+'\')" data-target="#updateType" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp<button type="button"  onclick="dmaManage.deleteType(\''+calldata[i].id+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>',    
-                                 calldata[i].userType,
-                                 calldata[i].explains
-                                 ];
-                        operations.push(list);
-                    }
-                }
-                console.log(operations);
-                reloadData(operations);
-            }else{
-                layer.msg(data.msg);
-            }
-        },
-         getTable:function(table,operations){
+        
+        getTable:function(table,operations){
            myTable = $(table).DataTable({
           "destroy": true,
             "dom": 'tiprl',// 自定义显示项
@@ -941,267 +948,29 @@
                   });
               }).draw();
         },
-        doSubmit:function () {
-            if(dmaManage.validates()){
-                $("#adduserType").ajaxSubmit(function(data) {
-                    console.log('sdfe:',data);
-                    if (data != null && typeof(data) == "object" &&
-                        Object.prototype.toString.call(data).toLowerCase() == "[object object]" &&
-                        !data.length) {//判断data是字符串还是json对象,如果是json对象
-                            if(data.success == true){
-                                $("#addType").modal("hide");//关闭窗口
-                                layer.msg(publicAddSuccess,{move:false});
-                                dmaManage.closeClean();//清空文本框
-                                $("#userType").val("");
-                                dmaManage.findOperation();
-                            }else{
-                                layer.msg(data.msg,{move:false});
-                            }
-                    }else{//如果data不是json对象
-                            var result = $.parseJSON(data);//转成json对象
-                            if (result.success == true) {
-                                    $("#addType").modal("hide");//关闭窗口
-                                    layer.msg(publicAddSuccess,{move:false});
-                                    $("#userType").val("");
-                                    dmaManage.closeClean();//清空文本框
-                                    dmaManage.findOperation();
-                            }else{
-                                layer.msg(result.msg,{move:false});
-                            }
-                    }
-                });
-            }
-        },
-        updateDoSubmit:function () {
-            dmaManage.init();
-            if(dmaManage.upDateValidates()){
-                var userType=$("#updateuserType").val();// 运营资质类型
-                var explains=$("#updateDescription").val();// 说明
-                var data={"id":OperationId,"userType":userType,"explains":explains};
-                var url="/dmam/station/updateOperation";
-                json_ajax("POST", url, "json", true,data,dmaManage.updateCallback);
-            }
-        },
-        closeClean:function(){
-            $("#addpruserType").val("");
-            $("#adddescription").val("");
-            $("#addpruserType-error").hide();//隐藏上次新增时未清除的validate样式
-            $("#adddescription-error").hide();
-        },
-        updateClean:function () {
-            $("#updateuserType-error").hide();
-            $("#updateDescription-error").hide();
-        },
-        findOperationById:function(id){
-            OperationId=id;
-            var data={"id":OperationId};
-            var url="/dmam/station/findOperationById";
-            json_ajax("POST",url,"json",true,data,dmaManage.findByIdback);
-        },
-        findByIdback:function(data){
-            if(data.success==true){
-                 $("#updateuserType").val(data.obj.operation.userType);
-                 $("#updateDescription").val(data.obj.operation.explains);
-                 startOperation=$("#updateuserType").val();
-                 console.log('startOperation:',startOperation);
-                 expliant=$("#updateDescription").val();
-            }else{
-                 layer.msg(data.msg,{move:false});
-            }
-        },
-        updateCallback:function(data){
-            if(data.success == true){
-                $("#updateType").modal('hide');
-                layer.msg("修改成功");
-                dmaManage.findOperation();
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
-        deleteType:function(id){
-            layer.confirm(publicDelete, {
-                title :'操作确认',
-                icon : 3, // 问号图标
-                btn: [ '确定', '取消'] // 按钮
-            }, function(){
-                var url="/dmam/station/deleteOperation";
-                var data={"id" : id}
-                json_ajax("POST", url, "json", false,data,dmaManage.deleteCallback);
-            });
-        },
-        deleteCallback:function(data){
-            if(data.success==true){
-                layer.closeAll('dialog');
-                dmaManage.findOperation();
-            }else{
-                layer.msg(publicError,{move:false});
-            }
-        },
-        deleteTypeMore : function(){
-            // 判断是否至少选择一项
-            var chechedNum = $("input[name='subChkTwo']:checked").length;
-            if (chechedNum == 0) {
-                layer.msg(selectItem);
-                return
-            }
-            var ids="";
-            $("input[name='subChkTwo']:checked").each(function() {
-                ids+=($(this).val())+",";
-            });
-            var url="/dmam/station/deleteOperationMore";
-            var data={"ids" : ids};
-            layer.confirm(publicDelete, {
-                title :'操作确认',
-                icon : 3, // 问号图标
-                btn: [ '确定', '取消'] // 按钮
-            }, function(){
-                json_ajax("POST", url, "json", false,data,dmaManage.deleteOperationMoreCallback);
-                layer.closeAll('dialog');
-            });
-        },
-        deleteOperationMoreCallback : function(data){
-            if(data.success){
-                layer.msg(publicDeleteSuccess);
-                dmaManage.findOperation();
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
-        findOperationByVague:function(){
-            dmaManage.findOperation();
-        },
-        findDownKey:function(event){
-            if(event.keyCode==13){
-                dmaManage.findOperation();
-            }
-        },
-        checkAll : function(e){
-            $("input[name='subChk']").not(':disabled').prop("checked", e.checked);
+        
+        saveDmaGisinfo:function(){
 
+            var data={"dma_no":current_dma_no,"polygonpath":"polygonpath","strokeColor":"strokeColor","fillColor":"#1ef43"}
+            var url="/dmam/district/saveDmaGisinfo/";
+            json_ajax("POST",url,"json",true,data,dmaManage.saveDmaGisinfoBack);
         },
-        checkAllTwo : function(e){
-            $("input[name='subChkTwo']").prop("checked", e.checked);
+        saveDmaGisinfoBack:function(data){
+            console.log(data);
+            if(data.success == true){
+                // $("#updateType").modal('hide');
+                layer.msg("修改成功");
+                
+            }else{
+                layer.msg(data.msg,{move:false});
+            }
         },
+        
         assignstation : function (){
             $("#assignstation").attr("href","/dmam/district/assignstation/"+current_dma_pk+"/");
-        },
-        validates:function () {//增加运营资质类别时的数据验证
-           return $("#adduserType").validate({
-               rules : {
-                   usertype: {
-                       required: true,
-                       stringCheck: true,
-                       maxlength: 20,
-                       minlength:2,
-                       remote: {
-                           type:"post",
-                           async:false,
-                           url:"/dmam/station/findusertypeByusertype/" ,
-                           data:{
-                               type:function(){return $("#addpruserType").val();}
-                           },
-                       }
-                   },
-                   explains:{
-                        stringCheck:true,
-                        maxlength:30,
-                   }
-               },
-               messages:{
-                   usertype:{
-                        required : userQualificationNull,
-                        stringCheck : publicPerverseData,
-                        maxlength : publicSize20,
-                        minlength:publicMinSize2Length,
-                        remote:userQualificationExists
-                    },
-                   explains : {
-                        stringCheck:publicPerverseData,
-                        maxlength:publicSize30
-                   }
-               }
-           }).form();
-        },
-        upDateValidates:function () {//修改运营资质类别时的数据验证
-            var userType=$("#updateuserType").val();// 运营资质类型
-            var explains=$("#updateDescription").val();// 说明
-            if(userType==startOperation && explains==expliant){
-                $("#updateType").modal('hide');
-            }else if(userType==startOperation && explains != expliant){
-                return $("#edituserType").validate({
-                    rules : {
-                        usertype:{
-                            required:true,
-                            maxlength:20,
-                            minlength:2
-                        },
-                        explains:{
-                            stringCheck:true,
-                            maxlength:30,
-                        }
-                    },
-                    messages:{
-                        usertype:{
-                            required:userQualificationNull,
-                            maxlength:publicSize20,
-                            minlength:publicMinSize2Length
-                        },
-                        explains : {
-                            stringCheck:publicPerverseData,
-                            maxlength:publicSize30
-                        }
-                    }
-                }).form();
-            }else{
-                return $("#edituserType").validate({
-                    rules : {
-                        usertype: {
-                            required: true,
-                            stringCheck: true,
-                            maxlength: 20,
-                            remote: {
-                                type:"post",
-                                async:false,
-                                url:"/dmam/station/findOperationCompare" ,
-                                data:{
-                                    type:function(){
-                                        return $("#updateuserType").val();
-                                    },
-                                    recomposeType: function(){
-                                        return startOperation;
-                                    }
-                                },
-                                // dataFilter:function(data){
-                                //     var resultData = $.parseJSON(data);
-                                //     if(resultData.success == true){
-                                //         return true;
-                                //     }else{
-                                //         return false;
-                                //     }
-                                // }
-                            }
-                        },
-                        explains:{
-                            stringCheck:true,
-                            maxlength:30,
-                        }
-                    },
-                    messages:{
-                        usertype:{
-                            required : userQualificationNull,
-                            stringCheck : publicPerverseData,
-                            maxlength : publicSize20,
-                            remote:userQualificationExists
-                        },
-                        explains : {
-                            stringCheck:publicPerverseData,
-                            maxlength:publicSize30
-                        }
-                    }
-                }).form();
-            }
-
-            }
+        }
+        
+        
     }
     $(function(){
         $('input').inputClear().on('onClearEvent',function(e,data){
@@ -1217,6 +986,18 @@
         dmaManage.init();
         DMABaseEdit.init();
         dmaManage.getBaseinfo();
+
+        //map
+        var map,mouseTool;
+        amapbase.init();
+        $("#drawDistrict").on("click",amapbase.drawPolygon);
+        $("#saveDmaGisinfo").on("click",dmaManage.saveDmaGisinfo);
+        $("#getFillColor,#getFrameColor").on("click",function(){ 
+            $("#getFillColor").spectrum({
+                color: "#f00"
+            });
+        });
+
         
         // IE9
         if(navigator.appName=="Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g,"")=="MSIE9.0") {
@@ -1259,16 +1040,10 @@
 
         //提交基本信息
         // $("#baseinfoCommit").bind("click",dmaManage.baseinfoCommit);
-        // 批量删除
-        $("#del_model").on("click",dmaManage.delModel);
-        $("#addoperation").on("click",dmaManage.doSubmit);
-        $("#deleteOperation").on("click",dmaManage.deleteType);
-        $("#updateOperation").on("click",dmaManage.updateDoSubmit);
-        $("#del_modelTwo").on("click",dmaManage.deleteTypeMore);
-        $("#search_operation").on("click",dmaManage.findOperationByVague);
+        
+        
         $("#assignstation").on("click",dmaManage.assignstation);
-        $("#closeAdd").on("click",dmaManage.closeClean);
-        $("#updateClose").on("click",dmaManage.updateClean);
+        
 
 
         var windowId = 'commonLgWin'; 
