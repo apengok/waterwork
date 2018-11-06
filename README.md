@@ -140,14 +140,31 @@ mod_wsgi-express module-config
 
 
 
-[{"id":"prodschedule","edit":false},{"id":"factoryview_prodschedule","edit":true},{"id":"hydromodel_prodschedule","edit":true},{"id":"monitor","edit":false},{"id":"mapstation_monitor","edit":true},{"id":"realcurlv_monitor","edit":true},{"id":"realtimedata_monitor","edit":true},{"id":"vehicle_monitor","edit":true},{"id":"vedio_monitor","edit":true},{"id":"secondwater_monitor","edit":true},{"id":"mapmonitor_monitor","edit":true},{"id":"analysis","edit":false},{"id":"dailyuse_analysis","edit":true},{"id":"monthlyuse_analysis","edit":true},{"id":"flownalys_analysis","edit":true},{"id":"comparenalys_analysis","edit":true},{"id":"peibiao_analysis","edit":true},{"id":"dmacxc_analysis","edit":true},{"id":"mnf_analysis","edit":true},{"id":"alarm","edit":false},{"id":"stationalarm_alarm","edit":true},{"id":"dmaalarm_alarm","edit":true},{"id":"queryalarm_alarm","edit":true},{"id":"baseanalys","edit":false},{"id":"dmaba_baseanalys","edit":true},{"id":"mnfba_baseanalys","edit":true},{"id":"dayuseba_baseanalys","edit":true},{"id":"gis","edit":false},{"id":"pipelinequery_gis","edit":true},{"id":"pipelinestastic_gis","edit":true},{"id":"pipelineanalys_gis","edit":true},{"id":"pipelineimexport_gis","edit":true},{"id":"entm","edit":false},{"id":"usermanager_entm","edit":true},{"id":"rolemanager_entm","edit":true},{"id":"devm","edit":false},{"id":"metermanager_devm","edit":true},{"id":"pressuremanager_devm","edit":true},{"id":"fireboltmanager_devm","edit":true},{"id":"simcardmanager_devm","edit":true},{"id":"paramsmanager_devm","edit":true},{"id":"dmam","edit":false},{"id":"stationmanager_dmam","edit":true},{"id":"districtmanager_dmam","edit":true},{"id":"secondmanager_dmam","edit":true},{"id":"vediomanager_dmam","edit":true},{"id":"vehiclemanager_dmam","edit":true},{"id":"reports","edit":false},{"id":"querylog_reports","edit":true},{"id":"alarm_reports","edit":true},{"id":"biguser_reports","edit":true},{"id":"dmastatics_reports","edit":true},{"id":"flows_reports","edit":true},{"id":"waters_reports","edit":true},{"id":"biaowu_reports","edit":true},{"id":"vehicle_reports","edit":true},{"id":"bigdata_reports","edit":true},{"id":"sysm","edit":false},{"id":"commconfig_sysm","edit":true},{"id":"personalized_sysm","edit":true},{"id":"system_sysm","edit":true},{"id":"retransit_sysm","edit":true},{"id":"iconscfg_sysm","edit":true}]
-
-[{"id":"prodschedule","edit":false},{"id":"factoryview_prodschedule","edit":true},{"id":"hydromodel_prodschedule","edit":true},{"id":"monitor","edit":false},{"id":"mapstation_monitor","edit":true},{"id":"realcurlv_monitor","edit":true},{"id":"realtimedata_monitor","edit":true},{"id":"vehicle_monitor","edit":true},{"id":"vedio_monitor","edit":true},{"id":"secondwater_monitor","edit":true},{"id":"mapmonitor_monitor","edit":true},{"id":"analysis","edit":false},{"id":"dailyuse_analysis","edit":true},{"id":"monthlyuse_analysis","edit":true},{"id":"flownalys_analysis","edit":true},{"id":"comparenalys_analysis","edit":true},{"id":"peibiao_analysis","edit":true},{"id":"dmacxc_analysis","edit":true},{"id":"mnf_analysis","edit":true},{"id":"alarm","edit":false},{"id":"stationalarm_alarm","edit":true},{"id":"dmaalarm_alarm","edit":true},{"id":"queryalarm_alarm","edit":true},{"id":"baseanalys","edit":false},{"id":"dmaba_baseanalys","edit":true},{"id":"mnfba_baseanalys","edit":true},{"id":"dayuseba_baseanalys","edit":true},{"id":"gis","edit":false},{"id":"pipelinequery_gis","edit":true},{"id":"pipelinestastic_gis","edit":true},{"id":"pipelineanalys_gis","edit":true},{"id":"pipelineimexport_gis","edit":true},{"id":"entm","edit":false},{"id":"usermanager_entm","edit":true},{"id":"rolemanager_entm","edit":true},{"id":"devm","edit":false},{"id":"metermanager_devm","edit":true},{"id":"pressuremanager_devm","edit":true},{"id":"fireboltmanager_devm","edit":true},{"id":"simcardmanager_devm","edit":true},{"id":"paramsmanager_devm","edit":true},{"id":"dmam","edit":false},{"id":"stationmanager_dmam","edit":true},{"id":"districtmanager_dmam","edit":true},{"id":"secondmanager_dmam","edit":true},{"id":"vediomanager_dmam","edit":true},{"id":"vehiclemanager_dmam","edit":true},{"id":"reports","edit":false},{"id":"querylog_reports","edit":true},{"id":"alarm_reports","edit":true},{"id":"biguser_reports","edit":true},{"id":"dmastatics_reports","edit":true},{"id":"flows_reports","edit":true},{"id":"waters_reports","edit":true},{"id":"biaowu_reports","edit":true},{"id":"vehicle_reports","edit":true},{"id":"bigdata_reports","edit":true},{"id":"sysm","edit":false},{"id":"personalized_sysm","edit":true},{"id":"system_sysm","edit":true},{"id":"retransit_sysm","edit":true},{"id":"iconscfg_sysm","edit":true}]
-
-[{"id":"monitor","edit":false},{"id":"realtimedata_monitor","edit":false},{"id":"analysis","edit":false},{"id":"dailyuse_analysis","edit":false},{"id":"monthlyuse_analysis","edit":false},{"id":"entm","edit":false},{"id":"usermanager_entm","edit":false},{"id":"rolemanager_entm","edit":false},{"id":"devm","edit":false},{"id":"metermanager_devm","edit":false},{"id":"simcardmanager_devm","edit":false},{"id":"dmam","edit":false},{"id":"stationmanager_dmam","edit":false},{"id":"sysm","edit":false},{"id":"personalized_sysm","edit":true}]
-
-
 
 q=HdbFlowData.day_hourly.search('064811210390','2018-09-24')
 
 from legacy.models import HdbFlowData
+
+
+treeDemo 
+    organization
+        "name":o.name,
+        "id":o.cid,
+        "pId":o.pId,
+        "districtid":'',
+        "type":"group",
+    dma
+        "name":d["dma_name"],
+        "id":d["pk"],
+        "districtid":d["pk"],
+        "pId":o.cid,
+        "type":"dma",
+    station
+        "name":s['username'],
+        "id":s['pk'],
+        "districtid":'',
+        "pId":o.cid,
+        "type":"station",
+        "dma_no":'',
+
+        "commaddr":commaddr,

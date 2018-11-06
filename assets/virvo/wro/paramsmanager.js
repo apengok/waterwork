@@ -10,12 +10,13 @@
     var commandNodes = "";
     var treeClickFlag;
     var currentCommandType;
-    var currentVehicle;
+    var currentStation;
     var loadTime;
     var requestRootURL = "/clbs/m/functionconfig/fence/bindfence";
     var zTreeIdJson = {};
     var setChar;
     var realsendflag = true;
+    
     realTimeCommand = {
         init: function(){
             //显示隐藏列
@@ -129,7 +130,7 @@
                 },
                 callback: {
                     beforeClick:realTimeCommand.beforeClick,
-                    onClick: realTimeCommand.onClickVehicle,
+                    onClick: realTimeCommand.onClickStation,
                     // onAsyncSuccess: realTimeCommand.zTreeOnAsyncSuccess,
                     // beforeCheck: realTimeCommand.zTreeBeforeCheck,
                     // onCheck: realTimeCommand.onCheckVehicle,
@@ -158,17 +159,17 @@
                 return "/clbs/m/functionconfig/fence/bindfence/putMonitorByAssign?assignmentId="+treeNode.id+"&isChecked="+treeNode.checked+"&monitorType=vehicle";
             } 
         },
-        initReferVehicleList: function(data){
+        initReferMeterList: function(data){
             if(currentCommandType !== null && currentCommandType !== ""){
-                //车辆list
-                var referVehicleList = data;
-                // 初始化车辆数据
+                //Meterlist
+                var referMeterList = data;
+                // 初始化Meter数据
                 var dataList = {value: []};
-                if (referVehicleList !== null && referVehicleList.length > 0) {
-                    for (var i=0; i< referVehicleList.length; i++) {
+                if (referMeterList !== null && referMeterList.length > 0) {
+                    for (var i=0; i< referMeterList.length; i++) {
                         var obj = {};
-                        obj.id = referVehicleList[i].vid;
-                        obj.name = referVehicleList[i].brand;
+                        obj.id = referMeterList[i].vid;
+                        obj.name = referMeterList[i].brand;
                         dataList.value.push(obj);
                     }
                     //取消全选勾
@@ -185,11 +186,11 @@
                     data: dataList
                 }).on('onDataRequestSuccess', function (e, result) {
                 }).on('onSetSelectValue', function (e, keyword, data) {
-                    // 当选择参考车牌
+                    // 当选择参考站点
                     var vehicleId = keyword.id;
                     var url="/devm/paramsmanager/command/getCommandParam";
                     var minotor = realTimeCommand.getMinotorObj(currentCommandType);
-                    var parameter={"vid": vehicleId,"commandType":currentCommandType,"isRefer":true,"minotor":minotor};
+                    var parameter={"sid": vehicleId,"commandType":currentCommandType,"isRefer":true,"minotor":minotor};
                     json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
                 }).on('onUnsetSelectValue', function () {
                 });
@@ -226,38 +227,43 @@
             return true;
         },
         //组织架构树点击事件
-        onClickVehicle: function(e,treeId,treeNode) {
-            //判断点击企业及分组以为(车)
-            if (treeNode.iconSkin !== "assignmentSkin" && treeNode.iconSkin !== "groupSkin") {
+        onClickStation: function(e,treeId,treeNode) {
+            //判断点击企业 dma or station
+            if (treeNode.type == "station" ) {
                 treeClickFlag = true;
-                currentVehicle = treeNode.id;
+                currentStation = treeNode.id;
                 myTable.requestData();
                 var url="/devm/paramsmanager/command/getCommandTypes";
-                var parameter={"vid": currentVehicle};
+                var parameter={"sid": currentStation};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.initCommandTypes);
             }
         },
         initCommandTypes : function(data) {
             var zTreeObj = $.fn.zTree.getZTreeObj("commandTreeDemo");
-            zTreeObj.checkAllNodes(false);
-            $("#commParameters,.report-para-footer," +
-                "#terminalParameters,#aquiryParameters,#meterbaseParameters," +
-                "#terminalSearch," +
-                ".report-para-footer-control,.report-para-footer-control-1").hide();
+            // zTreeObj.checkAllNodes(false);
+            $("#commParameters").show()
+            // $("#commParameters,.report-para-footer," +
+            //     "#terminalParameters,#aquiryParameters,#meterbaseParameters," +
+            //     "#terminalSearch," +
+            //     ".report-para-footer-control,.report-para-footer-control-1").hide();
             if(data.success === true){
-                if (data.msg === null && data.obj.commandTypes !== null
-                    &&data.obj.commandTypes.length !== undefined && data.obj.commandTypes.length !== 0) {
-                    var commandTypes = data.obj.commandTypes;
-                    var zTree = $.fn.zTree.getZTreeObj("commandTreeDemo");
-                    for(var i = 0, commandLength = commandTypes.length; i < commandLength; i++){
-                        var commandType = commandTypes[i];
-                          var nodes = zTree.getNodesByParam("id", commandType.commandType, null);
-                          zTree.checkNode(nodes[0], true, true);
-                    }
-                }
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
+                var url="/devm/paramsmanager/command/getCommandParam";
+                var parameter={"sid": currentStation,"commandType":11,"isRefer":false};
+                json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
+            //     if (data.msg === null && data.obj.commandTypes !== null
+            //         &&data.obj.commandTypes.length !== undefined && data.obj.commandTypes.length !== 0) {
+            //         var commandTypes = data.obj.commandTypes;
+            //         var zTree = $.fn.zTree.getZTreeObj("commandTreeDemo");
+            //         for(var i = 0, commandLength = commandTypes.length; i < commandLength; i++){
+            //             var commandType = commandTypes[i];
+            //               var nodes = zTree.getNodesByParam("id", commandType.commandType, null);
+            //               zTree.checkNode(nodes[0], true, true);
+            //         }
+            //     }
+             }
+            //else{
+            //     layer.msg(data.msg,{move:false});
+            // }
         },
         // 车辆树加载成功事件
         zTreeOnAsyncSuccess: function(event, treeId, treeNode, msg){
@@ -313,22 +319,23 @@
             clickTreeNodeName = treeNode.tId;
             realTimeCommand.executeCommandShow();
             currentCommandType = treeNode.id;
-            if(treeClickFlag){//仅当点击了车辆树某辆车时，才进行指令参数的查询。否则，只是批量新增指令参数。
+            if(treeClickFlag){//仅当点击站点时，才进行指令参数的查询。
                 var url="/devm/paramsmanager/command/getCommandParam";
-                var parameter={"vid": currentVehicle,"commandType":treeNode.id,"isRefer":false};
+                var parameter={"sid": currentStation,"commandType":treeNode.id,"isRefer":false};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
-            }else{
-                var url="/devm/paramsmanager/command/getReferCommand";
-                var parameter={"commandType":treeNode.id};
-                json_ajax("POST",url,"json",true,parameter, realTimeCommand.setRefer);
             }
+            // else{
+            //     var url="/devm/paramsmanager/command/getReferCommand";
+            //     var parameter={"commandType":treeNode.id};
+            //     json_ajax("POST",url,"json",true,parameter, realTimeCommand.setRefer);
+            // }
             
         },
         setRefer: function(data){
             if(data.success == true){
                 $("#meterbaseObject,#aquiryObject,#terminalObject,#commObject,#baseStationObject").val(vehicleList);
-                if(data.msg == null&&data.obj.referVehicleList!= null){
-                    realTimeCommand.initReferVehicleList(data.obj.referVehicleList);
+                if(data.msg == null&&data.obj.referMeterList!= null){
+                    realTimeCommand.initReferMeterList(data.obj.referMeterList);
                 }
             }else{
                 layer.msg(data.msg,{move:false});
@@ -337,64 +344,62 @@
         setCommand: function(data){
             console.log('setCommand',data);
                 if(data.success == true){
-                    $("#meterbaseObject,#aquiryObject,#terminalObject,#commObject,#baseStationObject").val(data.obj.vid);
-                    if(data.msg == null&&data.obj.referVehicleList!= null){
-                        realTimeCommand.initReferVehicleList(data.obj.referVehicleList);
+                    $("#meterbaseObject,#aquiryObject,#terminalObject,#commObject,#baseStationObject").val(data.obj.station__username);
+                    if(data.msg == null&&data.obj.referMeterList!= null){
+                        realTimeCommand.initReferMeterList(data.obj.referMeterList);
                     }
                     // 通讯参数
-                    if (data.msg == null&&data.obj.communicationParam!= null) {
-                        var communicationParam = data.obj.communicationParam;
-                        $("#reportMainApn").val(communicationParam.mainServerAPN);
-                        $("#reportMainAddress").val(communicationParam.mainServerAddress);
-                        $("#reportBackupApn").val(communicationParam.backupsServerAPN);
-                        $("#reportBackupAddress").val(communicationParam.backupsServerAddress);
-                        $("#reportServerTcp").val(communicationParam.serverTCPPort);
-                        $("#reportServerUdp").val(communicationParam.serverUDPPort);
-                        $("#reportServerAccound").val(communicationParam.mainServerCallUserName);
-                        $("#reportServerPwd").val(communicationParam.mainServerCallUserPwd);
-                        $("#reportBackupAccound").val(communicationParam.backupsServerCallUserName);
-                        $("#reportBackupPwd").val(communicationParam.backupsServerCallUserPwd);
+                    if (data.msg == null&&data.obj.commParam!= null) {
+                        var commParam = data.obj.commParam;
+                        $("#tcpresendcount").val(commParam.tcpresendcount);
+                        $("#tcpresponovertime").val(commParam.tcpresponovertime);
+                        $("#udpresendcount").val(commParam.udpresendcount);
+                        $("#udpresponovertime").val(commParam.udpresponovertime);
+                        $("#smsresendcount").val(commParam.smsresendcount);
+                        $("#smsresponovertime").val(commParam.smsresponovertime);
+                        $("#heartbeatperiod").val(commParam.heartbeatperiod);
+                        
                     }else{
 
                     }
                     // 终端参数
-                    if(data.msg == null&&data.obj.deviceParam!= null){
-                        var deviceParam = data.obj.deviceParam;
-                        $("#terminalSendTime").val(deviceParam.heartSpace);
-                        $("#terminalAnswerTime").val(deviceParam.tCPAckTimeOut);
-                        $("#terminalAnswerTcp").val(deviceParam.tCPReUpTimes);
-                        $("#terminalAnswerUdp").val(deviceParam.uDPAckTimeOut);
-                        $("#terminalUdpNum").val(deviceParam.uDPReUpTimes);
-                        $("#terminalAnswerSms").val(deviceParam.sMSAckTimeOut);
-                        $("#terminalSmsNum").val(deviceParam.sMSReUpTimes);
+                    if(data.msg == null&&data.obj.terminalParam!= null){
+                        var terminalParam = data.obj.terminalParam;
+                        $("#ipaddr").val(terminalParam.ipaddr);
+                        $("#port").val(terminalParam.port);
+                        $("#entrypoint").val(terminalParam.entrypoint);
+                        
                     }
                     // 采集指令
-                    if(data.msg == null&&data.obj.wirelessUpdateParam!= null){
-                        var wirelessUpdateParam = data.obj.wirelessUpdateParam;
-                        $("#UpgradeDialName").val(wirelessUpdateParam.wDailUserName);
-                        $("#UpgradeDialPwd").val(wirelessUpdateParam.wDailPwd);
-                        $("#UpgradeAddress").val(wirelessUpdateParam.wAddress);
-                        $("#UpgradeTcpTort").val(wirelessUpdateParam.wTcpPort);
-                        $("#UpgradeUdpTort").val(wirelessUpdateParam.wUdpPort);
-                        $("#UpgradeManufacturer").val(wirelessUpdateParam.manufactorId);
-                        $("#UpgradeHardware").val(wirelessUpdateParam.hardwareVersion);
-                        $("#UpgradeFirmware").val(wirelessUpdateParam.firmwareVersion);
-                        $("#UpgradeUrlAddress").val(wirelessUpdateParam.url);
-                        $("#UpgradeTimeLimit").val(wirelessUpdateParam.wTimeLimit);
-                        $("#UpgradeConnection").val(wirelessUpdateParam.wAccessControl);
-                        $("#UpgradeDial").val(wirelessUpdateParam.wDailName);
+                    if(data.msg == null&&data.obj.aquiryParam!= null){
+                        var aquiryParam = data.obj.aquiryParam;
+                        $("#updatastarttime").val(aquiryParam.updatastarttime);
+                        $("#updatamode").val(aquiryParam.updatamode);
+                        $("#collectperiod").val(aquiryParam.collectperiod);
+                        $("#updataperiod").val(aquiryParam.updataperiod);
+                        $("#updatatime1").val(aquiryParam.updatatime1);
+                        $("#updatatime2").val(aquiryParam.updatatime2);
+                        $("#updatatime3").val(aquiryParam.updatatime3);
+                        $("#updatatime4").val(aquiryParam.updatatime4);
+                        
                     }
                     // 基表设置
-                    if(data.msg == null&&data.obj.deviceConnectServerParam!= null){
-                        var deviceConnectServerParam = data.obj.deviceConnectServerParam;
-                        $("#specifyServerConnect").val(deviceConnectServerParam.cAccessControl);
-                        $("#specifyServerDial").val(deviceConnectServerParam.cDailName);
-                        $("#specifyServerDialName").val(deviceConnectServerParam.cDailUserName);
-                        $("#specifyServerDialPwd").val(deviceConnectServerParam.cDailPwd);
-                        $("#specifyServerAddress").val(deviceConnectServerParam.cAddress);
-                        $("#specifyServerTcpPort").val(deviceConnectServerParam.cTcpPort);
-                        $("#specifyServerUdpPort").val(deviceConnectServerParam.cUdpPort);
-                        $("#specifyServerTimeLimit").val(deviceConnectServerParam.cTimeLimit);
+                    if(data.msg == null&&data.obj.meterbaseParam!= null){
+                        var meterbaseParam = data.obj.meterbaseParam;
+                        $("#dn").val(meterbaseParam.dn);
+                        $("#liciperoid").val(meterbaseParam.liciperoid);
+                        $("#maintaindate").val(meterbaseParam.maintaindate);
+                        $("#transimeterfactor").val(meterbaseParam.transimeterfactor);
+                        $("#biaofactor").val(meterbaseParam.biaofactor);
+                        $("#manufacturercode").val(meterbaseParam.manufacturercode);
+                        $("#issmallsignalcutpoint").val(meterbaseParam.issmallsignalcutpoint);
+                        $("#smallsignalcutpoint").val(meterbaseParam.smallsignalcutpoint);
+
+                        $("#isflowzerovalue").val(meterbaseParam.isflowzerovalue);
+                        $("#flowzerovalue").val(meterbaseParam.flowzerovalue);
+                        $("#pressurepermit").val(meterbaseParam.pressurepermit);
+                        $("#flowdorient").val(meterbaseParam.flowdorient);
+                        $("#plusaccumupreset").val(meterbaseParam.plusaccumupreset);
                     }
                     
                     
@@ -949,7 +954,7 @@
             //             },
             //             callback: {
             //                 beforeClick:realTimeCommand.beforeClick,
-            //                 onClick: realTimeCommand.onClickVehicle,
+            //                 onClick: realTimeCommand.onClickStation,
             //                 onAsyncSuccess: realTimeCommand.fuzzyZTreeOnAsyncSuccess,
             //                 //beforeCheck: realTimeCommand.fuzzyZTreeBeforeCheck,
             //                 onCheck: realTimeCommand.fuzzyOnCheckVehicle,

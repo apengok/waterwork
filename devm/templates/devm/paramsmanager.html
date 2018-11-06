@@ -76,14 +76,14 @@
                                         TCP消息重发次数：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportMainApn" name="tcpresendcount" class="form-control" />
+                                        <input type="text" id="tcpresendcount" name="tcpresendcount" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         TCP消息应答超时时间（s）：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportMainAddress" name="tcpresponovertime" class="form-control" />
+                                        <input type="text" id="tcpresponovertime" name="tcpresponovertime" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -92,30 +92,30 @@
                                         UDP消息重发次数：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportBackupApn" name="udpresendcount" class="form-control" />
+                                        <input type="text" id="udpresendcount" name="udpresendcount" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         UDP消息应答超时时间（s）：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="reportBackupAddress" name="udpresponovertime" class="form-control" />
+                                        <input type="text" id="udpresponovertime" name="udpresponovertime" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">SMS消息重发次数：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="reportServerTcp" name="smsresendcount" class="form-control" />
+                                        <input type="text" id="smsresendcount" name="smsresendcount" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">SMS消息应答超时时间（s）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="reportServerUdp" name="smsresponovertime" class="form-control" />
+                                        <input type="text" id="smsresponovertime" name="smsresponovertime" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">终端心跳发送间隔（s）：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="reportServerAccound" name="heartbeatperiod" class="form-control" />
+                                        <input type="text" id="heartbeatperiod" name="heartbeatperiod" class="form-control" />
                                     </div>
                                     
                                 </div>
@@ -147,17 +147,17 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">IP地址：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="terminalSendTime" name="ipaddr" value="5" class="form-control" />
+                                        <input type="text" id="ipaddr" name="ipaddr" value="5" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">端口号：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="terminalAnswerTime" name="port" value="10" class="form-control" />
+                                        <input type="text" id="port" name="port" value="10" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">接入点：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="terminalAnswerTcp" name="entrypoint" value="10" class="form-control" />
+                                        <input type="text" id="entrypoint" name="entrypoint" value="10" class="form-control" />
                                     </div>
                                     <!-- <label class="col-md-3 control-label">流量零点修正值：</label>
                                     <div class="col-md-3">
@@ -305,66 +305,66 @@
                                         仪表维护日期：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="specifyServerTimeLimit" name="maintaindate" class="form-control" />
+                                        <input type="text" id="maintaindate" name="maintaindate" class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">
                                         
                                         传感器系数：
                                     </label>
                                     <div class="col-md-3 inp-inline-flex">
-                                        <input type="text" id="specifyServerDial" name="transimeterfactor" class="form-control" />
+                                        <input type="text" id="transimeterfactor" name="transimeterfactor" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">标定系数：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerDialName" name="manufacturercode"  class="form-control" />
+                                        <input type="text" id="biaofactor" name="biaofactor"  class="form-control" />
                                     </div>
                                     <label class="col-md-3 control-label">厂商标识代码：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerDialName" name="manufacturercode"  class="form-control" />
+                                        <input type="text" id="manufacturercode" name="manufacturercode"  class="form-control" />
                                     </div>
                                     
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">小信号切除：</label>
                                     <div class="col-md-3">
-                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                        <select id="issmallsignalcutpoint" name="issmallsignalcutpoint" class="form-control" >
                                             <option value="0">切除</option>
                                             <option value="1">不切除</option>
                                         </select>
                                     </div>
                                     <label class="col-md-3 control-label">小信号切除值：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerAddress" name="smallsignalcutpoint"  class="form-control" />
+                                        <input type="text" id="smallsignalcutpoint" name="smallsignalcutpoint"  class="form-control" />
                                     </div>
                                     
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">零点修正功能：</label>
                                     <div class="col-md-3">
-                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                        <select id="isflowzerovalue" name="isflowzerovalue" class="form-control" >
                                             <option value="0">关</option>
                                             <option value="1">开</option>
                                         </select>
                                     </div>
                                     <label class="col-md-3 control-label">零点修正值：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerUdpPort" name="flowdorient"  class="form-control" />
+                                        <input type="text" id="flowzerovalue" name="flowzerovalue"  class="form-control" />
                                     </div>
 
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">压力测量功能：</label>
                                     <div class="col-md-3">
-                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                        <select id="pressurepermit" name="pressurepermit" class="form-control" >
                                             <option value="0">关</option>
                                             <option value="1">开</option>
                                         </select>
                                     </div>
                                     <label class="col-md-3 control-label">方向选择：</label>
                                     <div class="col-md-3">
-                                        <select id="baseStationReportMode" name="baseStationReportMode" class="form-control" >
+                                        <select id="flowdorient" name="flowdorient" class="form-control" >
                                             <option value="0">正向</option>
                                             <option value="1">反向</option>
                                         </select>
@@ -374,7 +374,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">正向累积预置：</label>
                                     <div class="col-md-3">
-                                        <input type="text" id="specifyServerUdpPort" name="flowdorient"  class="form-control" />
+                                        <input type="text" id="plusaccumupreset" name="plusaccumupreset"  class="form-control" />
                                     </div>
 
                                 </div>

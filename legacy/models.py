@@ -958,9 +958,7 @@ class MeterParameter(models.Model):
     port                = models.CharField(db_column='port', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 接入点
     entrypoint          = models.CharField(db_column='entrypoint', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    # 流量零点修正值
-    flowzerovalue       = models.CharField(db_column='flowzerovalue', max_length=64, blank=True, null=True)  # Field name made lowercase.
-
+    
     # 采集指令
     # 上报起始时间
     updatastarttime     = models.CharField(db_column='updatastarttime', max_length=64, blank=True, null=True)  # Field name made lowercase.
@@ -982,20 +980,30 @@ class MeterParameter(models.Model):
     # 基表设置
     # 仪表口径
     dn                  = models.CharField(db_column='dn', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 励磁间隔
+    liciperoid        = models.CharField(db_column='liciperoid', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 仪表维护日期
+    maintaindate        = models.CharField(db_column='maintaindate', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 传感器系数
     transimeterfactor   = models.CharField(db_column='transimeterfactor', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # 标定系数
+    biaofactor        = models.CharField(db_column='biaofactor', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 厂商标识代码
     manufacturercode    = models.CharField(db_column='manufacturercode', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    
+    # 零点修正功能
+    isflowzerovalue        = models.CharField(db_column='isflowzerovalue', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 流量零点修正值
     flowzerovalue       = models.CharField(db_column='flowzerovalue', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    
+    # 小信号切除
+    issmallsignalcutpoint        = models.CharField(db_column='issmallsignalcutpoint', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 小信号切除点
     smallsignalcutpoint = models.CharField(db_column='smallsignalcutpoint', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    # 压力测量允许
+    # 压力测量功能：
     pressurepermit      = models.CharField(db_column='pressurepermit', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 流体测量方向
     flowdorient         = models.CharField(db_column='flowdorient', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    # 仪表维护日期
-    maintaindate        = models.CharField(db_column='maintaindate', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 正向累积预置
     plusaccumupreset    = models.CharField(db_column='plusaccumupreset', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 流量测量单位
