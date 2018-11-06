@@ -280,31 +280,31 @@
                 lang:'zh_cn',  //设置地图语言类型
             });
 
-            var path = [
-                [116.424124,39.906614],
-                [116.438115,39.911552],
-                [116.447299,39.906745],
-                [116.437771,39.89621],
-                [116.421292,39.903914],
-                [116.420863,39.905231]
-            ]
+            // var path = [
+            //     [116.424124,39.906614],
+            //     [116.438115,39.911552],
+            //     [116.447299,39.906745],
+            //     [116.437771,39.89621],
+            //     [116.421292,39.903914],
+            //     [116.420863,39.905231]
+            // ]
 
-            var polygon = new AMap.Polygon({
-                path: path,
-                isOutline: true,
-                borderWeight: 3,
-                strokeColor: "#FF33FF", 
-                strokeWeight: 6,
-                strokeOpacity: 0.2,
-                fillOpacity: 0.4,
-                // 线样式还支持 'dashed'
-                fillColor: '#1791fc',
-                zIndex: 50,
-            })
+            // var polygon = new AMap.Polygon({
+            //     path: path,
+            //     isOutline: true,
+            //     borderWeight: 3,
+            //     strokeColor: "#FF33FF", 
+            //     strokeWeight: 6,
+            //     strokeOpacity: 0.2,
+            //     fillOpacity: 0.4,
+            //     // 线样式还支持 'dashed'
+            //     fillColor: '#1791fc',
+            //     zIndex: 50,
+            // })
 
-            polygon.setMap(map)
-            // 缩放地图到合适的视野级别
-            map.setFitView([ polygon ])
+            // polygon.setMap(map)
+            // // 缩放地图到合适的视野级别
+            // map.setFitView([ polygon ])
 
             mouseTool = new AMap.MouseTool(map);
 
@@ -313,6 +313,7 @@
                 pgpath = event.obj.getPath();
                 console.log(pgpath);
                 console.log('覆盖物对象绘制完成')
+                dmaManage.saveDmaGisinfo(event.obj);
             })
         },
         drawPolygon:function() {
@@ -334,6 +335,7 @@
 
             }
         },
+
     },
     dmaManage = {
         init: function(){
@@ -949,11 +951,14 @@
               }).draw();
         },
         
-        saveDmaGisinfo:function(){
-
+        saveDmaGisinfo:function(data){
+            console.log(data);
+            // data.getOptions().strokeColor
+            // data.getOptions().fillColor
+            // data.toGeoJSON()
             var data={"dma_no":current_dma_no,"polygonpath":"polygonpath","strokeColor":"strokeColor","fillColor":"#1ef43"}
             var url="/dmam/district/saveDmaGisinfo/";
-            json_ajax("POST",url,"json",true,data,dmaManage.saveDmaGisinfoBack);
+            // json_ajax("POST",url,"json",true,data,dmaManage.saveDmaGisinfoBack);
         },
         saveDmaGisinfoBack:function(data){
             console.log(data);
