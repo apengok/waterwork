@@ -315,7 +315,7 @@ class DmaStation(models.Model):
 
 class DmaGisinfo(models.Model):
     dma_no        = models.CharField('分区编号',max_length=50, unique=True)
-    polygonpath   = models.TextField(blank=True)
+    geodata       = models.TextField(blank=True,null=True)
     strokeColor   = models.CharField(max_length=100,blank=True,null=True)
     fillColor     = models.CharField(max_length=100,blank=True,null=True)
 

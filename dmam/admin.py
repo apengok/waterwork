@@ -68,4 +68,4 @@ class SimCardAdmin(admin.ModelAdmin):
 
 @admin.register(DmaGisinfo)
 class DmaGisInfoAdmin(admin.ModelAdmin):
-    list_display = ['dma_no','polygonpath','strokeColor','fillColor']
+    list_display = ['dma_no','geodata','strokeColor','fillColor']

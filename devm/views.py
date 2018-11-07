@@ -31,7 +31,7 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
-from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Concentrator
+from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Concentrator,MeterParameter
 from dmam.models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,SimCard,VConcentrator
 import os
 from django.conf import settings
@@ -972,7 +972,7 @@ class ParamsMangerView(LoginRequiredMixin,TemplateView):
         
         return context  
 
-
+# 指令参数列表
 def commandlist(request):
 
     draw = 1
@@ -1001,24 +1001,34 @@ def commandlist(request):
         groupName = request.POST.get("groupName")
         districtId = request.POST.get("districtId")
         simpleQueryParam = request.POST.get("simpleQueryParam")
+        sid = request.POST.get("sid")
         # print(request.POST.get("draw"))
         print("groupName",groupName)
         print("districtId:",districtId)
         # print("post simpleQueryParam",simpleQueryParam)
 
-    print("get userlist:",draw,length,start,search_value)
-
-    user = request.user
-    organs = user.belongto
-
-    # meters = user.meter_list_queryset(simpleQueryParam)
-    
     data = []
+    if sid != '':
+        station = Station.objects.filter(pk=int(sid)).values("pk","meter__serialnumber","meter__simid__simcardNumber","username","belongto__name")
+        
+        
+        
+        data.append({
+            "status":0,
+            "commandType":"12",
+            "sierialnumber":station.first()["meter__serialnumber"],
+            "station_name":station.first()["username"],
+            "simcardnumber":station.first()["meter__simid__simcardNumber"],
+            "belongto":station.first()["belongto__name"],
+            "sendparametertime":"",
+            "readparametertime":"",
+            "createDataTime":"",
+            })
 
     
 
-    recordsTotal = 0
-    # recordsTotal = len(data)
+    # recordsTotal = 1
+    recordsTotal = len(data)
     
     result = dict()
     result["records"] = data
@@ -1038,6 +1048,8 @@ def commandlist(request):
 
 def saveCommand(request):
 
+    print("saveCommand",request.POST)
+
     operarions_list = {
         "exceptionDetailMsg":"null",
         "msg":None,
@@ -1048,7 +1060,7 @@ def saveCommand(request):
 
     return JsonResponse(operarions_list)
 
-
+# obslete
 def getCommandTypes(request):
 
     sid = request.POST.get("sid") #station id
@@ -1069,94 +1081,84 @@ def getCommandParam(request):
     sid = request.POST.get("sid")   #station pk
     commandType = request.POST.get("commandType")   #参数类型 11-通讯参数 12-终端参数 13-采集指令 14-基表参数
     isRefer = request.POST.get("isRefer")
-    minotor = request.POST.get("minotor")
+    commaddr = request.POST.get("commaddr")
 
-    user = request.user
+    # user = request.user
 
     # current meter
-    station = Station.objects.filter(pk=int(sid)).values("pk","meter__serialnumber","username")
+    station = Station.objects.filter(pk=int(sid)).values("pk","meter__serialnumber","meter__simid__simcardNumber","username")
+    if station.exists():
+        s = station.first()
+        commaddr = s["meter__simid__simcardNumber"]
     
-
-    # get refer meter list
-    meter_list = []
-    meter_objs = user.meter_list_queryset('').values("pk","serialnumber","simid__simcardNumber","station__pk","station__username")
-
-    for m in meter_objs:
-        meter_list.append({
-                    "updateDataTime":1541254778932,
-                    "commandType":commandType,
-                    "flag":1,
-                    "editable":1,
-                    "priority":1,
-                    "enabled":1,
-                    "vid":m["station__pk"],
-                    "createDataTime":1525928798000,
-                    "sortOrder":1,
-                    "id":m["pk"],
-                    "createDataUsername":user.user_name,
-                    "paramId":"e5cf0e5d-b7bd-4f8f-b5ba-2a14cba3a064,1f1e70de-308c-4bf8-b0c8-b959227e41aa",
-                    "brand":m["serialnumber"]
-                })
-
     commParam = {}
     terminalParam = {}
     aquiryParam = {}
     meterbaseParam = {}
-    if commandType == "11":
-        commParam = {
-            "tcpresendcount":1,
-            "tcpresponovertime":2,
-            "udpresendcount":3,
-            "udpresponovertime":4,
-            "smsresendcount":5,
-            "smsresponovertime":6,
-            "heartbeatperiod":7,
-        }
 
-    if commandType == "12":
-        terminalParam = {
-            "ipaddr":"1.2.3.4",
-            "port":2018,
-            "entrypoint":3,
-            
-        }
+    paramlist = MeterParameter.objects.filter(commaddr=commaddr).values()
+    if paramlist.exists():
+        param = paramlist.first()
+    
 
-    if commandType == "13":
-        aquiryParam = {
-            "updatastarttime":1,
-            "updatamode":2,
-            "collectperiod":3,
-            "updataperiod":4,
-            "updatatime1":5,
-            "updatatime2":6,
-            "updatatime3":7,
-            "updatatime4":8,
-        }
+    
+        if commandType == "11":
+            commParam = {
+                "tcpresendcount":param["tcpresendcount"],
+                "tcpresponovertime":param["tcpresponovertime"],
+                "udpresendcount":param["udpresendcount"],
+                "udpresponovertime":param["udpresponovertime"],
+                "smsresendcount":param["smsresendcount"],
+                "smsresponovertime":param["smsresponovertime"],
+                "heartbeatperiod":param["heartbeatperiod"],
+            }
 
-    if commandType == "14":
-        meterbaseParam = {
-            "dn":1,
-            "liciperoid":2,
-            "maintaindate":3,
-            "transimeterfactor":4,
-            "biaofactor":5,
-            "manufacturercode":6,
-            "issmallsignalcutpoint":0,
-            "smallsignalcutpoint":7,
-            "isflowzerovalue":1,
-            "flowzerovalue":7,
-            "pressurepermit":1,
-            "flowdorient":1,
-            "plusaccumupreset":7,
-        }
+        if commandType == "12":
+            terminalParam = {
+                "ipaddr":param["ipaddr"],
+                "port":param["port"],
+                "entrypoint":param["entrypoint"],
+                
+            }
+
+        if commandType == "13":
+            aquiryParam = {
+                "updatastarttime":param["updatastarttime"],
+                "updatamode":param["updatamode"],
+                "collectperiod":param["collectperiod"],
+                "updataperiod":param["updataperiod"],
+                "updatatime1":param["updatatime1"],
+                "updatatime2":param["updatatime2"],
+                "updatatime3":param["updatatime3"],
+                "updatatime4":param["updatatime4"],
+            }
+
+        if commandType == "14":
+            meterbaseParam = {
+                "dn":param["dn"],
+                "liciperoid":param["liciperoid"],
+                "maintaindate":param["maintaindate"],
+                "transimeterfactor":param["transimeterfactor"],
+                "biaofactor":param["biaofactor"],
+                "manufacturercode":param["manufacturercode"],
+                "issmallsignalcutpoint":param["issmallsignalcutpoint"],
+                "smallsignalcutpoint":param["smallsignalcutpoint"],
+                "isflowzerovalue":param["isflowzerovalue"],
+                "flowzerovalue":param["flowzerovalue"],
+                "pressurepermit":param["pressurepermit"],
+                "flowdorient":param["flowdorient"],
+                "plusaccumupreset":param["plusaccumupreset"],
+            }
     
     operarions_list = {
         "exceptionDetailMsg":"null",
         "msg":None,
         "obj":{
-            "vid":station.first()["meter__serialnumber"],
+            "sid":station.first()["pk"],
+            "commaddr":station.first()["meter__simid__simcardNumber"],
+            "serialnumber":station.first()["meter__serialnumber"],
             "station__username":station.first()["username"],
-            "referMeterList":meter_list,
+            # "referMeterList":meter_list,
             "commParam":commParam,
             "terminalParam":terminalParam,
             "aquiryParam":aquiryParam,

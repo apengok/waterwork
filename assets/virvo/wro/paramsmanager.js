@@ -46,7 +46,7 @@
                     onCheck: realTimeCommand.onCheckCommand
                 }
             };
-            realTimeCommand.baseStationReportModeCheckFn("1");
+            // realTimeCommand.baseStationReportModeCheckFn("1");
             var zNodes = [
                 { id:1, pId:0, name:"VIRVO平台",open:true},//,nocheck:true
                 { id:11, pId:1, name:"通讯参数"},
@@ -70,7 +70,7 @@
             ];
             $.fn.zTree.init($("#commandTreeDemo"), setting, zNodes);
             $("[data-toggle='tooltip']").tooltip();
-            realTimeCommand.baseStationReportModeCheckFn();
+            // realTimeCommand.baseStationReportModeCheckFn();
         },
         updataFenceData: function(msg){
             if (msg != null) {
@@ -91,7 +91,56 @@
             + (nowDate.getSeconds() < 10 ? "0" + nowDate.getSeconds() : nowDate.getSeconds());
             $("#baseStationStartTimePoint,#baseStationFixedTime").val(loadTime);
         },
-        initTreeData:function (deviceType) {
+        initTreeData : function(deviceType){
+            // 初始化文件树
+            treeSetting = {
+                async : {
+                    url : "/dmam/district/dmatree/",
+                    type : "post",
+                    enable : true,
+                    autoParam : [ "id" ],
+                    dataType : "json",
+                    data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    otherParam : {  // 是否可选 Organization
+                        "isOrg" : "1",
+                        "isStation": "1"
+                        // "csrfmiddlewaretoken": "{{ csrf_token }}"
+                    },
+                    dataFilter: realTimeCommand.ajaxDataFilter
+                },
+                view : {
+                    // addHoverDom : stationManage.addHoverDom,
+                    // removeHoverDom : stationManage.removeHoverDom,
+                    selectedMulti : false,
+                    nameIsHTML: true,
+                    fontCss: setFontCss_ztree
+                },
+                edit : {
+                    enable : true,
+                    editNameSelectAll : true,
+                    showRemoveBtn : false,//stationManage.showRemoveBtn,
+                    showRenameBtn : false
+                },
+                data : {
+                    simpleData : {
+                        enable : true
+                    }
+                },
+                callback : {
+                    // beforeDrag : realTimeCommand.beforeDrag,
+                    // beforeEditName : realTimeCommand.beforeEditName,
+                    // beforeRemove : realTimeCommand.beforeRemove,
+                    // beforeRename : realTimeCommand.beforeRename,
+                    // // onRemove : stationManage.onRemove,
+                    // onRename : realTimeCommand.onRename,
+                    onClick : realTimeCommand.onClickStation
+                }
+            };
+            $.fn.zTree.init($("#treeDemo"), treeSetting, null);
+            var treeObj = $.fn.zTree.getZTreeObj('treeDemo');treeObj.expandAll(true);
+           
+        },
+        initTreeData_old:function (deviceType) {
             //组织树
             setChar = {
                 async: {
@@ -152,50 +201,7 @@
 //            });
             $.fn.zTree.init($("#treeDemo"), setChar, null);
         },
-        getTreeUrl : function (treeId, treeNode){
-            if (treeNode == null) {
-                return "/clbs/m/personalized/ico/vehicleTree";
-            }else if(treeNode.type == "assignment") {
-                return "/clbs/m/functionconfig/fence/bindfence/putMonitorByAssign?assignmentId="+treeNode.id+"&isChecked="+treeNode.checked+"&monitorType=vehicle";
-            } 
-        },
-        initReferMeterList: function(data){
-            if(currentCommandType !== null && currentCommandType !== ""){
-                //Meterlist
-                var referMeterList = data;
-                // 初始化Meter数据
-                var dataList = {value: []};
-                if (referMeterList !== null && referMeterList.length > 0) {
-                    for (var i=0; i< referMeterList.length; i++) {
-                        var obj = {};
-                        obj.id = referMeterList[i].vid;
-                        obj.name = referMeterList[i].brand;
-                        dataList.value.push(obj);
-                    }
-                    //取消全选勾
-                    $("#checkAll").prop('checked',false);
-                    $("input[name=subChk]").prop("checked",false);
-                }
-                $("#commPlate,#terminalPlate,#aquiryPlate,#meterbasePlate,#baseStationPlate").bsSuggest({
-                    indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
-                    indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
-                    idField: "id",
-                    keyField: "name",
-                    effectiveFields: ["name"],
-                    searchFields:["id"],
-                    data: dataList
-                }).on('onDataRequestSuccess', function (e, result) {
-                }).on('onSetSelectValue', function (e, keyword, data) {
-                    // 当选择参考站点
-                    var vehicleId = keyword.id;
-                    var url="/devm/paramsmanager/command/getCommandParam";
-                    var minotor = realTimeCommand.getMinotorObj(currentCommandType);
-                    var parameter={"sid": vehicleId,"commandType":currentCommandType,"isRefer":true,"minotor":minotor};
-                    json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
-                }).on('onUnsetSelectValue', function () {
-                });
-            }
-        },
+        
         getMinotorObj: function(commandType){
               switch (commandType){
                 case 11:
@@ -233,39 +239,16 @@
                 treeClickFlag = true;
                 currentStation = treeNode.id;
                 myTable.requestData();
-                var url="/devm/paramsmanager/command/getCommandTypes";
-                var parameter={"sid": currentStation};
-                json_ajax("POST",url,"json",true,parameter, realTimeCommand.initCommandTypes);
+                if(currentCommandType === undefined){
+                    currentCommandType = 11;
+                }
+                var url="/devm/paramsmanager/command/getCommandParam";
+                var parameter={"sid": currentStation,"commandType":currentCommandType,"isRefer":false};
+                json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
             }
         },
-        initCommandTypes : function(data) {
-            var zTreeObj = $.fn.zTree.getZTreeObj("commandTreeDemo");
-            // zTreeObj.checkAllNodes(false);
-            $("#commParameters").show()
-            // $("#commParameters,.report-para-footer," +
-            //     "#terminalParameters,#aquiryParameters,#meterbaseParameters," +
-            //     "#terminalSearch," +
-            //     ".report-para-footer-control,.report-para-footer-control-1").hide();
-            if(data.success === true){
-                var url="/devm/paramsmanager/command/getCommandParam";
-                var parameter={"sid": currentStation,"commandType":11,"isRefer":false};
-                json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
-            //     if (data.msg === null && data.obj.commandTypes !== null
-            //         &&data.obj.commandTypes.length !== undefined && data.obj.commandTypes.length !== 0) {
-            //         var commandTypes = data.obj.commandTypes;
-            //         var zTree = $.fn.zTree.getZTreeObj("commandTreeDemo");
-            //         for(var i = 0, commandLength = commandTypes.length; i < commandLength; i++){
-            //             var commandType = commandTypes[i];
-            //               var nodes = zTree.getNodesByParam("id", commandType.commandType, null);
-            //               zTree.checkNode(nodes[0], true, true);
-            //         }
-            //     }
-             }
-            //else{
-            //     layer.msg(data.msg,{move:false});
-            // }
-        },
-        // 车辆树加载成功事件
+        
+        // 组织架构树加载成功事件
         zTreeOnAsyncSuccess: function(event, treeId, treeNode, msg){
             var treeObj = $.fn.zTree.getZTreeObj(treeId);
             var avid = $("#avid").val();
@@ -316,38 +299,31 @@
         //指令类型树 点击事件
         onClickCommand : function(e,treeId,treeNode) {
             $("#eventMain-container").find(">div").find("div.eventIdInfo>input").removeAttr("disabled","disabled");
+            console.log("currentStation",currentStation);
+            
             clickTreeNodeName = treeNode.tId;
             realTimeCommand.executeCommandShow();
             currentCommandType = treeNode.id;
+            if( currentStation === undefined){
+                layer.msg("请先选择站点");
+                return;
+            }
             if(treeClickFlag){//仅当点击站点时，才进行指令参数的查询。
                 var url="/devm/paramsmanager/command/getCommandParam";
                 var parameter={"sid": currentStation,"commandType":treeNode.id,"isRefer":false};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
             }
-            // else{
-            //     var url="/devm/paramsmanager/command/getReferCommand";
-            //     var parameter={"commandType":treeNode.id};
-            //     json_ajax("POST",url,"json",true,parameter, realTimeCommand.setRefer);
-            // }
+            
             
         },
-        setRefer: function(data){
-            if(data.success == true){
-                $("#meterbaseObject,#aquiryObject,#terminalObject,#commObject,#baseStationObject").val(vehicleList);
-                if(data.msg == null&&data.obj.referMeterList!= null){
-                    realTimeCommand.initReferMeterList(data.obj.referMeterList);
-                }
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
+        
         setCommand: function(data){
             console.log('setCommand',data);
                 if(data.success == true){
                     $("#meterbaseObject,#aquiryObject,#terminalObject,#commObject,#baseStationObject").val(data.obj.station__username);
-                    if(data.msg == null&&data.obj.referMeterList!= null){
-                        realTimeCommand.initReferMeterList(data.obj.referMeterList);
-                    }
+                    $("#meterbaseSerialnumber,#aquirySerialnumber,#terminalSerialnumber,#commSerialnumber").val(data.obj.serialnumber);
+                    $("#sid").val(data.obj.sid);
+                    $("#commaddr").val(data.obj.commaddr);
                     // 通讯参数
                     if (data.msg == null&&data.obj.commParam!= null) {
                         var commParam = data.obj.commParam;
@@ -483,75 +459,15 @@
                     }
                 },
                 {
-                    "data" : null,
-                    "class" : "text-center", //最后一列，操作按钮
-                    render : function(data, type, row, meta) {
-                        var editUrlPath = myTable.editUrl + row.id + ".gsp?paramId="+row.paramId+"&commandType="+row.commandType+"&vehicleId="+row.vehicleId+""; //修改地址
-                        var result = '';
-                        if(row.paramId == "终端关机"){
-                            result += '<button type="button" onclick="realTimeCommand.sendOne(\''+row.id+'\',\''+row.paramId+'\',\''+row.vehicleId+'\',\''+row.commandType+'\',\''+row.dId+'\')" type="button" class="editBtn editBtn-info btn-realtime-command-send"><i class="fa fa-issue"></i>终端关机</button>&nbsp;';
-                            //删除按钮
-                            result += '<button type="button" onclick="myTable.deleteItem(\''
-                                    + row.id
-                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>&nbsp;';
-                        }else if(row.paramId == "终端复位"){
-                            result += '<button type="button" onclick="realTimeCommand.sendOne(\''+row.id+'\',\''+row.paramId+'\',\''+row.vehicleId+'\',\''+row.commandType+'\',\''+row.dId+'\')" type="button" class="editBtn editBtn-info btn-realtime-command-send"><i class="fa fa-issue"></i>终端复位</button>&nbsp;';
-                            //删除按钮
-                            result += '<button type="button" onclick="myTable.deleteItem(\''
-                                    + row.id
-                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>&nbsp;';
-                        }else if(row.paramId == "恢复出厂设置"){
-                            result += '<button type="button" onclick="realTimeCommand.sendOne(\''+row.id+'\',\''+row.paramId+'\',\''+row.vehicleId+'\',\''+row.commandType+'\',\''+row.dId+'\')" type="button" class="editBtn editBtn-info btn-realtime-command-send"><i class="fa fa-issue"></i>恢复出厂设置</button>&nbsp;';
-                            //删除按钮
-                            result += '<button type="button" onclick="myTable.deleteItem(\''
-                                    + row.id
-                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>&nbsp;';
-                        }else if(row.paramId == "关闭数据通信"){
-                            result += '<button type="button" onclick="realTimeCommand.sendOne(\''+row.id+'\',\''+row.paramId+'\',\''+row.vehicleId+'\',\''+row.commandType+'\',\''+row.dId+'\')" type="button" class="editBtn editBtn-info btn-realtime-command-send"><i class="fa fa-issue"></i>关闭数据通信</button>&nbsp;';
-                            //删除按钮
-                            result += '<button type="button" onclick="myTable.deleteItem(\''
-                                    + row.id
-                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>&nbsp;';
-                        }else if(row.paramId == "关闭所有无线通信"){
-                            result += '<button type="button" onclick="realTimeCommand.sendOne(\''+row.id+'\',\''+row.paramId+'\',\''+row.vehicleId+'\',\''+row.commandType+'\',\''+row.dId+'\')" type="button" class="editBtn editBtn-info btn-realtime-command-send"><i class="fa fa-issue"></i>关闭所有无线通信</button>&nbsp;';
-                            //删除按钮
-                            result += '<button type="button" onclick="myTable.deleteItem(\''
-                                    + row.id
-                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>&nbsp;';
-                        }else if(row.paramId == "终端查询"){
-                            result += '<button type="button" onclick="realTimeCommand.sendOne(\''+row.id+'\',\''+row.paramId+'\',\''+row.vehicleId+'\',\''+row.commandType+'\',\''+row.dId+'\')" type="button" class="editBtn editBtn-info btn-realtime-command-send"><i class="glyphicon glyphicon-search"></i>终端查询</button>&nbsp;';
-                            //删除按钮
-                            result += '<button type="button" onclick="myTable.deleteItem(\''
-                                    + row.id
-                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>&nbsp;';
-                        }else{
-                            //修改按钮
-                            result += '<button href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
-                            //删除按钮
-                            result += '<button type="button" onclick="myTable.deleteItem(\''
-                                    + row.id
-                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>&nbsp;';
-                            //下发按钮
-                            result += '<button type="button" onclick="realTimeCommand.sendOne(\''+row.id+'\',\''+row.paramId+'\',\''+row.vehicleId+'\',\''+row.commandType+'\',\''+row.dId+'\')" type="button" class="editBtn editBtn-info"><i class="fa fa-issue"></i>下发参数</button>&nbsp;';
-                        }
-                        return result;
-                    }
-                }, {
                     "data" : "status",
                     "class" : "text-center",
                     render : function(data, type, row, meta) {
                          if (data == "0") {
-                                return '参数已生效';
+                                return '未下发';
                             } else if (data == "1") {
-                                return '参数未生效';
+                                return '已下发';
                             } else if (data == "2") {
-                                return "参数消息有误";
-                            } else if (data == "3") {
-                                return "参数不支持";
-                            } else if (data == "4") {
-                                return "参数下发中";
-                            } else if  (data == "5") {
-                                return "终端离线，未下发";
+                                return "已读取";
                             } else {
                                 return "";
                             }
@@ -565,29 +481,9 @@
                         }else if (data == "12"){
                             return '终端参数';
                         }else if (data == "13"){
-                            return '终端控制';
-                        }else if (data == "131"){
-                            return '无线升级';
-                        }else if (data == "132"){
-                            return '控制终端连接指定服务器';
+                            return '采集指令';
                         }else if (data == "14"){
-                            return '位置汇报参数';
-                        }else if (data == "15"){
-                            return '终端查询';
-                        }else if (data == "16"){
-                            return '电话参数';
-                        }else if (data == "17"){
-                            return '视频拍照参数';
-                        }else if (data == "18"){
-                            return 'GNSS参数';
-                        }else if (data == "19"){
-                            return '事件设置';
-                        }else if (data == "20"){
-                            return '电话本设置';
-                        }else if (data == "21"){
-                            return '信息点播菜单';
-                        }else if (data == "22"){
-                            return '基站参数设置';
+                            return '基表设置';
                         }
 
                     }
@@ -621,7 +517,8 @@
             ];//ajax参数
             var ajaxDataParamFun = function(d) {
                 d.simpleQueryParam = $('#simpleQueryParam').val(); //模糊查询
-                d.vehicleIdList = vehicleIdList;
+                sid = $("#sid").val()
+                d.sid = sid;
             };
             //表格setting
             var setting = {
@@ -673,20 +570,91 @@
             myTable.requestData();
         },
         saveCommand: function(){
-          $("#vid").val(vehicleIdList);
-          realTimeCommand.getCommandCheckedNodes();
-          $("#commandNodes").val(commandNodes);
-          if(!realTimeCommand.checkSubmit() || !realTimeCommand.checkGenerate()){
-              return;
-          };
-          if(realTimeCommand.validateSubmit()){
-          $("#saveCommandForm").ajaxSubmit(function() {
-              $("#commParameters,.report-para-footer,#terminalParameters,#aquiryParameters,#meterbaseParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
-                 myTable.refresh()
-            });
-          }
+            if(currentCommandType === undefined){
+                layer.msg("请先选择站点和指令类型");
+                return
+            }
+            // if(!realTimeCommand.checkSubmit() ){
+            //     layer.msg("请检查配置")
+            //     return;
+            // };
+            commaddr = $("#commaddr").val();
+
+            // 通讯参数
+            if (currentCommandType == "11") {
+                tcpresendcount = $("#tcpresendcount").val();
+                tcpresponovertime = $("#tcpresponovertime").val();
+                udpresendcount = $("#udpresendcount").val();
+                udpresponovertime = $("#udpresponovertime").val();
+                smsresendcount = $("#smsresendcount").val();
+                smsresponovertime = $("#smsresponovertime").val();
+                heartbeatperiod = $("#heartbeatperiod").val();
+                
+                data = {"commaddr":commaddr,"tcpresendcount":tcpresendcount,"tcpresponovertime":tcpresponovertime,
+                    "udpresendcount":udpresendcount,"udpresponovertime":udpresponovertime,"smsresendcount":smsresendcount,
+                    "smsresponovertime":smsresponovertime,"heartbeatperiod":heartbeatperiod}
+            }
+            // 终端参数
+            if(currentCommandType == "12"){
+                ipaddr = $("#ipaddr").val();
+                port = $("#port").val();
+                entrypoint = $("#entrypoint").val();
+
+                data = {"commaddr":commaddr,"ipaddr":ipaddr,"port":port,"entrypoint":entrypoint}
+                
+            }
+            // 采集指令
+            if(currentCommandType == "13"){
+                updatastarttime = $("#updatastarttime").val();
+                updatamode = $("#updatamode").val();
+                collectperiod = $("#collectperiod").val();
+                updataperiod = $("#updataperiod").val();
+                updatatime1 = $("#updatatime1").val();
+                updatatime2 = $("#updatatime2").val();
+                updatatime3 = $("#updatatime3").val();
+                updatatime4 = $("#updatatime4").val();
+                
+                data = {"commaddr":commaddr,"updatastarttime":updatastarttime,"updatamode":updatamode,
+                    "collectperiod":collectperiod,"updataperiod":updataperiod,"updatatime1":updatatime1,
+                    "updatatime2":updatatime2,"updatatime3":updatatime3,"updatatime4":updatatime4}
+            }
+            // 基表设置
+            if(currentCommandType == "14"){
+                dn = $("#dn").val();
+                liciperoid = $("#liciperoid").val();
+                maintaindate = $("#maintaindate").val();
+                transimeterfactor = $("#transimeterfactor").val();
+                biaofactor = $("#biaofactor").val();
+                manufacturercode = $("#manufacturercode").val();
+                issmallsignalcutpoint = $("#issmallsignalcutpoint").val();
+                smallsignalcutpoint = $("#smallsignalcutpoint").val();
+
+                isflowzerovalue = $("#isflowzerovalue").val();
+                flowzerovalue = $("#flowzerovalue").val();
+                pressurepermit = $("#pressurepermit").val();
+                flowdorient = $("#flowdorient").val();
+                plusaccumupreset = $("#plusaccumupreset").val();
+
+                data = {"commaddr":commaddr,"dn":dn,"liciperoid":liciperoid,
+                    "maintaindate":maintaindate,"transimeterfactor":transimeterfactor,"biaofactor":biaofactor,
+                    "manufacturercode":manufacturercode,"issmallsignalcutpoint":issmallsignalcutpoint,
+                    "smallsignalcutpoint":smallsignalcutpoint,"isflowzerovalue":isflowzerovalue,"flowzerovalue":flowzerovalue,
+                    "pressurepermit":pressurepermit,"flowdorient":flowdorient,"plusaccumupreset":plusaccumupreset
+                }
+            }
+            url = "/devm/paramsmanager/command/saveCommand/";
+
+            json_ajax("POST",url,"json",true,data, realTimeCommand.saveCommandback);
+              
         },
-         // 显示错误提示信息
+        saveCommandback:function(data){
+            console.log("saveCommandback",data);
+            if(data.success){
+                layer.msg("下发成功")
+                myTable.refresh()
+            }
+        },
+        // 显示错误提示信息
         showErrorMsg: function(msg, inputId){
             if ($("#error_label").is(":hidden")) {
                 $("#error_label").text(msg);
@@ -792,122 +760,7 @@
               }
               return true;
         },
-        checkGenerate:function(){
-            var flag = false;
-            var cZTree = $.fn.zTree.getZTreeObj("commandTreeDemo");
-              cNodes = cZTree.getCheckedNodes(true);
-              for (var i = 0, l = cNodes.length; i < l; i++) {
-                    if (cNodes[i].id != "13"&&cNodes[i].id != "15"&&cNodes[i].id != "1") {
-                         flag = true;
-                    }
-                }
-              if(!flag){
-                  layer.msg(commandSettingValueNull);
-                  return false;
-              }
-              return true;
-        },
-        //提交点击
-        generateClick: function(){
-            if(!realTimeCommand.checkSubmit()){
-                  return;
-            };
-            var flag = false;
-            var cZTree = $.fn.zTree.getZTreeObj("commandTreeDemo");
-            cNodes = cZTree.getCheckedNodes(true);
-            for (var i = 0, l = cNodes.length; i < l; i++) {
-                if (cNodes[i].id == "13") {
-                        flag = true;
-                }
-            }
-            if(!flag){
-                layer.msg(commandDeviceNull);
-                return false;
-            }
-            var url="/clbs/v/monitoring/command/generateDeviceControl";
-            var parameter={"vid": vehicleIdList};
-            json_ajax("POST",url,"json",true,parameter, null);
-            myTable.refresh();
-        },
-        generateDeviceSearch: function(){
-            if(!realTimeCommand.checkSubmit()){
-                 return;
-            };
-            var flag = false;
-            var cZTree = $.fn.zTree.getZTreeObj("commandTreeDemo");
-            cNodes = cZTree.getCheckedNodes(true);
-            for (var i = 0, l = cNodes.length; i < l; i++) {
-                if (cNodes[i].id == "15") {
-                    flag = true;
-                }
-            }
-            if(!flag){
-                layer.msg(commandDeviceNull);
-                return false;
-            }
-            var url="/clbs/v/monitoring/command/generateDeviceSearch";
-            var parameter={"vid": vehicleIdList};
-            json_ajax("POST",url,"json",true,parameter, null);
-            myTable.refresh();
-        },
-        //下发参数 （单个）
-        sendOne: function(id,paramId,vehicleId,commandType,dId){
-             var arr = [];
-             var obj = {};
-             obj.id = id;
-             obj.paramId = paramId;
-             obj.vehicleId = vehicleId;
-             obj.type = commandType;
-             obj.dId = dId;
-             arr.push(obj);
-             var jsonStr = JSON.stringify(arr);
-             realTimeCommand.sendCommand(jsonStr);
-        },
-        // 下发参数
-        sendCommand: function(sendParam){
-             layer.load(2);
-             $.ajax({
-                 type: "POST",
-                 url: "/clbs/v/monitoring/command/sendParam",
-                 data: {
-                     "sendParam": sendParam
-                 },
-                 dataType: "json",
-                 global : true,
-                 success: function (data) {
-                    if(realsendflag){
-                        webSocket.subscribe(headers, '/topic/fencestatus', realTimeCommand.updataFenceData,null, null);
-                        realsendflag=false;
-                    }
-                     if(data.success){
-                         layer.closeAll('loading');
-                         layer.msg(publicIssuedSuccess,{closeBtn: 0}, function(refresh){
-                             myTable.refresh();
-                             layer.close(refresh);
-                            }); 
-                     }else{
-                         layer.msg(data.msg,{move:false});
-                     }
-                 }
-             })
-        },
-        // 批量下发
-        sendBatch: function(){
-            //判断是否至少选择一项
-            var chechedNum = $("input[name='subChk']:checked").length;
-            if (chechedNum == 0) {
-                layer.msg(commandSelectNull);
-                return
-            }
-            var checkedList = new Array();
-            $("input[name='subChk']:checked").each(function() {
-                var jsonStr = $(this).val();
-                var jsonObj = $.parseJSON(jsonStr);
-                checkedList.push(jsonObj);
-            });
-            // 下发
-            realTimeCommand.sendCommand(JSON.stringify(checkedList));
-        },
+        
         ajaxQueryDataFilter: function(treeId, parentNode, responseData) {
             responseData = JSON.parse(ungzip(responseData));
             var list = [];
@@ -919,7 +772,7 @@
         },
          //模糊查询
         inputTextAutoSearch: function(param){
-         search_ztree('treeDemo', 'search_condition', 'group');
+         search_ztree('treeDemo', 'search_condition', 'station');
 
             // if (param != null && param != undefined && param != '') {
             //     var setQueryChar = {
@@ -968,25 +821,7 @@
             // }
             
         },
-        /**
-         * 选中已选的节点
-         */
-        checkCurrentNodes : function (treeNode){
-             var crrentSubV = vehicleIdList.split(",");
-             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-             if (treeNode != undefined && treeNode != null && treeNode.type === "assignment" && treeNode.children != undefined) {
-                 var list = treeNode.children;
-                 if (list != null && list.length > 0) {
-                     for (var j=0; j<list.length; j++){
-                         var znode = list[j];
-                         if (crrentSubV != null && crrentSubV != undefined && crrentSubV.length !== 0 && $.inArray(znode.id, crrentSubV) != -1){
-                            treeObj.checkNode(znode, true, true);
-                         }
-                     }
-                 }
-             }
-         },
-         
+        
          fuzzyZTreeOnAsyncSuccess : function (event, treeId, treeNode) {
             var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             zTree.expandAll(true);
@@ -1048,450 +883,7 @@
              }
          },
          
-        connectionControlSH: function(){
-            setTimeout(function(){
-                if(!($("#meterbaseParameters").is(":hidden"))){
-                    if($("#specifyServerConnect").val() == 1){
-                        $("#specifyServerDial,#specifyServerDialName,#specifyServerDialPwd,#specifyServerAddress,#specifyServerTcpPort,#specifyServerUdpPort,#specifyServerTimeLimit").attr("readonly","readonly");
-                    }else{
-                        $("#specifyServerDial,#specifyServerDialName,#specifyServerDialPwd,#specifyServerAddress,#specifyServerTcpPort,#specifyServerUdpPort,#specifyServerTimeLimit").removeAttr("readonly");
-                    }
-                }
-                if(!($("#locationReporting").is(":hidden"))){
-                    if($("#locationTactics").val() == 0){
-                        $("#locationDefaultDistance,#locationSleepDistance,#locationAlarmDistance,#locationNoLoginDistance").attr("readonly","readonly");
-                        $("#locationDefaultTime,#locationSleep,#locationAlarmTime,#locationNoLogin").removeAttr("readonly");
-                    }else if($("#locationTactics").val() == 1){
-                        $("#locationDefaultTime,#locationSleep,#locationAlarmTime,#locationNoLogin").attr("readonly","readonly");
-                        $("#locationDefaultDistance,#locationSleepDistance,#locationAlarmDistance,#locationNoLoginDistance").removeAttr("readonly");
-                    }else if($("#locationTactics").val() == 2){
-                        $("#locationDefaultTime,#locationSleep,#locationAlarmTime,#locationNoLogin").removeAttr("readonly");
-                        $("#locationDefaultDistance,#locationSleepDistance,#locationAlarmDistance,#locationNoLoginDistance").removeAttr("readonly");
-                    }
-                }
-            },100);
-        },
-        //事件设置添加事件
-        addEventSetting: function(){
-            addEventIndex++;
-            var html = "<div class='form-group' id='eventMain-container_"+ addEventIndex +"'><label class='col-md-3 control-label'>事件ID：</label><div class='col-md-3'><input type='text' name='eventId' id='eventId_"+ addEventIndex +"' value='"+ (addEventIndex-1) +"' class='form-control' onblur='realTimeCommand.inputBlur()'></div><label class='col-md-2 control-label'>事件内容：</label><div class='col-md-3'><input type='text' name='eventContent' id='eventContent_"+ addEventIndex +"' placeholder='请输入事件内容' class='form-control' onblur='realTimeCommand.inputBlur()'></div><div class='col-md-1'><button type='button' class='btn btn-danger eventSettingDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div>";
-            $("#eventMain-container").append(html);
-            $(".eventSettingDelete").on("click",function(){
-                $(this).parent().parent().remove();
-            });
-        },
-        //事件设置添加事件(id为下拉时)
-        addEventSettingIsSelect: function(){
-            addEventIndex++;
-            var html = "<div class='form-group' id='eventMain-container_"+ addEventIndex +"'><label class='col-md-3 control-label'>事件ID：</label><div class='col-md-3'><select id='eventId_"+ addEventIndex +"' name='eventId' class='form-control' onchange='realTimeCommand.eventSettIdParFn("+ addEventIndex +")'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option></select></div><label class='col-md-2 control-label'>事件内容：</label><div class='col-md-3'><input type='text' name='eventContent' id='eventContent_"+ addEventIndex +"' placeholder='请输入事件内容' class='form-control' onblur='realTimeCommand.inputBlur()'></div><div class='col-md-1'><button type='button' class='btn btn-danger eventSettingDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div>";
-            $("#eventMain-container").append(html);
-            $(".eventSettingDelete").on("click",function(){
-                $(this).parent().parent().remove();
-            });
-        },
-        //电话本设置添加事件
-        addPhoneBookEvent: function(){
-            addPhoneIndex++;
-            var html = "<div id='phoneBook-MainContent_"+ addPhoneIndex +"'><div class='form-group'><label class='col-md-3 control-label'>联系人ID：</label><div class='col-md-3 phoneBookIdInfo'><input type='text' id='phoneBookId_"+ addPhoneIndex +"' name='phoneBookId' value='"+ (addPhoneIndex-1) +"' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><label class='col-md-2 control-label'>联系人：</label><div class='col-md-3'><input type='text' id='phoneBookContact_"+ addPhoneIndex +"' name='contact' placeholder='请输入联系人' class='form-control' onblur='realTimeCommand.inputBlur()'/></div></div><div class='form-group'><label class='col-md-3 control-label'>电话号码：</label><div class='col-md-3'><input type='text' id='phoneBookNumber_"+ addPhoneIndex +"' name='phoneNo' placeholder='请输入电话号码' class='form-control' onblur='realTimeCommand.inputBlur()' /></div><label class='col-md-2 control-label'>呼叫类型：</label><div class='col-md-3'><select id='phoneBookOperateType_"+ addPhoneIndex +"' name='callType' class='form-control'><option value='1'>呼入</option><option value='2'>呼出</option><option value='3'>呼入/呼出</option></select></div><div class='col-md-1'><button type='button' class='btn btn-danger phoneBookDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div></div>";
-            $("#phoneBook-MainContent").append(html);
-            $(".phoneBookDelete").on("click",function(){
-                $(this).parent().parent().parent().remove();
-            });
-        },
-        //电话本设置添加事件(联系人ID为下拉时)
-        addPhoneBookEventIsSelect: function(){
-            addPhoneIndex++;
-            var html = "<div id='phoneBook-MainContent_"+ addPhoneIndex +"'><div class='form-group'><label class='col-md-3 control-label'>联系人ID：</label><div class='col-md-3 phoneBookIdInfo'><select id='phoneBookId_"+ addPhoneIndex +"' name='phoneBookId' class='form-control' onchange='realTimeCommand.phoneBookSettIdParFn("+ addPhoneIndex +")'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option></select></div><label class='col-md-2 control-label'>联系人：</label><div class='col-md-3'><input type='text' id='phoneBookContact_"+ addPhoneIndex +"' name='contact' placeholder='请输入联系人' class='form-control' onblur='realTimeCommand.inputBlur()'/></div></div><div class='form-group'><label class='col-md-3 control-label'>电话号码：</label><div class='col-md-3'><input type='text' id='phoneBookNumber_"+ addPhoneIndex +"' name='phoneNo' placeholder='请输入电话号码' class='form-control' onblur='realTimeCommand.inputBlur()' /></div><label class='col-md-2 control-label'>呼叫类型：</label><div class='col-md-3'><select id='phoneBookOperateType_"+ addPhoneIndex +"' name='callType' class='form-control'><option value='1'>呼入</option><option value='2'>呼出</option><option value='3'>呼入/呼出</option></select></div><div class='col-md-1'><button type='button' class='btn btn-danger phoneBookDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div></div>";
-            $("#phoneBook-MainContent").append(html);
-            $(".phoneBookDelete").on("click",function(){
-                $(this).parent().parent().parent().remove();
-            });
-        },
-        //信息点播菜单添加事件
-        addInfoDemandEvent: function(){
-            addInfoDemandIndex++;
-            var html = "<div class='form-group' id='infoDemand-MainContent_"+ addInfoDemandIndex +"'><label class='col-md-3 control-label'>信息ID：</label><div class='col-md-3'><input type='text' id='infoDemandId_"+ addInfoDemandIndex +"' value='"+ (addInfoDemandIndex-1) +"'  name='infoId' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><label class='col-md-2 control-label'>信息名称：</label><div class='col-md-3'><input type='text' id='infoDemandName"+ addInfoDemandIndex +"'  name='infoContent' placeholder='请输入信息名称' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><div class='col-md-1'><button type='button' class='btn btn-danger infoDemandDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div>";
-            $("#infoDemandMenu").append(html);
-            $(".infoDemandDelete").on("click",function(){
-                $(this).parent().parent().remove();
-            });
-        },
-        //信息点播菜单添加事件(信息ID为下拉时)
-        addInfoDemandEventIsSelect: function(){
-            addInfoDemandIndex++;
-            var html = "<div class='form-group' id='infoDemand-MainContent_"+ addInfoDemandIndex +"'><label class='col-md-3 control-label'>信息ID：</label><div class='col-md-3'><select id='infoDemandId_"+ addInfoDemandIndex +"' name='infoId' class='form-control' onchange='realTimeCommand.infoDemandSettIdParFn("+ addInfoDemandIndex +")'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option></select></div><label class='col-md-2 control-label'>信息名称：</label><div class='col-md-3'><input type='text' id='infoDemandName"+ addInfoDemandIndex +"'  name='infoContent' placeholder='请输入信息名称' class='form-control' onblur='realTimeCommand.inputBlur()'/></div><div class='col-md-1'><button type='button' class='btn btn-danger infoDemandDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div>";
-            $("#infoDemandMenu").append(html);
-            $(".infoDemandDelete").on("click",function(){
-                $(this).parent().parent().remove();
-            });
-        },
-        //基站参数设置 定点时间添加
-        addBaseStationEvent: function(){
-            var bsfpLength = $("#baseStation-MainContent").find("div.form-group").length;
-            var bs = parseInt(bsfpLength) + 1;
-            if(bs > 12){
-                layer.msg(commandDesignatedTimeError);
-            }else{
-                addBaseStationIndex++;
-                var html = "<div class='form-group'><label class='col-md-3 control-label'>定点时间：</label><div class='col-md-3'><input type='text' id='baseStationFixedTime_"+addBaseStationIndex+"' name='baseStationFixedTime' onclick='' class='form-control'/></div><div class='col-md-1'><button type='button' class='btn btn-danger baseStationDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div><div class='col-md-5'></div></div>";
-                $("#baseStation-MainContent").append(html);
-                laydate.render({elem: '#baseStationFixedTime_'+addBaseStationIndex,type: 'time',theme: '#6dcff6'});
-                $("#baseStationFixedTime_"+addBaseStationIndex).val(loadTime);
-                $(".baseStationDelete").on("click",function(){
-                    $(this).parent().parent().remove();
-                });
-            }
-        },
-        //事件设置  操作类型
-        eventSettingOperateType: function(){
-            var eventOperateTypeValue = $("#eventOperateType").find("option:selected").val();
-            //更新 追加
-            if(eventOperateTypeValue == 1 || eventOperateTypeValue == 2){
-                realTimeCommand.resetEventSetting();
-                var emcLength = $("#eventMain-container").children("div").length;
-                if(emcLength > 1){
-                    $("#eventMain-container>div.form-group").each(function(i){
-                        if(i>0){$(this).remove();}
-                    });
-                }
-                $(".eventIdInfo").find("input").removeAttr("disabled","disabled");
-                $("#event-add-btn").removeAttr("disabled","disabled");
-                $("#eventContent_2").val("");
-            }
-            //修改 id为下拉
-            else if(eventOperateTypeValue == 3){
-                realTimeCommand.eventSettingUpdateOrDel();
-            }
-            //删除 id为下拉
-            else if(eventOperateTypeValue == 4){
-                realTimeCommand.eventSettingUpdateOrDel();
-            }else{
-                realTimeCommand.resetEventSetting();
-                $(".eventIdInfo").find("input").removeAttr("disabled","disabled");
-                $("#event-add-btn").removeAttr("disabled","disabled");
-            }
-        },
-        //事件设置  修改删除时调用
-        eventSettingUpdateOrDel: function(){
-            addEventIndex = 2;
-            $("#eventMain-container").html("");
-            var html = 
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>事件ID：</label>"+
-                    "<div class='col-md-3 eventIdInfo'>"+
-                    "<select id='eventId_2' name='eventId' class='form-control' onchange='realTimeCommand.eventSettIdFn()'>"+
-                        "<option value='1'>1</option>"+
-                        "<option value='2'>2</option>"+
-                        "<option value='3'>3</option>"+
-                    "</select>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>事件内容：</label>"+
-                    "<div class='col-md-3'><input type='text' id='eventContent_2' name='eventContent' placeholder='请输入事件内容' class='form-control' onblur='realTimeCommand.inputBlur()'></div>"+
-                    "<div class='col-md-1'><button id='event-add-btn' onclick='realTimeCommand.addEventSettingIsSelect();' type='button' class='btn btn-primary addIcon'><span class='glyphicon glyphiconPlus' aria-hidden='true'></span></button></div>"+
-                "</div>";
-            $("#eventMain-container").append(html);
-        },
-        //事件设置 操作类型其他选项还原
-        resetEventSetting: function(){
-            $("#eventMain-container").html("");
-            var html = 
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>事件ID：</label>"+
-                    "<div class='col-md-3 eventIdInfo'>"+
-                    "<input id='eventId_2' type='text' name='eventId' value='1' class='form-control' onblur='realTimeCommand.inputBlur();'/>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>事件内容：</label>"+
-                    "<div class='col-md-3'><input type='text' id='eventContent_2' name='eventContent' placeholder='请输入事件内容' class='form-control' onblur='realTimeCommand.inputBlur()'></div>"+
-                    "<div class='col-md-1'><button id='event-add-btn' onclick='realTimeCommand.addEventSetting();' type='button' class='btn btn-primary addIcon'><span class='glyphicon glyphiconPlus' aria-hidden='true'></span></button></div>"+
-                "</div>";
-            $("#eventMain-container").append(html);
-        },
-        //事件设置  事件ID选择改变
-        eventSettIdFn: function(){
-            var eIdVal = $("#eventId_2").find("option:selected").val();
-            layer.msg(eIdVal);
-        },
-        //事件设置  事件ID选择改变(带参数)
-        eventSettIdParFn: function(id){
-            var eIdVal = $("#eventId_"+id).find("option:selected").val();
-            layer.msg(eIdVal);
-        },
-        //电话本设置 操作类型
-        phoneBookSettingOperateType: function(){
-            var phoneBookOperateTypeValue = $("#phoneBookOperateType").find("option:selected").val();
-            //更新  追加
-            if(phoneBookOperateTypeValue == 1 || phoneBookOperateTypeValue == 2){
-                var pbmLength = $("#phoneBook-MainContent").children("div").length;
-                if(pbmLength > 2){
-                    $("#phoneBook-MainContent>div").each(function(j){
-                        if(j>1){
-                            $(this).remove();
-                        }
-                    });
-                }
-                realTimeCommand.resetPhoneBookSetting();
-                $("#phoneBook-add-btn").removeAttr("disabled","disabled");
-                $("#phoneBookContact_2,#phoneBookNumber_2").val("");
-            }
-            //修改 联系人ID下拉
-            else if(phoneBookOperateTypeValue == 3){
-                $("#phoneBook-MainContent").html("");
-                var html = 
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>联系人ID：</label>"+
-                    "<div class='col-md-3 phoneBookIdInfo'>"+
-                        "<select id='phoneBookId_2' name='phoneBookId' class='form-control' onchange='realTimeCommand.phoneBookSettIdFn()'>"+
-                            "<option value='1'>1</option>"+
-                            "<option value='2'>2</option>"+
-                            "<option value='3'>3</option>"+
-                        "</select>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>联系人：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<input type='text' id='phoneBookContact_2' name='contact' placeholder='请输入联系人' class='form-control' onblur='realTimeCommand.inputBlur();'/>"+                                                  
-                    "</div>"+
-                "</div>"+
-                "<div class='form-group'>"+
-                    "<label class='col-md-3 control-label'>电话号码：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<input type='text' id='phoneBookNumber_2' name='phoneNo' placeholder='请输入电话号码' class='form-control' onblur='realTimeCommand.inputBlur();'/>"+                                                  
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>呼叫类型：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<select id='phoneBookOperateType_2' name='callType' class='form-control'>"+
-                            "<option value='1'>呼入</option>"+
-                            "<option value='2'>呼出</option>"+
-                            "<option value='3'>呼入/呼出</option>"+
-                        "</select>"+
-                    "</div>"+
-                    "<div class='col-md-1'>"+
-                        "<button id='phoneBook-add-btn' type='button' class='btn btn-primary addIcon' onclick='realTimeCommand.addPhoneBookEventIsSelect()'>"+
-                            "<span class='glyphicon glyphiconPlus' aria-hidden='true'></span>"+
-                        "</button>"+
-                    "</div>"+
-                "</div>";
-                $("#phoneBook-MainContent").append(html);
-            }
-            //其他选项
-            else{
-                realTimeCommand.resetPhoneBookSetting();
-                $(".phoneBookIdInfo").find("input").removeAttr("disabled","disabled");
-                $("#phoneBook-add-btn").removeAttr("disabled","disabled");
-            }
-        },
-        //电话本设置 操作类型其他选项还原
-        resetPhoneBookSetting: function(){
-            $("#phoneBook-MainContent").html("");
-            var html = 
-            "<div class='form-group'>"+
-                "<label class='col-md-3 control-label'>联系人ID：</label>"+
-                "<div class='col-md-3 phoneBookIdInfo'>"+
-                    "<input type='text' id='phoneBookId_2' name='phoneBookId' value='1' class='form-control' onblur='realTimeCommand.inputBlur();'/>    "+                                                  
-                "</div>"+
-                "<label class='col-md-2 control-label'>联系人：</label>"+
-                "<div class='col-md-3'>"+
-                    "<input type='text' id='phoneBookContact_2' name='contact' placeholder='请输入联系人' class='form-control' onblur='realTimeCommand.inputBlur();'/>    "+                                                  
-                "</div>"+
-            "</div>"+
-            "<div class='form-group'>"+
-                "<label class='col-md-3 control-label'>电话号码：</label>"+
-                "<div class='col-md-3'>"+
-                    "<input type='text' id='phoneBookNumber_2' name='phoneNo' placeholder='请输入电话号码' class='form-control' onblur='realTimeCommand.inputBlur();'/>"+                                              
-                "</div>"+
-                "<label class='col-md-2 control-label'>呼叫类型：</label>"+
-                "<div class='col-md-3'>"+
-                    "<select id='phoneBookOperateType_2' name='callType' class='form-control'>"+
-                        "<option value='1'>呼入</option>"+
-                        "<option value='2'>呼出</option>"+
-                        "<option value='3'>呼入/呼出</option>"+
-                    "</select>"+
-                "</div>"+
-                "<div class='col-md-1'>"+
-                    "<button id='phoneBook-add-btn' type='button' class='btn btn-primary addIcon' onclick='realTimeCommand.addPhoneBookEvent()'>"+
-                        "<span class='glyphicon glyphiconPlus' aria-hidden='true'></span>"+
-                    "</button>"+
-                "</div>"+
-            "</div>";
-            $("#phoneBook-MainContent").append(html);
-        },
-        //电话本设置 联系人ID改变
-        phoneBookSettIdFn: function(){
-            var pbIdVal = $("#phoneBookId_2").find("option:selected").val();
-            layer.msg("联系人ID-"+pbIdVal);
-        },
-        //电话本设置 联系人ID改变(带参数)
-        phoneBookSettIdParFn: function(id){
-            var pbIdVal = $("#phoneBookId_"+id).find("option:selected").val();
-            layer.msg("联系人ID-"+pbIdVal);
-        },
-        //信息点播菜单 操作类型
-        infoDemandMenuSettingOperateType: function(){
-            var infoDemandOperateTypeValue = $("#infoDemandOperateType").find("option:selected").val();
-            //更新 追加
-            if(infoDemandOperateTypeValue == 1 || infoDemandOperateTypeValue == 2){
-                var iddLength = $("#infoDemandMenu").children("div").length;
-                if(iddLength>3){
-                    $("#infoDemandMenu>div").each(function(k){
-                        if(k>2){
-                            $(this).remove();
-                        }
-                    });
-                }
-                realTimeCommand.resetInfoDemandMenuSetting();
-                $("#infoDemand-add-btn").removeAttr("disabled","disabled");
-                $("#infoDemandName_2").val("");
-            }
-            //修改 信息id下拉
-            else if(infoDemandOperateTypeValue == 3){
-                var idmLength = $("#infoDemandMenu").find("div.form-group").length;
-                if(idmLength > 2){
-                    $("#infoDemandMenu>div").each(function(k){
-                        if(k > 1){
-                            $(this).remove();
-                        }
-                    });
-                    var html = 
-                    "<div class='form-group' id='infoDemand-MainContent'>"+
-                        "<label class='col-md-3 control-label'>信息ID：</label>"+
-                        "<div class='col-md-3 infoDemandMenuId'>"+
-                            "<select id='infoDemandId_2' name='infoId' class='form-control' onchange='realTimeCommand.infoDemandSettIdFn()'>"+
-                                "<option value='1'>1</option>"+
-                                "<option value='2'>2</option>"+
-                                "<option value='3'>3</option>"+
-                            "</select>"+
-                        "</div>"+
-                        "<label class='col-md-2 control-label'>信息名称：</label>"+
-                        "<div class='col-md-3'>"+
-                            "<input type='text' id='infoDemandName_2' name='infoContent' placeholder='请输入信息名称' class='form-control'  onblur='realTimeCommand.inputBlur();'/>"+                                                  
-                        "</div>"+
-                        "<div class='col-md-1'>"+
-                            "<button id='infoDemand-add-btn' type='button' class='btn btn-primary addIcon' onclick='realTimeCommand.addInfoDemandEventIsSelect()'>"+
-                                "<span class='glyphicon glyphiconPlus' aria-hidden='true'></span>"+
-                            "</button>"+
-                        "</div>"+
-                    "</div>";
-                    $("#infoDemandMenu").append(html);
-                }
-            }else{
-                realTimeCommand.resetInfoDemandMenuSetting();
-                $(".infoDemandMenuId").find("input").removeAttr("disabled","disabled");
-                $("#infoDemand-add-btn").removeAttr("disabled","disabled");
-            }
-        },
-        //信息点播菜单  操作类型其他选项还原
-        resetInfoDemandMenuSetting: function(){
-            var idmLength = $("#infoDemandMenu").find("div.form-group").length;
-            if(idmLength > 2){
-                $("#infoDemandMenu>div").each(function(k){
-                    if(k > 1){
-                        $(this).remove();
-                    }
-                });
-                var html = 
-                "<div class='form-group' id='infoDemand-MainContent'>"+
-                    "<label class='col-md-3 control-label'>信息ID：</label>"+
-                    "<div class='col-md-3 infoDemandMenuId'>"+
-                        "<input type='text' id='infoDemandId_2' name='infoId' value='1' class='form-control' onblur='realTimeCommand.inputBlur();'/>"+
-                    "</div>"+
-                    "<label class='col-md-2 control-label'>信息名称：</label>"+
-                    "<div class='col-md-3'>"+
-                        "<input type='text' id='infoDemandName_2' name='infoContent' placeholder='请输入信息名称' class='form-control'  onblur='realTimeCommand.inputBlur();'/>"+                                                  
-                    "</div>"+
-                    "<div class='col-md-1'>"+
-                        "<button id='infoDemand-add-btn' type='button' class='btn btn-primary addIcon' onclick='realTimeCommand.addInfoDemandEvent()'>"+
-                            "<span class='glyphicon glyphiconPlus' aria-hidden='true'></span>"+
-                        "</button>"+
-                    "</div>"+
-                "</div>";
-                $("#infoDemandMenu").append(html);
-            }
-        },
-        //信息点播菜单 信息ID改变
-        infoDemandSettIdFn: function(){
-            var idIdVal = $("#infoDemandId_2").find("option:selected").val();
-            layer.msg("信息ID-"+idIdVal);
-        },
-        //信息点播菜单 信息ID改变(带参数)
-        infoDemandSettIdParFn: function(id){
-            var idIdVal = $("#infoDemandId_"+id).find("option:selected").val();
-            layer.msg("信息ID-"+idIdVal);
-        },
-        //基站参数设置 上报模式
-        baseStationReportModeCheckFn: function(){
-            var baseStationReportModeTypeValue = $("#baseStationReportMode").find("option:selected").val();
-            if(baseStationReportModeTypeValue == 0){
-                $("#baseStationStartTimePoint,#baseStationReportInterval").removeAttr("disabled","disabled");
-                $("#baseStationFixedTime").attr("disabled","disabled");
-                $("#baseStation-add-btn").hide();
-            }else if(baseStationReportModeTypeValue == 1){
-                $("#baseStationFixedTime").removeAttr("disabled","disabled");
-                $("#baseStation-add-btn").show();
-                $("#baseStationStartTimePoint,#baseStationReportInterval").attr("disabled","disabled");
-            }
-        },
-        // 应答
-        responseSocket: function() {
-            realTimeCommand.isGetSocketLayout();
-        },
-        isGetSocketLayout: function() {
-            setTimeout(function(){
-                if (webSocket.conFlag) {
-                    webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/check', realTimeCommand.updateTable, "/app/vehicle/inspect", null);
-                } else {
-                    realTimeCommand.isGetSocketLayout();
-                }
-            }, 2000);
-        },
-        // 应答socket回掉函数
-        updateTable: function(msg) {
-            if (msg != null) {
-                var json = $.parseJSON(msg.body);
-                var msgData = json.data;
-                if (msgData != undefined) {
-                    var msgId = msgData.msgHead.msgID;
-                    // if (msgId == 0x9300) {
-                    //     var dataType = msgData.msgBody.dataType;
-                    //     $("#msgDataType").val(dataType);
-                    //     $("#infoId").val(msgData.msgBody.data.infoId);
-                    //     $("#objectType").val(msgData.msgBody.data.objectType);
-                    //     $("#objectId").val(msgData.msgBody.data.objectId);
-                    //     $("#question").text(msgData.msgBody.data.infoContent);
-                    //     if (dataType == 0x9301) {
-                    //         $("#answer").val("");
-                    //         $("#msgTitle").text("平台查岗");
-                    //         $("#goTraceResponse").modal('show');
-                    //         $("#error_label").hide();
-                    //     }
-                    //     if (dataType == 0x9302) {
-                    //         $("#answer").val("");
-                    //         $("#msgTitle").text("下发平台间报文");
-                    //         $("#goTraceResponse").modal('show');
-                    //     }
-                    // }
-                }
-            }
-        },
-        // 应答确定
-        platformMsgAck: function() {
-            var answer = $("#answer").val();
-            if (answer == "") {
-                realTimeCommand.showErrorMsg("应答不能为空", "answer");
-                return;
-            } 
-            $("#goTraceResponse").modal('hide');
-            var msgDataType = $("#msgDataType").val();
-            var infoId = $("#infoId").val();
-            var objectType = $("#objectType").val();
-            var objectId = $("#objectId").val();
-            var url = "/clbs/m/connectionparamsset/platformMsgAck";
-            json_ajax("POST", url, "json", false, {
-                "infoId": infoId,
-                "answer": answer,
-                "msgDataType": msgDataType,
-                "objectType": objectType,
-                "objectId": objectId
-            });
-        },
+        
 //        showErrorMsg: function(msg, inputId) {
 //          if ($("#error_label").is(":hidden")) {
 //              $("#error_label").text(msg);
@@ -1506,7 +898,7 @@
         $('input').inputClear().on('onClearEvent',function(e,data){
             var id = data.id;
             if(id == 'search_condition'){
-             search_ztree('treeDemo', id, 'group');
+             search_ztree('treeDemo', id, 'station');
              // realTimeCommand.initTreeData("1");
             };
         });
@@ -1516,21 +908,21 @@
         realTimeCommand.init();
         realTimeCommand.getHoursMinuteSeconds();
         realTimeCommand.initTable();
-        realTimeCommand.responseSocket();
-        $("#generateListBtn").on("click",realTimeCommand.generateClick);
-        $("#event-add-btn").on("click",realTimeCommand.addEventSetting);
-        $("#phoneBook-add-btn").on("click",realTimeCommand.addPhoneBookEvent);
-        $("#infoDemand-add-btn").on("click",realTimeCommand.addInfoDemandEvent);
-        $("#baseStation-add-btn").on("click",realTimeCommand.addBaseStationEvent);
+        // realTimeCommand.responseSocket();
+        // $("#generateListBtn").on("click",realTimeCommand.generateClick);
+        // $("#event-add-btn").on("click",realTimeCommand.addEventSetting);
+        // $("#phoneBook-add-btn").on("click",realTimeCommand.addPhoneBookEvent);
+        // $("#infoDemand-add-btn").on("click",realTimeCommand.addInfoDemandEvent);
+        // $("#baseStation-add-btn").on("click",realTimeCommand.addBaseStationEvent);
         $("#checkAll").bind("click",realTimeCommand.checkAllClick);
         subChk.bind("click",realTimeCommand.subChk);
-        $("#jiaoTong_f3_standby").bind("click",realTimeCommand.getTree);
+        // $("#jiaoTong_f3_standby").bind("click",realTimeCommand.getTree);
         $("#del_model").bind("click",realTimeCommand.delModel);
         $("#refreshTable").bind("click",realTimeCommand.refreshTable);
         $("#saveCommand").bind("click",realTimeCommand.saveCommand);
-        $("#generateDeviceSearch").on("click",realTimeCommand.generateDeviceSearch);
+        // $("#generateDeviceSearch").on("click",realTimeCommand.generateDeviceSearch);
         // 批量下发
-        $("#send_model").bind("click",realTimeCommand.sendBatch);
+        // $("#send_model").bind("click",realTimeCommand.sendBatch);
         //自动模糊查询
 //        $("#search_condition").on('input oninput',realTimeCommand.inputTextAutoSearch);
         // 树结构模糊搜索

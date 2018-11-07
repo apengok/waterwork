@@ -1705,8 +1705,9 @@ def getDmaGisinfo(request):
 
 
 def saveDmaGisinfo(request):
+    print("saveDmaGisinfo",request.POST)
     dma_no = request.POST.get("dma_no")
-    polygonpath = request.POST.get("polygonpath")
+    geodata = request.POST.get("geodata")
     strokeColor = request.POST.get("strokeColor")
     fillColor = request.POST.get("fillColor")
 
@@ -1720,12 +1721,12 @@ def saveDmaGisinfo(request):
     dma = DmaGisinfo.objects.filter(dma_no=dma_no)
     if dma.exists():
         d = dma.first()
-        d.polygonpath = polygonpath
+        d.geodata = geodata
         d.strokeColor = strokeColor
         d.fillColor = fillColor
         d.save()
     else:
-        DmaGisinfo.objects.create(dma_no=dma_no,polygonpath=polygonpath,strokeColor=strokeColor,fillColor=fillColor)
+        DmaGisinfo.objects.create(dma_no=dma_no,geodata=geodata,strokeColor=strokeColor,fillColor=fillColor)
 
     data = {
             "success": 1,

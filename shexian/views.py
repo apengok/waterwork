@@ -720,3 +720,16 @@ def flowdata_mnf(request):
     
     
     return HttpResponse(json.dumps(ret))
+
+
+
+# class ParamsMangerView(LoginRequiredMixin,TemplateView):
+class ParamsMangerView(TemplateView):
+    template_name = "shexian/paramsmanager.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ParamsMangerView, self).get_context_data(*args, **kwargs)
+        context["page_title"] = "参数指令"
+        context["page_menu"] = "设备管理"
+        
+        return context  

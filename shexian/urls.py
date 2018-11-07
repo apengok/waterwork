@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^mnf/?$',views.MnfView.as_view(),name='mnf'),
     url(r'flowdata_mnf/?$',views.flowdata_mnf,name='flowdata_mnf'),
         
+    url(r'^paramter/?$',views.ParamsMangerView.as_view(),name='paramter'),
+
 ]

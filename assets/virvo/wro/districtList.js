@@ -953,12 +953,13 @@
         
         saveDmaGisinfo:function(data){
             console.log(data);
-            // data.getOptions().strokeColor
-            // data.getOptions().fillColor
-            // data.toGeoJSON()
-            var data={"dma_no":current_dma_no,"polygonpath":"polygonpath","strokeColor":"strokeColor","fillColor":"#1ef43"}
+            dma_no = $("#current_dma_no").val();
+            strokeColor = data.getOptions().strokeColor;
+            fillColor = data.getOptions().fillColor;
+            geodata = JSON.stringify(data.toGeoJSON());
+            var data={"dma_no":dma_no,"geodata":geodata,"strokeColor":strokeColor,"fillColor":fillColor}
             var url="/dmam/district/saveDmaGisinfo/";
-            // json_ajax("POST",url,"json",true,data,dmaManage.saveDmaGisinfoBack);
+            json_ajax("POST",url,"json",true,data,dmaManage.saveDmaGisinfoBack);
         },
         saveDmaGisinfoBack:function(data){
             console.log(data);
