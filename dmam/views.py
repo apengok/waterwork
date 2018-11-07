@@ -1683,14 +1683,17 @@ def communitylist(request):
 def getDmaGisinfo(request):
     dma_no = request.POST.get("dma_no")
 
-    dma = DmaGisinfo.objects.filter(dma_no=dma_no).values("polygonpath","strokeColor")
+    dma = DmaGisinfo.objects.filter(dma_no=dma_no).values("geodata","strokeColor","fillColor")
     data = []
 
     if dma.exists():
         d = dma.first()
-        data.append({"polygonpath":json.loads(d["polygonpath"]),
+        data.append({"geoJsonData":json.loads(d["geodata"]),
+        # data.append({"geoJsonData":d["geodata"],
             "strokeColor":d["strokeColor"],
             "fillColor":d["fillColor"]})
+    else:
+        data = []
 
 
     operarions_list = {

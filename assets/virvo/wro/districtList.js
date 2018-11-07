@@ -305,6 +305,7 @@
             // polygon.setMap(map)
             // // 缩放地图到合适的视野级别
             // map.setFitView([ polygon ])
+            amapbase.loadGeodata();
 
             mouseTool = new AMap.MouseTool(map);
 
@@ -315,6 +316,38 @@
                 console.log('覆盖物对象绘制完成')
                 dmaManage.saveDmaGisinfo(event.obj);
             })
+        },
+        loadGeodata:function(){
+            dma_no = $("#current_dma_no").val();
+            map.clearMap();
+            $.ajax({
+                type: 'POST',
+                url: '/dmam/district/getDmaGisinfo/',
+                data: {"dma_no" : $("#current_dma_no").val()},
+                async:false,
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if(data.obj !== null){
+                        // 创建 geoJSON 实例
+                        var geoJson = new AMap.GeoJSON({
+                            geoJSON: data.obj[0].geoJsonData,//JSON.parse(data.obj.geoJsonData),   // GeoJSON对象
+                            getPolygon:  function(geojson, lnglats) {//还可以自定义getMarker和getPolyline
+                                console.log(geojson,lnglats,data.obj[0].strokeColor,data.obj[0].fillColor)
+                                return new AMap.Polygon({
+                                    path: lnglats,
+                                    fillOpacity: .8,
+                                    strokeColor:data.obj[0].strokeColor,
+                                    fillColor:data.obj[0].fillColor
+                                });   
+                            }
+                        }); 
+
+                        map.add(geoJson);
+                    }
+                },      
+            });
+            
         },
         drawPolygon:function() {
             console.log("drawPolygon");
@@ -692,6 +725,7 @@
                 $("#current_dma_no").attr("value",treeNode.dma_no);
                 $("#current_dma_name").attr("value",treeNode.name);
                 dmaManage.getBaseinfo();
+                amapbase.loadGeodata();
 
 
                 // var organ = pNode.id;
