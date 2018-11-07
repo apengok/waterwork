@@ -70,7 +70,7 @@
         newwidth = (logoWidth + btnIconWidth + 40) / windowWidth * 100;
         //左右自适应宽度
         $contentLeft.css({
-            "width": newwidth + "%",
+            "width": newwidth -0.3+ "%",
             "height":newContLeftH + 'px'
         });
         $contentRight.css({

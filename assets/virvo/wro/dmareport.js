@@ -646,12 +646,12 @@
                     var leak_tmp_str;
                     var leak_tmp = stasticinfo[i].leak_percent;
                         if(leak_tmp < 12 ){
-                            leak_tmp_str = '<span style="background-color:#68f442;color:white;">'+ leak_tmp+'</span>';
+                          leak_tmp_str = '<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 100%;border:none;text-align:center;background-color:#008000;color:#ffffff;"value="'+ leak_tmp+'"  readonly="true"/>';
                         }else if(leak_tmp<16){
-                            leak_tmp_str = '<span style="background-color:#e58a22;color:white;">'+ leak_tmp+'</span>';
+                            leak_tmp_str = '<input type="text"  style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 100%;border:none;text-align:center; background-color:#FFCC00;color:#ffffff;"value="'+ leak_tmp+'"  readonly="true"/>';
                         }else{
-                            leak_tmp_str = '<span style="background-color:#f70439;color:white;">'+ leak_tmp+'</span>';
-                        }
+                            leak_tmp_str = '<input type="text"  style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 100%;border:none;text-align:center; background-color:#FF3300;color:#ffffff;"value="'+ leak_tmp+'"  readonly="true"/>';
+							}
                     var dateList=
                         [
                           i+1,
@@ -751,10 +751,10 @@
                         var relVal = "";
                         //var relValTime = a[0].name;
                         relVal = hdates[a[0].dataIndex] + ' 月';
-                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:grey'></span>供水量:" + ttotal.toFixed(2) + " m³/h";
-                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + tsale.toFixed(2) + " m³/h";
-                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[1].color + "'></span>" + a[1].seriesName + "：" + tuncount.toFixed(2) + " m³/h";
-                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[2].color + "'></span>" + a[2].seriesName + "：" + tleak.toFixed(2) + " m³/h";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:grey'></span>供水量:" + ttotal.toFixed(2) + " m³";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + tsale.toFixed(2) + " m³";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[1].color + "'></span>未计费水量：" + tuncount.toFixed(2) + " m³";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[2].color + "'></span>" + a[2].seriesName + "：" + tleak.toFixed(2) + " m³";
                         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[3].color + "'></span>" + a[3].seriesName + "：" + a[3].value[1] + "%";
                         relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:red'></span>漏损率:" + tleak_percent.toFixed(2) + "%";
 
@@ -763,7 +763,7 @@
                     }
                 },
                 legend: {
-                    data: ['售水量','未计量水量','漏水量','产销差率'],
+                    data: ['售水量','未计费水量','漏水量','产销差率'],
                     left: 'auto',
                 },
                 toolbox: {
@@ -931,7 +931,7 @@
                         // }
                     },
                     {
-                        name: '未计量水量',
+                        name: '未计费水量',
                         yAxisIndex: 0,
                         type: 'bar',
                         stack:'dma',
