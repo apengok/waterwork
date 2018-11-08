@@ -300,15 +300,15 @@ function searchByFlag_ztree(treeId, searchConditionId, flag,type) {
     var treeObj = $.fn.zTree.getZTreeObj(treeId);
     searchParam = searchCondition;
     if (type == "vehicle") {
-    	highlightNodes = treeObj.getNodesByFilter(monitorParamFuzzyFilter); 
-    	// allNodes = treeObj.getNodesByFilter(monitorFilter); // 所有type型nodes
-    	allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
-	}else{
-		highlightNodes = treeObj.getNodesByParamFuzzy("name", searchCondition, null); // 满足搜索条件的节点
+      highlightNodes = treeObj.getNodesByFilter(monitorParamFuzzyFilter); 
+      // allNodes = treeObj.getNodesByFilter(monitorFilter); // 所有type型nodes
+      allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
+  }else{
+    highlightNodes = treeObj.getNodesByParamFuzzy("name", searchCondition, null); // 满足搜索条件的节点
         allNodes = treeObj.getNodesByParam("type",type, null); // 所有type型nodes
-	}    
+  }    
     if (searchCondition != "") {
-    	searchParam = searchCondition;
+      searchParam = searchCondition;
         if (type == "group") {  // 企业
             // 需要显示是节点（包含父节点）
             var showNodes = [];
@@ -322,15 +322,15 @@ function searchByFlag_ztree(treeId, searchConditionId, flag,type) {
                 treeObj.expandAll(true);
             }
       /*  }else if (type == "vehicle"){
-        	treeObj.hideNodes(allNodes)
+          treeObj.hideNodes(allNodes)
             treeObj.showNodes(highlightNodes);
             treeObj.expandAll(true);*/
         }else{
-        	//<2>.得到模糊匹配搜索条件的节点数组集合
+          //<2>.得到模糊匹配搜索条件的节点数组集合
 //            treeObj.hideNodes(allNodes);
 //            treeObj.showNodes(highlightNodes);
 //            treeObj.expandAll(true);
-        	// 需要显示是节点（包含父节点）
+          // 需要显示是节点（包含父节点）
             var showNodes = [];
             // 只显示直接上级
             if (highlightNodes != null) {
@@ -344,7 +344,7 @@ function searchByFlag_ztree(treeId, searchConditionId, flag,type) {
             }
         }
     }else{
-    	treeObj.showNodes(allNodes)
+      treeObj.showNodes(allNodes)
         treeObj.expandAll(true);
     }
     //<3>.高亮显示并展示【指定节点s】
@@ -352,20 +352,21 @@ function searchByFlag_ztree(treeId, searchConditionId, flag,type) {
 }
 
 function realTimeMonitoringFilter(node){ // 模糊搜索从业人员，终端编号
-	return (node.type == "vehicle" && node.name.indexOf(searchParam) > -1) || 
-			(node.type == "people" && node.name.indexOf(searchParam) > -1) ||
-			(node.professional != undefined && node.professional != null && node.professional.indexOf(searchParam) > -1) ||
-			(node.simcardNumber != undefined && node.simcardNumber != null && node.simcardNumber.indexOf(searchParam) > -1) || 
-			(node.assignName != undefined && node.assignName != null && node.assignName.indexOf(searchParam) > -1) || 
-			(node.deviceNumber != undefined && node.deviceNumber != null && node.deviceNumber.indexOf(searchParam) > -1)
+  return (node.type == "vehicle" && node.name.indexOf(searchParam) > -1) || 
+      (node.type == "people" && node.name.indexOf(searchParam) > -1) ||
+      (node.type == "thing" && node.name.indexOf(searchParam) > -1) ||
+      (node.professional != undefined && node.professional != null && node.professional.indexOf(searchParam) > -1) ||
+      (node.simcardNumber != undefined && node.simcardNumber != null && node.simcardNumber.indexOf(searchParam) > -1) || 
+      (node.assignName != undefined && node.assignName != null && node.assignName.indexOf(searchParam) > -1) || 
+      (node.deviceNumber != undefined && node.deviceNumber != null && node.deviceNumber.indexOf(searchParam) > -1)
 }
 
 function monitorFilter(node){ // 搜索type等于人或者车
-	return node.type == "vehicle" || node.type == "people" 
+  return node.type == "vehicle" || node.type == "people" || node.type == "thing" 
 }
 
 function monitorParamFuzzyFilter(node){ // 模糊匹配name,type等于人或者车
-	return (node.type == "vehicle" && node.name.indexOf(searchParam) > -1) || (node.type == "people" && node.name.indexOf(searchParam) > -1)
+  return (node.type == "vehicle" && node.name.indexOf(searchParam) > -1) || (node.type == "people" && node.name.indexOf(searchParam) > -1) || (node.type == "thing" && node.name.indexOf(searchParam) > -1)
 }
 
 /**
@@ -374,7 +375,7 @@ function monitorParamFuzzyFilter(node){ // 模糊匹配name,type等于人或者�
  * @returns
  */
 function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
-	return node.type == "assignment" && node.children != undefined && node.children.length >0 && node.children[0].open==false;
+  return node.type == "assignment" && node.children != undefined && node.children.length >0 && node.children[0].open==false;
 }
 
 /**
@@ -383,7 +384,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
  * @returns
  */
 function moniterFilter(node){ // 搜索type等于人或者车
-    return (node.type == "vehicle" || node.type == "people")&&node.isHidden===false;
+    return (node.type == "vehicle" || node.type == "people" || node.type == "thing")&&node.isHidden===false;
 }
 
 /**
@@ -399,12 +400,12 @@ function high_search_ztree(treeId, searchConditionId,hasBegun) {
 //    var allNodes = [];
     var treeObj = $.fn.zTree.getZTreeObj(treeId);
     searchParam = searchCondition;
-	highlightNodes = treeObj.getNodesByFilter(realTimeMonitoringFilter); 
-	// allNodes = treeObj.getNodesByFilter(monitorFilter); // 所有type型nodes
-	var allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
+  highlightNodes = treeObj.getNodesByFilter(realTimeMonitoringFilter); 
+  // allNodes = treeObj.getNodesByFilter(monitorFilter); // 所有type型nodes
+  var allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
     if (searchCondition != "") {
-    	//<2>.得到模糊匹配搜索条件的节点数组集合
-    	// 需要显示是节点（包含父节点）
+      //<2>.得到模糊匹配搜索条件的节点数组集合
+      // 需要显示是节点（包含父节点）
         var showNodes = [];
         // 只显示直接上级
         if (highlightNodes != null) {
@@ -422,9 +423,9 @@ function high_search_ztree(treeId, searchConditionId,hasBegun) {
             // treeObj.expandAll(true);
         }
     }else{
-    //	var allNodes1 = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
-//    	treeObj.hideNodes(allNodes)
-    	treeObj.showNodes(allNodes)
+    //  var allNodes1 = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
+//      treeObj.hideNodes(allNodes)
+      treeObj.showNodes(allNodes)
         treeObj.expandAll(true);
     }
     //<3>.高亮显示并展示【指定节点s】
@@ -432,8 +433,8 @@ function high_search_ztree(treeId, searchConditionId,hasBegun) {
 }
 
 function searchTypeFilter(node){ // 模糊搜索从业人员，终端编号
-	var value = node[''+searchTypeValue+''];
-	return ((node.type == "vehicle" || node.type == "people") && value != undefined && value != null && value.indexOf(searchParam) > -1)
+  var value = node[''+searchTypeValue+''];
+  return ((node.type == "vehicle" || node.type == "people" || node.type == "thing") && value != undefined && value != null && value.indexOf(searchParam) > -1)
 }
 
 /**
@@ -450,27 +451,27 @@ function search_ztree_by_search_type(treeId, searchConditionId,searchType,hasBeg
     var treeObj = $.fn.zTree.getZTreeObj(treeId);
     searchParam = searchCondition;
     searchTypeValue = searchType;
-	//highlightNodes = treeObj.getNodesByFilter(searchTypeFilter); 
-	// highlightNodes = treeObj.getNodesByParamFuzzy(searchType, searchCondition, null);
-	var allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
+  //highlightNodes = treeObj.getNodesByFilter(searchTypeFilter); 
+  // highlightNodes = treeObj.getNodesByParamFuzzy(searchType, searchCondition, null);
+  var allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
     if (searchCondition != "") {
-    	//<2>.得到模糊匹配搜索条件的节点数组集合
-    	// 需要显示是节点（包含父节点） 
+      //<2>.得到模糊匹配搜索条件的节点数组集合
+      // 需要显示是节点（包含父节点） 
         var showNodes = [];
         // 只显示直接上级
         if (allNodes != null) {
             for (var i = 0; i < allNodes.length; i++) {
-            	var node = allNodes[i];
-            	var value = node[''+searchType+''];
-            	if ((node.type == "vehicle" || node.type == "people") && value != undefined && value != null && value.indexOf(searchParam) > -1) {
-            		//highlightNodes.push(node);
-            		//组装显示节点的父节点的父节点....直到根节点，并展示
+              var node = allNodes[i];
+              var value = node[''+searchType+''];
+              if ((node.type == "vehicle" || node.type == "people"|| node.type == "thing") && value != undefined && value != null && value.indexOf(searchParam) > -1) {
+                //highlightNodes.push(node);
+                //组装显示节点的父节点的父节点....直到根节点，并展示
                     if(hasBegun.indexOf(node.getParentNode().id)==-1){
                         hasBegun.push(node.getParentNode().id)
                         treeObj.expandNode(node.getParentNode(), true, true, false, true);
                     }
                     getParentShowNodes_ztree(treeId, node,showNodes);
-            	}
+              }
             }
             treeObj.hideNodes(allNodes)
             treeObj.showNodes(showNodes);
@@ -490,38 +491,38 @@ function search_ztree_by_search_type(treeId, searchConditionId,searchType,hasBeg
             treeObj.showNodes(showNodes);
         }*/
     }else{
-    	treeObj.showNodes(allNodes)
+      treeObj.showNodes(allNodes)
         treeObj.expandAll(true);
     }
 }
 
 function showSearchNodes(treeId, checkedList) {
     var treeObj = $.fn.zTree.getZTreeObj(treeId);
-	var allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
-	//<2>.得到模糊匹配搜索条件的节点数组集合
-	// 需要显示是节点（包含父节点） 
+  var allNodes = treeObj.transformToArray(treeObj.getNodes()); // 所有节点
+  //<2>.得到模糊匹配搜索条件的节点数组集合
+  // 需要显示是节点（包含父节点） 
     var showNodes = [];
     var checkedNodes = [];
     // 只显示直接上级
     if (allNodes !== null) {
         for (var i = 0; i < allNodes.length; i++) {
-        	var node = allNodes[i];
-//        	var value = node[''+searchType+''];
-        	if ((node.type === "vehicle" || node.type === "people") ) {
-        		// 勾选搜索前勾选的车辆
-        		if (checkedList !== null &&　checkedList　!== undefined && checkedList.length > 0
+          var node = allNodes[i];
+//          var value = node[''+searchType+''];
+          if ((node.type === "vehicle" || node.type === "people" || node.type === "thing") ) {
+            // 勾选搜索前勾选的车辆
+            if (checkedList !== null &&　checkedList　!== undefined && checkedList.length > 0
                     && checkedList.indexOf(node.id) !== -1){
-        			treeObj.checkNode(node, true, true);
-        		}
-        		//组装显示节点的父节点的父节点....直到根节点，并展示
-        		if (checkedNodes.indexOf(node.pId) >= 0) {
-        		    showNodes.push(node);
-        		    continue;
+              treeObj.checkNode(node, true, true);
+            }
+            //组装显示节点的父节点的父节点....直到根节点，并展示
+            if (checkedNodes.indexOf(node.pId) >= 0) {
+                showNodes.push(node);
+                continue;
                 }
                 checkedNodes.push(node.pId);
                 treeObj.expandNode(node.getParentNode(), true, true, false, true);
                 getParentShowNodes_ztree(treeId, node, showNodes);
-        	}
+          }
         }
         treeObj.hideNodes(allNodes);
         treeObj.showNodes(showNodes);
@@ -543,10 +544,10 @@ function filterQueryResult(data, checkedList) {
         nodes[data[i].id] = data[i];
     }
     for (i = 0; i < checkedList.length; i++) {
-    	var curNode = nodes[checkedList[i]];
-    	if (curNode != undefined && curNode != null){
-    		nodes[checkedList[i]].checked = true;
-    	}
+      var curNode = nodes[checkedList[i]];
+      if (curNode != undefined && curNode != null){
+        nodes[checkedList[i]].checked = true;
+      }
     }
 
     var result = [];
@@ -569,7 +570,7 @@ function getAllAvailableNodes(node, result, nodes) {
 }
 
 function isMonitorType(type) {
-    return type === "vehicle" || type === "people";
+    return type === "vehicle" || type === "people" || type === "thing";
 }
 
 function zTreeScroll(zTree, scroll) {
@@ -659,7 +660,7 @@ function getParentNodes_ztree(treeId, node) {
  */
 function getParentShowNodes_ztree(treeId, node, showNodes) {
     if (node !== null) {
-    	showNodes.push(node);
+      showNodes.push(node);
         var parentNode = node.getParentNode();
         return getParentShowNodes_ztree(treeId, parentNode,showNodes);
     } else {
@@ -690,63 +691,6 @@ function setFontCss_ztree(treeId, treeNode) {
 
     }
 }
-/**
- * Created by Tdz on 2016/10/12.
- */
-var stompClient;
-var webSocket = {
-    socket: null,
-    subscribeArr: [],
-    url: "",
-    conFlag: false,
-    init: function (url, headers, subUrl, callBack, sendUrl, requestStr) {
-        webSocket.url = url;
-        webSocket.socket = new SockJS(webSocket.url);
-        stompClient = Stomp.over(webSocket.socket);
-        stompClient.connect(headers, function () {
-            webSocket.conFlag = true;
-            webSocket.subscribeAndSend(subUrl, callBack, sendUrl, headers, requestStr);
-        });
-    },
-    send: function (url, headers, requestStr) {
-        stompClient.send(url, headers, JSON.stringify(requestStr));
-    },
-    subscribeAndSend: function (subUrl, callBack, sendUrl, headers, requestStr, state) {
-        if (webSocket.subscribeArr.indexOf(subUrl) === -1 || state) {
-        	if (webSocket.subscribeArr.indexOf(subUrl) === -1) {
-        		webSocket.subscribeArr.push(subUrl);
-        	}
-            stompClient.subscribe(subUrl, callBack);
-        }
-        webSocket.send(sendUrl, headers, requestStr);
-    },
-    subscribe: function (headers, subUrl, callBack, sendUrl, requestStr, state) {
-        if (stompClient.connected) {
-            webSocket.subscribeAndSend(subUrl, callBack, sendUrl, headers, requestStr, state);
-            return;
-        }
-        stompClient.connect(headers, function () {
-            webSocket.subscribeAndSend(subUrl, callBack, sendUrl, headers, requestStr);
-        });
-    },
-    unsubscribealarm: function (headers, url, requestStr) {
-        stompClient.send(url, headers, JSON.stringify(requestStr));
-    },
-    abort: function(headers, url) {
-    	stompClient.disconnect(url, headers);
-    },
-    close: function () {
-        if (webSocket.socket == null) {
-
-        } else {
-            webSocket.socket.close();
-        }
-    }
-};
-
-
-
-
 var m_vehId;
 var m_vehLic;
 var m_vehChannel;
@@ -754,501 +698,478 @@ var m_vehColor;
 var m_deviceNo;
 var m_streamType;       // 0-主码流，1-子码流
 var m_timeBarString;    // 时间轴的搜索结果
-var m_videoFlag=0;  //标识视频窗口是否打开
-var m_imgFlag=0;    //标识是否多通道同时抓图
-var m_trans=0;
+var m_videoFlag = 0;  //标识视频窗口是否打开
+var m_imgFlag = 0;    //标识是否多通道同时抓图
+var m_trans = 0;
 var m_videoHost;
 var m_videoPort;
-var m_isVideo=0;
+var m_isVideo = 0;
 var m_func;
 var m_usec;
-var m_vcid=[];
+var m_vcid = [];
 var m_voiceid;
-var m_stime=[];
+var m_stime = [];
 var m_riskNumber;
 var m_vuuid;
 var taskList = {};
 var channels = [1, 5, 6, 7, 8]; // 1 5 6 7 - 视频通道, 8 - 音频通道
-$(function(){
-    m_videoHost=$("#videoHost").val();
-    m_videoPort=$("#videoPort").val();
+$(function () {
+  m_videoHost = $("#videoHost").val();
+  m_videoPort = $("#videoPort").val();
 });
 
 realTimeVideo = {
 
-    generalTransNo: function () {
-        m_trans = m_trans + 1;
-        return m_trans;
-    },
-    getVideoOcx: function () {
-        return document.getElementById("videoplayer");
-    },
-    //设置视频铺满窗口
-    windowSet: function () {
-        var cmdstr = '{"PARAM":{"WINNAME":"PREVIEW","VSMODE":2}}';
-        realTimeVideo.getVideoOcx().WindowSet(cmdstr);
-    },
-    //查询是否IE浏览器
-    ieExplorer: function () {
-        var explorer = window.navigator.userAgent;
-        var result = false;
-        if (explorer.indexOf("MSIE") !== -1) {
-            result = true;
-        }
-        return result;
-    },
-    downloadVideoOcx: function () {
-        if (!realTimeVideo.ieExplorer()) {
-            layer.alert("请使用IE浏览器才能观看视频哦");
-        }
-        /*if(realTimeVideo.getVideoOcx().object == null) {
-            layer.alert("视频插件加载失败，请先下载安装插件<br>请不要使用迅雷下载", {btn : ['确定', '取消']},
-            function(){location.href="/clbs/file/videoOcx/videocx.exe";layer.closeAll();},
-            function(){layer.msg('取消');} );
-        }	*/
-    },
-    showtask: function (strmsg) {
-        var obj = document.getElementById("taskmsg");
-        obj.innerHTML = "视频控件功能演示，当前业务：" + strmsg
-    },
-    showmsg: function (strmsg) {
-        var obj = document.getElementById("locmsg");
-        obj.innerHTML = strmsg + '<br>' + obj.innerHTML;
-    },
-    //设置车辆信息
-    setVehicleInfo: function (vehicleParam) {
-        var param = vehicleParam;
-        m_vehLic = param.brand;
-        m_streamType = 1;
-        m_vehColor = parseInt(param.plateColor);
-        m_deviceNo = param.deviceNumber;
-        m_vehId = 0;
-        m_isVideo = param.isVideo;
-        m_func = param.func;
-        m_usec = param.usec;
-        m_riskNumber = param.riskNumber;
-        m_vuuid = param.vuuid;
-        //视频窗口打开才请求视频
-        // if (m_func === 1 && realTimeVideo.ieExplorer()) {
-        //     realTimeVideo.windowSet();
-        //     realTimeVideo.beventLiveView();
-        // } else if (m_func === 3) {
-        //     realTimeVideo.beventLiveIpTalk();
-		// }
-		
-		// if(m_videoFlag==1 && realTimeVideo.ieExplorer()){				
-		// 	realTimeVideo.windowSet();
-		// 	// realTimeVideo.beventLiveView();
-
-		// 	// wjk
-		// 	realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun);						
-		// }
-    },
-    //getchn：0 - 不用取通道号，1 - 取通道号
-    // getstreamtype：0 - 不用取码流类型，1 - 取码流类型
-    getVehicleInfo: function (getchn, getstreamtype) {
-        var cmd = {
-            VEHICLELICENSE: m_vehLic,
-            PLATECOLOR: m_vehColor,
-            DEVICENO: m_deviceNo,
-            VEHICLEID: 0
-        };
-        if (getstreamtype === 1) {
-            cmd.STREAMTYPE = m_streamType;
-        }
-        return cmd;
-    },
-    openVideo: function (vehicleInfo) {
-        realTimeVideo.setVehicleInfo(vehicleInfo);
-        realTimeVideo.windowSet();
-        realTimeVideo.beventLiveView();
-    },
-    closeVideo: function (channel) {
-        if (channel !== 0) {
-            realTimeVideo.beventMediaStop(channel);
-            return;
-        }
-        for (var i = 0; i < 4; i++) {
-            realTimeVideo.beventMediaStop(channels[i]);
-        }
-    },
-    openAudio: function (vehicleInfo) {
-        realTimeVideo.setVehicleInfo(vehicleInfo);
-        realTimeVideo.beventLiveIpTalk();
-    },
-    closeAudio: function () {
-        realTimeVideo.beventMediaStop(8);
-    },
-    getRestChannels: function (channel) {
-        var restChannels = [];
-        if (!channel) {
-            return restChannels;
-        }
-
-        for (var i = 0; i < 4; i++) {
-            if (channels[i] === channel) {
-                continue;
-            }
-            restChannels.push(channels[i]);
-        }
-        return restChannels;
-    },
-    // streamType: 0 - 不用取码流类型，1 - 取码流类型
-    // dataType： 0 - 音视频，1 - 视频，2 - 双向对讲，3 - 监听
-    // channelNumber: 通道号
-    getVideoCmdStr: function (streamType, dataType, channelNumber) {
-        var cmd = realTimeVideo.getCmd(streamType, dataType, channelNumber);
-        cmd.DEVICETYPE = 0; // 锐明视频设备
-        return JSON.stringify(cmd);
-    },
-    getAudioCmdStr: function (streamType, dataType, channelNumber) {
-        var cmd = realTimeVideo.getCmd(streamType, dataType, channelNumber);
-        cmd.DEVICETYPE = 53248; // 锐明音频设备
-        cmd.STOREMEDIAFLAG = 0;
-        // cmd.ALARMUUID = combat.alarmUUID;
-        cmd.ALARMUUID = new Date().getTime()
-        return JSON.stringify(cmd);
-    },
-    getCmd: function(streamType, dataType, channelNumber) {
-        var cmd = {
-            VEHICLELICENSE: m_vehLic,
-            PLATECOLOR: m_vehColor,
-            DEVICENO: m_deviceNo,
-            VEHICLEID: 0,
-            DATATYPE: dataType,
-            RECORDFLAG: 0,
-            CHANNEL: channelNumber
-        };
-        if (streamType === 1) {
-            cmd.STREAMTYPE = m_streamType;
-        }
-        return cmd;
-    },
-    //直通业务, taskType：0 - 直通预览(音视频)，1 - 直通预览(仅视频)，2 - 对讲，3 - 监听
-    beventLiveTask: function (taskType) { //wjk,回调定时器函数设置时间限制 ,callback 先注释掉
-        //判断打开视频窗口是否有车辆信息
-        if (typeof(m_vehLic) === "undefined") {
-            return;
-        }
-        if (m_isVideo === 0) {
-            layer.alert("当前设备未有视频哦");
-            return;
-        }
-        var cmdList = [];
-        if (m_usec === 0) {
-            for (var i = 0; i < 4; i++) {
-                var channel = channels[i];
-                if (taskList[channel]) {
-                    // 如果该通道已经打开，则跳过，不重复打开
-                    continue;
-                }
-                var cmdStr = realTimeVideo.getVideoCmdStr(1, taskType, channels[i]);
-                var taskId = realTimeVideo.generalTransNo();
-
-                cmdList.push({taskId: taskId, cmdStr: cmdStr});
-                m_vcid.push(taskId);
-				taskList[channel] = taskId; // 记录通道号对应的任务id
-            }
-        } else if (m_usec === 8) {
-            cmdStr = realTimeVideo.getAudioCmdStr(1, taskType, m_usec);
-            taskId = realTimeVideo.generalTransNo();
-
-            cmdList.push({taskId: taskId, cmdStr: cmdStr});
-            m_voiceid = taskId;
-            taskList[m_usec] = taskId; // 记录通道号对应的任务id
-        } else {
-            cmdStr = realTimeVideo.getVideoCmdStr(1, taskType, m_usec);
-            taskId = realTimeVideo.generalTransNo();
-
-            cmdList.push({taskId: taskId, cmdStr: cmdStr});
-            m_vcid.push(taskId);
-            taskList[m_usec] = taskId; // 记录通道号对应的任务id
-        }
-        var n = cmdList.length;
-        for (i = 0; i < n; i++) {
-            var retv = realTimeVideo.getVideoOcx().StartLiveTask(cmdList[i].taskId, m_videoHost, m_videoPort, cmdList[i].cmdStr);
-            if (retv !== 0) {
-                if (retv.toString(16) === "80f00003") {
-                    //layer.alert("请不要重复请求音频服务");
-                    realTimeVideo.showtask("");
-                } else {
-                    layer.alert("开始实时音视频业务失败，错误号码:0x" + retv.toString(16));
-                }
-            }
-		}
-        // wjk
-        // 先注释掉
-		// if (callback) {
-		// 	callback()
-		// }
-    },
-    //根据任务号抓取图片
-    snapAPicture: function (trans_no) {
-        if (trans_no === 0) {
-            layer.alert("还没开始视频，不能抓图哦");
-            return;
-        }
-        if (m_imgFlag === 1) {//抓取所有通道图片
-            var channelStr = "",
-                channelError = "",
-                message = "",
-                transNo,
-                retv;
-            for (var i = 0; i < 4; i++) {
-                transNo = i + 1;
-                retv = realTimeVideo.cmdPictureParam(transNo);
-                if (retv === "0") {
-                    channelStr += "," + transNo;
-                } else {
-                    channelError += "," + transNo;
-                }
-                //组织抓取图片提示语言
-                message = "";
-                if (channelStr !== "") {
-                    message += "已成功抓取【" + channelStr.substring(1) + "】通道图片\n";
-                }
-                if (channelError !== "") {
-                    message += "抓取失败【" + channelError.substring(1) + "】通道图片，请确定视频请求成功了吗";
-                }
-                layer.alert(message);
-            }
-        } else { //抓取当前通道图片
-            retv = realTimeVideo.cmdPictureParam(trans_no);
-            if (retv === "0") {
-                layer.alert("抓图成功,已存在" + $("#photoPath").val() + "目录");
-            } else {
-                layer.alert("请确定视频请求成功了吗");
-            }
-        }
-        //realTimeVideo.showmsg('ScreenControl() return 0x' + retv.toString(16));
-    },
-    //执行抓图命令
-    cmdPictureParam: function (trans_no) {
-        var myDate = new Date();
-        var strTime = "" + parseInt(myDate.getMonth() + 1) + myDate.getDate() + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds();
-        var path = $("#photoPath").val();
-        var fileName = '"' + path + '/' + m_vehLic + '-' + strTime + '[' + trans_no + '].bmp"';
-        var cmdstr = '{"DISPLAY":"' + m_vehLic + '","CAPWAY":2,"TIME":1,"SAVETO":' + fileName + '}';
-        return realTimeVideo.getVideoOcx().ScreenControl(trans_no, 0x10000E, cmdstr);
-    },
-
-    //录像
-    saveVidio: function (type) {
-
-        var myDate = new Date();
-        if (type === 1) {
-            m_stime = [];
-        }
-        var strTime = "" + parseInt(myDate.getMonth() + 1) + myDate.getDate() + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds();
-        for (var i = 0; i < m_vcid.length; i++) {
-            var fileName = '"C:/clbsVideo/' + m_riskNumber + '/' + m_vuuid + '/' + strTime + '[' + m_vcid[i] + '].avi"';
-            if (type === 1) {
-                m_stime.push(fileName.substring(65, fileName.length - 1))
-            }
-            var cmdstr = '{"VEHICLELICENSE":"' + m_vehLic + '","PLATECOLOR":2,"DEVICENO":"' + m_deviceNo + '","VEHICLEID":0,"CHANNEL":' + m_vcid[i] + ',"SAVETO":' + fileName + ',"STATE":' + type + '}';
-            realTimeVideo.getVideoOcx().ScreenControl(m_vcid[i], 0x100013, cmdstr);
-        }
-    },
-
-    //录音
-    saveVoice: function (type) {
-        var myDate = new Date();
-        var strTime = "" + parseInt(myDate.getMonth() + 1) + myDate.getDate() + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds();
-        var fileName = '"' + path + '/' + m_vehLic + '-' + strTime + '[' + trans_no + '].avi"';
-        var cmdstr = '{"VEHICLELICENSE":"' + m_vehLic + '","PLATECOLOR":2,"DEVICENO":"' + m_deviceNo + '","VEHICLEID":0,"CHANNEL":' + trans_no + ',"SAVETO":' + fileName + ',"STATE":"' + type + '"}';
-        return realTimeVideo.getVideoOcx().ScreenControl($("#channel").val(), 0x100015, cmdstr);
-    },
-
-    //imgFlag标识是否多通道抓图:1多通道(用于页面下抓图按钮)，0单通道(用于窗口上的抓图按钮)
-    beventCapture: function () {
-        realTimeVideo.snapAPicture(m_trans);
-
-    },
-    //直通预览
-    beventLiveView: function (callback) { //wjk ,加一个回调
-		m_vcid = [];
-		m_usec = 0;
-        realTimeVideo.showtask("直通预览");
-        realTimeVideo.beventLiveTask(0,callback);
-    },
-    // 监听，需要用到通道
-    beventLiveMonitor: function () {
-        realTimeVideo.showtask("监听");
-        realTimeVideo.beventLiveTask(3);
-    },
-    //对讲，和通道无关
-    beventLiveIpTalk: function (callback) { //wjk 加回调定时器
-		m_usec = 8;
-        realTimeVideo.showtask("对讲");
-        realTimeVideo.beventLiveTask(2,callback);
-    },
-    //由于使用了固定的m_trans，所以在调用此接口之前，不能对m_trans的值进行改变
-    //channel: 通道号 1 5 6 7 - 视频通道, 8 - 音频通道
-    beventMediaStop: function (channel) {
-        var taskId = taskList[channel];
-        if (!taskId) {
-            return;
-        }
-        var retv = realTimeVideo.getVideoOcx().StopMediaTask(taskId);
-        realTimeVideo.showtask("");
-        realTimeVideo.showmsg('StopMediaTask() return 0x' + retv.toString(16));
-
-        if (retv === 0) {
-            delete taskList[channel];
-        }
-    },
-    //停止所有媒体业务，这里采用直接关闭。如果要异步关闭，则传入0并处理关闭事件，在关闭事件中进行视频关闭
-    beventAllMediaStop: function () {
-        var retv = realTimeVideo.getVideoOcx().CloseAllMedia(1);
-        realTimeVideo.showtask("");
-        realTimeVideo.showmsg('CloseAllMedia() return 0x' + retv.toString(16));
-
-        m_trans = 0;
-        for (var i = 0; i < 5; i++) {
-            delete taskList[channels[i]];
-        }
-    },
-    video_event: function (msg_type, trans_no, data_type, server_ip, server_port, cmd_str, cmd_len) {
-
-        switch (msg_type) {
-            // 响应视频窗口右键菜单中的打开声音命令
-            case 0x100001:
-                realTimeVideo.getVideoOcx().OpenSound();
-                break;
-
-            // 响应视频窗口右键菜单中的关闭声音命令
-            case 0x100002:
-                realTimeVideo.getVideoOcx().CloseSound();
-                break;
-
-            // 响应视频窗口右键菜单中的关闭视频或者视频窗口右上角的“x”号，用于关闭一个视频
-            case 0x100007:
-                realTimeVideo.getVideoOcx().StopMediaTask(trans_no);
-                break;
-
-            // 抓图，需要调用抓图接口开始抓图
-            case 0x10000E:
-                m_imgFlag = 0; //标识当前通道抓图
-                //$("#videoPhotograph").modal('show');
-                realTimeVideo.snapAPicture(trans_no);
-                break;
-            case 0x100015:
-                layer.alert("系统暂不支持此功能");
-                break;
-            default:
-                break;
-
-        }
+  generalTransNo: function () {
+    m_trans = m_trans + 1;
+    return m_trans;
+  },
+  getVideoOcx: function () {
+    return document.getElementById("videoplayer");
+  },
+  //设置视频铺满窗口
+  windowSet: function () {
+    var cmdstr = '{"PARAM":{"WINNAME":"PREVIEW","VSMODE":2}}';
+    realTimeVideo.getVideoOcx().WindowSet(cmdstr);
+  },
+  //查询是否IE浏览器
+  ieExplorer: function () {
+    var explorer = window.navigator.userAgent;
+    var result = false;
+    if (explorer.indexOf("MSIE") !== -1) {
+      result = true;
     }
+    return result;
+  },
+  downloadVideoOcx: function () {
+    if (!realTimeVideo.ieExplorer()) {
+      layer.alert("请使用IE浏览器才能观看视频哦");
+    }
+    /*if(realTimeVideo.getVideoOcx().object == null) {
+        layer.alert("视频插件加载失败，请先下载安装插件<br>请不要使用迅雷下载", {btn : ['确定', '取消']},
+        function(){location.href="/clbs/file/videoOcx/videocx.exe";layer.closeAll();},
+        function(){layer.msg('取消');} );
+    } */
+  },
+  showtask: function (strmsg) {
+    var obj = document.getElementById("taskmsg");
+    obj.innerHTML = "视频控件功能演示，当前业务：" + strmsg
+  },
+  showmsg: function (strmsg) {
+    var obj = document.getElementById("locmsg");
+    obj.innerHTML = strmsg + '<br>' + obj.innerHTML;
+  },
+  //设置车辆信息
+  setVehicleInfo: function (vehicleParam) {
+    var param = vehicleParam;
+    m_vehLic = param.brand;
+    m_streamType = 1;
+    m_vehColor = parseInt(param.plateColor);
+    m_deviceNo = param.deviceNumber;
+    m_vehId = 0;
+    m_isVideo = param.isVideo;
+    m_func = param.func;
+    m_usec = param.usec;
+    m_riskNumber = param.riskNumber;
+    m_vuuid = param.vuuid;
+    //视频窗口打开才请求视频
+    // if (m_func === 1 && realTimeVideo.ieExplorer()) {
+    //     realTimeVideo.windowSet();
+    //     realTimeVideo.beventLiveView();
+    // } else if (m_func === 3) {
+    //     realTimeVideo.beventLiveIpTalk();
+    // }
+
+    // if(m_videoFlag==1 && realTimeVideo.ieExplorer()){
+    //  realTimeVideo.windowSet();
+    //  // realTimeVideo.beventLiveView();
+
+    //  // wjk
+    //  realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun);
+    // }
+  },
+  //getchn：0 - 不用取通道号，1 - 取通道号
+  // getstreamtype：0 - 不用取码流类型，1 - 取码流类型
+  getVehicleInfo: function (getchn, getstreamtype) {
+    var cmd = {
+      VEHICLELICENSE: m_vehLic,
+      PLATECOLOR: m_vehColor,
+      DEVICENO: m_deviceNo,
+      VEHICLEID: 0
+    };
+    if (getstreamtype === 1) {
+      cmd.STREAMTYPE = m_streamType;
+    }
+    return cmd;
+  },
+  openVideo: function (vehicleInfo) {
+    realTimeVideo.setVehicleInfo(vehicleInfo);
+    realTimeVideo.windowSet();
+    realTimeVideo.beventLiveView();
+  },
+  closeVideo: function (channel) {
+    if (channel !== 0) {
+      realTimeVideo.beventMediaStop(channel);
+      return;
+    }
+    for (var i = 0; i < 4; i++) {
+      realTimeVideo.beventMediaStop(channels[i]);
+    }
+  },
+  openAudio: function (vehicleInfo) {
+    realTimeVideo.setVehicleInfo(vehicleInfo);
+    realTimeVideo.beventLiveIpTalk();
+  },
+  closeAudio: function () {
+    realTimeVideo.beventMediaStop(8);
+  },
+  getRestChannels: function (channel) {
+    var restChannels = [];
+    if (!channel) {
+      return restChannels;
+    }
+
+    for (var i = 0; i < 4; i++) {
+      if (channels[i] === channel) {
+        continue;
+      }
+      restChannels.push(channels[i]);
+    }
+    return restChannels;
+  },
+  // streamType: 0 - 不用取码流类型，1 - 取码流类型
+  // dataType： 0 - 音视频，1 - 视频，2 - 双向对讲，3 - 监听
+  // channelNumber: 通道号
+  getVideoCmdStr: function (streamType, dataType, channelNumber) {
+    var cmd = realTimeVideo.getCmd(streamType, dataType, channelNumber);
+    cmd.DEVICETYPE = 0; // 锐明视频设备
+    return JSON.stringify(cmd);
+  },
+  getAudioCmdStr: function (streamType, dataType, channelNumber) {
+    var cmd = realTimeVideo.getCmd(streamType, dataType, channelNumber);
+    cmd.DEVICETYPE = 53248; // 锐明音频设备
+    cmd.STOREMEDIAFLAG = 0;
+    // cmd.ALARMUUID = combat.alarmUUID;
+    cmd.ALARMUUID = new Date().getTime()
+    return JSON.stringify(cmd);
+  },
+  getCmd: function (streamType, dataType, channelNumber) {
+    var cmd = {
+      VEHICLELICENSE: m_vehLic,
+      PLATECOLOR: m_vehColor,
+      DEVICENO: m_deviceNo,
+      VEHICLEID: 0,
+      DATATYPE: dataType,
+      RECORDFLAG: 0,
+      CHANNEL: channelNumber
+    };
+    if (streamType === 1) {
+      cmd.STREAMTYPE = m_streamType;
+    }
+    return cmd;
+  },
+  //直通业务, taskType：0 - 直通预览(音视频)，1 - 直通预览(仅视频)，2 - 对讲，3 - 监听
+  beventLiveTask: function (taskType) { //wjk,回调定时器函数设置时间限制 ,callback 先注释掉
+    //判断打开视频窗口是否有车辆信息
+    if (typeof(m_vehLic) === "undefined") {
+      return;
+    }
+    if (m_isVideo === 0) {
+      layer.alert("当前设备未有视频哦");
+      return;
+    }
+    var cmdList = [];
+    if (m_usec === 0) {
+      for (var i = 0; i < 4; i++) {
+        var channel = channels[i];
+        if (taskList[channel]) {
+          // 如果该通道已经打开，则跳过，不重复打开
+          continue;
+        }
+        var cmdStr = realTimeVideo.getVideoCmdStr(1, taskType, channels[i]);
+        var taskId = realTimeVideo.generalTransNo();
+
+        cmdList.push({taskId: taskId, cmdStr: cmdStr});
+        m_vcid.push(taskId);
+        taskList[channel] = taskId; // 记录通道号对应的任务id
+      }
+    } else if (m_usec === 8) {
+      cmdStr = realTimeVideo.getAudioCmdStr(1, taskType, m_usec);
+      taskId = realTimeVideo.generalTransNo();
+
+      cmdList.push({taskId: taskId, cmdStr: cmdStr});
+      m_voiceid = taskId;
+      taskList[m_usec] = taskId; // 记录通道号对应的任务id
+    } else {
+      cmdStr = realTimeVideo.getVideoCmdStr(1, taskType, m_usec);
+      taskId = realTimeVideo.generalTransNo();
+
+      cmdList.push({taskId: taskId, cmdStr: cmdStr});
+      m_vcid.push(taskId);
+      taskList[m_usec] = taskId; // 记录通道号对应的任务id
+    }
+    var n = cmdList.length;
+    for (i = 0; i < n; i++) {
+      var retv = realTimeVideo.getVideoOcx().StartLiveTask(cmdList[i].taskId, m_videoHost, m_videoPort, cmdList[i].cmdStr);
+      if (retv !== 0) {
+        if (retv.toString(16) === "80f00003") {
+          //layer.alert("请不要重复请求音频服务");
+          realTimeVideo.showtask("");
+        } else {
+          layer.alert("开始实时音视频业务失败，错误号码:0x" + retv.toString(16));
+        }
+      }
+    }
+    // wjk
+    // 先注释掉
+    // if (callback) {
+    //  callback()
+    // }
+  },
+  //根据任务号抓取图片
+  snapAPicture: function (trans_no) {
+    if (trans_no === 0) {
+      layer.alert("还没开始视频，不能抓图哦");
+      return;
+    }
+    if (m_imgFlag === 1) {//抓取所有通道图片
+      var channelStr = "",
+          channelError = "",
+          message = "",
+          transNo,
+          retv;
+      for (var i = 0; i < 4; i++) {
+        transNo = i + 1;
+        retv = realTimeVideo.cmdPictureParam(transNo);
+        if (retv === "0") {
+          channelStr += "," + transNo;
+        } else {
+          channelError += "," + transNo;
+        }
+        //组织抓取图片提示语言
+        message = "";
+        if (channelStr !== "") {
+          message += "已成功抓取【" + channelStr.substring(1) + "】通道图片\n";
+        }
+        if (channelError !== "") {
+          message += "抓取失败【" + channelError.substring(1) + "】通道图片，请确定视频请求成功了吗";
+        }
+        layer.alert(message);
+      }
+    } else { //抓取当前通道图片
+      retv = realTimeVideo.cmdPictureParam(trans_no);
+      if (retv === "0") {
+        layer.alert("抓图成功,已存在" + $("#photoPath").val() + "目录");
+      } else {
+        layer.alert("请确定视频请求成功了吗");
+      }
+    }
+    //realTimeVideo.showmsg('ScreenControl() return 0x' + retv.toString(16));
+  },
+  //执行抓图命令
+  cmdPictureParam: function (trans_no) {
+    var myDate = new Date();
+    var strTime = "" + parseInt(myDate.getMonth() + 1) + myDate.getDate() + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds();
+    var path = $("#photoPath").val();
+    var fileName = '"' + path + '/' + m_vehLic + '-' + strTime + '[' + trans_no + '].bmp"';
+    var cmdstr = '{"DISPLAY":"' + m_vehLic + '","CAPWAY":2,"TIME":1,"SAVETO":' + fileName + '}';
+    return realTimeVideo.getVideoOcx().ScreenControl(trans_no, 0x10000E, cmdstr);
+  },
+
+  //录像
+  saveVidio: function (type) {
+
+    var myDate = new Date();
+    if (type === 1) {
+      m_stime = [];
+    }
+    var strTime = "" + parseInt(myDate.getMonth() + 1) + myDate.getDate() + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds();
+    for (var i = 0; i < m_vcid.length; i++) {
+      var fileName = '"C:/clbsVideo/' + m_riskNumber + '/' + m_vuuid + '/' + strTime + '[' + m_vcid[i] + '].avi"';
+      if (type === 1) {
+        m_stime.push(fileName.substring(65, fileName.length - 1))
+      }
+      var cmdstr = '{"VEHICLELICENSE":"' + m_vehLic + '","PLATECOLOR":2,"DEVICENO":"' + m_deviceNo + '","VEHICLEID":0,"CHANNEL":' + m_vcid[i] + ',"SAVETO":' + fileName + ',"STATE":' + type + '}';
+      realTimeVideo.getVideoOcx().ScreenControl(m_vcid[i], 0x100013, cmdstr);
+    }
+  },
+
+  //录音
+  saveVoice: function (type) {
+    var myDate = new Date();
+    var strTime = "" + parseInt(myDate.getMonth() + 1) + myDate.getDate() + myDate.getHours() + myDate.getMinutes() + myDate.getSeconds();
+    var fileName = '"' + path + '/' + m_vehLic + '-' + strTime + '[' + trans_no + '].avi"';
+    var cmdstr = '{"VEHICLELICENSE":"' + m_vehLic + '","PLATECOLOR":2,"DEVICENO":"' + m_deviceNo + '","VEHICLEID":0,"CHANNEL":' + trans_no + ',"SAVETO":' + fileName + ',"STATE":"' + type + '"}';
+    return realTimeVideo.getVideoOcx().ScreenControl($("#channel").val(), 0x100015, cmdstr);
+  },
+
+  //imgFlag标识是否多通道抓图:1多通道(用于页面下抓图按钮)，0单通道(用于窗口上的抓图按钮)
+  beventCapture: function () {
+    realTimeVideo.snapAPicture(m_trans);
+
+  },
+  //直通预览
+  beventLiveView: function (callback) { //wjk ,加一个回调
+    m_vcid = [];
+    m_usec = 0;
+    realTimeVideo.showtask("直通预览");
+    realTimeVideo.beventLiveTask(0, callback);
+  },
+  // 监听，需要用到通道
+  beventLiveMonitor: function () {
+    realTimeVideo.showtask("监听");
+    realTimeVideo.beventLiveTask(3);
+  },
+  //对讲，和通道无关
+  beventLiveIpTalk: function (callback) { //wjk 加回调定时器
+    m_usec = 8;
+    realTimeVideo.showtask("对讲");
+    realTimeVideo.beventLiveTask(2, callback);
+  },
+  //由于使用了固定的m_trans，所以在调用此接口之前，不能对m_trans的值进行改变
+  //channel: 通道号 1 5 6 7 - 视频通道, 8 - 音频通道
+  beventMediaStop: function (channel) {
+    var taskId = taskList[channel];
+    if (!taskId) {
+      return;
+    }
+    var retv = realTimeVideo.getVideoOcx().StopMediaTask(taskId);
+    realTimeVideo.showtask("");
+    realTimeVideo.showmsg('StopMediaTask() return 0x' + retv.toString(16));
+
+    if (retv === 0) {
+      delete taskList[channel];
+    }
+  },
+  //停止所有媒体业务，这里采用直接关闭。如果要异步关闭，则传入0并处理关闭事件，在关闭事件中进行视频关闭
+  beventAllMediaStop: function () {
+    if (realTimeVideo.getVideoOcx().CloseAllMedia) {
+      var retv = realTimeVideo.getVideoOcx().CloseAllMedia(1);
+      realTimeVideo.showtask("");
+      realTimeVideo.showmsg('CloseAllMedia() return 0x' + retv.toString(16));
+    }
+
+    m_trans = 0;
+    for (var i = 0; i < 5; i++) {
+      delete taskList[channels[i]];
+    }
+  },
+  video_event: function (msg_type, trans_no, data_type, server_ip, server_port, cmd_str, cmd_len) {
+
+    switch (msg_type) {
+        // 响应视频窗口右键菜单中的打开声音命令
+      case 0x100001:
+        realTimeVideo.getVideoOcx().OpenSound();
+        break;
+
+        // 响应视频窗口右键菜单中的关闭声音命令
+      case 0x100002:
+        realTimeVideo.getVideoOcx().CloseSound();
+        break;
+
+        // 响应视频窗口右键菜单中的关闭视频或者视频窗口右上角的“x”号，用于关闭一个视频
+      case 0x100007:
+        realTimeVideo.getVideoOcx().StopMediaTask(trans_no);
+        break;
+
+        // 抓图，需要调用抓图接口开始抓图
+      case 0x10000E:
+        m_imgFlag = 0; //标识当前通道抓图
+        //$("#videoPhotograph").modal('show');
+        realTimeVideo.snapAPicture(trans_no);
+        break;
+      case 0x100015:
+        layer.alert("系统暂不支持此功能");
+        break;
+      default:
+        break;
+
+    }
+  }
 };
-$("#btnPhotoWindow").click(function(){
-    m_imgFlag=1; //标识启动多通道抓图
+$("#btnPhotoWindow").click(function () {
+  m_imgFlag = 1; //标识启动多通道抓图
 });
-$("#btnPhoto").click(function(){
-    realTimeVideo.beventCapture(); //调用抓图
+$("#btnPhoto").click(function () {
+  realTimeVideo.beventCapture(); //调用抓图
 });
 
-var travelLineList,AdministrativeRegionsList,fenceIdList,
-	administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
-    newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight, dbclickCheckedId, oldDbclickCheckedId,
-    onClickVId, oldOnClickVId, zTree, clickStateChar,logTime,operationLogLength, licensePlateInformation, groupIconSkin, markerListT = [], markerRealTimeT,
-    zoom = 18, requestStrS, cheakNodec = [], realTimeSet = [], alarmSet = [], neverOline = [], lineVid = [], zTreeIdJson = {}, cheakdiyuealls = [], lineAr = [],
-    lineAs = [], lineAa = [], lineAm = [], lineOs = [], changeMiss = [], diyueall = [], params = [], lineV = [], lineHb = [], cluster, fixedPoint = null, fixedPointPosition = null,
-    flog = true, mapVehicleTimeW, mapVehicleTimeQ, markerMap, mapflog, mapVehicleNum, infoWindow, paths = null, uptFlag = true, flagState = true,
-    videoHeight, addaskQuestionsIndex = 2, dbClickHeighlight = false, checkedVehicles = [], runVidArray = [], stopVidArray = [], msStartTime, msEndTime,
-    videoTimeIndex,voiceTimeIndex,charFlag = true, fanceID = "", newCount = 1, mouseTool, mouseToolEdit, clickRectangleFlag = false, isAddFlag = false, isAreaSearchFlag = false, isDistanceCount = false, fenceIDMap, PolyEditorMap,
-    sectionPointMarkerMap, fenceSectionPointMap, travelLineMap, fenceCheckLength = 0, amendCircle, amendPolygon, amendLine, polyFence, changeArray, trid = [], parametersID, brand, clickFenceCount = 0,
-    clickLogCount = 0, fenceIdArray = [], fenceOpenArray = [], save, moveMarkerBackData, moveMarkerFenceId, monitoringObjMapHeight, carNameMarkerContentMap, carNameMarkerMap, carNameContentLUMap,
-    lineSpotMap, isEdit = true, sectionMarkerPointArray, stateName = [], stateIndex = 1, alarmName = [], alarmIndex = 1, activeIndex = 1, queryFenceId = [], crrentSubV=[], crrentSubName=[],
-    suFlag=true, administrationMap, lineRoute, contextMenu, dragPointMarkerMap, isAddDragRoute = false, misstype=false,misstypes = false, alarmString, saveFenceName, saveFenceType, alarmSub = 0, cancelList = [], hasBegun=[],
-    isDragRouteFlag = false, flagSwitching = true, isCarNameShow = true, notExpandNodeInit,vinfoWindwosClickVid, $myTab = $("#myTab"), $MapContainer = $("#MapContainer"), $panDefLeft = $("#panDefLeft"), 
-    $contentLeft = $("#content-left"), $contentRight = $("#content-right"), $sidebar = $(".sidebar"), $mainContentWrapper = $(".main-content-wrapper"), $thetree = $("#thetree"),
-    $realTimeRC = $("#realTimeRC"), $goShow = $("#goShow"), $chooseRun = $("#chooseRun"), $chooseNot = $("#chooseNot"), $chooseAlam = $("#chooseAlam"), $chooseStop = $("#chooseStop"),
-    $chooseOverSeep = $("#chooseOverSeep"), $online = $("#online"), $chooseMiss = $("#chooseMiss"), $scrollBar = $("#scrollBar"), $mapPaddCon = $(".mapPaddCon"), $realTimeVideoReal = $(".realTimeVideoReal"),
-    $realTimeStateTableList = $("#realTimeStateTable"), $alarmTable = $("#alarmTable"), $logging=$("#logging"), $showAlarmWinMark = $("#showAlarmWinMark"), $alarmFlashesSpan = $(".alarmFlashes span"),
-    $alarmSoundSpan = $(".alarmSound span"), $alarmMsgBox = $("#alarmMsgBox"), $alarmSoundFont = $(".alarmSound font"), $alarmFlashesFont = $(".alarmFlashes font"), $alarmMsgAutoOff = $("#alarmMsgAutoOff"),
-    rMenu = $("#rMenu"), alarmNum = 0, carAddress, msgSNAck, setting, ztreeStyleDbclick, $tableCarAll = $("#table-car-all"), $tableCarOnline = $("#table-car-online"), $tableCarOffline = $("#table-car-offline"),
-    $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"), $tableCarOnlinePercent = $("#table-car-online-percent"),longDeviceType,tapingTime,loadInitNowDate = new Date(),loadInitTime,
-    checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
+var travelLineList, AdministrativeRegionsList, fenceIdList,
+    administrativeAreaFence = [], district, googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth,
+    btnIconWidth, windowWidth,
+    newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight,
+    dbclickCheckedId, oldDbclickCheckedId,
+    onClickVId, oldOnClickVId, zTree, clickStateChar, logTime, operationLogLength, licensePlateInformation,
+    groupIconSkin, markerListT = [], markerRealTimeT,
+    zoom = 18, requestStrS, cheakNodec = [], realTimeSet = [], alarmSet = [], neverOline = [], lineVid = [],
+    zTreeIdJson = {}, cheakdiyuealls = [], lineAr = [],
+    lineAs = [], lineAa = [], lineAm = [], lineOs = [], changeMiss = [], diyueall = [], params = [], lineV = [],
+    lineHb = [], cluster, fixedPoint = null, fixedPointPosition = null,
+    flog = true, mapVehicleTimeW, mapVehicleTimeQ, markerMap, mapflog, mapVehicleNum, infoWindow, paths = null,
+    uptFlag = true, flagState = true,
+    videoHeight, addaskQuestionsIndex = 2, dbClickHeighlight = false, checkedVehicles = [], runVidArray = [],
+    stopVidArray = [], msStartTime, msEndTime,
+    videoTimeIndex, voiceTimeIndex, charFlag = true, fanceID = "", newCount = 1, mouseTool, mouseToolEdit,
+    clickRectangleFlag = false, isAddFlag = false, isAreaSearchFlag = false, isDistanceCount = false, fenceIDMap,
+    PolyEditorMap,
+    sectionPointMarkerMap, fenceSectionPointMap, travelLineMap, fenceCheckLength = 0, amendCircle, amendPolygon,
+    amendLine, polyFence, changeArray, trid = [], parametersID, brand, clickFenceCount = 0,
+    clickLogCount = 0, fenceIdArray = [], fenceOpenArray = [], save, moveMarkerBackData, moveMarkerFenceId,
+    monitoringObjMapHeight, carNameMarkerContentMap, carNameMarkerMap, carNameContentLUMap,
+    lineSpotMap, isEdit = true, sectionMarkerPointArray, stateName = [], stateIndex = 1, alarmName = [], alarmIndex = 1,
+    activeIndex = 1, queryFenceId = [], crrentSubV = [], crrentSubName = [],
+    suFlag = true, administrationMap, lineRoute, contextMenu, dragPointMarkerMap, isAddDragRoute = false,
+    misstype = false, misstypes = false, alarmString, saveFenceName, saveFenceType, alarmSub = 0, cancelList = [],
+    hasBegun = [],
+    isDragRouteFlag = false, flagSwitching = true, isCarNameShow = true, notExpandNodeInit, vinfoWindwosClickVid,
+    $myTab = $("#myTab"), $MapContainer = $("#MapContainer"), $panDefLeft = $("#panDefLeft"),
+    $contentLeft = $("#content-left"), $contentRight = $("#content-right"), $sidebar = $(".sidebar"),
+    $mainContentWrapper = $(".main-content-wrapper"), $thetree = $("#thetree"),
+    $realTimeRC = $("#realTimeRC"), $goShow = $("#goShow"), $chooseRun = $("#chooseRun"), $chooseNot = $("#chooseNot"),
+    $chooseAlam = $("#chooseAlam"), $chooseStop = $("#chooseStop"),
+    $chooseOverSeep = $("#chooseOverSeep"), $online = $("#online"), $chooseMiss = $("#chooseMiss"),
+    $scrollBar = $("#scrollBar"), $mapPaddCon = $(".mapPaddCon"), $realTimeVideoReal = $(".realTimeVideoReal"),
+    $realTimeStateTableList = $("#realTimeStateTable"), $alarmTable = $("#alarmTable"), $logging = $("#logging"),
+    $showAlarmWinMark = $("#showAlarmWinMark"), $alarmFlashesSpan = $(".alarmFlashes span"),
+    $alarmSoundSpan = $(".alarmSound span"), $alarmMsgBox = $("#alarmMsgBox"), $alarmSoundFont = $(".alarmSound font"),
+    $alarmFlashesFont = $(".alarmFlashes font"), $alarmMsgAutoOff = $("#alarmMsgAutoOff"),
+    rMenu = $("#rMenu"), alarmNum = 0, carAddress, msgSNAck, setting, ztreeStyleDbclick,
+    $tableCarAll = $("#table-car-all"), $tableCarOnline = $("#table-car-online"),
+    $tableCarOffline = $("#table-car-offline"),
+    $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"),
+    $tableCarOnlinePercent = $("#table-car-online-percent"), longDeviceType, tapingTime, loadInitNowDate = new Date(),
+    loadInitTime,drivingState,
+    checkFlag = false, fenceZTreeIdJson = {}, fenceSize, bindFenceSetChar, fenceInputChange, scorllDefaultTreeTop,
+    stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
 // wjk 实时视频时间定时器
 var computingTimeInt;
 var computingTimeCallInt;
 // var VideoOrPhoneCall = 0; // 0 通话视频无，1视频，2通话，3都有
 
+var markerViewingArea;
+var markerOutside;
+var markerAllUpdateData;
+var isCluster = false; // 是否集合
+var markerFocus; // 聚焦跟踪id
+var isAreaSearch = false; // 是否区域查询
+var callTheRollId; // 点名车辆ID
+var markerClickLngLat = null; // 点击监控对象图标后，获取经纬度
 
+//图标向上标记
+var icoUpFlag;
 var pageLayout = {
-    // 页面布局
-    init: function(){
-    	var url = "/clbs/v/monitoring/getHost";
-        // ajax_submit("POST", url, "json", true, {}, true, function(data){
-        // 	hostUrl = 'http://' + data.obj.host + '/F3/sockjs/webSocket';
-        // });
-        winHeight = $(window).height();//可视区域高度
-        headerHeight = $("#header").height();//头部高度
-        var tabHeight = $myTab.height();//信息列表table选项卡高度
-        var tabContHeight = $("#myTabContent").height();//table表头高度
-        var fenceTreeHeight = winHeight - 193;//围栏树高度
-        $("#fenceZtree").css('height',fenceTreeHeight + "px");//电子围栏树高度
-        //地图高度
-        newMapHeight = winHeight - headerHeight - tabHeight - 10;
-        $MapContainer.css({
-            "height": newMapHeight + 'px'
-        });
-        //车辆树高度
-        var newContLeftH = winHeight - headerHeight;
-        //sidebar高度
-        $(".sidebar").css('height',newContLeftH + 'px');
-        //计算顶部logo相关padding
-        logoWidth = $("#header .brand").width();
-        btnIconWidth = $("#header .toggle-navigation").width();
-        windowWidth = $(window).width();
-        newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
-        //左右自适应宽度
-        $contentLeft.css({
-            "width": newwidth + "%"
-        });
-        $contentRight.css({
-            "width": 100 - newwidth + "%"
-        });
-        //加载时隐藏left同时计算宽度
-        $sidebar.attr("class", "sidebar sidebar-toggle");
-//        $mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
-        //操作树高度自适应
-        var newTreeH = winHeight - headerHeight - 203;
-        $thetree.css({
-            "height": newTreeH + "px"
-        });
-        //视频区域自适应
-        var mainContentHeight = $contentLeft.height();
-        var adjustHeight = $(".adjust-area").height();
-        videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
-        $(".videoArea").css("height", videoHeight + "px");
-        //地图拖动改变大小
-        oldMapHeight = $MapContainer.height();
-        myTabHeight = $myTab.height();
-        wHeight = $(window).height();
-        // 页面区域定位
-        $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
-        // 监听浏览器窗口大小变化
-        var sWidth = $(window).width();
-        if (sWidth < 1200) {
-            $("body").css("overflow", "auto");
-            $("#content-left,#panDefLeft").css("height", "auto");
-            $panDefLeft.css("margin-bottom", "0px");
-            if (sWidth <= 414) {
-                $sidebar.removeClass("sidebar-toggle");
-                $mainContentWrapper.removeClass("main-content-toggle-left");
-            }
-        } else {
-            $("body").css("overflow", "hidden");
-        };
-        window.onresize=function(){
-        	winHeight = $(window).height();//可视区域高度
-        	headerHeight = $("#header").height();//头部高度
+        // 页面布局
+        init: function () {
+            var url = "/clbs/v/monitoring/getHost";
+            ajax_submit("POST", url, "json", true, {}, true, function (data) {
+                hostUrl = 'http://' + data.obj.host + '/f3/sockjs/webSocket';
+            });
+            winHeight = $(window).height();//可视区域高度
+            headerHeight = $("#header").height();//头部高度
             var tabHeight = $myTab.height();//信息列表table选项卡高度
             var tabContHeight = $("#myTabContent").height();//table表头高度
             var fenceTreeHeight = winHeight - 193;//围栏树高度
-            $("#fenceZtree").css('height',fenceTreeHeight + "px");//电子围栏树高度
+            $("#fenceZtree").css('height', fenceTreeHeight + "px");//电子围栏树高度
             //地图高度
             newMapHeight = winHeight - headerHeight - tabHeight - 10;
             $MapContainer.css({
@@ -1257,7 +1178,7 @@ var pageLayout = {
             //车辆树高度
             var newContLeftH = winHeight - headerHeight;
             //sidebar高度
-            $(".sidebar").css('height',newContLeftH + 'px');
+            $(".sidebar").css('height', newContLeftH + 'px');
             //计算顶部logo相关padding
             logoWidth = $("#header .brand").width();
             btnIconWidth = $("#header .toggle-navigation").width();
@@ -1270,7 +1191,10 @@ var pageLayout = {
             $contentRight.css({
                 "width": 100 - newwidth + "%"
             });
-          //操作树高度自适应
+            //加载时隐藏left同时计算宽度
+            $sidebar.attr("class", "sidebar sidebar-toggle");
+//        $mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
+            //操作树高度自适应
             var newTreeH = winHeight - headerHeight - 203;
             $thetree.css({
                 "height": newTreeH + "px"
@@ -1280,646 +1204,729 @@ var pageLayout = {
             var adjustHeight = $(".adjust-area").height();
             videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
             $(".videoArea").css("height", videoHeight + "px");
-		}
-    },
-    // 数组原型链拓展方法
-    arrayExpand: function() {
-        Array.prototype.isHas = function (a) {
-            if (this.length === 0) {
-                return false
-            };
-            for (var i = 0, len = this.length; i < len; i++) {
-                if (this[i] === a) {
-                    return true
+            //地图拖动改变大小
+            oldMapHeight = $MapContainer.height();
+            myTabHeight = $myTab.height();
+            wHeight = $(window).height();
+            // 页面区域定位
+            $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
+            // 监听浏览器窗口大小变化
+            var sWidth = $(window).width();
+            if (sWidth < 1200) {
+                $("body").css("overflow", "auto");
+                $("#content-left,#panDefLeft").css("height", "auto");
+                $panDefLeft.css("margin-bottom", "0px");
+                if (sWidth <= 414) {
+                    $sidebar.removeClass("sidebar-toggle");
+                    $mainContentWrapper.removeClass("main-content-toggle-left");
                 }
+            } else {
+                $("body").css("overflow", "hidden");
             }
-        };
-        // 数组功能扩展
-        Array.prototype.each = function (fn) {
-            fn = fn || Function.K;
-            var a = [];
-            var args = Array.prototype.slice.call(arguments, 1);
-            for (var i = 0, len = this.length; i < len; i++) {
-                var res = fn.apply(this, [this[i], i].concat(args));
-                if (res != null) a.push(res);
+            ;
+            window.onresize = function () {
+                winHeight = $(window).height();//可视区域高度
+                headerHeight = $("#header").height();//头部高度
+                var tabHeight = $myTab.height();//信息列表table选项卡高度
+                var tabContHeight = $("#myTabContent").height();//table表头高度
+                var fenceTreeHeight = winHeight - 193;//围栏树高度
+                $("#fenceZtree").css('height', fenceTreeHeight + "px");//电子围栏树高度
+                //地图高度
+                newMapHeight = winHeight - headerHeight - tabHeight - 10;
+                $MapContainer.css({
+                    "height": newMapHeight + 'px'
+                });
+                //车辆树高度
+                var newContLeftH = winHeight - headerHeight;
+                //sidebar高度
+                $(".sidebar").css('height', newContLeftH + 'px');
+                //计算顶部logo相关padding
+                logoWidth = $("#header .brand").width();
+                btnIconWidth = $("#header .toggle-navigation").width();
+                windowWidth = $(window).width();
+                newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
+                //左右自适应宽度
+                $contentLeft.css({
+                    "width": newwidth + "%"
+                });
+                $contentRight.css({
+                    "width": 100 - newwidth + "%"
+                });
+                //操作树高度自适应
+                var newTreeH = winHeight - headerHeight - 203;
+                $thetree.css({
+                    "height": newTreeH + "px"
+                });
+                //视频区域自适应
+                var mainContentHeight = $contentLeft.height();
+                var adjustHeight = $(".adjust-area").height();
+                videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
+                $(".videoArea").css("height", videoHeight + "px");
             }
-            return a;
-        };
-        // 数组是否包含指定元素
-        Array.prototype.contains = function (suArr) {
-            for (var i = 0, len = this.length; i < len; i++) {
-                if (this[i] == suArr) {
-                    return true;
+            pageLayout.showOperatingAndRepairNum();
+        },
+        // 数组原型链拓展方法
+        arrayExpand: function () {
+            Array.prototype.isHas = function (a) {
+                if (this.length === 0) {
+                    return false
                 }
-            }
-            return false;
-        }
-        // 两个数组的交集
-        Array.intersect = function (a, b) {
-            return a.each(function (o) {
-                return b.contains(o) ? o : null
-            });
-        };
-        // 两个数组的差集
-        Array.minus = function (a, b) {
-            return a.each(function (o) {
-                return b.contains(o) ? null : o
-            });
-        };
-        // 删除数组指定下标或指定对象
-        Array.prototype.remove = function (obj) {
-            for (var i = 0; i < this.length; i++) {
-                var temp = this[i];
-                if (!isNaN(obj)&&obj.length<4) {
-                    temp = i;
-                }
-                if (temp == obj) {
-                    for (var j = i; j < this.length; j++) {
-                        this[j] = this[j + 1];
+                ;
+                for (var i = 0, len = this.length; i < len; i++) {
+                    if (this[i] === a) {
+                        return true
                     }
-                    this.length = this.length - 1;
-                }
-            }
-        };
-        Array.prototype.removeObj = function (obj) {
-            for (var i = 0; i < this.length; i++) {
-                var temp = this[i];
-                if (temp == obj) {
-                    for (var j = i; j < this.length; j++) {
-                        this[j] = this[j + 1];
-                    }
-                    this.length = this.length - 1;
-                }
-            }
-        };
-        // 去重
-        Array.prototype.unique2 = function () {
-            var res = [this[0]];
-            for (var i = 1, len = this.length; i < len; i++) {
-                var repeat = false;
-                for (var j = 0, jlen = res.length; j < jlen; j++) {
-                    if (this[i].id == res[j].id) {
-                        repeat = true;
-                        break;
-                    }
-                }
-                if (!repeat) {
-                    res.push(this[i]);
-                }
-            }
-            return res;
-        };
-        Array.prototype.unique3 = function(){
-            var res = [];
-            var json = {};
-            for(var i = 0, len = this.length; i < len; i++){
-                if(!json[this[i]]){
-                    res.push(this[i]);
-                    json[this[i]] = 1;
                 }
             };
-            return res;
-        };
-    },
-    // 创建map集合
-    createMap: function() {
-        mapVehicleTimeW = new pageLayout.mapVehicle();
-        mapVehicleTimeQ = new pageLayout.mapVehicle();
-        fenceIDMap = new pageLayout.mapVehicle();
-        PolyEditorMap = new pageLayout.mapVehicle();
-        fenceSectionPointMap = new pageLayout.mapVehicle();
-        markerMap = new pageLayout.mapVehicle();
-        mapflog = new pageLayout.mapVehicle();
-        mapVehicleNum = new pageLayout.mapVehicle();
-        sectionPointMarkerMap = new pageLayout.mapVehicle();
-        carNameMarkerMap  = new pageLayout.mapVehicle();
-        carNameMarkerContentMap = new pageLayout.mapVehicle();
-        carNameContentLUMap = new pageLayout.mapVehicle();
-        lineSpotMap = new pageLayout.mapVehicle();
-        sectionMarkerPointArray = new pageLayout.mapVehicle();
-        travelLineMap = new pageLayout.mapVehicle();
-        administrationMap = new pageLayout.mapVehicle();
-        dragPointMarkerMap = new pageLayout.mapVehicle();
-        //创建地图围栏相关集合
-        fenceIdList = new pageLayout.mapVehicle();
-    	AdministrativeRegionsList = new pageLayout.mapVehicle();
-    	travelLineList = new pageLayout.mapVehicle();
-    },
-    // 应答
-    responseSocket: function() {
-    	/*setTimeout(function() {
-    		webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/check', pageLayout.updateTable, "/app/vehicle/inspect", null);
-    	}, 1000);*/
-    	pageLayout.isGetSocketLayout();
-    },
-    isGetSocketLayout: function() {
-    	setTimeout(function(){
-    		if (webSocket.conFlag) {
-    			webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/check', pageLayout.updateTable, "/app/vehicle/inspect", null);
-    		} else {
-    			pageLayout.isGetSocketLayout();
-    		}
-    	}, 2000);
-    },
-    // 应答socket回掉函数
-    updateTable: function(msg) {
-    	if (msg != null) {
-    		var json = $.parseJSON(msg.body);
-            var msgData = json.data;
-            if (msgData != undefined) {
-            	var msgId = msgData.msgHead.msgID;
-                if (msgId == 0x9300) {
-                    var dataType = msgData.msgBody.dataType;
-                    $("#msgDataType").val(dataType);
-                    $("#infoId").val(msgData.msgBody.data.infoId);
-                    $("#objectType").val(msgData.msgBody.data.objectType);
-                    $("#objectId").val(msgData.msgBody.data.objectId);
-                    $("#question").text(msgData.msgBody.data.infoContent);
-                    if (dataType == 0x9301) {
-                        $("#answer").val("");
-                        $("#msgTitle").text("平台查岗");
-                        $("#goTraceResponse").modal('show');
-                    }
-                    if (dataType == 0x9302) {
-                        $("#answer").val("");
-                        $("#msgTitle").text("下发平台间报文");
-                        $("#goTraceResponse").modal('show');
-                    }
+            // 数组功能扩展
+            Array.prototype.each = function (fn) {
+                fn = fn || Function.K;
+                var a = [];
+                var args = Array.prototype.slice.call(arguments, 1);
+                for (var i = 0, len = this.length; i < len; i++) {
+                    var res = fn.apply(this, [this[i], i].concat(args));
+                    if (res != null) a.push(res);
                 }
-            }
-    	}
-    },
-    // 应答确定
-    platformMsgAck: function() {
-        var answer = $("#answer").val();
-        if (answer == "") {
-            showErrorMsg("应答不能为空", "answer");
-            return;
-        }
-        $("#goTraceResponse").modal('hide');
-        var msgDataType = $("#msgDataType").val();
-        var infoId = $("#infoId").val();
-        var objectType = $("#objectType").val();
-        var objectId = $("#objectId").val();
-        var url = "/clbs/m/connectionparamsset/platformMsgAck";
-        json_ajax("POST", url, "json", false, {
-            "infoId": infoId,
-            "answer": answer,
-            "msgDataType": msgDataType,
-            "objectType": objectType,
-            "objectId": objectId
-        });
-    },
-    //右边菜单显示隐藏切换
-    toggleLeft: function () {
-        if ($sidebar.hasClass("sidebar-toggle")) {
-            if ($contentLeft.is(":hidden")) {
-                $contentRight.css("width", "100%");
-            } else {
-                $contentLeft.css("width",newwidth + "%");
-                $contentRight.css("width",(100 - newwidth) + "%");
-            }
-        } else {
-            if ($contentLeft.is(":hidden")) {
-                $contentRight.css("width", "100%");
-            } else {
-                $contentRight.css("width", (100 - newwidth -5) + "%");
-                $contentLeft.css("width", (newwidth + 5) + "%");
-            }
-        }
-    },
-    //左侧操作树点击隐藏
-    goHidden: function () {
-        $contentLeft.hide();
-        $contentRight.attr("class", "col-md-12 content-right");
-        $contentRight.css("width", "100%");
-        $goShow.show();
-    },
-    //左侧操作树点击显示
-    goShow: function () {
-        $contentLeft.show();
-        $contentRight.attr("class", "col-md-9 content-right");
-        if ($sidebar.hasClass("sidebar-toggle")) {
-            $contentRight.css("width", (100 - newwidth) + "%");
-            $contentLeft.css("width", newwidth + "%");
-        } else {
-            $contentRight.css("width", "75%");
-            $contentLeft.css("width", "25%");
-        }
-        $goShow.hide();
-    },
-    //鼠标按住拖动事件
-    mouseMove: function (e) {
-        if (els - e.clientY > 0) {
-            var y = els - e.clientY;
-            var newHeight = mapHeight - y;
-            if (newHeight <= 0) {
-                newHeight = 0;
-            }
-            $MapContainer.css("height", newHeight + "px");
-            if (newHeight == 0) {
-                return false;
-            }
-            $("#realTimeStateTable-div").css("max-height", (tableHeight + y) + "px");
-        } else {
-            var dy = e.clientY - els;
-            var newoffsetTop = $myTab.offset().top;
-            var scrollBodyHeight = $("#realTimeState .dataTables_scrollBody").height();
-            if (scrollBodyHeight == 0) {
-                return false;
-            }
-            if (newoffsetTop <= (wHeight - myTabHeight)) {
-                var newHeight = mapHeight + dy;
-                $MapContainer.css("height", newHeight + "px");
-                $("#realTimeStateTable-div").css("max-height", (tableHeight - dy) + "px");
-            }
-        }
-        e.stopPropagation();
-    },
-    // 鼠标移除事件
-    mouseUp: function () {
-        $(document).unbind("mousemove", pageLayout.mouseMove).unbind("mouseup", pageLayout.mouseUp);
-    },
-    // 封装map集合
-    mapVehicle: function () {
-        this.elements = new Array();
-        //获取MAP元素个数
-        this.size = function () {
-            return this.elements.length;
-        };
-        //判断MAP是否为空
-        this.isEmpty = function () {
-            return (this.elements.length < 1);
-        };
-        //删除MAP所有元素
-        this.clear = function () {
-            this.elements = new Array();
-        };
-        //向MAP中增加元素（key, value)
-        this.put = function (_key, _value) {
-            this.elements.push({
-                key: _key,
-                value: _value
-            });
-        };
-        //删除指定KEY的元素，成功返回True，失败返回False
-        this.remove = function (_key) {
-            var bln = false;
-            try {
-                for (var i = 0, len = this.elements.length; i < len; i++) {
-                    if (this.elements[i].key == _key) {
-                        this.elements.splice(i, 1);
+                return a;
+            };
+            // 数组是否包含指定元素
+            Array.prototype.contains = function (suArr) {
+                for (var i = 0, len = this.length; i < len; i++) {
+                    if (this[i] == suArr) {
                         return true;
                     }
                 }
-            } catch (e) {
-                bln = false;
+                return false;
             }
-            return bln;
-        };
-        //获取指定KEY的元素值VALUE，失败返回NULL
-        this.get = function (_key) {
-            try {
-                for (var i = 0, len = this.elements.length; i < len; i++) {
-                    if (this.elements[i].key == _key) {
-                        return this.elements[i].value;
+            // 两个数组的交集
+            Array.intersect = function (a, b) {
+                return a.each(function (o) {
+                    return b.contains(o) ? o : null
+                });
+            };
+            // 两个数组的差集
+            Array.minus = function (a, b) {
+                return a.each(function (o) {
+                    return b.contains(o) ? null : o
+                });
+            };
+            // 删除数组指定下标或指定对象
+            Array.prototype.remove = function (obj) {
+                for (var i = 0; i < this.length; i++) {
+                    var temp = this[i];
+                    if (!isNaN(obj) && obj.length < 4) {
+                        temp = i;
+                    }
+                    if (temp == obj) {
+                        for (var j = i; j < this.length; j++) {
+                            this[j] = this[j + 1];
+                        }
+                        this.length = this.length - 1;
                     }
                 }
-            } catch (e) {
-                return null;
-            }
-        };
-        //获取指定索引的元素（使用element.key，element.value获取KEY和VALUE），失败返回NULL
-        this.element = function (_index) {
-            if (_index < 0 || _index >= this.elements.length) {
-                return null;
-            }
-            return this.elements[_index];
-        };
-        //判断MAP中是否含有指定KEY的元素
-        this.containsKey = function (_key) {
-            var bln = false;
-            try {
-                for (var i = 0, len = this.elements.length; i < len; i++) {
-                    if (this.elements[i].key == _key) {
-                        bln = true;
+            };
+            Array.prototype.removeObj = function (obj) {
+                for (var i = 0; i < this.length; i++) {
+                    var temp = this[i];
+                    if (temp == obj) {
+                        for (var j = i; j < this.length; j++) {
+                            this[j] = this[j + 1];
+                        }
+                        this.length = this.length - 1;
                     }
                 }
-            } catch (e) {
-                bln = false;
-            }
-            return bln;
-        };
-        //判断MAP中是否含有指定VALUE的元素
-        this.containsValue = function (_value) {
-            var bln = false;
-            try {
-                for (var i = 0, len = this.elements.length; i < len; i++) {
-                    if (this.elements[i].value == _value) {
-                        bln = true;
+            };
+            // 去重
+            Array.prototype.unique2 = function () {
+                var res = [this[0]];
+                for (var i = 1, len = this.length; i < len; i++) {
+                    var repeat = false;
+                    for (var j = 0, jlen = res.length; j < jlen; j++) {
+                        if (this[i].id == res[j].id) {
+                            repeat = true;
+                            break;
+                        }
+                    }
+                    if (!repeat) {
+                        res.push(this[i]);
                     }
                 }
-            } catch (e) {
-                bln = false;
-            }
-            return bln;
-        };
-        //获取MAP中所有VALUE的数组（ARRAY）
-        this.values = function () {
-            var arr = new Array();
-            for (var i = 0, len = this.elements.length; i < len; i++) {
-                arr.push(this.elements[i].value);
-            }
-            return arr;
-        };
-        //获取MAP中所有KEY的数组（ARRAY）
-        this.keys = function () {
-            var arr = new Array();
-            for (var i = 0, len = this.elements.length; i < len; i++) {
-                arr.push(this.elements[i].key);
-            }
-            return arr;
-        };
-    },
-    //拖拽DIV
-    dragDiv: function (e) {
-    	//报警记录及日志信息不能拖拽 隐藏不能拖拽
-    	if($("#realTimeStatus").hasClass("active") && $("#scalingBtn").hasClass("fa fa-chevron-down")){
-            if (stateName.length > 5) {
-                tableHeight = $("#realTimeStateTable-div").height();
-                mapHeight = $MapContainer.height();
-                els = e.clientY;
-                $(document).bind("mousemove", pageLayout.mouseMove).bind("mouseup", pageLayout.mouseUp);
-                e.stopPropagation();
-            }
-    	}
-    },
-    //实时视频
-    videoRealTimeShow: function (callback) {
-        //实时视频 判断IE模式
-        if(navigator.appName == "Microsoft Internet Explorer"){
-            if(parseInt(navigator.appVersion.split(";")[1].replace(/[ ]/g, "").replace("MSIE",""))<10){
-            	layer.msg("亲！您的IE浏览器版本过低，请下载IE10及以上版本查看！");
-            }else{
-                var $this = $('#btn-videoRealTime-show').children("i");
-                if(!$this.hasClass("active")) {
-                    // $realTimeVideoReal.removeClass("realTimeVideoShow");
-                    // $mapPaddCon.removeClass("mapAreaTransform");
-
-                    // wjk 通话时不关闭画面
-                    if (!$('#phoneCall').find('i').hasClass('active')) {
-                        $realTimeVideoReal.removeClass("realTimeVideoShow");
-                        $mapPaddCon.removeClass("mapAreaTransform");
-                        m_videoFlag = 0; //标识视频窗口关闭
+                return res;
+            };
+            Array.prototype.unique3 = function () {
+                var res = [];
+                var json = {};
+                for (var i = 0, len = this.length; i < len; i++) {
+                    if (!json[this[i]]) {
+                        res.push(this[i]);
+                        json[this[i]] = 1;
                     }
-
-                    // realTimeVideo.beventAllMediaStop();
-                    clearInterval(computingTimeInt)
-                    realTimeVideo.closeVideo(0);
+                }
+                ;
+                return res;
+            };
+        },
+        // 创建map集合
+        createMap: function () {
+            mapVehicleTimeW = new pageLayout.mapVehicle();
+            mapVehicleTimeQ = new pageLayout.mapVehicle();
+            fenceIDMap = new pageLayout.mapVehicle();
+            PolyEditorMap = new pageLayout.mapVehicle();
+            fenceSectionPointMap = new pageLayout.mapVehicle();
+            markerMap = new pageLayout.mapVehicle();
+            mapflog = new pageLayout.mapVehicle();
+            mapVehicleNum = new pageLayout.mapVehicle();
+            sectionPointMarkerMap = new pageLayout.mapVehicle();
+            carNameMarkerMap = new pageLayout.mapVehicle();
+            carNameMarkerContentMap = new pageLayout.mapVehicle();
+            carNameContentLUMap = new pageLayout.mapVehicle();
+            lineSpotMap = new pageLayout.mapVehicle();
+            sectionMarkerPointArray = new pageLayout.mapVehicle();
+            travelLineMap = new pageLayout.mapVehicle();
+            administrationMap = new pageLayout.mapVehicle();
+            dragPointMarkerMap = new pageLayout.mapVehicle();
+            //创建地图围栏相关集合
+            fenceIdList = new pageLayout.mapVehicle();
+            AdministrativeRegionsList = new pageLayout.mapVehicle();
+            travelLineList = new pageLayout.mapVehicle();
+            markerViewingArea = new pageLayout.mapVehicle();
+            markerOutside = new pageLayout.mapVehicle();
+            markerAllUpdateData = new pageLayout.mapVehicle();
+            drivingState = new pageLayout.mapVehicle();
+        },
+        // 应答
+        responseSocket: function () {
+            /*setTimeout(function() {
+                webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/check', pageLayout.updateTable, "/app/vehicle/inspect", null);
+            }, 1000);*/
+            pageLayout.isGetSocketLayout();
+        },
+        isGetSocketLayout: function () {
+            setTimeout(function () {
+                if (webSocket.conFlag) {
+                    webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/check', pageLayout.updateTable, "/app/vehicle/inspect", null);
                 } else {
-
-                    // wjk
-                    $(this).addClass("map-active");
-                    $realTimeVideoReal.addClass("realTimeVideoShow");
-                    $mapPaddCon.addClass("mapAreaTransform");
-                    m_videoFlag = 1; //标识视频窗口打开
-                    realTimeVideo.downloadVideoOcx();
-                    realTimeVideo.windowSet();
-                    //传入限制单次实时视频回调
-                    setTimeout("realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun)", 5);
-
-                    // $(this).addClass("map-active");
-                    // $realTimeVideoReal.addClass("realTimeVideoShow");
-                    // $mapPaddCon.addClass("mapAreaTransform");
-                    // m_videoFlag = 1; //标识视频窗口打开
-                    // realTimeVideo.downloadVideoOcx();
-                    // realTimeVideo.windowSet();
-                    // setTimeout("realTimeVideo.beventLiveView()", 5);
-
+                    pageLayout.isGetSocketLayout();
                 }
-             }
-        }else{
-        	$("#btn-videoRealTime-show i").removeClass("active");
-        	$("#btn-videoRealTime-show span").removeAttr("style");
-        	layer.msg("亲！实时视频暂时仅支持IE浏览器哟！请使用IE浏览器查看！");
-        }
-    },
-    // wjk 对讲，实时通话
-    phoneCallRealTimeshow:function(){
-        //实时通话 判断IE模式
-        if(navigator.appName == "Microsoft Internet Explorer"){
-            if(parseInt(navigator.appVersion.split(";")[1].replace(/[ ]/g, "").replace("MSIE",""))<10){
-            	layer.msg("亲！您的IE浏览器版本过低，请下载IE10及以上版本！");
-            }else{
-                var $this = $('#phoneCall').children("i");
-                if(!$this.hasClass("active")) {
-                    // wjk 视频时不关闭画面
-                    if (!$('#btn-videoRealTime-show').find('i').hasClass('active')) {
-                        $realTimeVideoReal.removeClass("realTimeVideoShow");
-                        $mapPaddCon.removeClass("mapAreaTransform");
-                        m_videoFlag = 0; //标识视频窗口关闭
-                    }
-
-                    clearInterval(computingTimeCallInt)
-                    realTimeVideo.closeAudio();
+            }, 2000);
+        },
+        // 应答socket回掉函数
+        updateTable: function (msg) {
+            if (msg != null) {
+                var json = $.parseJSON(msg.body);
+                var msgData = json.data;
+                if (msgData != undefined) {
+                    var msgId = msgData.msgHead.msgID;
+                    // if (msgId == 0x9300) {
+                    //     var dataType = msgData.msgBody.dataType;
+                    //     $("#msgDataType").val(dataType);
+                    //     $("#infoId").val(msgData.msgBody.data.infoId);
+                    //     $("#objectType").val(msgData.msgBody.data.objectType);
+                    //     $("#objectId").val(msgData.msgBody.data.objectId);
+                    //     $("#question").text(msgData.msgBody.data.infoContent);
+                    //     if (dataType == 0x9301) {
+                    //         $("#answer").val("");
+                    //         $("#msgTitle").text("平台查岗");
+                    //         $("#goTraceResponse").modal('show');
+                    //     }
+                    //     if (dataType == 0x9302) {
+                    //         $("#answer").val("");
+                    //         $("#msgTitle").text("下发平台间报文");
+                    //         $("#goTraceResponse").modal('show');
+                    //     }
+                    // }
+                }
+            }
+        },
+        // 应答确定
+        platformMsgAck: function () {
+            var answer = $("#answer").val();
+            if (answer == "") {
+                showErrorMsg("应答不能为空", "answer");
+                return;
+            }
+            $("#goTraceResponse").modal('hide');
+            var msgDataType = $("#msgDataType").val();
+            var infoId = $("#infoId").val();
+            var objectType = $("#objectType").val();
+            var objectId = $("#objectId").val();
+            var url = "/clbs/m/connectionparamsset/platformMsgAck";
+            json_ajax("POST", url, "json", false, {
+                "infoId": infoId,
+                "answer": answer,
+                "msgDataType": msgDataType,
+                "objectType": objectType,
+                "objectId": objectId
+            });
+        },
+        //右边菜单显示隐藏切换
+        toggleLeft: function () {
+            if ($sidebar.hasClass("sidebar-toggle")) {
+                if ($contentLeft.is(":hidden")) {
+                    $contentRight.css("width", "100%");
                 } else {
+                    $contentLeft.css("width", newwidth + "%");
+                    $contentRight.css("width", (100 - newwidth) + "%");
+                }
+            } else {
+                if ($contentLeft.is(":hidden")) {
+                    $contentRight.css("width", "100%");
+                } else {
+                    $contentRight.css("width", (100 - newwidth - 5) + "%");
+                    $contentLeft.css("width", (newwidth + 5) + "%");
+                }
+            }
+        },
+        //左侧操作树点击隐藏
+        goHidden: function () {
+            $contentLeft.hide();
+            $contentRight.attr("class", "col-md-12 content-right");
+            $contentRight.css("width", "100%");
+            $goShow.show();
+        },
+        //左侧操作树点击显示
+        goShow: function () {
+            $contentLeft.show();
+            $contentRight.attr("class", "col-md-9 content-right");
+            if ($sidebar.hasClass("sidebar-toggle")) {
+                $contentRight.css("width", (100 - newwidth) + "%");
+                $contentLeft.css("width", newwidth + "%");
+            } else {
+                $contentRight.css("width", "75%");
+                $contentLeft.css("width", "25%");
+            }
+            $goShow.hide();
+        },
+        //鼠标按住拖动事件
+        mouseMove: function (e) {
+            if (els - e.clientY > 0) {
+                var y = els - e.clientY;
+                var newHeight = mapHeight - y;
+                if (newHeight <= 0) {
+                    newHeight = 0;
+                }
+                $MapContainer.css("height", newHeight + "px");
+                if (newHeight == 0) {
+                    return false;
+                }
+                $("#realTimeStateTable-div").css("max-height", (tableHeight + y) + "px");
+            } else {
+                var dy = e.clientY - els;
+                var newoffsetTop = $myTab.offset().top;
+                var scrollBodyHeight = $("#realTimeState .dataTables_scrollBody").height();
+                if (scrollBodyHeight == 0) {
+                    return false;
+                }
+                if (newoffsetTop <= (wHeight - myTabHeight)) {
+                    var newHeight = mapHeight + dy;
+                    $MapContainer.css("height", newHeight + "px");
+                    $("#realTimeStateTable-div").css("max-height", (tableHeight - dy) + "px");
+                }
+            }
+            e.stopPropagation();
+        },
+        // 鼠标移除事件
+        mouseUp: function () {
+            $(document).unbind("mousemove", pageLayout.mouseMove).unbind("mouseup", pageLayout.mouseUp);
+        },
+        // 封装map集合
+        mapVehicle: function () {
+            this.elements = new Array();
+            //获取MAP元素个数
+            this.size = function () {
+                return this.elements.length;
+            };
+            //判断MAP是否为空
+            this.isEmpty = function () {
+                return (this.elements.length < 1);
+            };
+            //删除MAP所有元素
+            this.clear = function () {
+                this.elements = new Array();
+            };
+            //向MAP中增加元素（key, value)
+            this.put = function (_key, _value) {
+                this.elements.push({
+                    key: _key,
+                    value: _value
+                });
+            };
+            //删除指定KEY的元素，成功返回True，失败返回False
+            this.remove = function (_key) {
+                var bln = false;
+                try {
+                    for (var i = 0, len = this.elements.length; i < len; i++) {
+                        if (this.elements[i].key == _key) {
+                            this.elements.splice(i, 1);
+                            return true;
+                        }
+                    }
+                } catch (e) {
+                    bln = false;
+                }
+                return bln;
+            };
+            //获取指定KEY的元素值VALUE，失败返回NULL
+            this.get = function (_key) {
+                try {
+                    for (var i = 0, len = this.elements.length; i < len; i++) {
+                        if (this.elements[i].key == _key) {
+                            return this.elements[i].value;
+                        }
+                    }
+                } catch (e) {
+                    return null;
+                }
+            };
+            //获取指定索引的元素（使用element.key，element.value获取KEY和VALUE），失败返回NULL
+            this.element = function (_index) {
+                if (_index < 0 || _index >= this.elements.length) {
+                    return null;
+                }
+                return this.elements[_index];
+            };
+            //判断MAP中是否含有指定KEY的元素
+            this.containsKey = function (_key) {
+                var bln = false;
+                try {
+                    for (var i = 0, len = this.elements.length; i < len; i++) {
+                        if (this.elements[i].key == _key) {
+                            bln = true;
+                        }
+                    }
+                } catch (e) {
+                    bln = false;
+                }
+                return bln;
+            };
+            //判断MAP中是否含有指定VALUE的元素
+            this.containsValue = function (_value) {
+                var bln = false;
+                try {
+                    for (var i = 0, len = this.elements.length; i < len; i++) {
+                        if (this.elements[i].value == _value) {
+                            bln = true;
+                        }
+                    }
+                } catch (e) {
+                    bln = false;
+                }
+                return bln;
+            };
+            //获取MAP中所有VALUE的数组（ARRAY）
+            this.values = function () {
+                var arr = new Array();
+                for (var i = 0, len = this.elements.length; i < len; i++) {
+                    arr.push(this.elements[i].value);
+                }
+                return arr;
+            };
+            //获取MAP中所有KEY的数组（ARRAY）
+            this.keys = function () {
+                var arr = new Array();
+                for (var i = 0, len = this.elements.length; i < len; i++) {
+                    arr.push(this.elements[i].key);
+                }
+                return arr;
+            };
+        },
+        //拖拽DIV
+        dragDiv: function (e) {
+            //报警记录及日志信息不能拖拽 隐藏不能拖拽
+            if ($("#realTimeStatus").hasClass("active") && $("#scalingBtn").hasClass("fa fa-chevron-down")) {
+                if (stateName.length > 5) {
+                    tableHeight = $("#realTimeStateTable-div").height();
+                    mapHeight = $MapContainer.height();
+                    els = e.clientY;
+                    $(document).bind("mousemove", pageLayout.mouseMove).bind("mouseup", pageLayout.mouseUp);
+                    e.stopPropagation();
+                }
+            }
+        },
+        //实时视频
+        videoRealTimeShow: function (callback) {
+            //实时视频 判断IE模式
+            if (navigator.appName == "Microsoft Internet Explorer") {
+                if (parseInt(navigator.appVersion.split(";")[1].replace(/[ ]/g, "").replace("MSIE", "")) < 10) {
+                    layer.msg("亲！您的IE浏览器版本过低，请下载IE10及以上版本查看！");
+                } else {
+                    var $this = $('#btn-videoRealTime-show').children("i");
+                    if (!$this.hasClass("active")) {
+                        // $realTimeVideoReal.removeClass("realTimeVideoShow");
+                        // $mapPaddCon.removeClass("mapAreaTransform");
 
-                    // wjk
-                    $(this).addClass("map-active");
-                    $realTimeVideoReal.addClass("realTimeVideoShow");
-                    $mapPaddCon.addClass("mapAreaTransform");
-                    m_videoFlag = 1; //标识视频窗口打开
-                    realTimeVideo.windowSet();
-                    //传入限制单次实时视频回调
-                    setTimeout("realTimeVideo.beventLiveIpTalk(pageLayout.computingTimeCallIntFun)", 5);
+                        // wjk 通话时不关闭画面
+                        if (!$('#phoneCall').find('i').hasClass('active')) {
+                            $realTimeVideoReal.removeClass("realTimeVideoShow");
+                            $mapPaddCon.removeClass("mapAreaTransform");
+                            m_videoFlag = 0; //标识视频窗口关闭
+                        }
+
+                        // realTimeVideo.beventAllMediaStop();
+                        clearInterval(computingTimeInt)
+                        realTimeVideo.closeVideo(0);
+                    } else {
+
+                        // wjk
+                        $(this).addClass("map-active");
+                        $realTimeVideoReal.addClass("realTimeVideoShow");
+                        $mapPaddCon.addClass("mapAreaTransform");
+                        m_videoFlag = 1; //标识视频窗口打开
+                        realTimeVideo.downloadVideoOcx();
+                        realTimeVideo.windowSet();
+                        //传入限制单次实时视频回调
+                        setTimeout("realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun)", 5);
+
+                        // $(this).addClass("map-active");
+                        // $realTimeVideoReal.addClass("realTimeVideoShow");
+                        // $mapPaddCon.addClass("mapAreaTransform");
+                        // m_videoFlag = 1; //标识视频窗口打开
+                        // realTimeVideo.downloadVideoOcx();
+                        // realTimeVideo.windowSet();
+                        // setTimeout("realTimeVideo.beventLiveView()", 5);
+
+                    }
                 }
-             }
-        }else{
-        	$("#phoneCall i").removeClass("active");
-        	$("#phoneCall span").removeAttr("style");
-        	layer.msg("亲！实时通话暂时仅支持IE浏览器哟！请使用IE浏览器！");
-        }
-    },
-    // 关闭视频区域
-    closeVideo: function() {
-    	if ($('#btn-videoRealTime-show i').hasClass('active')) {
-    		$realTimeVideoReal.removeClass("realTimeVideoShow");
-            $mapPaddCon.removeClass("mapAreaTransform");
-            $('#btn-videoRealTime-show i').removeClass('active');
-            $('#btn-videoRealTime-show span').css('color','#5c5e62');
-    	}
-    },
-    //点击显示报警
-    showAlarmWindow: function () {
-        $showAlarmWinMark.show();
-        $("#showAlarmWin").hide();
-    },
-    //点击切换状态栏
-    showAlarmWinMarkRight: function () {
-        $("#TabFenceBox a").click();
-        $("#myTab li").removeAttr("class");
-        $("#realTtimeAlarm").attr("class", "active");
-        $("#operationLogTable").attr("class", "tab-pane fade");
-        $("#realTimeState").attr("class", "tab-pane fade");
-        $("#realTimeCall").attr("class", "tab-pane fade active in");
-        $(this).css("background-position", "0px -67px");
-        setTimeout(function () {
-            $showAlarmWinMark.css("background-position", "0px 0px");
-        }, 100)
-        $("#realTtimeAlarm").click();
-        dataTableOperation.realTtimeAlarmClick();
-    },
-    alarmToolMinimize: function () {
-        $("#context-menu").removeAttr("class");
-        $("#showAlarmWin").show();
-        $showAlarmWinMark.hide();
-    },
-    //开启关闭声音
-    alarmOffSound: function () {
-        if (navigator.userAgent.indexOf('MSIE') >= 0) {
-            //IE浏览器
-            if ($alarmSoundSpan.hasClass("soundOpen")) {
-                $alarmSoundSpan.addClass("soundOpen-off");
-                $alarmSoundSpan.removeClass("soundOpen");
-                $alarmSoundFont.css("color", "#a8a8a8");
-                $alarmMsgBox.html('<embed id="IEalarmMsg" src=""/>');
             } else {
-                $alarmSoundSpan.removeClass("soundOpen-off");
-                $alarmSoundSpan.addClass("soundOpen");
-                $alarmSoundFont.css("color", "#fff");
-                $alarmMsgBox.html('<embed id="IEalarmMsg" src="../../file/music/alarm.wav" autostart="true"/>');
+                $("#btn-videoRealTime-show i").removeClass("active");
+                $("#btn-videoRealTime-show span").removeAttr("style");
+                layer.msg("亲！实时视频暂时仅支持IE浏览器哟！请使用IE浏览器查看！");
             }
-        } else {
-            //其他浏览器
-            if ($alarmSoundSpan.hasClass("soundOpen")) {
-                $alarmSoundSpan.addClass("soundOpen-off");
-                $alarmSoundSpan.removeClass("soundOpen");
-                $alarmSoundFont.css("color", "#a8a8a8");
-                if (alarmNum > 0) {
-                    $("#alarmMsgAutoOff")[0].pause();
+        },
+        // wjk 对讲，实时通话
+        phoneCallRealTimeshow: function () {
+            //实时通话 判断IE模式
+            if (navigator.appName == "Microsoft Internet Explorer") {
+                if (parseInt(navigator.appVersion.split(";")[1].replace(/[ ]/g, "").replace("MSIE", "")) < 10) {
+                    layer.msg("亲！您的IE浏览器版本过低，请下载IE10及以上版本！");
+                } else {
+                    var $this = $('#phoneCall').children("i");
+                    if (!$this.hasClass("active")) {
+                        // wjk 视频时不关闭画面
+                        if (!$('#btn-videoRealTime-show').find('i').hasClass('active')) {
+                            $realTimeVideoReal.removeClass("realTimeVideoShow");
+                            $mapPaddCon.removeClass("mapAreaTransform");
+                            m_videoFlag = 0; //标识视频窗口关闭
+                        }
+
+                        clearInterval(computingTimeCallInt)
+                        realTimeVideo.closeAudio();
+                    } else {
+
+                        // wjk
+                        $(this).addClass("map-active");
+                        $realTimeVideoReal.addClass("realTimeVideoShow");
+                        $mapPaddCon.addClass("mapAreaTransform");
+                        m_videoFlag = 1; //标识视频窗口打开
+                        realTimeVideo.windowSet();
+                        //传入限制单次实时视频回调
+                        setTimeout("realTimeVideo.beventLiveIpTalk(pageLayout.computingTimeCallIntFun)", 5);
+                    }
                 }
-                $alarmMsgAutoOff.removeAttr("autoplay");
             } else {
-                $alarmSoundSpan.removeClass("soundOpen-off");
-                $alarmSoundSpan.addClass("soundOpen");
-                $alarmSoundFont.css("color", "#fff");
-                if (alarmNum > 0) {
-                    $("#alarmMsgAutoOff")[0].play();
-                }
+                $("#phoneCall i").removeClass("active");
+                $("#phoneCall span").removeAttr("style");
+                layer.msg("亲！实时通话暂时仅支持IE浏览器哟！请使用IE浏览器！");
             }
-        }
-    },
-    //开启关闭闪烁
-    alarmOffFlashes: function () {
-        if ($alarmFlashesSpan.hasClass("flashesOpen")) {
-            $alarmFlashesSpan.addClass("flashesOpen-off");
-            $alarmFlashesSpan.removeClass("flashesOpen");
-            $alarmFlashesFont.css("color", "#a8a8a8");
-            $showAlarmWinMark.css("background-position", "0px 0px");
-        } else {
-            $alarmFlashesSpan.removeClass("flashesOpen-off");
-            $alarmFlashesSpan.addClass("flashesOpen");
-            $alarmFlashesFont.css("color", "#fff");
-            if (alarmNum > 0) {
-                $showAlarmWinMark.css("background-position", "0px -134px");
-                setTimeout(function () {
-                    $showAlarmWinMark.css("background-position", "0px 0px");
-                }, 1500)
-            } else {
+        },
+        // 关闭视频区域
+        closeVideo: function () {
+            if ($('#btn-videoRealTime-show i').hasClass('active')) {
+                $realTimeVideoReal.removeClass("realTimeVideoShow");
+                $mapPaddCon.removeClass("mapAreaTransform");
+                $('#btn-videoRealTime-show i').removeClass('active');
+                $('#btn-videoRealTime-show span').css('color', '#5c5e62');
+            }
+        },
+        //点击显示报警
+        showAlarmWindow: function () {
+            $showAlarmWinMark.show();
+            $("#showAlarmWin").hide();
+        },
+        //点击切换状态栏
+        showAlarmWinMarkRight: function () {
+            $("#TabFenceBox a").click();
+            $("#myTab li").removeAttr("class");
+            $("#realTtimeAlarm").attr("class", "active");
+            $("#operationLogTable").attr("class", "tab-pane fade");
+            $("#realTimeState").attr("class", "tab-pane fade");
+            $("#realTimeCall").attr("class", "tab-pane fade active in");
+            $(this).css("background-position", "0px -67px");
+            setTimeout(function () {
                 $showAlarmWinMark.css("background-position", "0px 0px");
+            }, 100)
+            $("#realTtimeAlarm").click();
+            dataTableOperation.realTtimeAlarmClick();
+        },
+        alarmToolMinimize: function () {
+            $("#context-menu").removeAttr("class");
+            $("#showAlarmWin").show();
+            $showAlarmWinMark.hide();
+        },
+        //开启关闭声音
+        alarmOffSound: function () {
+            if (navigator.userAgent.indexOf('MSIE') >= 0) {
+                //IE浏览器
+                if ($alarmSoundSpan.hasClass("soundOpen")) {
+                    $alarmSoundSpan.addClass("soundOpen-off");
+                    $alarmSoundSpan.removeClass("soundOpen");
+                    $alarmSoundFont.css("color", "#a8a8a8");
+                    $alarmMsgBox.html('<embed id="IEalarmMsg" src=""/>');
+                } else {
+                    $alarmSoundSpan.removeClass("soundOpen-off");
+                    $alarmSoundSpan.addClass("soundOpen");
+                    $alarmSoundFont.css("color", "#fff");
+                    $alarmMsgBox.html('<embed id="IEalarmMsg" src="../../file/music/alarm.wav" autostart="true"/>');
+                }
+            } else {
+                //其他浏览器
+                if ($alarmSoundSpan.hasClass("soundOpen")) {
+                    $alarmSoundSpan.addClass("soundOpen-off");
+                    $alarmSoundSpan.removeClass("soundOpen");
+                    $alarmSoundFont.css("color", "#a8a8a8");
+                    if (alarmNum > 0) {
+                        $("#alarmMsgAutoOff")[0].pause();
+                    }
+                    $alarmMsgAutoOff.removeAttr("autoplay");
+                } else {
+                    $alarmSoundSpan.removeClass("soundOpen-off");
+                    $alarmSoundSpan.addClass("soundOpen");
+                    $alarmSoundFont.css("color", "#fff");
+                    if (alarmNum > 0) {
+                        $("#alarmMsgAutoOff")[0].play();
+                    }
+                }
             }
-        }
-    },
-    //显示报警设置详情
-    showAlarmInfoSettings: function () {
-    	pageLayout.closeVideo();
-        $("#alarmSettingInfo").modal("show");
-        $("#context-menu").removeClass("open");
-    },
-    //工具图标按钮
-    toolClick: function(){
-        // var $toolOperateClick = $("#toolOperateClick");
-        // if($toolOperateClick.css("margin-right") == "-702px"){
-        //     $toolOperateClick.animate({marginRight:"7px"});
-        // }else{
-        //     $("#disSetMenu,#mapDropSettingMenu").hide();
-        //     $toolOperateClick.animate({marginRight:"-702px"});
-        //     $("#toolOperateClick i").removeClass('active');
-        //     $("#toolOperateClick span").css('color','#5c5e62');
-        //     mouseTool.close(true);
-        // };
+        },
+        //开启关闭闪烁
+        alarmOffFlashes: function () {
+            if ($alarmFlashesSpan.hasClass("flashesOpen")) {
+                $alarmFlashesSpan.addClass("flashesOpen-off");
+                $alarmFlashesSpan.removeClass("flashesOpen");
+                $alarmFlashesFont.css("color", "#a8a8a8");
+                $showAlarmWinMark.css("background-position", "0px 0px");
+            } else {
+                $alarmFlashesSpan.removeClass("flashesOpen-off");
+                $alarmFlashesSpan.addClass("flashesOpen");
+                $alarmFlashesFont.css("color", "#fff");
+                if (alarmNum > 0) {
+                    $showAlarmWinMark.css("background-position", "0px -134px");
+                    setTimeout(function () {
+                        $showAlarmWinMark.css("background-position", "0px 0px");
+                    }, 1500)
+                } else {
+                    $showAlarmWinMark.css("background-position", "0px 0px");
+                }
+            }
+        },
+        //显示报警设置详情
+        showAlarmInfoSettings: function () {
+            pageLayout.closeVideo();
+            $("#alarmSettingInfo").modal("show");
+            $("#context-menu").removeClass("open");
+        },
+        //工具图标按钮
+        toolClick: function () {
+            // var $toolOperateClick = $("#toolOperateClick");
+            // if($toolOperateClick.css("margin-right") == "-702px"){
+            //     $toolOperateClick.animate({marginRight:"7px"});
+            // }else{
+            //     $("#disSetMenu,#mapDropSettingMenu").hide();
+            //     $toolOperateClick.animate({marginRight:"-702px"});
+            //     $("#toolOperateClick i").removeClass('active');
+            //     $("#toolOperateClick span").css('color','#5c5e62');
+            //     mouseTool.close(true);
+            // };
 
-        // wjk
-        var $toolOperateClick = $("#toolOperateClick");
-        if($toolOperateClick.css("margin-right") == "-776px"){
-            $toolOperateClick.animate({marginRight:"7px"});
-        }else{
-            $("#disSetMenu,#mapDropSettingMenu").hide();
-            $toolOperateClick.animate({marginRight:"-776px"});
-            $("#toolOperateClick i").removeClass('active');
-            $("#toolOperateClick span").css('color','#5c5e62');
-            mouseTool.close(true);
-        };
-    },
-    //显示设置
-    smoothMoveOrlogoDisplayClickFn: function(){
-        var id = $(this).attr("id");
-        //平滑移动
-        if(id == "smoothMove"){
-            if($("#smoothMove").attr("checked")){
-                flagSwitching = false;
-                $("#smoothMove").attr("checked",false);
-                $("#smoothMoveLab").removeClass("preBlue");
-            }else{
-                flagSwitching = true;
-                $("#smoothMove").attr("checked",true);
-                $("#smoothMoveLab").addClass("preBlue");
+            // wjk
+            var $toolOperateClick = $("#toolOperateClick");
+            if ($toolOperateClick.css("margin-right") == "-776px") {
+                $toolOperateClick.animate({marginRight: "7px"});
+            } else {
+                $("#disSetMenu,#mapDropSettingMenu").hide();
+                $toolOperateClick.animate({marginRight: "-776px"});
+                $("#toolOperateClick i").removeClass('active');
+                $("#toolOperateClick span").css('color', '#5c5e62');
+                mouseTool.close(true);
             }
-        }
-        //标识显示
-        else if(id == "logoDisplay"){
-            if($("#logoDisplay").attr("checked")){
-                isCarNameShow = false;
-                $("#logoDisplay").attr("checked",false);
-                $("#logoDisplayLab").removeClass("preBlue");
-            }else{
-                isCarNameShow = true;
-                $("#logoDisplay").attr("checked",true);
-                $("#logoDisplayLab").addClass("preBlue");
+            ;
+        },
+        //显示设置
+        smoothMoveOrlogoDisplayClickFn: function () {
+            var id = $(this).attr("id");
+            //平滑移动
+            if (id == "smoothMove") {
+                if ($("#smoothMove").attr("checked")) {
+                    flagSwitching = false;
+                    $("#smoothMove").attr("checked", false);
+                    $("#smoothMoveLab").removeClass("preBlue");
+                } else {
+                    flagSwitching = true;
+                    $("#smoothMove").attr("checked", true);
+                    $("#smoothMoveLab").addClass("preBlue");
+                }
             }
-            amapOperation.carNameState(isCarNameShow);
-        }
-    },
-    //地图设置
-    mapDropdownSettingClickFn: function(){
-        var id = $(this).attr("id");
-        //路况开关
-        if(id == "realTimeRC"){
-        	amapOperation.realTimeRC();
-        }
-        //卫星地图
-        else if(id == "defaultMap"){
-        	amapOperation.satelliteMapSwitching();
-        }
-        //谷歌地图
-        else if(id == "googleMap"){
-        	amapOperation.showGoogleMapLayers();
-        }
-    },
-    //获取当前服务器系统时间
-    getNowFormatDate : function () {
-        var url="/clbs/v/monitoring/getTime"
-        json_ajax("POST", url, "json", false,null,function(data){
-            logTime=data;
-        });
-    },
-    // wjk,视频时间限制回调函数
-    computingTimeIntFun:function(){
+            //标识显示
+            else if (id == "logoDisplay") {
+                if ($("#logoDisplay").attr("checked")) {
+                    isCarNameShow = false;
+                    $("#logoDisplay").attr("checked", false);
+                    $("#logoDisplayLab").removeClass("preBlue");
+                } else {
+                    isCarNameShow = true;
+                    $("#logoDisplay").attr("checked", true);
+                    $("#logoDisplayLab").addClass("preBlue");
+                }
+                amapOperation.carNameState(isCarNameShow);
+            }
+            //图标向上
+            else if (id == "icoUp") {
+                if ($("#icoUp").attr("checked")) {
+                    icoUpFlag = false;
+                    $("#icoUp").attr("checked", false);
+                    $("#icoUpLab").removeClass("preBlue");
+                } else {
+                    icoUpFlag = true;
+                    $("#icoUp").attr("checked", true);
+                    $("#icoUpLab").addClass("preBlue");
+                    var values = carNameMarkerMap.values();
+                    console.log(values);
+                    for (var i = 0; i < values.length; i++) {
+                        values[i].setAngle(0);
+                    }
+                }
+            }
+        },
+        //地图设置
+        mapDropdownSettingClickFn: function () {
+            var id = $(this).attr("id");
+            //路况开关
+            if (id == "realTimeRC") {
+                amapOperation.realTimeRC();
+            }
+            //卫星地图
+            else if (id == "defaultMap") {
+                amapOperation.satelliteMapSwitching();
+            }
+            //谷歌地图
+            else if (id == "googleMap") {
+                amapOperation.showGoogleMapLayers();
+            }
+        },
+        //获取当前服务器系统时间
+        getNowFormatDate: function () {
+            var url = "/clbs/v/monitoring/getTime"
+            json_ajax("POST", url, "json", false, null, function (data) {
+                logTime = data;
+            });
+        },
+        // wjk,视频时间限制回调函数
+        computingTimeIntFun: function () {
             clearInterval(computingTimeInt);
             if (m_isVideo !== 0 && m_videoFlag !== 0) {
                 var index = 0;
-                computingTimeInt = setInterval(function(){
-                    index ++ ;
+                computingTimeInt = setInterval(function () {
+                    index++;
                     if (index > 30) {
                         clearInterval(computingTimeInt);
                         if (!$('#phoneCall').find('i').hasClass('active')) {
@@ -1927,37 +1934,49 @@ var pageLayout = {
                             $mapPaddCon.removeClass("mapAreaTransform");
                         }
                         $("#btn-videoRealTime-show i").removeClass("active");
-        	            $("#btn-videoRealTime-show span").removeAttr("style");
+                        $("#btn-videoRealTime-show span").removeAttr("style");
                         m_videoFlag = 0; //标识视频窗口关闭
                         realTimeVideo.closeVideo(0);
                         layer.msg('单次视频时长已达到30s上限')
                     }
-                },1000)
+                }, 1000)
             }
-    },
-    //wjk 通话时间限制回调函数
-    computingTimeCallIntFun:function(){
-        clearInterval(computingTimeCallInt);
-        if (m_videoFlag !== 0) {
-            var index = 0;
-            computingTimeCallInt = setInterval(function(){
-                index ++ ;
-                if (index > 60) {
-                    clearInterval(computingTimeCallInt);
-                    if (!$('#btn-videoRealTime-show').find('i').hasClass('active')) {
-                        $realTimeVideoReal.removeClass("realTimeVideoShow");
-                        $mapPaddCon.removeClass("mapAreaTransform");
-                        m_videoFlag = 0; //标识视频窗口关闭
+        },
+        //wjk 通话时间限制回调函数
+        computingTimeCallIntFun: function () {
+            clearInterval(computingTimeCallInt);
+            if (m_videoFlag !== 0) {
+                var index = 0;
+                computingTimeCallInt = setInterval(function () {
+                    index++;
+                    if (index > 60) {
+                        clearInterval(computingTimeCallInt);
+                        if (!$('#btn-videoRealTime-show').find('i').hasClass('active')) {
+                            $realTimeVideoReal.removeClass("realTimeVideoShow");
+                            $mapPaddCon.removeClass("mapAreaTransform");
+                            m_videoFlag = 0; //标识视频窗口关闭
+                        }
+                        $("#phoneCall i").removeClass("active");
+                        $("#phoneCall span").removeAttr("style");
+                        realTimeVideo.closeAudio();
+                        layer.msg('单次实时通话时长已达到60s上限')
                     }
-                    $("#phoneCall i").removeClass("active");
-                    $("#phoneCall span").removeAttr("style");
-                    realTimeVideo.closeAudio();
-                    layer.msg('单次实时通话时长已达到60s上限')
-                }
-            },1000)
+                }, 1000)
+            }
+        },
+        //显示车辆运营数量和维修数量
+        showOperatingAndRepairNum: function () {
+            var url = "/clbs/m/basicinfo/monitoring/vehicle/getOperatingAndRepairNum";
+            json_ajax("POST", url, "json", true, {}, pageLayout.operatingAndRepairNumCall);
+        },
+        operatingAndRepairNumCall: function (data) {
+            if (data.success) {
+                $("#table-car-operating-num").text(data.obj.operatingNum);
+                $("#table-car-repair-num").text(data.obj.repairNum);
+            }
         }
     }
-};    
+;
 // wjk 实时视频时间定时器
 var computingTimeInt;
 
@@ -1966,8 +1985,8 @@ var amapOperation = {
     init: function () {
         // 创建地图
         map = new AMap.Map("MapContainer", {
-            resizeEnable: true,		//是否监控地图容器尺寸变化
-            zoom: 18,				//地图显示的缩放级别
+            resizeEnable: true,   //是否监控地图容器尺寸变化
+            zoom: 18,       //地图显示的缩放级别
         });
         // 输入提示
         var startPoint = new AMap.Autocomplete({
@@ -2008,13 +2027,15 @@ var amapOperation = {
         satellLayer.setMap(map);
         satellLayer.hide();
         // 实时路况
-        realTimeTraffic = new AMap.TileLayer.Traffic({zIndex: 1});
+        realTimeTraffic = new AMap.TileLayer.Traffic();
         realTimeTraffic.setMap(map);
         realTimeTraffic.hide();
         // 当范围缩小时触发该方法
-        var clickEventListener = map.on('zoomend', amapOperation.clickEventListener);
+        map.on('zoomend', amapOperation.markerStateListening);
+        // var clickEventListener = map.on('zoomend', amapOperation.clickEventListener);
         // 当拖拽结束时触发该方法
-        var clickEventListener2 = map.on('dragend', amapOperation.clickEventListener2);
+        map.on('dragend', amapOperation.markerStateListening);
+        // var clickEventListener2 = map.on('dragend', amapOperation.clickEventListener2);
         // 地图点击隐藏车辆树右键菜单
         map.on("click", function () {
             $("#rMenu").css("visibility", "hidden");
@@ -2023,6 +2044,13 @@ var amapOperation = {
             $("#fenceTool>.dropdown-menu").hide();
         });
         infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -10), closeWhenClickMap: true});
+        // 地图移动结束后触发，包括平移，以及中心点变化的缩放
+        map.on('moveend', amapOperation.mapMoveendFun);
+    },
+    // 地图setcenter完成后触发事件
+    mapMoveendFun: function () {
+        amapOperation.pathsChangeFun();
+        amapOperation.LimitedSizeTwo();
     },
     getDCallBack: function (data) {
         msgSNAck = data.obj.msgSN;
@@ -2037,9 +2065,7 @@ var amapOperation = {
             },
             "data": param
         };
-        setTimeout(function () {
-            webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/realLocationS", amapOperation.getLastOilDataCallBack, "/app/vehicle/realLocationS", requestStrS);
-        });
+        webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/realLocationS", amapOperation.getLastOilDataCallBack, "/app/vehicle/realLocationS", requestStrS);
     },
     // 对象点名传递数据
     getLastOilDataCallBack: function (data) {
@@ -2050,7 +2076,7 @@ var amapOperation = {
                 obj.desc = data.desc;
                 var da = {};
                 da.msgHead = data.data.msgHead;
-                da.msgBody = data.data.msgBody.gpsInfo;
+                da.msgBody = data.data.msgBody;
                 obj.data = da;
                 // 状态信息
                 dataTableOperation.updateVehicleStatusInfoTable(obj);
@@ -2111,328 +2137,81 @@ var amapOperation = {
                 '</a>' +
                 '</div>'
             );
-            if (mapVehicleTimeQ != undefined) {
-                if (mapVehicleTimeQ.containsKey(vehicle[12]) == true) {
-                    mapVehicleTimeQ.remove(vehicle[12]);
+            // 获取现在的订阅对象数据长度
+            var subscribeObjOldLength = markerAllUpdateData.values().length;
+
+            // 删除对应监控对象以前的数据
+            if (markerAllUpdateData.containsKey(vehicle[12])) {
+                markerAllUpdateData.remove(vehicle[12]);
+            }
+            // if(icoUpFlag){
+            //     markerInside.setAngle(0);
+            // }
+            // 组装监控对象需要保存的信息
+            var objSaveInfo = [
+                vehicle[12], // 监控对象ID
+                vehicle[1], // 监控对象名称
+                vehicle[10], // 经度
+                vehicle[9], // 纬度
+                vehicle[13], // 角度
+                vehicle[14], // 状态
+                vehicle[16], // 图标
+                vehicle[0], // 时间
+                vehicle[17], // 里程
+                vehicle[15],//监控对象类型
+            ];
+
+
+            var updateInfo = [
+                objSaveInfo,
+                content
+            ];
+            markerAllUpdateData.put(vehicle[12], updateInfo);
+
+            // 获取现在的订阅对象数据长度
+            var subscribeObjNowLength = markerAllUpdateData.values().length;
+
+            // 针对区域查询后，监控对象的聚合显示
+            if (map.getZoom() < 11 && subscribeObjNowLength != subscribeObjOldLength) {
+                amapOperation.markerStateListening();
+            }
+
+            // var angleVehicle = Number(vehicle[24]) + 270;
+            // 判断是否是订阅的第一个对象
+            if (markerViewingArea.size() == 0 && map.getZoom() >= 11 && markerAllUpdateData.size() == 1) {
+                amapOperation.createMarker(objSaveInfo, content, !isAreaSearch);
+                isAreaSearch = false;
+            } else {
+                // 判断当前位置点是否在可视区域内且层级大于11
+                if ((paths.contains(coordinateNew) || markerFocus == vehicle[12]) && map.getZoom() >= 11) {
+                    if (markerViewingArea.containsKey(vehicle[12])) { // 判断是否含有该id数据
+                        var value = markerViewingArea.get(vehicle[12]);
+
+                        var marker = value[0];
+                        marker.extData = vehicle[12]; // 监控对象id
+                        marker.stateInfo = vehicle[14]; // 监控对象状态
+                        marker.content = content.join(""); // 监控对象信息弹窗
+
+                        var markerLngLat = [vehicle[10], vehicle[9]];
+                        markerViewingArea.remove(vehicle[12]);
+                        value[0] = marker;
+                        value[1].push(markerLngLat);
+                        value[2] = content;
+                        value[3].push(null); // 里程
+                        value[4].push(null); // 时间
+                        value[6] = vehicle[14];
+                        value[8].push(vehicle[13]);
+                        markerViewingArea.put(vehicle[12], value);
+                        amapOperation.carNameEvade(vehicle[12], vehicle[1], marker.getPosition(), null, "1", null, false, vehicle[14]);// 监控对象进行移动
+                        amapOperation.markerMoveFun(objSaveInfo);
+                    } else { // 创建监控对象图标
+                        amapOperation.createMarker(objSaveInfo, content, false);
+                    }
+                } else {
+                    amapOperation.saveMarkerOutsideInfo(objSaveInfo, content);
                 }
             }
-            var mapVehicleTimeT = [];
-            var oldPosition = [];
-            mapVehicleTimeT.push(coordinateNew);
-            mapVehicleTimeT.push(content);
-            mapVehicleTimeT.push(vehicle[12]);
-            mapVehicleTimeT.push("1");
-            mapVehicleTimeQ.put(vehicle[12], mapVehicleTimeT);
-            var anglepeople = Number(vehicle[13]) + 270;
-            if (flog == true) {//2
-                var markerList = [];
-                flog = false;//关闭第一个点进入入口
-                //
-                markerRealTime = amapOperation.carNameEvade(vehicle[12], vehicle[1], [vehicle[10], vehicle[9]], true, "1", null, false, vehicle[14]);
-                markerRealTime.setAngle(anglepeople);
-                markerRealTime.extData = vehicle[12];
-                markerRealTime.content = content.join("");
-                markerRealTime.stateInfo = vehicle[14];
-                markerRealTime.on('click', amapOperation.markerClick);
-                map.setZoomAndCenter(18, coordinateNew);//将这个点设置为中心点和缩放级别
-                markerList.push(markerRealTime);//点
-                markerList.push(coordinateNew);//坐标
-                markerList.push(content);//详情
-                markerList.push("1");
-                markerList.push(vehicle[14]);
-                if (markerMap.containsKey(vehicle[12])) {
-                    markerMap.remove(vehicle[12]);
-                }
-                markerMap.put(vehicle[12], markerList);
 
-                amapOperation.LimitedSize(6);//第一个点限制范围
-            } else {
-                if (paths.contains(coordinateNew) == true && map.getZoom() >= 11) {//3
-                    var isExistVehicle = false;//判断是否是第一个点
-                    var lineArr = [];
-                    if (markerMap.containsKey(vehicle[12]) == false) {//判断最新点集合里面是否包含该车
-                        oldPosition = coordinateNew;
-                    } else {
-                        oldPositionlng = (markerMap.get(vehicle[12]))[1][0];
-                        if (oldPositionlng == null) {
-                            oldPositionlng = (markerMap.get(vehicle[12]))[1].lng;
-                        }
-                        oldPositionlat = (markerMap.get(vehicle[12]))[1][1];
-                        if (oldPositionlat == null) {
-                            oldPositionlat = (markerMap.get(vehicle[12]))[1].lat;
-                        }
-                        oldPosition.push(oldPositionlng);
-                        oldPosition.push(oldPositionlat);
-                    }
-                    ;
-                    if (markerMap.containsKey(vehicle[12]) == true) {
-                        isExistVehicle = true;
-                        markerInside = (markerMap.get(vehicle[12]))[0];
-                        markerInside.stateInfo = vehicle[14];
-                        markerInsidePosition = (markerMap.get(vehicle[12]))[1];
-                        if (mapflog.containsKey(vehicle[12]) == false) {//判断是否是第一个点 7
-                            mapflog.put(vehicle[12], "1");
-                            markerInside.content = content.join("");
-                            markerInside.setPosition(oldPosition);
-                            markerInside.on('click', amapOperation.markerClick);
-                            if (flagSwitching == true) {
-                                markerInside.moveTo(coordinateNew, 300);
-
-                                if (!markerInside.ej.moving) {
-                                    markerInside.on('moving', function (msg) {
-                                        //监听车牌移动
-                                        //
-                                        amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "1", null, false, markerInside.stateInfo);
-                                        if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                            amapOperation.LimitedSizeTwo();
-                                            var msg = markerInside.getPosition();
-                                            if (pathsTwo.contains(msg) == false) {
-                                                map.setZoomAndCenter(map.getZoom(), msg);
-                                                if (map.getZoom() == 18) {
-                                                    amapOperation.LimitedSize(6);
-                                                } else if (map.getZoom() == 17) {
-                                                    amapOperation.LimitedSize(5);
-                                                } else if (map.getZoom() == 16) {
-                                                    amapOperation.LimitedSize(4);
-                                                } else if (map.getZoom() == 15) {
-                                                    amapOperation.LimitedSize(3);
-                                                } else if (map.getZoom() == 14) {
-                                                    amapOperation.LimitedSize(2);
-                                                } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                    amapOperation.LimitedSize(1);
-                                                }
-                                                ;
-                                                amapOperation.LimitedSizeTwo();
-                                                amapOperation.vehicleMovement();
-                                            }
-                                            ;
-                                        }
-                                        ;
-                                    })
-                                }
-
-                            } else {
-                                markerInside.setPosition(coordinateNew);
-                                markerInside.setAngle(anglepeople);
-                                // 
-                                amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "1", null, false, markerInside.stateInfo);
-                                if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                    amapOperation.LimitedSizeTwo();
-                                    var msg = markerInside.getPosition();
-                                    if (pathsTwo.contains(msg) == false) {
-                                        map.setZoomAndCenter(map.getZoom(), msg);
-                                        if (map.getZoom() == 18) {
-                                            amapOperation.LimitedSize(6);
-                                        } else if (map.getZoom() == 17) {
-                                            amapOperation.LimitedSize(5);
-                                        } else if (map.getZoom() == 16) {
-                                            amapOperation.LimitedSize(4);
-                                        } else if (map.getZoom() == 15) {
-                                            amapOperation.LimitedSize(3);
-                                        } else if (map.getZoom() == 14) {
-                                            amapOperation.LimitedSize(2);
-                                        } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                            amapOperation.LimitedSize(1);
-                                        }
-                                        ;
-                                        amapOperation.LimitedSizeTwo();
-                                        amapOperation.vehicleMovement();
-                                    }
-                                    ;
-                                }
-                                ;
-                            }
-                            markerMap.remove(vehicle[12]);
-                            var markerList = [];
-                            markerList.push(markerInside);
-                            markerList.push(coordinateNew);//坐标
-                            markerList.push(content);
-                            markerList.push("1");
-                            markerList.push(vehicle[14]);
-                            if (markerMap.containsKey(vehicle[12])) {
-                                markerMap.remove(vehicle[12]);
-                            }
-                            markerMap.put(vehicle[12], markerList);
-
-                            if (!markerInside.ej.moveend) {
-                                markerInside.on('moveend', function (msg) {
-                                    amapOperation.ListeningMovement(markerInside.extData);
-                                    //
-                                    amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), false, "1", null, false, markerInside.stateInfo);
-                                })
-                            }
-
-                        } else {//7
-                            var posa = markerInsidePosition[1] === undefined ? markerInsidePosition.lat : markerInsidePosition[1]; //当前的坐标
-                            var posn = markerInsidePosition[0] === undefined ? markerInsidePosition.lng : markerInsidePosition[0];
-                            var oldn = oldPosition[0];//当前的坐标
-                            var olda = oldPosition[1];
-                            if (posa.substring(0, 9) == olda.substring(0, 9) && posn.substring(0, 10) == oldn.substring(0, 10)) {//8
-                                markerInside.content = content.join("");
-                                markerInside.setPosition(oldPosition); // 更新点标记位置
-                                markerInside.on('click', amapOperation.markerClick);
-                                if (flagSwitching == true) {
-                                    markerInside.moveTo(coordinateNew, 300);
-
-                                    if (!markerInside.ej.moving) {
-                                        markerInside.on('moving', function () {
-                                            //监听车牌移动
-                                            //
-                                            amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "1", null, false, markerInside.stateInfo);
-                                            if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                                amapOperation.LimitedSizeTwo();
-                                                var msg = markerInside.getPosition();
-                                                if (pathsTwo.contains(msg) == false) {
-                                                    map.setZoomAndCenter(map.getZoom(), msg);
-                                                    if (map.getZoom() == 18) {
-                                                        amapOperation.LimitedSize(6);
-                                                    } else if (map.getZoom() == 17) {
-                                                        amapOperation.LimitedSize(5);
-                                                    } else if (map.getZoom() == 16) {
-                                                        amapOperation.LimitedSize(4);
-                                                    } else if (map.getZoom() == 15) {
-                                                        amapOperation.LimitedSize(3);
-                                                    } else if (map.getZoom() == 14) {
-                                                        amapOperation.LimitedSize(2);
-                                                    } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                        amapOperation.LimitedSize(1);
-                                                    }
-                                                    ;
-                                                    amapOperation.LimitedSizeTwo();
-                                                    amapOperation.vehicleMovement();
-                                                }
-                                                ;
-                                            }
-                                            ;
-                                        })
-                                    }
-
-                                } else {
-                                    markerInside.setPosition(coordinateNew);
-                                    markerInside.setAngle(anglepeople);
-                                    //
-                                    amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "1", null, false, markerInside.stateInfo);
-                                    if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                        amapOperation.LimitedSizeTwo();
-                                        var msg = markerInside.getPosition();
-                                        if (pathsTwo.contains(msg) == false) {
-                                            map.setZoomAndCenter(map.getZoom(), msg);
-                                            if (map.getZoom() == 18) {
-                                                amapOperation.LimitedSize(6);
-                                            } else if (map.getZoom() == 17) {
-                                                amapOperation.LimitedSize(5);
-                                            } else if (map.getZoom() == 16) {
-                                                amapOperation.LimitedSize(4);
-                                            } else if (map.getZoom() == 15) {
-                                                amapOperation.LimitedSize(3);
-                                            } else if (map.getZoom() == 14) {
-                                                amapOperation.LimitedSize(2);
-                                            } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                amapOperation.LimitedSize(1);
-                                            }
-                                            ;
-                                            amapOperation.LimitedSizeTwo();
-                                            amapOperation.vehicleMovement();
-                                        }
-                                        ;
-                                    }
-                                    ;
-                                }
-                                markerMap.remove(vehicle[12]);
-                                var markerList = [];
-                                markerList.push(markerInside);
-                                markerList.push(coordinateNew);
-                                markerList.push(content);
-                                markerList.push("1");
-                                markerList.push(vehicle[14]);
-                                if (markerMap.containsKey(vehicle[12])) {
-                                    markerMap.remove(vehicle[12]);
-                                }
-                                markerMap.put(vehicle[12], markerList);
-
-                                if (!markerInside.ej.moveend) {
-                                    markerInside.on('moveend', function () {
-                                        amapOperation.ListeningMovement(markerInside.extData);
-                                        //
-                                        amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), false, "1", null, false, markerInside.stateInfo);
-                                    })
-                                }
-
-                            } else {//8
-                                lineArr.push(oldPosition);
-                                lineArr.push(coordinateNew);
-                                var VehicleNum = [];
-                                VehicleNum.push(oldPosition);//车辆坐标
-                                VehicleNum.push(lineArr);//线的坐标
-                                VehicleNum.push(content);//详情
-                                VehicleNum.push(300);//速度
-                                var VehicleNums = [];
-                                if (mapVehicleNum.containsKey(vehicle[12]) == true) {
-                                    var numa = mapVehicleNum.get(vehicle[12]);//取出值
-                                    numa.push(VehicleNum);//将新的值放进去
-                                    mapVehicleNum.remove(vehicle[12]);//删除map中的键值对
-                                    mapVehicleNum.put(vehicle[12], numa);//将新的键值对放进去
-                                } else {
-                                    VehicleNums.push(VehicleNum);
-                                    mapVehicleNum.put(vehicle[12], VehicleNums);
-                                }
-                                markerMap.remove(vehicle[12]);
-                                var markerList = [];
-                                markerList.push(markerInside);
-                                markerList.push(coordinateNew);
-                                markerList.push(content);
-                                markerList.push("1");
-                                markerList.push(vehicle[14]);
-                                if (markerMap.containsKey(vehicle[12])) {
-                                    markerMap.remove(vehicle[12]);
-                                }
-                                markerMap.put(vehicle[12], markerList);
-                            }//8
-                        }//7
-                    }//6
-                    // if (isExistVehicle == false) {//4
-                    //
-                    var markerRealTime = amapOperation.carNameEvade(vehicle[12], vehicle[1], oldPosition, true, "1", null, false, vehicle[14]);
-
-                    markerRealTime.setAngle(anglepeople);
-                    markerRealTime.extData = vehicle[12];
-                    markerRealTime.content = content.join("");
-                    markerRealTime.stateInfo = vehicle[14];
-                    markerRealTime.on('click', amapOperation.markerClick);
-                    markerList = [];
-                    markerList.push(markerRealTime);//点
-                    markerList.push(coordinateNew);//坐标
-                    markerList.push(content);//详情
-                    markerList.push("1");
-                    markerList.push(vehicle[14]);
-                    if (markerMap.containsKey(vehicle[12])) {
-                        markerMap.remove(vehicle[12]);
-                    }
-                    markerMap.put(vehicle[12], markerList);
-                    // }//4
-                } else {//3
-                    if (markerMap.containsKey(vehicle[12]) == true) {
-                        var markerInside = (markerMap.get(vehicle[12]))[0];
-                        markerInside.stateInfo = vehicle[14];
-                        markerMap.remove(vehicle[12]);
-                        map.remove([markerInside]);
-                        mapflog.remove(vehicle[12]);
-                        mapVehicleNum.remove(vehicle[12]);
-                    }
-                    if (mapVehicleTimeW.containsKey(vehicle[12]) == true) {
-                        mapVehicleTimeW.remove(vehicle[12]);
-                    }
-                    var mapVehicleTimeM = [];
-                    mapVehicleTimeM.push(coordinateNew);
-                    mapVehicleTimeM.push(content);
-                    mapVehicleTimeM.push(vehicle[12]);
-                    mapVehicleTimeM.push("1");
-                    mapVehicleTimeM.push(anglepeople);
-                    mapVehicleTimeM.push('123.png');
-                    mapVehicleTimeM.push(vehicle[14]);
-                    mapVehicleTimeW.put(vehicle[12], mapVehicleTimeM);
-                }//3
-            }//2
         } else if (vehicle[11] != "people") {
             //获取车Id
             var vehicleId = vehicle[13];
@@ -2506,10 +2285,11 @@ var amapOperation = {
             //轨迹跟踪点名
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
             var deviceType = vehicle[27];
+            var protocolType = vehicle[31];//协议类型
+            var state = vehicle[29];//在线状态
             if (deviceType == "0" || deviceType == "1") {
-                content.push(
-                    '<div class="infoWindowSetting">' +
-                    '<a class="col-md-2" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + type + '\',\'' + pid + '\',\'' + uuids + '\')">' +
+                var html = '<div class="infoWindowSetting">' +
+                    '<a class="col-md-2" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + deviceType + '\',\'' + pid + '\',\'' + uuids + '\')">' +
                     '<img src="../../resources/img/v-track.svg" style="height:28px;width:28px;"/>轨迹' +
                     '</a>' +
                     '<a class="col-md-2 traceTo" onClick="fenceOperation.goTrace(\'' + vehicle[13] + '\')">' +
@@ -2517,40 +2297,95 @@ var amapOperation = {
                     '</a>' +
                     '<a class="col-md-2 callName" onClick="treeMonitoring.callName_(\'' + vehicle[13] + '\')">' +
                     '<img src="../../resources/img/v-named.svg" style="height:28px;width:28px;"/>点名' +
-                    '</a>' +
-
-                    '<a class="col-md-2 callName" onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + vehicleId + '\')">' +
-                    '<img src="../../resources/img/video_info_jump.svg" style="height:28px;width:28px;"/>视频' +
-                    '</a>' +
-
-                    '<a class="col-md-2 text-right pull-right" style="padding-top:24px;">' +
+                    '</a>';
+                if (protocolType == '1' && state != '3') {//交通部JT/808-2013协议且车辆在线
+                    html += '<a class="col-md-2 callName" onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + vehicleId + '\')">' +
+                        '<img src="../../resources/img/video_info_jump.svg" style="height:28px;width:28px;"/>视频' +
+                        '</a>';
+                }
+                html += '<a class="col-md-2 text-right pull-right" style="padding-top:24px;">' +
                     '<i class="fa fa-chevron-circle-right fa-2x vStatusInfoShowMore" id="vStatusInfoShowMore" onclick="amapOperation.vStatusInfoShow(\'' + vStatusInfoShows + '\',\'' + vehicle[2] + '\',\'' + vehicle[14] + '\',\'' + vehicle[20] + '\')"></i>' +
                     '</a>' +
-                    '</div>'
-                );
+                    '</div>';
+                content.push(html);
+
+                /* content.push(
+                     '<div class="infoWindowSetting">' +
+                     '<a class="col-md-2" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + deviceType + '\',\'' + pid + '\',\'' + uuids + '\')">' +
+                     '<img src="../../resources/img/v-track.svg" style="height:28px;width:28px;"/>轨迹' +
+                     '</a>' +
+                     '<a class="col-md-2 traceTo" onClick="fenceOperation.goTrace(\'' + vehicle[13] + '\')">' +
+                     '<img src="../../resources/img/whereabouts.svg" style="height:28px;width:28px;"/>跟踪' +
+                     '</a>' +
+                     '<a class="col-md-2 callName" onClick="treeMonitoring.callName_(\'' + vehicle[13] + '\')">' +
+                     '<img src="../../resources/img/v-named.svg" style="height:28px;width:28px;"/>点名' +
+                     '</a>' +
+
+                     '<a class="col-md-2 callName" onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + vehicleId + '\')">' +
+                     '<img src="../../resources/img/video_info_jump.svg" style="height:28px;width:28px;"/>视频' +
+                     '</a>' +
+
+                     '<a class="col-md-2 text-right pull-right" style="padding-top:24px;">' +
+                     '<i class="fa fa-chevron-circle-right fa-2x vStatusInfoShowMore" id="vStatusInfoShowMore" onclick="amapOperation.vStatusInfoShow(\'' + vStatusInfoShows + '\',\'' + vehicle[2] + '\',\'' + vehicle[14] + '\',\'' + vehicle[20] + '\')"></i>' +
+                     '</a>' +
+                     '</div>'
+            )*/
             } else if (deviceType == "8" || deviceType == "9" || deviceType == "10") {
-                content.push(
-                    '<div class="infoWindowSetting">' +
-                    '<a class="col-md-3" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + type + '\',\'' + pid + '\',\'' + uuids + '\')">' +
+                var html = '<div class="infoWindowSetting">' +
+                    '<a class="col-md-3" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + deviceType + '\',\'' + pid + '\',\'' + uuids + '\')">' +
                     '<img src="../../resources/img/v-track.svg" style="height:28px;width:28px;"/>轨迹' +
                     '</a>' +
                     '<a class="col-md-3 traceTo" onClick="fenceOperation.goF3Trace(\'' + vehicle[13] + '\')">' +
                     '<img src="../../resources/img/whereabouts.svg" style="height:28px;width:28px;"/>跟踪' +
-                    '</a>' +
+                    '</a>';
 
-                    '<a class="col-md-2 callName" onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + vehicleId + '\')">' +
-                    '<img src="../../resources/img/video_info_jump.svg" style="height:28px;width:28px;"/>视频' +
-                    '</a>' +
-
-                    '<a class="col-md-3 text-right pull-right" style="padding-top:24px;">' +
+                if (protocolType == '1' && state != '3') {//交通部JT/808-2013协议
+                    html += '<a class="col-md-2 callName" onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + vehicleId + '\')">' +
+                        '<img src="../../resources/img/video_info_jump.svg" style="height:28px;width:28px;"/>视频' +
+                        '</a>';
+                }
+                html += '<a class="col-md-3 text-right pull-right" style="padding-top:24px;">' +
                     '<i class="fa fa-chevron-circle-right fa-2x vStatusInfoShowMore" id="vStatusInfoShowMore" onclick="amapOperation.vStatusInfoShow(\'' + vStatusInfoShows + '\',\'' + vehicle[2] + '\',\'' + vehicle[14] + '\',\'' + vehicle[20] + '\')"></i>' +
                     '</a>' +
-                    '</div>'
-                );
+                    '</div>';
+                content.push(html);
+
+                /* content.push(
+                     '<div class="infoWindowSetting">' +
+                     '<a class="col-md-3" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + deviceType + '\',\'' + pid + '\',\'' + uuids + '\')">' +
+                     '<img src="../../resources/img/v-track.svg" style="height:28px;width:28px;"/>轨迹' +
+                     '</a>' +
+                     '<a class="col-md-3 traceTo" onClick="fenceOperation.goF3Trace(\'' + vehicle[13] + '\')">' +
+                     '<img src="../../resources/img/whereabouts.svg" style="height:28px;width:28px;"/>跟踪' +
+                     '</a>' +
+
+                     '<a class="col-md-2 callName" onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + vehicleId + '\')">' +
+                     '<img src="../../resources/img/video_info_jump.svg" style="height:28px;width:28px;"/>视频' +
+                     '</a>' +
+
+                     '<a class="col-md-3 text-right pull-right" style="padding-top:24px;">' +
+                     '<i class="fa fa-chevron-circle-right fa-2x vStatusInfoShowMore" id="vStatusInfoShowMore" onclick="amapOperation.vStatusInfoShow(\'' + vStatusInfoShows + '\',\'' + vehicle[2] + '\',\'' + vehicle[14] + '\',\'' + vehicle[20] + '\')"></i>' +
+                     '</a>' +
+                     '</div>'
+                 );*/
             } else {
-                content.push(
+                var html = '<div class="infoWindowSetting">' +
+                    '<a class="col-md-3" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + deviceType + '\',\'' + pid + '\',\'' + uuids + '\')">' +
+                    '<img src="../../resources/img/v-track.svg" style="height:28px;width:28px;"/>轨迹' +
+                    '</a>';
+                if (protocolType == '1' && state != '3') {//交通部JT/808-2013协议
+                    html += '<a class="col-md-2 callName" onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + vehicleId + '\')">' +
+                        '<img src="../../resources/img/video_info_jump.svg" style="height:28px;width:28px;"/>视频' +
+                        '</a>';
+                }
+                html += '<a class="col-md-3 text-right pull-right" style="padding-top:24px;">' +
+                    '<i class="fa fa-chevron-circle-right fa-2x vStatusInfoShowMore" id="vStatusInfoShowMore" onclick="amapOperation.vStatusInfoShow(\'' + vStatusInfoShows + '\',\'' + vehicle[2] + '\',\'' + vehicle[14] + '\',\'' + vehicle[20] + '\')"></i>' +
+                    '</a>' +
+                    '</div>';
+                content.push(html);
+                /*content.push(
                     '<div class="infoWindowSetting">' +
-                    '<a class="col-md-3" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + type + '\',\'' + pid + '\',\'' + uuids + '\')">' +
+                    '<a class="col-md-3" id="jumpTo" onClick="window.amapOperation.jumpToTrackPlayer(\'' + vehicleId + '\',\'' + deviceType + '\',\'' + pid + '\',\'' + uuids + '\')">' +
                     '<img src="../../resources/img/v-track.svg" style="height:28px;width:28px;"/>轨迹' +
                     '</a>' +
 
@@ -2562,7 +2397,7 @@ var amapOperation = {
                     '<i class="fa fa-chevron-circle-right fa-2x vStatusInfoShowMore" id="vStatusInfoShowMore" onclick="amapOperation.vStatusInfoShow(\'' + vStatusInfoShows + '\',\'' + vehicle[2] + '\',\'' + vehicle[14] + '\',\'' + vehicle[20] + '\')"></i>' +
                     '</a>' +
                     '</div>'
-                );
+                );*/
             }
             content.push("</div>");
             //begin-2
@@ -2570,7 +2405,7 @@ var amapOperation = {
             content.push("<div class='col-md-6' style=''>");
             content.push("<div>所属企业：" + vehicle[26] + "</div>");
             content.push("<div>所属分组：" + vehicle[2] + "</div>");
-            content.push("<div>对象类型：" + vehicle[1] + "</div>");
+            content.push("<div>对象类型：" + ((vehicle[1] == null || vehicle[1] == 'null' || !vehicle[1]) ? '' : vehicle[1]) + "</div>");
             if (vehicle[8] == "开" || (vehicle[8].indexOf("无") == -1 && vehicle[8].indexOf("点火") > -1)) {
                 content.push("<div>ACC：" + vehicle[8] + " <img src='../../resources/img/acc_on.svg' style='margin: -3px 0px 0px 0px;height:24px;'/></div>");
             } else {
@@ -2606,598 +2441,545 @@ var amapOperation = {
             );
             content.push("</div>");
 
-            var mapVehicleTimeT = [];
-            var oldPosition = [];
-            if (mapVehicleTimeQ != undefined) {
-                if (mapVehicleTimeQ.containsKey(vehicle[13]) == true) {
-                    mapVehicleTimeQ.remove(vehicle[13]);
+            // 获取之前的订阅对象数据长度
+            var subscribeObjOldLength = markerAllUpdateData.values().length;
+
+            // 删除对应监控对象以前的数据
+            if (markerAllUpdateData.containsKey(vehicle[13])) {
+                markerAllUpdateData.remove(vehicle[13]);
+            }
+
+            // 组装监控对象需要保存的信息
+            var objSaveInfo = [
+                vehicle[13], // 监控对象ID
+                vehicle[0], // 监控对象名称
+                vehicle[12], // 经度
+                vehicle[11], // 纬度
+                vehicle[24], // 角度
+                vehicle[29], // 状态
+                vehicle[25], // 图标
+                vehicle[10], // 时间
+                vehicle[5], // 里程
+                vehicle[30], //监控对象类型
+            ];
+
+            var updateInfo = [
+                objSaveInfo,
+                content
+            ];
+
+
+            markerAllUpdateData.put(vehicle[13], updateInfo);
+
+            // 获取现在的订阅对象数据长度
+            var subscribeObjNowLength = markerAllUpdateData.values().length;
+
+            // 针对区域查询后，监控对象的聚合显示
+            if (map.getZoom() < 11 && subscribeObjNowLength != subscribeObjOldLength) {
+                amapOperation.markerStateListening();
+            }
+
+            // var angleVehicle = Number(vehicle[24]) + 270;
+            // 判断是否是订阅的第一个对象
+            if (markerViewingArea.size() == 0 && map.getZoom() >= 11 && markerAllUpdateData.size() == 1) {
+                amapOperation.createMarker(objSaveInfo, content, !isAreaSearch);
+                isAreaSearch = false;
+            } else {
+                // 判断当前位置点是否在可视区域内且层级大于11
+                if ((paths.contains(coordinateNew) || vehicle[13] == markerFocus) && map.getZoom() >= 11) {
+                    if (markerViewingArea.containsKey(vehicle[13])) { // 判断是否含有该id数据
+                        var value = markerViewingArea.get(vehicle[13]);
+                        var marker = value[0];
+                        marker.extData = vehicle[13]; // 监控对象id
+                        marker.stateInfo = vehicle[29]; // 监控对象状态
+                        marker.content = content.join(""); // 监控对象信息弹窗
+
+                        var markerLngLat = [vehicle[12], vehicle[11]];
+                        var timeOld = (new Date(vehicle[10].replace(/-/g, '/'))).getTime();//获得时间（毫秒）
+                        markerViewingArea.remove(vehicle[13]);
+                        value[0] = marker;
+                        value[1].push(markerLngLat);
+                        value[2] = content;
+                        value[3].push(vehicle[5]);
+                        value[4].push(timeOld);
+                        value[6] = vehicle[29];
+                        value[8].push(vehicle[24]);
+                        amapOperation.carNameEvade(vehicle[13], vehicle[0], marker.getPosition(), null, '0', null, false, vehicle[29]);
+                        markerViewingArea.put(vehicle[13], value);
+                        // 监控对象进行移动
+                        amapOperation.markerMoveFun(objSaveInfo);
+                    } else { // 创建监控对象图标
+                        amapOperation.createMarker(objSaveInfo, content, false);
+                    }
+                } else {
+                    amapOperation.saveMarkerOutsideInfo(objSaveInfo, content);
                 }
             }
-            mapVehicleTimeT = [];
-            mapVehicleTimeT.push(coordinateNew);
-            mapVehicleTimeT.push(content);
-            mapVehicleTimeT.push(vehicle[13]);
-            mapVehicleTimeQ.put(vehicle[13], mapVehicleTimeT);
-            var angleVehicle = Number(vehicle[24]) + 270;
-            if (flog == true) {//2
-                var markerList = [];
-                flog = false;//关闭第一个点进入入口
-                //
-                markerRealTime = amapOperation.carNameEvade(vehicle[13], vehicle[0], [vehicle[12], vehicle[11]], true, "0", vehicle[25], false, vehicle[29]);
-                markerRealTime.setAngle(angleVehicle);
-                markerRealTime.extData = vehicle[13];
-                markerRealTime.stateInfo = vehicle[29];
-                markerRealTime.content = content.join("");
-                markerRealTime.on('click', amapOperation.markerClick);
-                map.setZoomAndCenter(18, coordinateNew);//将这个点设置为中心点和缩放级别
-                markerList.push(markerRealTime);//点
-                markerList.push(coordinateNew);//坐标
-                markerList.push(content);//详情
-                markerList.push(vehicle[6]);//里程
-                var timeOld = (new Date(vehicle[10])).getTime();//获得时间（毫秒）
-                markerList.push(timeOld);//时间
-                markerList.push("0");
-                markerList.push(vehicle[29]);
-                markerMap.put(vehicle[13], markerList);
-                amapOperation.LimitedSize(6);//第一个点限制范围
-            } else {
-                if (paths.contains(coordinateNew) == true && map.getZoom() >= 11) {//3
-                    var isExistVehicle = false;//判断是否是第一个点
-                    var lineArr = [];
-                    if (markerMap.containsKey(vehicle[13]) == false) {//判断最新点集合里面是否包含该车
-                        oldPosition = coordinateNew;
-                    } else {
-                        oldPositionlng = (markerMap.get(vehicle[13]))[1][0];
-                        if (oldPositionlng == null) {
-                            oldPositionlng = (markerMap.get(vehicle[13]))[1].lng;
-                        }
-                        oldPositionlat = (markerMap.get(vehicle[13]))[1][1];
-                        if (oldPositionlat == null) {
-                            oldPositionlat = (markerMap.get(vehicle[13]))[1].lat;
-                        }
-                        oldPosition.push(oldPositionlng);
-                        oldPosition.push(oldPositionlat);
-                    }
-                    ;
-                    if (markerMap.containsKey(vehicle[13]) == true) {//6
-                        isExistVehicle = true;
-                        markerInside = (markerMap.get(vehicle[13]))[0];
-                        markerInside.stateInfo = vehicle[29];
-                        /********************************************************************/
-                        if (markerInside.getIcon() != "../../resources/img/vico/" + vehicle[25] && vehicle[25] != undefined) {
-                            markerInside.setIcon("../../resources/img/vico/" + vehicle[25]);
-                        }
-                        /********************************************************************/
-                        if (mapflog.containsKey(vehicle[13]) == false) {//判断是否是第一个点 7
-                            mapflog.put(vehicle[13], "1");
-                            markerInside.content = content.join("");
-                            markerInside.setPosition(oldPosition);
-                            markerInside.on('click', amapOperation.markerClick);
-                            if (flagSwitching == true) {
-                                var mileageMarker = vehicle[6] - (markerMap.get(vehicle[13]))[3];//当前点里程减去上个点的里程，得到里程差
-                                var timeOldA = (new Date(vehicle[10])).getTime();//获取当前点时间
-                                var timeOldB = timeOldA - (markerMap.get(vehicle[13]))[4];
-                                var timeMarker = timeOldB / 1000 / 60 / 60; //获取时间差，并将毫秒换算成小时
-                                var SpeedMarker = parseInt(mileageMarker / timeMarker);//获得平均速度并取整
-                                if (vehicle[18] == 1) {
-                                    markerInside.moveTo(coordinateNew, 10000);
-                                } else if (SpeedMarker > 0) {
-                                    if (mileageMarker > 6 || timeOldB > 300000) {
-                                        markerInside.moveTo(coordinateNew, 10000);
-                                    } else {
-                                        markerInside.moveTo(coordinateNew, SpeedMarker);
-                                    }
-                                } else {
-                                    if (vehicle[7] != 0) {
-                                        markerInside.moveTo(coordinateNew, vehicle[7]);
-                                    } else {
-                                        markerInside.moveTo(coordinateNew, 100);
-                                    }
-                                }
-
-                                if (!markerInside.ej.moving) {
-                                    markerInside.on('moving', function (msg) {
-                                        //监听车牌移动
-                                        //
-                                        amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "0", null, false, markerInside.stateInfo);
-                                        if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                            amapOperation.LimitedSizeTwo();
-                                            var msg = markerInside.getPosition();
-                                            if (pathsTwo.contains(msg) == false) {
-                                                map.setZoomAndCenter(map.getZoom(), msg);
-                                                if (map.getZoom() == 18) {
-                                                    amapOperation.LimitedSize(6);
-                                                } else if (map.getZoom() == 17) {
-                                                    amapOperation.LimitedSize(5);
-                                                } else if (map.getZoom() == 16) {
-                                                    amapOperation.LimitedSize(4);
-                                                } else if (map.getZoom() == 15) {
-                                                    amapOperation.LimitedSize(3);
-                                                } else if (map.getZoom() == 14) {
-                                                    amapOperation.LimitedSize(2);
-                                                } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                    amapOperation.LimitedSize(1);
-                                                }
-                                                ;
-                                                amapOperation.LimitedSizeTwo();
-                                                amapOperation.vehicleMovement();
-                                            }
-                                            ;
-                                        }
-                                        ;
-                                    })
-                                }
-
-                            } else {
-                                markerInside.setPosition(coordinateNew);
-                                markerInside.setAngle(angleVehicle);
-                                //
-                                amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "0", null, false, markerInside.stateInfo);
-                                if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                    amapOperation.LimitedSizeTwo();
-                                    var msg = markerInside.getPosition();
-                                    if (pathsTwo.contains(msg) == false) {
-                                        map.setZoomAndCenter(map.getZoom(), msg);
-                                        if (map.getZoom() == 18) {
-                                            amapOperation.LimitedSize(6);
-                                        } else if (map.getZoom() == 17) {
-                                            amapOperation.LimitedSize(5);
-                                        } else if (map.getZoom() == 16) {
-                                            amapOperation.LimitedSize(4);
-                                        } else if (map.getZoom() == 15) {
-                                            amapOperation.LimitedSize(3);
-                                        } else if (map.getZoom() == 14) {
-                                            amapOperation.LimitedSize(2);
-                                        } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                            amapOperation.LimitedSize(1);
-                                        }
-                                        ;
-                                        amapOperation.LimitedSizeTwo();
-                                        amapOperation.vehicleMovement();
-                                    }
-                                    ;
-                                }
-                                ;
-                            }
-                            markerMap.remove(vehicle[13]);
-                            var markerList = [];
-                            markerList.push(markerInside);
-                            markerList.push(coordinateNew);//坐标
-                            markerList.push(content);
-                            markerList.push(vehicle[6]);//里程
-                            markerList.push(timeOldA);
-                            markerList.push("0");
-                            markerList.push(vehicle[29]);
-                            if (markerMap.containsKey(vehicle[13])) {
-                                markerMap.remove(vehicle[13]);
-                            }
-                            markerMap.put(vehicle[13], markerList);
-
-                            if (!markerInside.ej.moveend) {
-                                markerInside.on('moveend', function (msg) {
-                                    amapOperation.ListeningMovement(markerInside.extData);
-                                    //
-                                    amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), false, "0", null, false, markerInside.stateInfo);
-                                })
-                            }
-
-                        } else {//7
-                            var posa = markerInside.getPosition().lat; //当前的坐标
-                            var posn = markerInside.getPosition().lng;
-                            var oldn = oldPosition[0];//当前的坐标
-                            var olda = oldPosition[1];
-                            if (posa == olda && posn == oldn) {//8
-                                markerInside.content = content.join("");
-                                markerInside.setPosition(oldPosition); // 更新点标记位置
-                                markerInside.on('click', amapOperation.markerClick);
-                                if (flagSwitching == true) {
-                                    var mileageMarker = vehicle[6] - (markerMap.get(vehicle[13]))[3];//当前点里程减去上个点的里程，得到里程差
-                                    var timeOldA = (new Date(vehicle[10])).getTime();//获取当前点时间
-                                    var timeOldB = timeOldA - (markerMap.get(vehicle[13]))[4];
-                                    var timeMarker = timeOldB / 1000 / 60 / 60; //获取时间差，并将毫秒换算成小时
-                                    var SpeedMarker = parseInt(mileageMarker / timeMarker);//获得平均速度并取整
-                                    if (vehicle[18] == 1) {
-                                        markerInside.moveTo(coordinateNew, 10000);
-                                        mapVehicleNum.remove(vehicle[13]);
-                                    } else if (SpeedMarker > 0) {
-                                        if (mileageMarker > 6 || timeOldB > 300000) {
-                                            markerInside.moveTo(coordinateNew, 10000);
-                                        } else {
-
-                                            markerInside.moveTo(coordinateNew, SpeedMarker);
-                                        }
-                                    } else {
-                                        if (vehicle[7] != 0) {
-                                            markerInside.moveTo(coordinateNew, vehicle[7]);
-                                        } else {
-                                            markerInside.moveTo(coordinateNew, 100);
-                                        }
-                                    }
-
-                                    if (!markerInside.ej.moving) {
-                                        markerInside.on('moving', function () {
-                                            //监听车牌移动
-                                            //
-                                            amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "0", null, false, markerInside.stateInfo);
-                                            if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                                amapOperation.LimitedSizeTwo();
-                                                var msg = markerInside.getPosition();
-                                                if (pathsTwo.contains(msg) == false) {
-                                                    map.setZoomAndCenter(map.getZoom(), msg);
-                                                    if (map.getZoom() == 18) {
-                                                        amapOperation.LimitedSize(6);
-                                                    } else if (map.getZoom() == 17) {
-                                                        amapOperation.LimitedSize(5);
-                                                    } else if (map.getZoom() == 16) {
-                                                        amapOperation.LimitedSize(4);
-                                                    } else if (map.getZoom() == 15) {
-                                                        amapOperation.LimitedSize(3);
-                                                    } else if (map.getZoom() == 14) {
-                                                        amapOperation.LimitedSize(2);
-                                                    } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                        amapOperation.LimitedSize(1);
-                                                    }
-                                                    ;
-                                                    amapOperation.LimitedSizeTwo();
-                                                    amapOperation.vehicleMovement();
-                                                }
-                                                ;
-                                            }
-                                            ;
-                                        })
-                                    }
-
-                                } else {
-                                    markerInside.setPosition(coordinateNew);
-                                    markerInside.setAngle(angleVehicle);
-                                    // 
-                                    amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "0", null, false, markerInside.stateInfo);
-                                    if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                        amapOperation.LimitedSizeTwo();
-                                        var msg = markerInside.getPosition();
-                                        if (pathsTwo.contains(msg) == false) {
-                                            map.setZoomAndCenter(map.getZoom(), msg);
-                                            if (map.getZoom() == 18) {
-                                                amapOperation.LimitedSize(6);
-                                            } else if (map.getZoom() == 17) {
-                                                amapOperation.LimitedSize(5);
-                                            } else if (map.getZoom() == 16) {
-                                                amapOperation.LimitedSize(4);
-                                            } else if (map.getZoom() == 15) {
-                                                amapOperation.LimitedSize(3);
-                                            } else if (map.getZoom() == 14) {
-                                                amapOperation.LimitedSize(2);
-                                            } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                amapOperation.LimitedSize(1);
-                                            }
-                                            ;
-                                            amapOperation.LimitedSizeTwo();
-                                            amapOperation.vehicleMovement();
-                                        }
-                                        ;
-                                    }
-                                    ;
-                                }
-                                markerMap.remove(vehicle[13]);
-                                var markerList = [];
-                                markerList.push(markerInside);
-                                markerList.push(coordinateNew);
-                                markerList.push(content);
-                                markerList.push(vehicle[6]);//里程
-                                markerList.push(timeOldA);
-                                markerList.push("0");
-                                markerList.push(vehicle[29]);
-                                if (markerMap.containsKey(vehicle[13])) {
-                                    markerMap.remove(vehicle[13]);
-                                }
-                                markerMap.put(vehicle[13], markerList);
-
-                                if (!markerInside.ej.moveend) {
-                                    markerInside.on('moveend', function () {
-                                        amapOperation.ListeningMovement(markerInside.extData);
-                                        //
-                                        amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), false, "0", null, false, markerInside.stateInfo);
-                                    })
-                                }
-
-                            } else if (vehicle[18] == 1) {
-                                // posa//经度
-                                // posn//纬度
-                                oldPosition = [posn, posa];
-                                markerInside.content = content.join("");
-                                markerInside.setPosition(oldPosition); // 更新点标记位置
-                                markerInside.on('click', amapOperation.markerClick);
-                                if (flagSwitching == true) {
-                                    markerInside.moveTo(coordinateNew, 10000);
-                                    mapVehicleNum.remove(vehicle[13]);
-
-                                    if (!markerInside.ej.moving) {
-                                        markerInside.on('moving', function () {
-                                            if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                                //监听车牌移动
-                                                //
-                                                amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "0", null, false, markerInside.stateInfo);
-                                                amapOperation.LimitedSizeTwo();
-                                                var msg = markerInside.getPosition();
-                                                if (pathsTwo.contains(msg) == false) {
-                                                    map.setZoomAndCenter(map.getZoom(), msg);
-                                                    if (map.getZoom() == 18) {
-                                                        amapOperation.LimitedSize(6);
-                                                    } else if (map.getZoom() == 17) {
-                                                        amapOperation.LimitedSize(5);
-                                                    } else if (map.getZoom() == 16) {
-                                                        amapOperation.LimitedSize(4);
-                                                    } else if (map.getZoom() == 15) {
-                                                        amapOperation.LimitedSize(3);
-                                                    } else if (map.getZoom() == 14) {
-                                                        amapOperation.LimitedSize(2);
-                                                    } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                        amapOperation.LimitedSize(1);
-                                                    }
-                                                    ;
-                                                    amapOperation.LimitedSizeTwo();
-                                                    amapOperation.vehicleMovement();
-                                                }
-                                                ;
-                                            }
-                                            ;
-                                        })
-                                    }
-
-                                } else {
-                                    markerInside.setPosition(coordinateNew);
-                                    markerInside.setAngle(angleVehicle);
-                                    mapVehicleNum.remove(vehicle[13]);
-                                    if (fixedPoint != null && fixedPoint == markerInside.extData) {
-                                        //监听车牌移动
-                                        //
-                                        amapOperation.carNameEvade(markerInside.extData, markerInside.name, markerInside.getPosition(), null, "0", null, false, markerInside.stateInfo);
-                                        amapOperation.LimitedSizeTwo();
-                                        var msg = markerInside.getPosition();
-                                        if (pathsTwo.contains(msg) == false) {
-                                            map.setZoomAndCenter(map.getZoom(), msg);
-                                            if (map.getZoom() == 18) {
-                                                amapOperation.LimitedSize(6);
-                                            } else if (map.getZoom() == 17) {
-                                                amapOperation.LimitedSize(5);
-                                            } else if (map.getZoom() == 16) {
-                                                amapOperation.LimitedSize(4);
-                                            } else if (map.getZoom() == 15) {
-                                                amapOperation.LimitedSize(3);
-                                            } else if (map.getZoom() == 14) {
-                                                amapOperation.LimitedSize(2);
-                                            } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                                amapOperation.LimitedSize(1);
-                                            }
-                                            ;
-                                            amapOperation.LimitedSizeTwo();
-                                            amapOperation.vehicleMovement();
-                                        }
-                                        ;
-                                    }
-                                    ;
-                                }
-                                var timeOldA = (new Date(vehicle[10])).getTime();//获取当前点时间
-                                markerMap.remove(vehicle[13]);
-                                var markerList = [];
-                                markerList.push(markerInside);
-                                markerList.push(coordinateNew);
-                                markerList.push(content);
-                                markerList.push(vehicle[6]);//里程
-                                markerList.push(timeOldA);
-                                markerList.push("0");
-                                markerList.push(vehicle[29]);
-                                if (markerMap.containsKey(vehicle[13])) {
-                                    markerMap.remove(vehicle[13]);
-                                }
-                                markerMap.put(vehicle[13], markerList);
-                            } else {//8
-                                lineArr.push(oldPosition);
-                                lineArr.push(coordinateNew);
-                                var VehicleNum = [];
-                                VehicleNum.push(oldPosition);//车辆坐标
-                                VehicleNum.push(lineArr);//线的坐标
-                                VehicleNum.push(content);//详情
-                                var mileageMarker = vehicle[6] - (markerMap.get(vehicle[13]))[3];//当前点里程减去上个点的里程，得到里程差
-                                var timeOldA = (new Date(vehicle[10])).getTime();//获取当前点时间
-                                var timeOldB = timeOldA - (markerMap.get(vehicle[13]))[4];
-                                var timeMarker = timeOldB / 1000 / 60 / 60; //获取时间差，并将毫秒换算成小时
-                                var SpeedMarker = parseInt(mileageMarker / timeMarker);//获得平均速度并取整
-                                if (SpeedMarker > 0) {
-                                    if (mileageMarker > 6 || timeOldB > 300000) {
-                                        VehicleNum.push(10000);//速度
-                                    } else {
-                                        VehicleNum.push(SpeedMarker);//速度
-                                    }
-                                } else {
-                                    if (vehicle[7] != 0) {
-                                        VehicleNum.push(vehicle[7]);//速度
-                                    } else {
-                                        VehicleNum.push(100);//速度
-                                    }
-                                }
-                                var VehicleNums = [];
-                                if (mapVehicleNum.containsKey(vehicle[13]) == true) {
-                                    var numa = mapVehicleNum.get(vehicle[13]);//取出值
-                                    numa.push(VehicleNum);//将新的值放进去
-                                    mapVehicleNum.remove(vehicle[13]);//删除map中的键值对
-                                    mapVehicleNum.put(vehicle[13], numa);//将新的键值对放进去
-                                } else {
-                                    VehicleNums.push(VehicleNum);
-                                    mapVehicleNum.put(vehicle[13], VehicleNums);
-                                }
-                                markerMap.remove(vehicle[13]);
-                                var markerList = [];
-                                markerList.push(markerInside);
-                                markerList.push(coordinateNew);
-                                markerList.push(content);
-                                markerList.push(vehicle[6]);//里程
-                                markerList.push(timeOldA);
-                                markerList.push("0");
-                                markerList.push(vehicle[29]);
-                                if (markerMap.containsKey(vehicle[13])) {
-                                    markerMap.remove(vehicle[13]);
-                                }
-                                markerMap.put(vehicle[13], markerList);
-                            }//8
-                        }//7
-                    }//6
-                    else {
-                        
-                    }
-                    // 这里注释掉是为了解决监控对象状态变了后，地图上的车辆状态无变化
-                    //  if (isExistVehicle == false) {//4
-                    //
-                    var markerRealTime;
-                    if (isExistVehicle == false) {
-                    	markerRealTime = amapOperation.carNameEvade(vehicle[13], vehicle[0], oldPosition, true, "0", vehicle[25], false, vehicle[29]);
-                    } else {
-                        markerRealTime = amapOperation.carNameEvade(vehicle[13], vehicle[0], oldPosition, null, "0", vehicle[25], true, vehicle[29]);
-                    }
-                    if(markerRealTime != undefined){
-                        markerRealTime.setAngle(angleVehicle);
-                        markerRealTime.extData = vehicle[13];
-                        markerRealTime.content = content.join("");
-                        markerRealTime.stateInfo = vehicle[29];
-                        markerRealTime.on('click', amapOperation.markerClick);
-                        markerList = [];
-                        markerList.push(markerRealTime);//点
-                        markerList.push(coordinateNew);//坐标
-                        markerList.push(content);//详情
-                        markerList.push(vehicle[6]);//里程
-                        var timeOld = (new Date(vehicle[10])).getTime();//获得时间（毫秒）
-                        markerList.push(timeOld);//时间
-                        markerList.push("0");
-                        markerList.push(vehicle[29]);
-                        if (markerMap.containsKey(vehicle[13])) {
-                        	markerMap.remove(vehicle[13]);
-                        }
-                        markerMap.put(vehicle[13], markerList);
-                    }
-                    
-                    // }//4
-                } else {//3
-                    if (markerMap.containsKey(vehicle[13]) == true) {
-                        var markerInside = (markerMap.get(vehicle[13]))[0];
-                        markerInside.stateInfo = vehicle[29];
-                        markerMap.remove(vehicle[13]);
-                        map.remove([markerInside]);
-                        mapflog.remove(vehicle[13]);
-                        mapVehicleNum.remove(vehicle[13]);
-                    }
-                    if (mapVehicleTimeW.containsKey(vehicle[13]) == true) {
-                        mapVehicleTimeW.remove(vehicle[13]);
-                    }
-                    var mapVehicleTimeM = [];
-                    mapVehicleTimeM.push(coordinateNew);
-                    mapVehicleTimeM.push(content);
-                    mapVehicleTimeM.push(vehicle[13]);
-                    mapVehicleTimeM.push("0");
-                    mapVehicleTimeM.push(angleVehicle);
-                    mapVehicleTimeM.push(vehicle[25]);
-                    mapVehicleTimeM.push(vehicle[29]);
-                    mapVehicleTimeW.put(vehicle[13], mapVehicleTimeM);
-                }//3
-            }//2
         }
     },//1
-    ListeningMovement: function (plate) {
-        var markerInside = markerMap.get(plate);
-        var leng = mapVehicleNum.get(plate);
-        if (mapVehicleNum.containsKey(plate) == true && leng.length != 0) {
-            lineArr = [];
-            var realtA = leng[0];
-            var realtB = realtA[0];//车的坐标
-            var realtC = realtA[1];//线的坐标
-            var realtD = realtA[2];//详情
-            var realtE = realtA[3];//速度
-            markerInside[0].content = realtD.join("");
-            markerInside[0].setPosition(realtB); // 更新点标记位置
-            markerInside[0].on('click', amapOperation.markerClick);
-            /**
-             *  监听拖拽地图（若车辆离开当前区域）
-             */
-            if (flagSwitching == true) {
-                markerInside[0].moveTo(realtC[1], realtE);
+    // 点名操作
+    callTheRollFun: function () {
+        if (markerViewingArea.containsKey(callTheRollId)) {
+            var value = markerViewingArea.get(callTheRollId);
+            var positions = value[1];
+            if (positions.length > 1) {
+                markerViewingArea.remove(callTheRollId);
+                var marker = value[0];
+                marker.stopMove();
+                value[1].splice(1, value[1].length - 2);
+                value[3].splice(1, value[3].length - 2);
+                value[4].splice(1, value[4].length - 2);
+                value[8].splice(1, value[8].length - 2);
+                markerViewingArea.put(callTheRollId, value);
 
-                if (!markerInside[0].ej.moving) {
-                    markerInside[0].on('moving', function () {
-                        if (fixedPoint != null && fixedPoint == markerInside[0].extData) {
-                            //监听车牌移动
-                            //
-                            amapOperation.carNameEvade(markerInside[0].extData, markerInside[0].name, markerInside[0].getPosition(), null, "0", null, false, markerInside[0].stateInfo);
-                            amapOperation.LimitedSizeTwo();
-                            var msg = markerInside[0].getPosition();
-                            if (pathsTwo.contains(msg) == false) {
-                                map.setZoomAndCenter(map.getZoom(), msg);
-                                if (map.getZoom() == 18) {
-                                    amapOperation.LimitedSize(6);
-                                } else if (map.getZoom() == 17) {
-                                    amapOperation.LimitedSize(5);
-                                } else if (map.getZoom() == 16) {
-                                    amapOperation.LimitedSize(4);
-                                } else if (map.getZoom() == 15) {
-                                    amapOperation.LimitedSize(3);
-                                } else if (map.getZoom() == 14) {
-                                    amapOperation.LimitedSize(2);
-                                } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                                    amapOperation.LimitedSize(1);
-                                }
-                                ;
-                                amapOperation.LimitedSizeTwo();
-                                amapOperation.vehicleMovement();
-                            }
-                            ;
-                        }
-                        ;
-                    })
+                marker.moveTo(value[1][1], 10000);
+                // 判断监控对象是否已经绑定了移动监听事件
+                if (!marker.ej.moving) {
+                    // 绑定移动监听事件
+                    marker.on('moving', function (e) {
+                        amapOperation.markerMovingFun(e, callTheRollId)
+                    });
                 }
+                // 判断监控对象是否已经绑定了移动结束事件
+                if (!marker.ej.moveend) {
+                    // 绑定移动监听事件
+                    marker.on('moveend', function (e) {
+                        amapOperation.markerMoveendFun(e, callTheRollId)
+                    });
+                }
+            }
+            callTheRollId = null;
+        }
+    },
+    // 创建监控对象图标
+    createMarker: function (info, content, isFocus) {
+        var markerLngLat = [info[2], info[3]]; // 经纬度
+        var angle;
+        if (icoUpFlag) {
+            angle = 0;
+        } else {
+            angle = Number(info[4]) + 270; // 角度
+        }
 
-            } else {
-                markerInside[0].setPosition(realtC[1]);
-                if (fixedPoint != null && fixedPoint == markerInside[0].extData) {
-                    //监听车牌移动
-                    //
-                    amapOperation.carNameEvade(markerInside[0].extData, markerInside[0].name, markerInside[0].getPosition(), null, "0", null, false, markerInside[0].stateInfo);
-                    amapOperation.LimitedSizeTwo();
-                    var msg = markerInside[0].getPosition();
-                    if (pathsTwo.contains(msg) == false) {
-                        map.setZoomAndCenter(map.getZoom(), msg);
-                        if (map.getZoom() == 18) {
-                            amapOperation.LimitedSize(6);
-                        } else if (map.getZoom() == 17) {
-                            amapOperation.LimitedSize(5);
-                        } else if (map.getZoom() == 16) {
-                            amapOperation.LimitedSize(4);
-                        } else if (map.getZoom() == 15) {
-                            amapOperation.LimitedSize(3);
-                        } else if (map.getZoom() == 14) {
-                            amapOperation.LimitedSize(2);
-                        } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                            amapOperation.LimitedSize(1);
-                        }
-                        ;
-                        amapOperation.LimitedSizeTwo();
-                        amapOperation.vehicleMovement();
+        // 删除已经存在的marker图标
+        if (markerViewingArea.containsKey(info[0])) {
+            markerViewingArea.remove(info[0]);
+        }
+
+
+        //创建监控对象图标
+        var marker = amapOperation.carNameEvade(
+            info[0],
+            info[1],
+            markerLngLat,
+            true,
+            info[9],
+            info[6],
+            false,
+            info[5]
+        );
+        // 监控对象添加字段
+        marker.setAngle(angle);
+        marker.extData = info[0]; // 监控对象id
+        marker.stateInfo = info[5]; // 监控对象状态
+        marker.content = content.join(""); // 监控对象信息弹窗
+        marker.on('click', amapOperation.markerClick);
+        if (markerViewingArea.size() == 0 && isFocus) {
+            map.setZoomAndCenter(18, markerLngLat);//将这个点设置为中心点和缩放级别
+            amapOperation.LimitedSize(6);// 第一个点限制范围
+        }
+        var timeOld = (new Date(info[7].replace(/-/g, '/'))).getTime();//获得时间（毫秒）
+        var markerList = [
+            marker, // marker
+            [markerLngLat], // 坐标
+            content, // 信息弹窗信息
+            [info[8]], // 里程
+            [timeOld], // 时间
+            '0', // ?
+            info[5], // 车辆状态
+            info[6], // 车辆图标
+            [info[4]], // 角度
+        ];
+        markerViewingArea.put(info[0], markerList);
+    },
+    // 保存可以区域外的监控对象信息
+    saveMarkerOutsideInfo: function (info, content) {
+        var id = info[0];
+        // 删除可视区域内的信息
+        if (markerViewingArea.containsKey(id)) {
+            var marker = markerViewingArea.get(id)[0];
+            marker.stopMove();
+            map.remove([marker]);
+            markerViewingArea.remove(id);
+        }
+
+        var markerLngLat = [info[2], info[3]]; // 经纬度
+        // var angle = Number(info[24]) + 270; // 角度
+        var timeOld = info[7] == null ? info[7] : (new Date(info[7].replace(/-/g, '/'))).getTime();//获得时间（毫秒）
+
+        var markerList = [
+            // markerRealTime, // marker
+            [markerLngLat], // 坐标
+            content, // 信息弹窗信息
+            [info[8]], // 里程
+            [timeOld], // 时间
+            '0', // ?
+            info[5], // ?
+            [info[4]] // 角度
+        ];
+
+        if (markerOutside.containsKey(id)) {
+            markerOutside.remove(id);
+        }
+        markerOutside.put(id, markerList);
+    },
+    // 监控对象进行移动
+    markerMoveFun: function (info) {
+        var id = info[0];
+        var value = markerViewingArea.get(id);
+        // 判断监控对象存储了多少个经纬度坐标，超过2个就暂时不移动
+        if (value[1].length == 2) {
+            // 平滑移动
+            if (flagSwitching) {
+                var presentPoint = value[1][0];
+                var moveToPoint = value[1][1];
+
+                // 判断如果两个点的经纬度相等，不执行移动事件且删除经纬度点
+                if (presentPoint[0] == moveToPoint[0] && presentPoint[1] == moveToPoint[1]) {
+                    markerViewingArea.remove(id);
+                    value[1].splice(0, 1);
+                    value[3].splice(0, 1);
+                    value[4].splice(0, 1);
+                    value[8].splice(0, 1);
+                    markerViewingArea.put(id, value);
+                } else {
+                    var moveMarker = value[0];
+                    var speed = amapOperation.markerMoveSpeed(value[3], value[4]); // marker移动速度
+                    if (isNaN(speed)) {
+                        speed = 50;
                     }
-                    ;
+                    moveMarker.moveTo(moveToPoint, speed);
+                    // 判断监控对象是否已经绑定了移动监听事件
+                    if (!moveMarker.ej.moving) {
+                        // 绑定移动监听事件
+                        moveMarker.on('moving', function (e) {
+                            amapOperation.markerMovingFun(e, id)
+                        });
+                    }
+                    // 判断监控对象是否已经绑定了移动结束事件
+                    if (!moveMarker.ej.moveend) {
+                        // 绑定移动监听事件
+                        moveMarker.on('moveend', function (e) {
+                            amapOperation.markerMoveendFun(e, id)
+                        });
+                    }
                 }
-                ;
+            } else { // 跳点
+                amapOperation.markerJumpPoint(id, value);
             }
+        }
+    },
+    // 跳点运动
+    markerJumpPoint: function (id, value) {
+        var marker = value[0];
+        var movePosition = value[1][1];
 
-            if (!markerInside[0].ej.moveend) {
-                markerInside[0].on('moveend', function () {
-                    amapOperation.ListeningMovement(markerInside[0].extData);
-                    amapOperation.carNameEvade(markerInside[0].extData, markerInside[0].name, markerInside[0].getPosition(), false, "0", null, false, markerInside[0].stateInfo);
-                })
-            }
+        // marker设置经纬度
+        marker.setPosition(movePosition);
+        // 设置图标角度
+        var angle;
+        if (icoUpFlag) {
+            angle = 0;
+        } else {
+            angle = Number(value[8][1]) + 270;
+        }
+        marker.setAngle(angle);
 
-            leng.splice(0, 1);
-            mapVehicleNum.remove(plate);
-            mapVehicleNum.put(plate, leng);
-            //break;
+        // 判断跳到指定点是否超出范围
+        if (!pathsTwo.contains(movePosition)) {
+            map.setCenter(movePosition);
+            amapOperation.pathsChangeFun();
+            amapOperation.LimitedSizeTwo();
         }
         ;
+
+        // 删除集合中已经走完的点
+        markerViewingArea.remove(id);
+        value[1].splice(0, 1);
+        value[3].splice(0, 1);
+        value[4].splice(0, 1);
+        value[8].splice(0, 1);
+        markerViewingArea.put(id, value);
+        //车牌避让
+        amapOperation.carNameEvade(
+            id,
+            marker.name,
+            movePosition,
+            null,
+            "0",
+            null,
+            false,
+            marker.stateInfo
+        );
+        // 跳点完成后，判断经纬度数据长度是否有堆积
+        if (value[1].length > 1) {
+            var newValue = markerViewingArea.get(id);
+            amapOperation.markerJumpPoint(id, newValue);
+        }
+    },
+    // 监控对象移动监听事件
+    markerMovingFun: function (e, id) {
+        var marker = markerViewingArea.get(id)[0];
+        // 车牌向上
+        if (icoUpFlag) {
+            marker.setAngle(0);
+        }
+        amapOperation.carNameEvade(
+            marker.extData,
+            marker.name,
+            marker.getPosition(),
+            null,
+            "0",
+            null,
+            false,
+            marker.stateInfo
+        );
+        // 判断是否为聚焦跟踪监控对象
+        if (markerFocus == marker.extData) {
+            // amapOperation.LimitedSizeTwo();
+            var msg = marker.getPosition();
+            if (!pathsTwo.contains(msg)) {
+                map.setCenter(msg);
+            }
+            ;
+        }
+        ;
+    },
+    // 监控对象移动结束事件
+    markerMoveendFun: function (e, id) {
+        var marker = markerViewingArea.get(id)[0];
+
+        amapOperation.carNameEvade(
+            marker.extData,
+            marker.name,
+            marker.getPosition(),
+            false,
+            '0',
+            null,
+            false,
+            marker.stateInfo
+        );
+
+        var value = markerViewingArea.get(id);
+        markerViewingArea.remove(id);
+        value[1].splice(0, 1);
+        value[3].splice(0, 1);
+        value[4].splice(0, 1);
+        value[8].splice(0, 1);
+        markerViewingArea.put(id, value);
+        // 判断行驶结束后
+        if (value[1].length > 1) {
+            if (flagSwitching) {
+                // 监控对象图标持续移动
+                amapOperation.markerContinueMoving(id);
+            } else {
+                // 跳点
+                var newValue = markerViewingArea.get(id);
+                amapOperation.markerJumpPoint(id, newValue);
+            }
+        }
+    },
+    // 监控对象图标持续移动
+    markerContinueMoving: function (id) {
+        var value = markerViewingArea.get(id);
+
+        var presentPoint = value[1][0];
+        var moveToPoint = value[1][1];
+
+        // 判断如果两个点的经纬度相等，不执行移动事件且删除经纬度点
+        if (presentPoint[0] == moveToPoint[0] && presentPoint[1] == moveToPoint[1]) {
+            markerViewingArea.remove(id);
+            value[1].splice(0, 1);
+            value[3].splice(0, 1);
+            value[4].splice(0, 1);
+            value[8].splice(0, 1);
+            markerViewingArea.put(id, value);
+        } else {
+            var moveMarker = value[0];
+            var speed = amapOperation.markerMoveSpeed(value[3], value[4]); // marker移动速度
+            moveMarker.moveTo(moveToPoint, speed);
+
+            if (!moveMarker.ej.moving) {
+                // 绑定移动监听事件
+                moveMarker.on('moving', function (e) {
+                    amapOperation.markerMovingFun(e, id)
+                });
+            }
+            // 判断监控对象是否已经绑定了移动结束事件
+            if (!moveMarker.ej.moveend) {
+                // 绑定移动监听事件
+                moveMarker.on('moveend', function (e) {
+                    amapOperation.markerMoveendFun(e, id)
+                });
+            }
+        }
+    },
+    // 计算marker移动速度
+    markerMoveSpeed: function (mileage, time) {
+        var speed;
+        if (mileage != null) {
+            var markerMileage = Number(mileage[1]) - Number(mileage[0]);
+            var markerTime = (Number(time[1]) - Number(time[0])) / 1000 / 60 / 60;
+            if (markerTime == 0) {
+                speed = 50;
+            } else {
+                speed = Number((markerMileage / markerTime).toFixed(2));
+            }
+        } else {
+            speed = 300;
+        }
+        return speed == 0 ? 100 : speed;
+    },
+    // 监控对象在地图层级改变或拖拽后状态更新
+    markerStateListening: function () {
+        // 根据地图层级变化相应改变paths
+        amapOperation.pathsChangeFun();
+        amapOperation.LimitedSizeTwo();
+
+        var mapZoom = map.getZoom();
+        // 判断地图层级是否大于等于11
+        // 大于等于11：重新计算地图上哪些监控对象在可视区域内||区域外
+        // 小于11：进行聚合
+        if (mapZoom >= 11) {
+            // 判断是否是刚从聚合状态切换过来
+            // 如果是就把最新点集合的数据进行创建marker
+            if (isCluster) {
+                if (cluster != undefined) {
+                    cluster.clearMarkers();
+                }
+                isCluster = false;
+            }
+            amapOperation.clusterToCreateMarker();
+        } else {
+            // 刚进入聚合状态，进行清空聚焦车辆
+            if (!isCluster) {
+                isCluster = true;
+                amapOperation.clearFocusObj();
+            }
+            // 清空地图上已创建监控对象图标
+            amapOperation.clearMapForMarker();
+            // 创建地图可视区域聚合点
+            amapOperation.createMarkerClusterer();
+        }
+    },
+    // 清空聚焦车辆
+    clearFocusObj: function () {
+        markerFocus = null;
+        $('#treeDemo li a').removeClass('curSelectedNode_dbClick');
+        $('#treeDemo li a').removeClass('curSelectedNode');
+        $('#realTimeStateTable tbody tr').removeClass('tableHighlight');
+        $('#realTimeStateTable tbody tr').removeClass('tableHighlight-blue');
+    },
+    // 根据地图层级变化相应改变paths
+    pathsChangeFun: function () {
+        var mapZoom = map.getZoom();
+
+        if (mapZoom == 18) {
+            amapOperation.LimitedSize(6);
+        } else if (mapZoom == 17) {
+            amapOperation.LimitedSize(5);
+        } else if (mapZoom == 16) {
+            amapOperation.LimitedSize(4);
+        } else if (mapZoom == 15) {
+            amapOperation.LimitedSize(3);
+        } else if (mapZoom == 14) {
+            amapOperation.LimitedSize(2);
+        } else if (mapZoom <= 13 && mapZoom >= 6) {
+            amapOperation.LimitedSize(1);
+        }
+        ;
+    },
+    // 清空地图上已创建监控对象图标
+    clearMapForMarker: function () {
+        var values = markerViewingArea.values();
+
+        for (var i = 0, len = values.length; i < len; i++) {
+            var marker = values[i][0];
+            marker.stopMove();
+            map.remove([marker]);
+        }
+        // 清空可视区域内经纬度集合
+        markerViewingArea.clear();
+        // 清空可视区域外经纬度集合
+        markerOutside.clear();
+        // 清空地图上的监控对象名称
+        var nameValues = carNameMarkerContentMap.values();
+        map.remove(nameValues);
+    },
+    // 创建地图可视区域聚合点
+    createMarkerClusterer: function () {
+        if (cluster != undefined) {
+            cluster.clearMarkers();
+            cluster.off('click', amapOperation.clusterClickFun);
+        }
+        var values = markerAllUpdateData.values();
+        var markerList = [];
+        for (var i = 0, len = values.length; i < len; i++) {
+            var markerLngLat = [values[i][0][2], values[i][0][3]];
+            var id = values[i][0][0];
+            var content = values[i][1];
+            // if (paths.contains(markerLngLat)) {
+            var marker = new AMap.Marker({
+                position: markerLngLat,
+                icon: "../../resources/img/1.png",
+                offset: new AMap.Pixel(-26, -13), //相对于基点的位置
+                autoRotation: true
+            });
+            marker.extData = id;
+            marker.content = content.join("");
+            marker.on('click', amapOperation.markerClick);
+            markerList.push(marker);
+            // }
+        }
+        cluster = new AMap.MarkerClusterer(map, markerList, {zoomOnClick: false});
+        cluster.on('click', amapOperation.clusterClickFun);
+    },
+    // 聚合点击事件
+    clusterClickFun: function (data) {
+        var position = data.lnglat;
+        var zoom = map.getZoom();
+        if (zoom < 6) {
+            map.setZoomAndCenter(6, position);
+        } else {
+            map.setZoomAndCenter(11, position);
+        }
+
+        // return false;
+        // amapOperation.markerStateListening();
+    },
+    // 聚合状态刚消失创建marker
+    clusterToCreateMarker: function () {
+        var values = markerAllUpdateData.values();
+
+        for (var i = 0, len = values.length; i < len; i++) {
+            var id = values[i][0][0];
+            var markerLngLat = [values[i][0][2], values[i][0][3]];
+
+            if (paths.contains(markerLngLat) || markerFocus == id) {
+                if (markerViewingArea.containsKey(id)) {
+                    var marker = markerViewingArea.get(id)[0];
+
+                    var info = values[i][0];
+                    var carName = info[1];
+                    var stateInfo = info[5];
+                    amapOperation.carNameEvade(id, carName, marker.getPosition(), false, '0', null, false, stateInfo);
+                } else {
+                    amapOperation.createMarker(values[i][0], values[i][1], false);
+                }
+            } else {
+                amapOperation.saveMarkerOutsideInfo(values[i][0], values[i][1]);
+            }
+        }
     },
     LimitedSizeTwo: function () {
         var southwest = map.getBounds().getSouthWest();
@@ -3234,277 +3016,13 @@ var amapOperation = {
             [pnn, pna]//东北角坐标
         );
     },
-    //当范围缩小时触发该方法
-    clickEventListener: function () {
-        setTimeout(function () {
-            if (map.getZoom() == 18) {
-                amapOperation.LimitedSize(6);
-            } else if (map.getZoom() == 17) {
-                amapOperation.LimitedSize(5);
-            } else if (map.getZoom() == 16) {
-                amapOperation.LimitedSize(4);
-            } else if (map.getZoom() == 15) {
-                amapOperation.LimitedSize(3);
-            } else if (map.getZoom() == 14) {
-                amapOperation.LimitedSize(2);
-            } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-                amapOperation.LimitedSize(1);
-            }
-            ;
-            markerListT = [];
-            if (cluster) {
-                cluster.setMap(null);
-            }
-            ;
-            if (map.getZoom() >= 11) {
-                if (zoom < 11) {
-                    var markerList = markerMap.values();
-                    for (var i = 0; i < markerList.length; i++) {
-                        markerList[i][0].stopMove();
-                        map.remove(markerList[i][0]);
-                    }
-                    ;
-                    cluster.setMap(null);
-                    amapOperation.vehicleMovement();
-                } else {
-                    amapOperation.setCarNameCircle();
-                    amapOperation.vehicleMovement();
-                }
-                ;
-            } else {
-                var markerList = markerMap.values();
-                var j = markerList.length - 1;
-                for (var i = j; i >= 0; i--) {
-                    markerList[i][0].stopMove();
-                    map.remove([markerList[i][0]]);
-                    var markerInside = markerList[i];
-                    var mapVehiclesNew = [];
-                    if (mapVehicleTimeW.containsKey(markerInside[0].extData) == true) {
-                        mapVehicleTimeW.remove(markerInside[0].extData);
-                    }
-                    mapVehiclesNew.push(markerInside[0].getPosition());
-                    mapVehiclesNew.push(markerInside[2]);
-                    mapVehiclesNew.push(markerInside[0].extData);
-                    if (markerInside[3] == "1") {
-                        mapVehiclesNew.push("1");
-                    } else {
-                        mapVehiclesNew.push("0");
-                    }
-                    mapVehiclesNew.push(markerInside[0].getAngle());
-                    var icons = markerInside[0].getIcon().split("/");
-                    var icon = icons[icons.length - 1];
-                    mapVehiclesNew.push(icon);
-                    mapVehiclesNew.push(markerInside[0].stateInfo);
-                    mapVehicleTimeW.put(markerInside[0].extData, mapVehiclesNew);
-                    markerMap.remove(markerInside[0].extData);
-                    mapflog.remove(markerInside[0].extData);
-                    mapVehicleNum.remove(markerInside[0].extData);
-                }
-                ;
-                amapOperation.addCluster(fixedPoint);//点聚合
-            }
-            zoom = map.getZoom();
-        }, 50);
-    },
-    //当拖拽结束时触发该方法
-    clickEventListener2: function () {
-        if (map.getZoom() == 18) {
-            amapOperation.LimitedSize(6);
-        } else if (map.getZoom() == 17) {
-            amapOperation.LimitedSize(5);
-        } else if (map.getZoom() == 16) {
-            amapOperation.LimitedSize(4);
-        } else if (map.getZoom() == 15) {
-            amapOperation.LimitedSize(3);
-        } else if (map.getZoom() == 14) {
-            amapOperation.LimitedSize(2);
-        } else if (map.getZoom() <= 13 && map.getZoom() >= 6) {
-            amapOperation.LimitedSize(1);
-        }
-        ;
-        markerListT = [];
-        if (cluster) {
-            cluster.setMap(null);
-        }
-        if (map.getZoom() >= 11) {
-            if (zoom < 11) {
-                //map.clearMap();//清空地图覆盖物
-                var markerList = markerMap.values();
-                for (var i = 0; i < markerList.length; i++) {
-                    map.remove(markerList[i][0]);
-                }
-                ;
-                amapOperation.vehicleMovement();
-            } else {
-                amapOperation.vehicleMovement();
-            }
-            ;
-        } else {
-            var markerList = markerMap.values();
-            var j = markerList.length - 1;
-            for (var i = j; i >= 0; i--) {
-                markerList[i][0].stopMove();
-                map.remove([markerList[i][0]]);
-                var markerInside = markerList[i];
-                var mapVehiclesNew = [];
-                if (mapVehicleTimeW.containsKey(markerInside[0].extData) == true) {
-                    mapVehicleTimeW.remove(markerInside[0].extData);
-                }
-                mapVehiclesNew.push(markerInside[0].getPosition());
-                mapVehiclesNew.push(markerInside[2]);
-                mapVehiclesNew.push(markerInside[0].extData);
-                if (markerInside[3] == "1") {
-                    mapVehiclesNew.push("1");
-                } else {
-                    mapVehiclesNew.push("0");
-                }
-                mapVehiclesNew.push(markerInside[0].getAngle());
-                var icons = markerInside[0].getIcon().split("/");
-                var icon = icons[icons.length - 1];
-                mapVehiclesNew.push(icon);
-                mapVehiclesNew.push(markerInside[0].stateInfo);
-                mapVehicleTimeW.put(markerInside[0].extData, mapVehiclesNew);
-                markerMap.remove(markerInside[0].extData);
-                mapflog.remove(markerInside[0].extData);
-                mapVehicleNum.remove(markerInside[0].extData);
-            }
-            amapOperation.addCluster(fixedPoint);//点聚合
-        }
-        zoom = map.getZoom();
-    },
-    vehicleMovement: function () {
-        var mapVehicles = mapVehicleTimeW.values();
-        var mapVehicleList = markerMap.values();
-        var j = mapVehicles.length - 1;
-        //清空车牌号显示位置信息
-        carNameContentLUMap.clear();
-        for (var i = j; i >= 0; i--) {
-            var vehicleleg = mapVehicles[i];
-            vehicleBans = vehicleleg[2];
-            coordinateNew = vehicleleg[0];
-            content = vehicleleg[1];
-            var angal = vehicleleg[4];
-            var ico = vehicleleg[5];
-            var stateInfo = vehicleleg[6];
-            if (paths.contains(coordinateNew) == true) {
-                var carLngLat;
-                if (coordinateNew.lat == undefined) {
-                    carLngLat = coordinateNew;
-                } else {
-                    carLngLat = [coordinateNew.lng, coordinateNew.lat];
-                }
-                ;
-                var carName = crrentSubName[crrentSubV.indexOf(vehicleBans)];
-                var markerRealTime;
-                // 
-                if (vehicleleg[3] == "1") {
-                    markerRealTime = amapOperation.carNameEvade(vehicleBans, carName, carLngLat, true, "1", ico, false, stateInfo);
-                } else {
-                    markerRealTime = amapOperation.carNameEvade(vehicleBans, carName, carLngLat, true, "0", ico, false, stateInfo);
-                }
-                markerRealTime.setAngle(angal);
-                markerRealTime.extData = vehicleBans;
-                markerRealTime.content = content.join("");
-                markerRealTime.stateInfo = stateInfo;
-                markerRealTime.on('click', amapOperation.markerClick);
-                markerList = [];
-                markerList.push(markerRealTime);
-                markerList.push(coordinateNew);//坐标
-                markerList.push(content);
-                if (vehicleleg[3] == "1") {
-                    markerList.push("1");
-                } else {
-                    markerList.push("0");
-                }
-                markerList.push(stateInfo);
-                if (markerMap.containsKey(markerRealTime.extData)) {
-                    markerMap.remove(markerRealTime.extData);
-                }
-                markerMap.put(markerRealTime.extData, markerList);
-
-                mapVehicleTimeW.remove(markerRealTime.extData);//根据下标删除该元素
-            }
-            ;
-        }
-        ;
-        var g = mapVehicleList.length - 1;
-        for (var i = g; i >= 0; i--) {
-            var markerInside = mapVehicleList[i];
-            if (paths.contains(markerInside[0].getPosition()) == false) {
-                markerInside[0].stopMove();
-                var mapVehiclesNew = [];
-                mapVehiclesNew.push(markerInside[1]);
-                mapVehiclesNew.push(markerInside[2]);
-                mapVehiclesNew.push(markerInside[0].extData);
-                if (markerInside[3] == "1") {
-                    mapVehiclesNew.push("1");
-                } else {
-                    mapVehiclesNew.push("0");
-                }
-                mapVehiclesNew.push(markerInside[0].getAngle());
-                var icons = markerInside[0].getIcon().split("/");
-                var icon = icons[icons.length - 1];
-                mapVehiclesNew.push(icon);
-                mapVehiclesNew.push(markerInside[0].stateInfo);
-                markerInside[0].setMap(null);
-                markerMap.remove(markerInside[0].extData);
-                mapflog.remove(markerInside[0].extData);
-                mapVehicleNum.remove(markerInside[0].extData);
-                mapVehicleTimeW.put(markerInside[0].extData, mapVehiclesNew);
-            }
-            ;
-        }
-        ;
-    },
-    vehicleReplacement: function () {
-        var mapVehicles = mapVehicleTimeQ.values();
-        var j = mapVehicles.length;
-        for (var i = 0; i < j; i++) {
-            var vehicleleg = mapVehicles[i];
-            vehicleBans = vehicleleg[2];
-            coordinateNew = vehicleleg[0];
-            content = vehicleleg[1];
-            if (paths.contains(coordinateNew) == true || map.getZoom() <= 5) {
-                markerRealTimeT = new AMap.Marker({
-                    position: coordinateNew,
-                    icon: "../../resources/img/1.png",
-                    offset: new AMap.Pixel(-26, -13), //相对于基点的位置
-                    autoRotation: true
-                });
-                markerRealTimeT.extData = vehicleBans;
-                markerRealTimeT.content = content.join("");
-                markerRealTimeT.on('click', amapOperation.markerClick);
-                markerListT.push(markerRealTimeT);
-            }
-            ;
-        }
-        ;
-    },
-    addCluster: function (id) {
-        fixedPoint = null;
-        if (id != null) {
-            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-            var nodes = treeObj.getNodesByParam("id", id, null);
-            var list = zTreeIdJson[nodes[0].id];
-            if (list.length >= 1) {
-                $.each(list, function (index, value) {
-                    $("#" + value).parent().removeAttr("class");
-                    $(".ztree li a").removeAttr("class", "curSelectedNode");
-                })
-            }
-            $("#realTimeStateTable tbody tr").removeAttr("class", "tableHighlight");
-        }
-        amapOperation.clearContentValue();
-        amapOperation.vehicleReplacement();
-        map.plugin(["AMap.MarkerClusterer"], function () {
-            cluster = new AMap.MarkerClusterer(map, markerListT);
-        });
-    },
     //车辆标注点击
     markerClick: function (e) {
+        var markerLngLat = e.target.getPosition();
         vinfoWindwosClickVid = e.target.extData;
         infoWindow.setContent(e.target.content);
-        infoWindow.open(map, e.target.getPosition());
+        infoWindow.open(map, markerLngLat);
+        markerClickLngLat = markerLngLat;
     },
     jumpToTrackPlayer: function (sid, type, pid, uuids) {
         var jumpFlag = false;
@@ -3730,9 +3248,35 @@ var amapOperation = {
     carNameEvade: function (id, name, lnglat, flag, type, ico, showFlag, stateInfo) {
         //监控对象图片大小
         var value = lnglat;
-        var picWidth;
-        var picHeight;
+        var picWidth = 0;
+        var picHeight = 0;
         var icons;
+        var span = getTextWH(name, {
+            "fontSize": "12px",
+            "fontFamily": "微软雅黑"
+        });
+        if (span.width > 70) {
+            if (name.length > 8) {
+                name = name.substring(0, 7) + '...';
+            }
+            var num = 0;
+            for (var i = 0; i < name.length; i++) {//判断车牌号含有汉字数量
+                if (name[i].match(/^[\u4E00-\u9FA5]{1,}$/)) {
+                    num++;
+                }
+            }
+            if (num > 3) {
+                name = name.substring(0, 4) + '...';
+            }
+
+            span = getTextWH(name, {
+                "fontSize": "12px",
+                "fontFamily": "微软雅黑"
+            });
+            if (span.width > 70) {
+                name = name.substring(0, name.length - 4) + '...';
+            }
+        }
         if (type == "0") {
             if (ico == "null" || ico == undefined || ico == null) {
                 icons = "../../resources/img/vehicle.png";
@@ -3742,9 +3286,21 @@ var amapOperation = {
             picWidth = 58 / 2;
             picHeight = 26 / 2;
         } else if (type == "1") {
-            icons = "../../resources/img/123.png";
+            if (ico == "null" || ico == undefined || ico == null) {
+                icons = "../../resources/img/123.png";
+            } else {
+                icons = "../../resources/img/vico/" + ico;
+            }
             picWidth = 30 / 2;
             picHeight = 30 / 2;
+        } else if (type == "2") {
+            if (ico == "null" || ico == undefined || ico == null) {
+                icons = "../../resources/img/thing.png";
+            } else {
+                icons = "../../resources/img/vico/" + ico;
+            }
+            picWidth = 40 / 2;
+            picHeight = 40 / 2;
         }
         if (isCarNameShow) {
             //显示对象姓名区域大小
@@ -3900,6 +3456,7 @@ var amapOperation = {
                         var nameValue = carNameMarkerContentMap.get(id);
                         map.remove([nameValue]);
                         carNameMarkerContentMap.remove(id);
+                        carNameContentLUMap.remove(id);
                     }
                     ;
                     var markerContent = new AMap.Marker({
@@ -3916,6 +3473,7 @@ var amapOperation = {
                     carNameContentLUMap.put(id, LUPX);
                     if (isConfirm) {
                         markerContent.hide();
+                        carNameContentLUMap.remove(id);
                     } else {
                         markerContent.show();
                     }
@@ -3933,23 +3491,29 @@ var amapOperation = {
                         var carContent = carNameMarkerContentMap.get(id);
                         if (isConfirm) {
                             carContent.hide();
+                            carNameContentLUMap.remove(id);
                         } else {
-                            map.remove([carContent]);
-                            carNameMarkerContentMap.remove(id);
-                            var markerContent = new AMap.Marker({
-                                position: mapPixel,
-                                content: carContentHtml,
-                                offset: offsetCarName,
-                                autoRotation: true,//自动调节图片角度
-                                map: map,
-                                zIndex: 999
-                            });
-                            markerContent.setMap(map);
-                            carNameMarkerContentMap.put(id, markerContent);
+                            // map.remove([carContent]);
+                            carContent.show();
+//                            carNameMarkerContentMap.remove(id);
+//                            var markerContent = new AMap.Marker({
+//                                position: mapPixel,
+//                                content: carContentHtml,
+//                                offset: offsetCarName,
+//                                autoRotation: true,//自动调节图片角度
+//                                map: map,
+//                                zIndex: 999
+//                            });
+//                            markerContent.setMap(map);
+//                            carNameMarkerContentMap.put(id, markerContent);
+
+                            carContent.setContent(carContentHtml);
+                            carContent.setPosition(mapPixel);
+                            carContent.setOffset(offsetCarName);
+                            carNameContentLUMap.put(id, LUPX);
                         }
                     }
                     ;
-                    carNameContentLUMap.put(id, LUPX);
                 }
                 ;
             }
@@ -3959,11 +3523,15 @@ var amapOperation = {
                 var carContentHtml = "<p class='" + showLocation + "'><i class='" + carState + "'></i>&nbsp;" + name + "</p>";
                 if (carNameMarkerContentMap.containsKey(id)) {
                     var thisMoveMarker = carNameMarkerContentMap.get(id);
-                    //llRD 移动中默认显示在右下脚
-                    thisMoveMarker.show();
-                    thisMoveMarker.setContent(carContentHtml);
-                    thisMoveMarker.setPosition(llRD);
-                    thisMoveMarker.setOffset(new AMap.Pixel(0, 0));
+                    if (isConfirm) {
+                        thisMoveMarker.hide();
+                    } else {
+                        thisMoveMarker.show();
+                        thisMoveMarker.setContent(carContentHtml);
+                        thisMoveMarker.setPosition(mapPixel);
+                        thisMoveMarker.setOffset(offsetCarName);
+                    }
+                    carNameContentLUMap.put(id, LUPX);
                 }
                 ;
             }
@@ -3976,11 +3544,11 @@ var amapOperation = {
         var thisPX;
         var thisX;
         var thisY;
-        if ((angle <= 45 && angle > 0) || ( angle > 180 && angle <= 225) || (angle >= 135 && angle < 180) || (angle >= 315 && angle < 360)) {
+        if ((angle <= 45 && angle > 0) || (angle > 180 && angle <= 225) || (angle >= 135 && angle < 180) || (angle >= 315 && angle < 360)) {
             angle = 0;
         }
         ;
-        if ((angle < 90 && angle > 45) || ( angle < 270 && angle > 225) || (angle > 90 && angle < 135) || (angle > 270 && angle < 315)) {
+        if ((angle < 90 && angle > 45) || (angle < 270 && angle > 225) || (angle > 90 && angle < 135) || (angle > 270 && angle < 315)) {
             angle = 90;
         }
         ;
@@ -4055,7 +3623,7 @@ var amapOperation = {
                 var carName = markerMapValue[i][0].name;
                 var stateInfo = markerMapValue[i][0].stateInfo;
                 var lngLatValue = markerMapValue[i][0].getPosition();
-                // 
+                //
                 if (isCarNameShow) {
                     if (markerMapValue[i][5] == "1") {
                         amapOperation.carNameEvade(carId, carName, lngLatValue, false, "1", null, false, stateInfo);
@@ -4082,9 +3650,9 @@ var amapOperation = {
         //获取当前车辆点击的经纬度
         var currentCarCoordinate = "";
         if (map.getZoom() >= 11) {
-            currentCarCoordinate = (markerMap.get(vinfoWindwosClickVid))[0].getPosition();
+            currentCarCoordinate = (markerViewingArea.get(vinfoWindwosClickVid))[0].getPosition();
         } else {
-            currentCarCoordinate = (mapVehicleTimeQ.get(vinfoWindwosClickVid))[0];
+            currentCarCoordinate = markerClickLngLat;
         }
         //点击时判断是否显示信息框
         if ($("#v-statusInfo-show").is(":hidden")) {
@@ -4119,8 +3687,8 @@ var amapOperation = {
             } else if (dataa.substring(28, 29) == 1) {
                 $("#bombBox3").text("西经：" + dataList[11]);
             }
-            ;
-            $("#bombBox4").text("方向：" + dataList[14]);
+
+            $("#bombBox4").text("方向：" + dataTableOperation.toDirectionStr(dataList[21]));
             $("#bombBox5").text("记录仪速度：" + dataList[20]);
             $("#bombBox6").text("高程：" + dataList[19]);
             $("#bombBox7").text("电子运单：");
@@ -4198,68 +3766,16 @@ var amapOperation = {
     carNameShow: function () {
         //清空车牌号显示位置信息
         if (map.getZoom() > 10) {
-            var mapVehicles = mapVehicleTimeW.values();
-            for (var i = 0, len = mapVehicles.length; i < len; i++) {
-                var vehicleleg = mapVehicles[i];
-                vehicleBans = vehicleleg[2];
-                coordinateNew = vehicleleg[0];
-                content = vehicleleg[1];
-                var angal = vehicleleg[4];
-                var ico = vehicleleg[5];
-                if (paths.contains(coordinateNew)) {
-                    var carLngLat;
-                    if (coordinateNew.lat == undefined) {
-                        carLngLat = coordinateNew;
-                    } else {
-                        carLngLat = [coordinateNew.lng, coordinateNew.lat];
-                    }
-                    ;
-                    var carName = crrentSubName[crrentSubV.indexOf(vehicleBans)];
-                    var markerRealTime;
-                    //
-                    if (vehicleleg[3] == "1") {
-                        amapOperation.carNameEvade(vehicleBans, carName, carLngLat, true, "1", ico, true, vehicleleg[0].stateInfo);
-                    } else {
-                        amapOperation.carNameEvade(vehicleBans, carName, carLngLat, true, "0", ico, true, vehicleleg[0].stateInfo);
-                    }
-                }
-                ;
+            var values = markerViewingArea.values();
+            for (var i = 0, len = values.length; i < len; i++) {
+                var marker = values[i][0]; // [7] 图标
+                var id = marker.extData;
+                var name = marker.name;
+                var markerLngLat = marker.getPosition();
+                var icon = values[i][7];
+                var stateInfo = marker.stateInfo;
+                amapOperation.carNameEvade(id, name, markerLngLat, true, "1", icon, true, stateInfo);
             }
-            ;
-            var mapVehicleList = markerMap.values();
-            for (var j = 0, len = mapVehicleList.length; j < len; j++) {
-                var vehicleleg = mapVehicleList[j];
-                vehicleBans = vehicleleg[0].extData; // id
-                coordinateNew = vehicleleg[1];
-                content = vehicleleg[2];
-                var this_marker = vehicleleg[0];
-                var angal = this_marker.getAngle();
-                if (angal > 360) {
-                    var num = Math.floor(angal / 360);
-                    angal = angal - 360 * num;
-                }
-                ;
-                var ico = this_marker.getIcon().split('/')[this_marker.getIcon().split('/').length - 1];
-                if (paths.contains(coordinateNew)) {
-                    var carLngLat;
-                    if (coordinateNew.lat == undefined) {
-                        carLngLat = coordinateNew;
-                    } else {
-                        carLngLat = [coordinateNew.lng, coordinateNew.lat];
-                    }
-                    ;
-                    var carName = crrentSubName[crrentSubV.indexOf(vehicleBans)];
-                    var markerRealTime;
-                    // 
-                    if (vehicleleg[3] == "1") {
-                        amapOperation.carNameEvade(vehicleBans, carName, carLngLat, true, "1", ico, true, vehicleleg[0].stateInfo);
-                    } else {
-                        amapOperation.carNameEvade(vehicleBans, carName, carLngLat, true, "0", ico, true, vehicleleg[0].stateInfo);
-                    }
-                }
-                ;
-            }
-            ;
         }
         ;
     },
@@ -4279,25 +3795,98 @@ var amapOperation = {
             $(".amap-info-sharp").addClass("amap-info-sharp-marleft-show");
         }
     },
+    //显示obd信息窗口
+    showObdInfo: function (name, id) {
+        var highLight = $("#realTimeStateTable .tableHighlight-blue,#realTimeStateTable .tableHighlight");
+        var len = highLight.length;
+        var isShow = false;
+        if (name != undefined || len > 0) {
+            isShow = true;
+        }
+        if (isShow) {
+            $(this).hide();
+            $('.loadingBox').show();
+            $('#obdInfo').html('');
+            if (name) {
+                amapOperation.setObdInfo(name, id);
+            } else {
+                amapOperation.setObdInfo();
+            }
+            $('.obdContent').slideDown();
+        } else {
+            layer.msg('请双击监控对象');
+        }
+    },
+
+    // 设置OBD窗口信息信息
+    setObdInfo: function (name, id) {
+        var highLight = $("#realTimeStateTable .tableHighlight-blue,#realTimeStateTable .tableHighlight");
+        var vName = highLight.find('td').eq(1).text();
+        var vId = highLight.find('td').eq(1).data('id');
+        if (name != undefined) {
+            vName = name;
+            vId = id;
+        }
+        $("#obdName").html(vName);
+        var url = '/clbs/v/monitoring/getLastOBDData';
+        var param = {
+            'vehicleId': vId
+        }
+        json_ajax("POST", url, "json", true, param, function (data) {
+            if (data.success) {
+                var obdInfo = data.obj;
+                amapOperation.changeObdInfo(obdInfo);
+            } else {
+                $('.loadingBox').hide();
+                $('#obdInfo').html('<li class="text-center">无数据</li>');
+            }
+        });
+    },
+    // 修改OBD信息
+    changeObdInfo: function (data) {
+        var info = null;
+        if (data.data.msgBody.obdObjStr != undefined) {
+            info = data.data.msgBody.obdObjStr;
+        }
+        var newHtml = '<li class="text-center">无数据</li>';
+        if (info != undefined && info != null) {
+            newHtml = '';
+            var arr = JSON.parse(info);
+            var len = arr.length;
+            for (var i = 0; i < len; i++) {
+                if (arr[i].name == '报警信息') {
+                    newHtml += '<li style="text-align: justify">' + arr[i].name + '：' + arr[i].status + '</li>';
+                } else {
+                    newHtml += '<li>' + arr[i].name + '：' + arr[i].status + '</li>';
+                }
+            }
+        }
+        $('.loadingBox').hide();
+        $('#obdInfo').html(newHtml);
+    }
 };
 var setting;
 var bflag = true;
 var eflag = true;
+var onLineIsExpandAll = false;
 var cheakedAll = [];
 var cheackGourpNum;
-var allflag=true;
-var missAll=false;
-var fzzflag=false;
-var stopVidArray=[];
-var runVidArray=[];
-var lineAndStop=[];
-var nmoline=[];
-var lineAndmiss=[];
-var lineAndRun=[];
-var lineAndAlarm=[];
-var overSpeed=[];
-var heartBeat=[];
+var allflag = true;
+var missAll = false;
+var fzzflag = false;
+var stopVidArray = [];
+var runVidArray = [];
+var lineAndStop = [];
+var nmoline = [];
+var lineAndmiss = [];
+var lineAndRun = [];
+var lineAndAlarm = [];
+var overSpeed = [];
+var heartBeat = [];
 var treeNodeNew;
+// 有时间的命令字,控制时间控件开启或关闭
+var commandSign = ["8H", "9H", "10H", "11H", "12H", "13H", "14H", "15H"];
+var isInitDatePicker = true;// 避免重复初始化
 var treeMonitoring = {
     // 初始化
     init: function () {
@@ -4325,144 +3914,94 @@ var treeMonitoring = {
         $("#muStartTime").val(msStartTime);
         $("#muEndTime").val(msEndTime);
         if ($("#tall").text() === "(...)") {
-        	
-        	
+
+
             json_ajax("POST", "/clbs/m/functionconfig/fence/bindfence/getStatistical", "json", true, null, treeMonitoring.setNumber);
         }
+        //修改终端车牌
+        $("#continuousReturnValue").bind('change', function () {
+            if ($(this).val() == 0) {
+                $('#timeInterval0').show();
+                $('#timeInterval2').hide();
+                $('#timeInterval1').hide();
+            } else if ($(this).val() == 1) {
+                $('#timeInterval1').show();
+                $('#timeInterval0').hide();
+                $('#timeInterval2').hide();
+            } else if ($(this).val() == 2) {
+                $('#timeInterval2').show();
+                $('#timeInterval0').hide();
+                $('#timeInterval1').hide();
+            }
+        });
+        //OBD
+        $("#classification").bind('change', function () {
+            if ($(this).val() == 0) {
+                $('#modelName').html("<label class='text-danger'>*</label> 车型名称：");
+                treeMonitoring.getOBDVehicle();
+            } else if ($(this).val() == 1) {
+                $('#modelName').html("<label class='text-danger'>*</label> 发动机类型：");
+                treeMonitoring.getOBDVehicle();
+            }
+        })
     },
-    //双击车辆，车辆居中
-    centerMarker: function (nodes, sub) {
-        var sof = false;
-        if (map.getZoom() <= 11) {
-            sof = true;
+    // 双击车辆，车辆居中
+    centerMarker: function (id, type) {
+        var id = id
+        if (type == 'DBLCLICK') {
+            markerFocus = id;
         }
-        var flogCentet = false;
-        var mapVehicles = mapVehicleTimeW.values();
-        var mapVehicleList = markerMap.values();
-        var j = mapVehicles.length;
-        for (var i = 0; i < j; i++) {
-            var vehicleleg = mapVehicles[i];
-            vehicleBans = vehicleleg[2];
-            coordinateNew = vehicleleg[0];
-            content = vehicleleg[1];
-            if (vehicleBans == nodes[0].id) {
-                map.setCenter(coordinateNew);
-                map.setZoom(18);
-                if (sub === 1) {
-                    fixedPoint = null;
-                    fixedPointPosition = coordinateNew;
-                } else if (sub === 2) {
-                    fixedPoint = vehicleBans;//这个用于存储车辆ID
-                    fixedPointPosition = coordinateNew;
-                }
-                amapOperation.LimitedSize(6);
-                flogCentet = true;
-            }
-            ;
-        }
-        ;
-        if (flogCentet == false) {
-            var g = mapVehicleList.length - 1;
-            for (var i = g; i >= 0; i--) {
-                var markerInside = mapVehicleList[i][0];
-                if (markerInside.extData == nodes[0].id) {
-                    map.setZoomAndCenter(18, markerInside.getPosition());
-                    if (sub === 1) {
-                        fixedPoint = null;
-                    } else if (sub === 2) {
-                        fixedPoint = markerInside.extData;//这个用于存储车辆ID
-                    }
-                    amapOperation.LimitedSize(6);
-                }
-                ;
-            }
-            ;
-        }
-        ;
-        if (sof == false) {
-            if (zoom > 11) {
-                amapOperation.vehicleMovement();
+        var zoom = map.getZoom();
+        // 判断可视区域集合里面是否已经创建了marker
+        if (markerViewingArea.containsKey(id)) {
+            var marker = markerViewingArea.get(id)[0];
+            map.setZoomAndCenter(18, marker.getPosition());
+        } else {
+            if (markerAllUpdateData.containsKey(id)) {
+                var info = markerAllUpdateData.get(id);
+                var markerLngLat = [info[0][2], info[0][3]];
+                map.setZoomAndCenter(18, markerLngLat);
             }
         }
+        setTimeout(function () {
+            amapOperation.markerStateListening();
+        }, zoom < 13 ? 500 : 0);
     },
     centerMarkerNo: function () {
-        fixedPoint = null;
+        markerFocus = null;
     },
     //取消点
     clearMarker: function (param) {
-        var mapVehicles = mapVehicleTimeW.values();
-        var mapVehicleList = markerMap.values();
-        var mapVehiclesQ = mapVehicleTimeQ.values();
-        var c = mapVehicleList.length - 1;
-        var jV = param.length;
-        for (var i = c; i >= 0; i--) {
-            var markerInside = mapVehicleList[i][0];
-            for (var j = 0; j < jV; j++) {
-                if (markerInside.extData == param[j].vehicleID) {
-                    markerInside.stopMove();
-                    // markerInside.setMap(null);
-                    map.remove([markerInside]);
-                    markerMap.remove(markerInside.extData);
-                }
+        for (var i = 0, len = param.length; i < len; i++) {
+            var id = param[i].vehicleID; // 监控对象ID
+
+            // 删除所有监控对象集合信息
+            if (markerAllUpdateData.containsKey(id)) {
+                markerAllUpdateData.remove(id);
+            }
+
+            // 删除可视区域内监控对象集合信息
+            if (markerViewingArea.containsKey(id)) {
+                var marker = markerViewingArea.get(id)[0]
+                marker.stopMove();
+                map.remove([marker]);
+                markerViewingArea.remove(id);
+            }
+
+            // 删除可视区域外监控对象集合信息
+            if (markerOutside.containsKey(id)) {
+                markerOutside.remove(id);
+            }
+
+            // 删除车牌号marker图标
+            if (carNameMarkerMap.containsKey(id)) {
+                var marker = carNameMarkerMap.get(id);
+                marker.stopMove();
+                map.remove([marker]);
+                carNameMarkerMap.remove(id);
             }
         }
-        
-        for (var s = 0; s < param.length; s++) {
-        	var id = param[s].vehicleID;
-        	if (carNameMarkerMap.containsKey(id)) {
-        		var this_marker = carNameMarkerMap.get(id);
-        		this_marker.stopMove();
-        		map.remove([this_marker]);
-        		carNameMarkerMap.remove(id);
-        	}
-        }
-        
-        var g = mapVehicles.length - 1;
-        for (var i = g; i >= 0; i--) {
-            var vehicleleg = mapVehicles[i];
-            vehicleBans = vehicleleg[2];
-            coordinateNew = vehicleleg[0];
-            content = vehicleleg[1];
-            for (var j = 0; j < jV; j++) {
-                if (vehicleBans == param[j].vehicleID) {
-                    mapVehicleTimeW.remove(vehicleBans);
-                }
-                ;
-            }
-            ;
-        }
-        var h = mapVehiclesQ.length - 1;
-        for (var i = h; i >= 0; i--) {
-            var vehicleleg = mapVehiclesQ[i];
-            vehicleBans = vehicleleg[2];
-            coordinateNew = vehicleleg[0];
-            content = vehicleleg[1];
-            for (var j = 0; j < jV; j++) {
-                if (vehicleBans == param[j].vehicleID) {
-                    mapVehicleTimeQ.remove(vehicleBans);
-                }
-                ;
-            }
-            ;
-        }
-        ;
-        if (markerListT.length > 0) {
-            var k = markerListT.length - 1;
-            for (var i = k; i >= 0; i--) {
-                var markerInside = markerListT[i];
-                for (var j = 0; j < jV; j++) {
-                    if (markerInside.extData == param[j].vehicleID) {
-                        markerInside.stopMove();
-                        markerInside.setMap(null);
-                        markerListT.remove(i);
-                    }
-                    ;
-                }
-                ;
-            }
-            ;
-        }
-        ;
+        // 关闭地图信息弹窗
         map.clearInfoWindow();
     },
     //组织树预处理函数
@@ -4497,11 +4036,17 @@ var treeMonitoring = {
                 break;
             }
         }
+        if (onLineIsExpandAll == true) {
+            for (var j = 0; j < initArr.length; j++) {
+                zTree.expandNode(notExpandNodeInit[j], true, true, false, true);
+            }
+            onLineIsExpandAll = false;
+        }
         var jumpId = $("#jumpId").val();
         if (jumpId == "trackPlayer") {
             var cheakdiyueall = [];
             for (var i = 0; i < nodes.length; i++) {
-                if (nodes[i].type === "vehicle" || nodes[i].type === "people") {
+                if (nodes[i].type === "vehicle" || nodes[i].type === "people" || nodes[i] == "thing") {
                     cheakdiyueall.push(nodes[i].id)
                 }
             }
@@ -4561,9 +4106,9 @@ var treeMonitoring = {
             var treeObj = $.fn.zTree.getZTreeObj(treeId);
             var parentNode = node.getParentNode();
             return treeMonitoring.getParentNodes(treeId, parentNode);
-        } else {
-            return node;
         }
+        return node;
+
     },
     // 设置树节点字体样式
     setFontCss: function (treeId, treeNode, type) {
@@ -4678,22 +4223,24 @@ var treeMonitoring = {
     },
     //单击事件
     onClickV: function (e, treeId, treeNode) {
-    	console.log(treeNode);
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
         if (treeNode.iconSkin != "assignmentSkin" && treeNode.iconSkin != "groupSkin") {
             zTree.selectNode(treeNode, false, true);
         }
         var nodes = zTree.getSelectedNodes(true);
-        var nodeName = treeNode.name;
+        var nodeName = treeNode.id;
         treeMonitoring.centerMarkerNo();
-        treeMonitoring.centerMarker(nodes, 1);
-        $("#" + dbclickCheckedId).parent().removeAttr("class", "curSelectedNode_dbClick");      //单击时取消双击Style
+        if (treeNode.checked) {
+            treeMonitoring.centerMarker(nodes[0].id, 'CLICK');
+        }
+        $("#" + dbclickCheckedId).parent().removeAttr("class", "curSelectedNode_dbClick"); //单击时取消双击Style
         $("#" + ztreeStyleDbclick).children("a").removeAttr("class", "curSelectedNode_dbClick");
         $(".ztree li a").removeClass("curSelectedNode_dbClick");
         //得到当前单击车辆的外层id信息
         onClickVId = e.target.id;
         if (treeNode.iconSkin != "assignmentSkin" && treeNode.iconSkin != "groupSkin") {
             $("#" + onClickVId).parent().attr("class", "curSelectedNode");
+            $("#" + onClickVId).parent().attr("data-id", nodeName);
         }
         //单击下一辆车取消上一辆
         if (oldOnClickVId != "") {
@@ -4703,10 +4250,11 @@ var treeMonitoring = {
         //处理单击订阅同一辆车
         if (oldOnClickVId = onClickVId) {
             $("#" + onClickVId).parent().attr("class", "curSelectedNode");
+            $("#" + onClickVId).parent().attr("data-id", nodeName);
         }
         dataTableOperation.tableHighlightBlue(treeNode.type, nodeName);
         //单击时判断节点是否勾选订阅 用于围栏查询
-        treeMonitoring.vehicleTreeClickGetFenceInfo(treeNode.checked,treeNode.id);
+        treeMonitoring.vehicleTreeClickGetFenceInfo(treeNode.checked, treeNode.id);
     },
     //双击事件
     onDbClickV: function (e, treeId, treeNode) {
@@ -4715,87 +4263,87 @@ var treeMonitoring = {
         var changedNodes;
         var param = [];
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-        if(treeNode){
-	        if (treeNode.children === undefined && treeNode.type === "assignment" && treeNode.isParent === true) {
-	            treeMonitoring.zTreeOnExpand(e, treeId, treeNode);
-	            if (treeNode.children !== undefined) {
-	                for (var m = 0; m < treeNode.children.length; m++) {
-	                    treeNode.children[m].checkedOld = false;
-	                }
-	            }
-	        }
-	        if (treeNode.iconSkin != "assignmentSkin" && treeNode.iconSkin != "groupSkin") {
-	            zTree.selectNode(treeNode, false, true);
-	            if(treeNode.checkedOld==false){
-	                cheakedAll.push(treeNode.id)
-	                cheakdiyueall.push(treeNode.id);
-	            }
-	        }
-	        licensePlateInformation = treeNode.name;
-	        DblclickName = licensePlateInformation;
-	        // 状态信息table表对应监控对象信息高亮
-	        dataTableOperation.tableHighlight(treeNode.type, licensePlateInformation);
-	        groupIconSkin = treeNode.iconSkin;
-	        var nodes = zTree.getSelectedNodes(true);
-	        if (nodes[0].checked == false) {
-	            cheakdiyuealls.push(nodes[0].id)
-	            var flag = treeMonitoring.getChannel(nodes, map);
-	            if(!flag) {
-	                return true;
+        if (treeNode) {
+            if (treeNode.children === undefined && treeNode.type === "assignment" && treeNode.isParent === true) {
+                treeMonitoring.zTreeOnExpand(e, treeId, treeNode);
+                if (treeNode.children !== undefined) {
+                    for (var m = 0; m < treeNode.children.length; m++) {
+                        treeNode.children[m].checkedOld = false;
+                    }
                 }
-	        }
-	        zTree.checkNode(nodes[0], true, true);
-	        //
-	        dbclickCheckedId = e.target.id;
-	        if (treeNode.iconSkin != "assignmentSkin" && treeNode.iconSkin != "groupSkin") {
-	            $("#" + dbclickCheckedId).parent().attr("class", "curSelectedNode_dbClick");
-	        }
-	        //双击下一辆车取消上一辆
-	        if (oldDbclickCheckedId != "") {
-	            $("#" + oldDbclickCheckedId).parent().removeAttr("class");
-	        }
-	        oldDbclickCheckedId = dbclickCheckedId;
-	        //处理双击订阅同一辆车
-	        if (oldDbclickCheckedId = dbclickCheckedId) {
-	            $("#" + dbclickCheckedId).parent().attr("class", "curSelectedNode_dbClick");
-	        }
-	        //创建车辆对象参数信息(用于实时视频)
-	        var vehicleInfo = new Object();
-	        vehicleInfo.vid = treeNode.id;
-	        vehicleInfo.brand = treeNode.name;
-	        vehicleInfo.deviceNumber = treeNode.deviceNumber;
-	        vehicleInfo.plateColor = treeNode.plateColor;
-	        vehicleInfo.isVideo = treeNode.isVideo;
-	
-	        // wjk
-	        // 是否IE
-	        if (realTimeVideo.ieExplorer()) {
-	            realTimeVideo.beventAllMediaStop(); //先关闭所有
-	        }
-	        //end
-	
-	        realTimeVideo.setVehicleInfo(vehicleInfo)
-	
-	        // wjk
-	        if(m_videoFlag==1 && realTimeVideo.ieExplorer()){				
-	            //没有通话只有视频  开启视频
-	            realTimeVideo.windowSet();
-	            clearInterval(computingTimeInt)
-	            clearInterval(computingTimeCallInt)
-	            if ($('#btn-videoRealTime-show i').hasClass('active') && !$('#phoneCall i').hasClass('active')){
-	                realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun);
-	            }
-	            else if(!$('#btn-videoRealTime-show i').hasClass('active') && $('#phoneCall i').hasClass('active')){
-	                realTimeVideo.beventLiveIpTalk(pageLayout.computingTimeCallIntFun);
-	            }
-	            else if($('#btn-videoRealTime-show i').hasClass('active') && $('#phoneCall i').hasClass('active')){
-	                realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun);
-	                realTimeVideo.beventLiveIpTalk(pageLayout.computingTimeCallIntFun);
-	            }
-			}
-	        //end
-	
-	        if (nodes[0].type === "vehicle" || nodes[0].type === "people") {
+            }
+            if (treeNode.iconSkin != "assignmentSkin" && treeNode.iconSkin != "groupSkin") {
+                zTree.selectNode(treeNode, false, true);
+                if (treeNode.checkedOld == false) {
+                    cheakedAll.push(treeNode.id)
+                    cheakdiyueall.push(treeNode.id);
+                }
+            }
+            licensePlateInformation = treeNode.id;
+            DblclickName = licensePlateInformation;
+            // 状态信息table表对应监控对象信息高亮
+            dataTableOperation.tableHighlight(treeNode.type, licensePlateInformation);
+            groupIconSkin = treeNode.iconSkin;
+            var nodes = zTree.getSelectedNodes(true);
+            if (nodes[0].checked == false) {
+                cheakdiyuealls.push(nodes[0].id)
+                var flag = treeMonitoring.getChannel(nodes, map);
+                if (!flag) {
+                    return true;
+                }
+            }
+            zTree.checkNode(nodes[0], true, true);
+            //
+            dbclickCheckedId = e.target.id;
+            if (treeNode.iconSkin != "assignmentSkin" && treeNode.iconSkin != "groupSkin") {
+                $("#" + dbclickCheckedId).parent().attr("class", "curSelectedNode_dbClick");
+            }
+            //双击下一辆车取消上一辆
+            if (oldDbclickCheckedId != "") {
+                $("#" + oldDbclickCheckedId).parent().removeAttr("class");
+            }
+            oldDbclickCheckedId = dbclickCheckedId;
+            //处理双击订阅同一辆车
+            if (oldDbclickCheckedId = dbclickCheckedId) {
+                $("#" + dbclickCheckedId).parent().attr("class", "curSelectedNode_dbClick");
+            }
+            //创建车辆对象参数信息(用于实时视频)
+            var vehicleInfo = new Object();
+            vehicleInfo.vid = treeNode.id;
+            vehicleInfo.brand = treeNode.name;
+            vehicleInfo.deviceNumber = treeNode.deviceNumber;
+            vehicleInfo.plateColor = treeNode.plateColor;
+            vehicleInfo.isVideo = treeNode.isVideo;
+
+            // wjk
+            // 是否IE
+            if (realTimeVideo.ieExplorer()) {
+                realTimeVideo.beventAllMediaStop(); //先关闭所有
+            }
+            //end
+
+            realTimeVideo.setVehicleInfo(vehicleInfo)
+
+            // wjk
+            if (m_videoFlag == 1 && realTimeVideo.ieExplorer()) {
+                //没有通话只有视频  开启视频
+                realTimeVideo.windowSet();
+                clearInterval(computingTimeInt)
+                clearInterval(computingTimeCallInt)
+                if ($('#btn-videoRealTime-show i').hasClass('active') && !$('#phoneCall i').hasClass('active')) {
+                    realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun);
+                }
+                else if (!$('#btn-videoRealTime-show i').hasClass('active') && $('#phoneCall i').hasClass('active')) {
+                    realTimeVideo.beventLiveIpTalk(pageLayout.computingTimeCallIntFun);
+                }
+                else if ($('#btn-videoRealTime-show i').hasClass('active') && $('#phoneCall i').hasClass('active')) {
+                    realTimeVideo.beventLiveView(pageLayout.computingTimeIntFun);
+                    realTimeVideo.beventLiveIpTalk(pageLayout.computingTimeCallIntFun);
+                }
+            }
+            //end
+
+            if (nodes[0].type === "vehicle" || nodes[0].type === "people" || nodes[0].type === "thing") {
                 var list = zTreeIdJson[nodes[0].id];
                 if (list.length > 1) {
                     $.each(list, function (index, value) {
@@ -4804,63 +4352,92 @@ var treeMonitoring = {
                         treeNoded.checkedOld = true;
                     })
                 }
-	        }
-	        if (nodes[0].type == "assignment" || nodes[0].type == "group") {
-	            changedNodes = zTree.getChangeCheckedNodes()
-	            for (var i = 0, l = changedNodes.length; i < l; i++) {
-	                changedNodes[i].checkedOld = true;
-	                if (changedNodes[i].type === "vehicle" || changedNodes[i].type === "people") {
-	                    var list = zTreeIdJson[changedNodes[i].id];
-	                    if (list.length > 1) {
-	                        $.each(list, function (index, value) {
-	                            var treeNoded = zTree.getNodeByTId(value);
-	                            zTree.checkNode(treeNoded, true, true);
-	                            treeNoded.checkedOld = true;
-	                        })
-	                    } else if (list.length == 1) {
-	                        zTree.checkNode(changedNodes[i], true, true);
-	                        changedNodes[i].checkedOld = true;
-	                    }
-	                    if ($.inArray(changedNodes[i].id, crrentSubV) === -1) {
-                            cheakdiyueall.push(changedNodes[i].id);
-	                        crrentSubV.push(changedNodes[i].id)
-	                        crrentSubName.push(changedNodes[i].name);
-	                        cheakedAll.push(changedNodes[i].id)
-	                    }
-	                }
-	            }
-	        }
-	        cheakdiyuealls = treeMonitoring.unique(cheakdiyueall);
-	        if (treeMonitoring.unique(cheakedAll).length <= 400) {
-	            for (var j = 0; j < cheakdiyuealls.length; j++) {
-	                var obj = new Object();
-	                obj.vehicleID = cheakdiyuealls[j];
-	                param.push(obj)
-	            }
-	            var requestStrS = {
-	                "desc": {
-	                    "MsgId": 40964,
-	                    "UserName": $("#userName").text()
-	                },
-	                "data": param
-	            };
-	            cancelList = [];
-	            // 状态信息
-	            webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/location", dataTableOperation.updateRealLocation, "/app/vehicle/location", requestStrS);
-	        } else {
-	            layer.alert("为了更好的性能,请少于400个监控对象,您刚刚勾选了" + treeMonitoring.unique(cheakedAll).length + "个,请重新勾选！")
+            }
+            if (nodes[0].type == "assignment" || nodes[0].type == "group") {
+                changedNodes = zTree.getChangeCheckedNodes();
+                var count = 0;
                 for (var i = 0, l = changedNodes.length; i < l; i++) {
-	                // 只有一个节点
-                    if(changedNodes.length==1){
+                    changedNodes[i].checkedOld = true;
+                    if (changedNodes[i].type === "vehicle" || changedNodes[i].type === "people" || changedNodes[i].type === "thing") {
+                        var list = zTreeIdJson[changedNodes[i].id];
+                        if (cheakedAll.length > 400) {
+                            layer.alert("我们的监控上限是400辆,您刚刚勾选数量超过了400个,请重新勾选！");
+                            for (var j = 0, l = changedNodes.length; j < l; j++) {
+                                // 只有一个节点
+                                if (changedNodes.length == 1) {
+                                    zTree.checkNode(changedNodes[j], false, true);
+                                } else {
+                                    // 如果某个分组树节点未展开，并且已经有勾选的数据，changedNodes中会包含当前树的所有节点
+                                    if (j >= 1) {
+                                        // cheakdiyueall已经剔除已勾选对象
+                                        /*if ($.inArray(changedNodes[j].id, cheakdiyueall) !== -1) {*/
+                                        zTree.checkNode(changedNodes[j], false, true);
+                                        /*}*/
+                                    } else if (j <= 0) {
+                                        // 取消父节点勾选
+                                        changedNodes[j].checked = false;
+                                    }
+                                }
+                                changedNodes[j].checkedOld = false;
+                                crrentSubV.remove(changedNodes[j].id);
+                                cheakedAll.remove(changedNodes[j].id);
+                            }
+                            // crrentSubV 用于刷新左侧树后， 重新勾选已选择树节点,此处不能清空，否则无法勾选树节点。
+                            // crrentSubV = [];
+                            cheakdiyuealls = [];
+                            return;
+                        }
+                        if (list.length > 1) {
+                            $.each(list, function (index, value) {
+                                var treeNoded = zTree.getNodeByTId(value);
+                                zTree.checkNode(treeNoded, true, true);
+                                treeNoded.checkedOld = true;
+                            })
+                        } else if (list.length == 1) {
+                            zTree.checkNode(changedNodes[i], true, true);
+                            changedNodes[i].checkedOld = true;
+                        }
+                        if ($.inArray(changedNodes[i].id, crrentSubV) === -1) {
+                            count++;
+                            cheakdiyueall.push(changedNodes[i].id);
+                            crrentSubV.push(changedNodes[i].id)
+                            crrentSubName.push(changedNodes[i].name);
+                            cheakedAll.push(changedNodes[i].id)
+                        }
+                    }
+                }
+            }
+            cheakdiyuealls = treeMonitoring.unique(cheakdiyueall);
+            if (treeMonitoring.unique(cheakedAll).length <= 400) {
+                for (var j = 0; j < cheakdiyuealls.length; j++) {
+                    var obj = new Object();
+                    obj.vehicleID = cheakdiyuealls[j];
+                    param.push(obj)
+                }
+                var requestStrS = {
+                    "desc": {
+                        "MsgId": 40964,
+                        "UserName": $("#userName").text()
+                    },
+                    "data": param
+                };
+                cancelList = [];
+                // 状态信息
+                webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/location", dataTableOperation.updateRealLocation, "/app/vehicle/location", requestStrS);
+            } else {
+                layer.alert("为了更好的性能,请少于400个监控对象,您刚刚勾选了" + treeMonitoring.unique(cheakedAll).length + "个,请重新勾选！")
+                for (var i = 0, l = changedNodes.length; i < l; i++) {
+                    // 只有一个节点
+                    if (changedNodes.length == 1) {
                         zTree.checkNode(changedNodes[i], false, true);
                     } else {
                         // 如果某个分组树节点未展开，并且已经有勾选的数据，changedNodes中会包含当前树的所有节点
-                        if(i>=1) {
+                        if (i >= 1) {
                             // cheakdiyueall已经剔除已勾选对象
                             if ($.inArray(changedNodes[i].id, cheakdiyueall) !== -1) {
                                 zTree.checkNode(changedNodes[i], false, true);
                             }
-                        }else if(i <= 0){
+                        } else if (i <= 0) {
                             // 取消父节点勾选
                             changedNodes[i].checked = false;
                         }
@@ -4869,66 +4446,75 @@ var treeMonitoring = {
                     crrentSubV.remove(changedNodes[i].id);
                     cheakedAll.remove(changedNodes[i].id);
                 }
-	            // crrentSubV 用于刷新左侧树后， 重新勾选已选择树节点,此处不能清空，否则无法勾选树节点。
-	            // crrentSubV = [];
-	            cheakdiyuealls = [];
-	        }
-	        nodes[0].checkedOld = nodes[0].checked;
-	        treeMonitoring.markerTimeout(nodes);
-	        treeMonitoring.realTimeDatatAdapt(nodes[0].type);
-	        //双击时判断节点是否勾选订阅 用于围栏查询
-	        treeMonitoring.vehicleTreeClickGetFenceInfo(treeNode.checked,treeNode.id)
+                // crrentSubV 用于刷新左侧树后， 重新勾选已选择树节点,此处不能清空，否则无法勾选树节点。
+                // crrentSubV = [];
+                cheakdiyuealls = [];
+            }
+            nodes[0].checkedOld = nodes[0].checked;
+            treeMonitoring.markerTimeout(nodes);
+            treeMonitoring.realTimeDatatAdapt(nodes[0].type);
+            //双击时判断节点是否勾选订阅 用于围栏查询
+            treeMonitoring.vehicleTreeClickGetFenceInfo(treeNode.checked, treeNode.id)
         }
     },
     // 双击聚焦轮询方法
-    markerTimeout: function(nodes) {
-		setTimeout(function(){
-    		var id = nodes[0].id;
-        	if (markerMap.containsKey(id) || mapVehicleTimeW.containsKey(id) || carNameMarkerMap.containsKey(id)) {
-        		treeMonitoring.centerMarker(nodes, 2);
-        	} else if (objAddressIsTrue.indexOf(id) != -1) {
-        		return true;
-        	} else {
-        		treeMonitoring.markerTimeout(nodes);
-        	}
-    	}, 250);
+    markerTimeout: function (nodes) {
+        setTimeout(function () {
+            var id = nodes[0].id;
+            if (markerAllUpdateData.containsKey(id)) {
+                treeMonitoring.centerMarker(id, 'DBLCLICK');
+            } else if (objAddressIsTrue.indexOf(id) != -1) {
+                return true;
+            } else {
+                treeMonitoring.markerTimeout(nodes);
+            }
+        }, 250);
     },
-    
+
     //组织树勾选
     onCheckVehicle: function (e, treeId, treeNode) {
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-        var parNode=treeNode.getParentNode();
-        if(!treeNode.isParent){
-            if(parNode!=null&&parNode!=undefined) {
-                if(parNode.check_Child_State==0){
-                    parNode.halfCheck=false;
-                    parNode.checked=false;
-                    parNode.checkedOld=false;
-                }else if(parNode.check_Child_State==1){
-                    parNode.halfCheck=true;
-                    parNode.checked=false;
-                    parNode.checkedOld=false;
-                }else if(parNode.check_Child_State==2){
-                    parNode.halfCheck=false;
-                    parNode.checked=true;
-                    parNode.checkedOld=true;
-                }
-            }
-        }else{
-            if(treeNode.check_Child_State==0){
-                treeNode.halfCheck=false;
-                treeNode.checked=false;
-                treeNode.checkedOld=false;
-            }else if(treeNode.check_Child_State==1){
-                treeNode.halfCheck=true;
-                treeNode.checked=false;
-                treeNode.checkedOld=false;
-            }else if(treeNode.check_Child_State==2){
-                treeNode.halfCheck=false;
-                treeNode.checked=true;
-                treeNode.checkedOld=true;
+        var curSelect = $('.curSelectedNode');
+        var vName = treeNode.name;
+        var vId = treeNode.id;
+        if (treeNode.checked && curSelect.attr('title') == vName) {
+            if (curSelect.length > 0) {
+                amapOperation.setObdInfo(vName, vId);
             }
         }
+
+        /*var parNode=treeNode.getParentNode();
+         if(!treeNode.isParent){
+         if(parNode!=null&&parNode!=undefined) {
+         if(parNode.check_Child_State==0){
+         parNode.halfCheck=false;
+         parNode.checked=false;
+         parNode.checkedOld=false;
+         }else if(parNode.check_Child_State==1){
+         parNode.halfCheck=true;
+         parNode.checked=false;
+         parNode.checkedOld=false;
+         }else if(parNode.check_Child_State==2){
+         parNode.halfCheck=false;
+         parNode.checked=true;
+         parNode.checkedOld=true;
+         }
+         }
+         }else{
+         if(treeNode.check_Child_State==0){
+         treeNode.halfCheck=false;
+         treeNode.checked=false;
+         treeNode.checkedOld=false;
+         }else if(treeNode.check_Child_State==1){
+         treeNode.halfCheck=true;
+         treeNode.checked=false;
+         treeNode.checkedOld=false;
+         }else if(treeNode.check_Child_State==2){
+         treeNode.halfCheck=false;
+         treeNode.checked=true;
+         treeNode.checkedOld=true;
+         }
+         }*/
         if (treeNode.children === undefined && treeNode.type === "assignment" && treeNode.isParent === true) {
             treeMonitoring.zTreeOnExpand(e, treeId, treeNode);
             if (treeNode.children !== undefined) {
@@ -4936,7 +4522,7 @@ var treeMonitoring = {
                     treeNode.children[m].checkedOld = false;
                 }
             }
-        }else if(treeNode.type === "group"&&allflag){
+        } else if (treeNode.type === "group" && allflag) {
             treeMonitoring.zTreeOnExpand(e, treeId, treeNode);
         }
         var changedNodes = zTree.getChangeCheckedNodes();
@@ -4944,25 +4530,45 @@ var treeMonitoring = {
         var subVeh = [];//订阅的车辆
         var subName = [];
         var cheakdiyueall = [];
-        
+
         for (var i = 0, l = changedNodes.length; i < l; i++) {
-            if ((changedNodes[i].type === "vehicle" || changedNodes[i].type === "people")&&changedNodes[i].isHidden==false) {
+            if ((changedNodes[i].type === "vehicle" || changedNodes[i].type === "people" || changedNodes[i].type === "thing") && changedNodes[i].isHidden == false) {
+                if (cheakedAll.length > 400) {
+                    layer.alert("我们的监控上限是400辆,您刚刚勾选数量超过了400个,请重新勾选！");
+                    for (var j = 0, l = changedNodes.length; j < l; j++) {
+                        if (!crrentSubV.contains(changedNodes[j].id)) {
+                            if (changedNodes.length == 1) {
+                                zTree.checkNode(changedNodes[j], false, true);
+                            }
+                            if (changedNodes.length > 1 && j >= 1) {
+                                zTree.checkNode(changedNodes[j], false, true);
+                            } else if (changedNodes.length > 1 && j == 0) {
+                                changedNodes[j].checked = false;
+                            }
+                            changedNodes[j].checkedOld = false;
+                            cheakedAll.remove(changedNodes[j].id)
+                        }
+                    }
+                    checkedVehicles = [];
+                    return;
+                }
                 if (changedNodes[i].checked == false) {
                     cancelVehicle.push(changedNodes[i].id);
-                    cheakedAll.remove(changedNodes[i].id)
+                    cheakedAll.remove(changedNodes[i].id);
+                    carNameContentLUMap.remove(changedNodes[i].id);
                 } else if (!subVeh.contains(changedNodes[i].id)) {
                     subVeh.push(changedNodes[i].id);
-                    subName.push(changedNodes[i].name)
-                    cheakdiyueall.push(changedNodes[i].id)
+                    subName.push(changedNodes[i].name);
+                    cheakdiyueall.push(changedNodes[i].id);
                     cheakedAll.push(changedNodes[i].id)
                 }
                 var list = zTree.getNodesByParam('id', changedNodes[i].id, null);
                 if (list !== undefined) {
-                	for (var j = 0; j < list.length; j++) {
-                		zTree.checkNode(list[j], treeNode.checked, true);
-                		list[j].checkedOld = treeNode.checked;
-                	}
-                }else {
+                    for (var j = 0; j < list.length; j++) {
+                        zTree.checkNode(list[j], treeNode.checked, true);
+                        list[j].checkedOld = treeNode.checked;
+                    }
+                } else {
                     changedNodes[i].checkedOld = changedNodes[i].checked;
                 }
             } else {
@@ -5006,7 +4612,7 @@ var treeMonitoring = {
                             crrentSubName.push(subName[i])
                         }
                     }
-                } else if (treeNode.type === "vehicle" || treeNode.type === "people") {
+                } else if (treeNode.type === "vehicle" || treeNode.type === "people" || treeNode.type === "thing") {
                     crrentSubV.push(treeNode.id)
                     crrentSubName.push(treeNode.name);
                 }
@@ -5021,14 +4627,14 @@ var treeMonitoring = {
                             crrentSubName.removeObj(treeNode.children[i].name);
                         }
                     }
-                } else if (treeNode.type == "vehicle" || treeNode.type == "people") {
+                } else if (treeNode.type == "vehicle" || treeNode.type == "people" || treeNode.type == "thing") {
                     crrentSubV.removeObj(treeNode.id)
                     crrentSubName.removeObj(treeNode.name);
                 }
                 cheakNodec = [];
                 param = [];
                 var plateNumbers = [];
-                if (treeNode.type == "vehicle" || treeNode.type == "people") {
+                if (treeNode.type == "vehicle" || treeNode.type == "people" || treeNode.type == "thing") {
                     var obj = new Object();
                     obj.vehicleID = treeNode.id;
                     plateNumbers.push(treeNode.id);
@@ -5036,9 +4642,9 @@ var treeMonitoring = {
                 } else if (treeNode.type == "assignment") {
                     treeMonitoring.getCancelNodes(changedNodes, param, plateNumbers);
                     param = treeMonitoring.removeDuplicates(param);
-                } else if (treeNode.type == "group" ) {
+                } else if (treeNode.type == "group") {
                     for (var i = 0, l = changedNodes.length; i < l; i++) {
-                        if ((changedNodes[i].type === "vehicle" || changedNodes[i].type === "people")&&changedNodes[i].checked==false) {
+                        if ((changedNodes[i].type === "vehicle" || changedNodes[i].type === "people" || changedNodes[i].type == "thing") && changedNodes[i].checked == false) {
                             var obj = new Object();
                             crrentSubV.removeObj(changedNodes[i].id)
                             crrentSubName.removeObj(changedNodes[i].name)
@@ -5047,7 +4653,7 @@ var treeMonitoring = {
                             plateNumbers.push(changedNodes[i].id)
                         }
                     }
-                }else if(treeNode.type == "group"&&treeNode.pId=="null"){
+                } else if (treeNode.type == "group" && treeNode.pId == "null") {
                     plateNumbers.push(crrentSubV);
                 }
                 plateNumbers = treeMonitoring.removeDuplicates(plateNumbers);
@@ -5078,26 +4684,26 @@ var treeMonitoring = {
                 $("#" + oldDbclickCheckedId).parent().removeAttr("class");
                 $(".ztree li a").removeAttr("class", "curSelectedNode");
                 //取消订阅时 使用此Fn判断围栏模块显示隐藏
-                treeMonitoring.vehicleTreeClickGetFenceInfo(treeNode.checked,treeNode.id);
+                treeMonitoring.vehicleTreeClickGetFenceInfo(treeNode.checked, treeNode.id);
                 // 删除未定位监控对象元素
                 for (var z = 0, zlen = param.length; z < zlen; z++) {
-                	var zIndex = objAddressIsTrue.indexOf(param[z].vehicleID);
-                	if (zIndex != -1) {
-                		objAddressIsTrue.splice(zIndex, 1);
-                	}
+                    var zIndex = objAddressIsTrue.indexOf(param[z].vehicleID);
+                    if (zIndex != -1) {
+                        objAddressIsTrue.splice(zIndex, 1);
+                    }
                 }
             }
         } else {
             layer.alert("我们的监控上限是400辆,您刚刚勾选了" + treeMonitoring.unique(cheakedAll).length + "辆,请重新勾选！")
             for (var i = 0, l = changedNodes.length; i < l; i++) {
-                if(!crrentSubV.contains(changedNodes[i].id)){
-                    if(changedNodes.length==1){
+                if (!crrentSubV.contains(changedNodes[i].id)) {
+                    if (changedNodes.length == 1) {
                         zTree.checkNode(changedNodes[i], false, true);
                     }
-                    if(changedNodes.length>1&&i>=1){
+                    if (changedNodes.length > 1 && i >= 1) {
                         zTree.checkNode(changedNodes[i], false, true);
-                    }else if(changedNodes.length>1&&i==0){
-                        changedNodes[i].checked=false;
+                    } else if (changedNodes.length > 1 && i == 0) {
+                        changedNodes[i].checked = false;
                     }
                     changedNodes[i].checkedOld = false;
                     cheakedAll.remove(changedNodes[i].id)
@@ -5117,7 +4723,7 @@ var treeMonitoring = {
     },
     getCancelNodes: function (changedNodes, param, plateNumbers) {
         for (var i = 0; i < changedNodes.length; i++) {
-            if ((changedNodes[i].type == 'vehicle' || changedNodes[i].type == 'people') && changedNodes[i].isHidden == false&&changedNodes[i].checked==false) {
+            if ((changedNodes[i].type == 'vehicle' || changedNodes[i].type == 'people' || changedNodes[i].type == 'thing') && changedNodes[i].isHidden == false && changedNodes[i].checked == false) {
                 var obj = new Object();
                 obj.vehicleID = changedNodes[i].id;
                 plateNumbers.push(changedNodes[i].id);
@@ -5126,36 +4732,36 @@ var treeMonitoring = {
         }
     },
     getChannel: function (fenceNode, showMap) {
-        if (fenceNode == null || fenceNode.length == 0 || (fenceNode[0].type !== 'vehicle' && fenceNode[0].type !== 'people')) {
+        if (fenceNode == null || fenceNode.length == 0 || (fenceNode[0].type !== 'vehicle' && fenceNode[0].type !== 'people' && fenceNode[0].type !== 'thing')) {
             return true;
-        } else {
-            if (treeMonitoring.unique(cheakedAll).length <= 400) {
-                if ($.inArray(fenceNode[0].id, crrentSubV) === -1) {
-                    crrentSubV.push(fenceNode[0].id)
-                    crrentSubName.push(fenceNode[0].name);
-                }
-                cancelList = [];
-                var requestStr = {
-                    "desc": {
-                        "MsgId": 40964,
-                        "UserName": $("#userName").text()
-                    },
-                    "data": [{
-                        "vehicleID": fenceNode[0].id
-                    }]
-                };
-                //状态信息
-                webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/location", dataTableOperation.updateRealLocation, "/app/vehicle/location", requestStr);
-                return true;
-            } else {
-        		zTree.checkNode(fenceNode, false, true);
-        		layer.alert("为了更好的性能,请少于400个监控对象,您刚刚勾选了" + treeMonitoring.unique(cheakedAll).length + "个,请重新勾选！");
-                cheakedAll.remove(fenceNode[0].id);
-        		// crrentSubV = [];
-        		// cheakdiyuealls = [];
-        		return false;
-            }
         }
+        if (treeMonitoring.unique(cheakedAll).length <= 400) {
+            if ($.inArray(fenceNode[0].id, crrentSubV) === -1) {
+                crrentSubV.push(fenceNode[0].id)
+                crrentSubName.push(fenceNode[0].name);
+            }
+            cancelList = [];
+            var requestStr = {
+                "desc": {
+                    "MsgId": 40964,
+                    "UserName": $("#userName").text()
+                },
+                "data": [{
+                    "vehicleID": fenceNode[0].id
+                }]
+            };
+            //状态信息
+            webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/location", dataTableOperation.updateRealLocation, "/app/vehicle/location", requestStr);
+            return true;
+        }
+        zTree.checkNode(fenceNode, false, true);
+        layer.alert("为了更好的性能,请少于400个监控对象,您刚刚勾选了" + treeMonitoring.unique(cheakedAll).length + "个,请重新勾选！");
+        cheakedAll.remove(fenceNode[0].id);
+        // crrentSubV = [];
+        // cheakdiyuealls = [];
+        return false;
+
+
     },
     // 实时更新监控对象树状态
     updataRealTree: function (msg) {
@@ -5163,10 +4769,11 @@ var treeMonitoring = {
         if (suFlag == true) {
             for (var j = 0; j < initArr.length; j++) {
                 zTree.expandNode(notExpandNodeInit[j], true, true, false, true);
-            };
-            suFlag = false
+            }
+            ;
+            suFlag = false;
         }
-        ;
+
         var data = $.parseJSON(msg.body);
         var carStopLine = 0;
         var carRunLine = 0;
@@ -5174,59 +4781,61 @@ var treeMonitoring = {
             var position = data.data;
             for (var i = 0; i < position.length; i++) {
                 if (position[i].vehicleStatus != 3) {
-                    lineV.push(position[i].vehicleId);
+                    if (lineV.indexOf(position[i].vehicleId) == -1) {
+                        lineV.push(position[i].vehicleId);
+                    }
                 }
                 lineVid = treeMonitoring.unique(lineV);
                 if (position[i].vehicleStatus == 4) {
-                    if ($.inArray(position[i].vehicleId, lineAs) === -1) {
+                    if (lineAs.indexOf(position[i].vehicleId) == -1) {
                         lineAs.push(position[i].vehicleId);
-                        lineAr.remove(position[i].vehicleId);
-                        lineAa.remove(position[i].vehicleId);
-                        lineAm.remove(position[i].vehicleId);
-                        changeMiss.remove(position[i].vehicleId);
-                        lineOs.remove(position[i].vehicleId);
-                        lineHb.remove(position[i].vehicleId);
                     }
+                    lineAr.remove(position[i].vehicleId);
+                    lineAa.remove(position[i].vehicleId);
+                    lineAm.remove(position[i].vehicleId);
+                    changeMiss.remove(position[i].vehicleId);
+                    lineOs.remove(position[i].vehicleId);
+                    lineHb.remove(position[i].vehicleId);
                 } else if (position[i].vehicleStatus == 10) {
-                    if ($.inArray(position[i].vehicleId, lineAr) === -1) {
+                    if (lineAr.indexOf(position[i].vehicleId) == -1) {
                         lineAr.push(position[i].vehicleId);
-                        lineAs.remove(position[i].vehicleId);
-                        lineAa.remove(position[i].vehicleId);
-                        lineAm.remove(position[i].vehicleId);
-                        changeMiss.remove(position[i].vehicleId);
-                        lineOs.remove(position[i].vehicleId);
-                        lineHb.remove(position[i].vehicleId);
                     }
+                    lineAs.remove(position[i].vehicleId);
+                    lineAa.remove(position[i].vehicleId);
+                    lineAm.remove(position[i].vehicleId);
+                    changeMiss.remove(position[i].vehicleId);
+                    lineOs.remove(position[i].vehicleId);
+                    lineHb.remove(position[i].vehicleId);
                 } else if (position[i].vehicleStatus == 5) {
-                    if ($.inArray(position[i].vehicleId, lineAa) === -1) {
+                    if (lineAa.indexOf(position[i].vehicleId) == -1) {
                         lineAa.push(position[i].vehicleId);
-                        lineAr.remove(position[i].vehicleId);
-                        lineAs.remove(position[i].vehicleId);
-                        lineAm.remove(position[i].vehicleId);
-                        changeMiss.remove(position[i].vehicleId);
-                        lineOs.remove(position[i].vehicleId);
-                        lineHb.remove(position[i].vehicleId);
                     }
+                    lineAr.remove(position[i].vehicleId);
+                    lineAs.remove(position[i].vehicleId);
+                    lineAm.remove(position[i].vehicleId);
+                    changeMiss.remove(position[i].vehicleId);
+                    lineOs.remove(position[i].vehicleId);
+                    lineHb.remove(position[i].vehicleId);
                 } else if (position[i].vehicleStatus == 2) {
-                    if ($.inArray(position[i].vehicleId, lineAm) === -1) {
+                    if (lineAm.indexOf(position[i].vehicleId) == -1) {
                         lineAm.push(position[i].vehicleId);
-                        lineAr.remove(position[i].vehicleId);
-                        lineAs.remove(position[i].vehicleId);
-                        lineAa.remove(position[i].vehicleId);
-                        changeMiss.remove(position[i].vehicleId);
-                        lineOs.remove(position[i].vehicleId);
-                        lineHb.remove(position[i].vehicleId);
                     }
+                    lineAr.remove(position[i].vehicleId);
+                    lineAs.remove(position[i].vehicleId);
+                    lineAa.remove(position[i].vehicleId);
+                    changeMiss.remove(position[i].vehicleId);
+                    lineOs.remove(position[i].vehicleId);
+                    lineHb.remove(position[i].vehicleId);
                 } else if (position[i].vehicleStatus == 3) {//未上线
-                    if ($.inArray(position[i].vehicleId, changeMiss) === -1) {
+                    if (changeMiss.indexOf(position[i].vehicleId) == -1) {
                         changeMiss.push(position[i].vehicleId)
-                        lineAm.remove(position[i].vehicleId);
-                        lineAr.remove(position[i].vehicleId);
-                        lineAs.remove(position[i].vehicleId);
-                        lineAa.remove(position[i].vehicleId);
-                        lineOs.remove(position[i].vehicleId);
-                        lineHb.remove(position[i].vehicleId);
                     }
+                    lineAm.remove(position[i].vehicleId);
+                    lineAr.remove(position[i].vehicleId);
+                    lineAs.remove(position[i].vehicleId);
+                    lineAa.remove(position[i].vehicleId);
+                    lineOs.remove(position[i].vehicleId);
+                    lineHb.remove(position[i].vehicleId);
                 } else if (position[i].vehicleStatus == 9) {//超速
                     if ($.inArray(position[i].vehicleId, lineOs) === -1) {
                         lineOs.push(position[i].vehicleId)
@@ -5238,15 +4847,15 @@ var treeMonitoring = {
                         lineHb.remove(position[i].vehicleId);
                     }
                 } else if (position[i].vehicleStatus == 11) {//心跳
-                	if ($.inArray(position[i].vehicleId, lineHb) === -1) {
-                		lineHb.push(position[i].vehicleId);
-                        changeMiss.remove(position[i].vehicleId);
-                        lineAm.remove(position[i].vehicleId);
-                        lineAr.remove(position[i].vehicleId);
-                        lineAs.remove(position[i].vehicleId);
-                        lineAa.remove(position[i].vehicleId);
-                        lineOs.remove(position[i].vehicleId);
-                	}
+                    if (lineHb.indexOf(position[i].vehicleId) == -1) {
+                        lineHb.push(position[i].vehicleId);
+                    }
+                    changeMiss.remove(position[i].vehicleId);
+                    lineAm.remove(position[i].vehicleId);
+                    lineAr.remove(position[i].vehicleId);
+                    lineAs.remove(position[i].vehicleId);
+                    lineAa.remove(position[i].vehicleId);
+                    lineOs.remove(position[i].vehicleId);
                 }
             }
             missVid = changeMiss;
@@ -5355,79 +4964,89 @@ var treeMonitoring = {
                 }
             }
             if (heartBeat.length != 0) {
-            	var len = heartBeat.length;
-            	for (var i = 0; i < len; i++) {
-            		var heartbeatValue = heartBeat[i];
-            		var list = zTreeIdJson[heartbeatValue];
-            		if (list != null) {
-            			$.each(list, function (index, value) {
-            				var treeNode = zTree.getNodeByTId(value);
-            				treeNode.iconSkin = "btnImage iconArea heartBeatWarning"
-            					zTree.updateNode(treeNode);
-            				$("#" + value + "_span")[0].style.color = "#fb8c96";
-            				if (misstype) {
-            					zTree.hideNode(treeNode);
-            				}
-            			})
-            		}
-            	}
+                var len = heartBeat.length;
+                for (var i = 0; i < len; i++) {
+                    var heartbeatValue = heartBeat[i];
+                    var list = zTreeIdJson[heartbeatValue];
+                    if (list != null) {
+                        $.each(list, function (index, value) {
+                            var treeNode = zTree.getNodeByTId(value);
+                            treeNode.iconSkin = "btnImage iconArea heartBeatWarning"
+                            zTree.updateNode(treeNode);
+                            $("#" + value + "_span")[0].style.color = "#fb8c96";
+                            if (misstype) {
+                                zTree.hideNode(treeNode);
+                            }
+                        })
+                    }
+                }
             }
             if (misstypes) {
                 var nodesList = [];
                 var treeNodeChildren = treeNodeNew.children;
                 $.each(treeNodeChildren, function (index, value) {
-                    if(value.isHidden == false){
+                    if (value.isHidden == false) {
                         nodesList.push(value.id);
                     }
                 });
-                address_submit("POST", "/clbs/m/functionconfig/fence/bindfence/getNodesList", "json", true, {"nodesList":nodesList}, true, treeMonitoring.getNodesList);
+                address_submit("POST", "/clbs/m/functionconfig/fence/bindfence/getNodesList", "json", true, {"nodesList": nodesList}, true, treeMonitoring.getNodesList);
             }
             var Vjiaoji = Array.intersect(lineVid, diyueall);
             var vmiss = params.length - Vjiaoji.length;
         } else if (data.desc.msgID == 34952) {//新增
             var upPosition = data.data;
-            if (upPosition[0].vehicleId == '5836ae81-76d1-4021-b4c4-f287e2f9dc0a') {
-        		console.log(data);
-        		// debugger;
-        	}
             if (upPosition[0].vehicleStatus == 4) {
-                lineAndStop.push(upPosition[0].vehicleId);
-                if (nmoline.isHas(upPosition[0].vehicleId)) {
-                    nmoline.remove(upPosition[0].vehicleId)
+                if (lineAndStop.indexOf(upPosition[0].vehicleId) == -1) {
+                    lineAndStop.push(upPosition[0].vehicleId);
                 }
+                nmoline.remove(upPosition[0].vehicleId)
                 treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
             } else if (upPosition[0].vehicleStatus == 10) {
-                lineAndRun.push(upPosition[0].vehicleId);
-                if (nmoline.isHas(upPosition[0].vehicleId)) {
-                    nmoline.remove(upPosition[0].vehicleId)
+                if (lineAndRun.indexOf(upPosition[0].vehicleId) == -1) {
+                    lineAndRun.push(upPosition[0].vehicleId);
                 }
+                // if (nmoline.isHas(upPosition[0].vehicleId)) {
+                nmoline.remove(upPosition[0].vehicleId)
+                // }
                 treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
             } else if (upPosition[0].vehicleStatus == 5) {
-                lineAndAlarm.push(upPosition[0].vehicleId);
-                if (nmoline.isHas(upPosition[0].vehicleId)) {
-                    nmoline.remove(upPosition[0].vehicleId)
+                if (lineAndAlarm.indexOf(upPosition[0].vehicleId) == -1) {
+                    lineAndAlarm.push(upPosition[0].vehicleId);
                 }
+                // if (nmoline.isHas(upPosition[0].vehicleId)) {
+                nmoline.remove(upPosition[0].vehicleId)
+                // }
                 treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
             } else if (upPosition[0].vehicleStatus == 2) {
-                lineAndmiss.push(upPosition[0].vehicleId);
-                if (nmoline.isHas(upPosition[0].vehicleId)) {
-                    nmoline.remove(upPosition[0].vehicleId)
+                if (lineAndmiss.indexOf(upPosition[0].vehicleId) == -1) {
+                    lineAndmiss.push(upPosition[0].vehicleId);
                 }
+
+                // if (nmoline.isHas(upPosition[0].vehicleId)) {
+                nmoline.remove(upPosition[0].vehicleId)
+                // }
                 treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
             } else if (upPosition[0].vehicleStatus == 3) { // 离线
-                changeMiss.push(upPosition[0].vehicleId)
+                if (changeMiss.indexOf(upPosition[0].vehicleId) == -1) {
+                    changeMiss.push(upPosition[0].vehicleId);
+                }
                 treeMonitoring.objHeartbeatChange(upPosition[0].vehicleId, 3);
             } else if (upPosition[0].vehicleStatus == 9) {
-                overSpeed.push(upPosition[0].vehicleId);
-                if (nmoline.isHas(upPosition[0].vehicleId)) {
-                    nmoline.remove(upPosition[0].vehicleId)
+                if (overSpeed.indexOf(upPosition[0].vehicleId) == -1) {
+                    overSpeed.push(upPosition[0].vehicleId);
                 }
+
+                // if (nmoline.isHas(upPosition[0].vehicleId)) {
+                nmoline.remove(upPosition[0].vehicleId)
+                // }
                 treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
             } else if (upPosition[0].vehicleStatus == 11) {
-            	heartBeat.push(upPosition[0].vehicleId);
-                if (nmoline.isHas(upPosition[0].vehicleId)) {
-                    nmoline.remove(upPosition[0].vehicleId)
+                if (heartBeat.indexOf(upPosition[0].vehicleId) == -1) {
+                    heartBeat.push(upPosition[0].vehicleId);
                 }
+                // if (nmoline.isHas(upPosition[0].vehicleId)) {
+                nmoline.remove(upPosition[0].vehicleId)
+                // }
                 treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                 treeMonitoring.objHeartbeatChange(upPosition[0].vehicleId, 11);
             }
@@ -5441,10 +5060,14 @@ var treeMonitoring = {
             if (diyueall.isHas(upPosition[0].vehicleId)) {
                 if (upPosition[0].speed < 1) {
                     $tableCarStop.text(parseInt($tableCarStop.text()) + 1);
-                    stopVidArray.push(upPosition[0].vehicleId);
+                    if (stopVidArray.indexOf(upPosition[0].vehicleId) == -1) {
+                        stopVidArray.push(upPosition[0].vehicleId);
+                    }
                 } else {
                     $tableCarRun.text(parseInt($tableCarRun.text()) + 1);
-                    runVidArray.push(upPosition[0].vehicleId);
+                    if (runVidArray.indexOf(upPosition[0].vehicleId) == -1) {
+                        runVidArray.push(upPosition[0].vehicleId);
+                    }
                 }
                 ;
                 $("#tline").text("(" + (parseInt($tableCarRun.text()) + parseInt($tableCarStop.text())) + ")");
@@ -5452,21 +5075,19 @@ var treeMonitoring = {
                 $tableCarOffline.text(parseInt($tableCarAll.text()) - parseInt($tableCarOnline.text()));
                 $tableCarOnlinePercent.text(((parseInt($tableCarOnline.text()) / parseInt($tableCarAll.text())) * 100).toFixed(2) + "%");
                 $("#tmiss").text("(" + parseInt($tableCarOffline.text()) + ")");
+                if (upPosition[0].brand.length > 8) {
+                    upPosition[0].brand = upPosition[0].brand.substring(0, 7) + '...';
+                }
                 $("#fixSpan").text(upPosition[0].brand + "  " + "  已上线");
                 $(".btn-videoRealTime").show();
                 $("#fixArea").show();
-                if ($("#recentlyC").children().length < 10) {
-                    $("#recentlyC").append("<p class='carStateShow'>" + $("#fixSpan").text() + "</p>")
-                } else {
-                    $("#recentlyC").children().get(0).remove()
+                if ($("#recentlyC").children().length >= 10) {
+                    $($("#recentlyC").children().get(0)).remove();
                 }
+                $("#recentlyC").append("<p class='carStateShow'>" + $("#fixSpan").text() + "</p>")
             }
         } else if (data.desc.msgID == 30583) {//更新
             var upPosition = data.data;
-            if (upPosition[0].vehicleId == '5836ae81-76d1-4021-b4c4-f287e2f9dc0a') {
-        		console.log(data);
-        		// debugger;
-        	}
             if (upPosition !== null) {
                 if (diyueall.isHas(upPosition[0].vehicleId)) {
                     if (upPosition[0].vehicleStatus != 3) {
@@ -5474,7 +5095,9 @@ var treeMonitoring = {
                             if (stopVidArray.indexOf(upPosition[0].vehicleId) == -1) {
                                 $tableCarStop.text(parseInt($tableCarStop.text()) + 1);
                                 $tableCarRun.text(parseInt($tableCarRun.text()) - 1);
-                                stopVidArray.push(upPosition[0].vehicleId);
+                                if (stopVidArray.indexOf(upPosition[0].vehicleId) == -1) {
+                                    stopVidArray.push(upPosition[0].vehicleId);
+                                }
                                 runVidArray.splice(runVidArray.indexOf(upPosition[0].vehicleId), 1);
                             }
                             ;
@@ -5482,7 +5105,9 @@ var treeMonitoring = {
                             if (runVidArray.indexOf(upPosition[0].vehicleId) == -1) {
                                 $tableCarStop.text(parseInt($tableCarStop.text()) - 1);
                                 $tableCarRun.text(parseInt($tableCarRun.text()) + 1);
-                                runVidArray.push(upPosition[0].vehicleId);
+                                if (runVidArray.indexOf(upPosition[0].vehicleId) == -1) {
+                                    runVidArray.push(upPosition[0].vehicleId);
+                                }
                                 stopVidArray.splice(stopVidArray.indexOf(upPosition[0].vehicleId), 1);
                             }
                         }
@@ -5497,7 +5122,9 @@ var treeMonitoring = {
                     overSpeed.remove(upPosition[0].vehicleId);
                     nmoline.remove(upPosition[0].vehicleId);
                     heartBeat.remove(upPosition[0].vehicleId);
-                    lineAndStop.push(upPosition[0].vehicleId)
+                    if (lineAndStop.indexOf(upPosition[0].vehicleId) == -1) {
+                        lineAndStop.push(upPosition[0].vehicleId);
+                    }
                     treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                 } else if (upPosition[0].vehicleStatus == 10) {
                     lineAndStop.remove(upPosition[0].vehicleId);
@@ -5506,7 +5133,9 @@ var treeMonitoring = {
                     overSpeed.remove(upPosition[0].vehicleId);
                     nmoline.remove(upPosition[0].vehicleId);
                     heartBeat.remove(upPosition[0].vehicleId);
-                    lineAndRun.push(upPosition[0].vehicleId)
+                    if (lineAndRun.indexOf(upPosition[0].vehicleId) == -1) {
+                        lineAndRun.push(upPosition[0].vehicleId);
+                    }
                     treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                 } else if (upPosition[0].vehicleStatus == 5) {
                     lineAndStop.remove(upPosition[0].vehicleId);
@@ -5515,7 +5144,9 @@ var treeMonitoring = {
                     overSpeed.remove(upPosition[0].vehicleId);
                     nmoline.remove(upPosition[0].vehicleId);
                     heartBeat.remove(upPosition[0].vehicleId);
-                    lineAndAlarm.push(upPosition[0].vehicleId)
+                    if (lineAndAlarm.indexOf(upPosition[0].vehicleId) == -1) {
+                        lineAndAlarm.push(upPosition[0].vehicleId);
+                    }
                     treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                 } else if (upPosition[0].vehicleStatus == 2) {
                     lineAndStop.remove(upPosition[0].vehicleId);
@@ -5524,17 +5155,21 @@ var treeMonitoring = {
                     overSpeed.remove(upPosition[0].vehicleId);
                     nmoline.remove(upPosition[0].vehicleId);
                     heartBeat.remove(upPosition[0].vehicleId);
-                    lineAndmiss.push(upPosition[0].vehicleId)
+                    if (lineAndmiss.indexOf(upPosition[0].vehicleId) == -1) {
+                        lineAndmiss.push(upPosition[0].vehicleId);
+                    }
                     treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                 } else if (upPosition[0].vehicleStatus == 3) {//离线
-                	treeMonitoring.objHeartbeatChange(upPosition[0].vehicleId, 3);
+                    treeMonitoring.objHeartbeatChange(upPosition[0].vehicleId, 3);
                     lineAndStop.remove(upPosition[0].vehicleId);
                     lineAndRun.remove(upPosition[0].vehicleId);
                     lineAndAlarm.remove(upPosition[0].vehicleId);
                     lineAndmiss.remove(upPosition[0].vehicleId);
                     overSpeed.remove(upPosition[0].vehicleId);
                     heartBeat.remove(upPosition[0].vehicleId);
-                    nmoline.push(upPosition[0].vehicleId);
+                    if (nmoline.indexOf(upPosition[0].vehicleId) == -1) {
+                        nmoline.push(upPosition[0].vehicleId);
+                    }
                     treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                     var list = zTreeIdJson[upPosition[0].vehicleId];
                     var brand = null;
@@ -5557,15 +5192,16 @@ var treeMonitoring = {
                         $tableCarOffline.text(parseInt($tableCarAll.text()) - parseInt($tableCarOnline.text()));
                         $tableCarOnlinePercent.text(((parseInt($tableCarOnline.text()) / parseInt($tableCarAll.text())) * 100).toFixed(2) + "%");
                         $("#tmiss").text("(" + parseInt($tableCarOffline.text()) + ")");
+                        if (upPosition[0].brand.length > 8) {
+                            upPosition[0].brand = upPosition[0].brand.substring(0, 7) + '...';
+                        }
                         $("#fixSpan").text(upPosition[0].brand + "  " + "  已下线");
                         $(".btn-videoRealTime").show();
-                        $(".btn-videoRealTime").show();
                         $("#fixArea").show();
-                        if ($("#recentlyC").children().length < 10) {
-                            $("#recentlyC").append("<p class='carStateShow'>" + $("#fixSpan").text() + "</p>")
-                        } else {
-                            $("#recentlyC").children().get(0).remove()
+                        if ($("#recentlyC").children().length >= 10) {
+                            $($("#recentlyC").children().get(0)).remove();
                         }
+                        $("#recentlyC").append("<p class='carStateShow'>" + $("#fixSpan").text() + "</p>")
                     }
                 } else if (upPosition[0].vehicleStatus == 9) {//超速
                     lineAndStop.remove(upPosition[0].vehicleId);
@@ -5574,7 +5210,9 @@ var treeMonitoring = {
                     lineAndmiss.remove(upPosition[0].vehicleId);
                     nmoline.remove(upPosition[0].vehicleId);
                     heartBeat.remove(upPosition[0].vehicleId);
-                    overSpeed.push(upPosition[0].vehicleId)
+                    if (overSpeed.indexOf(upPosition[0].vehicleId) == -1) {
+                        overSpeed.push(upPosition[0].vehicleId)
+                    }
                     treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                 } else if (upPosition[0].vehicleStatus == 11) {//心跳
                     lineAndStop.remove(upPosition[0].vehicleId);
@@ -5583,7 +5221,9 @@ var treeMonitoring = {
                     lineAndmiss.remove(upPosition[0].vehicleId);
                     nmoline.remove(upPosition[0].vehicleId);
                     overSpeed.remove(upPosition[0].vehicleId);
-                    heartBeat.push(upPosition[0].vehicleId);
+                    if (heartBeat.indexOf(upPosition[0].vehicleId) == -1) {
+                        heartBeat.push(upPosition[0].vehicleId);
+                    }
                     treeMonitoring.searchByFlag("treeDemo", upPosition[0].vehicleId, null, 4);
                     treeMonitoring.objHeartbeatChange(upPosition[0].vehicleId, 11);
                     // amapOperation.carNameEvade(carId, carName, lngLatValue, false, "1", null, false, stateInfo);
@@ -5591,51 +5231,38 @@ var treeMonitoring = {
             }
         }
     },
-    
+
     // 监控对象状态变更心跳后，更新地图车辆状态
-    objHeartbeatChange: function(id, stateIndex) {
-    	if (carNameMarkerMap.containsKey(id)) {
-    		var this_marker = carNameMarkerMap.get(id)
-    		,carName = this_marker.name
-    		,lngLatValue = this_marker.getPosition();
-    		amapOperation.carNameEvade(id, carName, lngLatValue, null, "1", null, false, stateIndex);
-    		
-    		if (mapVehicleTimeW.containsKey(id)) {
-    			var valueW = mapVehicleTimeW.get(id);
-    			mapVehicleTimeW.remove(id);
-    			valueW[6] = stateIndex;
-    			mapVehicleTimeW.put(id, valueW);
-    		}
-    		
-    		if (markerMap.containsKey(id)) {
-    			var value = markerMap.get(id);
-    			markerMap.remove(id);
-    			value[6] = stateIndex;
-    			value[0].stateInfo = stateIndex;
-    			markerMap.put(id, value);
-    		}
-    	} else if (mapVehicleTimeW.containsKey(id)) {
-    		var value = mapVehicleTimeW.get(id);
-    		mapVehicleTimeW.remove(id);
-    		value[6] = stateIndex;
-			mapVehicleTimeW.put(id, value);
-    		
-    		var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-    		var node = zTree.getNodeByParam('id', id, null);
-    		var carName = node.name;
-    		var lngLatValue = value[0];
-    		amapOperation.carNameEvade(id, carName, lngLatValue, null, "1", null, false, stateIndex);
-    		
-    		if (markerMap.containsKey(id)) {
-    			var valueM = markerMap.get(id);
-    			markerMap.remove(id);
-    			valueM[6] = stateIndex;
-    			valueM[0].stateInfo = stateIndex;
-    			markerMap.put(id, valueM);
-    		}
-    	}
+    objHeartbeatChange: function (id, stateIndex) {
+        // 改变全局位置信息车辆状态
+        if (markerAllUpdateData.containsKey(id)) {
+            var value = markerAllUpdateData.get(id);
+            markerAllUpdateData.remove(id);
+            value[0][5] = stateIndex;
+            markerAllUpdateData.put(id, value);
+        }
+
+        // 改变可视区域内的车辆状态
+        if (markerViewingArea.containsKey(id)) {
+            var value = markerViewingArea.get(id);
+            markerViewingArea.remove(id);
+            var marker = value[0];
+            marker.stateInfo = stateIndex;
+            value[0] = marker;
+            value[6] = stateIndex;
+            markerViewingArea.put(id, value);
+            amapOperation.carNameEvade(id, marker.name, marker.getPosition(), null, "1", null, false, stateIndex);
+        }
+
+        // 改变可视区域外的车俩状态
+        if (markerOutside.containsKey(id)) {
+            var value = markerOutside.get(id);
+            markerOutside.remove(id);
+            value[5] = stateIndex;
+            markerOutside.put(id, value);
+        }
     },
-    
+
     getNodesList: function (data) {
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
         var dataObj = data.obj;
@@ -5652,9 +5279,12 @@ var treeMonitoring = {
         var obj = JSON.parse(jsonStr);
         var type = obj.desc.type;
         // 判断用户是否有监控对象的权限
-        if (diyueall.indexOf(obj.desc.vId) != -1) {
-        	// 报警更新方法
+        if (diyueall.indexOf(obj.desc.monitorId) != -1) {
+            // 报警更新方法
             dataTableOperation.updateAlarmInfoTable(obj);
+
+            // wjk 报警记录更新也为隐藏按钮添加方法
+            $("#scalingBtn").unbind("click").bind("click", treeMonitoring.hideDataClick);
         }
     },
     //刷新树
@@ -5665,18 +5295,18 @@ var treeMonitoring = {
         $("#search_condition").val("");
         $thetree.animate({scrollTop: 0});//回到顶端
     },
-    ajaxQueryDataFilter: function(treeId, parentNode, responseData) {
-     	responseData = JSON.parse(ungzip(responseData));
-        return filterQueryResult(responseData,null);
- 	},
+    ajaxQueryDataFilter: function (treeId, parentNode, responseData) {
+        responseData = JSON.parse(ungzip(responseData));
+        return filterQueryResult(responseData, null);
+    },
     search_condition: function () {
-        fzzflag=true;
-        missAll=false;
-        misstype=false;
-        misstypes =false;
-        zTreeIdJson={}
+        fzzflag = true;
+        missAll = false;
+        misstype = false;
+        misstypes = false;
+        zTreeIdJson = {}
         suFlag = true;
-        allflag=false;
+        allflag = false;
         var queryType = $("#searchType").val();
         var queryParam = $("#search_condition").val();
         if (queryParam !== null && queryParam !== "") {
@@ -5687,12 +5317,12 @@ var treeMonitoring = {
                     enable: true,
                     autoParam: ["id"],
                     dataType: "json",
-                    otherParam: {"queryParam": queryParam,"queryType": queryType,"webType":1},
+                    otherParam: {"queryParam": queryParam, "queryType": queryType, "webType": 1},
                     dataFilter: treeMonitoring.ajaxQueryDataFilter
                 },
                 view: {
-                	 addHoverDom : treeMonitoring.addHoverDom,
-                     removeHoverDom : treeMonitoring.removeHoverDom,               
+                    addHoverDom: treeMonitoring.addHoverDom,
+                    removeHoverDom: treeMonitoring.removeHoverDom,
                     dblClickExpand: false,
                     nameIsHTML: true,
                     fontCss: setFontCss_ztree
@@ -5731,38 +5361,41 @@ var treeMonitoring = {
         }
     },
     //添加树节点悬浮dom
-    addHoverDom: function(treeId, treeNode){
-    	 var sObj = $("#" + treeNode.tId + "_span");
-         var id = (100 + newCount);
-         var pid = treeNode.id;
-         pid = window.encodeURI(window.encodeURI(pid));
-         if ($("#" + treeNode.tId + "_ico").hasClass("offlineIcon_ico_docu") || $("#" + treeNode.tId + "_ico").hasClass("onlineDriving_ico_docu") || 
-        	$("#" + treeNode.tId + "_ico").hasClass("onlineNotPositioning_ico_docu") || $("#" + treeNode.tId + "_ico").hasClass("warning_ico_docu") ||
-        	$("#" + treeNode.tId + "_ico").hasClass("onlineParking_ico_docu") || $("#" + treeNode.tId + "_ico").hasClass("speedLimitWarning_ico_docu") || 
-        	$("#" + treeNode.tId + "_ico").hasClass("heartBeatWarning_ico_docu")) {
-             var addStr = "<span class='button trackreplay' id='trackreplay_" + treeNode.tId+"'"
-             + 'onClick="amapOperation.jumpToTrackPlayer(\'' +treeNode.id + '\',\'' + treeNode.type + '\',\'' + treeNode.pId + '\')"'
-             + "></span>"
-             + "<span class='button realtime-video-jump' id='realTimeVideoJump_"+ treeNode.tId +"'"
-             + 'onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + treeNode.id + '\')"'
-             + "></span>";
-         } else {
-             var addStr = "<span class='button trackreplay' id='trackreplay_" + treeNode.tId+"'"
-             + 'onClick="amapOperation.jumpToTrackPlayer(\'' +treeNode.id + '\',\'' + treeNode.type + '\',\'' + treeNode.pId + '\')"'
-             + "></span>";
-         }
-         if(!sObj.nextAll().hasClass("trackreplay")&&(treeNode.type=="vehicle"||treeNode.type=="people")){
-        	 sObj.after(addStr);
-         }
+    addHoverDom: function (treeId, treeNode) {
+        var sObj = $("#" + treeNode.tId + "_span");
+        var id = (100 + newCount);
+        var pid = treeNode.id;
+        pid = window.encodeURI(window.encodeURI(pid));
+        if ($("#" + treeNode.tId + "_ico").hasClass("offlineIcon_ico_docu") || $("#" + treeNode.tId + "_ico").hasClass("onlineDriving_ico_docu") ||
+            $("#" + treeNode.tId + "_ico").hasClass("onlineNotPositioning_ico_docu") || $("#" + treeNode.tId + "_ico").hasClass("warning_ico_docu") ||
+            $("#" + treeNode.tId + "_ico").hasClass("onlineParking_ico_docu") || $("#" + treeNode.tId + "_ico").hasClass("speedLimitWarning_ico_docu") ||
+            $("#" + treeNode.tId + "_ico").hasClass("heartBeatWarning_ico_docu")) {
+            var addStr = "<span class='button trackreplay' id='trackreplay_" + treeNode.tId + "'"
+                + 'onClick="amapOperation.jumpToTrackPlayer(\'' + treeNode.id + '\',\'' + treeNode.deviceType + '\',\'' + treeNode.pId + '\')"'
+                + "></span>";
+
+            if (treeNode.deviceType == '1') {//只有808-2013协议有视频
+                addStr += "<span class='button realtime-video-jump' id='realTimeVideoJump_" + treeNode.tId + "'"
+                    + 'onClick="treeMonitoring.jumpToRealTimeVideoPage(\'' + treeNode.id + '\')"'
+                    + "></span>";
+            }
+        } else {
+            var addStr = "<span class='button trackreplay' id='trackreplay_" + treeNode.tId + "'"
+                + 'onClick="amapOperation.jumpToTrackPlayer(\'' + treeNode.id + '\',\'' + treeNode.deviceType + '\',\'' + treeNode.pId + '\')"'
+                + "></span>";
+        }
+        if (!sObj.nextAll().hasClass("trackreplay") && (treeNode.type == "vehicle" || treeNode.type == "people" || treeNode.type == "thing")) {
+            sObj.after(addStr);
+        }
     },
     //移除树节点悬浮dom
-    removeHoverDom: function(treeId, treeNode){
+    removeHoverDom: function (treeId, treeNode) {
         $("#trackreplay_" + treeNode.tId).unbind().remove();
         $("#realTimeVideoJump_" + treeNode.tId).unbind().remove();
     },
     //跳转到实时视频页面
     jumpToRealTimeVideoPage: function (sid) {
-    	var jumpFlag = false;
+        var jumpFlag = false;
         var permissionUrls = $("#permissionUrls").val();
         if (permissionUrls != null && permissionUrls != undefined) {
             var urllist = permissionUrls.split(",");
@@ -5798,6 +5431,7 @@ var treeMonitoring = {
                 $MapContainer.css('height', mapHeightdata + 'px');
                 $(this).attr("class", "fa fa-chevron-up");
             } else {
+                uptFlag = true;
                 if (num >= 5) {
                     $("#realTimeStateTable-div").css({
                         "max-height": "266px"
@@ -5812,157 +5446,169 @@ var treeMonitoring = {
     },
     //车辆树右键菜单
     zTreeShowRightMenu: function (event, treeId, treeNode) {
-    	if (treeNode != null) {
-    		// 判断用户是否拥有可操作权限
-        	var data;
+        if (treeNode != null) {
+            // 判断用户是否拥有可操作权限
+            var data;
             var permission = $('#permission').val();
             var deviceType = treeNode.deviceType;//终端类型（用于区别超待）
             if (deviceType != '8') {
-            	data = treeNode.id + ';' + treeNode.name + ';' + treeNode.deviceNumber + ';' + treeNode.simcardNumber;
+                data = treeNode.id + ';' + treeNode.name + ';' + treeNode.deviceNumber + ';' + treeNode.simcardNumber;
             } else {
-            	var deviceNumber = treeMonitoring.IntegerMobileIPAddress(treeNode.simcardNumber);
-            	data = treeNode.id + ';' + treeNode.name + ';' + deviceNumber + ';' + treeNode.simcardNumber;
+                var deviceNumber = treeMonitoring.IntegerMobileIPAddress(treeNode.simcardNumber);
+                data = treeNode.id + ';' + treeNode.name + ';' + deviceNumber + ';' + treeNode.simcardNumber;
             }
             // 判断deviceType是否取到 防止抛出错误信息
-            if(deviceType != undefined){
+            if (deviceType != undefined) {
                 //获取到节点信息
                 if (permission == "true") {
-                    if (treeNode && !treeNode.noR && treeNode.type == "vehicle") {
-                        zTree.selectNode(treeNode);
-                        var menuTopPos = winHeight - event.clientY;
-                        $("#rMenu").css("width", "143px");
-                        longDeviceType = deviceType;//给超长待机类型全局变量赋值（用作后续判断）
-                        if (treeNode.iconSkin != "vehicleSkin" && treeNode.iconSkin != 'btnImage iconArea offlineIcon') {
-                        	if (deviceType == "9") {
-                                if (menuTopPos <= 152 && menuTopPos > 0) {
-                                    treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, (event.clientY - 152), data);
-                                } else {
-                                    treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, event.clientY, data);
-                                }
-                            } else if (deviceType == "10") {
-                                if (menuTopPos <= 117 && menuTopPos > 0) {
-                                    treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, (event.clientY - 117), data);
-                                } else {
-                                    treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, event.clientY, data);
-                                }
-                            } else if (deviceType == "0" || deviceType == "1") {
-                            	if($("#userName").text() == "admin"){
-                                    if (menuTopPos <= 464 && menuTopPos > 0) {
-                                        treeMonitoring.showRMenu(treeNode.id, event.clientX, (event.clientY - 464), data);
+                    if (treeNode && !treeNode.noR) {
+                        if (treeNode.type == "vehicle" || treeNode.type == "people" || treeNode.type == "thing") {
+                            zTree.selectNode(treeNode);
+                            var menuTopPos = winHeight - event.clientY;
+                            $("#rMenu").css("width", "143px");
+                            longDeviceType = deviceType;//给超长待机类型全局变量赋值（用作后续判断）
+                            if (treeNode.iconSkin != "vehicleSkin" && treeNode.iconSkin != "peopleSkin" && treeNode.iconSkin != "thingSkin" && treeNode.iconSkin != 'btnImage iconArea offlineIcon') {
+                                if (deviceType == "9") {
+                                    if (menuTopPos <= 152 && menuTopPos > 0) {
+                                        treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, (event.clientY - 152), data);
                                     } else {
-                                        treeMonitoring.showRMenu(treeNode.id, event.clientX, event.clientY, data);
+                                        treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, event.clientY, data);
                                     }
-                            	}else{
-                                    if (menuTopPos <= 464 && menuTopPos > 0) {
-                                        treeMonitoring.showRMenu(treeNode.id, event.clientX, (event.clientY - 464), data);
+                                } else if (deviceType == "10") {
+                                    if (menuTopPos <= 117 && menuTopPos > 0) {
+                                        treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, (event.clientY - 117), data);
                                     } else {
-                                        treeMonitoring.showRMenu(treeNode.id, event.clientX, event.clientY, data);
+                                        treeMonitoring.gsmCdmaShowRmenu(treeNode.id, event.clientX, event.clientY, data);
                                     }
-                            	}
+                                } else if (deviceType == "0" || deviceType == "1") {
+                                    if ($("#userName").text() == "admin") {//464
+                                        if (menuTopPos <= 500 && menuTopPos > 0) {
+                                            treeMonitoring.showRMenu(treeNode.id, event.clientX, (event.clientY - 500), data);
+                                        } else {
+                                            treeMonitoring.showRMenu(treeNode.id, event.clientX, event.clientY, data);
+                                        }
+                                    } else {
+                                        if (menuTopPos <= 500 && menuTopPos > 0) {
+                                            treeMonitoring.showRMenu(treeNode.id, event.clientX, (event.clientY - 500), data);
+                                        } else {
+                                            treeMonitoring.showRMenu(treeNode.id, event.clientX, event.clientY, data);
+                                        }
+                                    }
+                                } else {
+                                    treeMonitoring.noShowRMenu(event.clientX, event.clientY, data);
+                                }
                             } else {
-                            	treeMonitoring.noShowRMenu(event.clientX, event.clientY, data);
+                                treeMonitoring.noShowRMenu(event.clientX, event.clientY, data);
                             }
-                        } else {
-                        	treeMonitoring.noShowRMenu(event.clientX, event.clientY, data);
                         }
                     }
                 }
             }
-    	}
+
+            $('.curSelectedNode').attr("data-id", treeNode.id);
+        }
     },
     // 博实杰伪ID
-    IntegerMobileIPAddress: function(sSim) {
-    	 var sTemp = [];
-         var sIp = [];
-         var iHigt;
-         if(sSim.length==13&&sSim.startsWith("106")){
-             sSim="1"+sSim.substring(3);
-         }
-         if (sSim.length == 11) {
-             sTemp[0] = parseInt(sSim.substring(3, 5));
-             sTemp[1] = parseInt(sSim.substring(5, 7));
-             sTemp[2] = parseInt(sSim.substring(7, 9));
-             sTemp[3] = parseInt(sSim.substring(9, 11));
-             iHigt = parseInt(sSim.substring(1, 3));
-             if(iHigt>45){
-             	iHigt-=46;
-             }else{
-             	iHigt-=30;
-             }
-         } else if (sSim.length == 10) {
-             sTemp[0] = parseInt(sSim.substring(2, 4));
-             sTemp[1] = parseInt(sSim.substring(4, 6));
-             sTemp[2] = parseInt(sSim.substring(6, 8));
-             sTemp[3] = parseInt(sSim.substring(8, 10));
-             iHigt = parseInt(sSim.substring(0, 2));
-             if(iHigt>45){
-             	iHigt-=46;
-             }else{
-             	iHigt-=30;
-             }
-         } else if (sSim.length == 9) {
-             sTemp[0] = parseInt(sSim.substring(1, 3));
-             sTemp[1] = parseInt(sSim.substring(3, 5));
-             sTemp[2] = parseInt(sSim.substring(5, 7));
-             sTemp[3] = parseInt(sSim.substring(7, 9));
-             iHigt = parseInt(sSim.substring(0, 1));
-         } else if (sSim.length < 9) {
-             switch (sSim.length) {
-                 case 8:
-                     sSim = "140" + sSim;
-                     break;
-                 case 7:
-                     sSim = "1400" + sSim;
-                     break;
-                 case 6:
-                     sSim = "14000" + sSim;
-                     break;
-                 case 5:
-                     sSim = "140000" + sSim;
-                     break;
-                 case 4:
-                     sSim = "1400000" + sSim;
-                     break;
-                 case 3:
-                     sSim = "14000000" + sSim;
-                     break;
-                 case 2:
-                     sSim = "140000000" + sSim;
-                     break;
-                 case 1:
-                     sSim = "1400000000" + sSim;
-                     break;
-             }
-             sTemp[0] = parseInt(sSim.substring(3, 5));
-             sTemp[1] = parseInt(sSim.substring(5, 7));
-             sTemp[2] = parseInt(sSim.substring(7, 9));
-             sTemp[3] = parseInt(sSim.substring(9, 11));
-             iHigt = parseInt(sSim.substring(1, 3));
-             if(iHigt>45){
-             	iHigt-=46;
-             }else{
-             	iHigt-=30;
-             }
-         } else {
-             return "";
-         }
-         if ((iHigt & 0x8) != 0)
-             sIp[0] = sTemp[0] | 128;
-         else
-             sIp[0] = sTemp[0];
-         if ((iHigt & 0x4) != 0)
-             sIp[1] = sTemp[1] | 128;
-         else
-             sIp[1] = sTemp[1];
-         if ((iHigt & 0x2) != 0)
-             sIp[2] = sTemp[2] | 128;
-         else
-             sIp[2] = sTemp[2];
-         if ((iHigt & 0x1) != 0)
-             sIp[3] = sTemp[3] | 128;
-         else
-             sIp[3] = sTemp[3];
-         return sIp[0] + ''+ sIp[1] + '' + sIp[2] + '' + sIp[3];
+    IntegerMobileIPAddress: function (sSim) {
+        var sTemp = [];
+        var sIp = [];
+        var iHigt;
+        if (sSim.length == 13 && sSim.startsWith("106")) {
+            sSim = "1" + sSim.substring(3);
+        }
+        if (sSim.length == 11) {
+            sTemp[0] = parseInt(sSim.substring(3, 5));
+            sTemp[1] = parseInt(sSim.substring(5, 7));
+            sTemp[2] = parseInt(sSim.substring(7, 9));
+            sTemp[3] = parseInt(sSim.substring(9, 11));
+            iHigt = parseInt(sSim.substring(1, 3));
+            if (iHigt > 45) {
+                iHigt -= 46;
+            } else {
+                iHigt -= 30;
+            }
+        } else if (sSim.length == 10) {
+            sTemp[0] = parseInt(sSim.substring(2, 4));
+            sTemp[1] = parseInt(sSim.substring(4, 6));
+            sTemp[2] = parseInt(sSim.substring(6, 8));
+            sTemp[3] = parseInt(sSim.substring(8, 10));
+            iHigt = parseInt(sSim.substring(0, 2));
+            if (iHigt > 45) {
+                iHigt -= 46;
+            } else {
+                iHigt -= 30;
+            }
+        } else if (sSim.length == 9) {
+            sTemp[0] = parseInt(sSim.substring(1, 3));
+            sTemp[1] = parseInt(sSim.substring(3, 5));
+            sTemp[2] = parseInt(sSim.substring(5, 7));
+            sTemp[3] = parseInt(sSim.substring(7, 9));
+            iHigt = parseInt(sSim.substring(0, 1));
+        } else if (sSim.length < 9) {
+            switch (sSim.length) {
+                case 8:
+                    sSim = "140" + sSim;
+                    break;
+                case 7:
+                    sSim = "1400" + sSim;
+                    break;
+                case 6:
+                    sSim = "14000" + sSim;
+                    break;
+                case 5:
+                    sSim = "140000" + sSim;
+                    break;
+                case 4:
+                    sSim = "1400000" + sSim;
+                    break;
+                case 3:
+                    sSim = "14000000" + sSim;
+                    break;
+                case 2:
+                    sSim = "140000000" + sSim;
+                    break;
+                case 1:
+                    sSim = "1400000000" + sSim;
+                    break;
+            }
+            sTemp[0] = parseInt(sSim.substring(3, 5));
+            sTemp[1] = parseInt(sSim.substring(5, 7));
+            sTemp[2] = parseInt(sSim.substring(7, 9));
+            sTemp[3] = parseInt(sSim.substring(9, 11));
+            iHigt = parseInt(sSim.substring(1, 3));
+            if (iHigt > 45) {
+                iHigt -= 46;
+            } else {
+                iHigt -= 30;
+            }
+        } else {
+            return "";
+        }
+        if ((iHigt & 0x8) != 0) {
+            sIp[0] = sTemp[0] | 128;
+        }
+        else {
+            sIp[0] = sTemp[0];
+        }
+        if ((iHigt & 0x4) != 0) {
+            sIp[1] = sTemp[1] | 128;
+        }
+        else {
+            sIp[1] = sTemp[1];
+        }
+        if ((iHigt & 0x2) != 0) {
+            sIp[2] = sTemp[2] | 128;
+        }
+        else {
+            sIp[2] = sTemp[2];
+        }
+        if ((iHigt & 0x1) != 0) {
+            sIp[3] = sTemp[3] | 128;
+        }
+        else {
+            sIp[3] = sTemp[3];
+        }
+        return sIp[0] + '' + sIp[1] + '' + sIp[2] + '' + sIp[3];
 
     },
     gsmCdmaShowRmenu: function (type, x, y, data) {
@@ -5994,11 +5640,11 @@ var treeMonitoring = {
         $("#rMenu").html(
             '<div class="col-md-12" id="treeRightMenu-l" style="padding:0px">' +
             '<a href= "' + editUrlPath + '" data-toggle="modal" onclick="treeMonitoring.simLog(\'' + type + '\')" data-target="#commonWin">获取SIM卡信息</a>' +
+            '<a onclick="treeMonitoring.setOBD(\'' + type + '\')">设置OBD车型信息</a>' +
             '<a onclick="treeMonitoring.callName_(\'' + type + '\')">单次回报(点名)</a>' +
             '<a onclick="treeMonitoring.following(\'' + type + '\')">临时位置跟踪</a>' +
-            '<a onclick="treeMonitoring.continuousReturnTiming(\'' + type + '\')">连续回报(定时)</a>' +
-            '<a onclick="treeMonitoring.ContinuousReturnFixedDistance(\'' + type + '\')">连续回报(定距)</a>' +
-            '<a onclick="treeMonitoring.ContinuousReturnTimingDistance(\'' + type + '\')">连续回报(定时定距)</a>' +
+            '<a onclick="treeMonitoring.ContinuousReturn(\'' + type + '\')">连续回报</a>' +
+            '<a onclick="treeMonitoring.setPlateNumber(\'' + type + '\')">设置终端车牌号</a>' +
             '<a onclick="treeMonitoring.goPhotograph(\'' + type + '\')">监控对象-拍照</a>' +
             '<a onclick="treeMonitoring.monitoringObjectListening(\'' + type + '\')">监控对象-监听</a>' +
             '<a onclick="treeMonitoring.goVideotape(\'' + type + '\')">监控对象-录像</a>' +
@@ -6016,6 +5662,7 @@ var treeMonitoring = {
             '<a onclick="treeMonitoring.doorLock(\'' + type + '\',\'' + 0 + '\')">车门解锁</a>' +
             '<a id="cutoil" onclick="treeMonitoring.cutOilElec(\'' + type + '\'' + ')">断油断电</a>' +
             '<a onclick="treeMonitoring.recordCollection(\'' + type + '\')">行驶记录数据采集</a>' +
+            '<a onclick="treeMonitoring.recordSend(\'' + type + '\')">行驶记录参数下传</a>' +
             '<a onclick="treeMonitoring.multimediaSearch(\'' + type + '\')">多媒体检索</a>' +
             '<a onclick="treeMonitoring.multimediaUpload(\'' + type + '\')">多媒体上传</a>' +
             '<a onclick="treeMonitoring.recordingUpload(\'' + type + '\')">录音上传</a>' +
@@ -6025,18 +5672,18 @@ var treeMonitoring = {
         );
         var roleName = $("#allUserRole").attr("value");
         if (roleName.indexOf("POWER_USER") != -1 || roleName.indexOf("ROLE_ADMIN") != -1) {
-            $("#cutoil").css("display","block");
+            $("#cutoil").css("display", "block");
         } else {
-            $("#cutoil").css("display","none");
+            $("#cutoil").css("display", "none");
         }
         treeMonitoring.rMenuUlShowOrPosition(x, y);
     },
-    noShowRMenu: function(x, y, data) {
-    	$("#rMenu").html('<div class="col-md-12" id="treeRightMenu-l" style="padding:0px">' +
+    noShowRMenu: function (x, y, data) {
+        $("#rMenu").html('<div class="col-md-12" id="treeRightMenu-l" style="padding:0px">' +
             '<a class="rmenu-last-a" onclick="treeMonitoring.searchOriginalData(\'' + data + '\')">查询原始数据</a>' +
             '</div>'
         );
-    	treeMonitoring.rMenuUlShowOrPosition(x, y);
+        treeMonitoring.rMenuUlShowOrPosition(x, y);
     },
     rMenuUlShowOrPosition: function (x, y) {
         $("#rMenu ul").show();
@@ -6047,7 +5694,7 @@ var treeMonitoring = {
         }
         $("body").bind("mousedown", treeMonitoring.onBodyMouseDown);
         //右键显示菜单节点跳动问题
-    	$("#thetree").scrollTop(scorllDefaultTreeTop);
+        $("#thetree").scrollTop(scorllDefaultTreeTop);
     },
     showLocationTime: function () {
         $("#baseStation-MainContent").html(
@@ -6094,6 +5741,8 @@ var treeMonitoring = {
         json_ajax_p("POST", url, "json", false, data, amapOperation.getDCallBack);
         amapOperation.subscribeLatestLocation(param);
         layer.msg("点名成功");
+        callTheRollId = type;
+        amapOperation.callTheRollFun();
         rMenu.css({"visibility": "hidden"});
         setTimeout("dataTableOperation.logFindCilck()", 500);
     },
@@ -6153,29 +5802,52 @@ var treeMonitoring = {
             }
         }
     },
-    continuousReturnTiming: function (type) {
+    /*    continuousReturnTiming: function (type) {
+            pageLayout.closeVideo();
+            treeMonitoring.getBrandParameter(type);
+            $("#continuousReturnTimingBrand").html("连续回报(定时)：" + brand);
+            $("#vid30").val(type);
+            $("#continuousReturnTiming").modal('show');
+            rMenu.css({"visibility": "hidden"});
+        },
+        ContinuousReturnFixedDistance: function (type) {
+            pageLayout.closeVideo();
+            treeMonitoring.getBrandParameter(type);
+            $("#continuousReturnFixedDistanceBrand").html("连续回报(定距)：" + brand);
+            $("#vid31").val(type);
+            $("#continuousReturnFixedDistance").modal('show');
+            rMenu.css({"visibility": "hidden"});
+        },*/
+    ContinuousReturn: function (type) {
         pageLayout.closeVideo();
         treeMonitoring.getBrandParameter(type);
-        $("#continuousReturnTimingBrand").html("连续回报(定时)：" + brand);
-        $("#vid30").val(type);
-        $("#continuousReturnTiming").modal('show');
-        rMenu.css({"visibility": "hidden"});
-    },
-    ContinuousReturnFixedDistance: function (type) {
-        pageLayout.closeVideo();
-        treeMonitoring.getBrandParameter(type);
-        $("#continuousReturnFixedDistanceBrand").html("连续回报(定距)：" + brand);
-        $("#vid31").val(type);
-        $("#continuousReturnFixedDistance").modal('show');
-        rMenu.css({"visibility": "hidden"});
-    },
-    ContinuousReturnTimingDistance: function (type) {
-        pageLayout.closeVideo();
-        treeMonitoring.getBrandParameter(type);
-        $("#continuousReturnTimingDistanceBrand").html("连续回报(定时定距)：" + brand);
+        $("#continuousReturnTimingDistanceBrand").html("连续回报：" + brand);
         $("#vid32").val(type);
+        $("#vid31").val(type);
+        $("#vid30").val(type);
         $("#continuousReturnTimingDistance").modal('show');
         rMenu.css({"visibility": "hidden"});
+        treeMonitoring.setContinuousReturnDefaultValue();
+        $('#timeInterval0').show();
+        $('#timeInterval1').hide();
+        $('#timeInterval2').hide();
+        $('#timeInterval2 label.error').hide();
+        $('#timeInterval0 label.error').hide();
+        $('#timeInterval1 label.error').hide();
+    },
+    /**
+     * 设置连续回报默认值
+     */
+    setContinuousReturnDefaultValue: function () {
+        $("#continuousReturnValue").val(0);
+        $("input[name='driverLoggingOutUpTimeSpace']").val(30);
+        $("input[name='driverLoggingOutUpDistanceSpace']").val(200);
+        $("input[name='dormancyUpTimeSpace']").val(120);
+        $("input[name='dormancyUpDistanceSpace']").val(20000);
+        $("input[name='emergencyAlarmUpTimeSpace']").val(15);
+        $("input[name='emergencyAlarmUpDistanceSpace']").val(100);
+        $("input[name='defaultTimeUpSpace']").val(30);
+        $("input[name='defaultDistanceUpSpace']").val(500);
     },
     sendOriginalCommand: function (type) {
         pageLayout.closeVideo();
@@ -6309,147 +5981,250 @@ var treeMonitoring = {
         rMenu.css({"visibility": "hidden"});
     },
     //断油电功能
-    cutOilElec: function(type){    	
-    	//获取断电油量信息
-    	var getstopoildata={
-    		getlastestoildata:function(){
-    		    var url="/clbs/v/oilmassmgt/oilcalibration/getLatestOilData";
-    			json_ajax("post", url, "json", false, {"vehicleId": type, "curBox": null},getstopoildata.getDCallBack);  
-    	},   		           
-    		getDCallBack:function(data){
-    			msgSNAck = data.obj.msgSN;
-    			if(msgSNAck!=null&&msgSNAck!=""){
-    				getstopoildata.subscribeLatestLocation2(msgSNAck,type);}    	 
-        },
-        	subscribeLatestLocation2:function(msgSNAck,type){
-        		var requestStrS = {
-        	            "desc": {
-        	                "MsgId": 40964,
-        	                "UserName": $("#userName").text(),
-        	                "cmsgSN":msgSNAck
-        	            },
-        	            "data": {"vehicleID":type}
-        	        };       	     
-        	        setTimeout(function () {
-        	            webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/realLocationS", getstopoildata.oilElectric, "/app/vehicle/realLocationS", requestStrS);
-        	        });
-        },
-        	oilElectric:function(data){
-      	  	var data = $.parseJSON(data.body);
-      	  	var vid=data.desc.vId;
-      	  	var data=data.data.msgBody;
-      	  	var formattedAddress=data.gpsInfo.formattedAddress;
-      	  	var speed=data.gpsInfo.speed;
-         
-      	  	var status=data.gpsInfo.status.toString(2);
-      	  	var status=status.substr(9,1);
-      	  	if(status==0){
-      	  		status="通油电";
-      	  	}else{
-      	  		status="断油电";
-      	  	}
-      	  	$("#cutOilElecState").text(status);      
-      	  	$("#cutOilElecSpeed").text(speed);
-      	  	$("#cutOilElecLocation").text(formattedAddress);  
-   	
-      	  	$("#gpCutOilElec").removeAttr("disabled");
-      	  	
-      	  
-      	  	$("#gpCutOilElec").unbind().on("click",function(){      	  
-      	  	if(treeMonitoring.validates()){
-  	    	var value=$("#cutOilElecToken").val()   		
-  	    	var oilElectricMsg=$("#cutOilElecToken").val();
-  	    	var checkvalue=$("input:radio[name='cutOilElecOpe']:checked").val(); 
-  	    	 	if(!checkvalue||!oilElectricMsg){
-  	    	 		layer.msg("请选择您要执行的操作或输入口令");
-  	    	 	}else{
-  	    	 		layer.open({
-  	    	 			closeBtn: false,
-  	    	 			offset:'t',
-  	    	 			title: '提示',
-  	    	 			content: '当前操作影响重大，请再次确认操作',
-  	    	 			btn:['确定','返回'],
-  	    	 			btn1:function(index,layero){
-  	    	 				Issuedstopoil.clickIssuedstopoil(vid,oilElectricMsg,checkvalue);				   	    	 			
-  	    	 				layer.close(index);
-  	    	 				$("#cutOilElecToken").val('');
-  	    	 				$(':input',"#cutOilElecForm").removeAttr('checked');
-  	    	 			},
-  	    	 			btn2:function(index,layero){
-  	    	 				getstopoildata.getlastestoildata();
-  	    	 				$("#cutOilElecToken").val('');
-  	    	 				$(':input',"#cutOilElecForm").removeAttr('checked');
-  	    	 			}
-  	    	 		});     
-  	    	   
-  	    	 	}
-      	  	}
-      	  	})               
-        	
-      	  	}
-        	}  	
-    		getstopoildata.getlastestoildata();
-    	//断油电指令下发工功能
-    		var Issuedstopoil={
-    				clickIssuedstopoil:function(vid,oilElectricMsg,checkvalue){   				
-    					var url="/clbs/v/monitoring/orderMsg";   	
-    					json_ajax("post", url, "json", false, {"vid": vid, "orderType": 42,"oilElectricMsg":oilElectricMsg,"flag":checkvalue},getDCallBack3);    	
-    					function getDCallBack3(data){
-    						if(data.obj.type==true){
-    							layer.msg("口令发送成功");
-    						}else{
-    							layer.msg("口令错误！");
-    						}
-    					}
-    				}	
-    			
-    		}    	    			     	
-         //断油电刷新
-    		$("#cutOilElecRefresh").unbind().on("click",function(){
-    			getstopoildata.getlastestoildata(type);
-    			$("#cutOilElecToken").val('');
-    			$(':input',"#cutOilElecForm").removeAttr('checked');
-    		})
-    		treeMonitoring.getBrandParameter(type);
-    		$("#cutOilElecBrand").html("断油断电：" + brand); 
-    		$("#cutOilElec").modal('show');
-    		rMenu.css({"visibility": "hidden"});
-    },  
-    //关闭清空表单
-    cutoilclose:function(){     	
-    		$("#cutOilElecForm").find("input").not(':button,:submit,:reset,:hidden,:radio').val('').removeAttr('checked');
-    	     $("#cutOilElecState").text("");
-    	     $("#cutOilElecSpeed").text("");
-    	     $("#cutOilElecLocation").text("");
-    		$('input').removeAttr('checked');
-    		$("#cutOilElecToken").val('');
+    cutOilElec: function (type) {
+        //获取断电油量信息
+        var getstopoildata = {
+            getlastestoildata: function () {
+                var url = "/clbs/v/oilmassmgt/oilcalibration/getLatestOilData";
+                json_ajax("post", url, "json", false, {"vehicleId": type, "curBox": null}, getstopoildata.getDCallBack);
+            },
+            getDCallBack: function (data) {
+                msgSNAck = data.obj.msgSN;
+                if (msgSNAck != null && msgSNAck != "") {
+                    getstopoildata.subscribeLatestLocation2(msgSNAck, type);
+                }
+            },
+            subscribeLatestLocation2: function (msgSNAck, type) {
+                var requestStrS = {
+                    "desc": {
+                        "MsgId": 40964,
+                        "UserName": $("#userName").text(),
+                        "cmsgSN": msgSNAck
+                    },
+                    "data": {"vehicleID": type}
+                };
+                setTimeout(function () {
+                    webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/realLocationS", getstopoildata.oilElectric, "/app/vehicle/realLocationS", requestStrS);
+                });
+            },
+            oilElectric: function (data) {
+                var data = $.parseJSON(data.body);
+                var vid = data.desc.monitorId;
+                data = data.data.msgBody;
+                var formattedAddress = data.positionDescription ? data.positionDescription : "";
+                var speed = data.gpsSpeed;
+
+                var status = data.status.toString(2);
+                status = status.substr(9, 1);
+                if (status == 0) {
+                    status = "通油电";
+                } else {
+                    status = "断油电";
+                }
+                $("#cutOilElecState").text(status);
+                $("#cutOilElecSpeed").text(speed);
+                $("#cutOilElecLocation").text(formattedAddress);
+
+                $("#gpCutOilElec").removeAttr("disabled");
+
+
+                $("#gpCutOilElec").unbind().on("click", function () {
+                    if (treeMonitoring.validates()) {
+                        var value = $("#cutOilElecToken").val()
+                        var oilElectricMsg = $("#cutOilElecToken").val();
+                        var checkvalue = $("input:radio[name='cutOilElecOpe']:checked").val();
+                        if (!checkvalue || !oilElectricMsg) {
+                            layer.msg("请选择您要执行的操作或输入口令");
+                        } else {
+                            layer.open({
+                                closeBtn: false,
+                                offset: 't',
+                                title: '提示',
+                                content: '当前操作影响重大，请再次确认操作',
+                                btn: ['确定', '返回'],
+                                btn1: function (index, layero) {
+                                    Issuedstopoil.clickIssuedstopoil(vid, oilElectricMsg, checkvalue);
+                                    layer.close(index);
+                                    $("#cutOilElecToken").val('');
+                                    $(':input', "#cutOilElecForm").removeAttr('checked');
+                                },
+                                btn2: function (index, layero) {
+                                    getstopoildata.getlastestoildata();
+                                    $("#cutOilElecToken").val('');
+                                    $(':input', "#cutOilElecForm").removeAttr('checked');
+                                }
+                            });
+
+                        }
+                    }
+                })
+
+            }
+        }
+        getstopoildata.getlastestoildata();
+        //断油电指令下发工功能
+        var Issuedstopoil = {
+            clickIssuedstopoil: function (vid, oilElectricMsg, checkvalue) {
+                var url = "/clbs/v/monitoring/orderMsg";
+                json_ajax("post", url, "json", false, {
+                    "vid": vid,
+                    "orderType": 42,
+                    "oilElectricMsg": oilElectricMsg,
+                    "flag": checkvalue
+                }, getDCallBack3);
+
+                function getDCallBack3(data) {
+                    if (data.obj.type == true) {
+                        layer.msg("口令发送成功");
+                    } else {
+                        layer.msg("口令错误！");
+                    }
+                }
+            }
+
+        }
+        //断油电刷新
+        $("#cutOilElecRefresh").unbind().on("click", function () {
+            getstopoildata.getlastestoildata(type);
+            $("#cutOilElecToken").val('');
+            $(':input', "#cutOilElecForm").removeAttr('checked');
+        })
+        treeMonitoring.getBrandParameter(type);
+        $("#cutOilElecBrand").html("断油断电：" + brand);
+        $("#cutOilElec").modal('show');
+        rMenu.css({"visibility": "hidden"});
     },
-    validates:function(){
-    	return $("#cutOilElecForm").validate({    
-    	 rules : {
-    		 cutOilElecToken: {
-         		required:true,
-         		minlength:6,
-         	}
-    	 },
-    	 messages: {
-    		 cutOilElecToken:{    	 
-    		 required: "输入内容不能为空",
-    		 minlength: "不能少于6个字符",
-    	 }
-    	 }
-    	}).form();
+    //关闭清空表单
+    cutoilclose: function () {
+        $("#cutOilElecForm").find("input").not(':button,:submit,:reset,:hidden,:radio').val('').removeAttr('checked');
+        $("#cutOilElecState").text("");
+        $("#cutOilElecSpeed").text("");
+        $("#cutOilElecLocation").text("");
+        // $('input').removeAttr('checked');
+        $("#cutOilElecToken").val('');
+    },
+    validates: function () {
+        return $("#cutOilElecForm").validate({
+            rules: {
+                cutOilElecToken: {
+                    required: true,
+                    minlength: 6,
+                }
+            },
+            messages: {
+                cutOilElecToken: {
+                    required: "输入内容不能为空",
+                    minlength: "不能少于6个字符",
+                }
+            }
+        }).form();
     },
     recordCollection: function (type) {
-        pageLayout.closeVideo();
-        var url = "/clbs/v/monitoring/orderMsg"
-        json_ajax("post", url, "json", false, {"vid": type, "orderType": 10}, treeMonitoring.terminalResetBack)
-        setTimeout("dataTableOperation.logFindCilck()", 500);
+        //设置当前时间显示
+        if (isInitDatePicker) {
+            // dateRangePicker 不刷新页面, 二次初始存在问题
+            isInitDatePicker = false;
+            // $('#recordTimeInterval').dateRangePicker();
+        } else {
+            treeMonitoring.getCurrentRangeTIme();
+        }
+
+        $("#sign").val('0H');
+        $("#recordTimeIntervalIsHidden").addClass('hidden');
+        treeMonitoring.getBrandParameter(type);
+        $("#recordCollectionCommandBrand").html("行驶记录数据采集：" + brand);
+        $("#recordCollectionCommand").modal('show');
+        $("#vid10").val(type);
         rMenu.css({"visibility": "hidden"});
+    },
+    getCurrentRangeTIme: function () {
+        var nowDate = new Date();
+        msStartTime = nowDate.getFullYear()
+            + "-"
+            + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                + parseInt(nowDate.getMonth() + 1) : parseInt(nowDate
+                .getMonth() + 1))
+            + "-"
+            + (nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate())
+            + " " + "00:00:00";
+        msEndTime = nowDate.getFullYear()
+            + "-"
+            + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                + parseInt(nowDate.getMonth() + 1) : parseInt(nowDate
+                .getMonth() + 1))
+            + "-"
+            + (nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate())
+            + " " + ("23") + ":" + ("59") + ":" + ("59");
+        $('#recordTimeInterval').val(msStartTime + "--" + msEndTime);
+    }
+    ,
+    recordSend: function (type) {
+        treeMonitoring.getBrandParameter(type);
+        $("#recordSendCommandBrand").html("行驶记录参数下传：" + brand);
+        $("#recordSendCommand").modal('show');
+        $("#recordSend").val(type);
+        rMenu.css({"visibility": "hidden"});
+    },
+    goRecordCollect: function () {
+        var vid = $("#recordCollectionCommand").find("#vid10").val();
+        var orderType = $("#recordCollectionCommand").find("#orderType").val();
+        var sign = $("#recordCollectionCommand").find("#sign").val();
+        var param = {
+            vid: vid,
+            orderType: orderType,
+            commandSign: sign,
+        };
+        if (commandSign.indexOf(sign) != -1) {
+            var timeInterval = $('#recordTimeInterval').val().split('--');
+            var startTimes = timeInterval[0];
+            var endTimes = timeInterval[1];
+            // 判断时间范围
+            if ("2000-01-01 00:00:00" > startTimes || endTimes > "2099-12-31 23:59:59") {
+                layer.msg('已超出范围(范围为: 2000-01-01 00:00:00～2099-12-31 23:59:59)');
+                return;
+            }
+            param.startTime = startTimes;
+            param.endTime = endTimes;
+        }
+        json_ajax("post", "/clbs/v/monitoring/orderMsg",
+            "json", false, param, function (data) {
+                $("#recordCollectionCommand").modal("hide");
+                if (data) {
+                    if (data.success) {
+                        layer.msg("指令发送成功");
+                        setTimeout("dataTableOperation.logFindCilck()", 500);
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+    },
+    monitorSignChange: function (signSelected) {
+        var sign = $(signSelected).val();
+
+        if (commandSign.indexOf(sign) != -1) {
+            $("#recordTimeIntervalIsHidden").removeClass('hidden');
+        } else {
+            $("#recordTimeIntervalIsHidden").addClass('hidden');
+        }
+    }
+    ,
+    goRecordSend: function () {
+        $("#recordSends").ajaxSubmit(function (data) {
+            $("#recordSendCommand").modal("hide");
+            if (JSON.parse(data).success) {
+                layer.msg("指令发送成功")
+                setTimeout("dataTableOperation.logFindCilck()", 500);
+            } else {
+                layer.msg(JSON.parse(data).msg)
+            }
+        });
     },
     terminalResetBack: function (data) {
         if (data.success) {
             layer.msg("指令发送成功")
+        } else {
+            layer.msg(JSON.parse(data).msg)
         }
         setTimeout("dataTableOperation.logFindCilck()", 500);
     },
@@ -6497,86 +6272,86 @@ var treeMonitoring = {
         rMenu.css({"visibility": "hidden"});
     },
     // 查询原始数据
-    searchOriginalData: function(data) {
-    	rMenu.css({"visibility": "hidden"});
-    	var info = data.split(';');
-    	var id = ''+ new Date().getTime() +''
-    	var requestData = {
-        	'socketId': id,
-        	'deviceNumber': info[2],
-        	'plateNumber': info[1],
-            'mobile': info[3], 
-    	};
-    	$('#searchForName').text(info[1]);
-    	$('#searchDviceNumber').text(info[2]);
-    	$('#searchSimNumber').text(info[3]);
-    	if (stompClientSocket != null) {
-    		stompClientSocket.close();
-    	}
-    	stompClientSocket = new SockJS(hostUrl);
+    searchOriginalData: function (data) {
+        rMenu.css({"visibility": "hidden"});
+        var info = data.split(';');
+        var id = '' + new Date().getTime() + ''
+        var requestData = {
+            'socketId': id,
+            'deviceNumber': info[2],
+            'plateNumber': info[1],
+            'mobile': info[3],
+        };
+        $('#searchForName').text(info[1]);
+        $('#searchDviceNumber').text(info[2]);
+        $('#searchSimNumber').text(info[3]);
+        if (stompClientSocket != null) {
+            stompClientSocket.close();
+        }
+        stompClientSocket = new SockJS(hostUrl);
         stompClientOriginal = Stomp.over(stompClientSocket);
         $('#controlGetData').text('暂停');
-        stompClientOriginal.connect({}, function(frame) {
+        stompClientOriginal.connect({}, function (frame) {
             stompClientOriginal.subscribe("/user/" + id + "/t808Msg", treeMonitoring.originalFunCallBack);
             stompClientOriginal.send('/app/webSocket/updateDevice', {}, JSON.stringify(requestData));
             $('#originalDataList').html('');
             $('#originalDataModal').animate({bottom: 0});
-        });     
+        });
     },
     // 原始数据获取回掉函数
-    originalFunCallBack: function(data) {
-    	var msg = data.body;
-    	var html = '<li style="word-wrap: break-word;white-space: initial;">'+ msg +'</li>';
-    	$('#originalDataList').append(html);
-    	treeMonitoring.copyDataFun();
+    originalFunCallBack: function (data) {
+        var msg = data.body;
+        var html = '<li style="word-wrap: break-word;white-space: initial;">' + msg + '</li>';
+        $('#originalDataList').append(html);
+        treeMonitoring.copyDataFun();
     },
     // modal关闭事件
-    modalCloseFun: function() {
-    	if (stompClientSocket != null) {
-    		stompClientSocket.close();
-    	}
-    	stompClientSocket = null;
-    	stompClientOriginal = null;
-    	$('#originalDataModal').animate({bottom: '-300px'});
+    modalCloseFun: function () {
+        if (stompClientSocket != null) {
+            stompClientSocket.close();
+        }
+        stompClientSocket = null;
+        stompClientOriginal = null;
+        $('#originalDataModal').animate({bottom: '-300px'});
     },
     // 复制原始数据
-    copyDataFun: function() {
-    	var clipboard = new Clipboard('#copyOriginalData', {
-            text: function() {
+    copyDataFun: function () {
+        var clipboard = new Clipboard('#copyOriginalData', {
+            text: function () {
                 return $('#originalDataList').text();
             }
         });
-       clipboard.on('success', function(e) {
-           layer.msg('复制成功');
-       })
+        clipboard.on('success', function (e) {
+            layer.msg('复制成功');
+        })
     },
     // 清空数据
-    clearDataFun: function() {
-    	$('#originalDataList').html('');
+    clearDataFun: function () {
+        $('#originalDataList').html('');
     },
     // 暂停 or获取历史数据
-    isGetOriginalData: function() {
-    	var text = $('#controlGetData').text();
-    	if (text == '暂停') {
-    		stompClientSocket.close();
-        	stompClientSocket = null;
-        	stompClientOriginal = null;
-        	$('#controlGetData').text('开始');
-    	} else {
-    		$('#controlGetData').text('暂停');
-    		var requestData = {
-	        	'socketId': $("#userName").text(),
-	        	'deviceNumber': $('#searchDviceNumber').text(),
-	        	'plateNumber': $('#searchForName').text(),
-	            'mobile': $('#searchSimNumber').text(), 
-	    	};
-    		stompClientSocket = new SockJS(hostUrl);
+    isGetOriginalData: function () {
+        var text = $('#controlGetData').text();
+        if (text == '暂停') {
+            stompClientSocket.close();
+            stompClientSocket = null;
+            stompClientOriginal = null;
+            $('#controlGetData').text('开始');
+        } else {
+            $('#controlGetData').text('暂停');
+            var requestData = {
+                'socketId': $("#userName").text(),
+                'deviceNumber': $('#searchDviceNumber').text(),
+                'plateNumber': $('#searchForName').text(),
+                'mobile': $('#searchSimNumber').text(),
+            };
+            stompClientSocket = new SockJS(hostUrl);
             stompClientOriginal = Stomp.over(stompClientSocket);
-            stompClientOriginal.connect({}, function(frame) {
+            stompClientOriginal.connect({}, function (frame) {
                 stompClientOriginal.subscribe("/user/" + $("#userName").text() + "/t808Msg", treeMonitoring.originalFunCallBack);
                 stompClientOriginal.send('/app/webSocket/updateDevice', {}, JSON.stringify(requestData));
-            });    
-    	}
+            });
+        }
     },
     showRightMenuMoreClick: function () {
         pageLayout.closeVideo();
@@ -6605,38 +6380,39 @@ var treeMonitoring = {
         var validity = $("#validity").val();
         var interval = $("#interval").val();
         if (interval.length > 5) {
-        	layer.msg("时间间隔不能超过五位！",{move:false});
-        	return;
-        } 
-        if (validity.length > 5) {
-        	layer.msg("有效时间不能超过五位！",{move:false});
-        	return;
-        } 
-        if (interval.length == 0) {
-        	layer.msg("时间间隔不能为空！",{move:false});
-        	return;
-        } 
-        if (validity.length == 0) {
-        	layer.msg("有效时间不能为空！",{move:false});
-        	return;
+            layer.msg("时间间隔不能超过五位！", {move: false});
+            return;
         }
-    	var listParameters = [];
+        if (validity.length > 5) {
+            layer.msg("有效时间不能超过五位！", {move: false});
+            return;
+        }
+        if (interval.length == 0) {
+            layer.msg("时间间隔不能为空！", {move: false});
+            return;
+        }
+        if (validity.length == 0) {
+            layer.msg("有效时间不能为空！", {move: false});
+            return;
+        }
+        var listParameters = [];
         listParameters.push(type);
         listParameters.push(interval);
         listParameters.push(validity);
         var url = "/clbs/v/monitoring/parametersTrace";
         var parameters = {"parameters": listParameters};
         ajax_submit("POST", url, "json", true, parameters, true, fenceOperation.parametersTrace);
+        setTimeout("dataTableOperation.logFindCilck()", 500);
     },
     //树优化测试代码块todo
     zTreeOnExpand: function (event, treeId, treeNode) {
         var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
         treeNodeNew = treeNode; //获取当前展开节点
-        if(treeNode.pId!==null){
-            if (treeNode.children === undefined&&treeNode.type=="assignment") {
+        if (treeNode.pId !== null) {
+            if (treeNode.children === undefined && treeNode.type == "assignment") {
                 var url = "/clbs/m/functionconfig/fence/bindfence/putMonitorByAssign";
                 json_ajax("post", url, "json", false, {
-                    "assignmentId": treeNode.id, "isChecked": treeNode.checked, "monitorType": "monitor","webType":1
+                    "assignmentId": treeNode.id, "isChecked": treeNode.checked, "monitorType": "monitor", "webType": 1
                 }, function (data) {
                     var addV = treeObj.addNodes(treeNode, JSON.parse(ungzip(data.msg)));
                     if (addV !== null) {
@@ -6670,25 +6446,27 @@ var treeMonitoring = {
                         }
                     }
                 })
-            }else if(treeNode.type == "group"){
+            } else if (treeNode.type == "group") {
                 var url = "/clbs/m/functionconfig/fence/bindfence/putMonitorByGroup";
-                json_ajax("post", url, "json", false, {"groupId": treeNode.id
-                    ,"isChecked":treeNode.checked,"monitorType":"vehicle"}, function (data) {
+                json_ajax("post", url, "json", false, {
+                    "groupId": treeNode.id
+                    , "isChecked": treeNode.checked, "monitorType": "vehicle"
+                }, function (data) {
                     var result = data.obj;
-                    if (result != null && result != undefined){
-                        $.each(result, function(i) {
+                    if (result != null && result != undefined) {
+                        $.each(result, function (i) {
                             var pid = i; //获取键值
                             var chNodes = result[i] //获取对应的value
                             var parentTid = zTreeIdJson[pid][0];
                             var parentNode = treeObj.getNodeByTId(parentTid);
                             if (parentNode.children === undefined) {
-                                treeObj.addNodes(parentNode, chNodes);
+                                treeObj.addNodes(parentNode, []);
                             }
                         });
                     }
                 })
 
-            } else{
+            } else {
                 if (crrentSubV.length !== 0) {
                     for (var i = 0; i < crrentSubV.length; i++) {
                         var list = zTreeIdJson[crrentSubV[i]]
@@ -6717,36 +6495,30 @@ var treeMonitoring = {
                     "data": param
                 };
                 treeMonitoring.isExpendSocket(requestStrS);
-                /*if(webSocket.conFlag){
-                    webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/cachestatus', treeMonitoring.updataRealTree, "/app/vehicle/subscribeCacheStatusNew", requestStrS);
-                }else {
-                    setTimeout(function () {
-                        webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/cachestatus', treeMonitoring.updataRealTree, "/app/vehicle/subscribeCacheStatusNew", requestStrS);
-                    },200)
-                } */       }
+            }
         }
     },
-    
+
     // socket 订阅连接
-    isExpendSocket: function(requestStrS) {
-    	setTimeout(function() {
-    		if (webSocket.conFlag) {
-    			webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/cachestatus', treeMonitoring.updataRealTree, "/app/vehicle/subscribeCacheStatusNew", requestStrS);
-    		} else {
-    			treeMonitoring.isExpendSocket(requestStrS);
-    		}
-    	}, 1000)
+    isExpendSocket: function (requestStrS) {
+        setTimeout(function () {
+            if (webSocket.conFlag) {
+                webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/cachestatus', treeMonitoring.updataRealTree, "/app/vehicle/subscribeCacheStatusNew", requestStrS);
+            } else {
+                treeMonitoring.isExpendSocket(requestStrS);
+            }
+        }, 1000);
     },
-    
-    getGroupChild: function (node,assign) { // 递归获取组织及下级组织的分组节点
+
+    getGroupChild: function (node, assign) { // 递归获取组织及下级组织的分组节点
         var nodes = node.children;
-        if (nodes != null && nodes != undefined && nodes.length > 0){
-            for (var i= 0; i < nodes.length; i++) {
+        if (nodes != null && nodes != undefined && nodes.length > 0) {
+            for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
                 if (node.type == "assignment") {
                     assign.push(node);
-                }else if (node.type == "group" && node.children != undefined){
-                    treeMonitoring.getGroupChild(node.children,assign);
+                } else if (node.type == "group" && node.children != undefined) {
+                    treeMonitoring.getGroupChild(node.children, assign);
                 }
             }
         }
@@ -6764,9 +6536,11 @@ var treeMonitoring = {
         misstype = false;
         misstypes = false;
         suFlag = true;
+        //用于判断在线车辆是否展开节点
+        onLineIsExpandAll = true;
         zTreeIdJson = {};
-        allflag=false;
-        fzzflag=false;
+        allflag = false;
+        fzzflag = false;
         $("#search_condition").val("");
         var settingTree = {
             async: {
@@ -6775,11 +6549,11 @@ var treeMonitoring = {
                 enable: true,
                 autoParam: ["id"],
                 dataType: "json",
-                otherParam: {"type": event.data.type,"webType" : 1},
+                otherParam: {"type": event.data.type, "webType": 1},
             },
             view: {
-            	addHoverDom : treeMonitoring.addHoverDom,
-                removeHoverDom : treeMonitoring.removeHoverDom,            
+                addHoverDom: treeMonitoring.addHoverDom,
+                removeHoverDom: treeMonitoring.removeHoverDom,
                 dblClickExpand: false,
                 nameIsHTML: true,
                 fontCss: setFontCss_ztree
@@ -6867,8 +6641,8 @@ var treeMonitoring = {
             $chooseMiss.css("text-decoration", "none");
             $('#chooseHeartBeat').css("text-decoration", "none");
         } else if (event.data.type === 9) {
-        	$('#chooseHeartBeat').css("text-decoration", "underline");
-        	$chooseNot.css("text-decoration", "none");
+            $('#chooseHeartBeat').css("text-decoration", "underline");
+            $chooseNot.css("text-decoration", "none");
             $chooseOverSeep.css("text-decoration", "none");
             $chooseAlam.css("text-decoration", "none");
             $chooseRun.css("text-decoration", "none");
@@ -6878,8 +6652,8 @@ var treeMonitoring = {
         }
     },
     alltree: function () {
-        fzzflag=false;
-        missAll=false;
+        fzzflag = false;
+        missAll = false;
         bflag = true;
         changeMiss = [];
         lineAs = [];//停车
@@ -6894,9 +6668,9 @@ var treeMonitoring = {
         zTreeIdJson = {};
         $("#search_condition").val("");
         var otherParam = null;
-        if ($tableCarAll.text() < 5000) {
+        if ($tableCarAll.text() <= 300) {
             var zurl = "/clbs/m/functionconfig/fence/bindfence/monitorTree";
-            otherParam = {"webType" : 1};
+            otherParam = {"webType": 1};
         } else {
             var zurl = "/clbs/m/functionconfig/fence/bindfence/bigDataMonitorTree";
         }
@@ -6911,8 +6685,8 @@ var treeMonitoring = {
                 dataFilter: treeMonitoring.ajaxDataFilter
             },
             view: {
-            	 addHoverDom : treeMonitoring.addHoverDom,
-                 removeHoverDom : treeMonitoring.removeHoverDom,            
+                addHoverDom: treeMonitoring.addHoverDom,
+                removeHoverDom: treeMonitoring.removeHoverDom,
                 dblClickExpand: false,
                 nameIsHTML: true,
                 fontCss: setFontCss_ztree
@@ -6958,11 +6732,11 @@ var treeMonitoring = {
         $chooseMiss.css("text-decoration", "none");
         bflag = false
     },
-    //筛选离线车辆
+    // 筛选离线车辆
     misslines: function (event) {
-        fzzflag=false;
-        allflag=false;
-        missAll=true;
+        fzzflag = false;
+        allflag = false;
+        missAll = true;
         bflag = true;
         changeMiss = [];
         lineAs = [];//停车
@@ -6981,11 +6755,11 @@ var treeMonitoring = {
         misstype = true;
         suFlag = true;
         zTreeIdJson = {};
-        var otherParam=null;
+        var otherParam = null;
         $("#search_condition").val("");
-        if ($("#table-car-offline").text() < 5000) {
+        if ($("#table-car-offline").text() <= 300) {
             zurl = "/clbs/m/basicinfo/monitoring/vehicle/treeStateInfo";
-            otherParam={"type": numberMiss,"webType" : 1}
+            otherParam = {"type": numberMiss, "webType": 1}
         } else {
             zurl = "/clbs/m/functionconfig/fence/bindfence/bigDataMonitorTree";
         }
@@ -7000,8 +6774,8 @@ var treeMonitoring = {
                 dataFilter: treeMonitoring.ajaxDataFilter
             },
             view: {
-            	addHoverDom : treeMonitoring.addHoverDom,
-                removeHoverDom : treeMonitoring.removeHoverDom,
+                addHoverDom: treeMonitoring.addHoverDom,
+                removeHoverDom: treeMonitoring.removeHoverDom,
                 dblClickExpand: false,
                 nameIsHTML: true,
                 fontCss: setFontCss_ztree
@@ -7063,9 +6837,9 @@ var treeMonitoring = {
         stopVidArray = data.obj.stopVidArray;
         diyueall = data.obj.vehicleIdArray;
         var otherParam = null;
-        if (data.obj.allV < 5000) {
+        if (data.obj.allV <= 300) {
             zurl = "/clbs/m/functionconfig/fence/bindfence/monitorTree";
-            otherParam = {"webType" : 1};
+            otherParam = {"webType": 1};
         } else {
             zurl = "/clbs/m/functionconfig/fence/bindfence/bigDataMonitorTree";
         }
@@ -7081,8 +6855,8 @@ var treeMonitoring = {
                 dataFilter: treeMonitoring.ajaxDataFilter
             },
             view: {
-            	 addHoverDom : treeMonitoring.addHoverDom,
-                 removeHoverDom : treeMonitoring.removeHoverDom,
+                addHoverDom: treeMonitoring.addHoverDom,
+                removeHoverDom: treeMonitoring.removeHoverDom,
                 dblClickExpand: false,
                 nameIsHTML: true,
                 fontCss: setFontCss_ztree
@@ -7122,17 +6896,17 @@ var treeMonitoring = {
         zTree = $.fn.zTree.getZTreeObj("treeDemo");
         treeMonitoring.isGetSocket();
     },
-    isGetSocket: function() {
-    	setTimeout(function(){
-    		if (webSocket.conFlag) {
-    			webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/cachestatus', treeMonitoring.updataRealTree, null, null);
-                setTimeout(function(){
-                	webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/alarm', treeMonitoring.updataRealAlarmMessage, "/app/vehicle/subscribeStatus", null);
+    isGetSocket: function () {
+        setTimeout(function () {
+            if (webSocket.conFlag) {
+                webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/cachestatus', treeMonitoring.updataRealTree, null, null);
+                setTimeout(function () {
+                    webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/alarm', treeMonitoring.updataRealAlarmMessage, "/app/vehicle/subscribeStatus", null);
                 }, 1000);
-    		} else {
-    			treeMonitoring.isGetSocket();
-    		}
-    	}, 2000);
+            } else {
+                treeMonitoring.isGetSocket();
+            }
+        }, 2000);
     },
     getIcoTreeUrl: function (treeId, treeNode) {
         if (treeNode == null) {
@@ -7145,19 +6919,19 @@ var treeMonitoring = {
         return bflag;
     },
     zTreeBeforeCheck: function (treeId, treeNode) {
-    	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-    	var changedNodes = zTree.getChangeCheckedNodes();
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        var changedNodes = zTree.getChangeCheckedNodes();
         var flag = true;
-        if(fzzflag&&!treeNode.checked){
+        if (fzzflag && !treeNode.checked) {
             var queryType = $("#searchType").val();
             var queryParam = $("#search_condition").val();
-            if (treeNode.type === 'group'&&treeNode.pId===null) {
+            if (treeNode.type === 'group' && treeNode.pId === null) {
                 json_ajax("POST", "/clbs/a/search/monitorTreeFuzzyCount", "json", false, {
                     "queryParam": queryParam,
-                     "queryType": queryType
+                    "queryType": queryType
                 }, function (data) {
                     if (data > 400) {
-                        cheackGourpNum=data;
+                        cheackGourpNum = data;
                         layer.alert("我们的监控上限是400辆,您刚刚勾选了" + cheackGourpNum + "辆,请重新勾选！");
                         flag = false;
                     }
@@ -7170,15 +6944,15 @@ var treeMonitoring = {
                 "pid": treeNode.id,
                 "type": treeNode.type
             }, function (data) {
-                if(missAll){
-                	cheackGourpNum=(data.obj.num)-($("#table-car-online").text());
+                if (missAll) {
+                    cheackGourpNum = (data.obj.num) - ($("#table-car-online").text());
                     if (cheackGourpNum > 400) {
                         layer.alert("我们的监控上限是400辆,您刚刚勾选了" + cheackGourpNum + "辆,请重新勾选！");
                         flag = false;
                     }
-                }else{
+                } else {
                     if (data.obj.num > 400) {
-                        cheackGourpNum=data.obj.num;
+                        cheackGourpNum = data.obj.num;
                         layer.alert("我们的监控上限是400辆,您刚刚勾选了" + data.obj.num + "辆,请重新勾选！");
                         flag = false;
                     }
@@ -7192,18 +6966,18 @@ var treeMonitoring = {
     },
     zTreeBeforeDblClick: function (treeId, treeNode) {
         var flag = true;
-            if(treeNode.type === 'group') {
-                json_ajax("POST", "/clbs/m/functionconfig/fence/bindfence/subGroup", "json", false, {
-                    "pid": treeNode.id,
-                    "type": treeNode.type
-                }, function (data) {
-                    if (data.obj.num > 400) {
-                        cheackGourpNum=data.obj.num
-                        layer.alert("我们的监控上限是400辆,您刚刚勾选了" + data.obj.num + "辆,请重新勾选！")
-                        flag = false;
-                    }
-                });
-            }
+        if (treeNode.type === 'group') {
+            json_ajax("POST", "/clbs/m/functionconfig/fence/bindfence/subGroup", "json", false, {
+                "pid": treeNode.id,
+                "type": treeNode.type
+            }, function (data) {
+                if (data.obj.num > 400) {
+                    cheackGourpNum = data.obj.num
+                    layer.alert("我们的监控上限是400辆,您刚刚勾选了" + data.obj.num + "辆,请重新勾选！")
+                    flag = false;
+                }
+            });
+        }
         return flag;
     },
     getVehicleArr: function (data) {
@@ -7274,32 +7048,32 @@ var treeMonitoring = {
         }
     },
     //围栏集合数据清除及切换后初始化
-    delFenceListAndMapClear: function(){
+    delFenceListAndMapClear: function () {
         //清除根据监控对象查询的围栏勾选
         var zTree = $.fn.zTree.getZTreeObj("vFenceTree");
         //处理判断不勾选围栏直接切换至电子围栏后错误问题
-        if(zTree != null){
+        if (zTree != null) {
             var nodes = zTree.getCheckedNodes(true);
             //获取已勾选的节点结合  变换为不勾选
-            for (var i=0, l=nodes.length; i < l; i++) {
+            for (var i = 0, l = nodes.length; i < l; i++) {
                 zTree.checkNode(nodes[i], false, false);
             }
             //改变勾选状态checkedOld
             var allNodes = zTree.getChangeCheckedNodes();
-            for(var i = 0; i < allNodes.length; i++){
+            for (var i = 0; i < allNodes.length; i++) {
                 allNodes[i].checkedOld = false;
             }
             //删除 标注、线、矩形、圆形、多边形 （集合fenceIdList）
-            if(fenceIdList.elements.length > 0){
+            if (fenceIdList.elements.length > 0) {
                 var fLength = fenceIdList.elements.length;
                 //遍历当前勾选围栏
-                for(var i = 0; i < fLength; i++){
+                for (var i = 0; i < fLength; i++) {
                     //获取围栏Id
                     var felId = fenceIdList.elements[i].key;
                     //隐藏围栏及删除数组数据
                     var felGs = fenceIdList.get(felId);
                     //AMap.Marker标注    AMap.Polyline线    AMap.Polygon矩形   AMap.Circle圆形
-                    if(felGs.CLASS_NAME == "AMap.Marker" || felGs.CLASS_NAME == "AMap.Polyline" || felGs.CLASS_NAME == "AMap.Polygon" || felGs.CLASS_NAME == "AMap.Circle"){
+                    if (felGs.CLASS_NAME == "AMap.Marker" || felGs.CLASS_NAME == "AMap.Polyline" || felGs.CLASS_NAME == "AMap.Polygon" || felGs.CLASS_NAME == "AMap.Circle") {
                         felGs.hide();
                     }
                 }
@@ -7307,9 +7081,9 @@ var treeMonitoring = {
                 fenceIdList.clear();
             }
             //删除行政区域 （集合AdministrativeRegionsList）
-            if(AdministrativeRegionsList.elements.length > 0){
+            if (AdministrativeRegionsList.elements.length > 0) {
                 var aLength = AdministrativeRegionsList.elements.length;
-                for(var i = 0; i < aLength; i++){
+                for (var i = 0; i < aLength; i++) {
                     var admId = AdministrativeRegionsList.elements[i].key;
                     var admGs = AdministrativeRegionsList.get(admId);
                     map.remove(admGs);
@@ -7317,9 +7091,9 @@ var treeMonitoring = {
                 AdministrativeRegionsList.clear();
             }
             //删除导航路线 （集合travelLineList）
-            if(travelLineList.elements.length > 0){
+            if (travelLineList.elements.length > 0) {
                 var tLength = travelLineList.elements.length;
-                for(var i = 0; i < tLength; i++){
+                for (var i = 0; i < tLength; i++) {
                     var travelId = travelLineList.elements[i].key;
                     var travelGs = travelLineList.get(travelId);
                     map.remove([travelGs]);
@@ -7329,28 +7103,28 @@ var treeMonitoring = {
         }
     },
     //电子围栏及监控对象切换
-    fenceAndVehicleFn: function(){
+    fenceAndVehicleFn: function () {
         var id = $(this).attr("id");
         //隐藏地图工具栏相关
-        if(!($("#mapDropSettingMenu").is(":hidden"))){
+        if (!($("#mapDropSettingMenu").is(":hidden"))) {
             $("#mapDropSettingMenu").hide();//地图设置
         }
-        if(!($("#disSetMenu").is(":hidden"))){
+        if (!($("#disSetMenu").is(":hidden"))) {
             $("#disSetMenu").hide();//显示设置
         }
-        $("#toolOperateClick").animate({marginRight:"-776px"});
+        $("#toolOperateClick").animate({marginRight: "-776px"});
         //判断点击电子围栏
-        if(id == "TabCarBox"){
+        if (id == "TabCarBox") {
             $("#fenceTool").hide();
             treeMonitoring.delFenceListAndMapClear();
-        }else{
+        } else {
             $("#fenceTool").show();
         }
     },
     //当前监控对象围栏点击
     vFenceTreeClick: function (e, treeId, treeNode) {
         var zTree = $.fn.zTree.getZTreeObj("vFenceTree");
-        zTree.checkNode(treeNode, !treeNode.checked,true);
+        zTree.checkNode(treeNode, !treeNode.checked, true);
         treeMonitoring.vFenceTreeCheck(e, treeId, treeNode);
         return false;
         treeMonitoring.showZtreeCheckedToMap(treeNode, zTree);
@@ -7401,13 +7175,13 @@ var treeMonitoring = {
         return responseData;
     },
     //车辆树单双击获取当前围栏信息
-    vehicleTreeClickGetFenceInfo: function(treeStatus,treeId){
-        if(treeStatus == true){
-    		//清空搜索条件
-    		if($("#vFenceSearch").val() != "" || $("#vFenceSearch").val() != null){
-    			$("#vFenceSearch").val("");
-    		}
-    		//清空围栏数组及地图
+    vehicleTreeClickGetFenceInfo: function (treeStatus, treeId) {
+        if (treeStatus == true) {
+            //清空搜索条件
+            if ($("#vFenceSearch").val() != "" || $("#vFenceSearch").val() != null) {
+                $("#vFenceSearch").val("");
+            }
+            //清空围栏数组及地图
             treeMonitoring.delFenceListAndMapClear();
             //订阅后查询当前对象绑定围栏信息
             treeMonitoring.getCurrentVehicleAllFence(treeId);
@@ -7728,22 +7502,129 @@ var treeMonitoring = {
         }
     },
     treeToTrackBlack: function () {
-    	var jumpFlag = false;
-    	var permissionUrls = $("#permissionUrls").val();
-    	if (permissionUrls != null && permissionUrls != undefined) {
-    		var urllist =  permissionUrls.split(",");
-    		if (urllist.indexOf("/v/monitoring/trackPlayback") > -1) {
-    			jumpFlag = true;
-                location.href="/clbs/v/monitoring/trackPlayback";
-    		}
-    	}
-    	if (!jumpFlag) {
-    		layer.msg("无操作权限，请联系管理员");
-    	}
+        var jumpFlag = false;
+        var permissionUrls = $("#permissionUrls").val();
+        if (permissionUrls != null && permissionUrls != undefined) {
+            var urllist = permissionUrls.split(",");
+            if (urllist.indexOf("/v/monitoring/trackPlayback") > -1) {
+                jumpFlag = true;
+                location.href = "/clbs/v/monitoring/trackPlayback";
+            }
+        }
+        if (!jumpFlag) {
+            layer.msg("无操作权限，请联系管理员");
+        }
     },
-    
+
+    /**
+     * 设置终端车牌号
+     * @param type
+     */
+    setPlateNumber: function (type) {
+        pageLayout.closeVideo();
+        treeMonitoring.getBrandParameter(type);
+        parametersID = type;
+        $("#terminalPlate").html("设置终端车牌号：" + brand);
+        $("#oldNumber").val(brand);
+        $("#plateId").val(type);
+        $("#setPlateNumber").modal('show');
+        rMenu.css({"visibility": "hidden"});
+        setTimeout("dataTableOperation.logFindCilck()", 500);
+        $("#brand").val('');
+    },
+
+    /**
+     * 设置OBD
+     */
+    setOBD: function (type) {
+        pageLayout.closeVideo();
+        treeMonitoring.getBrandParameter(type);
+        parametersID = type;
+        var OBDMultiplicative = [];
+        var OBDCommercial = [];
+        var url = "/clbs/v/monitoring/findOBD";
+        json_ajax("POST", url, "json", false, null, function (data) {
+            if (data.success) {
+                var datas = data.obj;
+                if (datas != null && datas.length > 0) {
+                    for (var i = 0; i < datas.length; i++) {
+                        if (datas[i].type == 'OBD1') {
+                            OBDMultiplicative.push({
+                                code: datas[i].code,
+                                name: datas[i].value
+                            });
+                        } else if (datas[i].type == 'OBD2') {
+                            OBDCommercial.push({
+                                code: datas[i].code,
+                                name: datas[i].value + '-' + datas[i].description
+                            });
+                        }
+                    }
+                    $("#model").val(datas[0].value);
+                    $("#OBDVid").val(datas[0].code);
+                }
+                $("#OBDMultiplicative").val(JSON.stringify(OBDMultiplicative));
+                $("#OBDCommercial").val(JSON.stringify(OBDCommercial))
+            } else {
+                layer.msg("获取OBD车型信息失败");
+                return
+            }
+        });
+        setTimeout("dataTableOperation.logFindCilck()", 500);
+        $("#OBDtitle").html("设置OBD车型信息：" + brand);
+        $("#classification").val(0);
+        $('#modelName').html("<label class='text-danger'>*</label> 车型名称：");
+        $("#OBDId").val(type);
+        treeMonitoring.getOBDVehicle();
+        $("#OBD").modal('show');
+        rMenu.css({"visibility": "hidden"});
+        setTimeout("dataTableOperation.logFindCilck()", 500);
+        $("#newPlateNumber").val('');
+    },
+
+    /**
+     * OBD车辆类型下拉选
+     * @param data
+     */
+    getOBDVehicle: function () {
+        var data;
+        var classification = $("#classification").val();
+        if (classification == 0) {
+            //乘用车
+            data = JSON.parse($("#OBDMultiplicative").val());
+        } else if (classification == 1) {
+            //商用车
+            data = JSON.parse($("#OBDCommercial").val());
+        }
+        var dataList = {value: []};
+        if (data != null && data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                dataList.value.push({
+                    name: data[i].name,
+                    code: data[i].code
+                });
+            }
+            $("#model").val(data[0].name);
+            $("#OBDVid").val(data[0].code);
+        }
+        $("#OBDVName").val('');
+        $("#model").bsSuggest("destroy"); // 销毁事件
+        $("#model").bsSuggest({
+            indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+            indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+            data: dataList,
+            effectiveFields: ["name"]
+        }).on('onDataRequestSuccess', function (e, result) {
+        }).on('onSetSelectValue', function (e, keyword, data) {
+            $("#OBDVid").val(keyword.id);
+            $("#OBDVName").val(keyword.key);
+        }).on('onUnsetSelectValue', function () {
+        });
+    },
+
 }
- function showErrorMsg(msg, inputId) {
+
+function showErrorMsg(msg, inputId) {
     if ($("#error_label").is(":hidden")) {
         $("#error_label").text(msg);
         $("#error_label").insertAfter($("#" + inputId));
@@ -7875,7 +7756,7 @@ var fenceOperation = {
                     //修改按钮
                     result += '<button href="' + editUrlPath + '" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                     // 围栏下发按钮
-                    if (row.type == 'zw_m_marker' || row.alarm_source == 1 || row.monitorType == '1') {
+                    if (row.type == 'zw_m_marker' || row.alarm_source == 1 || (row.deviceType != '0' && row.deviceType != '1')) {
                         result += ' <button disabled onclick="fenceOperation.sendFenceOne(\'' + row.id + '\',\'' + row.paramId + '\',\'' + row.vehicle_id + '\',\'' + row.fence_id + '\')" class="editBtn btn-default" type="button"><i class="glyphicon glyphicon-circle-arrow-down"></i>围栏下发</button>&nbsp;'
                     } else {
                         result += ' <button onclick="fenceOperation.sendFenceOne(\'' + row.id + '\',\'' + row.paramId + '\',\'' + row.vehicle_id + '\',\'' + row.fence_id + '\')" class="editBtn editBtn-info" type="button"><i class="glyphicon glyphicon-circle-arrow-down"></i>围栏下发</button>&nbsp;'
@@ -7907,17 +7788,21 @@ var fenceOperation = {
                 "class": "text-center",
                 render: function (data, type, row, meta) {
                     if (data == "0") {
-                        return '指令已生效';
+                        return '参数已生效';
                     } else if (data == "1") {
-                        return '指令未生效';
+                        return '参数未生效';
                     } else if (data == "2") {
-                        return "指令未生效";
+                        return "参数消息有误";
                     } else if (data == "3") {
-                        return "指令未生效";
+                        return "参数不支持";
                     } else if (data == "4") {
-                        return "指令已发出";
+                        return "参数下发中";
                     } else if (data == "5") {
-                        return "设备离线，未下发";
+                        return "终端离线，未下发";
+                    }  else if (data == "7") {
+                        return "终端处理中";
+                    } else if (data == "8") {
+                        return "终端接收失败";
                     } else {
                         return "";
                     }
@@ -8906,7 +8791,7 @@ var fenceOperation = {
             ;
             lineSpotMap.put(lineId, spotArray);
             $.each(dataArr, function (index, item) {
-                // index是索引值（即下标）   item是每次遍历得到的值；
+                // index是索引值（即下标） ? item是每次遍历得到的值；
                 if (item == undefined) {
                     dataArr.splice(index, 1);
                 }
@@ -9268,7 +9153,6 @@ var fenceOperation = {
                                             str += '<li class="active" id="TabFenceBox"><a href="#route1" data-toggle="tab">路段1</a></li>'
                                             strc += '<div class="tab-pane active" id="route1">'
                                             strc += '<div class="form-group hidden">'
-                                            strc += '&lt;!&ndash;<input type="hidden" id="addOrUpdateMarkerFlag" name="addOrUpdateMarkerFlag" value="" />&ndash;&gt;'
                                             strc += '<input id="lineIDms1" name="lineId" value=""/>'
                                             strc += '<input id="sumn" name="sumn" value=""/>'
                                             strc += '<div class="col-md-3">'
@@ -9341,7 +9225,6 @@ var fenceOperation = {
                                             str += '<li id="TabFenceBox"><a href="' + hrefs + '" + data-toggle="tab">路段' + (i + 1) + '</a></li>'
                                             strc += '<div class="tab-pane" id="' + rids + '">'
                                             strc += '<div class="form-group hidden">'
-                                            strc += '&lt;!&ndash;<input type="hidden" id="addOrUpdateMarkerFlag"  name="addOrUpdateMarkerFlag" value="" />&ndash;&gt;'
                                             strc += '<div class="col-md-3">'
                                             strc += '<input  id="' + sectionlng + '"    name="longitude" value=""/>'
                                             strc += '</div>'
@@ -9957,7 +9840,7 @@ var fenceOperation = {
         var thisData = thisId + "#" + "zw_m_line";
         var thisParams = {"fenceIdShape": thisData};
         var url = "/clbs/m/functionconfig/fence/managefence/previewFence";
-        ajax_submit("POST", url, "json", true, thisParams, true, fenceOperation.editCallBack);
+        ajax_submit("POST", url, "json", false, thisParams, true, fenceOperation.editCallBack);
     },
     editCallBack: function (data) {
         if (data.success) {
@@ -10023,10 +9906,12 @@ var fenceOperation = {
                 overlengthThreshold: {
                     required: false,
                     range: [0, 65535],
+                    digits:true
                 },
                 shortageThreshold: {
                     required: false,
                     range: [0, 65535],
+                    digits:true
                 },
                 maximumSpeed: {
                     required: true,
@@ -10035,6 +9920,7 @@ var fenceOperation = {
                 overspeedTime: {
                     required: true,
                     range: [0, 65535],
+                    digits:true
                 },
                 lng: {
                     required: true,
@@ -10053,10 +9939,12 @@ var fenceOperation = {
                 overlengthThreshold: {
                     required: fenceOperationOverLength,
                     range: fenceOperationScope65535,
+                    digits: requiredInt
                 },
                 shortageThreshold: {
                     required: fenceOperationTooShort,
                     range: fenceOperationScope65535,
+                    digits: requiredInt
                 },
                 maximumSpeed: {
                     required: fenceOperationMaxSpeed,
@@ -10065,6 +9953,7 @@ var fenceOperation = {
                 overspeedTime: {
                     required: fenceOperationOverSpeedTime,
                     range: fenceOperationScope65535,
+                    digits: requiredInt
                 },
                 lng: {
                     required: fenceOperationLongitudeNull,
@@ -10219,7 +10108,7 @@ var fenceOperation = {
             var longitude = objRegional[i][2];
             var latitude = objRegional[i][1];
             var flagssss = changeArray.contains([longitude, latitude]);
-            if (flagssss == true) {
+            if (flagssss == true) { // 判断车辆是否在指定区域内
                 isHasCar = true;
                 var carMsgID = objRegional[i][0];//车辆ID
                 if (select.toString().indexOf(carMsgID) == -1) {
@@ -10227,14 +10116,18 @@ var fenceOperation = {
                     var carName = objRegional[i][4];
                     var carGroup = objRegional[i][3];
                     var nodes = zTree.getNodesByParam("id", carMsgID, null);
+
+                    crrentSubV.push(objRegional[i][0]);
+                    crrentSubName.push(objRegional[i][4]);
+
                     for (var j = 0; j < nodes.length; j++) {
-                        crrentSubV.push(objRegional[i][0]);
-                        crrentSubName.push(objRegional[i][4]);
+                        // crrentSubV.push(objRegional[i][0]);
+                        // crrentSubName.push(objRegional[i][4]);
                         zTree.checkNode(nodes[j], true, true);
                         nodes[j].checkedOld = true;
                         zTree.updateNode(nodes[j]);
-                    }
-                    ;
+                    };
+
                     cheakdiyuealls.push(carMsgID);
                     html += '<tr><td>' + carName + '</td><td>' + carGroup + '</td></tr>';
                     var obj = new Object();
@@ -10259,6 +10152,7 @@ var fenceOperation = {
                 "data": param
             };
             cancelList = [];
+            isAreaSearch = true;
             webSocket.subscribe(headers, "/user/" + $("#userName").text() + "/location", dataTableOperation.updateRealLocation, "/app/vehicle/location", requestStrS);
         } else {
             layer.msg(trackAreaMonitorNull);
@@ -10924,7 +10818,7 @@ var fenceOperation = {
         if (treeNode == null) {
             return "/clbs/m/functionconfig/fence/bindfence/alarmSearchTree";
         } else if (treeNode.type == "assignment") {
-            return "/clbs/m/functionconfig/fence/bindfence/putMonitorByAssign?assignmentId=" + treeNode.id + "&isChecked=" + treeNode.checked + "&monitorType=allMonitor";
+            return "/clbs/m/functionconfig/fence/bindfence/putMonitorByAssign?assignmentId=" + treeNode.id + "&isChecked=" + treeNode.checked + "&monitorType=monitor";
         }
     },
     //组织树预处理函数
@@ -10956,7 +10850,7 @@ var fenceOperation = {
     },
 //    zTreeOnAsyncSuccess: function(event, treeId, treeNode, msg){
 //
-//	},
+//  },
     zTreeBeforeCheck: function (treeId, treeNode) {
         var flag = true;
         if (!treeNode.checked) {
@@ -10980,7 +10874,7 @@ var fenceOperation = {
                 var nodeId;
                 for (var i = 0; i < nodes.length; i++) {
                     nodeId = nodes[i].id;
-                    if (nodes[i].type == "people" || nodes[i].type == "vehicle") {
+                    if (nodes[i].type == "people" || nodes[i].type == "vehicle" || nodes[i].type == "thing") {
                         //查询该节点是否在勾选组织或分组下，若在则不记录，不在则记录
                         var nd = zTree.getNodeByParam("tId", nodes[i].tId, treeNode);
                         if (nd == null && $.inArray(nodeId, ns) == -1) {
@@ -10989,7 +10883,7 @@ var fenceOperation = {
                     }
                 }
                 nodesLength += ns.length;
-            } else if (treeNode.type == "people" || treeNode.type == "vehicle") { //若勾选的为监控对象
+            } else if (treeNode.type == "people" || treeNode.type == "vehicle" || treeNode.type == "thing") { //若勾选的为监控对象
                 var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
                     .getCheckedNodes(true), v = "";
                 var nodesLength = 0;
@@ -10999,7 +10893,7 @@ var fenceOperation = {
                 var nodeId;
                 for (var i = 0; i < nodes.length; i++) {
                     nodeId = nodes[i].id;
-                    if (nodes[i].type == "people" || nodes[i].type == "vehicle") {
+                    if (nodes[i].type == "people" || nodes[i].type == "vehicle" || nodes[i].type == "thing") {
                         if ($.inArray(nodeId, ns) == -1) {
                             ns.push(nodeId);
                         }
@@ -11047,7 +10941,7 @@ var fenceOperation = {
         // 记录勾选的节点
         var v = "";
         for (var i = 0, l = nodes.length; i < l; i++) {
-            if (nodes[i].type == "vehicle" || nodes[i].type == "people") {
+            if (nodes[i].type == "vehicle" || nodes[i].type == "people" || nodes[i].type == "thing") {
                 v += nodes[i].id + ",";
             }
         }
@@ -11086,7 +10980,7 @@ var fenceOperation = {
                         var parentTid = fenceZTreeIdJson[pid][0];
                         var parentNode = treeObj.getNodeByTId(parentTid);
                         if (parentNode.children === undefined) {
-                            treeObj.addNodes(parentNode, chNodes);
+                            treeObj.addNodes(parentNode, []);
                         }
                     });
                 }
@@ -11205,9 +11099,9 @@ var fenceOperation = {
             $("#tableList tbody").html("");
             // 去重
             vehicleNode = vehicleNode.unique2();
-            var j = 1;
+            var j = 0;
             for (var i = 0; i < vehicleNode.length; i++) {
-                if (vehicleNode[i].type == "vehicle" || vehicleNode[i].type == "people") {
+                if (vehicleNode[i].type == "vehicle" || vehicleNode[i].type == "people" || vehicleNode[i].type == "thing") {
                     j++;
                     var inRadioName = "Inradio" + j;
                     var outRadioName = "Outradio" + j;
@@ -11236,8 +11130,8 @@ var fenceOperation = {
                         + "<td id = 'alarmOut'><input type='radio'  value = 1 checked name='" + outRadioName + "' id='" + outRadioName + "'><label style='margin-bottom:0px;cursor:pointer' for='" + outRadioName + "'>是</label><input type='radio'  value = 0 name='" + outRadioName + "' id='" + outRadioName + "s'><label style='margin-bottom:0px;cursor:pointer' for='" + outRadioName + "s'>否</label></td>"
                         + "<td id = 'alarmInDriver'><input type='radio' value = 1 checked name='" + inDriverName + "' id='" + inDriverName + "'><label style='margin-bottom:0px;cursor:pointer' for='" + inDriverName + "'>是</label><input type='radio' value = 0 name='" + inDriverName + "' id='" + inDriverName + "s'><label style='margin-bottom:0px;cursor:pointer' for='" + inDriverName + "s'>否</label></td>"
                         + "<td id = 'alarmOutDriver'><input type='radio'  value = 1 checked name='" + outDriverName + "' id='" + outDriverName + "'><label style='margin-bottom:0px;cursor:pointer' for='" + outDriverName + "'>是</label><input type='radio'  value = 0 name='" + outDriverName + "' id='" + outDriverName + "s'><label style='margin-bottom:0px;cursor:pointer' for='" + outDriverName + "s'>否</label></td>"
-                        + "<td id='speed'><input type= 'number' name = 'speed' class='form-control'/></td>"
-                        + "<td id='overSpeedLastTime'><input type= 'number' name = 'overSpeedLastTime' class='form-control'/></td>"
+                        + "<td id='speed'><input type= 'text' name = 'speed' class='form-control' onkeyup=\"value=value.replace(/[^\\d]/g,'')\" /></td>"
+                        + "<td id='overSpeedLastTime'><input type= 'text' name = 'overSpeedLastTime' class='form-control' onkeyup=\"value=value.replace(/[^\\d]/g,'')\" /></td>"
                         +
                         fenceOperation.travelLongAndSmallTime(fencetype)
                         +
@@ -11364,6 +11258,10 @@ var fenceOperation = {
         var travelLongTimeVal = '';
         var travelSmallTimeVal = '';
         var fenceType = $("#" + trid[0]).children("td").eq(3).find("label").text();
+        console.log(trid);
+        if(trid.indexOf('list1')!='-1'){
+            console.log(1111);
+        }
         if (trid.length < 1) {
             layer.msg("请选择一项！")
         } else if (trid.length > 1) {
@@ -11430,8 +11328,8 @@ var fenceOperation = {
                 nameGNSSFlag = $("#" + trid[0]).children("td").eq(20).find("input").attr("name")
                 setGNSSFlag = $('input[name="' + nameGNSSFlag + '"]:checked').val();
             }
-            for (i = 2; i <= $("#tableList tr").length; i++) {
-                var tds = $("#tableList tr")[i - 1]
+            for (i = 2; i <= $("#tableList tbody tr").length; i++) {
+                var tds = $("#tableList tbody tr")[i - 1];
                 $(tds).each(function () {
                     var td = this;
                     if (fenceType != "路线" && fenceType != "多边形") {
@@ -11632,7 +11530,7 @@ var fenceOperation = {
         var arr = [];
         var errFlag = 1;
         var errMsg = "";
-        var i = 1;
+        var i = 0;
         // 遍历表格，组装Json
         $("#tableList tr").each(function () {
             var tr = this;
@@ -11665,11 +11563,15 @@ var fenceOperation = {
                     var time = $(td).find("input").val();
                     if (time != null && time != "") {
                         obj.alarmStartDate = "2016-01-01 " + time;
+                    } else {
+                      obj.alarmStartDate = "";
                     }
                 } else if (td.id == "alarmEndDateTD") {
                     var time = $(td).find("input").val();
                     if (time != null && time != "") {
                         obj.alarmEndDate = "2016-01-01 " + time;
+                    } else {
+                      obj.alarmEndDate = "";
                     }
                 } else if (td.id == "speed") {
                     obj.speed = $(td).find("input").val();
@@ -11713,19 +11615,34 @@ var fenceOperation = {
                 }
             });
             var a = i - 1;
-            // 开始时间和结束时间要么都有，要么都没有
+            // 开始日期和结束日期要么都有，要么都没有
             if (obj.alarmStartTime != "" && obj.alarmEndTime == "") {
                 errFlag = 0;
-                errMsg += '第' + (a) + '条数据请选择结束时间！<br/>';
+                errMsg += '第' + (a) + '条数据请选择结束日期！<br/>';
             } else if (obj.alarmStartTime == "" && obj.alarmEndTime != "") {
                 errFlag = 0;
-                errMsg += '第' + (a) + '条数据请选择开始时间！<br/>';
+                errMsg += '第' + (a) + '条数据请选择开始日期！<br/>';
             } else if (obj.alarmStartTime != "" && obj.alarmEndTime != "") { // 结束日期必须大于开始日期
                 if (fenceOperation.compareDate(obj.alarmStartTime, obj.alarmEndTime)) {
                     errFlag = 0;
                     errMsg += '第' + (a) + '条数据结束日期必须大于开始日期！<br/>';
                 }
             }
+            
+            // 开始时间和结束时间要么都有，要么都没有
+            if (obj.alarmStartDate != "" && obj.alarmEndDate == "") {
+                errFlag = 0;
+                errMsg += '第' + (a) + '条数据请选择结束时间！<br/>';
+            } else if (obj.alarmStartDate == "" && obj.alarmEndDate != "") {
+                errFlag = 0;
+                errMsg += '第' + (a) + '条数据请选择开始时间！<br/>';
+            } else if (obj.alarmStartDate != "" && obj.alarmEndDate != "") { // 结束日期必须大于开始日期
+                if (fenceOperation.compareDate(obj.alarmStartDate, obj.alarmEndDate)) {
+                    errFlag = 0;
+                    errMsg += '第' + (a) + '条数据结束时间必须大于开始时间！<br/>';
+                }
+            }
+            
             if (obj.speed < 0 || obj.speed > 65535) { // 限速校验最大值最小值
                 errFlag = 0;
                 errMsg += '第' + (a) + '条数限速的最小值为0，最大值为65535！<br/>';
@@ -11757,6 +11674,14 @@ var fenceOperation = {
             var parameter = {"data": JSON.stringify(arr)};
             json_ajax("POST", url, "json", true, parameter, fenceOperation.saveBindCallback);
         }
+        // 清空勾选框
+        vehicleFenceList = "";
+    },
+    fenceCancelBtnClick: function () {
+      // 清空勾选框
+        vehicleFenceList = "";
+        $("#fenceBind").modal('hide');
+        myTable.filter();
     },
     //保存围栏绑定回调方法
     saveBindCallback: function (data) {
@@ -11820,7 +11745,7 @@ var fenceOperation = {
         ;
         // 订阅电子围栏
         if (clickFenceCount == 0) {
-            webSocket.subscribe(headers, "/user/" + $("#userName").text() + '/fencestatus', fenceOperation.updataFenceData, null, null);
+            webSocket.subscribe(headers,'/topic/fencestatus', fenceOperation.updataFenceData,"", null);
         }
         ;
         clickFenceCount = 1;
@@ -11922,7 +11847,7 @@ var fenceOperation = {
     },
     //跟踪
     goTrace: function (id) {
-        parametersID = id;
+        parametersID = id;top
         var listParameters = [];
         listParameters.push(parametersID);
         var validity = $("#validity").val();
@@ -12059,7 +11984,7 @@ var fenceOperation = {
     // 报警区分平台
     alarmSourceCheck: function (fencetype, alarmSourceName) {
         if (fencetype == "zw_m_administration" || fencetype == "zw_m_travel_line") {
-            return "<td id = 'alarmSource'><input type='radio' value = 0 name='" + alarmSourceName + "' id='" + alarmSourceName + "'><label style='margin-bottom:0px;cursor:pointer' for='" + alarmSourceName + "'>终端报警</label><input type='radio' value = 1 checked='checked' name='" + alarmSourceName + "' id='" + alarmSourceName + "s'><label style='margin-bottom:0px;cursor:pointer' for='" + alarmSourceName + "s'>平台报警</label></td>"
+            return "<td id = 'alarmSource'><input type='radio' disabled value = 0 name='" + alarmSourceName + "' id='" + alarmSourceName + "'><label style='margin-bottom:0px;cursor:pointer' for='" + alarmSourceName + "'>终端报警</label><input type='radio' value = 1 checked='checked' name='" + alarmSourceName + "' id='" + alarmSourceName + "s'><label style='margin-bottom:0px;cursor:pointer' for='" + alarmSourceName + "s'>平台报警</label></td>"
         } else {
             return "<td id = 'alarmSource'><input type='radio' value = 0 checked='checked' name='" + alarmSourceName + "' id='" + alarmSourceName + "'><label style='margin-bottom:0px;cursor:pointer' for='" + alarmSourceName + "'>终端报警</label><input type='radio' value = 1 name='" + alarmSourceName + "' id='" + alarmSourceName + "s'><label style='margin-bottom:0px;cursor:pointer' for='" + alarmSourceName + "s'>平台报警</label></td>"
         }
@@ -12074,7 +11999,7 @@ var fenceOperation = {
     //判断绑定详细列表中行驶时间阈值过长或者不足是否需要填写
     travelLongAndSmallTime: function (fencetype) {
         if (fencetype == "zw_m_line" || fencetype == "zw_m_travel_line") {
-            return "<td id='travelLongTime'><input type= 'number' name = 'travelLongTime' class='form-control'/></td>" + "<td id='travelSmallTime'><input type= 'number' name = 'travelSmallTime' class='form-control'/></td>";
+            return "<td id='travelLongTime'><input type= 'text' name = 'travelLongTime' class='form-control' onkeyup=\"value=value.replace(/[^\\d]/g,'')\" /></td>" + "<td id='travelSmallTime'><input type= 'text' name = 'travelSmallTime' class='form-control' onkeyup=\"value=value.replace(/[^\\d]/g,'')\" /></td>";
         } else {
             return "<td id='travelLongTime'></td>" + "<td id='travelSmallTime'></td>";
         }
@@ -13138,7 +13063,7 @@ var fenceOperation = {
             var checkedNodes = zTree.getCheckedNodes(true);
             var nodesLength = 0;
             for (var i = 0; i < checkedNodes.length; i++) {
-                if (checkedNodes[i].type == "people" || checkedNodes[i].type == "vehicle") {
+                if (checkedNodes[i].type == "people" || checkedNodes[i].type == "vehicle" || checkedNodes[i].type == "thing") {
                     nodesLength += 1;
                 }
             }
@@ -13159,7 +13084,7 @@ var fenceOperation = {
         // 记录勾选的节点
         var v = "", nodes = zTree.getCheckedNodes(true);
         for (var i = 0, l = nodes.length; i < l; i++) {
-            if (nodes[i].type == "vehicle" || nodes[i].type == "people") {
+            if (nodes[i].type == "vehicle" || nodes[i].type == "people" || nodes[i].type == "thing") {
                 v += nodes[i].id + ",";
             }
         }
@@ -13196,1714 +13121,1689 @@ var alarmFanceId = null;
 var alarmFanceType = null;
 var sendFlag = false;
 var alarmTypeList = ['1', '2', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '29', '30', '18', '19', '23', '24', '25', '26'];
+// 持续性报警pos,用于实时监控判断报警是否可处理
+var continueAlarmsPosList = ["67", "6511", "6512", "6511", "6521", "6522", "6523", "6531", "6532", "6533", "6541", "6542", "6543", "6551", "6552", "6553", "6611", "6612", "6613", "6621", "6622", "6623", "6631", "6632", "6633", "6642", "6642", "6643", "6651", "6652", "6654", "6811", "6812", "6813", "6821", "6822", "6823", "6831", "6832", "6834", "6841", "6842", "6843", "18177", "18178", "18180", "18433", "18434", "18435", "18689", "18691", "18691", "18945", "18946", "18947", "19201", "19202", "19203", "19457", "19458", "19459", "19713", "19714", "19715", "19969", "19970", "19971", "12411", "124", "7012", "7021", "14000", "14001", "14002", "14003", "14004", "14100", "14101", "14102", "14103", "14104", "14105", "14106", "14107", "14108", "14109", "14110", "14112", "14112", "14113", "14114", "14115", "14116", "14117", "14118", "14119", "14120", "14122", "14122", "14123", "14124", "14125", "14126", "14127", "14128", "14129", "14130", "14131", "141000", "14200", "14201", "14202", "14203", "14204", "14205", "14206", "14207", "14208", "14209", "14210", "14211", "14212", "14213", "14214", "14215", "14217", "14217", "14218", "14219", "14220", "14221", "14222", "14223", "14224", "14225", "14226", "14227", "14228", "14229", "14230", "14231", "142000", "14311", "14511", "14521", "14411",
+    "12511", "12512", "12513", "12514", "12515", "12516", "12517", "12518",
+    "12519", "12520", "12521", "12521", "12523", "12524", "12525", "12526", "12527", "12528", "12529",
+    "12530", "12531", "12532", "12533", "12534", "12535", "12536", "12537", "12538", "12539",
+    "12539", "12541", "12542", "12611", "12612", "12613", "12614", "12615", "12616", "12616",
+    "12618", "12619", "12620", "12621", "12622", "12623", "12624",
+    "12625", "12626", "12627", "12628", "12629", "12630", "12631", "12632", "12633", "12634",
+    "12635", "12636", "12637", "12638", "12639", "12639", "12641", "12642", "12711", "12712", "12713",
+    "12714", "12715", "12716", "12717", "12718", "12719",
+    "12720", "12721", "12722", "12723", "12724", "12725", "12726", "13011", "13012", "13013","13211","13212","13213","13214"];
+//io报警
+var ioAlarmTypeList = ['14100', '14101', '14102', '14103', '14104', '14105', '14106', '14107', '14108', '14109', '14110', '14111', '14112', '14113', '14114',
+    '14115', '14116', '14117', '14118', '14119', '14120', '14121', '14122', '14123', '14124', '14125', '14126', '14127', '14128', '14129', '14130', '14131', '14200',
+    '14201', '14202', '14203', '14204', '14205', '14206', '14207', '14208', '14209', '14210', '14211', '14212', '14213', '14214', '14215', '14216', '14217', '14218',
+    '14219', '14220', '14221', '14222', '14223', '14224', '14225', '14226', '14227', '14228', '14229', '14230', '14231', '14000', '14001', '14002', '14003', '14004',
+    '141000', '142000']
 //创建报警信息集合信息
 var alarmInfoList = new pageLayout.mapVehicle();
 var toFixed = function (source, digit, omitZero) {
-    if (typeof source === 'string') {
-        source = parseFloat(source)
+  if (typeof source === 'string') {
+    source = parseFloat(source)
+  }
+  if (typeof source === 'number') {
+    var afterFixed = source.toFixed(digit) //此时 afterFixed 为string类型
+    if (omitZero) {
+      afterFixed = parseFloat(afterFixed)
     }
-    if (typeof source === 'number') {
-        var afterFixed = source.toFixed(digit) //此时 afterFixed 为string类型
-        if (omitZero) {
-            afterFixed = parseFloat(afterFixed)
-        }
-        return afterFixed
-    }
+    return afterFixed
+  }
 }
 var dataTableOperation = {
-    // 表格点击订阅对象居中
-    centerMarkerBands: function (numberPlate) {
-        var sof = false;
-        if (map.getZoom() <= 11) {
-            sof = true;
-        }
-        var flogCentet = false;
-        var mapVehicles = mapVehicleTimeW.values();
-        var mapVehicleList = markerMap.values();
-        var j = mapVehicles.length;
-        for (var i = 0; i < j; i++) {
-            var vehicleleg = mapVehicles[i];
-            vehicleBans = vehicleleg[2]; // 车辆id
-            coordinateNew = vehicleleg[0];
-            // content = vehicleleg[1];
-            // var StringContent = null;
-//            if (vehicleleg[3] == 1) {
-//                StringContent = content[1];
-//            } else {
-//                StringContent = content[2];
-//            }
-            
-            if (vehicleBans == numberPlate) {
-                map.setCenter(coordinateNew);
-                map.setZoom(18);
-                fixedPoint = vehicleBans;//这个用于存储车辆ID
-                fixedPointPosition = coordinateNew;
-                amapOperation.LimitedSize(6);
-                flogCentet = true;
-            }
-            ;
-        }
-        ;
-        if (flogCentet == false) {
-            var g = mapVehicleList.length - 1
-            for (var i = g; i >= 0; i--) {
-                var markerInside = mapVehicleList[i][0];
-                var bansVs = markerInside.extData;
-                if (bansVs == numberPlate) {
-                    map.setCenter(markerInside.getPosition());
-                    map.setZoom(18);
-                    fixedPoint = markerInside.extData;//这个用于存储车辆ID
-                    amapOperation.LimitedSize(6);
-                }
-                ;
-            }
-            ;
-        }
-        ;
-        if (sof == false) {
-            amapOperation.vehicleMovement();
-        }
-    },
-    //报警信息(数量显示  声音  闪烁)
-    realTimeAlarmInfoCalcFn: function () {
-        alarmNum++;
-        var alarmLength = $("#alarmTable tbody").find("tr").length;
-        alarmNum = alarmLength;
-        $("#showAlarmNum").text(alarmNum);
-        if (alarmNum > 0) {
-            //声音
-            if (navigator.userAgent.indexOf('MSIE') >= 0) {
-                if ($alarmSoundSpan.hasClass("soundOpen")) {
-                    $alarmMsgBox.html('<embed id="IEalarmMsg" src="../../file/music/alarm.wav" autostart="true"/>');
-                } else {
-                    $alarmMsgBox.html('<embed id="IEalarmMsg" src=""/>');
-                }
-            } else {
-                if ($alarmSoundSpan.hasClass("soundOpen")) {
-                    $alarmMsgBox.html('<audio id="alarmMsgAutoOff" src="../../file/music/alarm.wav" autoplay="autoplay"></audio>');
-                } else {
-                    $alarmMsgBox.html('<audio id="alarmMsgAutoOff" src="../../file/music/alarm.wav"></audio>');
-                }
-            }
-            //闪烁
-            if ($alarmFlashesSpan.hasClass("flashesOpen")) {
-                $showAlarmWinMark.css("background-position", "0px -134px");
-                setTimeout(function () {
-                    $showAlarmWinMark.css("background-position", "0px 0px");
-                }, 1500)
-            } else {
-                $showAlarmWinMark.css("background-position", "0px 0px");
-            }
-            pageLayout.showAlarmWindow();
-        }
-    },
-    // 实时更新
-    updateRealLocation: function (msg) {
-        var data = $.parseJSON(msg.body);
-        if (data.desc !== "neverOnline") {
-            if (data.desc.msgID == 513) {
-                var obj = {};
-                obj.desc = data.desc;
-                var da = {};
-                da.msgHead = data.data.msgHead;
-                da.msgBody = data.data.msgBody.gpsInfo;
-                obj.data = da;
-                // 状态信息
-                dataTableOperation.updateVehicleStatusInfoTable(obj);
-            } else {
-                var cid;
-                if (data.desc.msgID === 179) {
-                    cid = data.data.msgBody.id;
-                } else {
-                    cid = data.data.msgBody.vehicleId;
-                }
-                if (crrentSubV.isHas(cid)) {
-                    dataTableOperation.updateVehicleStatusInfoTable(data);
-                }
-            }
+  //报警信息(数量显示  声音  闪烁)
+  realTimeAlarmInfoCalcFn: function () {
+    alarmNum++;
+    var alarmLength = $("#alarmTable tbody").find("tr").length;
+    alarmNum = alarmLength;
+    $("#showAlarmNum").text(alarmNum);
+    if (alarmNum > 0) {
+      //声音
+      if (navigator.userAgent.indexOf('MSIE') >= 0) {
+        if ($alarmSoundSpan.hasClass("soundOpen")) {
+          $alarmMsgBox.html('<embed id="IEalarmMsg" src="../../file/music/alarm.wav" autostart="true"/>');
         } else {
-            var objInfo = treeMonitoring.searchNeverOnline("treeDemo", data.vid)[0];
-            var brand = objInfo.name;
-            var objType = objInfo.type;
-            if (!cancelList.isHas(brand) && crrentSubName.isHas(brand)) {
-                if (objType == "vehicle" || objType == "people") {
-                    var groupName = data.groupName // 所属分组
-                        , objectType = data.objectType == 'default' ? '-' : data.objectType // 对象类型
-                        , plateColor = data.plateColor // 车牌颜色
-                        , deviceNumber = data.deviceNumber // 终端号
-                        , simNumber = data.simNumber // SIM卡号
-                        , professionals = data.professionals == 'null' ? '-' : data.professionals // 从业人员
-
-                    tdList = [0, brand, '未上线', '', groupName, objectType, plateColor, deviceNumber, simNumber, professionals, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', objInfo.id];
-                    dataTableOperation.dataTableList(stateName, tdList, "realTimeStateTable", 'state');
-                }
-                ;
-            }
-            ;
+          $alarmMsgBox.html('<embed id="IEalarmMsg" src=""/>');
         }
-        ;
-    },
-    // 状态信息数据更新
-    updateVehicleStatusInfoTable: function (position) {
-        var msgBody = position.data.msgBody;
-        var msgDesc = position.desc;
-        var sysTime = (position.desc.sysTime).toString();
-        //状态信息  服务器时间
-        var serviceSystemTime;
-        if (sysTime.length == 12) {
-            serviceSystemTime = 20 + sysTime.substring(0, 2) + "-" + sysTime.substring(2, 4) + "-" + sysTime.substring(4, 6) + " " +
-                sysTime.substring(6, 8) + ":" + sysTime.substring(8, 10) + ":" + sysTime.substring(10, 12);
-        } else if (sysTime.length == 13) {
-            //毫秒级时间戳转换
-            var dateTime = new Date(parseInt(sysTime));
-            serviceSystemTime = dateTime.getFullYear() + "-"
-                + ((dateTime.getMonth() + 1) < 10 ? "0" + (dateTime.getMonth() + 1) : (dateTime.getMonth() + 1))
-                + "-" + (dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()) + " "
-                + (dateTime.getHours() < 10 ? "0" + dateTime.getHours() : dateTime.getHours()) + ":"
-                + (dateTime.getMinutes() < 10 ? "0" + dateTime.getMinutes() : dateTime.getMinutes()) + ":"
-                + (dateTime.getSeconds() < 10 ? "0" + dateTime.getSeconds() : dateTime.getSeconds());
+      } else {
+        if ($alarmSoundSpan.hasClass("soundOpen")) {
+          $alarmMsgBox.html('<audio id="alarmMsgAutoOff" src="../../file/music/alarm.wav" autoplay="autoplay"></audio>');
         } else {
-            serviceSystemTime = sysTime;
+          $alarmMsgBox.html('<audio id="alarmMsgAutoOff" src="../../file/music/alarm.wav"></audio>');
         }
-        // 人 状态信息
-        if (msgDesc.msgID == 179) {
-            var testInfo = [];//初始标注数据
-            testInfo.push(msgBody.vtime);
-            testInfo.push(msgBody.monitorObject);
-            testInfo.push(msgBody.group);
-            testInfo.push(msgBody.userCode);
-            testInfo.push(msgBody.sIMCard);
-            testInfo.push(msgBody.batteryVoltage);
-            testInfo.push(msgBody.signalStrength);
-            testInfo.push(msgBody.speed);
-            testInfo.push(msgBody.altitude);
-            testInfo.push(msgBody.latitude);
-            testInfo.push(msgBody.longitude);
-            testInfo.push("people");
-            testInfo.push(msgBody.id);
-            var angle = msgBody.bearing;
-            var direction = dataTableOperation.toDirectionStr(angle);
-            var latitudeP = msgBody.latitude;//纬度
-            var longitudeP = msgBody.longitude;//经度
-            var locationType = msgBody.locationType;
-            if (locationType == "1") {
-                locationType = "北斗";
-            } else {
-                locationType = "北斗";
-            }
-            var lnglatXY = [longitudeP, latitudeP];
-            var laglatObjct = {'lnglatXYs': lnglatXY};
-            var geocoder = new AMap.Geocoder({
-                radius: 1000,
-                extensions: "all",
-                batch: false
-            });
-            carAddress = msgBody.formattedAddress;
-            var people = [
-                0,
-                msgBody.monitorObject,
-                msgBody.vtime,
-                serviceSystemTime,
-                msgBody.group,
-                "-",
-                "-",
-                msgBody.userCode,
-                msgBody.sIMCard,
-                "-",
-                "-",
-                "-",
-                "-",
-                msgBody.speed,
-                direction,
-                msgBody.batteryVoltage,
-                msgBody.signalStrength,
-                locationType,
-                "-", "-", "-", "-", "-",
-                msgBody.altitude,
-                "-",
-                (carAddress === "AddressNull" || carAddress === "[]" || carAddress == undefined) ? "位置描述获取失败" : carAddress,
-                msgBody.id
-            ]
-            testInfo.push(angle);
-            testInfo.push(msgBody.stateInfo);
-            // 更新实时数据
-            if (crrentSubV.indexOf(msgBody.id) != -1 && (msgBody.softwareFance == undefined || msgBody.softwareFance == 0)) {
-                dataTableOperation.updateRow('#realTimeStateTable', realTimeSet, people, 'state');
-                //信息框数据调用
-                amapOperation.completeEventHandler(testInfo);
-            }
-        }
-        // 车 状态信息
-        else {
-            var gpsAttachInfoList = msgBody.gpsAttachInfoList;
-            var license = msgBody.plateFormAttachInfo.vehicleLicense;
-            var vehicleId = msgBody.vehicleId;
-            var simcardNo = position.data.msgHead != undefined ? position.data.msgHead.mobile : msgBody.plateFormAttachInfo.phone;
-            if (position.data.msgHead != undefined) {
-                var msgSN = position.data.msgHead.msgSN;
-            }
-            if (cancelList.indexOf(license) >= 0) {
-                return;
-            }
-            var acc = msgBody.status + "";
-            if (msgDesc.msgID == "512" || msgDesc.msgID == "513" || msgDesc.msgID == "1796" || msgDesc.msgID == "1280") {
-                acc = msgBody.status & 1;
-            } else if (acc.length == 32) {
-                acc = (msgBody.status).substring(18, 19);
-            } else {
-                acc = msgBody.status;
-            }
-            var time = msgBody.time + '';
-            if (time.length > 13) {
-                time = time.substring(2, 14);
-            }
-            var gpsAttachInfo;
-            var mileage = 0;
-            var oil = 0;
-            var areaAlarmFlag;
-            var lineAlarmFlag;
-            var signalStateFlag; //信号状态
-            var drivers = msgBody.plateFormAttachInfo.driverName;
-            if (msgBody.plateFormAttachInfo.distance != undefined) {
-                mileage = msgBody.plateFormAttachInfo.distance;
-            }
-            if (gpsAttachInfoList != null && gpsAttachInfoList != undefined) {
-                for (var i = 0; i < gpsAttachInfoList.length; i++) {
-                    gpsAttachInfo = gpsAttachInfoList[i];
-                    if (gpsAttachInfo.gpsAttachInfoID === 0x12) {
-                        var lineOutAlarm = gpsAttachInfo.lineOutAlarm;
-                        var type = lineOutAlarm.type;
-                        if (type == 1 || type == 2 || type == 3) {
-                            areaAlarmFlag = lineOutAlarm.direction;
-                        } else {
-                            lineAlarmFlag = lineOutAlarm.direction;
-                        }
-
-                    } else if (gpsAttachInfo.gpsAttachInfoID === 0x25) {
-                        if (gpsAttachInfo.signalState != null && gpsAttachInfo.signalState != undefined) {
-                            signalStateFlag = gpsAttachInfo.signalState; //获取信号状态
-                        }
-                    }
-                }
-
-            } else {
-                mileage = msgBody.mileage;
-            }
-            //信号状态
-            var signalStateFlagDetails = "";
-            if (signalStateFlag != null && signalStateFlag != 0) {
-                signalStateFlagDetails = dataTableOperation.signalStateFlagAnalysis(signalStateFlag);//获取详情信息
-                if (signalStateFlagDetails != "") {
-                    signalStateFlagDetails = signalStateFlagDetails.substring(0, signalStateFlagDetails.length - 1);//删除字符串最后的“,”
-                }
-            }
-            var vTestInfo = [];
-            vTestInfo.push(msgBody.plateFormAttachInfo.vehicleLicense);
-            var vehicleTypeName = msgBody.plateFormAttachInfo.vehicleTypeName;
-            vTestInfo.push((vehicleTypeName === undefined || vehicleTypeName === "" || vehicleTypeName === "null" || vehicleTypeName === null) ? '未设置分类' : vehicleTypeName);
-            vTestInfo.push(msgBody.plateFormAttachInfo.groupNames === undefined ? '未绑定分组' : msgBody.plateFormAttachInfo.groupNames);
-            vTestInfo.push(position.desc.deviceNo);
-            if (position.data.msgHead != undefined) {
-                if (position.data.msgHead.mobile != undefined) {
-                    vTestInfo.push(position.data.msgHead.mobile);
-                } else {
-                    vTestInfo.push(msgBody.plateFormAttachInfo.simcardNumber);
-                }
-            } else {
-                vTestInfo.push(msgBody.plateFormAttachInfo.simcardNumber);
-            }
-            vTestInfo.push(msgBody.plateFormAttachInfo.todayDistance === undefined ? '0' : msgBody.plateFormAttachInfo.todayDistance);
-            vTestInfo.push(mileage === undefined ? "0" : mileage);
-            vTestInfo.push(msgBody.speed);
-            if ((acc + "").length == 1) {
-                vTestInfo.push(acc == 0 ? "关" : "开");
-            } else if (acc == "21") {
-                vTestInfo.push("点火静止");
-                acc = "点火静止";
-            } else if (acc == "16") {
-                vTestInfo.push("熄火拖车");
-                acc = "熄火拖车";
-            } else if (acc == "1A") {
-                vTestInfo.push("熄火假拖车");
-                acc = "熄火假拖车";
-            } else if (acc == "11") {
-                vTestInfo.push("熄火静止");
-                acc = "熄火静止";
-            } else if (acc == "12") {
-                vTestInfo.push("熄火移动");
-                acc = "熄火移动";
-            } else if (acc == "22") {
-                vTestInfo.push("点火移动");
-                acc = "点火移动";
-            } else if (acc == "41") {
-                vTestInfo.push("无点火静止");
-                acc = "无点火静止";
-            } else if (acc == "42") {
-                vTestInfo.push("无点火移动");
-                acc = "无点火移动";
-            } else {
-                layer.msg("ACC状态异常");
-                return;
-            }
-            vTestInfo.push((msgBody.speed == 0 || msgBody.speed == "0") ? "停止" : "行驶");
-            var oilExpend = msgBody.oilExpend;
-            if (oilExpend != undefined) {
-                for (var i = 0; i < oilExpend.length; i++) {
-                    oil += oilExpend[i].allExpend;
-                }
-            }
-            var angle = msgBody.direction;
-            var direction = dataTableOperation.toDirectionStr(angle);
-            var latitude;
-            var longitude;
-            if (msgBody.latitude < 1000 && msgBody.longitude < 1000) {
-                latitude = Number(msgBody.latitude).toFixed(6);//纬度
-                longitude = Number(msgBody.longitude).toFixed(6);//经度
-            } else {
-                latitude = msgBody.latitude / 1000000;//纬度
-                longitude = msgBody.longitude / 1000000;//经度
-            }
-            var oilX = 0;
-            var speedX = 0;
-            var gps_altitude = 0;
-            if (gpsAttachInfoList != undefined) {
-                if (Array.isArray(gpsAttachInfoList)) {
-                    for (var i = 0; i < gpsAttachInfoList.length; i++) {
-                        var gpsAttachInfoID = gpsAttachInfoList[i].gpsAttachInfoID;
-                        if (gpsAttachInfoID == 2) {
-                            oilX = gpsAttachInfoList[i].oil / 10;
-                        }
-                        if (gpsAttachInfoID == 3) {
-                            speedX = gpsAttachInfoList[i].speed;
-                        }
-                        ;
-                    }
-                    ;
-                }
-                ;
-            }
-            ;
-            gps_altitude = msgBody.altitude;
-            //逆地理编码
-            var lnglatXY = [longitude, latitude];
-            var geocoder = new AMap.Geocoder({
-                radius: 1000,
-                extensions: "all",
-                batch: false
-            });
-            if (time.length == 12) {
-                vTestInfo.push(20 + time.substring(0, 2) + "-" + time.substring(2, 4) + "-" + time.substring(4, 6) + " " +
-                    time.substring(6, 8) + ":" + time.substring(8, 10) + ":" + time.substring(10, 12));
-            } else {
-                vTestInfo.push("时间异常");
-            }
-            vTestInfo.push(latitude);
-            vTestInfo.push(longitude);
-            vTestInfo.push(msgBody.vehicleId);
-            vTestInfo.push(msgBody.plateFormAttachInfo.driverName === undefined ? '-' : msgBody.plateFormAttachInfo.driverName);
-            vTestInfo.push(msgBody.plateFormAttachInfo.plateColor === undefined ? '' : msgBody.plateFormAttachInfo.plateColor);
-            vTestInfo.push(direction);
-            var AddressNew;
-            var carIndex = 1;
-            var laglatObjct = {'lnglatXYs': lnglatXY};
-            var alarmStr = '';
-            carAddress = msgBody.formattedAddress;
-            //逆地理编码 end
-            var timeFormat;
-            if (time.length == 12) {
-                timeFormat = 20 + time.substring(0, 2) + "-" + time.substring(2, 4) + "-" + time.substring(4, 6) + " " +
-                    time.substring(6, 8) + ":" + time.substring(8, 10) + ":" + time.substring(10, 12);
-            } else {
-                timeFormat = "时间异常";
-            }
-            var batteryVoltage = msgBody.batteryVoltage;//电池电压
-            var signalStrength = msgBody.signalStrength;//信号强度
-            var locationType = msgBody.locationType;//定位方式
-            var locateMode;
-            if (locationType == 1) {
-                locateMode = "卫星定位";
-            } else if (locationType == 2) {
-                locateMode = "LBS定位";
-            } else if (locationType == 3) {
-                locateMode = "WiFi+LBS定位";
-            } else {
-                locateMode = "-";
-            }
-            vTestInfo.push((carAddress === "AddressNull" || carAddress === "[]") ? "位置描述获取失败" : carAddress);//18
-            var speeds;
-            if (msgBody.durationTime !== undefined && msgBody.durationTime !== null) {
-                speeds = Number(msgBody.speed) === 0 ? "停止(" + dataTableOperation.formatDuring(msgBody.durationTime) + ")" : "行驶(" + dataTableOperation.formatDuring(msgBody.durationTime) + ")"
-            } else {
-                speeds = Number(msgBody.speed) === 0 ? "停止" : "行驶"
-            }
-            if (!cancelList.isHas(msgBody.plateFormAttachInfo.vehicleLicense) && crrentSubV.indexOf(vehicleId) != -1) {
-                vehicleTypeName = msgBody.plateFormAttachInfo.vehicleTypeName;
-                var msgBodySpeed = dataTableOperation.fiterNumber(msgBody.speed);
-                gps_altitude = dataTableOperation.fiterNumber(gps_altitude);
-                var vehicle = [
-                    0,
-                    msgBody.plateFormAttachInfo.vehicleLicense,
-                    timeFormat,
-                    serviceSystemTime,
-                    msgBody.plateFormAttachInfo.groupNames === undefined ? '未绑定分组' : msgBody.plateFormAttachInfo.groupNames,
-                    (vehicleTypeName === undefined || vehicleTypeName === "" || vehicleTypeName === "null" || vehicleTypeName === null) ? '未设置分类' : vehicleTypeName,
-                    vTestInfo[15],
-                    vTestInfo[3] === undefined ? "" : vTestInfo[3],
-                    vTestInfo[4],
-                    (vTestInfo[14] == "null" || vTestInfo[14] == "") ? "-" : vTestInfo[14],
-                    vTestInfo[8],
-                    speeds,
-                    signalStateFlagDetails,
-                    msgBodySpeed,
-                    direction,
-                    batteryVoltage === undefined ? "-" : batteryVoltage,
-                    signalStrength === undefined ? "-" : signalStrength,
-                    locateMode,
-                    msgBody.plateFormAttachInfo.todayDistance === undefined ? '0' : toFixed(msgBody.plateFormAttachInfo.todayDistance, 1, true),
-                    mileage === undefined ? "0" : toFixed(mileage, 1, true),
-                    msgBody.plateFormAttachInfo.todayOilExpand === undefined ? '0' : msgBody.plateFormAttachInfo.todayOilExpand / 100, parseInt(oil) / 100,
-                    oilX === undefined ? "0" : oilX, gps_altitude === undefined ? "0" : gps_altitude,
-                    speedX === undefined ? "0" : speedX,
-                    (carAddress === undefined || carAddress === "[]") ? "位置描述获取失败" : carAddress,
-                    msgBody.vehicleId
-                ];
-                dataTableOperation.updateRow('#realTimeStateTable', realTimeSet, vehicle, 'state');
-            }
-            if (position.desc.msgID == 513) {
-                vTestInfo.push(1);
-            } else {
-                vTestInfo.push(0);
-            }
-            var statusMsg = msgBody.status;
-            vTestInfo.push(statusMsg);
-            vTestInfo.push(alarmStr);
-            //vTestInfo.push(msgBody.plateFormAttachInfo.cardNumber == undefined ? "" : msgBody.plateFormAttachInfo.cardNumber);
-            vTestInfo.push("");
-            vTestInfo.push(gps_altitude);
-            vTestInfo.push(speedX === undefined ? "0" : speedX);
-            vTestInfo.push(msgBody.direction);
-            vTestInfo.push(msgBody.plateFormAttachInfo.vehicleIcon);
-            vTestInfo.push(msgBody.plateFormAttachInfo.business == undefined ? "" : msgBody.plateFormAttachInfo.business);
-            vTestInfo.push(msgBody.protocolType); // 终端类型
-            vTestInfo.push(signalStateFlagDetails === undefined ? "" : signalStateFlagDetails);//28
-            vTestInfo.push(msgBody.stateInfo); // 车辆状态
-            if (crrentSubV.indexOf(vehicleId) != -1 && (msgBody.softwareFance == undefined || msgBody.softwareFance == 0)) { // 订阅了且没有软围栏报警地图不示车辆信息
-                //信息框数据调用
-                amapOperation.completeEventHandler(vTestInfo);
-            }
-        }
-    },
-    dateFormat : function(data){
-        var dateTime =  new Date(data);
-       var time = dateTime.getFullYear() + "-"
-            + ((dateTime.getMonth() + 1) < 10 ? "0" + (dateTime.getMonth() + 1) : (dateTime.getMonth() + 1))
-            + "-" + (dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()) + " "
-            + (dateTime.getHours() < 10 ? "0" + dateTime.getHours() : dateTime.getHours()) + ":"
-            + (dateTime.getMinutes() < 10 ? "0" + dateTime.getMinutes() : dateTime.getMinutes()) + ":"
-            + (dateTime.getSeconds() < 10 ? "0" + dateTime.getSeconds() : dateTime.getSeconds());
-       return time;
-    },
-    formatDuring: function (mss) {
-        var days = parseInt(mss / (1000 * 60 * 60 * 24));
-        var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = parseInt((mss % (1000 * 60)) / 1000);
-        if (days === 0 && hours === 0 && minutes == 0) {
-            return seconds + " 秒 ";
-        } else if (days === 0 && hours === 0 && minutes !== 0) {
-            return minutes + " 分 " + seconds + " 秒 ";
-        } else if (days === 0 && hours !== 0) {
-            return hours + " 小时 " + minutes + " 分 " + seconds + " 秒 ";
-        } else if (days !== 0) {
-            return days + " 天 " + hours + " 小时 " + minutes + " 分 " + seconds + " 秒 ";
-        }
-    },
-    signalStateFlagAnalysis: function (signalStateFlag) {
-        var signalStateFlags = signalStateFlag.toString(2);
-        signalStateFlags = (Array(32).join(0) + signalStateFlags).slice(-32);//高位补零
-        var details = "";
-        if (signalStateFlags.substring(31, 32) == 1) {
-            details += "近光灯,"
-        }
-        ;
-        if (signalStateFlags.substring(30, 31) == 1) {
-            details += "远光灯,"
-        }
-        ;
-        if (signalStateFlags.substring(29, 30) == 1) {
-            details += "右转向灯,"
-        }
-        ;
-        if (signalStateFlags.substring(28, 29) == 1) {
-            details += "左转向灯,"
-        }
-        ;
-        if (signalStateFlags.substring(27, 28) == 1) {
-            details += "制动,"
-        }
-        ;
-        if (signalStateFlags.substring(26, 27) == 1) {
-            details += "倒挡,"
-        }
-        ;
-        if (signalStateFlags.substring(25, 26) == 1) {
-            details += "雾灯,"
-        }
-        ;
-        if (signalStateFlags.substring(24, 25) == 1) {
-            details += "示廊灯,"
-        }
-        ;
-        if (signalStateFlags.substring(23, 24) == 1) {
-            details += "喇叭,"
-        }
-        ;
-        if (signalStateFlags.substring(22, 23) == 1) {
-            details += "空调开,"
-        }
-        ;
-        if (signalStateFlags.substring(21, 22) == 1) {
-            details += "空挡,"
-        }
-        ;
-        if (signalStateFlags.substring(20, 21) == 1) {
-            details += "缓速器工作,"
-        }
-        ;
-        if (signalStateFlags.substring(19, 20) == 1) {
-            details += "ABS工作,"
-        }
-        ;
-        if (signalStateFlags.substring(18, 19) == 1) {
-            details += "加热器工作,"
-        }
-        ;
-        if (signalStateFlags.substring(17, 18) == 1) {
-            details += "离合器状态,"
-        }
-        ;
-        return details;
-    },
-    // 报警记录数据更新
-    updateAlarmInfoTable: function (position) {
-        var msgBody = position.data.msgBody;
-        var msgDesc = position.desc;
-        var alarmSource = msgBody.alarmSource;
-        //区分人与车报警
-        if (msgDesc.type != null && msgDesc.type != undefined && msgDesc.type != "") {
-            //判断集合是否为空 (此方法用于地图显示监控对象信息框)
-            if (alarmInfoList.isEmpty()) {
-                alarmInfoList.put(msgDesc.vId, msgBody.alarmName);
-            } else {
-                if (alarmInfoList.containsKey(msgDesc.vId)) {
-                    alarmInfoList.remove(msgDesc.vId);
-                    alarmInfoList.put(msgDesc.vId, msgBody.alarmName);
-                } else {
-                    alarmInfoList.put(msgDesc.vId, msgBody.alarmName);
-                }
-            }
-            //人报警
-            if (msgDesc.type == "1") {
-                var vehicleId = msgDesc.vId;//车id
-                var peopleName = msgBody.peopleInfo.peopleNumber;//人名
-                var groupName = msgBody.peopleInfo.groupName;//分组名称
-                var addresss = msgBody.formattedAddress;//位置信息
-                var deviceNumber = msgBody.peopleInfo.deviceNumber//终端编号
-                var simcardNumber = msgBody.peopleInfo.simcardNumber;//SIM卡号
-                var alarmNumber = msgBody.alarm;//报警编号
-                var msgSN = position.data.msgHead.msgSN;//流水号
-                //报警时间
-                var alarmTime;
-                var time = msgBody.gpsTime;
-                if (time.length == 12) {
-                    alarmTime = 20 + time.substring(0, 2) + "-" + time.substring(2, 4) + "-" + time.substring(4, 6) + " " +
-                        time.substring(6, 8) + ":" + time.substring(8, 10) + ":" + time.substring(10, 12);
-                } else {
-                    var alarmPeopleTime=msgDesc.sysTime;
-                    alarmTime=dataTableOperation.dateFormat(Number(alarmPeopleTime));
-                }
-                //区分人 硬件报警及软围栏报警
-                if (alarmNumber == "32") {
-                    //硬件报警  人(手持设备手动报警)
-                    var alarmStr = "SOS报警";
-                    if (addresss == "" || addresss == "[]") {
-                        addresss = "位置描述获取失败";
-                    }
-                    var alarm = [
-                        0,
-                        peopleName == "" ? "-" : peopleName,
-                        alarmTime,
-                        groupName == "" ? '未绑定分组' : groupName,
-                        "人",
-                        "-",
-                        alarmStr,
-                        "-",
-                        "-",
-                        "-",
-                        addresss,
-                        "",
-                        simcardNumber,
-                        deviceNumber,
-                        msgSN,
-                        alarmNumber,
-                        alarmSource,
-                        vehicleId
-                    ];
-                    dataTableOperation.updateRow('#alarmTable', alarmSet, alarm, 'alarm');
-                    //地图右下角报警提示
-                    dataTableOperation.realTimeAlarmInfoCalcFn();
-                } else {
-                    //清空之前围栏类型及围栏名称
-                    alarmFanceId = null;
-                    alarmFanceType = null;
-                    // 软围栏报警
-                    if ((msgBody.fenceName != null && msgBody.fenceName != "" && msgBody.fenceName != undefined) && (msgBody.fenceType != null && msgBody.fenceType != "" && msgBody.fenceType != undefined)) {
-                        alarmFanceId = msgBody.fenceName;
-                        if (msgBody.fenceType == "zw_m_polygon") {
-                            alarmFanceType = "多边形";
-                        } else if (msgBody.fenceType == "zw_m_rectangle") {
-                            alarmFanceType = "矩形";
-                        } else if (msgBody.fenceType == "zw_m_line") {
-                            alarmFanceType = "路线";
-                        } else if (msgBody.fenceType == "zw_m_circle") {
-                            alarmFanceType = "圆形";
-                        }
-                    }
-                    //推送数据包含报警名称 直接赋值
-                    alarmStr = msgBody.alarmName;
-                    var alarm = [
-                        0,
-                        peopleName == "" ? "-" : peopleName,
-                        alarmTime,
-                        groupName == "" ? '未绑定分组' : groupName,
-                        "人",
-                        "-",
-                        alarmStr,
-                        "-",
-                        alarmFanceType != null ? alarmFanceType : "-",//围栏类型
-                        alarmFanceId != null ? alarmFanceId : "-",//围栏ID
-                        (addresss == "" || addresss == undefined || addresss == "[]") ? "位置描述获取失败" : addresss,
-                        "",
-                        simcardNumber,
-                        deviceNumber,
-                        msgSN,
-                        alarmNumber,
-                        alarmSource,
-                        vehicleId
-                    ];
-                    dataTableOperation.updateRow('#alarmTable', alarmSet, alarm, 'alarm');
-                    //地图右下角报警提示
-                    dataTableOperation.realTimeAlarmInfoCalcFn();
-                }
-            }
-            //车报警
-            else {
-                if (msgBody.vehicleInfo != undefined) {
-                    var vehicleId = msgDesc.vId;//车id
-                    var vehicleName = msgDesc.vNo;//车牌号
-                    var groupName = msgBody.vehicleInfo.assignmentName;//分组名称
-                    var addresss = msgBody.formattedAddress;//位置信息
-                    var deviceNumber = msgBody.vehicleInfo.deviceNumber//终端编号
-                    var mobile = msgBody.vehicleInfo.mobile;//SIM卡号
-                    var alarmNumber = msgBody.alarm;//报警编号
-                    var msgSN = position.data.msgHead.msgSN;//流水号
-                    var peopleName = msgBody.vehicleInfo.professionalsName;//从业人员
-                    //车辆颜色
-                    var vehicleColor;
-                    if (msgBody.vehicleInfo.plateColor == "1") {
-                        vehicleColor = "蓝色";
-                    } else if (msgBody.vehicleInfo.plateColor == "2") {
-                        vehicleColor = "黄色";
-                    } else if (msgBody.vehicleInfo.plateColor == "3") {
-                        vehicleColor = "黑色";
-                    } else if (msgBody.vehicleInfo.plateColor == "4") {
-                        vehicleColor = "白色";
-                    } else if (msgBody.vehicleInfo.plateColor == "9") {
-                        vehicleColor = "其他";
-                    }
-                    //对象类型
-                    var vpObjType;
-                    if (msgDesc.type == "0") {
-                        vpObjType = "车";
-                    } else {
-                        vpObjType = "人";
-                    }
-                    //报警时间
-                    var alarmTime;
-                    var time = msgBody.gpsTime;
-                    if (time.length == 12) {
-                        alarmTime = 20 + time.substring(0, 2) + "-" + time.substring(2, 4) + "-" + time.substring(4, 6) + " " +
-                            time.substring(6, 8) + ":" + time.substring(8, 10) + ":" + time.substring(10, 12);
-                    } else {
-                        alarmTime = "时间异常";
-                    }
-                    ;
-                    //报警类型名称
-                    var alarmNames = msgBody.alarmName;
-                    if (alarmNames != null || alarmNames != undefined) {
-                        //清空之前围栏类型及围栏名称
-                        alarmFanceId = null;
-                        alarmFanceType = null;
-                        //软围栏报警直接取围栏类型及名称
-                        if ((msgBody.fenceName != null && msgBody.fenceName != "" && msgBody.fenceName != undefined) && (msgBody.fenceType != null && msgBody.fenceType != "" && msgBody.fenceType != undefined)) {
-                            alarmFanceId = msgBody.fenceName;
-                            if (msgBody.fenceType == "zw_m_polygon") {
-                                alarmFanceType = "多边形";
-                            } else if (msgBody.fenceType == "zw_m_rectangle") {
-                                alarmFanceType = "矩形";
-                            } else if (msgBody.fenceType == "zw_m_line") {
-                                alarmFanceType = "路线";
-                            } else if (msgBody.fenceType == "zw_m_circle") {
-                                alarmFanceType = "圆形";
-                            } else if (msgBody.fenceType == "zw_m_administration") {
-                                alarmFanceType = "行政区划";
-                            }
-                        } else {
-                            // 查询围栏名称及类型
-                            if (alarmNumber != undefined && alarmNumber != null) {
-                                if (alarmNumber.indexOf(",") != -1) {
-                                    var alarmSetLists = alarmNumber.split(",");
-                                    for (var i = 0; i < alarmSetLists.length; i++) {
-                                        var alarmSetList = alarmSetLists[i];
-                                        dataTableOperation.distinguishPushAlarmSet(alarmSetList, msgBody);
-                                    }
-                                } else {
-                                    dataTableOperation.distinguishPushAlarmSet(alarmNumber, msgBody);
-                                }
-                            }
-                        }
-                        //推送数据包含报警名称 直接赋值
-                        alarmStr = alarmNames;
-                        var alarm = [
-                            0,
-                            vehicleName == "" ? "-" : vehicleName,
-                            alarmTime,
-                            groupName == "" ? '未绑定分组' : groupName,
-                            vpObjType,
-                            vehicleColor,
-                            alarmStr,
-                            (peopleName == "null" || peopleName == undefined) ? "-" : peopleName,
-                            alarmFanceType != null ? alarmFanceType : "-",
-                            alarmFanceId != null ? alarmFanceId : "-",
-                            (addresss == "" || addresss == undefined || addresss == "[]") ? "位置描述获取失败" : addresss,
-                            '',
-                            mobile,
-                            deviceNumber,
-                            msgSN,
-                            alarmNumber,
-                            alarmSource,
-                            vehicleId
-                        ];
-                        dataTableOperation.updateRow('#alarmTable', alarmSet, alarm, 'alarm');
-                        //紧急报警弹窗
-                        if (alarmStr.indexOf("紧急报警") >= 0) {
-                            var ssh = alarmString;
-                            layer.msg('监控对象:' + vehicleName + '发出紧急报警!请处理!', {
-                                time: 5000,
-                                btn: ['处理'],
-                                btnAlign: 'c',
-                                yes: function (index) {
-                                    layer.close(index);
-                                    $('.modal').map(function () {
-                                        $(this).modal('hide');
-                                    });
-                                    setTimeout(function () {
-                                        dataTableOperation.warningManage('' + ssh + '');
-                                    }, 50);
-
-                                }
-                            });
-                        }
-                        //地图右下角报警提示
-                        dataTableOperation.realTimeAlarmInfoCalcFn();
-                    }
-                }
-            }
-        }
-    },
-    distinguishPushAlarmSet: function (alarmSetType, msgBody) {
-        //报警数据 围栏名称及类型
-        var gpsAttachInfoList = msgBody.gpsAttachInfos;
-        if (gpsAttachInfoList != undefined) {
-            for (var i = 0; i < gpsAttachInfoList.length; i++) {
-                var gpsAttachInfoID = gpsAttachInfoList[i].gpsAttachInfoID;
-                // 17 围栏内超速 
-                if (gpsAttachInfoID == 17) {
-                    if (gpsAttachInfoList[i].speedAlarm != undefined) {
-                        var stype = gpsAttachInfoList[i].speedAlarm.type;
-                        alarmFanceType = dataTableOperation.getAlarmFanceIdAndType(stype);
-                        var alarmFanceIds = gpsAttachInfoList[i].speedAlarm.lineID;
-                        if (alarmFanceIds != null && alarmFanceIds != undefined && alarmFanceIds != "") {
-                            alarmFanceId = dataTableOperation.getFanceNameByFanceIdAndVid(msgBody.vehicleInfo.id, alarmFanceIds);
-                        }
-                    }
-                }
-                // 18 进出围栏
-                else if (gpsAttachInfoID == 18) {
-                    if (gpsAttachInfoList[i].lineOutAlarm != undefined) {
-                        var ltype = gpsAttachInfoList[i].lineOutAlarm.type;
-                        alarmFanceType = dataTableOperation.getAlarmFanceIdAndType(ltype);
-                        var alarmFanceIds = gpsAttachInfoList[i].lineOutAlarm.lineID;
-                        if (alarmFanceIds != null && alarmFanceIds != undefined && alarmFanceIds != "") {
-                            alarmFanceId = dataTableOperation.getFanceNameByFanceIdAndVid(msgBody.vehicleInfo.id, alarmFanceIds);
-                        }
-                    }
-                }
-                // 19 过长 不足
-                else if (gpsAttachInfoID == 19) {
-                    if (gpsAttachInfoList[i].timeOutAlarm != undefined) {
-                        var ttype = gpsAttachInfoList[i].timeOutAlarm.type;
-                        alarmFanceType = dataTableOperation.getAlarmFanceIdAndType(ttype);
-                        var alarmFanceIds = gpsAttachInfoList[i].timeOutAlarm.lineID;
-                        if (alarmFanceIds != null && alarmFanceIds != undefined && alarmFanceIds != "") {
-                            alarmFanceId = dataTableOperation.getFanceNameByFanceIdAndVid(msgBody.vehicleInfo.id, alarmFanceIds);
-                        }
-                    }
-                }
-            }
-
-        }
-    },
-    // 围栏类型判断
-    getAlarmFanceIdAndType: function (types) {
-        if (types != undefined) {
-            if (types == 1) {
-                alarmFanceType = "圆形";
-            } else if (types == 2) {
-                alarmFanceType = "矩形";
-            } else if (types == 3) {
-                alarmFanceType = "多边形";
-            } else if (types == 4) {
-                alarmFanceType = "路线";
-            }else {
-            	alarmFanceType = "行政区划";
-            }
-            return alarmFanceType;
-        }
-    },
-    //根据围栏Id及车Id查询围栏名称
-    getFanceNameByFanceIdAndVid: function (vid, fcid) {
-        var fenceName;
-        $.ajax({
-            type: "POST",
-            url: "/clbs/v/monitoring/getFenceInfo",
-            dataType: "json",
-            async: false,
-            data: {"vehicleId": vid, "sendDownId": fcid},
-            success: function (data) {
-                if (data.success) {
-                    if (data.obj != null) {
-                        fenceName = data.obj.name;
-                    } else {
-                        fenceName = null;
-                    }
-                }
-            }
-        });
-        return fenceName;
-    },
-    //数据表格html组装
-    tableListHtml: function (dataMsg, type, dataString) {
-        var html = '';
-        var this_id = dataMsg[dataMsg.length - 1];
-        if (type == 'state') {
-            for (var i = 0; i < dataMsg.length - 1; i++) {
-                if (i == 12) {
-                    var allinfo = dataMsg[i];
-                    if (dataMsg[i] != "" && dataMsg[i].length > 10) {
-                        dataMsg[i] = dataMsg[i].substring(0, 10) + "...";
-                    }
-                    html += '<td class="demo demoUp" alt="' + allinfo + '"  data-id="' + this_id + '">' + dataMsg[i] + '</td>';
-                } else {
-                    html += '<td data-id="' + this_id + '">' + dataMsg[i] + '</td>';
-                }
-            }
-            ;
-        }
-        ;
-        if (type == 'alarm') {
-            if (dataMsg[3] == '人') {
-                html += "<td>" + dataMsg[0] + "</td><td data-id='" + this_id + "'>" + dataMsg[1] + "</td><td>" + dataMsg[7] + "</td><td onClick='dataTableOperation.warningManage(" + dataString + ")' style='color:#2ca2d1;'>未处理</td><td>" + dataMsg[2] + "</td><td>" + dataMsg[3] + "</td><td>" + dataMsg[4] + "</td><td>" + dataMsg[5] + "</td><td>" + dataMsg[6] + "</td><td>" + dataMsg[8] + "</td><td>" + dataMsg[9] + "</td><td>" + dataMsg[10] + "</td>";
-            } else {
-                html += "<td>" + dataMsg[0] + "</td><td data-id='" + this_id + "'>" + dataMsg[1] + "</td><td>" + dataMsg[2] + "</td><td onClick='dataTableOperation.warningManage(" + dataString + ")' style='color:#2ca2d1;'>未处理</td><td>" + dataMsg[3] + "</td><td>" + dataMsg[4] + "</td><td>" + dataMsg[5] + "</td><td>" + dataMsg[6] + "</td><td>" + dataMsg[7] + "</td><td>" + dataMsg[8] + "</td><td>" + dataMsg[9] + "</td><td>" + dataMsg[10] + "</td>";
-            }
-        }
-        ;
+      }
+      //闪烁
+      if ($alarmFlashesSpan.hasClass("flashesOpen")) {
+        $showAlarmWinMark.css("background-position", "0px -134px");
         setTimeout(function () {
-            $(".demoUp").mouseover(function () {
+          $showAlarmWinMark.css("background-position", "0px 0px");
+        }, 1500)
+      } else {
+        $showAlarmWinMark.css("background-position", "0px 0px");
+      }
+      pageLayout.showAlarmWindow();
+    }
+  },
+  // 实时更新
+  updateRealLocation: function (msg) {
+    var data = $.parseJSON(msg.body);
+    if (data.desc !== "neverOnline") {
+      if (data.desc.msgID == 513) {
+        var obj = {};
+        obj.desc = data.desc;
+        var da = {};
+        da.msgHead = data.data.msgHead;
+        da.msgBody = data.data.msgBody;
+        obj.data = da;
+        // 状态信息
+        dataTableOperation.updateVehicleStatusInfoTable(obj);
+      } else {
+        var cid = data.data.msgBody.monitorInfo.monitorId;
+        if (crrentSubV.isHas(cid)) {
+          dataTableOperation.updateVehicleStatusInfoTable(data);
+        }
+      }
+    } else {
+      var objInfo = treeMonitoring.searchNeverOnline("treeDemo", data.vid)[0];
+      var brand = objInfo.name;
+      var objType = objInfo.type;
+      if (!cancelList.isHas(brand) && crrentSubName.isHas(brand)) {
+        if (objType == "vehicle" || objType == "people" || objType == "thing") {
+          var business = (data.business == undefined || data.business === null) ? '' : data.business // 所属企业
+              , assignmentName = data.assignmentName // 所属分组
+              , groupName = data.groupName // 所属企业
+              , objectType = data.objectType == 'default' ? '-' : data.objectType // 对象类型
+              , plateColor = (data.plateColor == 'null' || data.plateColor === null) ? '-' : data.plateColor // 车牌颜色
+              , deviceNumber = data.deviceNumber // 终端号
+              , simNumber = data.simNumber // SIM卡号
+              , professionals = data.professionals == 'null' ? '-' : data.professionals // 从业人员
 
-                var _this = $(this);
-                if (_this.attr("alt")) {
-                    _this.justToolsTip({
-                        animation: "moveInTop",
-                        width: "auto",
-                        contents: _this.attr("alt"),
-                        gravity: 'top'
-                    });
-                }
-            })
-        }, 1000)
-
-        return html;
-
-    },
-    //表格插入数据
-    dataTableList: function (array, data, id, type) {
-        var dataMsg = data;
-        var html = '';
-        var dataString;
-        // 列表不存在记录  添加
-        if (array.indexOf(dataMsg[dataMsg.length - 1]) == -1) {
-            if (type == 'state') {
-                dataMsg[0] = stateIndex;
-                html = dataTableOperation.tableListHtml(dataMsg, type, dataString);
-            }
-            //报警记录
-            else if (type == 'alarm') {
-                dataString = '"' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '"';
-                alarmString = '' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '';
-                dataMsg[0] = alarmIndex;
-                html = dataTableOperation.tableListHtml(dataMsg, type, dataString);
-            }
-            ;
+          tdList = [0, brand, '未上线', '-', assignmentName, groupName, (objectType == null || objectType == 'null') ? '-' : objectType, plateColor, deviceNumber, simNumber, professionals, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', objInfo.id];
+          dataTableOperation.dataTableList(stateName, tdList, "realTimeStateTable", 'state');
         }
         ;
-        if (array.length == 0) {
-            var htmlString = '<tr>' + html + '</tr>';
-            $("#" + id).children("tbody").append(htmlString);
+      }
+      ;
+    }
+    ;
+  },
+  // 状态信息数据更新
+  updateVehicleStatusInfoTable: function (position) {
+    var msgBody = position.data.msgBody;
+    var msgDesc = position.desc;
+    var monitorInfo = msgBody.monitorInfo;
 
-            dataTableOperation.typeGroup(type, dataMsg[dataMsg.length - 1]);
-        } else {
-            // 列表存在记录  更新
-            if (array.indexOf(dataMsg[dataMsg.length - 1]) != -1) {
-                $("#" + id).children("tbody").children("tr").each(function () {
-                    if ($(this).children("td:nth-child(2)").attr('data-id') == dataMsg[dataMsg.length - 1]) {
-                        var index = $(this).children("td:nth-child(1)").text();
-                        dataMsg[0] = index;
-                        dataString = '"' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '"';
-                        alarmString = '' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '';
-                        html = dataTableOperation.tableListHtml(dataMsg, type, dataString);
-                        $(this).html(html);
-                    }
-                    ;
-                });
+    // 修改已订阅车辆的OBD信息
+    var vid=monitorInfo.monitorId;
+    var highLight = $("#realTimeStateTable .tableHighlight-blue,#realTimeStateTable .tableHighlight");
+    var curId = highLight.find('td').eq(1).data('id');
+    if(vid==curId){
+        amapOperation.changeObdInfo(position);
+    }
+
+    // 监控对象名称
+    var mObjectName = msgBody.monitorInfo.monitorName;
+    // 定位时间
+    var gpsTime = msgBody.gpsTime;
+    var serviceGpsTime = 20 + gpsTime.substring(0, 2)
+        + "-" + gpsTime.substring(2, 4)
+        + "-" + gpsTime.substring(4, 6)
+        + " " + gpsTime.substring(6, 8)
+        + ":" + gpsTime.substring(8, 10)
+        + ":" + gpsTime.substring(10, 12);
+    // 服务器时间
+    var uploadtime = msgBody.uploadtime;
+    var serviceSystemTime = 20 + uploadtime.substring(0, 2)
+        + "-" + uploadtime.substring(2, 4)
+        + "-" + uploadtime.substring(4, 6)
+        + " " + uploadtime.substring(6, 8)
+        + ":" + uploadtime.substring(8, 10)
+        + ":" + uploadtime.substring(10, 12);
+    // 所属分组
+    var groupName = msgBody.monitorInfo.assignmentName;
+    // 所属企业
+    var business = monitorInfo.groupName;
+    // 对象类型
+    var vehicleType = msgBody.monitorInfo.vehicleType;
+    // 车牌颜色
+    var plateColor = msgBody.monitorInfo.plateColorName;
+    if (plateColor == "null" || plateColor == null) {
+      plateColor = '-';
+    }
+    // 终端号
+    var deviceId = msgBody.monitorInfo.deviceNumber;
+    // SIM卡号
+    var sNumber = msgBody.monitorInfo.simcardNumber;
+    // 从业人员
+    var professionalsName = msgBody.monitorInfo.professionalsName;
+    // ACC
+    var acc = msgBody.acc;
+    if ((acc + "").length == 1) {
+      acc = (acc == 0 ? "关" : "开");
+    } else if (acc == "21") {
+      acc = "点火静止";
+    } else if (acc == "16") {
+      acc = "熄火拖车";
+    } else if (acc == "1A") {
+      acc = "熄火假拖车";
+    } else if (acc == "11") {
+      acc = "熄火静止";
+    } else if (acc == "12") {
+      acc = "熄火移动";
+    } else if (acc == "22") {
+      acc = "点火移动";
+    } else if (acc == "41") {
+      acc = "无点火静止";
+    } else if (acc == "42") {
+      acc = "无点火移动";
+    } else {
+      layer.msg("ACC状态异常");
+      return;
+    }
+    // 行驶状态
+    var speed = (msgBody.gpsSpeed == '0' ? '停止' : '行驶');
+    // 信号状态
+    var signalStateFlag = msgBody.signalState;
+    var signalStateFlagDetails = "";
+    if (signalStateFlag != null && signalStateFlag != 0) {
+      signalStateFlagDetails = dataTableOperation.signalStateFlagAnalysis(signalStateFlag);//获取详情信息
+      if (signalStateFlagDetails != "") {
+        signalStateFlagDetails = signalStateFlagDetails.substring(0, signalStateFlagDetails.length - 1);//删除字符串最后的“,”
+      }
+    } else {
+      signalStateFlagDetails = '-';
+    }
+
+    // 速度
+    var speed = msgBody.gpsSpeed;
+    // 方向
+    var angle = msgBody.direction;
+    // 电池电压
+    var batteryVoltage = msgBody.batteryVoltage;
+    // 信号强度
+    var signalStrength = msgBody.signalStrength;
+    // 定位方式
+    var locationType = msgBody.locationType;
+    if (locationType == 1) {
+      locationType = "卫星定位";
+    } else if (locationType == 2) {
+      locationType = "LBS定位";
+    } else if (locationType == 3) {
+      locationType = "WiFi+LBS定位";
+    } else {
+      locationType = "-";
+    }
+    // 当日里程
+    var todayMileage = msgBody.dayMileage;
+    todayMileage = parseFloat(todayMileage);
+    // 总里程
+    var allMileage;
+    if (msgBody.mileageSensor != undefined && msgBody.mileageSensor != null) {
+      allMileage = msgBody.mileageSensor.mileage == null ? 0.0 : msgBody.mileageSensor.mileage;
+    } else {
+      allMileage = msgBody.gpsMileage == null ? 0.0 : msgBody.gpsMileage;
+    }
+    // 当日油耗
+    var todayFuelConsumption = msgBody.dayOilWear;
+    todayFuelConsumption = parseFloat(todayFuelConsumption) / 100.0;
+    todayFuelConsumption = todayFuelConsumption.toFixed(2);
+    // 总油耗
+    var allFuelConsumption;
+    if (msgBody.oilExpend !== undefined && msgBody.oilExpend != null && msgBody.oilExpend.length > 0) {
+      allFuelConsumption = msgBody.oilExpend[0].allExpend == null ? 0.0 : msgBody.oilExpend[0].allExpend;
+    } else {
+      allFuelConsumption = msgBody.gpsOil == null ? 0.0 : msgBody.gpsOil;
+    }
+    allFuelConsumption = allFuelConsumption / 100.0;
+    allFuelConsumption = allFuelConsumption.toFixed(2);
+    // 油量
+    var gpsOil = msgBody.gpsOil;
+    // 高程
+    var altitude = msgBody.altitude;
+    // 记录仪速度
+    var grapherSpeed = msgBody.grapherSpeed;
+    // 位置信息
+    var address = msgBody.positionDescription;
+    // 监控对象ID
+    var mObjectId = msgBody.monitorInfo.monitorId;
+
+    if (msgBody.durationTime !== undefined && msgBody.durationTime !== null) {
+      var speeds = Number(msgBody.gpsSpeed) === 0 ? "停止(" + dataTableOperation.formatDuring(msgBody.durationTime) + ")" : "行驶(" + dataTableOperation.formatDuring(msgBody.durationTime) + ")"
+    } else {
+      var speeds = Number(msgBody.gpsSpeed) === 0 ? "停止" : "行驶"
+    }
+    //添加行驶状态
+    var drivingStateValue = drivingState.get(msgDesc.deviceId);
+    if (drivingStateValue != null && drivingStateValue != undefined) {
+      speeds = drivingStateValue + speeds;
+      drivingState.remove(msgDesc.deviceId);
+    }
+
+    var tableList = [
+      0,
+      mObjectName,
+      serviceGpsTime,
+      serviceSystemTime,
+      ((groupName == 'null' || groupName == null) ? '-' : groupName),
+      ((business == 'null' || business == null) ? '-' : business),
+      ((vehicleType == 'null' || vehicleType == null) ? '-' : vehicleType),
+      ((plateColor == 'null' || plateColor == null) ? '-' : plateColor),
+      deviceId,
+      sNumber,
+      ((professionalsName == 'null' || professionalsName == null) ? '-' : professionalsName),
+      acc,
+      speeds,
+      signalStateFlagDetails,//信号状态
+      speed,
+      dataTableOperation.toDirectionStr(angle),
+      ((batteryVoltage == 'null' || batteryVoltage == null || batteryVoltage == undefined) ? '-' : batteryVoltage),
+      ((signalStrength == 'null' || signalStrength == null || signalStrength == undefined || signalStrength == -1) ? '-' : signalStrength),
+      locationType,
+      ((todayMileage == 'null' || todayMileage == null) ? 0 : todayMileage),
+      ((allMileage == 'null' || allMileage == null) ? 0 : allMileage),
+      ((todayFuelConsumption == 'null' || todayFuelConsumption == null) ? 0 : todayFuelConsumption),
+      ((allFuelConsumption == 'null' || allFuelConsumption == null) ? 0 : allFuelConsumption),
+      ((gpsOil == 'null' || gpsOil == null) ? 0 : gpsOil),
+      altitude,
+      ((grapherSpeed == 'null' || grapherSpeed == null) ? 0 : grapherSpeed),
+      ((address == 'null' || address == null) ? '未定位' : address),
+      mObjectId
+    ];
+    /*var len = tableList.length;
+     for (var i = 0; i < len; i++) {
+     if (tableList[i] == 'null' || tableList[i] == '' || tableList[i] == null || tableList[i] == undefined) {
+     tableList[i] = '-';
+     }
+     }*/
+    // 更新状态信息
+    dataTableOperation.updateRow('#realTimeStateTable', realTimeSet, tableList, 'state');
+    // 更新信息弹窗信息
+    if (msgBody.protocolType == '5') {//北斗天地
+      var testInfo = [];//初始标注数据
+      var monitorInfo = msgBody.monitorInfo;
+      testInfo.push(parseDate2Str(msgBody.gpsTime));//时间
+      testInfo.push(monitorInfo.monitorName);
+      testInfo.push(((monitorInfo.assignmentName == 'null' || monitorInfo.assignmentName == null) ? '-' : monitorInfo.assignmentName));
+      testInfo.push(monitorInfo.deviceNumber);
+      testInfo.push(monitorInfo.simcardNumber);
+      testInfo.push(msgBody.batteryVoltage);
+      testInfo.push(msgBody.signalStrength);
+      testInfo.push(msgBody.gpsSpeed);
+      testInfo.push(msgBody.altitude);
+      testInfo.push(msgBody.latitude);
+      testInfo.push(msgBody.longitude);
+      testInfo.push("people");
+      testInfo.push(monitorInfo.monitorId);
+      var angle = msgBody.direction;
+      var direction = dataTableOperation.toDirectionStr(angle);
+      var latitudeP = msgBody.latitude;//纬度
+      var longitudeP = msgBody.longitude;//经度
+      var locationType = msgBody.locationType;
+      if (locationType == "1") {
+        locationType = "北斗";
+      } else {
+        locationType = "北斗";
+      }
+      var lnglatXY = [longitudeP, latitudeP];
+      var laglatObjct = {'lnglatXYs': lnglatXY};
+      var geocoder = new AMap.Geocoder({
+        radius: 1000,
+        extensions: "all",
+        batch: false
+      });
+      carAddress = msgBody.formattedAddress;
+      testInfo.push(angle);//角度
+      testInfo.push(msgBody.stateInfo);//状态信息
+      testInfo.push((monitorInfo.monitorType == null || monitorInfo.monitorType == 'null' || monitorInfo.monitorType == undefined) ? '0' : monitorInfo.monitorType);//监控对象类型
+      testInfo.push(monitorInfo.monitorIcon);//监控对象图标
+      testInfo.push(msgBody.dayMileage);//当日里程
+      //信息框数据调用
+      amapOperation.completeEventHandler(testInfo);
+    } else {//车和物
+      var testInfo = [];//初始标注数据
+      var monitorInfo = msgBody.monitorInfo;
+      testInfo.push(monitorInfo.monitorName);//监控对象
+      testInfo.push(monitorInfo.vehicleType);//对象类型
+      testInfo.push(monitorInfo.assignmentName);//分组
+      testInfo.push(monitorInfo.deviceNumber);//终端号
+      testInfo.push(monitorInfo.simcardNumber);//SIM卡号
+      testInfo.push(msgBody.dayMileage);//当日里程
+      testInfo.push((msgBody.gpsMileage == '' || msgBody.gpsMileage == null || msgBody.gpsMileage == undefined) ? 0 : msgBody.gpsMileage);//总里程
+      testInfo.push(msgBody.gpsSpeed);//速度
+      testInfo.push(acc);//acc
+      testInfo.push((msgBody.gpsSpeed == 0 ? '停止' : '行驶'));//行驶状态
+      testInfo.push(parseDate2Str(msgBody.gpsTime));//时间
+      testInfo.push(msgBody.latitude);//纬度
+      testInfo.push(msgBody.longitude);//经度
+      testInfo.push(monitorInfo.monitorId);//监控对象id
+      testInfo.push((monitorInfo.professionalsName == 'null' ? '-' : monitorInfo.professionalsName));//从业人员
+      testInfo.push(plateColor);//车辆颜色
+      testInfo.push(dataTableOperation.toDirectionStr(msgBody.direction));//方向(东南西北等)
+      testInfo.push(msgBody.positionDescription);//位置
+      testInfo.push((msgDesc.msgID == 513 ? 1 : 0));
+      testInfo.push(msgBody.status);
+      testInfo.push('报警类型');//报警类型
+      testInfo.push('');
+      testInfo.push(msgBody.altitude);//高程
+      testInfo.push(((msgBody.grapherSpeed == 'null' || msgBody.grapherSpeed == null) ? 0 : msgBody.grapherSpeed));//记录仪速度
+      testInfo.push(msgBody.direction);//角度
+      testInfo.push(monitorInfo.monitorIcon);//图标
+      testInfo.push(((monitorInfo.groupName == 'null' || monitorInfo.groupName == null) ? '-' : monitorInfo.groupName));//所属企业
+      testInfo.push(monitorInfo.deviceType);//终端类型
+      testInfo.push(signalStateFlagDetails === undefined ? "-" : signalStateFlagDetails);
+      testInfo.push(msgBody.stateInfo);//状态
+      testInfo.push((monitorInfo.monitorType == null || monitorInfo.monitorType == 'null' || monitorInfo.monitorType == undefined) ? '0' : monitorInfo.monitorType);//监控对象类型
+      testInfo.push(msgBody.protocolType);//协议类型
+      //信息框数据调用
+      amapOperation.completeEventHandler(testInfo);
+    }
+  },
+  dateFormat: function (inputTime) {
+    var date = new Date(inputTime * 1000);
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    var h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    second = second < 10 ? ('0' + second) : second;
+    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+  },
+  formatDuring: function (mss) {
+    var days = parseInt(mss / (1000 * 60 * 60 * 24));
+    var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = parseInt((mss % (1000 * 60)) / 1000);
+    if (days === 0 && hours === 0 && minutes == 0) {
+      return seconds + " 秒 ";
+    } else if (days === 0 && hours === 0 && minutes !== 0) {
+      return minutes + " 分 " + seconds + " 秒 ";
+    } else if (days === 0 && hours !== 0) {
+      return hours + " 小时 " + minutes + " 分 " + seconds + " 秒 ";
+    } else if (days !== 0) {
+      return days + " 天 " + hours + " 小时 " + minutes + " 分 " + seconds + " 秒 ";
+    }
+  },
+  signalStateFlagAnalysis: function (signalStateFlag) {
+    var signalStateFlags = signalStateFlag.toString(2);
+    signalStateFlags = (Array(32).join(0) + signalStateFlags).slice(-32);//高位补零
+    var details = "";
+    if (signalStateFlags.substring(31, 32) == 1) {
+      details += "近光灯,"
+    }
+    ;
+    if (signalStateFlags.substring(30, 31) == 1) {
+      details += "远光灯,"
+    }
+    ;
+    if (signalStateFlags.substring(29, 30) == 1) {
+      details += "右转向灯,"
+    }
+    ;
+    if (signalStateFlags.substring(28, 29) == 1) {
+      details += "左转向灯,"
+    }
+    ;
+    if (signalStateFlags.substring(27, 28) == 1) {
+      details += "制动,"
+    }
+    ;
+    if (signalStateFlags.substring(26, 27) == 1) {
+      details += "倒挡,"
+    }
+    ;
+    if (signalStateFlags.substring(25, 26) == 1) {
+      details += "雾灯,"
+    }
+    ;
+    if (signalStateFlags.substring(24, 25) == 1) {
+      details += "示廊灯,"
+    }
+    ;
+    if (signalStateFlags.substring(23, 24) == 1) {
+      details += "喇叭,"
+    }
+    ;
+    if (signalStateFlags.substring(22, 23) == 1) {
+      details += "空调开,"
+    }
+    ;
+    if (signalStateFlags.substring(21, 22) == 1) {
+      details += "空挡,"
+    }
+    ;
+    if (signalStateFlags.substring(20, 21) == 1) {
+      details += "缓速器工作,"
+    }
+    ;
+    if (signalStateFlags.substring(19, 20) == 1) {
+      details += "ABS工作,"
+    }
+    ;
+    if (signalStateFlags.substring(18, 19) == 1) {
+      details += "加热器工作,"
+    }
+    ;
+    if (signalStateFlags.substring(17, 18) == 1) {
+      details += "离合器状态,"
+    }
+    ;
+    return details;
+  },
+
+  //若有超速报警、异动报警标识则更新状态列表中的行驶状态
+  updateStateInfoByAlarm: function (position) {
+    var msgBody = position.data.msgBody;
+    var msgDesc = position.desc;
+    //超速报警状态名称
+    var speedAlarmName = "";
+    //超速报警状态值
+    var speedAlarmFlag = msgBody.speedAlarmFlag;
+    if (speedAlarmFlag != null) {
+      switch (speedAlarmFlag) {
+        case 0:
+          speedAlarmName = "开始超速,";
+          break;
+        case 1:
+          speedAlarmName = "持续超速,";
+          break;
+        case 2:
+        case -2:
+          speedAlarmName = "结束超速,";
+          break;
+        case 10:
+          speedAlarmName = "开始夜间超速,";
+          break;
+        case 11:
+          speedAlarmName = "夜间持续超速,";
+          break;
+        case 12:
+        case -12:
+          speedAlarmName = "夜间超速结束,";
+          break;
+      }
+    }
+    //异动报警状态名称
+    var exceptionMoveName = "";
+    var exceptionMoveFlag = msgBody.exceptionMoveFlag;
+    if (exceptionMoveFlag != null) {
+      switch (exceptionMoveFlag) {
+        case 0:
+          exceptionMoveName = "开始异动,";
+          break;
+        case 1:
+          exceptionMoveName = "持续异动,";
+          break;
+        case 2:
+          exceptionMoveName = "结束异动,";
+          break;
+      }
+    }
+    if (speedAlarmName == "" && exceptionMoveName == "") { //若没有相关报警信息则删除行驶状态map中数据
+      drivingState.remove(msgDesc.deviceId);
+    } else { //若有相关报警数据则储存至行驶状态map中并更新状态信息中的行驶状态
+      var drivingStateValue = speedAlarmName + exceptionMoveName;
+      //先删除原有数据再存储
+      drivingState.remove(msgDesc.deviceId);
+      drivingState.put(msgDesc.deviceId, drivingStateValue);
+      //获取车辆id
+      var checkVehicleId = msgDesc.monitorId;
+      dataTableOperation.updateDrivingState(drivingStateValue, checkVehicleId);
+      if (speedAlarmFlag < 0 || exceptionMoveFlag < 0) {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  //更新状态信息中的行驶状态
+  updateDrivingState: function (drivingStateValue, vid) {
+    if (drivingStateValue != null && drivingStateValue != "" && drivingStateValue != undefined) {
+      if (stateName.indexOf(vid) != -1) {
+        $("#realTimeStateTable").children("tbody").children("tr").each(function () {
+          if ($(this).children("td:nth-child(2)").attr('data-id') == vid) {
+            var existValue = $(this).children("td:nth-child(13)").text().split(",");
+            //获取最后一个元素，及行驶/停止时长，并组装更新行驶状态
+            drivingStateValue = drivingStateValue + existValue[existValue.length - 1];
+            $(this).children("td:nth-child(13)").text(drivingStateValue);
+          }
+          ;
+        });
+      }
+    }
+  },
+  //解析报警位置信息
+  getAlarmAddress: function (vId,latitude,longitude) {
+    var vid=vId;
+    var url = '/clbs/v/monitoring/address';
+    var param = {addressReverse: [latitude, longitude, '', "", 'vehicle']};
+
+    $.ajax({
+      type: "POST",//通常会用到两种：GET,POST。默认是：GET
+      url: url,//(默认: 当前页地址) 发送请求的地址
+      dataType: "json", //预期服务器返回的数据类型。"json"
+      async: true, // 异步同步，true  false
+      data: param,
+      traditional: true,
+      timeout: 8000, //超时时间设置，单位毫秒
+      success: function (data) {//请求成功
+        $('#alarmTable td[data-id="'+vid+'"]').closest('tr').find('td:last-child').html($.isPlainObject(data) ? '未定位' : data);
+      },
+    });
+  },
+  // 报警记录数据更新
+  updateAlarmInfoTable: function (position) {
+    var msgBody = position.data.msgBody;
+    var msgDesc = position.desc;
+    var monitorInfo = position.data.msgBody.monitorInfo;
+    var alarmSource = msgBody.alarmSource;
+    //更新行驶状态
+    var updateAlarmFlag = dataTableOperation.updateStateInfoByAlarm(position);
+    if (updateAlarmFlag) {
+      return;
+    }
+    var monitorId = monitorInfo.monitorId;//监控对象id
+    var alarmName = msgBody.alarmName;//报警名称
+    var alarmInfo = msgBody.alarmName;//报警名称
+    if (alarmInfo.indexOf('异常驾驶行为(疲劳)') != -1) {
+      var number = '疲劳 ' + msgBody.gpsAttachInfoList[1].unusualDrive.level;
+      alarmInfo = alarmInfo.replace('疲劳', number);
+    }
+    //判断集合是否为空 (此方法用于地图显示监控对象信息框)
+    if (alarmInfoList.isEmpty()) {
+      alarmInfoList.put(monitorId, alarmName);
+    } else {
+      if (alarmInfoList.containsKey(monitorId)) {
+        alarmInfoList.remove(monitorId);
+        alarmInfoList.put(monitorId, alarmName);
+      } else {
+        alarmInfoList.put(monitorId, alarmName);
+      }
+    }
+
+    var monitorName = monitorInfo.monitorName;//监控对象
+    var groupName = monitorInfo.assignmentName;//分组名称
+    //var addresss = msgBody.formattedAddress;//位置信息
+    var addresss = '<a onclick="dataTableOperation.getAlarmAddress(\''+monitorId+'\','+msgBody.latitude+','+msgBody.longitude+')">点击获取位置信息</a>';//位置信息
+    var deviceNumber = monitorInfo.deviceNumber;//终端编号
+    var simcardNumber = monitorInfo.simcardNumber;//SIM卡号
+    var alarmNumber = msgBody.globalAlarmSet;//报警编号
+    var msgSN = msgBody.swiftNumber;//流水号
+
+    var plateColor = monitorInfo.plateColor;//车牌颜色
+    if (plateColor == "1") {
+      plateColor = "蓝色";
+    } else if (plateColor == "2") {
+      plateColor = "黄色";
+    } else if (plateColor == "3") {
+      plateColor = "黑色";
+    } else if (plateColor == "4") {
+      plateColor = "白色";
+    } else if (plateColor == "9") {
+      plateColor = "其他";
+    } else {
+      plateColor = ''
+    }
+    var monitorType = monitorInfo.monitorType;//监控对象类型
+    switch (monitorType) {
+      case 0:
+        monitorType = '车';
+        break;
+      case 1:
+        monitorType = '人';
+        break;
+      case 2:
+        monitorType = '物';
+        break;
+      default:
+        monitorType = '';
+        break;
+    }
+    var professionalsName = monitorInfo.professionalsName;//从业人员
+    var fenceType = msgBody.fenceType;//围栏类型
+    /*if (fenceType == "zw_m_polygon") {
+      fenceType = "多边形";
+    } else if (fenceType == "zw_m_rectangle") {
+      fenceType = "矩形";
+    } else if (fenceType == "zw_m_line") {
+      fenceType = "路线";
+    } else if (fenceType == "zw_m_circle") {
+      fenceType = "圆形";
+    } else if (fenceType == "zw_m_administration") {
+      fenceType = "行政区划";
+    } else {
+      fenceType = "";
+    }*/
+    var fenceName = msgBody.fenceName;//围栏名称
+    //报警时间
+    var alarmTime;
+    var time = msgBody.gpsTime;
+    if (time.length == 12) {
+      alarmTime = 20 + time.substring(0, 2) + "-" + time.substring(2, 4) + "-" + time.substring(4, 6) + " " +
+          time.substring(6, 8) + ":" + time.substring(8, 10) + ":" + time.substring(10, 12);
+    } else {
+      var alarmPeopleTime = msgDesc.sysTime;
+      alarmTime = dataTableOperation.dateFormat(Number(alarmPeopleTime));
+    }
+    if (addresss == "" || addresss == null || addresss == 'null' || addresss == "[]") {
+      addresss = "位置描述获取失败";
+    }
+    //拼装报警记录表格数据
+    var alarm = [
+      0,
+      monitorName == "" ? "-" : monitorName,
+      alarmTime,
+      (groupName == "" || groupName == undefined) ? '未绑定分组' : groupName,
+      monitorType,
+      plateColor,
+      alarmName,
+      (professionalsName == "null" || professionalsName == null) ? "-" : professionalsName,
+       (fenceType == "null" || fenceType == null || fenceType == undefined) ? "-" : fenceType,
+      (fenceName == "null" || fenceName == null || fenceName == undefined) ? "-" : fenceName,
+      addresss,
+      "",
+      simcardNumber,
+      deviceNumber,
+      msgSN,
+      alarmNumber,
+      alarmSource,
+      monitorId
+    ];
+    dataTableOperation.updateRow('#alarmTable', alarmSet, alarm, 'alarm');
+    //紧急报警弹窗
+    //if (alarmName.indexOf("紧急报警") >= 0) {
+    //var ssh = alarmString;
+    //layer.msg('监控对象:' + monitorName + '发出紧急报警!请处理!', {
+    //time: 5000,
+    //btn: ['处理'],
+    //btnAlign: 'c',
+    //yes: function (index) {
+    //layer.close(index);
+    //$('.modal').map(function () {
+    //$(this).modal('hide');
+    //});
+    //setTimeout(function () {
+    //dataTableOperation.warningManage('' + ssh + '');
+    //}, 50);
+//
+    //}
+    //});
+    //}
+    //地图右下角报警提示
+    dataTableOperation.realTimeAlarmInfoCalcFn();
+
+  },
+  distinguishPushAlarmSet: function (alarmSetType, msgBody) {
+    //报警数据 围栏名称及类型
+    var gpsAttachInfoList = msgBody.gpsAttachInfos;
+    if (gpsAttachInfoList != undefined) {
+      for (var i = 0; i < gpsAttachInfoList.length; i++) {
+        var gpsAttachInfoID = gpsAttachInfoList[i].gpsAttachInfoID;
+        // 17 围栏内超速
+        if (gpsAttachInfoID == 17) {
+          if (gpsAttachInfoList[i].speedAlarm != undefined) {
+            var stype = gpsAttachInfoList[i].speedAlarm.type;
+            alarmFanceType = dataTableOperation.getAlarmFanceIdAndType(stype);
+            var alarmFanceIds = gpsAttachInfoList[i].speedAlarm.lineID;
+            if (alarmFanceIds != null && alarmFanceIds != undefined && alarmFanceIds != "") {
+              alarmFanceId = dataTableOperation.getFanceNameByFanceIdAndVid(msgBody.vehicleInfo.id, alarmFanceIds);
+            }
+          }
+        }
+        // 18 进出围栏
+        else if (gpsAttachInfoID == 18) {
+          if (gpsAttachInfoList[i].lineOutAlarm != undefined) {
+            var ltype = gpsAttachInfoList[i].lineOutAlarm.type;
+            alarmFanceType = dataTableOperation.getAlarmFanceIdAndType(ltype);
+            var alarmFanceIds = gpsAttachInfoList[i].lineOutAlarm.lineID;
+            if (alarmFanceIds != null && alarmFanceIds != undefined && alarmFanceIds != "") {
+              alarmFanceId = dataTableOperation.getFanceNameByFanceIdAndVid(msgBody.vehicleInfo.id, alarmFanceIds);
+            }
+          }
+        }
+        // 19 过长 不足
+        else if (gpsAttachInfoID == 19) {
+          if (gpsAttachInfoList[i].timeOutAlarm != undefined) {
+            var ttype = gpsAttachInfoList[i].timeOutAlarm.type;
+            alarmFanceType = dataTableOperation.getAlarmFanceIdAndType(ttype);
+            var alarmFanceIds = gpsAttachInfoList[i].timeOutAlarm.lineID;
+            if (alarmFanceIds != null && alarmFanceIds != undefined && alarmFanceIds != "") {
+              alarmFanceId = dataTableOperation.getFanceNameByFanceIdAndVid(msgBody.vehicleInfo.id, alarmFanceIds);
+            }
+          }
+        }
+      }
+
+    }
+  },
+  // 围栏类型判断
+  getAlarmFanceIdAndType: function (types) {
+    if (types != undefined) {
+      if (types == 1) {
+        alarmFanceType = "圆形";
+      } else if (types == 2) {
+        alarmFanceType = "矩形";
+      } else if (types == 3) {
+        alarmFanceType = "多边形";
+      } else if (types == 4) {
+        alarmFanceType = "路线";
+      }
+      return alarmFanceType;
+    }
+  },
+  //根据围栏Id及车Id查询围栏名称
+  getFanceNameByFanceIdAndVid: function (vid, fcid) {
+    var fenceName;
+    $.ajax({
+      type: "POST",
+      url: "/clbs/v/monitoring/getFenceInfo",
+      dataType: "json",
+      async: false,
+      data: {"vehicleId": vid, "sendDownId": fcid},
+      success: function (data) {
+        if (data.success) {
+          if (data.obj != null) {
+            fenceName = data.obj.name;
+          } else {
+            fenceName = null;
+          }
+        }
+      }
+    });
+    return fenceName;
+  },
+  //数据表格html组装
+  tableListHtml: function (dataMsg, type, dataString) {
+    var html = '';
+    var this_id = dataMsg[dataMsg.length - 1];
+    if (type == 'state') {
+      for (var i = 0; i < dataMsg.length - 1; i++) {
+        if (i == 12) {
+          var allinfo = dataMsg[i];
+          if (dataMsg[i] != null) {
+            if (dataMsg[i] != "" && dataMsg[i].length > 20) {
+              dataMsg[i] = dataMsg[i].substring(0, 20) + "...";
+              html += '<td class="demo demoUp" alt="' + allinfo + '"  data-id="' + this_id + '">' + dataMsg[i] + '</td>';
             } else {
-                //表格数据判断报警数据最新推送排第一  更新数据除外
-                var htmlString = '<tr>' + html + '</tr>';
-                if (type == "alarm") {
-                    $("#" + id).children("tbody").prepend(htmlString);
-                    dataTableOperation.tableRank(id);
+              html += '<td  data-id="' + this_id + '">' + dataMsg[i] + '</td>';
+            }
+          } else {
+            html += '<td  data-id="' + this_id + '"> </td>';
+          }
+        } else {
+          html += '<td data-id="' + this_id + '">' + dataMsg[i] + '</td>';
+        }
+      }
+      ;
+    }
+    ;
+    if (type == 'alarm') {
+      if (dataMsg[3] == '人') {
+        html += "<td>" + dataMsg[0] + "</td><td data-id='" + this_id + "'>" + dataMsg[1] + "</td><td>" + dataMsg[7] + "</td><td onClick='dataTableOperation.warningManage(" + dataString + ")' style='color:#2ca2d1;'>未处理</td><td>" + dataMsg[2] + "</td><td>" + dataMsg[3] + "</td><td>" + dataMsg[4] + "</td><td>" + dataMsg[5] + "</td><td>" + dataMsg[6] + "</td><td>" + dataMsg[8] + "</td><td>" + dataMsg[9] + "</td><td>" + dataMsg[10] + "</td>";
+      } else {
+        html += "<td>" + dataMsg[0] + "</td><td data-id='" + this_id + "'>" + dataMsg[1] + "</td><td>" + dataMsg[2] + "</td><td onClick='dataTableOperation.warningManage(" + dataString + ")' style='color:#2ca2d1;'>未处理</td><td>" + dataMsg[3] + "</td><td>" + dataMsg[4] + "</td><td>" + dataMsg[5] + "</td><td data-alarmType='" + (dataTableOperation.endsWith(dataMsg[15], ",") ? dataMsg[15] : dataMsg[15] + ",") + "'>" + dataMsg[6] + "</td><td>" + dataMsg[7] + "</td><td>" + dataMsg[8] + "</td><td>" + dataMsg[9] + "</td><td>" + dataMsg[10] + "</td>";
+      }
+    }
+    ;
+    setTimeout(function () {
+      $(".demoUp").mouseover(function () {
+
+        var _this = $(this);
+        if (_this.attr("alt")) {
+          _this.justToolsTip({
+            animation: "moveInTop",
+            width: "auto",
+            contents: _this.attr("alt"),
+            gravity: 'top'
+          });
+        }
+      })
+    }, 1000)
+
+    return html;
+
+  },
+  endsWith: function (val, str) {
+    var reg = new RegExp(str + "$");
+    return reg.test(val);
+  },
+  //表格插入数据
+  dataTableList: function (array, data, id, type) {
+    var dataMsg = data;
+    var html = '';
+    var dataString;
+    // 列表不存在记录  添加
+    if (array.indexOf(dataMsg[dataMsg.length - 1]) == -1) {
+      if (type == 'state') {
+        dataMsg[0] = stateIndex;
+        html = dataTableOperation.tableListHtml(dataMsg, type, dataString);
+      }
+      //报警记录
+      else if (type == 'alarm') {
+        dataString = '"' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '"';
+        alarmString = '' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '';
+        dataMsg[0] = alarmIndex;
+        html = dataTableOperation.tableListHtml(dataMsg, type, dataString);
+      }
+      ;
+    }
+    ;
+    if (array.length == 0) {
+      var htmlString = '<tr>' + html + '</tr>';
+      $("#" + id).children("tbody").append(htmlString);
+
+      dataTableOperation.typeGroup(type, dataMsg[dataMsg.length - 1]);
+    } else {
+      // 列表存在记录  更新
+      if (array.indexOf(dataMsg[dataMsg.length - 1]) != -1) {
+        $("#" + id).children("tbody").children("tr").each(function () {
+          if ($(this).children("td:nth-child(2)").attr('data-id') == dataMsg[dataMsg.length - 1]) {
+            //已有的报警时间
+            var alarmTime = $(this).children("td:nth-child(3)").text();
+            //如果是同一条位置信息上传的报警
+            if (alarmTime == dataMsg[2] && type == 'alarm') {
+              //已有报警类型名称
+              var alarmTypeName = $(this).children("td:nth-child(8)").text();
+              //已有的报警类型集合
+              var alarmTypeStrs = $(this).children("td:nth-child(8)").attr('data-alarmType');
+              if (alarmTypeStrs != dataMsg[15] && alarmTypeName != dataMsg[6]) {
+                dataMsg[6] = alarmTypeName + "," + dataMsg[6];
+                if (dataTableOperation.endsWith(alarmTypeStrs, ",")) {
+                  dataMsg[15] = alarmTypeStrs + dataMsg[15];
                 } else {
-                    $("#" + id).children("tbody").append(htmlString);
+                  dataMsg[15] = alarmTypeStrs + "," + dataMsg[15];
                 }
-                dataTableOperation.typeGroup(type, dataMsg[dataMsg.length - 1]);
+              }
             }
-            ;
-        }
-        ;
-        if (uptFlag != false) {
-            dataTableOperation.carStateAdapt(activeIndex);
-        }
-        if (type == 'alarm') {
-            dataTableOperation.alarmInfoDataDbclick(type);
+            var index = $(this).children("td:nth-child(1)").text();
+            dataMsg[0] = index;
+            dataString = '"' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '"';
+            alarmString = '' + dataMsg[1] + "|" + dataMsg[2] + "|" + dataMsg[3] + "|" + dataMsg[4] + "|" + dataMsg[5] + "|" + dataMsg[6] + "|" + dataMsg[7] + "|" + dataMsg[11] + "|" + dataMsg[12] + "|" + dataMsg[13] + "|" + dataMsg[14] + "|" + dataMsg[15] + "|" + dataMsg[16] + "|" + dataMsg[17] + '';
+            html = dataTableOperation.tableListHtml(dataMsg, type, dataString);
+            $(this).html(html);
+          }
+          ;
+        });
+      } else {
+        //表格数据判断报警数据最新推送排第一  更新数据除外
+        var htmlString = '<tr>' + html + '</tr>';
+        if (type == "alarm") {
+          $("#" + id).children("tbody").prepend(htmlString);
+          dataTableOperation.tableRank(id);
         } else {
-            if (dbClickHeighlight) {
-                dataTableOperation.tableHighlight(type, DblclickName);
-            }
-            ;
-            dataTableOperation.dataTableDbclick(type);
+          $("#" + id).children("tbody").append(htmlString);
         }
-        ;
-        setTimeout(
-            function () {
-                $("[data-toggle='popover']").popover({container: 'body'});
-            }, 10000)
-        //);
-    },
-    getAddressback: function (data) {
-        carAddress = data;
-    },
-    getaddressParticulars: function (AddressNew, longitude, latitude) {
-        var addressParticulars = {
-            "longitude": Number(longitude).toFixed(3),
-            "latitude": Number(latitude).toFixed(3),
-            "adcode": AddressNew.regeocode.addressComponent.adcode,//区域编码
-            "building": AddressNew.regeocode.addressComponent.building,//所在楼/大厦
-            "buildingType": AddressNew.regeocode.addressComponent.buildingType,
-            "city": AddressNew.regeocode.addressComponent.city,
-            "cityCode": AddressNew.regeocode.addressComponent.citycode,
-            "district": AddressNew.regeocode.addressComponent.district,//所在区
-            "neighborhood": AddressNew.regeocode.addressComponent.neighborhood,//所在社区
-            "neighborhoodType": AddressNew.regeocode.addressComponent.neighborhoodType,//社区类型
-            "province": AddressNew.regeocode.addressComponent.province,//省
-            "street": AddressNew.regeocode.addressComponent.street,//所在街道
-            "streetNumber": AddressNew.regeocode.addressComponent.streetNumber,//门牌号
-            "township": AddressNew.regeocode.addressComponent.township,//所在乡镇
-            "crosses": "",
-            "pois": "",
-            "roads": "",//道路名称
-            "formattedAddress": AddressNew.regeocode.formattedAddress,//格式化地址
-        };
-        return JSON.stringify(addressParticulars);
-    },
-    toDirectionStr: function (angle) {
-        if ((0 <= angle && 22.5 >= angle) || (337.5 < angle && angle <= 360)) {
-            direction = '北';
-        } else if (22.5 < angle && 67.5 >= angle) {
-            direction = '东北';
-        } else if (67.5 < angle && 112.5 >= angle) {
-            direction = '东';
-        } else if (112.5 < angle && 157.5 >= angle) {
-            direction = '东南';
-        } else if (157.5 < angle && 202.5 >= angle) {
-            direction = '南';
-        } else if (202.5 < angle && 247.5 >= angle) {
-            direction = '西南';
-        } else if (247.5 < angle && 292.5 >= angle) {
-            direction = '西';
-        } else if (292.5 < angle && 337.5 >= angle) {
-            direction = '西北';
+        dataTableOperation.typeGroup(type, dataMsg[dataMsg.length - 1]);
+      }
+      ;
+    }
+    ;
+    if (uptFlag != false) {
+      dataTableOperation.carStateAdapt(activeIndex);
+    }
+    if (type == 'alarm') {
+      dataTableOperation.alarmInfoDataDbclick(type);
+    } else {
+      if (dbClickHeighlight) {
+        dataTableOperation.tableHighlight(type, DblclickName);
+      }
+      ;
+      dataTableOperation.dataTableDbclick(type);
+    }
+    ;
+    setTimeout(
+        function () {
+          $("[data-toggle='popover']").popover({container: 'body'});
+        }, 10000)
+    //);
+  },
+  getAddressback: function (data) {
+    carAddress = data;
+  },
+  getaddressParticulars: function (AddressNew, longitude, latitude) {
+    var addressParticulars = {
+      "longitude": Number(longitude).toFixed(3),
+      "latitude": Number(latitude).toFixed(3),
+      "adcode": AddressNew.regeocode.addressComponent.adcode,//区域编码
+      "building": AddressNew.regeocode.addressComponent.building,//所在楼/大厦
+      "buildingType": AddressNew.regeocode.addressComponent.buildingType,
+      "city": AddressNew.regeocode.addressComponent.city,
+      "cityCode": AddressNew.regeocode.addressComponent.citycode,
+      "district": AddressNew.regeocode.addressComponent.district,//所在区
+      "neighborhood": AddressNew.regeocode.addressComponent.neighborhood,//所在社区
+      "neighborhoodType": AddressNew.regeocode.addressComponent.neighborhoodType,//社区类型
+      "province": AddressNew.regeocode.addressComponent.province,//省
+      "street": AddressNew.regeocode.addressComponent.street,//所在街道
+      "streetNumber": AddressNew.regeocode.addressComponent.streetNumber,//门牌号
+      "township": AddressNew.regeocode.addressComponent.township,//所在乡镇
+      "crosses": "",
+      "pois": "",
+      "roads": "",//道路名称
+      "formattedAddress": AddressNew.regeocode.formattedAddress,//格式化地址
+    };
+    return JSON.stringify(addressParticulars);
+  },
+  toDirectionStr: function (angle) {
+    if ((angle >= 0 && angle <= 22.5) || (angle > 337.5 && angle <= 360)) {
+      direction = '北';
+    } else if (angle > 22.5 && angle <= 67.5) {
+      direction = '东北';
+    } else if (angle > 67.5 && angle <= 112.5) {
+      direction = '东';
+    } else if (angle > 112.5 && angle <= 157.5) {
+      direction = '东南';
+    } else if (angle > 157.5 && angle <= 202.5) {
+      direction = '南';
+    } else if (angle > 202.5 && angle <= 247.5) {
+      direction = '西南';
+    } else if (angle > 247.5 && angle <= 292.5) {
+      direction = '西';
+    } else if (angle > 292.5 && angle <= 337.5) {
+      direction = '西北';
+    } else {
+      direction = '未知数据';
+    }
+    return direction;
+  },
+  //点击页面隐藏相应的ul下拉列表
+  updateRow: function (table, dataSet, obj, type) {
+    if (type == 'state') {//状态信息(车)
+      dataTableOperation.dataTableList(stateName, obj, "realTimeStateTable", "state");
+    }
+    else if (type == 'alarm') {//报警记录(车)
+      dataTableOperation.dataTableList(alarmName, obj, "alarmTable", "alarm");
+    }
+  },
+  //报警处理
+  warningManage: function (data) {
+    $('.sendTextFooter').hide();
+    $('.takePicturesFooter').hide();
+    $("#alarm-remark").show();
+    $("#smsTxt").val("");
+    $("#time").val("");
+    $("#alarmRemark").val("");
+    pageLayout.closeVideo();
+    layer.closeAll();
+    $('#warningManage').modal('show');
+    var dataArray = data.split('|');
+    var url = "/clbs/v/monitoring/getDeviceTypeByVid";
+    var data = {"vehicleId": dataArray[13]};
+    var warningType = "";
+    json_ajax("POST", url, "json", false, data, function (data) {
+      warningType = data;
+    });
+    var alarmType = dataArray[11].split(',');
+    for (var i = 0; i < alarmType.length; i++) {
+      var flag = $.inArray(alarmType[i], alarmTypeList);
+      if (flag != -1) {
+        $("#warningManagePhoto").attr("disabled", "disabled");
+        $("#warningManageSend").attr("disabled", "disabled");
+        $("#warningManageAffirm").attr("disabled", "disabled");
+        $("#warningManageFuture").attr("disabled", "disabled");
+        $("#warningManageCancel").attr("disabled", "disabled");
+        $("#color").show();
+        $("#color").text(alarmDisabled);
+        break;
+      }
+    }
+    // 持续性报警结束时间不会为"0", 因此如果是持续性报警无需判断此逻辑
+    var url1 = "/clbs/a/search/findEndTime";
+    var data1 = {"vehicleId": dataArray[13], "type": dataArray[11], "startTime": dataArray[1]};
+    layer.load(2);
+    json_ajax("POST", url1, "json", true, data1, function (result) {
+      if (result.success == true) {
+        if (result.msg == "0") {
+          $("#color").show();
+          $("#color").text(alarmError);
+          $("#warningManagePhoto").attr("disabled", "disabled");
+          $("#warningManageSend").attr("disabled", "disabled");
+          $("#warningManageAffirm").attr("disabled", "disabled");
+          $("#warningManageFuture").attr("disabled", "disabled");
+          $("#warningManageCancel").attr("disabled", "disabled");
         } else {
-            direction = '未知数据';
+          $("#color").show();
+          $("#color").text(alarmDisabled);
         }
-        return direction;
-    },
-    //点击页面隐藏相应的ul下拉列表
-    updateRow: function (table, dataSet, obj, type) {
-        if (type == 'state') {//状态信息(车)
-            dataTableOperation.dataTableList(stateName, obj, "realTimeStateTable", "state");
-        }
-        else if (type == 'alarm') {//报警记录(车)
-            dataTableOperation.dataTableList(alarmName, obj, "alarmTable", "alarm");
-        }
-    },
-    //报警处理
-    warningManage: function (data) {
-        $("#smsTxt").val("");
-        $("#time").val("");
-        pageLayout.closeVideo();
+      } else {
+        $("#warningManagePhoto").removeAttr("disabled");
+        $("#warningManageSend").removeAttr("disabled");
+        $("#warningManageAffirm").removeAttr("disabled");
+        $("#warningManageFuture").removeAttr("disabled");
+        $("#warningManageCancel").removeAttr("disabled");
+        $("#color").hide();
+        $("#colorMore").hide();
         layer.closeAll();
-        $('#warningManage').modal('show');
-        var dataArray = data.split('|');
-        var url = "/clbs/v/monitoring/getDeviceTypeByVid";
-        var data = {"vehicleId": dataArray[13]};
-        var warningType = "";
-        json_ajax("POST", url, "json", true, data, function (data) {
-            warningType = data;
-        });
-        var alarmType = dataArray[11].split(',');
-        for (var i = 0; i < alarmType.length; i++) {
-            var flag = $.inArray(alarmType[i], alarmTypeList);
-            if (flag != -1) {
-                $("#warningManageAffirm").attr("disabled", "disabled");
-                $("#warningManageFuture").attr("disabled", "disabled");
-                $("#warningManageCancel").attr("disabled", "disabled");
-                $("#color").show();
-                $("#color").text(alarmDisabled);
-                break;
-            }
-        }
-        var url1 = "/clbs/a/search/findEndTime";
-        var data1 = {"vehicleId": dataArray[13], "type": dataArray[11], "startTime": dataArray[1]};
-        layer.load(2);
-        json_ajax("POST", url1, "json", true, data1, function (result) {
-            if (result.success == true) {
-                if (result.msg == "0") {
-                    $("#color").show();
-                    $("#color").text(alarmError);
-                    $("#warningManageAffirm").attr("disabled", "disabled");
-                    $("#warningManageFuture").attr("disabled", "disabled");
-                    $("#warningManageCancel").attr("disabled", "disabled");
-                } else {
-                    $("#color").show();
-                    $("#color").text(alarmDisabled);
-                }
-            } else {
-                $("#warningManageAffirm").removeAttr("disabled");
-                $("#warningManageFuture").removeAttr("disabled");
-                $("#warningManageCancel").removeAttr("disabled");
-                $("#color").hide();
-                $("#colorMore").hide();
-                layer.closeAll();
-            }
-        });
-        $("#takePicturesContent,#sendTextMessages").hide();
-        if (warningType == true || dataArray[3] == "人" || dataArray[12] == "1") {
-            $("#warningHiden").removeAttr("style");
-            $("#warningManagePhoto").hide();
-            $("#warningManageSend").hide();
-            $("#sno").val("0");
-        } else {
-            $("#warningHiden").attr("style", "text-align:center");
-            $("#warningManagePhoto").show();
-            $("#warningManageSend").show();
-            $("#sno").val(dataArray[10]);
-        }
+      }
+    });
+    $("#takePicturesContent,#sendTextMessages").hide();
+    if (warningType == true || dataArray[12] == "1") {
+      $("#warningHiden").removeAttr("style");
+      $("#warningManagePhoto").hide();
+      $("#warningManageSend").hide();
+      $("#sno").val("0");
+    } else {
+      $("#warningHiden").attr("style", "text-align:center");
+      $("#warningManagePhoto").show();
+      $("#warningManageSend").show();
+      $("#sno").val(dataArray[10]);
+    }
 
 
-        $("#warningCarName").text(dataArray[0]);
-        $("#warningTime").text(dataArray[1]);
-        $("#warningGroup").text(dataArray[2]);
-        $("#warningDescription").text(dataArray[5]);
-        $("#warningPeo").text(dataArray[6]);
-        $("#simcard").val(dataArray[8]);
-        $("#device").val(dataArray[9]);
-        $("#warningType").val(dataArray[11]);
-        $("#vUuid").val(dataArray[13]);
-        var url = "/clbs/v/monitoring/getAlarmParam";
-        var parameter = {"vehicleId": dataArray[13], "alarm": dataArray[5]};
-        json_ajax("POST", url, "json", true, parameter, dataTableOperation.getAlarmParam);
-    },
-    getAlarmParam: function (data) {
-        $(".warningDeal").hide();
-        var len = data.obj.length;
-        var valueList = data.obj;
-        if (len != 0) {
-            for (var i = 0; i < len; i++) {
-                var name = valueList[i].name;
-                var value = valueList[i].parameterValue;
-                var paramCode = valueList[i].paramCode;
-                if (name == "超速预警") {
-                    $("#overSpeedGap").show();
-                    $("#overSpeedGapValue").text(value);
-                }
-                ;
-                if (name == "疲劳驾驶预警") {
-                    $("#tiredDriveGap").show();
-                    $("#tiredDriveGapValue").text(value);
-                }
-                ;
-                if (name == "碰撞预警") {
-                    $("#crashWarning").show();
-                    if (paramCode == "param1") {
-                        $("#crashTime").text(value);
-                    } else if (paramCode == "param2") {
-                        $("#crashSpeed").text(value);
-                    }
-                }
-                ;
-                if (name == "侧翻预警") {
-                    $("#turnOnWarning").show();
-                    $("#turnOnValue").text(value);
-                }
-                ;
-                if (name == "超速报警") {
-                    $("#overSpeeds").show();
-                    if (paramCode == "param1") {
-                        $("#warningSpeed").text(value);
-                    } else if (paramCode == "param2") {
-                        $("#warningAllTime").text(value);
-                    }
-                }
-                ;
-                if (name == "疲劳驾驶") {
-                    $("#tiredDrive").show();
-                    if (paramCode == "param1") {
-                        $("#continuousDriveTime").text(value);
-                    } else if (paramCode == "param2") {
-                        $("#breakTime").text(value);
-                    }
-                }
-                ;
-                if (name == "当天累积驾驶超时") {
-                    $("#addUpDrive").show();
-                    $("#addUpDriveTime").text(value);
-                }
-                ;
-                if (name == "超时停车") {
-                    $("#overTimeStop").show();
-                    $("#overTimeStopTime").text(value);
-                }
-                ;
-                if (name == "凌晨2-5点行驶报警") {
-                    $("#earlyRun").show();
-                    $("#earlyRunValue").text(value);
-                }
-                ;
-                if (name == "车辆非法位移") {
-                    $("#displacementCar").show();
-                    $("#displacementCarDistance").text(value);
-                }
-                ;
-                if (name == "车机疑似屏蔽报警") {
-                    $("#shieldWarning").show();
-                    if (paramCode == "param1") {
-                        $("#offLineTime").text(value);
-                    } else if (paramCode == "param2") {
-                        $("#offLineStartTime").text(value);
-                    } else if (paramCode == "param3") {
-                        $("#offLineEndTime").text(value);
-                    }
-                }
-                ;
-            }
-            ;
+    $("#warningCarName").text(dataArray[0]);
+    $("#warningTime").text(dataArray[1]);
+    $("#warningGroup").text(dataArray[2]);
+    $("#warningDescription").text(dataArray[5]);
+    $("#warningPeo").text(dataArray[6]);
+    $("#simcard").val(dataArray[8]);
+    $("#device").val(dataArray[9]);
+    $("#warningType").val(dataArray[11]);
+    $("#vUuid").val(dataArray[13]);
+    var url = "/clbs/v/monitoring/getAlarmParam";
+    var parameter = {"vehicleId": dataArray[13], "alarm": dataArray[5]};
+    json_ajax("POST", url, "json", true, parameter, dataTableOperation.getAlarmParam);
+  },
+  getAlarmParam: function (data) {
+    $(".warningDeal").hide();
+    var len = data.obj.length;
+    var valueList = data.obj;
+    if (len != 0) {
+      for (var i = 0; i < len; i++) {
+        var name = valueList[i].name;
+        var value = valueList[i].parameterValue;
+        var paramCode = valueList[i].paramCode;
+        if (name == "超速预警") {
+          $("#overSpeedGap").show();
+          $("#overSpeedGapValue").text(value);
         }
         ;
-    },
-    // 拍照
-    photo: function () {
-        dataTableOperation.getPhoto();
-    },
-    getPhoto: function (data) {
-        //拍照参数显示隐藏
-        if ($("#takePicturesContent").is(":hidden")) {
-            $("#takePicturesContent").slideDown();
-            $("#sendTextMessages").hide();
-        } else {
-            $("#takePicturesContent").slideUp();
-        }
-        setTimeout("dataTableOperation.logFindCilck()", 500);
-    },
-    send: function () {
-        if ($("#sendTextMessages").is(":hidden")) {
-            $("#sendTextMessages").slideDown();
-            $("#takePicturesContent").hide();
-        } else {
-            $("#sendTextMessages").slideUp();
-        }
-        setTimeout("dataTableOperation.logFindCilck()", 500);
-    },
-    handleAlarm: function (handleType) {
-        var startTime = $("#warningTime").text();
-        var plateNumber = $("#warningCarName").text();
-        var vehicleId = $("#vUuid").val();
-        var simcard = $('#simcard').val();
-        var device = $("#device").val();
-        var sno = $("#sno").val();
-        var alarm = $("#warningType").val();
-        var url = "/clbs/v/monitoring/handleAlarm";
-        var data = {
-            "vehicleId": vehicleId,
-            "plateNumber": plateNumber,
-            "alarm": alarm,
-            "handleType": handleType,
-            "startTime": startTime,
-            "simcard": simcard,
-            "device": device,
-            "sno": sno
-        };
-        json_ajax("POST", url, "json", true, data, null);
-        $("#warningManage").modal('hide');
-        dataTableOperation.updateHandleStatus($("#warningCarName").text());
-        setTimeout("dataTableOperation.logFindCilck()", 500);
-    },
-    // 更新报警处理状态
-    updateHandleStatus: function (plateNumber) {
-        $alarmTable.children("tbody").children("tr").each(function () {
-            if ($(this).children("td:nth-child(2)").text() == plateNumber) {
-                $(this).children("td:nth-child(4)").removeAttr("onclick");
-                $(this).children("td:nth-child(4)").text("已处理").removeAttr("style");
-            }
-        });
-    },
-    // 取消订阅后删除对应表格信息
-    deleteRowByRealTime: function (plateNumber) {
-        for (var i = 0; i < plateNumber.length; i++) {
-            //车辆状态信息
-            if (stateName.indexOf(plateNumber[i]) != -1) {
-                $realTimeStateTableList.children("tbody").children("tr").each(function () {
-                    if ($(this).children("td:nth-child(2)").attr('data-id') == plateNumber[i]) {
-                        $(this).remove();
-                        stateIndex--;
-                        stateName.splice(stateName.indexOf(plateNumber[i]), 1);
-                    }
-                });
-            }
-            ;
+        if (name == "疲劳驾驶预警") {
+          $("#tiredDriveGap").show();
+          $("#tiredDriveGapValue").text(value);
         }
         ;
-        dataTableOperation.carStateAdapt(activeIndex);
-        dataTableOperation.tableRank('realTimeStateTable');
-        dataTableOperation.tableRank('alarmTable');
-    },
-    // 监控对象列表单双击
-    dataTableDbclick: function (type) {
-        var thisID = dataTableOperation.confirmID(type);
-        var TimeFn = null;
-        $("#" + thisID).children("tbody").children("tr").unbind("click").bind("click", function () {
-            //判断当前单击后的信息是否高亮
-            if ($(this).hasClass("tableHighlight") || $(this).hasClass("tableHighlight-blue")) {
-                //清除车辆树高亮效果
-                var plateInformationName = $(this).children("td:nth-child(2)").text();
-                if (licensePlateInformation == plateInformationName) {
-                    $(".ztree li a").removeAttr("class", "curSelectedNode");
-                    $("#" + dbclickCheckedId).parent().removeAttr("class", "curSelectedNode_dbClick");
-                }
-                if (groupIconSkin == "assignmentSkin" || groupIconSkin == "groupSkin") {
-                    $(".ztree li a").removeAttr("class", "curSelectedNode");
-                    $("#" + dbclickCheckedId).parent().removeAttr("class", "curSelectedNode_dbClick");
-                }
-                //清除数据表高亮效果
-                $(this).removeClass("tableHighlight");
-                $(this).removeClass("tableHighlight-blue");
-                $(".ztree li a").removeClass("curSelectedNode_dbClick");
-                $(".ztree li a").removeClass("curSelectedNode");
-                //取消聚焦跟踪
-                treeMonitoring.centerMarkerNo();
-            } else {
-                $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight");
-                $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
-                //为表格添加高亮
-                var numberPlate = $(this).children("td:nth-child(2)").text();
-                var realTimeDataTableTrNum = $("#realTimeStateTable").find("tr").length;
-                for (var i = 0; i < realTimeDataTableTrNum; i++) {
-                    $(this).addClass("tableHighlight");
-                }
-                $(".ztree li a").removeClass("curSelectedNode_dbClick");
-                $(".ztree li a").removeClass("curSelectedNode");
-                //为车辆树添加高亮
-                var zTreeDataTables = $.fn.zTree.getZTreeObj("treeDemo");
-                var dataTabCheckedNum = zTreeDataTables.getCheckedNodes(true);
-                for (var i = 0; i < dataTabCheckedNum.length; i++) {
-                    if (dataTabCheckedNum[i].name == numberPlate) {
-                        ztreeStyleDbclick = dataTabCheckedNum[i].tId;
-                        $("#" + ztreeStyleDbclick).children("a").addClass("curSelectedNode_dbClick");
-                    }
-                }
-                var $this = $(this);
-                TimeFn = setTimeout(function () {
-                	var objID = $this.children("td:nth-child(2)").attr('data-id');
-                    //聚焦跟踪执行方法
-                    dataTableOperation.centerMarkerBands(objID);
-                }, 300);
-            }
-        });
-        $("#" + thisID).children("tbody").children("tr").unbind("dblclick").bind("dblclick", function () {
-            var nodeName = $(this).children("td:nth-child(2)").text();
-            dataTableOperation.tableHighlight(type, nodeName);
-            //为表格添加高亮
-            var numberPlate = $(this).children("td:nth-child(2)").text();
-            var realTimeDataTableTrNum = $("#realTimeStateTable").find("tr").length;
-            for (var i = 0; i < realTimeDataTableTrNum; i++) {
-                $(this).addClass("tableHighlight");
-            }
-            $(".ztree li a").removeClass("curSelectedNode_dbClick");
-            $(".ztree li a").removeClass("curSelectedNode");
-            //为车辆树添加高亮
-            var zTreeDataTables = $.fn.zTree.getZTreeObj("treeDemo");
-            var dataTabCheckedNum = zTreeDataTables.getCheckedNodes(true);
-            for (var i = 0; i < dataTabCheckedNum.length; i++) {
-                if (dataTabCheckedNum[i].name == numberPlate) {
-                    ztreeStyleDbclick = dataTabCheckedNum[i].tId;
-                    $("#" + ztreeStyleDbclick).children("a").addClass("curSelectedNode_dbClick");
-                }
-            }
-            //聚焦跟踪执行方法
-            var objID = $(this).children("td:nth-child(2)").attr('data-id');
-            dataTableOperation.centerMarkerBands(objID);
-            clearTimeout(TimeFn);
-        });
-    },
-    //报警记录单双击
-    alarmInfoDataDbclick: function (type) {
-        var thisID = dataTableOperation.confirmID(type);
-        var alarmTimeFn = null;
-        $("#" + thisID).children("tbody").children("tr").unbind("click").bind("click", function () {
-            clearTimeout(alarmTimeFn);
-            $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
-            var alarmDataTableTrNum = $("#" + thisID).find("tr").length;
-            for (var i = 0; i < alarmDataTableTrNum; i++) {
-                $(this).addClass("tableHighlight-blue");
-            }
-            alarmTimeFn = setTimeout(function () {
-            }, 300);
-        });
-        $("#" + thisID).children("tbody").children("tr").unbind("dblclick").bind("dblclick", function () {
-            clearTimeout(alarmTimeFn);
-            var alarmVid;
-            var timeFormat;
-            var alarmStr;
-            //获取当前点击行相对应的值
-            if (type == 'alarm') {
-                alarmVid = $(this).children("td:nth-child(2)").attr("data-id");
-                timeFormat = $(this).children("td:nth-child(3)").text();
-                alarmStr = $(this).children("td:nth-child(8)").text();
-            } else if (type == 'peopleAlarm') {
-                alarmVid = $(this).children("td:nth-child(2)").attr("data-id");
-                timeFormat = $(this).children("td:nth-child(3)").text();
-                alarmStr = $(this).children("td:nth-child(6)").text();
-            }
-            ;
-            // 判断是否有报警查询的菜单权限
-            var alarmFlag = false;
-            var permissionUrls = $("#permissionUrls").val();
-            if (permissionUrls != null && permissionUrls != undefined) {
-                var urllist = permissionUrls.split(",");
-                if (urllist.indexOf("/a/search/list") > -1) {
-                    alarmFlag = true;
-                    //跳转
-                    location.href = "/clbs/a/search/list?avid=" + alarmVid + "&atype=0" + "&atime=" + timeFormat + "";
-                }
-            }
-            if (!alarmFlag) {
-                layer.msg("无操作权限，请联系管理员");
-            }
-        });
-    },
-    //列表高亮
-    tableHighlight: function (type, name) {
-        var thisID = dataTableOperation.confirmID(type);
-        $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight");
-        $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
-        $("#" + thisID).children("tbody").children("tr").each(function () {
-            if ($(this).children("td:nth-child(2)").text() == name) {
-                dbClickHeighlight = false;
-                $(this).addClass("tableHighlight");
-                $(this).parent('div').scrollTop(0);
-                $("#" + thisID).children('tbody').children('tr.tableHighlight').insertBefore($("#" + thisID).children("tbody").children("tr:first-child"));
-            }
-        });
-
-        //序号重新进行排序
-        dataTableOperation.tableRank(thisID);
-    },
-    //列表高亮
-    tableHighlightBlue: function (type, name) {
-        var thisID = dataTableOperation.confirmID(type);
-        $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
-        $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight");
-        $("#" + thisID).children("tbody").children("tr").each(function () {
-            if ($(this).children("td:nth-child(2)").text() == name) {
-                dbClickHeighlight = false;
-                $(this).addClass("tableHighlight-blue");
-                $(this).parent('div').scrollTop(0);
-                $("#" + thisID).children('tbody').children('tr.tableHighlight-blue').insertBefore($("#" + thisID).children("tbody").children("tr:first-child"));
-            }
-        });
-        //序号重新进行排序
-        dataTableOperation.tableRank(thisID);
-    },
-    logFindCilck: function () {
-        if (clickLogCount == 0) {
-            // 终端上报日志updataFenceData
-            webSocket.subscribe(headers, '/topic/deviceReportLog', function () {
-                var data = {"eventDate": logTime}
-                address_submit("POST", '/clbs/m/reportManagement/logSearch/findLog', "json", false, data, true, dataTableOperation.logFind);
-            }, null, null);
-            webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/deviceReportLog', function () {
-                var data = {"eventDate": logTime}
-                address_submit("POST", '/clbs/m/reportManagement/logSearch/findLog', "json", false, data, true, dataTableOperation.logFind);
-            }, null, null);
-            clickLogCount = 1;
+        if (name == "碰撞预警") {
+          $("#crashWarning").show();
+          if (paramCode == "param1") {
+            $("#crashTime").text(value);
+          } else if (paramCode == "param2") {
+            $("#crashSpeed").text(value);
+          }
         }
+        ;
+        if (name == "侧翻预警") {
+          $("#turnOnWarning").show();
+          $("#turnOnValue").text(value);
+        }
+        ;
+        if (name == "超速报警") {
+          $("#overSpeeds").show();
+          if (paramCode == "param1") {
+            $("#warningSpeed").text(value);
+          } else if (paramCode == "param2") {
+            $("#warningAllTime").text(value);
+          }
+        }
+        ;
+        if (name == "疲劳驾驶") {
+          $("#tiredDrive").show();
+          if (paramCode == "param1") {
+            $("#continuousDriveTime").text((value && value !== "null")?value:"");
+          } else if (paramCode == "param2") {
+            $("#breakTime").text(value);
+          }
+        }
+        ;
+        if (name == "当天累积驾驶超时") {
+          $("#addUpDrive").show();
+          $("#addUpDriveTime").text(value);
+        }
+        ;
+        if (name == "超时停车") {
+          $("#overTimeStop").show();
+          $("#overTimeStopTime").text(value);
+        }
+        ;
+        if (name == "凌晨2-5点行驶报警") {
+          $("#earlyRun").show();
+          $("#earlyRunValue").text(value);
+        }
+        ;
+        if (name == "车辆非法位移") {
+          $("#displacementCar").show();
+          $("#displacementCarDistance").text(value);
+        }
+        ;
+        if (name == "车机疑似屏蔽报警") {
+          $("#shieldWarning").show();
+          if (paramCode == "param1") {
+            $("#offLineTime").text(value);
+          } else if (paramCode == "param2") {
+            $("#offLineStartTime").text(value);
+          } else if (paramCode == "param3") {
+            $("#offLineEndTime").text(value);
+          }
+        }
+        ;
+      }
+      ;
+    }
+    ;
+  },
+  // 拍照
+  photo: function () {
+    dataTableOperation.getPhoto();
+  },
+  getPhoto: function (data) {
+    //拍照参数显示隐藏
+    if ($("#takePicturesContent").is(":hidden")) {
+      $("#takePicturesContent").slideDown();
+      $('.takePicturesFooter').show();
+      $("#sendTextMessages").hide();
+      $('.sendTextFooter').hide();
+    } else {
+      $("#takePicturesContent").slideUp();
+      $('.takePicturesFooter').hide();
+    }
+    setTimeout("dataTableOperation.logFindCilck()", 500);
+  },
+  send: function () {
+    if ($("#sendTextMessages").is(":hidden")) {
+      $("#sendTextMessages").slideDown();
+      $('.sendTextFooter').show();
+      $("#takePicturesContent").hide();
+      $('.takePicturesFooter').hide();
+    } else {
+      $("#sendTextMessages").slideUp();
+      $('.sendTextFooter').hide();
+    }
+    setTimeout("dataTableOperation.logFindCilck()", 500);
+  },
+  handleAlarm: function (handleType) {
+    var startTime = $("#warningTime").text();
+    var plateNumber = $("#warningCarName").text();
+    var description = $("#warningDescription").text();
+    var vehicleId = $("#vUuid").val();
+    var simcard = $('#simcard').val();
+    var device = $("#device").val();
+    var sno = $("#sno").val();
+    var alarm = $("#warningType").val();
+    var remark = $("#alarmRemark").val();
+    var url = "/clbs/v/monitoring/handleAlarm";
+    var data = {
+      "vehicleId": vehicleId,
+      "plateNumber": plateNumber,
+      "alarm": alarm,
+      "description": description,
+      "handleType": handleType,
+      "startTime": startTime,
+      "simcard": simcard,
+      "device": device,
+      "sno": sno,
+      "remark":remark
+    };
+    json_ajax("POST", url, "json", true, data, null);
+    $("#warningManage").modal('hide');
+    dataTableOperation.updateHandleStatus($("#warningCarName").text());
+    setTimeout("dataTableOperation.logFindCilck()", 500);
+  },
+  // 更新报警处理状态
+  updateHandleStatus: function (plateNumber) {
+    $alarmTable.children("tbody").children("tr").each(function () {
+      if ($(this).children("td:nth-child(2)").text() == plateNumber) {
+        $(this).children("td:nth-child(4)").removeAttr("onclick");
+        $(this).children("td:nth-child(4)").text("已处理").removeAttr("style");
+      }
+    });
+  },
+  // 取消订阅后删除对应表格信息
+  deleteRowByRealTime: function (plateNumber) {
+    for (var i = 0; i < plateNumber.length; i++) {
+      //车辆状态信息
+      if (stateName.indexOf(plateNumber[i]) != -1) {
+        $realTimeStateTableList.children("tbody").children("tr").each(function () {
+          if ($(this).children("td:nth-child(2)").attr('data-id') == plateNumber[i]) {
+            $(this).remove();
+            stateIndex--;
+            stateName.splice(stateName.indexOf(plateNumber[i]), 1);
+          }
+        });
+      }
+      ;
+    }
+    ;
+    dataTableOperation.carStateAdapt(activeIndex);
+    dataTableOperation.tableRank('realTimeStateTable');
+    dataTableOperation.tableRank('alarmTable');
+  },
+  // 监控对象列表单双击
+  dataTableDbclick: function (type) {
+    var thisID = dataTableOperation.confirmID(type);
+    var TimeFn = null;
+    $("#" + thisID).children("tbody").children("tr").unbind("click").bind("click", function () {
+      //判断当前单击后的信息是否高亮
+      if ($(this).hasClass("tableHighlight") || $(this).hasClass("tableHighlight-blue")) {
+        //清除车辆树高亮效果
+        var plateInformationName = $(this).children("td:nth-child(2)").data('id');
+        if (licensePlateInformation == plateInformationName) {
+          $(".ztree li a").removeAttr("class", "curSelectedNode");
+          $("#" + dbclickCheckedId).parent().removeAttr("class", "curSelectedNode_dbClick");
+        }
+        if (groupIconSkin == "assignmentSkin" || groupIconSkin == "groupSkin") {
+          $(".ztree li a").removeAttr("class", "curSelectedNode");
+          $("#" + dbclickCheckedId).parent().removeAttr("class", "curSelectedNode_dbClick");
+        }
+        //清除数据表高亮效果
+        $(this).removeClass("tableHighlight");
+        $(this).removeClass("tableHighlight-blue");
+        $(".ztree li a").removeClass("curSelectedNode_dbClick");
+        $(".ztree li a").removeClass("curSelectedNode");
+        //取消聚焦跟踪
+        treeMonitoring.centerMarkerNo();
+      } else {
+        $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight");
+        $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
+        //为表格添加高亮
+        var numberPlate = $(this).children("td:nth-child(2)").data('id');
+        var realTimeDataTableTrNum = $("#realTimeStateTable").find("tr").length;
+        for (var i = 0; i < realTimeDataTableTrNum; i++) {
+          $(this).addClass("tableHighlight");
+        }
+        $(".ztree li a").removeClass("curSelectedNode_dbClick");
+        $(".ztree li a").removeClass("curSelectedNode");
+        //为车辆树添加高亮
+        var zTreeDataTables = $.fn.zTree.getZTreeObj("treeDemo");
+        var dataTabCheckedNum = zTreeDataTables.getCheckedNodes(true);
+        for (var i = 0; i < dataTabCheckedNum.length; i++) {
+          if (dataTabCheckedNum[i].id == numberPlate) {
+            ztreeStyleDbclick = dataTabCheckedNum[i].tId;
+            $("#" + ztreeStyleDbclick).children("a").addClass("curSelectedNode_dbClick");
+          }
+        }
+        var $this = $(this);
+        TimeFn = setTimeout(function () {
+          var objID = $this.children("td:nth-child(2)").attr('data-id');
+          //聚焦跟踪执行方法
+          // dataTableOperation.centerMarkerBands(objID);
+          treeMonitoring.centerMarker(objID, 'DBLCLICK');
+        }, 300);
+        if (!$('.obdContent').is(':hidden')) {
+            amapOperation.setObdInfo();
+        }
+      }
+    });
+    $("#" + thisID).children("tbody").children("tr").unbind("dblclick").bind("dblclick", function () {
+      var nodeName = $(this).children("td:nth-child(2)").data('id');
+      dataTableOperation.tableHighlight(type, nodeName);
+      //为表格添加高亮
+      var numberPlate = $(this).children("td:nth-child(2)").data('id');
+      var realTimeDataTableTrNum = $("#realTimeStateTable").find("tr").length;
+      for (var i = 0; i < realTimeDataTableTrNum; i++) {
+        $(this).addClass("tableHighlight");
+      }
+      $(".ztree li a").removeClass("curSelectedNode_dbClick");
+      $(".ztree li a").removeClass("curSelectedNode");
+      //为车辆树添加高亮
+      var zTreeDataTables = $.fn.zTree.getZTreeObj("treeDemo");
+      var dataTabCheckedNum = zTreeDataTables.getCheckedNodes(true);
+      for (var i = 0; i < dataTabCheckedNum.length; i++) {
+        if (dataTabCheckedNum[i].id == numberPlate) {
+          ztreeStyleDbclick = dataTabCheckedNum[i].tId;
+          $("#" + ztreeStyleDbclick).children("a").addClass("curSelectedNode_dbClick");
+        }
+      }
+      //聚焦跟踪执行方法
+      var objID = $(this).children("td:nth-child(2)").attr('data-id');
+      // dataTableOperation.centerMarkerBands(objID);
+      treeMonitoring.centerMarker(objID, 'DBLCLICK');
+      clearTimeout(TimeFn);
+      if (!$('.obdContent').is(':hidden')) {
+          amapOperation.setObdInfo();
+      }
+    });
+  },
+  //报警记录单双击
+  alarmInfoDataDbclick: function (type) {
+    var thisID = dataTableOperation.confirmID(type);
+    var alarmTimeFn = null;
+    $("#" + thisID).children("tbody").children("tr").unbind("click").bind("click", function () {
+      clearTimeout(alarmTimeFn);
+      $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
+      var alarmDataTableTrNum = $("#" + thisID).find("tr").length;
+      for (var i = 0; i < alarmDataTableTrNum; i++) {
+        $(this).addClass("tableHighlight-blue");
+      }
+      alarmTimeFn = setTimeout(function () {
+      }, 300);
+    });
+    $("#" + thisID).children("tbody").children("tr").unbind("dblclick").bind("dblclick", function () {
+      clearTimeout(alarmTimeFn);
+      var alarmVid;
+      var timeFormat;
+      var alarmStr;
+      //获取当前点击行相对应的值
+      if (type == 'alarm') {
+        alarmVid = $(this).children("td:nth-child(2)").attr("data-id");
+        timeFormat = $(this).children("td:nth-child(3)").text();
+        alarmStr = $(this).children("td:nth-child(8)").text();
+      } else if (type == 'peopleAlarm') {
+        alarmVid = $(this).children("td:nth-child(2)").attr("data-id");
+        timeFormat = $(this).children("td:nth-child(3)").text();
+        alarmStr = $(this).children("td:nth-child(6)").text();
+      }
+      ;
+      // 判断是否有报警查询的菜单权限
+      var alarmFlag = false;
+      var permissionUrls = $("#permissionUrls").val();
+      if (permissionUrls != null && permissionUrls != undefined) {
+        var urllist = permissionUrls.split(",");
+        if (urllist.indexOf("/a/search/list") > -1) {
+          alarmFlag = true;
+          //跳转
+          location.href = "/clbs/a/search/list?avid=" + alarmVid + "&atype=0" + "&atime=" + timeFormat + "";
+        }
+      }
+      if (!alarmFlag) {
+        layer.msg("无操作权限，请联系管理员");
+      }
+    });
+  },
+  //列表高亮
+  tableHighlight: function (type, name) {
+    var thisID = dataTableOperation.confirmID(type);
+    $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight");
+    $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
+    $("#" + thisID).children("tbody").children("tr").each(function () {
+      if ($(this).children("td:nth-child(2)").data('id') == name) {
+        dbClickHeighlight = false;
+        $(this).addClass("tableHighlight");
+        $(this).parent('div').scrollTop(0);
+        $("#" + thisID).children('tbody').children('tr.tableHighlight').insertBefore($("#" + thisID).children("tbody").children("tr:first-child"));
+        if (!$('.obdContent').is(':hidden')) {
+            amapOperation.setObdInfo();
+        }
+      }
+    });
+
+    //序号重新进行排序
+    dataTableOperation.tableRank(thisID);
+  },
+  //列表高亮
+  tableHighlightBlue: function (type, name) {
+    var thisID = dataTableOperation.confirmID(type);
+    $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight-blue");
+    $("#" + thisID).children("tbody").children("tr").removeClass("tableHighlight");
+    $("#" + thisID).children("tbody").children("tr").each(function () {
+      if ($(this).children("td:nth-child(2)").data('id') == name) {
+        dbClickHeighlight = false;
+        $(this).addClass("tableHighlight-blue");
+        $(this).parent('div').scrollTop(0);
+        $("#" + thisID).children('tbody').children('tr.tableHighlight-blue').insertBefore($("#" + thisID).children("tbody").children("tr:first-child"));
+        if (!$('.obdContent').is(':hidden')) {
+            amapOperation.setObdInfo();
+        }
+      }
+    });
+    //序号重新进行排序
+    dataTableOperation.tableRank(thisID);
+  },
+  logFindCilck: function () {
+    if (clickLogCount == 0) {
+      // 终端上报日志updataFenceData
+      webSocket.subscribe(headers, '/topic/deviceReportLog', function () {
         var data = {"eventDate": logTime}
         address_submit("POST", '/clbs/m/reportManagement/logSearch/findLog', "json", false, data, true, dataTableOperation.logFind);
-    },
-    logFind: function (data) {
-        operationLogLength = data.length;
-        if ($("#operationLog").hasClass("active")) {
-            if (data.length <= 5) {
-                $MapContainer.css('height', (newMapHeight - (41 * data.length + 43 + 17)) + 'px');
-            } else {
-                $("#operationLogTable").css({"overflow": "auto", "max-height": "248px"});
-            }
+      }, null, null);
+      webSocket.subscribe(headers, '/user/' + $("#userName").text() + '/deviceReportLog', function () {
+        var data = {"eventDate": logTime}
+        address_submit("POST", '/clbs/m/reportManagement/logSearch/findLog', "json", false, data, true, dataTableOperation.logFind);
+      }, null, null);
+      clickLogCount = 1;
+    }
+    var data = {"eventDate": logTime}
+    address_submit("POST", '/clbs/m/reportManagement/logSearch/findLog', "json", false, data, true, dataTableOperation.logFind);
+  },
+  logFind: function (data) {
+    operationLogLength = data.length;
+    if ($("#operationLog").hasClass("active")) {
+      if (data.length <= 5) {
+        $MapContainer.css('height', (newMapHeight - (41 * data.length + 43 + 17)) + 'px');
+      } else {
+        $("#operationLogTable").css({"overflow": "auto", "max-height": "248px"});
+      }
+    }
+    $logging.children("tbody").empty();
+    var logTable = 1;
+    var html = "";
+    var logType = "";
+    var content = "";
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].logSource == "1") {
+        logType = '终端上传';
+        content = "<a onclick = 'dataTableOperation.showLogContent(\"" + data[i].message + "\")'>" + data[i].monitoringOperation + "</a>";
+      } else if (data[i].logSource == "2") {
+        logType = '平台下发';
+        content = data[i].message;
+      } else {
+        logType = '平台操作';
+        content = data[i].message;
+      }
+      html += "<tr><td>" + logTable + "</td><td>" + data[i].eventDate + "</td><td>" + (data[i].ipAddress != null ? data[i].ipAddress : "") + "</td><td>" + (data[i].username != null ? data[i].username : "") + "</td><td>" + data[i].brand + "</td><td>" + data[i].plateColorStr + "</td><td>" + content + "</td><td>" + logType + "</td></tr>";
+      logTable++;
+    }
+    $logging.children("tbody").append(html);
+  },
+  showLogContent: function (content) { // 显示log详情
+    pageLayout.closeVideo();
+    $("#logDetailDiv").modal("show");
+    $("#logContent").html(content);
+  },
+  takePhoto: function () {
+    if (dataTableOperation.photoValidate()) {
+      $("#takePhoto").ajaxSubmit(function (data) {
+        $("#goPhotograph").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess);
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg);
         }
-        $logging.children("tbody").empty();
-        var logTable = 1;
-        var html = "";
-        var logType = "";
-        var content = "";
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].logSource == "1") {
-                logType = '终端上传';
-                content = "<a onclick = 'dataTableOperation.showLogContent(\"" + data[i].message + "\")'>" + data[i].monitoringOperation + "</a>";
-            } else if (data[i].logSource == "2") {
-                logType = '平台下发';
-                content = data[i].message;
-            } else {
-                logType = '平台操作';
-                content = data[i].message;
-            }
-            html += "<tr><td>" + logTable + "</td><td>" + data[i].eventDate + "</td><td>" + (data[i].ipAddress != null ? data[i].ipAddress : "") + "</td><td>" + (data[i].username != null ? data[i].username : "") + "</td><td>" + data[i].brand + "</td><td>" + data[i].plateColorStr + "</td><td>" + content + "</td><td>" + logType + "</td></tr>";
-            logTable++;
+      });
+    }
+  },
+  takePhotoForAlarm: function () {
+    if (dataTableOperation.photoValidateForAlarm()) {
+        // 为车id赋值
+      var vehicleId = $("#vUuid").val();
+      $("#vidforAlarm").val(vehicleId);
+      $("#brandPhoto").val($("#warningCarName").text());
+      $("#alarmPhoto").val($("#warningType").val());
+      $("#startTimePhoto").val($("#warningTime").text());
+
+      $("#simcardPhoto").val($('#simcard').val());
+      $("#devicePhoto").val($("#device").val());
+      $("#snoPhoto").val($("#sno").val());
+      $("#handleTypePhoto").val("拍照");
+      $("#description-photo").val($("#warningDescription").text());
+      $("#remark-photo").val($("#alarmRemark").val());
+        $("#goPhotographsForAlarm").attr("disabled", "disabled");
+      $("#takePhotoForAlarm").ajaxSubmit(function (data) {
+        /*$("#warningManage").modal('hide');
+         if (JSON.parse(data).success) {
+         layer.msg(publicIssuedSuccess)
+         setTimeout("dataTableOperation.logFindCilck()", 500);
+         } else {
+         layer.msg(publicIssuedFailure);
+         }*/
+
+      });
+      // 根据需求, 此处无需等待响应成功
+      $("#warningManage").modal('hide');
+      dataTableOperation.updateHandleStatus($("#warningCarName").text());
+      setTimeout("dataTableOperation.logFindCilck()", 500);
+    }
+      $("#goPhotographsForAlarm").removeAttr("disabled");
+  },
+  getVideo: function () {
+    if ($("#vtime").val() == "0") {
+      $(".recording-timeline").show();
+      $("#videoPlay").attr("class", "pause");
+      videoTimeIndex = 1;
+      videoPlay.src = "../../resources/img/pause.png";
+      time = setInterval(function () {
+        $("#videoTime").html((videoTimeIndex++) + "秒");
+      }, 1000);
+    }
+    if (dataTableOperation.videoValidate()) {
+      $("#getVideo").ajaxSubmit(function (data) {
+        $("#goVideotape").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
         }
-        $logging.children("tbody").append(html);
-    },
-    showLogContent: function (content) { // 显示log详情
-        pageLayout.closeVideo();
-        $("#logDetailDiv").modal("show");
-        $("#logContent").html(content);
-    },
-    takePhoto: function () {
-        if (dataTableOperation.photoValidate()) {
-            $("#takePhoto").ajaxSubmit(function (data) {
-                $("#goPhotograph").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess);
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
+      });
+    }
+  },
+  goRegularReport: function () {
+    if (dataTableOperation.regularReportValidate()) {
+      $("#regularReport").ajaxSubmit(function (data) {
+        $("#continuousReturnTiming").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
         }
-    },
-    takePhotoForAlarm: function () {
-        if (dataTableOperation.photoValidateForAlarm()) {
-            // 为车id赋值
-            var vehicleId = $("#vUuid").val();
-            $("#vidforAlarm").val(vehicleId);
-            $("#brandPhoto").val($("#warningCarName").text());
-            $("#alarmPhoto").val($("#warningType").val());
-            $("#startTimePhoto").val($("#warningTime").text());
-            $("#takePhotoForAlarm").ajaxSubmit(function (data) {
-                $("#warningManage").modal('hide');
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                } else {
-                    layer.msg(publicIssuedFailure);
-                }
-            });
+      });
+    }
+  },
+  regularReportValidate: function () {
+    return $("#timeInterval0").validate({
+      rules: {
+        driverLoggingOutUpTimeSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        dormancyUpTimeSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        emergencyAlarmUpTimeSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        defaultTimeUpSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
         }
-    },
-    getVideo: function () {
-        if ($("#vtime").val() == "0") {
-            $(".recording-timeline").show();
-            $("#videoPlay").attr("class", "pause");
-            videoTimeIndex = 1;
-            videoPlay.src = "../../resources/img/pause.png";
-            time = setInterval(function () {
-                $("#videoTime").html((videoTimeIndex++) + "秒");
-            }, 1000);
+      },
+      messages: {
+        driverLoggingOutUpTimeSpace: {
+          required: drivingTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength
+        },
+        dormancyUpTimeSpace: {
+          required: sleepTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        emergencyAlarmUpTimeSpace: {
+          required: sosTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        defaultTimeUpSpace: {
+          required: defaultTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
         }
-        if (dataTableOperation.videoValidate()) {
-            $("#getVideo").ajaxSubmit(function (data) {
-                $("#goVideotape").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
+      }
+    }).form();
+  },
+  goDistanceReport: function () {
+    if (dataTableOperation.distanceReportValidate()) {
+      $("#distanceReport").ajaxSubmit(function (data) {
+        $("#continuousReturnFixedDistance").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
         }
-    },
-    goRegularReport: function () {
-        if (dataTableOperation.regularReportValidate()) {
-            $("#regularReport").ajaxSubmit(function (data) {
-                $("#continuousReturnTiming").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
+      });
+    }
+  },
+  distanceReportValidate: function () {
+    return $("#timeInterval1").validate({
+      rules: {
+        driverLoggingOutUpDistanceSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        dormancyUpDistanceSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        emergencyAlarmUpDistanceSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        defaultDistanceUpSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
         }
-    },
-    regularReportValidate: function () {
-        return $("#regularReport").validate({
-            rules: {
-                driverLoggingOutUpTimeSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                dormancyUpTimeSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                emergencyAlarmUpTimeSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                defaultTimeUpSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                }
-            },
-            messages: {
-                driverLoggingOutUpTimeSpace: {
-                    required: drivingTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength
-                },
-                dormancyUpTimeSpace: {
-                    required: sleepTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                emergencyAlarmUpTimeSpace: {
-                    required: sosTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                defaultTimeUpSpace: {
-                    required: defaultTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                }
-            }
-        }).form();
-    },
-    goDistanceReport: function () {
-        if (dataTableOperation.distanceReportValidate()) {
-            $("#distanceReport").ajaxSubmit(function (data) {
-                $("#continuousReturnFixedDistance").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
+      },
+      messages: {
+        driverLoggingOutUpDistanceSpace: {
+          required: drivingTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength
+        },
+        dormancyUpDistanceSpace: {
+          required: sleepTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        emergencyAlarmUpDistanceSpace: {
+          required: sosTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        defaultDistanceUpSpace: {
+          required: defaultTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
         }
-    },
-    distanceReportValidate: function () {
-        return $("#distanceReport").validate({
-            rules: {
-                driverLoggingOutUpDistanceSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                dormancyUpDistanceSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                emergencyAlarmUpDistanceSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                defaultDistanceUpSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                }
-            },
-            messages: {
-                driverLoggingOutUpDistanceSpace: {
-                    required: drivingTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength
-                },
-                dormancyUpDistanceSpace: {
-                    required: sleepTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                emergencyAlarmUpDistanceSpace: {
-                    required: sosTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                defaultDistanceUpSpace: {
-                    required: defaultTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                }
-            }
-        }).form();
-    },
-    goTimeInterval: function () {
-        if (dataTableOperation.timeIntervalValidate()) {
-            $("#timeInterval").ajaxSubmit(function (data) {
+      }
+    }).form();
+  },
+  goTimeInterval: function () {
+    var continuousReturnValue = $("#continuousReturnValue").val();
+    if(continuousReturnValue == 0){
+        if (!dataTableOperation.regularReportValidate()){
+            return;
+      }else {
+            $("#timeInterval0").ajaxSubmit(function (data) {
                 $("#continuousReturnTimingDistance").modal("hide");
                 if (JSON.parse(data).success) {
                     layer.msg(publicIssuedSuccess)
@@ -14911,1094 +14811,1276 @@ var dataTableOperation = {
                 }
             });
         }
-    },
-    timeIntervalValidate: function () {
-        return $("#timeInterval").validate({
-            rules: {
-                driverLoggingOutUpTimeSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                dormancyUpTimeSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                emergencyAlarmUpTimeSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                defaultTimeUpSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                driverLoggingOutUpDistanceSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                dormancyUpDistanceSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                emergencyAlarmUpDistanceSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                },
-                defaultDistanceUpSpace: {
-                    required: true,
-                    digits: true,
-                    max: 4294967295,
-                    min: 1
-                }
-            },
-            messages: {
-                driverLoggingOutUpTimeSpace: {
-                    required: drivingTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength
-                },
-                dormancyUpTimeSpace: {
-                    required: sleepTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                emergencyAlarmUpTimeSpace: {
-                    required: sosTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                defaultTimeUpSpace: {
-                    required: defaultTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                driverLoggingOutUpDistanceSpace: {
-                    required: drivingTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength
-                },
-                dormancyUpDistanceSpace: {
-                    required: sleepTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                emergencyAlarmUpDistanceSpace: {
-                    required: sosTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                },
-                defaultDistanceUpSpace: {
-                    required: defaultTimeNull,
-                    digits: publicNumberFloat,
-                    max: publicSizeMoreLength,
-                }
-            }
-        }).form();
-    },
-    gpListening: function () {
-        if (dataTableOperation.listeningValidate()) {
-            $("#listening").ajaxSubmit(function (data) {
-                $("#monitoringObjectListening").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
-        }
-    },
-    reportSet: function () {
-        var ht = $("#hours").val();
-        var mt = $("#minute").val();
-        if ((ht != "" && !/^[0-9]+$/.test(ht)) || (mt != "" && !/^[0-9]+$/.test(mt))) {//输入了非法字符
-            layer.msg("上报频率时间只能输入正整数");
-        } else {//正常校验
-            var hours = parseInt(ht);
-            var minute = parseInt(mt);
-            if (isNaN(hours) && isNaN(minute)) {
-                $("#locationNumber").val(86400);
-            } else if (isNaN(hours) && !isNaN(minute)) {
-                $("#locationNumber").val(minute * 60);
-            } else if (!isNaN(hours) && isNaN(minute)) {
-                $("#locationNumber").val(hours * 60 * 60);
-            } else if (!isNaN(hours) && !isNaN(minute)) {
-                $("#locationNumber").val(hours * 60 * 60 + minute * 60);
-            }
-            var reportSetFalg = false;
-            var locationNumber = $("#locationNumber").val();
-            if (locationNumber != 0 && locationNumber < 300) {
-                layer.msg("上报间隔最小为5分钟");
-            } else {
-                reportSetFalg = true;
-            }
-            var sada = $("#locationNumber").val();
-            if (reportSetFalg && dataTableOperation.reportSetValidate()) {
-                $("#reportFrequency").ajaxSubmit(function (data) {
-                    $("#reportFrequencySet").modal("hide");
-                    if (JSON.parse(data).obj.type) {
-                        layer.msg(publicIssuedSuccess);
-                        setTimeout("dataTableOperation.logFindCilck()", 500);
-                    } else {
-                        layer.msg(publicIssuedError);
-                    }
-                });
-            }
-        }
-    },
-    goInfofixedPointAndTiming: function () {
-        if (dataTableOperation.goInfofixedValidate()) {
-            $("#fixedPointTimingList").ajaxSubmit(function (data) {
-                if (JSON.parse(data).obj.type) {
-                    $("#fixedPointAndTiming").modal("hide");
-                    layer.msg(publicIssuedSuccess);
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                } else {
-                    layer.msg("指令发送失败,相邻时间点的间隔必须大于等于300秒");
-                }
-            });
-        }
-    },
-    positionTrailing: function () {
-        if (dataTableOperation.positionTrailingValidate()) {
-            $("#locationTailAfterList").ajaxSubmit(function (data) {
-                $("#locationTailAfter").modal("hide");
-                if (JSON.parse(data).obj.type) {
-                    layer.msg(publicIssuedSuccess);
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                } else {
-                    layer.msg(publicIssuedError);
-                }
-            });
-        }
-    },
-    listeningValidate: function () {
-        return $("#listening").validate({
-            rules: {
-                regRet: {
-                    isTel: true,
-                    required: true
-                }
-            },
-            messages: {
-                regRet: {
-                    isTel: phoneError,
-                    required: phoneNull
-                }
-            }
-        }).form();
-    },
-    reportSetValidate: function () {
-        return $("#reportFrequency").validate({
-            rules: {
-                locationPattern: {
-                    required: true
-                },
-                requiteTime: {
-                    checkRequiteTime: longDeviceType
-                }
-            },
-            messages: {
-                locationPattern: {
-                    required: positionNull
-                },
-                requiteTime: {
-                    checkRequiteTime: reportNull
-                }
-            }
-        }).form();
-    },
-    goInfofixedValidate: function () {
-        return $("#fixedPointTimingList").validate({
-            rules: {
-                locationTimes: {
-                    checkLocationTimes: true
-                }
-            },
-            messages: {
-                locationTimes: {
-                    checkLocationTimes: fixedPointNull
-                }
-            }
-        }).form();
-    },
-    positionTrailingValidate: function () {
-        return $("#locationTailAfterList").validate({
-            rules: {
-                longValidity: {
-                    required: true,
-                    maxlength: 5
-                },
-                longInterval: {
-                    required: true,
-                    maxlength: 5
-                }
-            },
-            messages: {
-                longValidity: {
-                    required: trackingNull,
-                    maxlength: intervalTimeNull
-                },
-                longInterval: {
-                    required: trackingIntervalNull,
-                    maxlength: intervalTimeNull
-                }
-            }
-        }).form();
-    },
-    goOverspeedSettings: function () {
-        if (dataTableOperation.speedLimitValidate()) {
-            $("#speedLimit").ajaxSubmit(function (data) {
-                $("#goOverspeedSetting").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
-        }
-    },
-    speedLimitValidate: function () {
-        return $("#speedLimit").validate({
-            rules: {
-                masSpeed: {
-                    required: true,
-                    digits: true,
-                    max: 2147483647,
-                    min: 1
-                },
-                speedTime: {
-                    required: true,
-                    digits: true,
-                    max: 2147483647,
-                    min: 1
-                }
-            },
-            messages: {
-                masSpeed: {
-                    required: maxSpeedNull,
-                    digits: maxSpeedError,
-                    max: maxSpeedErrorScope
-                },
-                speedTime: {
-                    required: speedTimeNull,
-                    digits: timeError,
-                    max: maxSpeedErrorScope
-                }
-            }
-        }).form();
-    },
-    emergency: function () {
-        if ($("#emergency").is(':checked')) {
-            $("#emergency").val(1)
-        } else {
-            $("#emergency").val(0)
-        }
-    },
-    emergency1: function () {
-        if ($("#emergency1").is(':checked')) {
-            $("#emergency1").val(1)
-        } else {
-            $("#emergency1").val(0)
-        }
-    },
-    displayTerminalDisplay: function () {
-        if ($("#displayTerminalDisplay").is(':checked')) {
-            $("#displayTerminalDisplay").val(3)
-        } else {
-            $("#displayTerminalDisplay").val(0)
-        }
-    },
-    tts: function () {
-        if ($("#tts").is(':checked')) {
-            $("#tts").val(4)
-        } else {
-            $("#tts").val(0)
-        }
-    },
-    tts1: function () {
-        if ($("#tts1").is(':checked')) {
-            $("#tts1").val(4)
-        } else {
-            $("#tts1").val(0)
-        }
-    },
-    advertisingDisplay: function () {
-        if ($("#advertisingDisplay").is(':checked')) {
-            $("#advertisingDisplay").val(5)
-        } else {
-            $("#advertisingDisplay").val(0)
-        }
-    },
-    advertisingDisplay1: function () {
-        if ($("#advertisingDisplay1").is(':checked')) {
-            $("#advertisingDisplay1").val(5)
-        } else {
-            $("#advertisingDisplay1").val(0)
-        }
-    },
-    deleteSign: function () {
-        if ($("#deleteSign").is(':checked')) {
-            $("#deleteSign").val(1)
-        } else {
-            $("#deleteSign").val(0)
-        }
-    },
-    goTxtSend: function () {
-        if (dataTableOperation.txtSendValidate()) {
-            $("#txtSend").ajaxSubmit(function (data) {
-                $("#textInfoSend").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
-        }
-    },
-    txtSendValidate: function () {
-        return $("#txtSend").validate({
-            rules: {
-                txt: {
-                    required: true
-                }
-            },
-            messages: {
-                txt: {
-                    required: textNull
-                }
-            }
-        }).form();
-    },
-    goTxtSendForAlarm: function () {
-        // 为车id赋值
-        var vehicleId = $("#vUuid").val();
-        $("#vidSendTxtForAlarm").val(vehicleId);
-        $("#brandTxt").val($("#warningCarName").text());
-        $("#alarmTxt").val($("#warningType").val());
-        $("#startTimeTxt").val($("#warningTime").text());
-        var smsTxt = $("#smsTxt").val();
-        if (smsTxt.length > 1024) {
-            layer.msg("下发内容不能超过1024个字符");
-            return;
-        }
-        $("#txtSendForAlarm").ajaxSubmit(function (data) {
-            $("#warningManage").modal('hide');
-            if (JSON.parse(data).success) {
-                layer.msg(publicIssuedSuccess)
-                setTimeout("dataTableOperation.logFindCilck()", 500);
-            } else {
-                layer.msg(publicIssuedFailure);
-            }
-        });
-    },
-    goSendQuestion: function () {
-        dataTableOperation.sendQuestionValidateTwo();
-        if (sendFlag) {
-            $("#sendQuestion").ajaxSubmit(function (data) {
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess);
+    }else if(continuousReturnValue == 1){
+      if (!dataTableOperation.distanceReportValidate()){
+        return;
+      }else {
+          $("#timeInterval1").ajaxSubmit(function (data) {
+              $("#continuousReturnTimingDistance").modal("hide");
+              if (JSON.parse(data).success) {
+                  layer.msg(publicIssuedSuccess)
+                  setTimeout("dataTableOperation.logFindCilck()", 500);
+              }
+          });
+      }
+    }else if(continuousReturnValue == 2){
+      if (!dataTableOperation.timeIntervalValidate()){
+        return;
+      }else {
+          $("#timeInterval2").ajaxSubmit(function (data) {
+              $("#continuousReturnTimingDistance").modal("hide");
+              if (JSON.parse(data).success) {
+                  layer.msg(publicIssuedSuccess)
+                  setTimeout("dataTableOperation.logFindCilck()", 500);
+              }
+          });
+      }
+    }else {
+        layer.msg("请选择回报类型");
+        return;
+    }
 
-                    //关闭并还原提问下发表单
-                    $("#askQuestionsIssued").modal("hide");
-                    $("#askQuestionsIssued input[type='text']").val('');
-                    $("#askQuestionsIssued .error").hide();
-                    $('#answer-add-content div[id^="answer-add"]').remove();
-
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
+  },
+  timeIntervalValidate: function () {
+    return $("#timeInterval2").validate({
+      rules: {
+        driverLoggingOutUpTimeSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        dormancyUpTimeSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        emergencyAlarmUpTimeSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        defaultTimeUpSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        driverLoggingOutUpDistanceSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        dormancyUpDistanceSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        emergencyAlarmUpDistanceSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
+        },
+        defaultDistanceUpSpace: {
+          required: true,
+          digits: true,
+          max: 4294967295,
+          min: 1
         }
-        /*
-         if (dataTableOperation.sendQuestionValidate()) {
-             $("#sendQuestion").ajaxSubmit(function (data) {
-                 $("#askQuestionsIssued").modal("hide");
-                 if (JSON.parse(data).success) {
-                     layer.msg(publicIssuedSuccess)
-                     setTimeout("dataTableOperation.logFindCilck()", 500);
-                 }
-             });
-         }*/
-    },
-    goInfoService: function () {
-        if (dataTableOperation.sendQuestionValidate()) {
-            $("#infoService").ajaxSubmit(function (data) {
-                $("#informationService").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
+      },
+      messages: {
+        driverLoggingOutUpTimeSpace: {
+          required: drivingTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength
+        },
+        dormancyUpTimeSpace: {
+          required: sleepTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        emergencyAlarmUpTimeSpace: {
+          required: sosTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        defaultTimeUpSpace: {
+          required: defaultTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        driverLoggingOutUpDistanceSpace: {
+          required: drivingTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength
+        },
+        dormancyUpDistanceSpace: {
+          required: sleepTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        emergencyAlarmUpDistanceSpace: {
+          required: sosTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
+        },
+        defaultDistanceUpSpace: {
+          required: defaultTimeNull,
+          digits: publicNumberInt,
+          max: publicSizeMoreLength,
         }
-    },
-    goThroughOrder: function () {
-        if (dataTableOperation.throughOrderValidate()) {
-            $("#throughOrder").ajaxSubmit(function (data) {
-                $("#throughInstruction").modal("hide");
-                if (JSON.parse(data).obj.type) {
-                    layer.msg(publicIssuedSuccess);
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                } else {
-                    layer.msg(publicIssuedError);
-                }
-            });
+      }
+    }).form();
+  },
+  gpListening: function () {
+    if (dataTableOperation.listeningValidate()) {
+      $("#listening").ajaxSubmit(function (data) {
+        $("#monitoringObjectListening").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
         }
-    },
-    throughOrderValidate: function () {
-        return $("#throughOrder").validate({
-            rules: {
-                longData: {
-                    required: true
-                }
-            },
-            messages: {
-                longData: {
-                    required: instructionError
-                }
-            }
-        }).form();
-    },
-    sendQuestionValidateTwo: function () {
-        var inputArr = $("#askQuestionsIssued input[type='text']");
-        var inpLen = 0;
-        for (var i = 0; i < inputArr.length; i++) {
-            var thisInput = inputArr[i];
-            var inputVal = thisInput.value;
-            if (inputVal == "") {
-                $(thisInput).siblings(".error").show();
-                inpLen = 1;
-            }
-            else {
-                $(thisInput).siblings(".error").hide();
-            }
-        }
-        if (inpLen == 0) {
-            sendFlag = true;
-        }
-        else {
-            sendFlag = false;
-        }
-    },
-    sendQuestionValidate: function () {
-        return $("#sendQuestion").validate({
-            rules: {
-                question: {
-                    required: true
-                },
-                value: {
-                    required: true
-                }
-            },
-            messages: {
-                question: {
-                    required: questionsNull
-                },
-                value: {
-                    required: answerNull
-                }
-            }
-        }).form();
-    },
-    goTelBack: function () {
-        if (dataTableOperation.telBackValidate()) {
-            $("#telBack").ajaxSubmit(function (data) {
-                $("#reantimeCallBack").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
-        }
-    },
-    telBackValidate: function () {
-        return $("#telBack").validate({
-            rules: {
-                regRet: {
-                    isTel: true,
-                    required: true
-                }
-            },
-            messages: {
-                regRet: {
-                    isTel: phoneError,
-                    required: phoneNull
-                }
-            }
-        }).form();
-    },
-    goMultimediaRetrieval: function () {
-        if (dataTableOperation.multimediaRetrievalValidate()) {
-            var startTime = $("#multimediaRetrieval input[name='startTime']").val();
-            var endTime = $("#multimediaRetrieval input[name='endTime']").val();
-            startTime = new Date(startTime.replace(/-/, "/"));
-            endTime = new Date(endTime.replace(/-/, "/"));
-            if (startTime > endTime) {
-                layer.msg("开始时间不能大于结束时间");
-                return;
-            }
-            $("#multimediaSearch").modal("hide");
-            $("#multimediaRetrieval").ajaxSubmit(function (data) {
-                $("#multimediaSearch").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
-        }
-    },
-    multimediaRetrievalValidate: function () {
-        return $("#multimediaRetrieval").validate({
-            rules: {
-                startTime: {
-                    required: true
-                },
-                endTime: {
-                    required: true
-                }
-            },
-            messages: {
-                startTime: {
-                    required: publicInputStartTime
-                },
-                endTime: {
-                    required: publicInputEndTime
-                }
-            }
-        }).form();
-    },
-    goMultimediaUploads: function () {
-        if (dataTableOperation.multimediaUploadsValidate()) {
-            $("#multimediaUploads").ajaxSubmit(function (data) {
-                $("#multimediaUpload").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
-        }
-    },
-    multimediaUploadsValidate: function () {
-        return $("#multimediaUploads").validate({
-            rules: {
-                startTime: {
-                    required: true
-                },
-                endTime: {
-                    required: true
-                }
-            },
-            messages: {
-                startTime: {
-                    required: publicInputStartTime
-                },
-                endTime: {
-                    required: publicInputEndTime
-                }
-            }
-        }).form();
-    },
-    //录音上传参数下发
-    goRecordUpload: function () {
-        if (dataTableOperation.recordUploadValidate()) {
-            $("#voiceCommand").val("1");
-            $("#recordUpload").ajaxSubmit(function (data) {
-                $("#recordingUpload").modal("hide");
-                if (JSON.parse(data).success) {
-                    layer.msg(publicIssuedSuccess)
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                }
-            });
-            if ($("#tapingTime").val() == "0") {
-                $(".taping-timeline").show();
-                $("#voicePlay").attr("class", "pause");
-                voiceTimeIndex = 1;
-                $("#voicePlay").attr("src", "../../resources/img/pause.png");
-                tapingTime = setInterval(function () {
-                    $("#voiceTime").html((voiceTimeIndex++) + "秒");
-                }, 1000);
-            }
-        }
-    },
-    //录音上传停止参数下发
-    tapingTimelinePlay: function () {
-        if ($("#voicePlay").hasClass("pause")) {
-            $("#voicePlay").attr("src", "../../resources/img/play.png");
-            voiceTimeIndex = 0;
-            clearInterval(tapingTime);
-            $("#voiceTime").html(videoTimeIndex + "秒");
-            $("#voiceCommand").val("0");
-            //下发
-            $("#recordUpload").ajaxSubmit(function (data) {
-                if (JSON.parse(data).success) {
-                    setTimeout("dataTableOperation.logFindCilck()", 500);
-                } else {
-                    layer.msg(publicIssuedError);
-                }
-            });
-            //隐藏
-            $(".taping-timeline").hide(500);
-        }
-    },
-    recordUploadValidate: function () {
-        return $("#recordUpload").validate({
-            rules: {
-                time: {
-                    required: true,
-                    max: 65535
-                }
-            },
-            messages: {
-                time: {
-                    required: recordingNull
-                }
-            }
-        }).form();
-    },
-    goOriginalOrder: function () {
-        $("#originalOrder").ajaxSubmit(function (data) {
-            $("#sendOriginalCommand").modal("hide");
-            if (JSON.parse(data).success) {
-                layer.msg(publicIssuedSuccess)
-                setTimeout("dataTableOperation.logFindCilck()", 500);
-            }
+      });
+    }
+  },
+  reportSet: function () {
+    var ht = $("#hours").val();
+    var mt = $("#minute").val();
+    if ((ht != "" && !/^[0-9]+$/.test(ht)) || (mt != "" && !/^[0-9]+$/.test(mt))) {//输入了非法字符
+      layer.msg("上报频率时间只能输入正整数");
+    } else {//正常校验
+      var hours = parseInt(ht);
+      var minute = parseInt(mt);
+      if (isNaN(hours) && isNaN(minute)) {
+        $("#locationNumber").val(86400);
+      } else if (isNaN(hours) && !isNaN(minute)) {
+        $("#locationNumber").val(minute * 60);
+      } else if (!isNaN(hours) && isNaN(minute)) {
+        $("#locationNumber").val(hours * 60 * 60);
+      } else if (!isNaN(hours) && !isNaN(minute)) {
+        $("#locationNumber").val(hours * 60 * 60 + minute * 60);
+      }
+      var reportSetFalg = false;
+      var locationNumber = $("#locationNumber").val();
+      if (locationNumber != 0 && locationNumber < 300) {
+        layer.msg("上报间隔最小为5分钟");
+      } else {
+        reportSetFalg = true;
+      }
+      var sada = $("#locationNumber").val();
+      if (reportSetFalg && dataTableOperation.reportSetValidate()) {
+        $("#reportFrequency").ajaxSubmit(function (data) {
+          $("#reportFrequencySet").modal("hide");
+          if (JSON.parse(data).obj.type) {
+            layer.msg(publicIssuedSuccess);
+            setTimeout("dataTableOperation.logFindCilck()", 500);
+          } else {
+            layer.msg(publicIssuedError);
+          }
         });
-    },
-    photoValidate: function () {
-        return $("#takePhoto").validate({
-            rules: {
-                wayID: {
-                    required: true
-                },
-                time: {
-                    required: true,
-                    digits: true,
-                    range: [0, 65535]
-                },
-                command: {
-                    range: [0, 10],
-                    required: true
-                },
-                saveSign: {
-                    required: true
-                },
-                distinguishability: {
-                    required: true
-                },
-                quality: {
-                    range: [1, 10],
-                    required: true
-                },
-                luminance: {
-                    range: [0, 255],
-                    required: true
-                },
-                contrast: {
-                    range: [0, 127],
-                    required: true
-                },
-                saturability: {
-                    range: [0, 127],
-                    required: true
-                },
-                chroma: {
-                    range: [0, 255],
-                    required: true
-                },
-            },
-            messages: {
-                wayID: {
-                    required: alarmSearchChannelID
-                },
-                time: {
-                    required: alarmSearchIntervalTime,
-                    digits: alarmSearchIntervalError,
-                    range: alarmSearchIntervalSize
-                },
-                command: {
-                    range: alarmSearchPhotoSize,
-                    required: alarmSearchPhotoNull
-                },
-                saveSign: {
-                    required: alarmSearchSaveNull
-                },
-                distinguishability: {
-                    required: alarmSearchResolutionNull
-                },
-                quality: {
-                    range: alarmSearchMovieSize,
-                    required: alarmSearchMovieNull
-                },
-                luminance: {
-                    range: alarmSearchBrightnessSize,
-                    required: alarmSearchBrightnessNull
-                },
-                contrast: {
-                    range: alarmSearchContrastSize,
-                    required: alarmSearchContrastNull
-                },
-                saturability: {
-                    range: alarmSearchSaturatedSize,
-                    required: alarmSearchSaturatedNull
-                },
-                chroma: {
-                    range: alarmSearchColorSize,
-                    required: alarmSearchColorNull
-                }
-            }
-        }).form();
-    },
-    videoValidate: function () {
-        return $("#getVideo").validate({
-            rules: {
-                wayID: {
-                    required: true
-                },
-                time: {
-                    required: true,
-                    digits: true,
-                    range: [0, 65535]
-                },
-                command: {
-                    range: [0, 10],
-                    required: true
-                },
-                saveSign: {
-                    required: true
-                },
-                distinguishability: {
-                    required: true
-                },
-                quality: {
-                    range: [1, 10],
-                    required: true
-                },
-                luminance: {
-                    range: [0, 255],
-                    required: true
-                },
-                contrast: {
-                    range: [0, 127],
-                    required: true
-                },
-                saturability: {
-                    range: [0, 127],
-                    required: true
-                },
-                chroma: {
-                    range: [0, 255],
-                    required: true
-                },
-            },
-            messages: {
-                wayID: {
-                    required: alarmSearchChannelID
-                },
-                time: {
-                    required: alarmSearchIntervalTime,
-                    digits: alarmSearchIntervalError,
-                    range: alarmSearchIntervalSize
-                },
-                command: {
-                    range: alarmSearchPhotoSize,
-                    required: alarmSearchPhotoNull
-                },
-                saveSign: {
-                    required: alarmSearchSaveNull
-                },
-                distinguishability: {
-                    required: alarmSearchResolutionNull
-                },
-                quality: {
-                    range: alarmSearchMovieSize,
-                    required: alarmSearchMovieNull
-                },
-                luminance: {
-                    range: alarmSearchBrightnessSize,
-                    required: alarmSearchBrightnessNull
-                },
-                contrast: {
-                    range: alarmSearchContrastSize,
-                    required: alarmSearchContrastNull
-                },
-                saturability: {
-                    range: alarmSearchSaturatedSize,
-                    required: alarmSearchSaturatedNull
-                },
-                chroma: {
-                    range: alarmSearchColorSize,
-                    required: alarmSearchColorNull
-                }
-            }
-        }).form();
-    },
-    photoValidateForAlarm: function () {
-        return $("#takePhotoForAlarm").validate({
-            rules: {
-                wayID: {
-                    required: true
-                },
-                time: {
-                    required: true,
-                    digits: true,
-                    range: [0, 65535]
-                },
-                command: {
-                    range: [0, 10],
-                    required: true
-                },
-                saveSign: {
-                    required: true
-                },
-                distinguishability: {
-                    required: true
-                },
-                quality: {
-                    range: [1, 10],
-                    required: true
-                },
-                luminance: {
-                    range: [0, 255],
-                    required: true
-                },
-                contrast: {
-                    range: [0, 127],
-                    required: true
-                },
-                saturability: {
-                    range: [0, 127],
-                    required: true
-                },
-                chroma: {
-                    range: [0, 255],
-                    required: true
-                },
-            },
-            messages: {
-                wayID: {
-                    required: alarmSearchChannelID
-                },
-                time: {
-                    required: alarmSearchIntervalTime,
-                    digits: alarmSearchIntervalError,
-                    range: alarmSearchIntervalSize
-                },
-                command: {
-                    range: alarmSearchPhotoSize,
-                    required: alarmSearchPhotoNull
-                },
-                saveSign: {
-                    required: alarmSearchSaveNull
-                },
-                distinguishability: {
-                    required: alarmSearchResolutionNull
-                },
-                quality: {
-                    range: alarmSearchMovieSize,
-                    required: alarmSearchMovieNull
-                },
-                luminance: {
-                    range: alarmSearchBrightnessSize,
-                    required: alarmSearchBrightnessNull
-                },
-                contrast: {
-                    range: alarmSearchContrastSize,
-                    required: alarmSearchContrastNull
-                },
-                saturability: {
-                    range: alarmSearchSaturatedSize,
-                    required: alarmSearchSaturatedNull
-                },
-                chroma: {
-                    range: alarmSearchColorSize,
-                    required: alarmSearchColorNull
-                }
-            }
-        }).form();
-    },
-    //录像下发播放器隐藏
-    recordingTimelinePlay: function () {
-        if ($("#videoPlay").hasClass("pause")) {
-            videoPlay.src = "../../resources/img/play.png";
-            videoTimeIndex = 0;
-            clearInterval(time);
-            $("#videoTime").html(videoTimeIndex + "秒");
-            //隐藏
-            $(".recording-timeline").hide(500);
-        }
-    },
-    //上传数据类型判断
-    typeGroup: function (type, data) {
-        if (type == 'state') {
-            stateName.push(data);
-            stateIndex++;
-        } else if (type == 'alarm') {
-            alarmName.push(data);
-            alarmIndex++;
-        }
-    },
-    //所有table重新排序
-    tableRank: function (id) {
-        var index = 1;
-        $("#" + id).children("tbody").children("tr").each(function () {
-            $(this).children("td:nth-child(1)").text(index);
-            index++;
-        });
-    },
-    //通过table条数计算显示高度
-    realTtimeAlarmClick: function () {
-        //从报警标识点击切换至报警记录时改变列表状态
-        if ($("#scalingBtn").hasClass("fa fa-chevron-up")) {
-            $("#scalingBtn").removeAttr("class");
-            $("#scalingBtn").addClass("fa fa-chevron-down");
-        }
-        //日志记录及报警记录 状态信息
-        if (alarmNum == 0) {
-            $MapContainer.css({
-                "height": newMapHeight + 'px'
-            });
-        } else if (alarmNum == 1) {
-            $MapContainer.css({
-                "height": (newMapHeight - 102) + 'px'
-            });
-        } else if (alarmNum == 2) {
-            $MapContainer.css({
-                "height": (newMapHeight - (100 + 42)) + 'px'
-            });
-        } else if (alarmNum == 3) {
-            $MapContainer.css({
-                "height": (newMapHeight - (100 + 42 * 2)) + 'px'
-            });
-        } else if (alarmNum == 4) {
-            $MapContainer.css({
-                "height": (newMapHeight - (100 + 42 * 3)) + 'px'
-            });
-        } else if (alarmNum >= 5) {
-            $MapContainer.css({
-                "height": (newMapHeight - 266) + 'px'
-            });
-        }
-    },
-    // 信息列表自适应显示
-    carStateAdapt: function (type) {
-        if (!($("#scalingBtn").hasClass("fa fa-chevron-up"))) {
-            var listLength;
-            var id;
-            if (type == 1) {//状态信息车
-                listLength = stateName.length;
-                id = 'realTimeStateTable-div';
-            } else if (type == 3) { //报警信息车
-                listLength = alarmName.length;
-                id = 'realTimeCall';
-            }
-            ;
-            if (type == 4) {//日志
-                listLength = $("#logging tbody tr").length;
-                id = 'operationLogTable';
-            }
-            if (listLength <= 5 && $('#TabFenceBox').hasClass('active')) {
-                if (listLength == 5) {
-                    $("#" + id).css({
-                        "max-height": "266px",
-                        "overflow": "auto",
-                    });
-                }
-                if (listLength == 0) {
-                    $MapContainer.css({'height': newMapHeight + 'px'});
-                } else {
-                    $MapContainer.css({'height': (newMapHeight - (41 * listLength + 60)) + 'px'});
-                }
-                ;
-            } else {
-                if ($('#scalingBtn').hasClass('fa-chevron-down') && $('#TabFenceBox').hasClass('active')) {
-                    if (id == "operationLogTable") {
-                        $("#" + id).css({
-                            "max-height": "248px",
-                            "overflow": "auto",
-                        });
-                    } else {
-                        $("#" + id).css({
-                            "max-height": "266px",
-                            "overflow": "auto",
-                        });
-                    }
-                    $MapContainer.css({'height': (newMapHeight - (41 * 5 + 60)) + 'px'});
-                }
-                ;
-            }
-            ;
-        }
-    },
-    //确定ID
-    confirmID: function (type) {
-        var id;
-        if (type == 'vehicle' || type == 'people' || type == 'state') {
-            id = 'realTimeStateTable';
-        }
-        if (type == 'alarm') {
-            id = 'alarmTable';
-        }
-        return id;
-    },
-    //格式时间得到时间差
-    gettimestamp: function (time) {
-        if (time.length == 12) {
-            var time = 20 + time.substring(0, 2) + "-" + time.substring(2, 4) + "-" + time.substring(4, 6) + " " +
-                time.substring(6, 8) + ":" + time.substring(8, 10) + ":" + time.substring(10, 12);
-        } else if (time.length == 14) {
-            var time = time.substring(0, 4) + "-" + time.substring(4, 6) + "-" + time.substring(6, 8) + " " +
-                time.substring(8, 10) + ":" + time.substring(10, 12) + ":" + time.substring(12, 14);
-        }
-        var timestamp = Date.parse(new Date(time));
-        return timestamp / 1000;
-    },
-    //保留一位小数
-    saveonedecimal: function (str) {
-        var str = Number(str).toFixed(1);
-        var strlast = str.substr(str.lenght - 1, 1);
-        if (strlast == "0" || strlast == 0) {
-            str = Math.round(str);
-        }
-        return str;
-    },
-    //过滤小数点为0
-    fiterNumber: function (data) {
-        if (data == null || data == undefined || data == "") {
-            return data;
+      }
+    }
+  },
+  goInfofixedPointAndTiming: function () {
+    if (dataTableOperation.goInfofixedValidate()) {
+      $("#fixedPointTimingList").ajaxSubmit(function (data) {
+        if (JSON.parse(data).obj.type) {
+          $("#fixedPointAndTiming").modal("hide");
+          layer.msg(publicIssuedSuccess);
+          setTimeout("dataTableOperation.logFindCilck()", 500);
         } else {
-            var data = data.toString();
-            data = parseFloat(data);
-            return data;
+          layer.msg("指令发送失败,相邻时间点的间隔必须大于等于300秒");
+        }
+      });
+    }
+  },
+  positionTrailing: function () {
+    if (dataTableOperation.positionTrailingValidate()) {
+      $("#locationTailAfterList").ajaxSubmit(function (data) {
+        $("#locationTailAfter").modal("hide");
+        if (JSON.parse(data).obj.type) {
+          layer.msg(publicIssuedSuccess);
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        } else {
+          layer.msg(publicIssuedError);
+        }
+      });
+    }
+  },
+  listeningValidate: function () {
+    return $("#listening").validate({
+      rules: {
+        regRet: {
+          isTel: true,
+          required: true
+        }
+      },
+      messages: {
+        regRet: {
+          isTel: phoneError,
+          required: phoneNull
+        }
+      }
+    }).form();
+  },
+  reportSetValidate: function () {
+    return $("#reportFrequency").validate({
+      rules: {
+        locationPattern: {
+          required: true
+        },
+        requiteTime: {
+          checkRequiteTime: longDeviceType
+        }
+      },
+      messages: {
+        locationPattern: {
+          required: positionNull
+        },
+        requiteTime: {
+          checkRequiteTime: reportNull
+        }
+      }
+    }).form();
+  },
+  goInfofixedValidate: function () {
+    return $("#fixedPointTimingList").validate({
+      rules: {
+        locationTimes: {
+          checkLocationTimes: true
+        }
+      },
+      messages: {
+        locationTimes: {
+          checkLocationTimes: fixedPointNull
+        }
+      }
+    }).form();
+  },
+  positionTrailingValidate: function () {
+    return $("#locationTailAfterList").validate({
+      rules: {
+        longValidity: {
+          required: true,
+          maxlength: 5
+        },
+        longInterval: {
+          required: true,
+          maxlength: 5
+        }
+      },
+      messages: {
+        longValidity: {
+          required: trackingNull,
+          maxlength: intervalTimeNull
+        },
+        longInterval: {
+          required: trackingIntervalNull,
+          maxlength: intervalTimeNull
+        }
+      }
+    }).form();
+  },
+  goOverspeedSettings: function () {
+    if (dataTableOperation.speedLimitValidate()) {
+      $("#speedLimit").ajaxSubmit(function (data) {
+        $("#goOverspeedSetting").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+    }
+  },
+  speedLimitValidate: function () {
+    return $("#speedLimit").validate({
+      rules: {
+        masSpeed: {
+          required: true,
+          digits: true,
+          max: 2147483647,
+          min: 1
+        },
+        speedTime: {
+          required: true,
+          digits: true,
+          max: 2147483647,
+          min: 1
+        }
+      },
+      messages: {
+        masSpeed: {
+          required: maxSpeedNull,
+          digits: maxSpeedError,
+          max: maxSpeedErrorScope
+        },
+        speedTime: {
+          required: speedTimeNull,
+          digits: timeError,
+          max: maxSpeedErrorScope
+        }
+      }
+    }).form();
+  },
+  emergency: function () {
+    if ($("#emergency").is(':checked')) {
+      $("#emergency").val(1)
+    } else {
+      $("#emergency").val(0)
+    }
+  },
+  emergency1: function () {
+    if ($("#emergency1").is(':checked')) {
+      $("#emergency1").val(1)
+    } else {
+      $("#emergency1").val(0)
+    }
+  },
+  displayTerminalDisplay: function () {
+    if ($("#displayTerminalDisplay").is(':checked')) {
+      $("#displayTerminalDisplay").val(3)
+    } else {
+      $("#displayTerminalDisplay").val(0)
+    }
+  },
+  tts: function () {
+    if ($("#tts").is(':checked')) {
+      $("#tts").val(4)
+    } else {
+      $("#tts").val(0)
+    }
+  },
+  tts1: function () {
+    if ($("#tts1").is(':checked')) {
+      $("#tts1").val(4)
+    } else {
+      $("#tts1").val(0)
+    }
+  },
+  advertisingDisplay: function () {
+    if ($("#advertisingDisplay").is(':checked')) {
+      $("#advertisingDisplay").val(5)
+    } else {
+      $("#advertisingDisplay").val(0)
+    }
+  },
+  advertisingDisplay1: function () {
+    if ($("#advertisingDisplay1").is(':checked')) {
+      $("#advertisingDisplay1").val(5)
+    } else {
+      $("#advertisingDisplay1").val(0)
+    }
+  },
+  deleteSign: function () {
+    if ($("#deleteSign").is(':checked')) {
+      $("#deleteSign").val(1)
+    } else {
+      $("#deleteSign").val(0)
+    }
+  },
+  goTxtSend: function () {
+    if (dataTableOperation.txtSendValidate()) {
+      $("#txtSend").ajaxSubmit(function (data) {
+        $("#textInfoSend").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+    }
+  },
+  txtSendValidate: function () {
+    return $("#txtSend").validate({
+      rules: {
+        txt: {
+          required: true,
+          maxlength: 50
+        }
+      },
+      messages: {
+        txt: {
+          required: textNull,
+          maxlength: '最多输入50个字符'
+        }
+      }
+    }).form();
+  },
+  goTxtSendForAlarm: function () {
+    // 为车id赋值
+    var vehicleId = $("#vUuid").val();
+    $("#vidSendTxtForAlarm").val(vehicleId);
+    $("#brandTxt").val($("#warningCarName").text());
+    $("#alarmTxt").val($("#warningType").val());
+    $("#startTimeTxt").val($("#warningTime").text());
+
+    $("#simcardTxt").val($('#simcard').val());
+    $("#deviceTxt").val($("#device").val());
+    $("#snoTxt").val($("#sno").val());
+    $("#handleTypeTxt").val("下发短信");
+    $("#description-Txt").val($("#warningDescription").text());
+    $("#remark-Txt").val($("#alarmRemark").val());
+
+    var smsTxt = $("#smsTxt").val();
+    if (smsTxt.length > 255) {
+      layer.msg("下发内容不能超过255个字符");
+      return;
+    }
+      $("#goTxtSendForAlarm").attr("disabled", "disabled");
+    $("#txtSendForAlarm").ajaxSubmit(function (data) {
+      /*$("#warningManage").modal('hide');
+      if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+      } else {
+          layer.msg(publicIssuedFailure);
+      }*/
+    });
+      $("#goTxtSendForAlarm").removeAttr("disabled");
+    // 根据需求, 此处无需等待响应成功
+    $("#warningManage").modal('hide');
+    dataTableOperation.updateHandleStatus($("#warningCarName").text());
+    setTimeout("dataTableOperation.logFindCilck()", 500);
+  },
+  goSendQuestion: function () {
+    dataTableOperation.sendQuestionValidateTwo();
+    if (sendFlag) {
+      $("#sendQuestion").ajaxSubmit(function (data) {
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess);
+
+          //关闭并还原提问下发表单
+          $("#askQuestionsIssued").modal("hide");
+          $("#askQuestionsIssued input[type='text']").val('');
+          $("#askQuestionsIssued .error").hide();
+          $('#answer-add-content div[id^="answer-add"]').remove();
+
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+    }
+    /*
+     if (dataTableOperation.sendQuestionValidate()) {
+     $("#sendQuestion").ajaxSubmit(function (data) {
+     $("#askQuestionsIssued").modal("hide");
+     if (JSON.parse(data).success) {
+     layer.msg(publicIssuedSuccess)
+     setTimeout("dataTableOperation.logFindCilck()", 500);
+     }
+     });
+     }*/
+  },
+  goInfoService: function () {
+    if (dataTableOperation.sendQuestionValidate()) {
+      $("#infoService").ajaxSubmit(function (data) {
+        $("#informationService").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+    }
+  },
+  goThroughOrder: function () {
+    if (dataTableOperation.throughOrderValidate()) {
+      $("#throughOrder").ajaxSubmit(function (data) {
+        $("#throughInstruction").modal("hide");
+        if (JSON.parse(data).obj.type) {
+          layer.msg(publicIssuedSuccess);
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        } else {
+          layer.msg(publicIssuedError);
+        }
+      });
+    }
+  },
+  throughOrderValidate: function () {
+    return $("#throughOrder").validate({
+      rules: {
+        longData: {
+          required: true
+        }
+      },
+      messages: {
+        longData: {
+          required: instructionError
+        }
+      }
+    }).form();
+  },
+  sendQuestionValidateTwo: function () {
+    var inputArr = $("#askQuestionsIssued input[type='text']");
+    var inpLen = 0;
+    for (var i = 0; i < inputArr.length; i++) {
+      var thisInput = inputArr[i];
+      var inputVal = thisInput.value;
+      if (inputVal == "") {
+        $(thisInput).siblings(".error").show();
+        inpLen = 1;
+      }
+      else {
+        $(thisInput).siblings(".error").hide();
+      }
+    }
+    if (inpLen == 0) {
+      sendFlag = true;
+    }
+    else {
+      sendFlag = false;
+    }
+  },
+  sendQuestionValidate: function () {
+    return $("#sendQuestion").validate({
+      rules: {
+        question: {
+          required: true
+        },
+        value: {
+          required: true
+        }
+      },
+      messages: {
+        question: {
+          required: questionsNull
+        },
+        value: {
+          required: answerNull
+        }
+      }
+    }).form();
+  },
+  goTelBack: function () {
+    if (dataTableOperation.telBackValidate()) {
+      $("#telBack").ajaxSubmit(function (data) {
+        $("#reantimeCallBack").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+    }
+  },
+  telBackValidate: function () {
+    return $("#telBack").validate({
+      rules: {
+        regRet: {
+          isTel: true,
+          required: true
+        }
+      },
+      messages: {
+        regRet: {
+          isTel: phoneError,
+          required: phoneNull
+        }
+      }
+    }).form();
+  },
+  goMultimediaRetrieval: function () {
+    if (dataTableOperation.multimediaRetrievalValidate()) {
+      var startTime = $("#multimediaRetrieval input[name='startTime']").val();
+      var endTime = $("#multimediaRetrieval input[name='endTime']").val();
+      startTime = new Date(startTime.replace(/-/, "/"));
+      endTime = new Date(endTime.replace(/-/, "/"));
+      if (startTime > endTime) {
+        layer.msg("开始时间不能大于结束时间");
+        return;
+      }
+      $("#multimediaSearch").modal("hide");
+      $("#multimediaRetrieval").ajaxSubmit(function (data) {
+        $("#multimediaSearch").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+    }
+  },
+  multimediaRetrievalValidate: function () {
+    return $("#multimediaRetrieval").validate({
+      rules: {
+        startTime: {
+          required: true
+        },
+        endTime: {
+          required: true
+        }
+      },
+      messages: {
+        startTime: {
+          required: publicInputStartTime
+        },
+        endTime: {
+          required: publicInputEndTime
+        }
+      }
+    }).form();
+  },
+  goMultimediaUploads: function () {
+    if (dataTableOperation.multimediaUploadsValidate()) {
+      $("#multimediaUploads").ajaxSubmit(function (data) {
+        $("#multimediaUpload").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+    }
+  },
+  multimediaUploadsValidate: function () {
+    return $("#multimediaUploads").validate({
+      rules: {
+        startTime: {
+          required: true
+        },
+        endTime: {
+          required: true
+        }
+      },
+      messages: {
+        startTime: {
+          required: publicInputStartTime
+        },
+        endTime: {
+          required: publicInputEndTime
+        }
+      }
+    }).form();
+  },
+  //录音上传参数下发
+  goRecordUpload: function () {
+    if (dataTableOperation.recordUploadValidate()) {
+      $("#voiceCommand").val("1");
+      $("#recordUpload").ajaxSubmit(function (data) {
+        $("#recordingUpload").modal("hide");
+        if (JSON.parse(data).success) {
+          layer.msg(publicIssuedSuccess)
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        }else {
+            layer.msg(JSON.parse(data).msg)
+        }
+      });
+      if ($("#tapingTime").val() == "0") {
+        $(".taping-timeline").show();
+        $("#voicePlay").attr("class", "pause");
+        voiceTimeIndex = 1;
+        $("#voicePlay").attr("src", "../../resources/img/pause.png");
+        tapingTime = setInterval(function () {
+          $("#voiceTime").html((voiceTimeIndex++) + "秒");
+        }, 1000);
+      }
+    }
+  },
+  //录音上传停止参数下发
+  tapingTimelinePlay: function () {
+    if ($("#voicePlay").hasClass("pause")) {
+      $("#voicePlay").attr("src", "../../resources/img/play.png");
+      voiceTimeIndex = 0;
+      clearInterval(tapingTime);
+      $("#voiceTime").html(voiceTimeIndex + "秒");
+      $("#voiceCommand").val("0");
+      //下发
+      $("#recordUpload").ajaxSubmit(function (data) {
+        if (JSON.parse(data).success) {
+          setTimeout("dataTableOperation.logFindCilck()", 500);
+        } else {
+          layer.msg(publicIssuedError);
+        }
+      });
+      //隐藏
+      $(".taping-timeline").hide(500);
+    }
+  },
+  recordUploadValidate: function () {
+    return $("#recordUpload").validate({
+      rules: {
+        time: {
+          required: true,
+          max: 65535
+        }
+      },
+      messages: {
+        time: {
+          required: recordingNull
+        }
+      }
+    }).form();
+  },
+  goOriginalOrder: function () {
+    $("#originalOrder").ajaxSubmit(function (data) {
+      $("#sendOriginalCommand").modal("hide");
+      if (JSON.parse(data).success) {
+        layer.msg(publicIssuedSuccess)
+        setTimeout("dataTableOperation.logFindCilck()", 500);
+      }else {
+          layer.msg(JSON.parse(data).msg)
+      }
+    });
+  },
+  photoValidate: function () {
+    return $("#takePhoto").validate({
+      rules: {
+        wayID: {
+          required: true
+        },
+        time: {
+          required: true,
+          digits: true,
+          range: [0, 65535]
+        },
+        command: {
+          range: [1, 10],
+          required: true
+        },
+        saveSign: {
+          required: true
+        },
+        distinguishability: {
+          required: true
+        },
+        quality: {
+          range: [1, 10],
+          required: true
+        },
+        luminance: {
+          range: [0, 255],
+          required: true
+        },
+        contrast: {
+          range: [0, 127],
+          required: true
+        },
+        saturability: {
+          range: [0, 127],
+          required: true
+        },
+        chroma: {
+          range: [0, 255],
+          required: true
+        },
+      },
+      messages: {
+        wayID: {
+          required: alarmSearchChannelID
+        },
+        time: {
+          required: alarmSearchIntervalTime,
+          digits: alarmSearchIntervalError,
+          range: alarmSearchIntervalSize
+        },
+        command: {
+          range: alarmSearchPhotoSize,
+          required: alarmSearchPhotoNull
+        },
+        saveSign: {
+          required: alarmSearchSaveNull
+        },
+        distinguishability: {
+          required: alarmSearchResolutionNull
+        },
+        quality: {
+          range: alarmSearchMovieSize,
+          required: alarmSearchMovieNull
+        },
+        luminance: {
+          range: alarmSearchBrightnessSize,
+          required: alarmSearchBrightnessNull
+        },
+        contrast: {
+          range: alarmSearchContrastSize,
+          required: alarmSearchContrastNull
+        },
+        saturability: {
+          range: alarmSearchSaturatedSize,
+          required: alarmSearchSaturatedNull
+        },
+        chroma: {
+          range: alarmSearchColorSize,
+          required: alarmSearchColorNull
+        }
+      }
+    }).form();
+  },
+  videoValidate: function () {
+    return $("#getVideo").validate({
+      rules: {
+        wayID: {
+          required: true
+        },
+        time: {
+          required: true,
+          digits: true,
+          range: [0, 65535]
+        },
+        command: {
+          range: [0, 10],
+          required: true
+        },
+        saveSign: {
+          required: true
+        },
+        distinguishability: {
+          required: true
+        },
+        quality: {
+          range: [1, 10],
+          required: true
+        },
+        luminance: {
+          range: [0, 255],
+          required: true
+        },
+        contrast: {
+          range: [0, 127],
+          required: true
+        },
+        saturability: {
+          range: [0, 127],
+          required: true
+        },
+        chroma: {
+          range: [0, 255],
+          required: true
+        },
+      },
+      messages: {
+        wayID: {
+          required: alarmSearchChannelID
+        },
+        time: {
+          required: alarmSearchIntervalTime,
+          digits: alarmSearchIntervalError,
+          range: alarmSearchIntervalSize
+        },
+        command: {
+          range: alarmSearchPhotoSize,
+          required: alarmSearchPhotoNull
+        },
+        saveSign: {
+          required: alarmSearchSaveNull
+        },
+        distinguishability: {
+          required: alarmSearchResolutionNull
+        },
+        quality: {
+          range: alarmSearchMovieSize,
+          required: alarmSearchMovieNull
+        },
+        luminance: {
+          range: alarmSearchBrightnessSize,
+          required: alarmSearchBrightnessNull
+        },
+        contrast: {
+          range: alarmSearchContrastSize,
+          required: alarmSearchContrastNull
+        },
+        saturability: {
+          range: alarmSearchSaturatedSize,
+          required: alarmSearchSaturatedNull
+        },
+        chroma: {
+          range: alarmSearchColorSize,
+          required: alarmSearchColorNull
+        }
+      }
+    }).form();
+  },
+  photoValidateForAlarm: function () {
+    return $("#takePhotoForAlarm").validate({
+      rules: {
+        wayID: {
+          required: true
+        },
+        time: {
+          required: true,
+          digits: true,
+          range: [0, 65535]
+        },
+        command: {
+          range: [0, 10],
+          required: true
+        },
+        saveSign: {
+          required: true
+        },
+        distinguishability: {
+          required: true
+        },
+        quality: {
+          range: [1, 10],
+          required: true
+        },
+        luminance: {
+          range: [0, 255],
+          required: true
+        },
+        contrast: {
+          range: [0, 127],
+          required: true
+        },
+        saturability: {
+          range: [0, 127],
+          required: true
+        },
+        chroma: {
+          range: [0, 255],
+          required: true
+        },
+      },
+      messages: {
+        wayID: {
+          required: alarmSearchChannelID
+        },
+        time: {
+          required: alarmSearchIntervalTime,
+          digits: alarmSearchIntervalError,
+          range: alarmSearchIntervalSize
+        },
+        command: {
+          range: alarmSearchPhotoSize,
+          required: alarmSearchPhotoNull
+        },
+        saveSign: {
+          required: alarmSearchSaveNull
+        },
+        distinguishability: {
+          required: alarmSearchResolutionNull
+        },
+        quality: {
+          range: alarmSearchMovieSize,
+          required: alarmSearchMovieNull
+        },
+        luminance: {
+          range: alarmSearchBrightnessSize,
+          required: alarmSearchBrightnessNull
+        },
+        contrast: {
+          range: alarmSearchContrastSize,
+          required: alarmSearchContrastNull
+        },
+        saturability: {
+          range: alarmSearchSaturatedSize,
+          required: alarmSearchSaturatedNull
+        },
+        chroma: {
+          range: alarmSearchColorSize,
+          required: alarmSearchColorNull
+        }
+      }
+    }).form();
+  },
+  //录像下发播放器隐藏
+  recordingTimelinePlay: function () {
+    if ($("#videoPlay").hasClass("pause")) {
+      videoPlay.src = "../../resources/img/play.png";
+      videoTimeIndex = 0;
+      clearInterval(time);
+      $("#videoTime").html(videoTimeIndex + "秒");
+      //隐藏
+      $(".recording-timeline").hide(500);
+    }
+  },
+  //上传数据类型判断
+  typeGroup: function (type, data) {
+    if (type == 'state') {
+      stateName.push(data);
+      stateIndex++;
+    } else if (type == 'alarm') {
+      alarmName.push(data);
+      alarmIndex++;
+    }
+  },
+  //所有table重新排序
+  tableRank: function (id) {
+    var index = 1;
+    $("#" + id).children("tbody").children("tr").each(function () {
+      $(this).children("td:nth-child(1)").text(index);
+      index++;
+    });
+  },
+  //通过table条数计算显示高度
+  realTtimeAlarmClick: function () {
+    //从报警标识点击切换至报警记录时改变列表状态
+    if ($("#scalingBtn").hasClass("fa fa-chevron-up")) {
+      $("#scalingBtn").removeAttr("class");
+      $("#scalingBtn").addClass("fa fa-chevron-down");
+    }
+    //日志记录及报警记录 状态信息
+    if (alarmNum == 0) {
+      $MapContainer.css({
+        "height": newMapHeight + 'px'
+      });
+    } else if (alarmNum == 1) {
+      $MapContainer.css({
+        "height": (newMapHeight - 102) + 'px'
+      });
+    } else if (alarmNum == 2) {
+      $MapContainer.css({
+        "height": (newMapHeight - (100 + 42)) + 'px'
+      });
+    } else if (alarmNum == 3) {
+      $MapContainer.css({
+        "height": (newMapHeight - (100 + 42 * 2)) + 'px'
+      });
+    } else if (alarmNum == 4) {
+      $MapContainer.css({
+        "height": (newMapHeight - (100 + 42 * 3)) + 'px'
+      });
+    } else if (alarmNum >= 5) {
+      $MapContainer.css({
+        "height": (newMapHeight - 266) + 'px'
+      });
+    }
+  },
+  // 信息列表自适应显示
+  carStateAdapt: function (type) {
+    if (!($("#scalingBtn").hasClass("fa fa-chevron-up"))) {
+      var listLength;
+      var id;
+      if (type == 1) {//状态信息车
+        listLength = stateName.length;
+        id = 'realTimeStateTable-div';
+      } else if (type == 3) { //报警信息车
+        listLength = alarmName.length;
+        id = 'realTimeCall';
+      }
+      ;
+      if (type == 4) {//日志
+        listLength = $("#logging tbody tr").length;
+        id = 'operationLogTable';
+      }
+      if (listLength <= 5 && $('#TabFenceBox').hasClass('active')) {
+        if (listLength == 5) {
+          $("#" + id).css({
+            "max-height": "266px",
+            "overflow": "auto",
+          });
+        }
+        if (listLength == 0) {
+          $MapContainer.css({'height': newMapHeight + 'px'});
+        } else {
+          $MapContainer.css({'height': (newMapHeight - (41 * listLength + 60)) + 'px'});
+        }
+        ;
+      } else {
+        if ($('#scalingBtn').hasClass('fa-chevron-down') && $('#TabFenceBox').hasClass('active')) {
+          if (id == "operationLogTable") {
+            $("#" + id).css({
+              "max-height": "248px",
+              "overflow": "auto",
+            });
+          } else {
+            $("#" + id).css({
+              "max-height": "266px",
+              "overflow": "auto",
+            });
+          }
+          $MapContainer.css({'height': (newMapHeight - (41 * 5 + 60)) + 'px'});
+        }
+        ;
+      }
+      ;
+    }
+  },
+  //确定ID
+  confirmID: function (type) {
+    var id;
+    if (type == 'vehicle' || type == 'people' || type == 'thing' || type == 'state') {
+      id = 'realTimeStateTable';
+    }
+    if (type == 'alarm') {
+      id = 'alarmTable';
+    }
+    return id;
+  },
+  //格式时间得到时间差
+  gettimestamp: function (time) {
+    if (time.length == 12) {
+      var time = 20 + time.substring(0, 2) + "-" + time.substring(2, 4) + "-" + time.substring(4, 6) + " " +
+          time.substring(6, 8) + ":" + time.substring(8, 10) + ":" + time.substring(10, 12);
+    } else if (time.length == 14) {
+      var time = time.substring(0, 4) + "-" + time.substring(4, 6) + "-" + time.substring(6, 8) + " " +
+          time.substring(8, 10) + ":" + time.substring(10, 12) + ":" + time.substring(12, 14);
+    }
+    var timestamp = Date.parse(new Date(time));
+    return timestamp / 1000;
+  },
+  //保留一位小数
+  saveonedecimal: function (str) {
+    var str = Number(str).toFixed(1);
+    var strlast = str.substr(str.lenght - 1, 1);
+    if (strlast == "0" || strlast == 0) {
+      str = Math.round(str);
+    }
+    return str;
+  },
+  //过滤小数点为0
+  fiterNumber: function (data) {
+    if (data == null || data == undefined || data == "") {
+      return data;
+    }
+    var data = data.toString();
+    data = parseFloat(data);
+    return data;
+
+  },
+    /**
+     * 设置终端车牌号
+     */
+    parametersPlate:function () {
+        if (dataTableOperation.isBrand()) {
+            $("#setTerminalPlate").ajaxSubmit(function (data) {
+                $("#setPlateNumber").modal("hide");
+                if (JSON.parse(data).success) {
+                    layer.msg(publicIssuedSuccess)
+                    setTimeout("dataTableOperation.logFindCilck()", 500);
+                }else {
+                    layer.msg(JSON.parse(data).msg);
+                }
+            });
         }
     },
+
+    isBrand:function () {
+        return $("#setTerminalPlate").validate({
+            rules: {
+                brand: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 20,
+                    isBrand: true,
+                    remote: {
+                        type: "post",
+                        async: false,
+                        url: "/clbs/m/basicinfo/monitoring/vehicle/repetition",
+                        dataType: "json",
+                        data: {
+                            username: function () {
+                                return $("#brand").val();
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            var oldV = $("#oldNumber").val();
+                            var newV = $("#brand").val();
+                            var data2 = data;
+                            if (oldV == newV) {
+                                return true;
+                            } else {
+                                if (data2 == "true") {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            messages: {
+                brand: {
+                    required: vehicleBrandNull,
+                    maxlength: vehicleBrandError,
+                    minlength: vehicleBrandError,
+                    isBrand: vehicleBrandError,
+                    remote: vehicleBrandExists
+                }
+            }
+
+        }).form();
+    },
+
+    /**
+     * 下发OBD
+     */
+    toSetOBD:function () {
+        if (dataTableOperation.OBDValidate()) {
+            $("#setOBD").ajaxSubmit(function (data) {
+                $("#OBD").modal("hide");
+                if (JSON.parse(data).success) {
+                    layer.msg(publicIssuedSuccess)
+                    setTimeout("dataTableOperation.logFindCilck()", 500);
+                }else {
+                    layer.msg(JSON.parse(data).msg);
+                }
+            });
+        }
+    },
+
+
+    OBDValidate: function () {
+        return $("#setOBD").validate({
+            rules: {
+                classification:{
+                    required:true
+                },
+                model:{
+                  required:true
+                },
+                uploadTime:{
+                  isRightNumber:true,
+                  range:[1,10]
+                }
+            },
+            messages: {
+                classification: {
+                    required: '请选择车型分类'
+                },
+                model:{
+                  required:'请选择类型'
+                },
+                uploadTime:{
+                  isRightNumber:'请输入正确的数字',
+                  range:'请输入1-10之间的整数'
+                }
+            }
+
+        }).form();
+    }
 
 };
-$(function(){
-    $('input').inputClear().on('onClearEvent',function(e,data){
+$(function () {
+    $('input').inputClear().on('onClearEvent', function (e, data) {
         var id = data.id;
-        if(id == 'search_condition'){
-        	treeMonitoring.alltree();
-        };
-        if(id == 'searchVehicle'){
-        	fenceOperation.initBindFenceTree();
-        };
-        if(id == 'searchFence'){
-            search_ztree('fenceDemo', id,'fence');
-        };
-        if(id == 'vFenceSearch'){
-            search_ztree('vFenceTree', id,'fence');
-        };
-        if(id == 'startPoint' || id == 'endPoint' || id.indexOf('wayPoint') != -1){
-            $('#' + id).attr('data-address','').removeAttr('data-lnglat');
-        };
+        if (id == 'search_condition') {
+            treeMonitoring.alltree();
+        }
+        ;
+        if (id == 'searchVehicle') {
+            fenceOperation.initBindFenceTree();
+        }
+        ;
+        if (id == 'searchFence') {
+            search_ztree('fenceDemo', id, 'fence');
+        }
+        ;
+        if (id == 'vFenceSearch') {
+            search_ztree('vFenceTree', id, 'fence');
+        }
+        ;
+        if (id == 'startPoint' || id == 'endPoint' || id.indexOf('wayPoint') != -1) {
+            $('#' + id).attr('data-address', '').removeAttr('data-lnglat');
+        }
+        ;
     });
     //地图
     var lineVid = [];//在线车辆id
@@ -16010,12 +16092,12 @@ $(function(){
     var lineAndmiss = [];//未定位
     var offLineTable = [];
     var overSpeed = [];
-    var vnodesId =[];
-    var vnodemId=[];
+    var vnodesId = [];
+    var vnodemId = [];
     var vnodelmId = [];
     var vnoderId = [];
     var vnodeaId = [];
-    var vnodespId=[];
+    var vnodespId = [];
     var markerRealTime;
     var lineArr = [];
     var pathsTwo = null;
@@ -16023,85 +16105,106 @@ $(function(){
     var nmoline;
     //初始化页面
     pageLayout.init();
-    // pageLayout.arrayExpand();
-    // pageLayout.createMap();
-    // pageLayout.responseSocket();
-    // fenceOperation.init();
-    // fenceOperation.fenceBindList();
+    pageLayout.arrayExpand();
+    pageLayout.createMap();
+    pageLayout.responseSocket();
+    fenceOperation.init();
+    fenceOperation.fenceBindList();
     // fenceOperation.fenceEnterprise();
-    // amapOperation.init();
-    // treeMonitoring.init();
-    // pageLayout.getNowFormatDate();
+    amapOperation.init();
+    treeMonitoring.init();
+    pageLayout.getNowFormatDate();
     $("[data-toggle='tooltip']").tooltip();
     //右边菜单显示隐藏切换
-    $("#toggle-left").on("click",pageLayout.toggleLeft);
+    $("#toggle-left").on("click", pageLayout.toggleLeft);
     //左侧操作树点击隐藏
-    $("#goHidden").on("click",pageLayout.goHidden);
+    $("#goHidden").on("click", pageLayout.goHidden);
     //左侧操作树点击显示
-    $goShow.on("click",pageLayout.goShow);
+    $goShow.on("click", pageLayout.goShow);
     //输入时自动查询
     var inputChange;
     // $("#search_condition").unbind("focus");
-	$("#search_condition").on('input propertychange', function(value){
-		var search_condition_value=$("#search_condition").val();
-		if(search_condition_value){
-		if (inputChange !== undefined) {
-			clearTimeout(inputChange);
-		};
-		inputChange = setTimeout(function(){
-			// search
-			treeMonitoring.search_condition();
-		}, 500);		
-	}
-	});
+    $("#search_condition").on('input propertychange', function (value) {
+        var search_condition_value = $("#search_condition").val();
+        if (search_condition_value) {
+            if (inputChange !== undefined) {
+                clearTimeout(inputChange);
+            }
+            ;
+            inputChange = setTimeout(function () {
+                // search
+                treeMonitoring.search_condition();
+            }, 500);
+        }
+    });
     //右键显示菜单节点跳动问题
-	scorllDefaultTreeTop = 0;
-	$("#thetree").scroll(function(){
-	    scorllDefaultTreeTop = $("#thetree").scrollTop();
-	});
+    scorllDefaultTreeTop = 0;
+    $("#thetree").scroll(function () {
+        scorllDefaultTreeTop = $("#thetree").scrollTop();
+    });
     // 搜索类型下拉框change事件
     $("#searchType").change(treeMonitoring.search_condition);
     //刷新文件树
-    $("#refresh").on("click",treeMonitoring.refreshTree);
+    $("#refresh").on("click", treeMonitoring.refreshTree);
     $('#originalDataModalClose').on('click', treeMonitoring.modalCloseFun)
     $('#controlGetData').on('click', treeMonitoring.isGetOriginalData);
     // $('#copyOriginalData').on('click', treeMonitoring.copyDataFun);
     $('#clearOriginalData').on('click', treeMonitoring.clearDataFun);
     //状态信息可以拖动
-    $("#realTimeStatus").on("click",function(){flagState = true;activeIndex = 1;dataTableOperation.carStateAdapt(activeIndex);});
+    $("#realTimeStatus").on("click", function () {
+        flagState = true;
+        activeIndex = 1;
+        dataTableOperation.carStateAdapt(activeIndex);
+    });
     //报警记录不拖动
-    $("#realTtimeAlarm").on("click",function(){flagState = false;activeIndex = 3;dataTableOperation.carStateAdapt(activeIndex)});
+    $("#realTtimeAlarm").on("click", function () {
+        flagState = false;
+        activeIndex = 3;
+        dataTableOperation.carStateAdapt(activeIndex)
+    });
     //日志点击不拖动
-    $("#operationLog").on("click",function(){flagState = false;activeIndex = 4;dataTableOperation.carStateAdapt(activeIndex);dataTableOperation.logFindCilck()});
+    $("#operationLog").on("click", function () {
+        flagState = false;
+        activeIndex = 4;
+        dataTableOperation.carStateAdapt(activeIndex);
+        dataTableOperation.logFindCilck()
+    });
     $("#dragDIV").mousedown(pageLayout.dragDiv);
     //$("#btn-videoRealTime-show").on("click",pageLayout.videoRealTimeShow);
     //报警弹窗显示
-    $("#showAlarmWin").on("click",pageLayout.showAlarmWindow);
+    $("#showAlarmWin").on("click", pageLayout.showAlarmWindow);
     //报警数量块单击
-    $showAlarmWinMark.bind("click",pageLayout.showAlarmWinMarkRight);
+    $showAlarmWinMark.bind("click", pageLayout.showAlarmWinMarkRight);
     //屏蔽浏览器右键菜单
-    $(".contextMenuContent,#showAlarmWin").bind("contextmenu",function(e){return false;});
+    $(".contextMenuContent,#showAlarmWin").bind("contextmenu", function (e) {
+        return false;
+    });
     $showAlarmWinMark.contextmenu();
     //最小化
-    $(".alarmSettingsSmall").bind("click",pageLayout.alarmToolMinimize);
+    $(".alarmSettingsSmall").bind("click", pageLayout.alarmToolMinimize);
     //关闭声音
-    $(".alarmSound").bind("click",pageLayout.alarmOffSound);
+    $(".alarmSound").bind("click", pageLayout.alarmOffSound);
     //关闭闪烁
-    $(".alarmFlashes").bind("click",pageLayout.alarmOffFlashes);
+    $(".alarmFlashes").bind("click", pageLayout.alarmOffFlashes);
     // 应答确定
     $('#parametersResponse').on('click', pageLayout.platformMsgAck);
     //点击显示报警设置详情
-    $(".alarmSettingsBtn").bind("click",pageLayout.showAlarmInfoSettings);
-    $("ul.dropdown-menu").on("click", function(e) {
+    $(".alarmSettingsBtn").bind("click", pageLayout.showAlarmInfoSettings);
+    $("ul.dropdown-menu").on("click", function (e) {
         e.stopPropagation();
     });
     // 电子围栏  树结构搜索
-    $("#searchFence").bind('input oninput',fenceOperation.searchFenceCarSearch);
-    $("#vFenceSearch").bind('input oninput',treeMonitoring.vsearchFenceCarSearch);
-    $("#fixSpan").mouseover(function(){
+    $("#searchFence").bind('input oninput', fenceOperation.searchFenceCarSearch);
+    //电子围栏搜索-刷新功能
+    $("#refreshFence").on('click', function () {
+        $("#searchFence").val('');
+        fenceOperation.searchFenceCarSearch();
+    });
+    $("#vFenceSearch").bind('input oninput', treeMonitoring.vsearchFenceCarSearch);
+    $("#fixSpan").mouseover(function () {
         $("#recentlyC").removeClass("hidden")
     });
-    $("#fixSpan").mouseout(function(){
+    $("#fixSpan").mouseout(function () {
         $("#recentlyC").mouseover(function () {
             $("#recentlyC").removeClass("hidden");
         });
@@ -16109,188 +16212,210 @@ $(function(){
             $("#recentlyC").addClass("hidden");
         });
     });
-    $("#warningManageClose").on("click",function(){$("#warningManage").modal('hide')});
-    $("#warningManagePhoto").bind("click",dataTableOperation.photo);
-    $("#warningManageSend").bind("click",dataTableOperation.send);
-    $("#warningManageAffirm").bind("click",function(){dataTableOperation.handleAlarm("人工确认报警")});
-    $("#warningManageCancel").bind("click",function(){dataTableOperation.handleAlarm("不做处理")});
-    $("#warningManageFuture").bind("click",function(){dataTableOperation.handleAlarm("将来处理")});
+    $("#warningManageClose").on("click", function () {
+        $("#warningManage").modal('hide')
+    });
+    $("#warningManagePhoto").bind("click", dataTableOperation.photo);
+    $("#warningManageSend").bind("click", dataTableOperation.send);
+    $("#warningManageAffirm").bind("click", function () {
+        dataTableOperation.handleAlarm("人工确认报警")
+    });
+    $("#warningManageCancel").bind("click", function () {
+        dataTableOperation.handleAlarm("不做处理")
+    });
+    $("#warningManageFuture").bind("click", function () {
+        dataTableOperation.handleAlarm("将来处理")
+    });
     // $("#magnifyClick, #shrinkClick, #countClick, #queryClick, #defaultMap, #realTimeRC, #btn-videoRealTime-show, #displayClick,#mapDropSetting").on("click",amapOperation.toolClickList);
 
     // wjk
     //先注释掉
     // $("#magnifyClick, #shrinkClick, #countClick, #queryClick, #defaultMap, #realTimeRC, #btn-videoRealTime-show, #displayClick,#mapDropSetting,#phoneCall").on("click",amapOperation.toolClickList);
-    $("#magnifyClick, #shrinkClick, #countClick, #queryClick, #defaultMap, #realTimeRC, #btn-videoRealTime-show, #displayClick,#mapDropSetting").on("click",amapOperation.toolClickList);
-   
-    $("#toolClick").on("click",pageLayout.toolClick);
-    $("#save").bind("click",fenceOperation.doSubmits1);
+    $("#magnifyClick, #shrinkClick, #countClick, #queryClick, #defaultMap, #realTimeRC, #btn-videoRealTime-show, #displayClick,#mapDropSetting").on("click", amapOperation.toolClickList);
+
+    $("#toolClick").on("click", pageLayout.toolClick);
+    $("#save").bind("click", fenceOperation.doSubmits1);
 
     //清空添加关键点表单
-    $("#monitoringTagClose").bind("click",function () {
-        $("#addMonitoringTag input").each(function (index,input) {
+    $("#monitoringTagClose").bind("click", function () {
+        $("#addMonitoringTag input").each(function (index, input) {
             $(input).val('');
         })
         $("#addMonitoringTag #description").val('');
     });
 
-    $("#searchCarClose").on("click",fenceOperation.searchCarClose);
-    $("#annotatedSave").on("click",fenceOperation.annotatedSave);
-    $("#threadSave").on("click",fenceOperation.threadSave);
-    $("#rectangleSave").on("click",fenceOperation.rectangleSave);
-    $("#polygonSave").on("click",fenceOperation.polygonSave);
-    $("#roundSave").on("click",fenceOperation.roundSave);
-    $(".modalClose").on("click",fenceOperation.clearErrorMsg);
-    $("#searchVehicle").bind('input oninput',fenceOperation.searchVehicleSearch);
+    $("#searchCarClose").on("click", fenceOperation.searchCarClose);
+    $("#annotatedSave").on("click", fenceOperation.annotatedSave);
+    $("#threadSave").on("click", fenceOperation.threadSave);
+    $("#rectangleSave").on("click", fenceOperation.rectangleSave);
+    $("#polygonSave").on("click", fenceOperation.polygonSave);
+    $("#roundSave").on("click", fenceOperation.roundSave);
+    $(".modalClose").on("click", fenceOperation.clearErrorMsg);
+    $("#searchVehicle").bind('input oninput', fenceOperation.searchVehicleSearch);
     // 滚动展开绑定围栏的监控对象树结构
     // 滚动展开
-	$("#bindVehicleTreeDiv").scroll(function () {
+    $("#bindVehicleTreeDiv").scroll(function () {
         var zTree = $.fn.zTree.getZTreeObj("treeDemoFence");
         zTreeScroll(zTree, this);
     });
     // 点击添加(按围栏 )
-    $("#addBtn").bind("click",fenceOperation.addBtnClick);
-    $("#tableCheckAll").bind("click",fenceOperation.tableCheckAll);
+    $("#addBtn").bind("click", fenceOperation.addBtnClick);
+    $("#tableCheckAll").bind("click", fenceOperation.tableCheckAll);
     //点击移除围栏
-    $("#removeBtn").bind("click",fenceOperation.removeBtnClick);
+    $("#removeBtn").bind("click", fenceOperation.removeBtnClick);
     //check选择
-    $("#checkAll").bind( "click",fenceOperation.checkAllClick);
+    $("#checkAll").bind("click", fenceOperation.checkAllClick);
     //依例全设
-    $("#setAll").bind("click",fenceOperation.setAllClick);
+    $("#setAll").bind("click", fenceOperation.setAllClick);
     // 提交(按围栏)
-    $("#fenceSaveBtn").bind("click",fenceOperation.fenceSaveBtnClick);
+    $("#fenceSaveBtn").bind("click", fenceOperation.fenceSaveBtnClick);
+    // 围栏绑定-取消按钮
+    $("#fenceCancelBtn").bind("click", fenceOperation.fenceCancelBtnClick);
     // 批量下发
-    $("#send_model").bind("click",fenceOperation.sendModelClick);
+    $("#send_model").bind("click", fenceOperation.sendModelClick);
     //批量删除
-    $("#del_model").bind("click",fenceOperation.delModelClick);
+    $("#del_model").bind("click", fenceOperation.delModelClick);
     // 模糊搜索围栏绑定列表
-    $("#search_button").bind("click",fenceOperation.searchBindTable);
-    $("body").bind("click",fenceOperation.bodyClickEvent);
-    $("#hourseSelect tr td").bind("click",fenceOperation.hourseSelectClick);
-    $("#minuteSelect tr td").bind("click",fenceOperation.minuteSelectClick);
-    $("#secondSelect tr td").bind("click",fenceOperation.secondSelectClick);
+    $("#search_button").bind("click", fenceOperation.searchBindTable);
+    $("body").bind("click", fenceOperation.bodyClickEvent);
+    $("#hourseSelect tr td").bind("click", fenceOperation.hourseSelectClick);
+    $("#minuteSelect tr td").bind("click", fenceOperation.minuteSelectClick);
+    $("#secondSelect tr td").bind("click", fenceOperation.secondSelectClick);
     //切换电子围栏
-    $("#TabCarBox").bind("click",fenceOperation.TabCarBox);
+    $("#TabCarBox").bind("click", fenceOperation.TabCarBox);
     //切换监控对象
-    $("#TabFenceBox").bind("click",fenceOperation.TabFenceBox);
-    $("#rectangleEditClose").bind("click",fenceOperation.rectangleEditClose);
+    $("#TabFenceBox").bind("click", fenceOperation.TabFenceBox);
+    $("#rectangleEditClose").bind("click", fenceOperation.rectangleEditClose);
     //围栏取消
-    $("#markFenceClose").bind("click",fenceOperation.markFenceClose);
-    $("#saveSection").bind("click",fenceOperation.doSubmitsMonitor);
-    $("#lineEditClose").bind("click",fenceOperation.lineEditClose);
-    $("#circleFenceClose").bind("click",fenceOperation.circleFenceClose);
-    $("#polygonFenceClose").bind("click",fenceOperation.polygonFenceClose);
-    $("#bingListClick").bind("click",fenceOperation.bingListClick);
-    $("#fenceDemo").bind('contextmenu',function(event){return false});
-    $("#parameters").bind("click",function(){treeMonitoring.parameter(parametersID)});
-    $("#askQuestions-add-btn").on("click",fenceOperation.addaskQuestions);
-    $("#goPhotographs").bind("click",dataTableOperation.takePhoto);
-    $("#goPhotographsForAlarm").bind("click",dataTableOperation.takePhotoForAlarm);
-    $("#goVideotapes").bind("click",dataTableOperation.getVideo);
-    $("#goRegularReport").bind("click",dataTableOperation.goRegularReport);
-    $("#goDistanceReport").bind("click",dataTableOperation.goDistanceReport);
-    $("#goTimeInterval").bind("click",dataTableOperation.goTimeInterval);
-    $("#gpListening").bind("click",dataTableOperation.gpListening);
-    $("#goOverspeedSettings").bind("click",dataTableOperation.goOverspeedSettings);
-    $("#emergency").bind("click",dataTableOperation.emergency);
-    $("#displayTerminalDisplay").bind("click",dataTableOperation.displayTerminalDisplay);
-    $("#tts").bind("click",dataTableOperation.tts);
-    $("#advertisingDisplay").bind("click",dataTableOperation.advertisingDisplay);
-    $("#goTxtSend").bind("click",dataTableOperation.goTxtSend);
-    $("#goTxtSendForAlarm").bind("click",dataTableOperation.goTxtSendForAlarm);
-    $("#emergency1").bind("click",dataTableOperation.emergency1);
-    $("#tts1").bind("click",dataTableOperation.tts1);
-    $("#advertisingDisplay1").bind("click",dataTableOperation.advertisingDisplay1);
-    $("#goSendQuestion").bind("click",dataTableOperation.goSendQuestion);
-    $("#goTelBack").bind("click",dataTableOperation.goTelBack);
-    $("#goMultimediaRetrieval").bind("click",dataTableOperation.goMultimediaRetrieval);
-    $("#deleteSign").bind("click",dataTableOperation.deleteSign);
-    $("#goMultimediaUploads").bind("click",dataTableOperation.goMultimediaUploads);
-    $("#goRecordUpload").bind("click",dataTableOperation.goRecordUpload);
-    $("#goOriginalOrder").bind("click",dataTableOperation.goOriginalOrder);
+    $("#markFenceClose").bind("click", fenceOperation.markFenceClose);
+    $("#saveSection").bind("click", fenceOperation.doSubmitsMonitor);
+    $("#lineEditClose").bind("click", fenceOperation.lineEditClose);
+    $("#circleFenceClose").bind("click", fenceOperation.circleFenceClose);
+    $("#polygonFenceClose").bind("click", fenceOperation.polygonFenceClose);
+    $("#bingListClick").bind("click", fenceOperation.bingListClick);
+    $("#fenceDemo").bind('contextmenu', function (event) {
+        return false
+    });
+    $("#parameters").bind("click", function () {
+        treeMonitoring.parameter(parametersID)
+    });
+    $("#askQuestions-add-btn").on("click", fenceOperation.addaskQuestions);
+    $("#goPhotographs").bind("click", dataTableOperation.takePhoto);
+    $("#goRecordCollect").bind("click", treeMonitoring.goRecordCollect);
+    $("#goRecordSend").bind("click", treeMonitoring.goRecordSend);
+    $("#goPhotographsForAlarm").bind("click", dataTableOperation.takePhotoForAlarm);
+    $("#goVideotapes").bind("click", dataTableOperation.getVideo);
+    $("#goRegularReport").bind("click", dataTableOperation.goRegularReport);
+    $("#goDistanceReport").bind("click", dataTableOperation.goDistanceReport);
+    $("#goTimeInterval").bind("click", dataTableOperation.goTimeInterval);
+    $("#parametersPlate").bind("click", dataTableOperation.parametersPlate);
+    $("#toSetOBD").bind("click", dataTableOperation.toSetOBD);
+    $("#gpListening").bind("click", dataTableOperation.gpListening);
+    $("#goOverspeedSettings").bind("click", dataTableOperation.goOverspeedSettings);
+    $("#emergency").bind("click", dataTableOperation.emergency);
+    $("#displayTerminalDisplay").bind("click", dataTableOperation.displayTerminalDisplay);
+    $("#tts").bind("click", dataTableOperation.tts);
+    $("#advertisingDisplay").bind("click", dataTableOperation.advertisingDisplay);
+    $("#goTxtSend").bind("click", dataTableOperation.goTxtSend);
+    $("#goTxtSendForAlarm").bind("click", dataTableOperation.goTxtSendForAlarm);
+    $("#emergency1").bind("click", dataTableOperation.emergency1);
+    $("#tts1").bind("click", dataTableOperation.tts1);
+    $("#advertisingDisplay1").bind("click", dataTableOperation.advertisingDisplay1);
+    $("#goSendQuestion").bind("click", dataTableOperation.goSendQuestion);
+    $("#goTelBack").bind("click", dataTableOperation.goTelBack);
+    $("#goMultimediaRetrieval").bind("click", dataTableOperation.goMultimediaRetrieval);
+    $("#deleteSign").bind("click", dataTableOperation.deleteSign);
+    $("#goMultimediaUploads").bind("click", dataTableOperation.goMultimediaUploads);
+    $("#goRecordUpload").bind("click", dataTableOperation.goRecordUpload);
+    $("#goOriginalOrder").bind("click", dataTableOperation.goOriginalOrder);
     //录像时间轴
-    $("#videoPlay").on("click",dataTableOperation.recordingTimelinePlay);
+    $("#videoPlay").on("click", dataTableOperation.recordingTimelinePlay);
     //录音时间轴
-    $("#voicePlay").on("click",dataTableOperation.tapingTimelinePlay);
+    $("#voicePlay").on("click", dataTableOperation.tapingTimelinePlay);
     $("#sectionRateLimitingClose").on("click", fenceOperation.sectionRateLimitingClose);
-    $("#goInfoService").bind("click",dataTableOperation.goInfoService);
+    $("#goInfoService").bind("click", dataTableOperation.goInfoService);
     //上报频率设置
-    $("#reportSet").bind("click",dataTableOperation.reportSet);
+    $("#reportSet").bind("click", dataTableOperation.reportSet);
     //定点和校时
-    $("#goInfofixedPointAndTiming").bind("click",dataTableOperation.goInfofixedPointAndTiming);
+    $("#goInfofixedPointAndTiming").bind("click", dataTableOperation.goInfofixedPointAndTiming);
     //位置跟踪
-    $("#positionTrailing").bind("click",dataTableOperation.positionTrailing);
+    $("#positionTrailing").bind("click", dataTableOperation.positionTrailing);
     //透传指令
-    $("#goThroughOrder").bind("click",dataTableOperation.goThroughOrder);
-    
+    $("#goThroughOrder").bind("click", dataTableOperation.goThroughOrder);
+
     $('.lngLat_show').on('click', fenceOperation.lngLatTextShow);
-    $('#province, #city, #district, #street').on('change',function(){fenceOperation.administrativeAreaSelect(this)});
+    $('#province, #city, #district, #street').on('change', function () {
+        fenceOperation.administrativeAreaSelect(this)
+    });
     $('#administrativeSave').on('click', fenceOperation.administrativeSave);
     $('#administrativeClose').on('click', fenceOperation.administrativeClose);
-    $('#tableCheckAll').on('click',function(){
+    $('#tableCheckAll').on('click', function () {
         $("input[name='subChk']").prop("checked", this.checked);
     });
     //树优化测试代码
-    $online.bind("click",{type:1},treeMonitoring.onlines);
-    $chooseNot.bind("click",{type:6},treeMonitoring.onlines);
-    $chooseAlam.bind("click",{type:4},treeMonitoring.onlines);
-    $chooseRun.bind("click",{type:3},treeMonitoring.onlines);
-    $chooseStop.bind("click",{type:2},treeMonitoring.onlines);
-    $chooseOverSeep.bind("click",{type:5},treeMonitoring.onlines);
-    $("#chooseHeartBeat").bind("click",{type:9},treeMonitoring.onlines);
-   /* $("#chooseMissLine").bind("click",treeMonitoring.misslines);*/
-    $("#chooseAll").bind("click",treeMonitoring.alltree);
-   /* $("#chooseMiss").bind("click",treeMonitoring.misslines);*/
-    var p=0,t=0,y=0;
+    $online.bind("click", {type: 1}, treeMonitoring.onlines);
+    $chooseNot.bind("click", {type: 6}, treeMonitoring.onlines);
+    $chooseAlam.bind("click", {type: 4}, treeMonitoring.onlines);
+    $chooseRun.bind("click", {type: 3}, treeMonitoring.onlines);
+    $chooseStop.bind("click", {type: 2}, treeMonitoring.onlines);
+    $chooseOverSeep.bind("click", {type: 5}, treeMonitoring.onlines);
+    $("#chooseHeartBeat").bind("click", {type: 9}, treeMonitoring.onlines);
+    /* $("#chooseMissLine").bind("click",treeMonitoring.misslines);*/
+    $("#chooseAll").bind("click", treeMonitoring.alltree);
+    /* $("#chooseMiss").bind("click",treeMonitoring.misslines);*/
+    var p = 0, t = 0, y = 0;
     $("#thetree").scroll(function () {
         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
         p = $(this).scrollTop();
-        if(t<=p){//下滚
+        if (t <= p) {//下滚
             // 获取没有展开的分组节点
             var notExpandNodes = zTree.getNodesByFilter(assignmentNotExpandFilter);
             if (notExpandNodes != undefined && notExpandNodes.length > 0) {
-                for (var i=0; i<notExpandNodes.length; i++) {
+                for (var i = 0; i < notExpandNodes.length; i++) {
                     var node = notExpandNodes[i];
                     var tid = node.tId + "_a";
                     var divHeight = $("#thetree").offset().top;
-                    var nodeHeight = $("#"+tid).offset().top;
-                    if ( nodeHeight - divHeight > 696) {
+                    var nodeHeight = $("#" + tid).offset().top;
+                    if (nodeHeight - divHeight > 696) {
                         break;
                     }
-                    if (nodeHeight - divHeight > 0 && nodeHeight - divHeight < 696){
+                    if (nodeHeight - divHeight > 0 && nodeHeight - divHeight < 696) {
                         var zTree = $.fn.zTree.getZTreeObj("treeDemo");
                         zTree.expandNode(node, true, true, false, true);
-                        node.children[0].open= true;
+                        node.children[0].open = true;
                     }
                 }
             }
         }
-        setTimeout(function(){t = p;},0);
+        setTimeout(function () {
+            t = p;
+        }, 0);
     });
     //树优化测试代码
-    $('#addWayToPoint').on('click',fenceOperation.addWayToPoint);
+    $('#addWayToPoint').on('click', fenceOperation.addWayToPoint);
     $('#lineDragRouteClose').on('click', fenceOperation.lineDragRouteClose);
     $('#lineDragRouteSave').on('click', fenceOperation.lineDragRouteSave);
     //围栏所属企业
     $('#markerFenceEnterprise, #markerFenceEnterprise-select, #lineFenceEnterprise, #lineFenceEnterprise-select, #rectangleFenceEnterprise, #rectangleFenceEnterprise-select, #circleFenceEnterprise, #circleFenceEnterprise-select, #polygonFenceEnterprise, #polygonFenceEnterprise-select, #areaFenceEnterprise, #areaFenceEnterprise-select, #dragRouteFenceEnterprise, #dragRouteFenceEnterprise-select').on('click', treeMonitoring.enterpriseShow);
     //显示设置
-    $("#smoothMove,#logoDisplay").on("click",pageLayout.smoothMoveOrlogoDisplayClickFn);
+    $("#smoothMove,#logoDisplay,#icoUp").on("click", pageLayout.smoothMoveOrlogoDisplayClickFn);
     //地图设置
-    $("#realTimeRC,#defaultMap,#googleMap").on("click",pageLayout.mapDropdownSettingClickFn);
-    $("#fenceToolBtn").on("click",treeMonitoring.fenceToolClickSHFn);
-    $("#TabCarBox,#TabFenceBox").on("click",treeMonitoring.fenceAndVehicleFn);
+    $("#realTimeRC,#defaultMap,#googleMap").on("click", pageLayout.mapDropdownSettingClickFn);
+    $("#fenceToolBtn").on("click", treeMonitoring.fenceToolClickSHFn);
+    $("#TabCarBox,#TabFenceBox").on("click", treeMonitoring.fenceAndVehicleFn);
     // 跳转至轨迹回放
-    $("#treeToTrackBlack").on("click",treeMonitoring.treeToTrackBlack);
+    $("#treeToTrackBlack").on("click", treeMonitoring.treeToTrackBlack);
 
 
     //关闭并还原提问下发表单
-    $("#closeSendQuestion").on("click",function () {
+    $("#closeSendQuestion").on("click", function () {
         $("#askQuestionsIssued input[type='text']").val('');
         $("#askQuestionsIssued .error").hide();
         $('#answer-add-content div[id^="answer-add"]').remove();
     })
     //监听提问下发表单中input的value变化
-    var askQuestionsIssued=$("#askQuestionsIssued");
-    askQuestionsIssued.on("input propertychange change",'input',function(event){
+    var askQuestionsIssued = $("#askQuestionsIssued");
+    askQuestionsIssued.on("input propertychange change", 'input', function (event) {
         var inputVal = $(this).val();
         if (inputVal == "") {
             $(this).siblings(".error").show();
@@ -16300,16 +16425,64 @@ $(function(){
         }
         //dataTableOperation.sendQuestionValidateTwo();
     });
-    $("#askQuestionsIssued input").inputClear().on('onClearEvent',function(e){
+    $("#askQuestionsIssued input").inputClear().on('onClearEvent', function (e) {
         $(this).siblings(".error").show();
     });
 
     //点击弹窗中的取消按钮后隐藏表单验证报错信息
-    $("button").on("click",function () {
-        var thisMiss=$(this).data("dismiss");
-        if(thisMiss=="modal"){
+    $("button").on("click", function () {
+        var thisMiss = $(this).data("dismiss");
+        if (thisMiss == "modal") {
             $("label.error").hide();
         }
+    })
+
+    //获取图标方向
+    var icoUrl = '/clbs/m/personalized/ico/getIcodirection';
+    json_ajax("POST", icoUrl, "json", false, null, function (data) {
+        var icoMsg = data.msg;
+        if (icoMsg == 'true') {
+            icoUpFlag = true;
+            $("#icoUp").attr("checked", true);
+            $("#icoUpLab").addClass("preBlue");
+        }
+        else {
+            icoUpFlag = false;
+            $("#icoUp").attr("checked", false);
+            $("#icoUpLab").removeClass("preBlue");
+        }
+    });
+
+    $('.obdIco').on('click', function () {
+        var highLight = $("#realTimeStateTable .tableHighlight-blue,#realTimeStateTable .tableHighlight");
+        var len = highLight.length;
+        if (len > 0) {
+            $(this).hide();
+            $('.loadingBox').show();
+            $('#obdInfo').html('');
+            amapOperation.setObdInfo();
+            $('.obdContent').slideDown();
+        } else {
+            var curSelect = $('.curSelectedNode');
+            var checkFlag = curSelect.prev('span.button').hasClass('checkbox_true_full');
+            if (curSelect.length > 0 && checkFlag) {
+                $(this).hide();
+                $('.loadingBox').hide();
+                $("#obdName").html();
+                var name = curSelect.attr('title');
+                var id = curSelect.attr('data-id');
+                amapOperation.setObdInfo(name, id);
+                $('.obdContent').slideDown();
+                return;
+            }
+            layer.msg('请双击监控对象');
+        }
+    });
+    $('.removeIcon').on('click', function () {
+        $('.obdContent').slideUp();
+        setTimeout(function () {
+            $('.obdIco').show();
+        }, 500)
     })
 })
 
@@ -16321,72 +16494,74 @@ $(function(){
 /**
  * Created by Tdz on 2016-11-24.
  */
-function json_ajax(type,url,dataType,async,data,callback){
+function json_ajax(type, url, dataType, async, data, callback) {
     $.ajax(
         {
-            type:type,//通常会用到两种：GET,POST。默认是：GET
-            url:url,//(默认: 当前页地址) 发送请求的地址
-            dataType:dataType, //预期服务器返回的数据类型。"json"
-            async:async, // 异步同步，true  false
-            data:data,
-            timeout : 30000, //超时时间设置，单位毫秒
-            beforeSend:beforeSend, //发送请求
-            success:callback, //请求成功
-            error:error,//请求出错
-            complete:complete//请求完成
-        });
-}
-function ajax_submit(type,url,dataType,async,data,traditional,callback){
-    $.ajax(
-        {
-            type:type,//通常会用到两种：GET,POST。默认是：GET
-            url:url,//(默认: 当前页地址) 发送请求的地址
-            dataType:dataType, //预期服务器返回的数据类型。"json"
-            async:async, // 异步同步，true  false
-            data:data,
-            traditional:traditional,
-            timeout : 30000, //超时时间设置，单位毫秒
-            beforeSend:beforeSend, //发送请求
-            success:callback, //请求成功
-            error:error,//请求出错
-            complete:complete//请求完成
-        });
-}
-//逆地理编码专用ajax
-function address_submit(type,url,dataType,async,data,traditional,callback){
-    $.ajax(
-        {
-            type:type,//通常会用到两种：GET,POST。默认是：GET
-            url:url,//(默认: 当前页地址) 发送请求的地址
-            dataType:dataType, //预期服务器返回的数据类型。"json"
-            async:async, // 异步同步，true  false
-            data:data,
-            traditional:traditional,
-            timeout : 30000, //超时时间设置，单位毫秒
-            success:callback, //请求成功
-            error:error,//请求出错
+            type: type,//通常会用到两种：GET,POST。默认是：GET
+            url: url,//(默认: 当前页地址) 发送请求的地址
+            dataType: dataType, //预期服务器返回的数据类型。"json"
+            async: async, // 异步同步，true  false
+            data: data,
+            timeout: 30000, //超时时间设置，单位毫秒
+            beforeSend: beforeSend, //发送请求
+            success: callback, //请求成功
+            error: error,//请求出错
+            complete: complete//请求完成
         });
 }
 
-function json_ajax_p(type,url,dataType,async,data,callback){
+function ajax_submit(type, url, dataType, async, data, traditional, callback) {
     $.ajax(
         {
-            type:type,//通常会用到两种：GET,POST。默认是：GET
-            url:url,//(默认: 当前页地址) 发送请求的地址
-            dataType:dataType, //预期服务器返回的数据类型。"json"
-            async:async, // 异步同步，true  false
-            data:data,
-            timeout : 30000, //超时时间设置，单位毫秒
+            type: type,//通常会用到两种：GET,POST。默认是：GET
+            url: url,//(默认: 当前页地址) 发送请求的地址
+            dataType: dataType, //预期服务器返回的数据类型。"json"
+            async: async, // 异步同步，true  false
+            data: data,
+            traditional: traditional,
+            timeout: 30000, //超时时间设置，单位毫秒
+            beforeSend: beforeSend, //发送请求
+            success: callback, //请求成功
+            error: error,//请求出错
+            complete: complete//请求完成
+        });
+}
+
+//逆地理编码专用ajax
+function address_submit(type, url, dataType, async, data, traditional, callback) {
+    $.ajax(
+        {
+            type: type,//通常会用到两种：GET,POST。默认是：GET
+            url: url,//(默认: 当前页地址) 发送请求的地址
+            dataType: dataType, //预期服务器返回的数据类型。"json"
+            async: async, // 异步同步，true  false
+            data: data,
+            traditional: traditional,
+            timeout: 30000, //超时时间设置，单位毫秒
+            success: callback, //请求成功
+            error: error,//请求出错
+        });
+}
+
+function json_ajax_p(type, url, dataType, async, data, callback) {
+    $.ajax(
+        {
+            type: type,//通常会用到两种：GET,POST。默认是：GET
+            url: url,//(默认: 当前页地址) 发送请求的地址
+            dataType: dataType, //预期服务器返回的数据类型。"json"
+            async: async, // 异步同步，true  false
+            data: data,
+            timeout: 30000, //超时时间设置，单位毫秒
             // beforeSend:beforeSend, //发送请求
-            success:callback, //请求成功
-            error:error,//请求出错
+            success: callback, //请求成功
+            error: error,//请求出错
             // complete:complete//请求完成
         });
 }
 
 //支持Form方式excel导出
-function exportExcelUseForm(url,params) {
-	var form = $('<form method="POST" action="' + url + '">');
+function exportExcelUseForm(url, params) {
+    var form = $('<form method="POST" action="' + url + '">');
     $.each(params, function (k, v) {
         form.append($('<input type="hidden" name="' + k +
             '" value="' + v + '">'));
@@ -16395,10 +16570,28 @@ function exportExcelUseForm(url,params) {
     form.submit(); //自动提交
 }
 
+//支持Form方式excel导出
+function exportExcelUseFormGet(url, params) {
+    var form = $('<form method="GET" action="' + url + '">');
+    $.each(params, function (k, v) {
+        form.append($('<input type="hidden" name="' + k +
+            '" value="' + v + '">'));
+    });
+    $('body').append(form);
+    form.on('submit', function(e){
+        var $form = $(this);
+        if ($form.data('submitted') === true) {
+            e.preventDefault();
+        } else {
+            $form.data('submitted', true);
+        }
+    });
+    form.submit(); //自动提交
+}
 
 
 //支持post方式excel导出
-function exportExcelUsePost(url,params) {
+function exportExcelUsePost(url, params) {
     $.ajax({
         type: "POST",
         url: url,
@@ -16415,16 +16608,16 @@ function exportExcelUsePost(url,params) {
                 form.submit(); //自动提交
             }
         },
-        beforeSend:beforeSend, //发送请求
-        error:error,//请求出错
-        complete:complete//请求完成
+        beforeSend: beforeSend, //发送请求
+        error: error,//请求出错
+        complete: complete//请求完成
     })
 }
 
 
-function error(XMLHttpRequest, textStatus, errorThrown){
+function error(XMLHttpRequest, textStatus, errorThrown) {
     layer.closeAll('loading');
-    if(textStatus === "timeout"){
+    if (textStatus === "timeout") {
         layer.msg("加载超时，请重试");
         return;
     }
@@ -16434,177 +16627,187 @@ function error(XMLHttpRequest, textStatus, errorThrown){
     }
     layer.msg("系统的情绪不稳定，并向你扔了一个错误~");
 }
-function beforeSend(XMLHttpRequest){
+
+function beforeSend(XMLHttpRequest) {
     layer.load(2);
 }
-function complete(XMLHttpRequest, textStatus){
+
+function complete(XMLHttpRequest, textStatus) {
     layer.closeAll('loading');
 }
 
 //逆地理编码 -- 解析两个经纬度一组的数据
 var startAddress, endAddress, pushIndex = 1;
-function backAddressMsg(index,addressLngLat,goBackMsg,addressArray){
-  var arrayIndex = index;
-  $.ajax(
-    {
-      type:"POST",
-      url:"/clbs/v/monitoring/getAddress",
-      dataType:"json",
-      async:true,
-      data:{lnglatXYs:addressLngLat[index]},
-      traditional:true,
-      timeout : 30000,
-      success:function(data){
-    	  var carAddress = data;
-    	  if(carAddress == "AddressNull"){
-    	      var geocoder = new AMap.Geocoder({
-    	          radius: 1000,
-    	          extensions: "base"
-    	      });
-    	      geocoder.getAddress(addressLngLat[index]);
-    	      AMap.event.addListener(geocoder,"complete",function(GeocoderResult){
-    	        arrayIndex++;
-    	        if(pushIndex == 1){
-    	          if(GeocoderResult.info == 'NO_DATA'){
-    	        	  startAddress = '未定位';
-    	          }else{
-    	        	  startAddress = GeocoderResult.regeocode.formattedAddress;
-    	          };
-    	          pushIndex++;
-    	        }else{
-	        	  if(GeocoderResult.info == 'NO_DATA'){
-	        		  endAddress = '未定位';
-       	          }else{
-       	        	endAddress = GeocoderResult.regeocode.formattedAddress;
-       	          };
-    	          addressArray.push([startAddress, endAddress]);
-    	          startAddress = null;
-    	          endAddress == null;
-    	          pushIndex = 1;
-    	        }
-    	        if(startAddress != '未定位' && endAddress != '未定位'){
-    	        	var addressParticulars = getaddressParticulars(GeocoderResult,addressLngLat[index][0],addressLngLat[index][1]);
-        	        $.ajax({
-                    	type:"POST",
-                        url:"/clbs/v/monitoring/setAddress",
-                        dataType:"json",
-                        async:true,
-                        data:{"addressNew" : addressParticulars},
-                        traditional:false,
-                        timeout : 30000,
+
+function backAddressMsg(index, addressLngLat, goBackMsg, addressArray) {
+    var arrayIndex = index;
+    $.ajax(
+        {
+            type: "POST",
+            url: "/clbs/v/monitoring/getAddress",
+            dataType: "json",
+            async: true,
+            data: {lnglatXYs: addressLngLat[index]},
+            traditional: true,
+            timeout: 30000,
+            success: function (data) {
+                var carAddress = data;
+                if (carAddress == "AddressNull") {
+                    var geocoder = new AMap.Geocoder({
+                        radius: 1000,
+                        extensions: "base"
                     });
-    	        };
-    	        if(arrayIndex < addressLngLat.length){
-    	          backAddressMsg(arrayIndex,addressLngLat,goBackMsg,addressArray);
-    	        }else{
-    	          return goBackMsg(addressArray);
-    	        }
-    	      });
-    	  }else{
-    	    arrayIndex++;
-    	    if(pushIndex == 1){
-    	      startAddress = carAddress;
-    	      pushIndex++;
-    	    }else{
-    	      endAddress = carAddress;
-    	      addressArray.push([startAddress, endAddress]);
-    	      startAddress = null;
-    	        endAddress == null;
-    	        pushIndex = 1;
-    	    };
-	        if(arrayIndex < addressLngLat.length){
-	          backAddressMsg(arrayIndex,addressLngLat,goBackMsg,addressArray);
-	        }else{
-	          return goBackMsg(addressArray);
-	        }
-    	  }
-      },
-  });
+                    geocoder.getAddress(addressLngLat[index]);
+                    AMap.event.addListener(geocoder, "complete", function (GeocoderResult) {
+                        arrayIndex++;
+                        if (pushIndex == 1) {
+                            if (GeocoderResult.info == 'NO_DATA') {
+                                startAddress = '未定位';
+                            } else {
+                                startAddress = GeocoderResult.regeocode.formattedAddress;
+                            }
+                            ;
+                            pushIndex++;
+                        } else {
+                            if (GeocoderResult.info == 'NO_DATA') {
+                                endAddress = '未定位';
+                            } else {
+                                endAddress = GeocoderResult.regeocode.formattedAddress;
+                            }
+                            ;
+                            addressArray.push([startAddress, endAddress]);
+                            startAddress = null;
+                            endAddress == null;
+                            pushIndex = 1;
+                        }
+                        if (startAddress != '未定位' && endAddress != '未定位') {
+                            var addressParticulars = getaddressParticulars(GeocoderResult, addressLngLat[index][0], addressLngLat[index][1]);
+                            $.ajax({
+                                type: "POST",
+                                url: "/clbs/v/monitoring/setAddress",
+                                dataType: "json",
+                                async: true,
+                                data: {"addressNew": addressParticulars},
+                                traditional: false,
+                                timeout: 30000,
+                            });
+                        }
+                        ;
+                        if (arrayIndex < addressLngLat.length) {
+                            backAddressMsg(arrayIndex, addressLngLat, goBackMsg, addressArray);
+                        } else {
+                            return goBackMsg(addressArray);
+                        }
+                    });
+                } else {
+                    arrayIndex++;
+                    if (pushIndex == 1) {
+                        startAddress = carAddress;
+                        pushIndex++;
+                    } else {
+                        endAddress = carAddress;
+                        addressArray.push([startAddress, endAddress]);
+                        startAddress = null;
+                        endAddress == null;
+                        pushIndex = 1;
+                    }
+                    ;
+                    if (arrayIndex < addressLngLat.length) {
+                        backAddressMsg(arrayIndex, addressLngLat, goBackMsg, addressArray);
+                    } else {
+                        return goBackMsg(addressArray);
+                    }
+                }
+            },
+        });
 }
+
 //逆地理编码 -- 解析一条加载一条
-function backAddressMsg1(index,addressLngLat,goBackMsg,addressArray,tableID,tdIndex){
-  var arrayIndex = index;
-  $.ajax(
-	{
-	    type:"post",
-	    url:"/clbs/v/monitoring/getAddress",
-	    dataType:"json",
-	    async:true,
-	    data:{lnglatXYs:addressLngLat[index]},
-	    traditional: true,
-	    timeout : 30000,
-	    success: function(data){
-	    	var carAddress = data;
-	    	if(carAddress == "AddressNull"){
-	            var geocoder = new AMap.Geocoder({
-	                radius: 1000,
-	                extensions: "base"
-	            });
-	            geocoder.getAddress(addressLngLat[index]);
-	            AMap.event.addListener(geocoder,"complete",function(GeocoderResult){
-	              arrayIndex++;
-	              var addressValue_index;
-	              if(GeocoderResult.info == 'NO_DATA'){
-	            	  addressValue_index = '未定位';
-	              }else{
-	            	  addressValue_index = GeocoderResult.regeocode.formattedAddress;
-	            	  var addressParticulars = getaddressParticulars(GeocoderResult,addressLngLat[index][0],addressLngLat[index][1]);
-	            	  $.ajax({
-	                	type:"POST",
-	                    url:"/clbs/v/monitoring/setAddress",
-	                    dataType:"json",
-	                    async:true,
-	                    data:{"addressNew" : addressParticulars},
-	                    traditional:false,
-	                    timeout : 30000,
-	            	  });
-	              };
-	              $("#" + tableID).children("tbody").children("tr:nth-child(" + arrayIndex + ")").children("td:nth-child("+ tdIndex +")").text(addressValue_index);
-	              if(arrayIndex < addressLngLat.length){
-	                  backAddressMsg1(arrayIndex,addressLngLat,goBackMsg,addressArray,tableID,tdIndex);
-	              }else{
-	                return;
-	              }
-	            });
-	        }else{
-	          arrayIndex++;
-              var addressValue_index = carAddress;
-              $("#" + tableID).children("tbody").children("tr:nth-child(" + arrayIndex + ")").children("td:nth-child("+ tdIndex +")").text(addressValue_index);
-              if(arrayIndex < addressLngLat.length){
-                backAddressMsg1(arrayIndex,addressLngLat,goBackMsg,addressArray,tableID,tdIndex);
-              }else{
-                return;
-              }
-	        }
-	    },
-	});
+function backAddressMsg1(index, addressLngLat, goBackMsg, addressArray, tableID, tdIndex) {
+    var arrayIndex = index;
+    $.ajax(
+        {
+            type: "post",
+            url: "/clbs/v/monitoring/getAddress",
+            dataType: "json",
+            async: true,
+            data: {lnglatXYs: addressLngLat[index]},
+            traditional: true,
+            timeout: 30000,
+            success: function (data) {
+                var carAddress = data;
+                if (carAddress == "AddressNull") {
+                    var geocoder = new AMap.Geocoder({
+                        radius: 1000,
+                        extensions: "base"
+                    });
+                    geocoder.getAddress(addressLngLat[index]);
+                    AMap.event.addListener(geocoder, "complete", function (GeocoderResult) {
+                        arrayIndex++;
+                        var addressValue_index;
+                        if (GeocoderResult.info == 'NO_DATA') {
+                            addressValue_index = '未定位';
+                        } else {
+                            addressValue_index = GeocoderResult.regeocode.formattedAddress;
+                            var addressParticulars = getaddressParticulars(GeocoderResult, addressLngLat[index][0], addressLngLat[index][1]);
+                            $.ajax({
+                                type: "POST",
+                                url: "/clbs/v/monitoring/setAddress",
+                                dataType: "json",
+                                async: true,
+                                data: {"addressNew": addressParticulars},
+                                traditional: false,
+                                timeout: 30000,
+                            });
+                        }
+                        ;
+                        $("#" + tableID).children("tbody").children("tr:nth-child(" + arrayIndex + ")").children("td:nth-child(" + tdIndex + ")").text(addressValue_index);
+                        if (arrayIndex < addressLngLat.length) {
+                            backAddressMsg1(arrayIndex, addressLngLat, goBackMsg, addressArray, tableID, tdIndex);
+                        } else {
+                            return;
+                        }
+                    });
+                } else {
+                    arrayIndex++;
+                    var addressValue_index = carAddress;
+                    $("#" + tableID).children("tbody").children("tr:nth-child(" + arrayIndex + ")").children("td:nth-child(" + tdIndex + ")").text(addressValue_index);
+                    if (arrayIndex < addressLngLat.length) {
+                        backAddressMsg1(arrayIndex, addressLngLat, goBackMsg, addressArray, tableID, tdIndex);
+                    } else {
+                        return;
+                    }
+                }
+            },
+        });
 };
-function getaddressParticulars(AddressNew,longitude,latitude){
+
+function getaddressParticulars(AddressNew, longitude, latitude) {
     var addressParticulars = {
-        "longitude" : longitude.substring(0,longitude.lastIndexOf(".")+4),
-        "latitude" : latitude.substring(0,latitude.lastIndexOf(".")+4),
-        "adcode" : AddressNew.regeocode.addressComponent.adcode,//区域编码
-        "building" : AddressNew.regeocode.addressComponent.building,//所在楼/大厦
+        "longitude": longitude.substring(0, longitude.lastIndexOf(".") + 4),
+        "latitude": latitude.substring(0, latitude.lastIndexOf(".") + 4),
+        "adcode": AddressNew.regeocode.addressComponent.adcode,//区域编码
+        "building": AddressNew.regeocode.addressComponent.building,//所在楼/大厦
         "buildingType": AddressNew.regeocode.addressComponent.buildingType,
-        "city" : AddressNew.regeocode.addressComponent.city,
-        "cityCode" : AddressNew.regeocode.addressComponent.citycode,
-        "district" : AddressNew.regeocode.addressComponent.district,//所在区
-        "neighborhood" : AddressNew.regeocode.addressComponent.neighborhood,//所在社区
-        "neighborhoodType" : AddressNew.regeocode.addressComponent.neighborhoodType,//社区类型
-        "province" : AddressNew.regeocode.addressComponent.province,//省
-        "street" : AddressNew.regeocode.addressComponent.street,//所在街道
-        "streetNumber" : AddressNew.regeocode.addressComponent.streetNumber,//门牌号
-        "township" : AddressNew.regeocode.addressComponent.township,//所在乡镇
-        "crosses" : "",
-        "pois" : "",
-        "roads" : AddressNew.regeocode.roads.name,//道路名称
-        "formattedAddress" : AddressNew.regeocode.formattedAddress,//格式化地址
+        "city": AddressNew.regeocode.addressComponent.city,
+        "cityCode": AddressNew.regeocode.addressComponent.citycode,
+        "district": AddressNew.regeocode.addressComponent.district,//所在区
+        "neighborhood": AddressNew.regeocode.addressComponent.neighborhood,//所在社区
+        "neighborhoodType": AddressNew.regeocode.addressComponent.neighborhoodType,//社区类型
+        "province": AddressNew.regeocode.addressComponent.province,//省
+        "street": AddressNew.regeocode.addressComponent.street,//所在街道
+        "streetNumber": AddressNew.regeocode.addressComponent.streetNumber,//门牌号
+        "township": AddressNew.regeocode.addressComponent.township,//所在乡镇
+        "crosses": "",
+        "pois": "",
+        "roads": AddressNew.regeocode.roads.name,//道路名称
+        "formattedAddress": AddressNew.regeocode.formattedAddress,//格式化地址
     };
     return JSON.stringify(addressParticulars);
 };
 
 //跨域请求接口
-function getJsonForCross(type,url,data,dataType,async,jsonp,jsonpCallback,callback) {
+function getJsonForCross(type, url, data, dataType, async, jsonp, jsonpCallback, callback) {
     $.ajax(
         {
             type: type,
@@ -16614,85 +16817,123 @@ function getJsonForCross(type,url,data,dataType,async,jsonp,jsonpCallback,callba
             async: async,
             jsonp: jsonp,
             jsonpCallback: jsonpCallback,
-            timeout : 30000, //超时时间设置，单位毫秒
-            beforeSend:beforeSend, //发送请求
-            success:callback, //请求成功
-            error:error,//请求出错
-            complete:complete//请求完成
+            timeout: 30000, //超时时间设置，单位毫秒
+            beforeSend: beforeSend, //发送请求
+            success: callback, //请求成功
+            error: error,//请求出错
+            complete: complete//请求完成
         })
 }
 
 //校验监控对象是否输入正确
-function checkBrands(id){
-	//标准车牌规则
-	var reg = /^[\u4eac\u6d25\u5180\u664b\u8499\u8fbd\u5409\u9ed1\u6caa\u82cf\u6d59\u7696\u95fd\u8d63\u9c81\u8c6b\u9102\u6e58\u7ca4\u6842\u743c\u5ddd\u8d35\u4e91\u6e1d\u85cf\u9655\u7518\u9752\u5b81\u65b0\u6d4b]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
-	//香港车牌规则
-	var reg1 = /^[A-Z]{2}[0-9]{4}$/;
-	var value = $("#" + id).val();
-    if(reg.test(value) || reg1.test(value)) {
-        return true;
-    } else {
-        return false;
-    }
+// function checkBrands(id){
+//  //标准车牌规则
+//  var reg = /^[\u4eac\u6d25\u5180\u664b\u8499\u8fbd\u5409\u9ed1\u6caa\u82cf\u6d59\u7696\u95fd\u8d63\u9c81\u8c6b\u9102\u6e58\u7ca4\u6842\u743c\u5ddd\u8d35\u4e91\u6e1d\u85cf\u9655\u7518\u9752\u5b81\u65b0\u6d4b]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
+//  //香港车牌规则
+//  var reg1 = /^[A-Z]{2}[0-9]{4}$/;
+//  var value = $("#" + id).val();
+//     if(reg.test(value) || reg1.test(value)) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
+
+// wjk
+function checkBrands(id) {
+    var value = $("#" + id).val();
+    var reg = /^[0-9a-zA-Z\u4e00-\u9fa5-]{2,20}$/;
+    return reg.test(value)
 }
 
-
-(function($){  
+(function ($) {
     //备份jquery的ajax方法  
-    var _ajax=$.ajax;  
-      
+    var _ajax = $.ajax;
+
     //重写jquery的ajax方法  
-    $.ajax=function(opt){  
+    $.ajax = function (opt) {
         //备份opt中error和success方法  
-        var fn = {  
-          /*  error:function(XMLHttpRequest, textStatus, errorThrown){},  
-            success:function(data, textStatus){} ,*/
-            complete:function(msg){}
-        }  
-      /*  if(opt.error){  
-            fn.error=opt.error;  
-        }  
-        if(opt.success){  
-            fn.success=opt.success;  
-        }  */
-        if(opt.complete){
-        	fn.complete=opt.complete;
+        var fn = {
+            /*  error:function(XMLHttpRequest, textStatus, errorThrown){},
+              success:function(data, textStatus){} ,*/
+            complete: function (msg) {
+            }
+        }
+        /*  if(opt.error){
+              fn.error=opt.error;
+          }
+          if(opt.success){
+              fn.success=opt.success;
+          }  */
+        if (opt.complete) {
+            fn.complete = opt.complete;
         }
 
-          
+
         //扩展增强处理  
-        var _opt = $.extend(opt,{  
-         /*   error:function(XMLHttpRequest, textStatus, errorThrown){  
-                //错误方法增强处理  
-                  
-                fn.error(XMLHttpRequest, textStatus, errorThrown);  
-            },  
-            success:function(data, textStatus){  
-                //成功回调方法增强处理  
-                  
-                fn.success(data, textStatus);  
-            },*/
-            complete:function(msg){
-            	if (msg.responseText && msg.responseText.indexOf("<form id=\"loginForm") > 0) {
-			        window.location.replace("/clbs/login?type=expired");
-			        return;
-				}	
-            	fn.complete(msg);
+        var _opt = $.extend(opt, {
+            /*   error:function(XMLHttpRequest, textStatus, errorThrown){
+                   //错误方法增强处理
+
+                   fn.error(XMLHttpRequest, textStatus, errorThrown);
+               },
+               success:function(data, textStatus){
+                   //成功回调方法增强处理
+
+                   fn.success(data, textStatus);
+               },*/
+            complete: function (msg) {
+                if (msg.responseText && msg.responseText.indexOf("<form id=\"loginForm") > 0) {
+                    window.location.replace("/clbs/login?type=expired");
+                    return;
+                }
+                fn.complete(msg);
+            },
+            converters: { "text json": function (json_string) {
+                    if ( (typeof json_string !== 'string' && typeof json_string !== 'boolean') || !$.trim(json_string).length ) {
+                        return {};
+                    } else {
+                        return jQuery.parseJSON( json_string );
+                    }
+                }
             }
-        });  
-        return _ajax(_opt);  
+        });
+        return _ajax(_opt);
     };
-    
-   $(".fa-chevron-down").on("click",function(){
-    	if($(this).next().is(":hidden")){
-    	$(this).prev().trigger("focus");
-    	$(this).prev().trigger("click");
-    	}
+
+    //组织树下拉框显示隐藏
+    $("span.fa-chevron-down").on("click", function () {
+        if ($(this).next().is(":hidden")) {
+            $(this).siblings('input').trigger("focus");
+            $(this).siblings('input').trigger("click");
+        }
+    });
+    /*$(".fa-chevron-down").on("click", function () {
+        if ($(this).next().is(":hidden")) {
+            $(this).prev().trigger("focus");
+            $(this).prev().trigger("click");
+        }
+    })*/
+    $(".layer-date").unbind("click").on("click", function () {
+        $(this).trigger("focus");
     })
-    $(".layer-date").unbind("click").on("click",function(){   	
-        	$(this).trigger("focus");        	
-        })
-})(jQuery); 
+
+    //防止backspace键后退网页
+    document.onkeydown = function (event) {
+        if (event.keyCode == 8) {// backspace的keycode=8
+            var type = document.activeElement.type;// 获取焦点类型
+            if (type == "text" || type == "textarea" || type == "password"
+                || type == "select") {// 判断焦点类型，无法输入的类型一律屏蔽
+                if (document.activeElement.readOnly == false)// 如果不是只读，则执行本次backspace按键
+                    return true;
+            }
+            event.keyCode = 0;// 将本次按键设为0（即无按键）
+            event.returnValue = false;
+            return false;
+        }
+    };
+})(jQuery);
+
 /*!
  * jQuery Form Plugin
  * version: 3.51.0-2014.06.20
@@ -16708,143 +16949,144 @@ function checkBrands(id){
 /**
  * Created by Administrator on 2016/7/26.
  */
-$(function(){
-    // 判断整数value是否等于0 
-    jQuery.validator.addMethod("isIntEqZero", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || value==0;
-    	}else{
-    		return false;
-    	}
+$(function () {
+    // 判断整数value是否等于0
+    jQuery.validator.addMethod("isIntEqZero", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || value == 0;
+        } else {
+            return false;
+        }
     }, "整数必须为0");
 
     // 判断整数value是否大于0
-    jQuery.validator.addMethod("isIntGtZero", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || value>0;
-    	}else{
-    		return false;
-    	}
+    jQuery.validator.addMethod("isIntGtZero", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || value > 0;
+        } else {
+            return false;
+        }
     }, "整数必须大于0");
 
     //验证组织机构代码格式
-    jQuery.validator.addMethod("doubles",function(value,element){
-        if(value.length == 9){
-            var reg= /^[0-9]/;
-            return this.optional(element)||(reg.test(value));
+    jQuery.validator.addMethod("doubles", function (value, element) {
+        if (value.length == 9) {
+            var reg = /^[0-9]/;
+            return this.optional(element) || (reg.test(value));
         } else if (value.length == 18) {
-            var reg= /^([A-Z]*\d+[A-Z]+)|(\d*[A-Z]+\d+)$/;
-            return this.optional(element)||(reg.test(value));
-        } else if(value.length == 0){
+            // var reg = /^([A-Z]*\d+[A-Z]+)|(\d*[A-Z]+\d+)$/;
+            var reg = /^[A-Z\d]{18}$/;
+            return this.optional(element) || (reg.test(value));
+        } else if (value.length == 0) {
             return true;
         } else {
             return false;
         }
-    },"请输入正确的组织结构代码(9位数字)或者18位的统一社会信用代码(数字和大写字母的组合)");
-    
+    }, "请输入正确的组织结构代码(9位数字)或者18位的统一社会信用代码(数字和大写字母的组合)");
+
     //验证输入的文本是否为数字和字母
-    jQuery.validator.addMethod("isRegisterNumber",function(value,element){
-    	var reg = /^[a-zA-Z0-9-]{13}-[a-zA-Z0-9]/;
-    	return this.optional(element) || (reg.test(value));
-    },"请输入正确的数字和字母以及正确的长度");
-    
+    jQuery.validator.addMethod("isRegisterNumber", function (value, element) {
+        var reg = /^[a-zA-Z0-9-]{13}-[a-zA-Z0-9]/;
+        return this.optional(element) || (reg.test(value));
+    }, "请输入正确的数字和字母以及正确的长度");
+
 
     // 判断是否是正确的数字
-    jQuery.validator.addMethod("isRightNumber", function(value, element) {
-    	var reg = /^[1-9]([0-9]*)$|^[0-9]$/;
+    jQuery.validator.addMethod("isRightNumber", function (value, element) {
+        var reg = /^[1-9]([0-9]*)$|^[0-9]$/;
         return this.optional(element) || reg.test(value);
     }, "请输入正确的数字");
 
     // 判断整数value是否大于或等于0
-    jQuery.validator.addMethod("isIntGteZero", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || value>=0;
-    	}else{
-    		return false;
-    	}
+    jQuery.validator.addMethod("isIntGteZero", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || value >= 0;
+        } else {
+            return false;
+        }
     }, "整数必须大于或等于0");
-    
+
     // 判断整数value是否介于1-120
-    jQuery.validator.addMethod("isInt1to120", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-    		value=parseInt(value);
-    		return this.optional(element) || (value >= 1 && value <= 120);
-    	}else{
-    		return false;
-    	}
+    jQuery.validator.addMethod("isInt1to120", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 1 && value <= 120);
+        } else {
+            return false;
+        }
     }, "介于1到120之间的整数");
-    
+
     // 判断整数value是否介于1-400
-    jQuery.validator.addMethod("isInt1to400", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-    		value=parseInt(value);
-    		return this.optional(element) || (value >= 1 && value <= 400);
-    	}else{
-    		return false;
-    	}
+    jQuery.validator.addMethod("isInt1to400", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 1 && value <= 400);
+        } else {
+            return false;
+        }
     }, "介于1到400之间的整数");
 
     // 判断整数value是否介于1tovalue
-    jQuery.validator.addMethod("isInt1tov", function(value, element,param) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || (value >= 1 && value <= param);
-    	}else if(value==null||value==""){
-    		return true;
-    	}else {
-    	    return false;
+    jQuery.validator.addMethod("isInt1tov", function (value, element, param) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 1 && value <= param);
+        } else if (value == null || value == "") {
+            return true;
+        } else {
+            return false;
         }
     }, "介于1到之间的整数");
 
     // 判断整数value是否介于1-60
-    jQuery.validator.addMethod("isInt1to60", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || (value >=1 && value <= 60);
-    	}else{
-    		return false;
-    	}
+    jQuery.validator.addMethod("isInt1to60", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 1 && value <= 60);
+        } else {
+            return false;
+        }
     }, "介于1到60之间的整数");
-    
+
     // 判断整数value是否介于10-100
-    jQuery.validator.addMethod("isInt10to100", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || (value >=10 && value <= 100);
-    	}else{
-        	return false;
+    jQuery.validator.addMethod("isInt10to100", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 10 && value <= 100);
+        } else {
+            return false;
         }
     }, "介于10到100之间的整数");
-    
+
     // 判断整数value是否介于1-10
-    jQuery.validator.addMethod("isInt1to10", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	    	value=parseInt(value);
-	        return this.optional(element) || (value >=1 && value <= 10);
-    	}else{
-    		return false;
-    	}
+    jQuery.validator.addMethod("isInt1to10", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 1 && value <= 10);
+        } else {
+            return false;
+        }
     }, "介于1到10之间的整数");
 
     // 判断整数value是否介于1-24
-    jQuery.validator.addMethod("isInt1to24", function(value, element) {
-        if(/^[-\+]?\d/.test(value)){
-            value=parseInt(value);
-            return this.optional(element) || (value >=1 && value <= 24);
-        }else{
+    jQuery.validator.addMethod("isInt1to24", function (value, element) {
+        if (/^[-\+]?\d/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 1 && value <= 24);
+        } else {
             return false;
         }
     }, "介于1到24之间的整数");
 
     // 判断整数value是否介于0-59
-    jQuery.validator.addMethod("isInt1to59", function(value, element) {
-        if(/^[-\+]?\d/.test(value)){
-            value=parseInt(value);
-            return this.optional(element) || (value >=0 && value <= 59);
-        }else{
+    jQuery.validator.addMethod("isInt1to59", function (value, element) {
+        if (/^[-\+]?\d/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || (value >= 0 && value <= 59);
+        } else {
             return false;
         }
     }, "介于0到59之间的整数");
@@ -16858,245 +17100,276 @@ $(function(){
             return false;
         }
     }, "介于7到15之间的整数");
-*/
-    // 判断整数value是否不等于0 
-    jQuery.validator.addMethod("isIntNEqZero", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || value!=0;
-    	}else{
-    		return false;
-    	}
+  */
+    // 判断整数value是否不等于0
+    jQuery.validator.addMethod("isIntNEqZero", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || value != 0;
+        } else {
+            return false;
+        }
     }, "整数必须不等于0");
 
-    // 判断整数value是否小于0 
-    jQuery.validator.addMethod("isIntLtZero", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || value<0;
-    	}else{
-    		return false;
-    	}
+    // 判断整数value是否小于0
+    jQuery.validator.addMethod("isIntLtZero", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || value < 0;
+        } else {
+            return false;
+        }
     }, "整数必须小于0");
 
-    // 判断整数value是否小于或等于0 
-    jQuery.validator.addMethod("isIntLteZero", function(value, element) {
-    	if(/^[-\+]?\d+$/.test(value)){
-	        value=parseInt(value);
-	        return this.optional(element) || value<=0;
-    	}else{
-    		return false;
-    	}
+    // 判断整数value是否小于或等于0
+    jQuery.validator.addMethod("isIntLteZero", function (value, element) {
+        if (/^[-\+]?\d+$/.test(value)) {
+            value = parseInt(value);
+            return this.optional(element) || value <= 0;
+        } else {
+            return false;
+        }
     }, "整数必须小于或等于0");
 
-    // 判断浮点数value是否等于0 
-    jQuery.validator.addMethod("isFloatEqZero", function(value, element) {
-        value=parseFloat(value);
-        return this.optional(element) || value==0;
+    // 判断浮点数value是否等于0
+    jQuery.validator.addMethod("isFloatEqZero", function (value, element) {
+        value = parseFloat(value);
+        return this.optional(element) || value == 0;
     }, "浮点数必须为0");
 
     // 判断浮点数value是否大于0
-    jQuery.validator.addMethod("isFloatGtZero", function(value, element) {
-        value=parseFloat(value);
-        return this.optional(element) || value>0;
+    jQuery.validator.addMethod("isFloatGtZero", function (value, element) {
+        value = parseFloat(value);
+        return this.optional(element) || value > 0;
     }, "浮点数必须大于0");
 
     // 判断浮点数value是否大于或等于0
-    jQuery.validator.addMethod("isFloatGteZero", function(value, element) {
-        value=parseFloat(value);
-        return this.optional(element) || value>=0;
+    jQuery.validator.addMethod("isFloatGteZero", function (value, element) {
+        value = parseFloat(value);
+        return this.optional(element) || value >= 0;
     }, "浮点数必须大于或等于0");
 
-    // 判断浮点数value是否不等于0 
-    jQuery.validator.addMethod("isFloatNEqZero", function(value, element) {
-        value=parseFloat(value);
-        return this.optional(element) || value!=0;
+    // 判断浮点数value是否不等于0
+    jQuery.validator.addMethod("isFloatNEqZero", function (value, element) {
+        value = parseFloat(value);
+        return this.optional(element) || value != 0;
     }, "浮点数必须不等于0");
 
-    // 判断浮点数value是否小于0 
-    jQuery.validator.addMethod("isFloatLtZero", function(value, element) {
-        value=parseFloat(value);
-        return this.optional(element) || value<0;
+    // 判断浮点数value是否小于0
+    jQuery.validator.addMethod("isFloatLtZero", function (value, element) {
+        value = parseFloat(value);
+        return this.optional(element) || value < 0;
     }, "浮点数必须小于0");
 
-    // 判断浮点数value是否小于或等于0 
-    jQuery.validator.addMethod("isFloatLteZero", function(value, element) {
-        value=parseFloat(value);
-        return this.optional(element) || value<=0;
+    // 判断浮点数value是否小于或等于0
+    jQuery.validator.addMethod("isFloatLteZero", function (value, element) {
+        value = parseFloat(value);
+        return this.optional(element) || value <= 0;
     }, "浮点数必须小于或等于0");
 
-    // 判断浮点型  
-    jQuery.validator.addMethod("isFloat", function(value, element) {
+    // 判断浮点型
+    jQuery.validator.addMethod("isFloat", function (value, element) {
         return this.optional(element) || /^[-\+]?\d+(\.\d+)?$/.test(value);
     }, "只能包含数字、小数点等字符");
-    
+
     // 判断小数0-1
-    jQuery.validator.addMethod("isDecimal", function(value, element) {
+    jQuery.validator.addMethod("isDecimal", function (value, element) {
         return this.optional(element) || /^0\.\d+$/.test(value);
     }, "只能输入0-1的小数");
 
     // 匹配integer
-    jQuery.validator.addMethod("isInteger", function(value, element) {
-        return this.optional(element) || (/^[-\+]?\d+$/.test(value) && parseInt(value)>=0);
+    jQuery.validator.addMethod("isInteger", function (value, element) {
+        return this.optional(element) || (/^[-\+]?\d+$/.test(value) && parseInt(value) >= 0);
     }, "匹配integer");
 
     // 判断数值类型，包括整数和浮点数
-    jQuery.validator.addMethod("isNumber", function(value, element) {
+    jQuery.validator.addMethod("isNumber", function (value, element) {
         return this.optional(element) || /^[-\+]?\d+$/.test(value) || /^[-\+]?\d+(\.\d+)?$/.test(value);
     }, "匹配数值类型，包括整数和浮点数");
 
     // 只能输入[0-9]数字
-    jQuery.validator.addMethod("isDigits", function(value, element) {
+    jQuery.validator.addMethod("isDigits", function (value, element) {
         return this.optional(element) || /^\d+$/.test(value);
     }, "只能输入0-9数字");
 
-    // 判断中文字符 
-    jQuery.validator.addMethod("isChinese", function(value, element) {
+    // 判断中文字符
+    jQuery.validator.addMethod("isChinese", function (value, element) {
         return this.optional(element) || /^[\u0391-\uFFE5]+$/.test(value);
     }, "只能包含中文字符。");
 
-    // 判断英文字符 
-    jQuery.validator.addMethod("isEnglish", function(value, element) {
+    // 判断英文字符
+    jQuery.validator.addMethod("isEnglish", function (value, element) {
         return this.optional(element) || /^[A-Za-z]+$/.test(value);
     }, "只能包含英文字符。");
 
-    // 手机号码验证    
-    jQuery.validator.addMethod("isMobile", function(value, element) {
+    // 手机号码验证
+    jQuery.validator.addMethod("isMobile", function (value, element) {
         var length = value.length;
-        return this.optional(element) || (length == 11 && /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(value));
+        var mobile = /^((13[0-9]{1})|(14[5,7,9]{1})|(15[^4]{1})|(166)|(18[0-9]{1})|(19[8-9]{1})|(17[0,1,3,5,6,7,8]{1}))+\d{8}$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
     }, "请正确填写您的手机号码。");
 
-    // 电话号码验证    
-    jQuery.validator.addMethod("isPhone", function(value, element) {
+    // 电话号码验证
+    jQuery.validator.addMethod("isPhone", function (value, element) {
         var tel = /^(\d{3,4}-?)?\d{7,9}$/g;
         return this.optional(element) || (tel.test(value));
     }, "请正确填写您的电话号码。");
 
-    // 联系电话(手机/电话皆可)验证   
-    jQuery.validator.addMethod("isTel", function(value,element) {
+    // 手机号码验证
+    jQuery.validator.addMethod("mobilePhone", function (value, element) {
         var length = value.length;
-        var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-        var tel = /^(\d{3,4}-?)?\d{7,9}$/g;
-        return this.optional(element) || tel.test(value) || (length==11 && mobile.test(value));
+        var mobile = /^((13[0-9]{1})|(14[5,7,9]{1})|(15[^4]{1})|(166)|(18[0-9]{1})|(19[8-9]{1})|(17[0,1,3,5,6,7,8]{1}))+\d{8}$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
+    }, "看起来不像手机号码呢");
+
+    // 联系电话(手机/电话皆可)验证
+    jQuery.validator.addMethod("isTel", function (value, element) {
+        var length = value.length;
+        var tel = /^(\d{3}-\d{8}|\d{4}-\d{7,8}|\d{7,13})?$/;
+        var mobile = /^((13[0-9]{1})|(14[5,7,9]{1})|(15[^4]{1})|(166)|(18[0-9]{1})|(19[8-9]{1})|(17[0,1,3,5,6,7,8]{1}))+\d{8}$/;
+        return this.optional(element) || tel.test(value) || (length == 11 && mobile.test(value));
     }, "请正确填写您的联系方式");
 
-    // 匹配qq      
-    jQuery.validator.addMethod("isQq", function(value, element) {
+    // sim卡号验证
+    jQuery.validator.addMethod("isSim", function (value, element) {
+        var length = value.length;
+        var tel = /^((\d{3,4}-\d{7,9})|([1-9]{1}\d{6,12}))$/g;
+        var mobile = /^((13[0-9]{1})|(14[5,7,9]{1})|(15[^4]{1})|(166)|(18[0-9]{1})|(19[8-9]{1})|(17[0,1,3,5,6,7,8]{1}))+\d{8}$/;
+        return this.optional(element) || tel.test(value) || (length == 11 && mobile.test(value));
+    }, "请输入SIM卡号数字，范围：7~13,且不能以0开头");
+
+    // 匹配qq
+    jQuery.validator.addMethod("isQq", function (value, element) {
         return this.optional(element) || /^[1-9]\d{4,12}$/;
     }, "匹配QQ");
 
-    // 邮政编码验证    
-    jQuery.validator.addMethod("isZipCode", function(value, element) {
+    // 邮政编码验证
+    jQuery.validator.addMethod("isZipCode", function (value, element) {
         var zip = /^[0-9]{6}$/;
         return this.optional(element) || (zip.test(value));
     }, "请正确填写您的邮政编码。");
 
-    // 匹配密码，以字母开头，长度在6-12之间，只能包含字符、数字和下划线。      
-    jQuery.validator.addMethod("isPwd", function(value, element) {
+    // 匹配密码，以字母开头，长度在6-12之间，只能包含字符、数字和下划线。
+    jQuery.validator.addMethod("isPwd", function (value, element) {
         return this.optional(element) || /^[a-zA-Z]\\w{6,12}$/.test(value);
     }, "以字母开头，长度在6-12之间，只能包含字符、数字和下划线。");
 
     // 身份证号码验证
-    jQuery.validator.addMethod("isIdCardNo", function(value, element) {
-        //var idCard = /^(\d{6})()?(\d{4})(\d{2})(\d{2})(\d{3})(\w)$/;   
+    jQuery.validator.addMethod("isIdCardNo", function (value, element) {
+        //var idCard = /^(\d{6})()?(\d{4})(\d{2})(\d{2})(\d{3})(\w)$/;
         return this.optional(element) || isIdCardNo(value);
     }, "请输入正确的身份证号码。");
 
-    // IP地址验证   
-    jQuery.validator.addMethod("ip", function(value, element) {
-        return this.optional(element) || /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/.test(value);
+    // IP地址验证
+    jQuery.validator.addMethod("ip", function (value, element) {
+        return this.optional(element) || /^(([0-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([0-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([0-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/.test(value);
     }, "请填写正确的IP地址。");
 
-    // 多个以 # 隔开的IP地址验证   
-    jQuery.validator.addMethod("batchIp", function(value, element) {
-    	var ips = value.split("#");
-    	var reg = /^(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([1-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/;
-    	for (var i = 0;i < ips.length;i++) {
-    		if (!reg.test(ips[i])) {
-    			return false;
-    		}
-    	}
+    // 多个以 # 隔开的IP地址验证
+    jQuery.validator.addMethod("batchIp", function (value, element) {
+        var ips = value.split("#");
+        var reg = /^(([0-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.)(([0-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))\.){2}([0-9]|([1-9]\d)|(1\d\d)|(2([0-4]\d|5[0-5])))$/;
+        for (var i = 0; i < ips.length; i++) {
+            if (!reg.test(ips[i])) {
+                return false;
+            }
+        }
         return true;
     }, "");
-    
-    // 字符验证，只能包含中文、英文、数字、下划线等字符。    
-    jQuery.validator.addMethod("stringCheck", function(value, element) {
+
+    // 字符验证，只能包含中文、英文、数字、下划线等字符。
+    jQuery.validator.addMethod("stringCheck", function (value, element) {
         return this.optional(element) || /^[a-zA-Z0-9\u4e00-\u9fa5-_]+$/.test(value);
     }, "只能包含中文、英文、数字、下划线等字符");
-    
+    // 字符验证，只能包含中文、英文、数字、# ~字符。
+    jQuery.validator.addMethod("fuelType", function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9\u4e00-\u9fa5-#~]+$/.test(value);
+    }, "只能包含中文、英文、数字、#、~");
+
+    // 字符验证，只能包含中文、英文、数字字符。
+    jQuery.validator.addMethod("zysCheck", function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9\u4e00-\u9fa5]+$/.test(value);
+    }, "只能包含中文、英文、数字");
+
     //字符验证，只能包含中文和英文
-    jQuery.validator.addMethod("isCE", function(value, element) {
-    	var reg=/^[a-zA-Z\u4e00-\u9fa5]$/
+    jQuery.validator.addMethod("isCE", function (value, element) {
+        var reg = /^[a-zA-Z\u4e00-\u9fa5]$/
         return this.optional(element) || reg.test(value);
     }, "只能包含中文、英文");
-    // 匹配english  
-    jQuery.validator.addMethod("isEnglish", function(value, element) {
+    // 匹配english
+    jQuery.validator.addMethod("isEnglish", function (value, element) {
         return this.optional(element) || /^[A-Za-z]+$/.test(value);
     }, "匹配english");
 
-    // 匹配汉字  
-    jQuery.validator.addMethod("isChinese", function(value, element) {
+    // 匹配汉字
+    jQuery.validator.addMethod("isChinese", function (value, element) {
         return this.optional(element) || /^[\u4e00-\u9fa5]+$/.test(value);
     }, "匹配汉字");
 
-    // 匹配中文(包括汉字和字符) 
-    jQuery.validator.addMethod("isChineseChar", function(value, element) {
+    // 匹配中文(包括汉字和字符)
+    jQuery.validator.addMethod("isChineseChar", function (value, element) {
         return this.optional(element) || /^[\u0391-\uFFE5]+$/.test(value);
     }, "匹配中文(包括汉字和字符) ");
 
     // 判断是否为合法字符(a-zA-Z0-9-_)
-    jQuery.validator.addMethod("isRightfulString", function(value, element) {
+    jQuery.validator.addMethod("isRightfulString", function (value, element) {
         return this.optional(element) || /^[A-Za-z0-9_-]+$/.test(value);
     }, "判断是否为合法字符(a-zA-Z0-9-_)");
-    
+
     // 判断是否为合法字符(油箱型号输入限制：中文、-、_、字母、数字、（）、*)
-    jQuery.validator.addMethod("isRightfulString_oilBoxType", function(value, element) {
+    jQuery.validator.addMethod("isRightfulString_oilBoxType", function (value, element) {
         return this.optional(element) || /^[A-Za-z0-9_.\(\)\（\）\*\u4e00-\u9fa5\-]+$/.test(value);
     }, "判断是否为合法字符(中文、-、_、字母、数字、（）、*)");
-    
+
+    // 判断是否为合法传感器型号(传感器型号输入限制：中文、字母、数字或特殊符号*、-、_、#)
+    jQuery.validator.addMethod("isRightSensorModel", function (value, element) {
+        return this.optional(element) || /^[A-Za-z0-9_#\*\u4e00-\u9fa5\-]+$/.test(value);
+    }, "请输入中文、字母、数字或特殊符号*、-、_、#");
+
+    // 判断是否为合法字符(工时传感器型号输入限制：-、字母、数字、+)
+    jQuery.validator.addMethod("isRightfulString_workhourSensorType", function (value, element) {
+        return this.optional(element) || /^[A-Za-z0-9-+]+$/.test(value);
+    }, "判断是否为合法字符(-、字母、数字、+)");
+
     // 判断是否为合法字符(a-zA-Z0-9)
-    jQuery.validator.addMethod("isRightfulStr", function(value, element) {
+    jQuery.validator.addMethod("isRightfulStr", function (value, element) {
         return this.optional(element) || /^[A-Za-z0-9]+$/.test(value);
-    }, "判断是否为合法字符(a-zA-Z0-9)");
+    }, "输入类型为数字和字母");
 
     // 判断是否包含中英文特殊字符，除英文"-_"字符外
-    jQuery.validator.addMethod("isContainsSpecialChar", function(value, element) {
+    jQuery.validator.addMethod("isContainsSpecialChar", function (value, element) {
         var reg = RegExp(/[(\ )(\`)(\~)(\!)(\@)(\#)(\$)(\%)(\^)(\&)(\*)(\()(\))(\+)(\=)(\|)(\{)(\})(\')(\:)(\;)(\')(',)(\[)(\])(\.)(\<)(\>)(\/)(\?)(\~)(\！)(\@)(\#)(\￥)(\%)(\…)(\&)(\*)(\（)(\）)(\—)(\+)(\|)(\{)(\})(\【)(\】)(\‘)(\；)(\：)(\”)(\“)(\’)(\。)(\，)(\、)(\？)]+/);
         return this.optional(element) || !reg.test(value);
     }, "含有中英文特殊字符");
-    
 
     //身份证号码的验证规则
-    function isIdCardNo(num){
-        //if (isNaN(num)) {alert("输入的不是数字！"); return false;} 
+    function isIdCardNo(num) {
+        //if (isNaN(num)) {alert("输入的不是数字！"); return false;}
         var len = num.length, re;
         if (len == 15)
             re = new RegExp(/^(\d{6})()?(\d{2})(\d{2})(\d{2})(\d{2})(\w)$/);
         else if (len == 18)
             re = new RegExp(/^(\d{6})()?(\d{4})(\d{2})(\d{2})(\d{3})(\w)$/);
         else {
-            //alert("输入的数字位数不对。"); 
+            //alert("输入的数字位数不对。");
             return false;
         }
         var a = num.match(re);
-        if (a != null)
-        {
-            if (len==15)
-            {
-                var D = new Date("19"+a[3]+"/"+a[4]+"/"+a[5]);
-                var B = D.getYear()==a[3]&&(D.getMonth()+1)==a[4]&&D.getDate()==a[5];
+        if (a != null) {
+            if (len == 15) {
+                var D = new Date("19" + a[3] + "/" + a[4] + "/" + a[5]);
+                var B = D.getYear() == a[3] && (D.getMonth() + 1) == a[4] && D.getDate() == a[5];
             }
-            else
-            {
-                var D = new Date(a[3]+"/"+a[4]+"/"+a[5]);
-                var B = D.getFullYear()==a[3]&&(D.getMonth()+1)==a[4]&&D.getDate()==a[5];
+            else {
+                var D = new Date(a[3] + "/" + a[4] + "/" + a[5]);
+                var B = D.getFullYear() == a[3] && (D.getMonth() + 1) == a[4] && D.getDate() == a[5];
             }
             if (!B) {
-                //alert("输入的身份证号 "+ a[0] +" 里出生日期不对。"); 
+                //alert("输入的身份证号 "+ a[0] +" 里出生日期不对。");
                 return false;
             }
         }
-        if(!re.test(num)){
+        if (!re.test(num)) {
             //alert("身份证最后一位只能是数字和字母。");
             return false;
         }
@@ -17105,34 +17378,48 @@ $(function(){
 
 });
 
-jQuery.validator.addMethod("compareDate",function(value,element,param){
+jQuery.validator.addMethod("compareDate", function (value, element, param) {
     var assigntime = value;
-    var deadlinetime =jQuery(param).val();
-    var reg = new RegExp('-','g');
-    assigntime = assigntime.replace(reg,'/');//正则替换
-    deadlinetime = deadlinetime.replace(reg,'/');
-    assigntime = new Date(parseInt(Date.parse(assigntime),10));
-    deadlinetime = new Date(parseInt(Date.parse(deadlinetime),10));
-    if(deadlinetime>assigntime){
+    var deadlinetime = jQuery(param).val();
+    var reg = new RegExp('-', 'g');
+    assigntime = assigntime.replace(reg, '/');//正则替换
+    deadlinetime = deadlinetime.replace(reg, '/');
+    assigntime = new Date(parseInt(Date.parse(assigntime), 10));
+    deadlinetime = new Date(parseInt(Date.parse(deadlinetime), 10));
+    if (deadlinetime > assigntime) {
         return false;
-    }else{
+    } else {
         return true;
     }
-},"<font color='#E47068'>结束日期必须大于开始日期</font>");
+}, "<font color='#E47068'>结束日期必须大于开始日期</font>");
 
-
-jQuery.validator.addMethod("compareDateDiff",function(value,element,param){
-    var sData1=value;
-    var sData2=jQuery(param).val();
-    if(DateDiff(sData1.substring(0,10),sData2.substring(0,10))>=7){
+jQuery.validator.addMethod("compareTime", function (value, element, param) {
+    var assigntime = "2016-01-01 " + value;
+    var deadlinetime = "2016-01-01 " + jQuery(param).val();
+    var reg = new RegExp('-', 'g');
+    assigntime = assigntime.replace(reg, '/');//正则替换
+    deadlinetime = deadlinetime.replace(reg, '/');
+    assigntime = new Date(parseInt(Date.parse(assigntime), 10));
+    deadlinetime = new Date(parseInt(Date.parse(deadlinetime), 10));
+    if (deadlinetime > assigntime) {
         return false;
-    }else{
+    } else {
         return true;
     }
-},"<font color='#E47068'>查询的日期必须小于一周</font>");
+}, "<font color='#E47068'>结束时间必须大于开始时间</font>");
+
+jQuery.validator.addMethod("compareDateDiff", function (value, element, param) {
+    var sData1 = value;
+    var sData2 = jQuery(param).val();
+    if (DateDiff(sData1.substring(0, 10), sData2.substring(0, 10)) >= 7) {
+        return false;
+    } else {
+        return true;
+    }
+}, "<font color='#E47068'>查询的日期必须小于一周</font>");
 
 //判断是否为合法字符(.0-9)
-jQuery.validator.addMethod("isContainsNumberAndPoint", function(value, element, param) {
+jQuery.validator.addMethod("isContainsNumberAndPoint", function (value, element, param) {
     return this.optional(element) || /^[0-9.]+$/.test(value);
 }, "只能包含数字和.");
 
@@ -17147,385 +17434,472 @@ function DateDiff(sDate1, sDate2) {  //sDate1和sDate2是yyyy-MM-dd格式
 
     return iDays;  //返回相差天数
 }
+
 /**
  * 判断选择的时间是否大于等与今天
  */
-jQuery.validator.addMethod("selectDate",function(value,element) {
-	return this.optional(element) || operationTime(value);
-},"授权截止时间必须大于\等于今天");
+jQuery.validator.addMethod("selectDate", function (value, element) {
+    return this.optional(element) || operationTime(value);
+}, "授权截止时间必须大于\等于今天");
 
-function operationTime(value){
-	var sDate = value;//字符串格式yyyy-MM-dd
-	var nowDate = new Date();
-	var newDate = nowDate.toLocaleDateString();//获取当前时间的日期 年/月/日(IE浏览器获取当前时间为x年x月x日)----字符串
-	var reg = new RegExp(/[-\u4E00-\u9FA5\uF900-\uFA2D]/g);
-	var aDate = sDate.replace(reg,"/");//把用户选择时间的字符串中的-替换成/
-	var normDate = new Date(newDate.replace(reg,"/"));//把当前时间字符串转换为时间格式
-	var selDate = new Date(aDate);//把用户选择的日期(字符串格式)转换为日期格式 年/月/日
-	var nowDateTimestamp = normDate.getTime();//把当前时间转换为时间戳
-	var selDateTimestamp = selDate.getTime();//把用户选择的时间转换为时间戳
-	if(selDateTimestamp-nowDateTimestamp >= 0){
-		return true;
-	}else{
-		return false;
-	}
+function operationTime(value) {
+    var sDate = value;//字符串格式yyyy-MM-dd
+    var nowDate = new Date();
+    var newDate = nowDate.toLocaleDateString();//获取当前时间的日期 年/月/日(IE浏览器获取当前时间为x年x月x日)----字符串
+    var reg = new RegExp(/[-\u4E00-\u9FA5\uF900-\uFA2D]/g);
+    var aDate = sDate.replace(reg, "/");//把用户选择时间的字符串中的-替换成/
+    var normDate = new Date(newDate.replace(reg, "/"));//把当前时间字符串转换为时间格式
+    var selDate = new Date(aDate);//把用户选择的日期(字符串格式)转换为日期格式 年/月/日
+    var nowDateTimestamp = normDate.getTime();//把当前时间转换为时间戳
+    var selDateTimestamp = selDate.getTime();//把用户选择的时间转换为时间戳
+    if (selDateTimestamp - nowDateTimestamp >= 0) {
+        return true;
+    } else {
+        return false;
+    }
 
 }
+
 /**
  * 判断选择的时间是否小于等与今天
  */
-jQuery.validator.addMethod("selectRegDate",function(value,element) {
-	return this.optional(element) || operationRegTime(value);
-},"注册日期必须小与/等于今天");
+jQuery.validator.addMethod("selectRegDate", function (value, element) {
+    return this.optional(element) || operationRegTime(value);
+}, "注册日期必须小与/等于今天");
 
-function operationRegTime(value){
-	var sDate = value;//字符串格式yyyy-MM-dd
-	var nowDate = new Date();
-	var newDate = nowDate.toLocaleDateString();//获取当前时间的日期 年/月/日(IE浏览器获取当前时间为x年x月x日)----字符串
-	var reg = new RegExp(/[-\u4E00-\u9FA5\uF900-\uFA2D]/g);
-	var aDate = sDate.replace(reg,"/");//把用户选择时间的字符串中的-替换成/
-	var normDate = new Date(newDate.replace(reg,"/"));//把当前时间字符串转换为时间格式
-	var selDate = new Date(aDate);//把用户选择的日期(字符串格式)转换为日期格式 年/月/日
-	var nowDateTimestamp = normDate.getTime();//把当前时间转换为时间戳
-	var selDateTimestamp = selDate.getTime();//把用户选择的时间转换为时间戳
-	if(nowDateTimestamp-selDateTimestamp >= 0){
-		return true;
-	}else{
-		return false;
-	}
+function operationRegTime(value) {
+    var sDate = value;//字符串格式yyyy-MM-dd
+    var nowDate = new Date();
+    var newDate = nowDate.toLocaleDateString();//获取当前时间的日期 年/月/日(IE浏览器获取当前时间为x年x月x日)----字符串
+    var reg = new RegExp(/[-\u4E00-\u9FA5\uF900-\uFA2D]/g);
+    var aDate = sDate.replace(reg, "/");//把用户选择时间的字符串中的-替换成/
+    var normDate = new Date(newDate.replace(reg, "/"));//把当前时间字符串转换为时间格式
+    var selDate = new Date(aDate);//把用户选择的日期(字符串格式)转换为日期格式 年/月/日
+    var nowDateTimestamp = normDate.getTime();//把当前时间转换为时间戳
+    var selDateTimestamp = selDate.getTime();//把用户选择的时间转换为时间戳
+    if (nowDateTimestamp - selDateTimestamp >= 0) {
+        return true;
+    } else {
+        return false;
+    }
 
 }
-//车牌号校验
-jQuery.validator.addMethod("isBrand", function(value, element) {
-    return isPlateNo(value);
-}, "请填写正确的车牌号");
 
-function isPlateNo(plateNo){
-//    var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
-	// 京津冀晋蒙辽吉黑沪苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云渝藏陕甘青宁新
-	var re = /^[\u4eac\u6d25\u5180\u664b\u8499\u8fbd\u5409\u9ed1\u6caa\u82cf\u6d59\u7696\u95fd\u8d63\u9c81\u8c6b\u9102\u6e58\u7ca4\u6842\u743c\u5ddd\u8d35\u4e91\u6e1d\u85cf\u9655\u7518\u9752\u5b81\u65b0\u6d4b]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
-	//香港车牌规则
-	var reg1 = /^[A-Z]{2}[0-9]{4}$/;
-	if(re.test(plateNo) || reg1.test(plateNo)){
+//小数点精度两位校验
+jQuery.validator.addMethod("decimalTwo", function (value, element) {
+    var reg = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+    return this.optional(element) || reg.test(value);
+}, "输入类型为非负数，精度0.01");
+
+//小数点精度一位校验
+jQuery.validator.addMethod("decimalOne", function (value, element) {
+    var reg = /^(?:0\.\d|[1-9][0-9]{0,9}|[1-9][0-9]{0,7}\.\d)$/;
+    return this.optional(element) || reg.test(value);
+}, "输入类型为非负数，精度0.1");
+
+//大小不限 小数点精度一位校验
+jQuery.validator.addMethod("decimalOneMore", function (value, element) {
+    var reg = /^(?:0\.\d|[1-9][0-9]*|[1-9][0-9]*\.\d)$/;
+    return this.optional(element) || reg.test(value);
+}, "输入类型为非负数，精度0.1");
+
+// 小数点精度校验
+jQuery.validator.addMethod("decimalFour", function (value, element) {
+    var reg = /^(?:0\.\d|\d[0-9]{0,3}|[1-9][0-9]{0,3}\.\d)$/;
+    return this.optional(element) || reg.test(value);
+}, "输入类型为非负数，精度0.1");
+//小数点精度校验
+jQuery.validator.addMethod("decimalThree", function (value, element) {
+    var reg = /^(?:0\.\d|\d[0-9]{0,2}|[1-9][0-9]{0,2}\.\d)$/;
+    return this.optional(element) || reg.test(value);
+}, "输入类型为非负数，精度0.1");
+//小数点精度校验
+jQuery.validator.addMethod("decimalSeven", function (value, element) {
+    var reg = /^(?:0\.\d|\d[0-9]{0,6}|[1-9][0-9]{0,6}\.\d)$/;
+    return this.optional(element) || reg.test(value);
+}, "输入类型为非负数，精度0.1");
+
+
+//座机校验
+jQuery.validator.addMethod("isLandline", function (value, element) {
+    var reg = /^(\d{3}-\d{8}|\d{4}-\d{7,8}|\d{7,13})?$/;
+    return this.optional(element) || reg.test(value);
+}, "看起来不像座机号呢");
+
+
+//车牌号校验
+jQuery.validator.addMethod("isBrand", function (value, element) {
+    return isPlateNo(value);
+}, "请输入汉字、字母、数字或短横杠，长度2-20位");
+
+function isPlateNo(plateNo) {
+    var reg = /^[0-9a-zA-Z\u4e00-\u9fa5-]{2,20}$/;
+    if (reg.test(plateNo)) {
         return true;
     }
     return false;
 }
-jQuery.validator.addMethod("isGroupRequired",function(value,element,param){
-    if(param == "true"){
-    	if(value){
-    		return true;
-    	}else{
-    		return false;
-    	}
-    }else{
-    	return true;
+
+/*function isPlateNo(plateNo){
+//    var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
+  // 京津冀晋蒙辽吉黑沪苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云渝藏陕甘青宁新
+  var re = /^[\u4eac\u6d25\u5180\u664b\u8499\u8fbd\u5409\u9ed1\u6caa\u82cf\u6d59\u7696\u95fd\u8d63\u9c81\u8c6b\u9102\u6e58\u7ca4\u6842\u743c\u5ddd\u8d35\u4e91\u6e1d\u85cf\u9655\u7518\u9752\u5b81\u65b0\u6d4b]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
+  //香港车牌规则
+  var reg1 = /^[A-Z]{2}[0-9]{4}$/;
+  if(re.test(plateNo) || reg1.test(plateNo)){
+        return true;
     }
-    
-},"<font color='#E47068'>组织不能为空</font>");
+    return false;
+}*/
+jQuery.validator.addMethod("isGroupRequired", function (value, element, param) {
+    if (param == "true") {
+        if (value) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+
+}, "<font color='#E47068'>组织不能为空</font>");
 //判断是否是大于0的合法数字 /^(?!(0[0-9]{0,}$))[0-9]{0,}[.]{0,}[0-9]{1,}$/ /^(?:[1-9]\d*|0)(?:\.\d+)?$/ 
-jQuery.validator.addMethod("isFloatAndGtZero", function(value, element) {// 
+jQuery.validator.addMethod("isFloatAndGtZero", function (value, element) {//
     return this.optional(element) || /^(?:[1-9]\d*|0)(?:\.\d+)?$/.test(value) && value > 0;
 }, "只能包含数字、小数点等字符并且要大于零");
-jQuery.validator.addMethod("minSize", function(value, element,param) {// 
-	var len =element.value.replace(/[\u4E00-\u9FA5]/g,'aa').length;
-	var flag = true;
-	if(len<param){
-		flag = false;
-	}
+jQuery.validator.addMethod("minSize", function (value, element, param) {//
+    var len = element.value.replace(/[\u4E00-\u9FA5]/g, 'aa').length;
+    var flag = true;
+    if (len < param) {
+        flag = false;
+    }
     return flag;
 }, "");
-jQuery.validator.addMethod("maxSize", function(value, element,param) {// 
-	var len =element.value.replace(/[\u4E00-\u9FA5]/g,'aa').length;
-	var flag = true;
-	if(len>param){
-		flag = false;
-	}
+jQuery.validator.addMethod("maxSize", function (value, element, param) {//
+    var len = element.value.replace(/[\u4E00-\u9FA5]/g, 'aa').length;
+    var flag = true;
+    if (len > param) {
+        flag = false;
+    }
     return flag;
 }, "");
 
 /**
  * 分组管理现在每个组织下最多存在100个分组
  */
-jQuery.validator.addMethod("assignmentLimit100", function(value,element,param) {// 
-	var flag = false;
-	json_ajax("POST","/clbs/m/basicinfo/enterprise/assignment/assignCountLimit",null,false,{"group": $(param).val()},function (data) {
-		if (data != null && data != undefined && data != "") {
-			flag = data === 'true';
-		}
-	});
+jQuery.validator.addMethod("assignmentLimit100", function (value, element, param) {//
+    var flag = false;
+    json_ajax("POST", "/clbs/m/basicinfo/enterprise/assignment/assignCountLimit", null, false, {"group": $(param).val()}, function (data) {
+        if (data != null && data != undefined && data != "") {
+            flag = data === 'true';
+        }
+    });
     return flag;
 }, "");
 /**
  * 判断树中是否选中车辆
  */
-jQuery.validator.addMethod("zTreeChecked",function(value,element,param){
-	var check=false;
-	var zTree = $.fn.zTree.getZTreeObj(param), 
-	nodes = zTree.getCheckedNodes(true),
-	v = "";
-	for (var i = 0, l = nodes.length; i < l; i++) {
-		if (nodes[i].type == "vehicle") {
-			v += nodes[i].name + ",";
-		}
-	}
-	if(v){
-		return true;
-	}
-	return check;
-},"");
+jQuery.validator.addMethod("zTreeChecked", function (value, element, param) {
+    var check = false;
+    var zTree = $.fn.zTree.getZTreeObj(param),
+        nodes = zTree.getCheckedNodes(true),
+        v = "";
+    for (var i = 0, l = nodes.length; i < l; i++) {
+        if (nodes[i].type == "vehicle" || nodes[i].type == "people" || nodes[i].type == "thing") {
+            v += nodes[i].name + ",";
+        }
+    }
+    if (v) {
+        return true;
+    }
+    return check;
+}, "");
+
+jQuery.validator.addMethod("zTreePeopleChecked", function (value, element, param) {
+    var check = false;
+    var zTree = $.fn.zTree.getZTreeObj(param),
+        nodes = zTree.getCheckedNodes(true),
+        v = "";
+    for (var i = 0, l = nodes.length; i < l; i++) {
+        if (nodes[i].type == "user") {
+            v += nodes[i].name + ",";
+        }
+    }
+    if (v) {
+        return true;
+    }
+    return check;
+}, "");
 
 /**
  * 开始时间和结束时间必须同时存在或者同时不存在
  */
-jQuery.validator.addMethod("timeNotNull", function(value,element,param) {// 
-	if ($(param).val() != null && $(param).val() != "" && (value == null || value == "")) {
-		return false;
-	}else{
-		return true;
-	}
+jQuery.validator.addMethod("timeNotNull", function (value, element, param) {//
+    if ($(param).val() != null && $(param).val() != "" && (value == null || value == "")) {
+        return false;
+    } else {
+        return true;
+    }
 }, "");
 
 /**
  * 根据不同监控对象类型校验终端编号
  */
-jQuery.validator.addMethod("checkDeviceNumber", function(value,element,param) {// 
-	var Dtype=$(param).val();//终端类型
-	if(Dtype==5){//判断人
-		return this.optional(element) || /^[0-9a-zA-Z]{1,20}$/.test(value);
-	}else{//判断车
-		if(/^[_-]+$/.test(value)){//如果全是横杠和下划线则不通过
-			return this.optional(element) || false;
-		}
-		return this.optional(element) || /^[0-9a-zA-Z_-]{7,15}$/.test(value);
-	}
+jQuery.validator.addMethod("checkDeviceNumber", function (value, element, param) {//
+    // var Dtype = $(param).val();//终端类型
+    // if (Dtype == 5) {//判断人
+    //     return this.optional(element) || /^[0-9a-zA-Z]{1,20}$/.test(value);
+    // } else {//判断车
+    //     if (/^[_-]+$/.test(value)) {//如果全是横杠和下划线则不通过
+    //         return this.optional(element) || false;
+    //     }
+    //     return this.optional(element) || /^[0-9a-zA-Z_-]{7,15}$/.test(value);
+    // }
+    return this.optional(element) || /^[0-9a-zA-Z]{7,20}$/.test(value);
 }, "");
 
 /**
  * 校验人员姓名
  */
-jQuery.validator.addMethod("checkPeopleName", function(value,element,param) {// 
-	if(/^[A-Za-z\u4e00-\u9fa5]{0,8}$/.test(value)){
-		return true;
-	}
-	return false;
-}, "");
+jQuery.validator.addMethod("checkPeopleName", function (value, element, param) {//
+    if (/^[A-Za-z\u4e00-\u9fa5]{0,8}$/.test(value)) {
+        return true;
+    }
+    return false;
+}, "只能输入最多8位的中英文字符");
 
 /**
  * 校验人员编号
  */
-jQuery.validator.addMethod("checkRightPeopleNumber", function(value,element,param) {// 
-	if(/^[A-Za-z0-9\u4e00-\u9fa5_-]+$/.test(value)){
-		return true;
-	}
-	return false;
+jQuery.validator.addMethod("checkRightPeopleNumber", function (value, element, param) {//
+    if (/^[A-Za-z0-9\u4e00-\u9fa5_-]+$/.test(value)) {
+        return true;
+    }
+    return false;
 }, "");
 
 //电子围栏输入的经纬度验证
-jQuery.validator.addMethod("isLngLat", function(value, element, params) { 
-   var this_value = value;
-   if(this_value.indexOf(',') != -1){
-	   var this_value_array = this_value.split(',');
-	   if((Number(this_value_array[0]) > 73.66 && Number(this_value_array[0]) < 135.05) && (Number(this_value_array[1]) > 3.86 && Number(this_value_array[1]) < 53.55)){
-		   return true;
-	   }else{
-		   return false;
-	   };
-   }else{
-	   return false;
-   };
+jQuery.validator.addMethod("isLngLat", function (value, element, params) {
+    var this_value = value;
+    if (this_value.indexOf(',') != -1) {
+        var this_value_array = this_value.split(',');
+        if ((Number(this_value_array[0]) > 73.66 && Number(this_value_array[0]) < 135.05) && (Number(this_value_array[1]) > 3.86 && Number(this_value_array[1]) < 53.55)) {
+            return true;
+        } else {
+            return false;
+        }
+        ;
+    } else {
+        return false;
+    }
+    ;
 }, '请输入正确的经纬度');
 //电子围栏输入的经度验证
-jQuery.validator.addMethod("isLng", function(value, element, params) { 
-   var this_value = value;
-   if(this_value != ''){
-	   if(Number(this_value) > 73.66 && Number(this_value) < 135.05){
-		   return true;
-	   }else{
-		   return false;
-	   };
-   }else{
-	   return false;
-   };
+jQuery.validator.addMethod("isLng", function (value, element, params) {
+    var this_value = value;
+    if (this_value != '') {
+        if (Number(this_value) > 73.66 && Number(this_value) < 135.05) {
+            return true;
+        } else {
+            return false;
+        }
+        ;
+    } else {
+        return false;
+    }
+    ;
 }, '请输入正确的经度');
 //电子围栏输入的纬度验证
-jQuery.validator.addMethod("isLat", function(value, element, params) { 
-   var this_value = value;
-   if(this_value != ''){
-	   if(Number(this_value) > 3.86 && Number(this_value) < 53.55){
-		   return true;
-	   }else{
-		   return false;
-	   };
-   }else{
-	   return false;
-   };
+jQuery.validator.addMethod("isLat", function (value, element, params) {
+    var this_value = value;
+    if (this_value != '') {
+        if (Number(this_value) > 3.86 && Number(this_value) < 53.55) {
+            return true;
+        } else {
+            return false;
+        }
+        ;
+    } else {
+        return false;
+    }
+    ;
 }, '请输入正确的纬度');
 
 //字符验证，只能包含中文和英文(全部匹配,只能包含中文和英文)
-jQuery.validator.addMethod("isCN", function(value, element) {
-    var reg=/^[a-zA-Z\u4e00-\u9fa5]+$/
+jQuery.validator.addMethod("isCN", function (value, element) {
+    var reg = /^[a-zA-Z\u4e00-\u9fa5]+$/
     return this.optional(element) || reg.test(value);
 }, "只能包含中文、英文");
 
 //上报频率设置-上报起始时间校验
-jQuery.validator.addMethod("checkRequiteTime", function(value, element, params) {
-    if(params==9){
-    	return true;
-    }else{
-    	return value!=null && value!="";
+jQuery.validator.addMethod("checkRequiteTime", function (value, element, params) {
+    if (params == 9) {
+        return true;
+    } else {
+        return value != null && value != "";
     }
 }, "");
 //定点和校时-定点时间校验
-jQuery.validator.addMethod("checkLocationTimes", function(value, element, params) {
-	var obj=document.getElementsByName("locationTimes");
-	for(i=0;i<obj.length;i++){
-		if(obj[i].value){
-			return true;
-		}
-	}
-	return false;
+jQuery.validator.addMethod("checkLocationTimes", function (value, element, params) {
+    var obj = document.getElementsByName("locationTimes");
+    for (i = 0; i < obj.length; i++) {
+        if (obj[i].value) {
+            return true;
+        }
+    }
+    return false;
 }, "");
 
 /**
  * 如果勾选了，校验是否必填
  */
-jQuery.validator.addMethod("isCheckedRequested", function(value,element,param) {// 
-	var checked = $(param).is(":checked"); //终端类型
-	if(checked){ // 勾选
-		if (value == null || value == undefined || value == ""){
-    		return false;
-    	}
-	}
-	return true;
+jQuery.validator.addMethod("isCheckedRequested", function (value, element, param) {//
+    var checked = $(param).is(":checked"); //终端类型
+    if (checked) { // 勾选
+        if (value == null || value == undefined || value == "") {
+            return false;
+        }
+    }
+    return true;
 }, "");
 
 /**
  * 如果勾选了，校验是否是数字
  */
-jQuery.validator.addMethod("isCheckedNumber", function(value,element,param) {// 
-	var paramlist = param.split(",");
-	var checked = $(paramlist[0]).is(":checked"); //终端类型
-	if(checked){ // 勾选
-		var re = /^[0-9]+$/;
-		if (!re.test(value) || Number(value) > Number(paramlist[2]) || Number(value) < Number(paramlist[1])){ //true:数字。false：非数字
-    		return false;
-    	}
-	}
-	return true;
+jQuery.validator.addMethod("isCheckedNumber", function (value, element, param) {//
+    var paramlist = param.split(",");
+    var checked = $(paramlist[0]).is(":checked"); //终端类型
+    if (checked) { // 勾选
+        var re = /^[0-9]+$/;
+        if (!re.test(value) || Number(value) > Number(paramlist[2]) || Number(value) < Number(paramlist[1])) { //true:数字。false：非数字
+            return false;
+        }
+    }
+    return true;
 }, "");
 
 /**
  * 如果勾选了，校验是否是是在范围内
  */
-jQuery.validator.addMethod("isCheckedNumber2", function(value,element,param) {// 
-	var paramlist = param.split(",");
-	console.log("ffff"+paramlist[2]+paramlist[1])
+jQuery.validator.addMethod("isCheckedNumber2", function (value, element, param) {//
+    var paramlist = param.split(",");
+    console.log("ffff" + paramlist[2] + paramlist[1])
 
-	var checked = $(paramlist[0]).is(":checked"); //终端类型
-	if(checked){ // 勾选
-		var re = /^[0-9]+$/;
-		if (Number(value) <= Number(paramlist[2]) && Number(value) >= Number(paramlist[1])){ //true:数字。false：非数字
-    		return true;
-    	}else{
-    		return false;
-    	}
-	}
-	return true;
+    var checked = $(paramlist[0]).is(":checked"); //终端类型
+    if (checked) { // 勾选
+        var re = /^[0-9]+$/;
+        if (Number(value) <= Number(paramlist[2]) && Number(value) >= Number(paramlist[1])) { //true:数字。false：非数字
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return true;
 }, "");
 //校验如果启用了定时唤醒，进行时间校验不能为空
-jQuery.validator.addMethod("isCheckedRequested2", function(value,element,param) {// 
-	var paramlist = param.split(",");
-	var checked = $(paramlist[0] ).is(":checked"); //终端类型
-	var seleted=$(paramlist[1]).val();
-	if(checked&&seleted=="1"){ // 勾选
-		if (value == null || value == undefined || value == ""){
-    		return false;
-    	}
-	}
-	return true;
+jQuery.validator.addMethod("isCheckedRequested2", function (value, element, param) {//
+    var paramlist = param.split(",");
+    var checked = $(paramlist[0]).is(":checked"); //终端类型
+    var seleted = $(paramlist[1]).val();
+    if (checked && seleted == "1") { // 勾选
+        if (value == null || value == undefined || value == "") {
+            return false;
+        }
+    }
+    return true;
 }, "");
 //校验如果启用了定时唤醒，进行时间校验关闭时间不能大于开始时间
-jQuery.validator.addMethod("isCheckedtime", function(value,element,param) {
-	var paramlist = param.split(",");
-	var checked = $(paramlist[0] ).is(":checked"); //终端类型
-	var seleted=$(paramlist[1]).val();
-	var time1=$(paramlist[2]).val();
-	var time2=$(paramlist[3]).val();
-	if(checked&&seleted=="1"){ // 勾选
-		if (compTime(time1,time2)){
-    		return false;
-    	}
-	}
-	return true;
+jQuery.validator.addMethod("isCheckedtime", function (value, element, param) {
+    var paramlist = param.split(",");
+    var checked = $(paramlist[0]).is(":checked"); //终端类型
+    var seleted = $(paramlist[1]).val();
+    var time1 = $(paramlist[2]).val();
+    var time2 = $(paramlist[3]).val();
+    if (checked && seleted == "1") { // 勾选
+        if (compTime(time1, time2)) {
+            return false;
+        }
+    }
+    return true;
 }, "");
 
 /*
  * 校验中英文数字字符串，以传过来的参数做类型校验及输入限制(例：param = "1,1,20" 表示匹配中英文数字范围1-20)
  * 类型：1:中英文数字，2：中英文，3：中文数字，4：英文数字,5：中文,6：英文,7：数字,8:英文数字点
  */
-jQuery.validator.addMethod("checkCAENumber", function(value,element,param) {
-	var strs = param.split(",");
-	var type = strs[0];//类型
-	var minLimit = strs[1];//最小长度
-	var maxLimit = strs[2];//最大长度
-	var typeString;
-	switch (type) {
-		case "1":
-			typeString = "[a-zA-Z0-9\u4e00-\u9fa5]";
-			break;
-		case "2":
-			typeString = "[a-zA-Z\u4e00-\u9fa5]";
-			break;
-		case "3":
-			typeString = "[0-9\u4e00-\u9fa5]";
-			break;
-		case "4":
-			typeString = "[a-zA-Z0-9]";
-			break;
-		case "5":
-			typeString = "[\u4e00-\u9fa5]";
-			break;
-		case "6":
-			typeString = "[a-zA-Z]";
-			break;
-		case "7":
-			typeString = "[0-9]";
-			break;
-		case "8":
-			typeString = "[a-zA-Z0-9.]";
-			break;
-			
-		default:
-			return false;
-			break;
-	}
-	var reg = new RegExp("^"+ typeString +"{" + minLimit + "," + maxLimit + "}$");
-	if (reg.test(value)) {
-		return true;
-	} else {
-		return false;
-	}
+jQuery.validator.addMethod("checkCAENumber", function (value, element, param) {
+    var strs = param.split(",");
+    var type = strs[0];//类型
+    var minLimit = strs[1];//最小长度
+    var maxLimit = strs[2];//最大长度
+    var typeString;
+    switch (type) {
+        case "1":
+            typeString = "[a-zA-Z0-9\u4e00-\u9fa5]";
+            break;
+        case "2":
+            typeString = "[a-zA-Z\u4e00-\u9fa5]";
+            break;
+        case "3":
+            typeString = "[0-9\u4e00-\u9fa5]";
+            break;
+        case "4":
+            typeString = "[a-zA-Z0-9]";
+            break;
+        case "5":
+            typeString = "[\u4e00-\u9fa5]";
+            break;
+        case "6":
+            typeString = "[a-zA-Z]";
+            break;
+        case "7":
+            typeString = "[0-9]";
+            break;
+        case "8":
+            typeString = "[a-zA-Z0-9.]";
+            break;
+
+        default:
+            return false;
+            break;
+    }
+    var reg = new RegExp("^" + typeString + "{" + minLimit + "," + maxLimit + "}$");
+    if (reg.test(value)) {
+        return true;
+    } else {
+        return false;
+    }
 }, "");
 
 /**
  * 检查是否是正确版本号
  */
-jQuery.validator.addMethod("checkVersion", function(value,element,param) {
-	var reg = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])){0,2}$/;
-	if (reg.test(value)) {
-		return true;
-	}
-	return false;
+jQuery.validator.addMethod("checkVersion", function (value, element, param) {
+    var reg = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]?[0-9])){0,2}$/;
+    if (reg.test(value)) {
+        return true;
+    }
+    return false;
 }, "");
 
-function compTime(time1,time2){    
-   var  array1 = time1.split(":");  
-   var  total1 = parseInt(array1[0])*3600+parseInt(array1[1])*60;  
-   var  array2 = time2.split(":");  
-   var  total2 = parseInt(array2[0])*3600+parseInt(array2[1])*60;  
-    return total1-total2>=0?true:false;  
-            
+
+/**
+ * 校验ICCID
+ */
+jQuery.validator.addMethod("checkICCID", function (value, element, param) {//
+    if (/^[A-Z0-9]{20}$/.test(value) || value == '') {
+        return true;
+    }
+    return false;
+}, "请输入20位的数字或大写字母");
+
+function compTime(time1, time2) {
+    var array1 = time1.split(":");
+    var total1 = parseInt(array1[0]) * 3600 + parseInt(array1[1]) * 60;
+    var array2 = time2.split(":");
+    var total2 = parseInt(array2[0]) * 3600 + parseInt(array2[1]) * 60;
+    return total1 - total2 >= 0 ? true : false;
+
 }  
 
 
@@ -17540,7 +17914,7 @@ function compTime(time1,time2){
             if(bs > 12){
                 layer.msg("定点时间最多允许存在12个哟！");
             }else{
-            	addLocationTimeIndex++;
+              addLocationTimeIndex++;
                 var html = "<div class='form-group'><label class='col-md-4 control-label'>定点时间：</label><div class='col-md-4'><input type='text' id='locationTimes_"+addLocationTimeIndex+"' name='locationTimes' onclick='' class='form-control' style='cursor: pointer;  background-color: #fafafa;' readonly/></div><div class='col-md-1'><button type='button' class='btn btn-danger baseStationDelete deleteIcon'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div></div>";
                 $("#baseStation-MainContent").append(html);
                 laydate.render({elem: '#locationTimes_'+addLocationTimeIndex,type: 'time',theme: '#6dcff6'});
@@ -17551,14 +17925,14 @@ function compTime(time1,time2){
             }
         },
         getHoursMinutesSeconds: function(){
-        	loadInitTime = 
+          loadInitTime = 
             + (loadInitNowDate.getHours()< 10 ? "0" + loadInitNowDate.getHours() : loadInitNowDate.getHours())+":"
             + (loadInitNowDate.getMinutes() < 10 ? "0" + loadInitNowDate.getMinutes() : loadInitNowDate.getMinutes())+":"
             + (loadInitNowDate.getSeconds() < 10 ? "0" + loadInitNowDate.getSeconds() : loadInitNowDate.getSeconds());
-        	$("#requiteTime,#locationTimes").val(loadInitTime);
+          $("#requiteTime,#locationTimes").val(loadInitTime);
         },
         getsTheCurrentTime: function () {
-        	var nowDate = new Date();
+          var nowDate = new Date();
             startTime = parseInt(nowDate.getFullYear()+1)
             + "-"
             + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
@@ -17653,7 +18027,7 @@ function compTime(time1,time2){
     $(function(){
         realTimeMonitoringGsmCdma.getsTheCurrentTime();
         realTimeMonitoringGsmCdma.getHoursMinutesSeconds();
-    	$(".modal-body").addClass("modal-body-overflow");
+      $(".modal-body").addClass("modal-body-overflow");
         laydate.render({elem: '#baseStationFixedTime',type: 'time',theme: '#6dcff6'});
         laydate.render({elem: '#tailAfterdTime',type: 'time',theme: '#6dcff6'});
         $("#goInfoLocationTailAfter").on("click",realTimeMonitoringGsmCdma.tailAfter);

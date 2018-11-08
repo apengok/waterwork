@@ -110,6 +110,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             <section id="main-content">
                 <div class="row eightIsZero">
                     <div class="col-md-12 realtime-content">
+                        {% block content_left %}
                         <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
                             <div style="background-color: rgba(0, 153, 204, 1);" >
                                 <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(1251)
@@ -153,6 +154,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
 
 
                         </div>
+                        {% endblock content_left %}
 
                         {% block main_content %}
                         
