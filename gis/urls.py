@@ -15,8 +15,10 @@ urlpatterns = [
 
     # GIS系统 --管网查询
     url(r'^pipelinequery/?$',views.PipelineQueryView.as_view(),name='pipelinequery'),
-    url(r'^bindfence/fenceTree?$',views.fenceTree,name='fenceTree'),
+    url(r'^bindfence/fenceTree/?$',views.fenceTree,name='fenceTree'),
     url(r'^bindfence/list/?$',views.fencelist,name='fencelist'),
+    url(r'^fence/managefence/polygons',views.polygons,name='polygons'),
+    url(r'^fence/bindfence/getFenceDetails',views.getFenceDetails,name='getFenceDetails'),
     
     # 管网统计
     url(r'^pipelinestastic/?$',views.PipelineStasticView.as_view(),name='pipelinestastic'),

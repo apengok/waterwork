@@ -3154,7 +3154,7 @@
         // 围栏树
             var fenceAll = {
                 async: {
-                    url: "/gis/bindfence/fenceTree",
+                    url: "/gis/bindfence/fenceTree/",
                     type: "post",
                     enable: true,
                     autoParam: ["id"],
@@ -3763,7 +3763,7 @@
             layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/clbs/m/functionconfig/fence/bindfence/getFenceDetails",
+                url: "/gis/fence/bindfence/getFenceDetails",
                 data: {
                     "fenceNodes": JSON.stringify(fenceNode)
                 },
@@ -4893,7 +4893,7 @@
             layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/clbs/m/functionconfig/fence/bindfence/getFenceDetails",
+                url: "/gis/fence/bindfence/getFenceDetails",
                 async: false,
                 data: {
                     "fenceNodes": JSON.stringify(nodes)
@@ -6221,7 +6221,7 @@
             ;
             var fenceAll = {
                 async: {
-                    url: "/clbs/m/functionconfig/fence/bindfence/fenceTree",
+                    url: "/gis/bindfence/fenceTree/",
                     type: "post",
                     enable: true,
                     autoParam: ["id"],
@@ -6243,7 +6243,7 @@
                     removeHoverDom: fenceOperation.removeHoverDom,
                     dblClickExpand: false,
                     nameIsHTML: true,
-                    fontCss: setFontCss_ztree
+                    // fontCss: setFontCss_ztree
                 },
                 data: {
                     simpleData: {
@@ -8996,6 +8996,42 @@ console.log("$newMapHeight",$("#map-container").height());
     $("#fenceSaveBtn").bind("click", fenceOperation.fenceSaveBtnClick);
     // 围栏绑定-取消按钮
     $("#fenceCancelBtn").bind("click", fenceOperation.fenceCancelBtnClick);
+
+    // 批量下发
+    $("#send_model").bind("click", fenceOperation.sendModelClick);
+    //批量删除
+    $("#del_model").bind("click", fenceOperation.delModelClick);
+    // 模糊搜索围栏绑定列表
+    $("#search_button").bind("click", fenceOperation.searchBindTable);
+    $("body").bind("click", fenceOperation.bodyClickEvent);
+    $("#hourseSelect tr td").bind("click", fenceOperation.hourseSelectClick);
+    $("#minuteSelect tr td").bind("click", fenceOperation.minuteSelectClick);
+    $("#secondSelect tr td").bind("click", fenceOperation.secondSelectClick);
+    //切换电子围栏
+    $("#TabCarBox").bind("click", fenceOperation.TabCarBox);
+    //切换监控对象
+    $("#TabFenceBox").bind("click", fenceOperation.TabFenceBox);
+    $("#rectangleEditClose").bind("click", fenceOperation.rectangleEditClose);
+    //围栏取消
+    $("#markFenceClose").bind("click", fenceOperation.markFenceClose);
+    $("#saveSection").bind("click", fenceOperation.doSubmitsMonitor);
+    $("#lineEditClose").bind("click", fenceOperation.lineEditClose);
+    $("#circleFenceClose").bind("click", fenceOperation.circleFenceClose);
+    $("#polygonFenceClose").bind("click", fenceOperation.polygonFenceClose);
+    $("#bingListClick").bind("click", fenceOperation.bingListClick);
+    $("#fenceDemo").bind('contextmenu', function (event) {
+        return false
+    });
+
+    $('.lngLat_show').on('click', fenceOperation.lngLatTextShow);
+    $('#province, #city, #district, #street').on('change', function () {
+        fenceOperation.administrativeAreaSelect(this)
+    });
+    $('#administrativeSave').on('click', fenceOperation.administrativeSave);
+    $('#administrativeClose').on('click', fenceOperation.administrativeClose);
+    $('#tableCheckAll').on('click', function () {
+        $("input[name='subChk']").prop("checked", this.checked);
+    });
 
     // pageLayout.init();
     //     // mapStation.userTree();
