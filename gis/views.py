@@ -202,8 +202,8 @@ def polygons(request):
 
     createDataUsername = request.user.user_name
 
-    FenceDistrict.objects.create(name=name,ftype=ftype,createDataUsername=createDataUsername,description=description,cid="test_no1",pId="zw_m_polygon")
-    Polygon.objects.create(polygonId=polygonId,name=name,ftype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes)
+    FenceDistrict.objects.create(name=name,ftype=ftype,createDataUsername=createDataUsername,description=description,pId="zw_m_polygon")
+    Polygon.objects.create(polygonId=polygonId,name=name,ftype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
 
     return HttpResponse(json.dumps({"success":1}))
 
@@ -211,22 +211,79 @@ def polygons(request):
 
 def getFenceDetails(request):
     print("getFenceDetails",request.POST)
-    name = request.POST.get("name")
+    dma_no = request.POST.get("dma_no") or ''
     fenceNodes = request.POST.get("fenceNodes")
-    print("name",name)
-    print("fenceNodes",fenceNodes,type(fenceNodes))
+    # print("dma_no",dma_no)
+    # print("fenceNodes",fenceNodes)
+
+    if dma_no != '':
+        pgo = Polygon.objects.filter(dma_no=dma_no).values().first()
+
+        fenceData = []
+        pointSeqs = pgo["pointSeqs"].split(",")
+        longitudes = pgo["longitudes"].split(",")
+        latitudes = pgo["latitudes"].split(",")
+        # print(pointSeqs,type(pointSeqs))
+        # print(longitudes,type(longitudes))
+        # print(latitudes,type(latitudes))
+
+        for p in pointSeqs:
+            idx = int(p)
+            fenceData.append({
+                "createDataTime":"2018-11-08 20:46:57",
+                "createDataUsername":"admin",
+                "description":"null",
+                "flag":1,
+                "id":"null",
+                "latitude":latitudes[idx],
+                "longitude":longitudes[idx],
+                "name":"null",
+                "polygonId":"037f67e5-acfa-466f-a6b0-60916d88d8a2",
+                "sortOrder":idx,
+                "type":"null",
+                "updateDataTime":"null",
+                "updateDataUsername":"null"
+                })
+
+        details = {
+            "exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":[
+                {"fenceType":"zw_m_polygon",
+                "fenceData":fenceData
+                }],
+            "success":1
+        }
+
+        return JsonResponse(details)
+
+    if len(fenceNodes) == 0:
+        details = {
+            "exceptionDetailMsg":"null",
+            "msg":"empty?",
+            "obj":[
+                {"fenceType":"zw_m_polygon",
+                "fenceData":fenceData
+                }],
+            "success":0
+        }
+
+        return JsonResponse(details)
+    
     fenceNodes_json = json.loads(fenceNodes)
-    print("json ?",fenceNodes_json,type(fenceNodes_json[0]))
+    # print("json ?",fenceNodes_json,type(fenceNodes_json[0]))
     name=fenceNodes_json[0]["name"]
     pgo = Polygon.objects.filter(name=name).values().first()
+
+    
 
     fenceData = []
     pointSeqs = pgo["pointSeqs"].split(",")
     longitudes = pgo["longitudes"].split(",")
     latitudes = pgo["latitudes"].split(",")
-    print(pointSeqs,type(pointSeqs))
-    print(longitudes,type(longitudes))
-    print(latitudes,type(latitudes))
+    # print(pointSeqs,type(pointSeqs))
+    # print(longitudes,type(longitudes))
+    # print(latitudes,type(latitudes))
 
     for p in pointSeqs:
         idx = int(p)

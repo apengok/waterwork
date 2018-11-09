@@ -5592,6 +5592,7 @@
                         ;
                         $("#rectangleAllPointShow").html(html);
                         $("#addOrUpdatePolygonFlag").val("0");
+                        fenceOperation.initDMAList();
                         pageLayout.closeVideo();
                         $("#myModal").modal('show');
                     }
@@ -6090,6 +6091,58 @@
                     }
                 }
             }).form();
+        },
+        initDMAList:function(){
+            var url="/dmam/getDmaSelect/";
+            
+            var parameter={};
+            json_ajax("POST",url,"json",true,parameter, fenceOperation.initDMAListBack);
+        },
+
+        initDMAListBack: function(data){
+            console.log("dmalist",data);
+            var html = ''
+            
+            // //DMAlist
+            var dmalist = data.obj;
+            // 初始化dma数据
+            
+            if (dmalist.length > 0) {
+                for (var i=0; i< dmalist.length; i++) {
+                    
+                    html+= '<option value="'+dmalist[i].dma_no+'">'+dmalist[i].dma_name+'</option>'
+                }
+                $("#dma_no").html(html);
+            }
+            //DMAlist
+            // var dmalist = data.obj;
+            // // 初始化车辆数据
+            // var dataList = {value: []};
+            // if (dmalist !== null && dmalist.length > 0) {
+            //     for (var i=0; i< dmalist.length; i++) {
+            //         var obj = {};
+            //         obj.id = dmalist[i].dma_no;
+            //         obj.name = dmalist[i].dma_name;
+            //         dataList.value.push(obj);
+            //     }
+                
+            // }
+            // $("#dma_no").bsSuggest({
+            //     indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+            //     indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+            //     idField: "id",
+            //     keyField: "name",
+            //     effectiveFields: ["name"],
+            //     searchFields:["id"],
+            //     data: dataList
+            // }).on('onDataRequestSuccess', function (e, result) {
+            // }).on('onSetSelectValue', function (e, keyword, data) {
+            //     // 当选择参考车牌
+            //     var dma_no_selected = keyword.id;
+                
+            // }).on('onUnsetSelectValue', function () {
+            // });
+        
         },
         //圆保存
         roundSave: function (thisBtn) {
@@ -8966,6 +9019,7 @@ console.log("$newMapHeight",$("#map-container").height());
     pageLayout.responseSocket();
     fenceOperation.init();
     fenceOperation.fenceBindList();
+    fenceOperation.initDMAList();
     // fenceOperation.fenceEnterprise();
     amapOperation.init();
     // treeMonitoring.init();

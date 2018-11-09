@@ -78,3 +78,18 @@ class Polygon(models.Model):
     def __str__(self):
         return self.name 
     
+
+from entm.utils import unique_uuid_generator,unique_cid_generator
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.cid:
+        # instance.slug = create_slug(instance)
+        instance.cid = unique_uuid_generator(instance)
+        
+
+    
+    
+
+
+
+pre_save.connect(pre_save_post_receiver, sender=FenceDistrict)

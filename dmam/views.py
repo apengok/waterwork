@@ -156,6 +156,32 @@ def dmatree(request):
     return HttpResponse(json.dumps(organtree))
 
 
+def getDmaSelect(request):
+    print("getDmaSelect.....")
+    dmas = DMABaseinfo.objects.values("dma_no","dma_name")
+
+    def m_info(m):
+        
+        return {
+            "dma_no":m["dma_no"],
+            "dma_name":m["dma_name"],
+            
+        }
+    data = []
+
+    for m in dmas:
+        data.append(m_info(m))
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":data,
+        "success":True
+    }
+   
+    # print(operarions_list)
+    return JsonResponse(operarions_list)
+
 def getmeterlist(request):
 
     meters = Meter.objects.all()

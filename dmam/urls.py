@@ -30,6 +30,9 @@ urlpatterns = [
     url(r'^verifydmano/?$',views.verifydmano,name='verifydmano'),
     url(r'^verifydmaname/?$',views.verifydmaname,name='verifydmaname'),
 
+    # dma 列表选择关联
+    url(r'^getDmaSelect/?$',views.getDmaSelect,name='getDmaSelect'),
+
     #dma分区站点配置
     url(r'^district/assignstation/(?P<pk>\w+)/?$',views.DistrictAssignStationView.as_view(),name='districtassignstation'),
     url(r'^dmaStation/getdmastationsbyId/?$',views.getdmastationsbyId,name='getdmastationsbyId'),
