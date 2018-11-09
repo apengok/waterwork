@@ -84,7 +84,7 @@ from entm.utils import unique_uuid_generator,unique_cid_generator
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.cid:
         # instance.slug = create_slug(instance)
-        instance.cid = unique_uuid_generator(instance)
+        instance.cid = unique_cid_generator(instance)
         
 
     
