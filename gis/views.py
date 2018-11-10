@@ -91,13 +91,16 @@ def fenceTree(request):
 
     fentree = []
     for fs in fences:
-        fentree.append({
+        polygon = {
             "name":fs["name"],
             "pId":fs["pId"],
             "id":fs["cid"],
             "type":fs["ftype"],
             "open":"true"
-            })
+            }
+        if fs["pId"] == "zw_m_polygon":
+            polygon["iconSkin"]="zw_m_rectangle_skin",
+        fentree.append(polygon)
 
     # fentree = [{"name":"标注","pId":"","id":"zw_m_marker","type":"fenceParent","open":"true"},
     #             {"name":"路线","pId":"","id":"zw_m_line","type":"fenceParent","open":"true"},
@@ -187,8 +190,8 @@ polygons <QueryDict: {'addOrUpdatePolygonFlag': ['0'], 'polygonId': [''], 'name'
   'latitudes': ['22.547862,22.548234,22.547183,22.546718,22.547268']}>
 '''
     # save ploygon
-def polygons(request):
-    print("polygons",request.POST)
+def savePolygons(request):
+    print("savePolygons",request.POST)
     addOrUpdatePolygonFlag = request.POST.get("addOrUpdatePolygonFlag")
     polygonId = request.POST.get("polygonId")
     name = request.POST.get("name")
@@ -202,8 +205,22 @@ def polygons(request):
 
     createDataUsername = request.user.user_name
 
-    FenceDistrict.objects.create(name=name,ftype=ftype,createDataUsername=createDataUsername,description=description,pId="zw_m_polygon")
-    Polygon.objects.create(polygonId=polygonId,name=name,ftype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
+    if addOrUpdatePolygonFlag == "1":
+        f = FenceDistrict.objects.get(cid=polygonId)
+        p = Polygon.objects.get(polygonId=polygonId)
+        f.name = name
+        f.description = description
+        f.save()
+        p.name = name
+        p.ftype = ftype
+        p.pointSeqs = pointSeqs
+        p.longitudes = longitudes
+        p.latitudes = latitudes
+        p.save()
+        
+    else:
+        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_polygon")
+        Polygon.objects.create(polygonId=instance.cid,name=name,ftype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
 
     return HttpResponse(json.dumps({"success":1}))
 
@@ -238,7 +255,7 @@ def getFenceDetails(request):
                 "latitude":latitudes[idx],
                 "longitude":longitudes[idx],
                 "name":"null",
-                "polygonId":"037f67e5-acfa-466f-a6b0-60916d88d8a2",
+                "polygonId":pgo["polygonId"],
                 "sortOrder":idx,
                 "type":"null",
                 "updateDataTime":"null",
@@ -257,14 +274,14 @@ def getFenceDetails(request):
 
         return JsonResponse(details)
 
-    if len(fenceNodes) == 0:
+    if len(fenceNodes) == 0 or fenceNodes == '[null]':
         details = {
             "exceptionDetailMsg":"null",
             "msg":"empty?",
-            "obj":[
-                {"fenceType":"zw_m_polygon",
-                "fenceData":fenceData
-                }],
+            # "obj":[
+            #     {"fenceType":"zw_m_polygon",
+            #     "fenceData":fenceData
+            #     }],
             "success":0
         }
 
@@ -311,6 +328,91 @@ def getFenceDetails(request):
             "fenceData":fenceData
             }],
         "success":1
+    }
+
+    return JsonResponse(details)
+
+
+
+def previewFence(request):
+    print("previewFence",request.POST)
+    fenceIdShape = request.POST.get("fenceIdShape") 
+    
+    fenceId,shape = fenceIdShape.split("#")
+
+    fd = FenceDistrict.objects.filter(cid=fenceId).values().first()
+    pgo = Polygon.objects.filter(polygonId=fenceId).values().first()
+
+    
+
+    fenceData = []
+    pointSeqs = pgo["pointSeqs"].split(",")
+    longitudes = pgo["longitudes"].split(",")
+    latitudes = pgo["latitudes"].split(",")
+    # print(pointSeqs,type(pointSeqs))
+    # print(longitudes,type(longitudes))
+    # print(latitudes,type(latitudes))
+
+    for p in pointSeqs:
+        idx = int(p)
+        fenceData.append({
+            "createDataTime":"2018-11-08 20:46:57",
+            "createDataUsername":fd["createDataUsername"],
+            "description":fd["description"],
+            "flag":1,
+            "id":"null",
+            "latitude":latitudes[idx],
+            "longitude":longitudes[idx],
+            "name":"null",
+            "polygonId":pgo["polygonId"],
+            "sortOrder":idx,
+            "type":pgo["ftype"],
+            "updateDataTime":"null",
+            "updateDataUsername":"null"
+            })
+
+    details = {
+        "exceptionDetailMsg":"null",
+        "msg":"null",
+        "obj":[
+            {"fenceType":"zw_m_polygon",
+            "polygon":{
+                "createDataTime":"2018-11-10 17:30:06",
+                "createDataUsername":fd["createDataUsername"],
+                "description":fd["description"],
+                "flag":1,
+                "id":pgo["polygonId"],
+                "latitude":"null",
+                "longitude":"null",
+                "name":fd["name"],
+                "polygonId":"null",
+                "sortOrder":"null",
+                "type":"普通区域",
+                "updateDataTime":"2018-11-10 18:02:07",
+                "updateDataUsername":fd["updateDataUsername"]
+            },
+            "fenceData":fenceData
+            }],
+        "success":1
+    }
+
+    return JsonResponse(details)
+
+
+def deteleFence(request):
+    print("deteleFence",request.POST)
+    fenceId = request.POST.get("fenceId")
+
+    fd = FenceDistrict.objects.get(cid=fenceId)
+    pgo = Polygon.objects.get(polygonId=fenceId)
+    pgo.delete()
+    fd.delete()
+
+    details = {
+        "exceptionDetailMsg":"null",
+        "msg":"null",
+        "obj":"null",
+        "success":True
     }
 
     return JsonResponse(details)

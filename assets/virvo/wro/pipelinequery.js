@@ -3828,7 +3828,7 @@
             $.ajax({
                 type: "POST",
                 async: false,
-                url: "/clbs/m/functionconfig/fence/managefence/previewFence",
+                url: "/gis/fence/managefence/previewFence",
                 data: {"fenceIdShape": fenceId_shape_value},
                 dataType: "json",
                 success: function (data) {
@@ -4174,14 +4174,14 @@
         },
         // 删除围栏
         deleteFence: function (treeNode) {
-            var url = "/clbs/m/functionconfig/fence/managefence/delete_" + treeNode.id + ".gsp";
+            var url = "/gis/fence/managefence/delete_/";// + treeNode.id + "/";
             layer.confirm(fenceOperationFenceDeleteConfirm, {
                 btn: ['确定', '取消'],
                 icon: 3,
                 move: false,
                 title: "操作确认",
             }, function (index) {
-                json_ajax("POST", url, "json", true, null, function (data) {
+                json_ajax("POST", url, "json", true, {"fenceId":treeNode.id}, function (data) {
                     if (data.success) {
                         fenceOperation.fenceHidden(treeNode.id);
                         fenceIDMap.remove(treeNode.id);
@@ -4190,8 +4190,8 @@
                             var thisStopArray = lineSpotMap.get(treeNode.id);
                             map.remove(thisStopArray);
                             lineSpotMap.remove(treeNode.id);
-                        }
-                        ;
+                        };
+                        var zTree = $.fn.zTree.getZTreeObj("fenceDemo"); //add pwl
                         zTree.removeNode(treeNode);
                         fenceOperation.addNodes();
                     } else {
@@ -5063,7 +5063,7 @@
                 }
                 // 判断是否有可写权限
                 if (permissionValue == "true") {
-                    theImport.after(tImport);
+                    // theImport.after(tImport);
                     sObj.after(addStr);
                 }
                 var btn = $("#addBtn_" + treeNode.tId);
@@ -5148,7 +5148,7 @@
                     deleteList.after(deleteStr);
                     sDetails.after(detailsStr);
                     sEdit.after(editStr);
-                    sBind.after(bindStr);
+                    // sBind.after(bindStr);
                 }
                 var zTree = $.fn.zTree.getZTreeObj("fenceDemo");
                 var editBtn = $("#editBtn_" + treeNode.tId);
@@ -5350,7 +5350,7 @@
             $("#addOrUpdateLineFlag").val("1");
             var thisData = thisId + "#" + "zw_m_line";
             var thisParams = {"fenceIdShape": thisData};
-            var url = "/clbs/m/functionconfig/fence/managefence/previewFence";
+            var url = "/gis/fence/managefence/previewFence";
             ajax_submit("POST", url, "json", true, thisParams, true, fenceOperation.editCallBack);
         },
         editCallBack: function (data) {

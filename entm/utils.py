@@ -115,3 +115,27 @@ def unique_slug_generator(instance, new_slug=None):
                 )
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug
+
+
+def unique_shapeid_generator(instance, new_polygonId=None):
+    """
+    This is for a Django project and it assumes your instance 
+    has a model with a slug field and a title character (char) field.
+    """
+    if new_polygonId is not None:
+        polygonId = new_polygonId
+    else:
+        polygonId = "{polygonId}_{randstr}".format(
+                    polygonId=random_string_generator(size=4),
+                    randstr=random_string_generator(size=4)
+                )
+        
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(polygonId=polygonId).exists()
+    if qs_exists:
+        new_polygonId = "{polygonId}_{randstr}".format(
+                    polygonId=polygonId,
+                    randstr=random_string_generator(size=4)
+                )
+        return unique_shapeid_generator(instance, new_polygonId=new_polygonId)
+    return polygonId

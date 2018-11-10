@@ -17,8 +17,11 @@ urlpatterns = [
     url(r'^pipelinequery/?$',views.PipelineQueryView.as_view(),name='pipelinequery'),
     url(r'^bindfence/fenceTree/?$',views.fenceTree,name='fenceTree'),
     url(r'^bindfence/list/?$',views.fencelist,name='fencelist'),
-    url(r'^fence/managefence/polygons',views.polygons,name='polygons'),
+    url(r'^fence/managefence/polygons',views.savePolygons,name='savePolygons'),
     url(r'^fence/bindfence/getFenceDetails',views.getFenceDetails,name='getFenceDetails'),
+    url(r'^fence/managefence/previewFence',views.previewFence,name='previewFence'),
+    url(r'^fence/managefence/delete_/',views.deteleFence,name='deteleFence'),
+    # url(r'^fence/managefence/delete_/(?P<fendeId>\w+)/',views.deteleFence,name='deteleFence'),
     
     # 管网统计
     url(r'^pipelinestastic/?$',views.PipelineStasticView.as_view(),name='pipelinestastic'),
