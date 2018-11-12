@@ -302,6 +302,20 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-3 control-label"><label class="text-danger">*</label> 所属组织：</label>
+                                    <div class="has-feedback col-md-8">
+                                        <input name="belongto" class="form-control" id="zTreeOrganSel"
+                                               placeholder="请选择所属企业" readonly="readonly"
+                                               style="background-color: #fafafa; cursor: pointer;" type="text"/>
+                                        <span class="fa fa-chevron-down form-control-feedback"
+                                              aria-hidden="true" id="zTreeOrganSelSpan"></span>
+                                        <div class="ztreeModelBox" id="zTreeContent">
+                                            <ul id="ztreeDemo" class="ztree"></ul>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-3 control-label">DMA分区：</label>
                                     <div class="col-md-8">
                                         <select class="form-control" id="dma_no" name="dma_no">

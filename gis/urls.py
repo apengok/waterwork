@@ -22,6 +22,16 @@ urlpatterns = [
     url(r'^fence/managefence/previewFence',views.previewFence,name='previewFence'),
     url(r'^fence/managefence/delete_/',views.deteleFence,name='deteleFence'),
     # url(r'^fence/managefence/delete_/(?P<fendeId>\w+)/',views.deteleFence,name='deteleFence'),
+
+    # save rectangle
+    url(r'^fence/managefence/rectangles',views.saveRectangles,name='saveRectangles'),
+
+    # 圆形
+    url(r'^fence/managefence/circles',views.saveCircles,name='saveCircles'),
+
+    # addAdministration
+    url(r'^fence/managefence/addAdministration',views.addAdministration,name='addAdministration'),
+    
     
     # 管网统计
     url(r'^pipelinestastic/?$',views.PipelineStasticView.as_view(),name='pipelinestastic'),

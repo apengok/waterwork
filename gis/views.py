@@ -100,6 +100,12 @@ def fenceTree(request):
             }
         if fs["pId"] == "zw_m_polygon":
             polygon["iconSkin"]="zw_m_rectangle_skin",
+        if fs["pId"] == "zw_m_rectangle":
+            polygon["iconSkin"]="zw_m_rectangle_skin",
+        if fs["pId"] == "zw_m_circle":
+            polygon["iconSkin"]="zw_m_circle_skin",
+        if fs["pId"] == "zw_m_administration":
+            polygon["iconSkin"]="zw_m_administration_skin",
         fentree.append(polygon)
 
     # fentree = [{"name":"标注","pId":"","id":"zw_m_marker","type":"fenceParent","open":"true"},
@@ -235,7 +241,7 @@ def getFenceDetails(request):
 
     if dma_no != '':
         pgo = Polygon.objects.filter(dma_no=dma_no).values().first()
-
+        # fd = FenceDistrict.objects.filter(cid=fenceId).values().first()
         fenceData = []
         pointSeqs = pgo["pointSeqs"].split(",")
         longitudes = pgo["longitudes"].split(",")
@@ -274,7 +280,7 @@ def getFenceDetails(request):
 
         return JsonResponse(details)
 
-    if len(fenceNodes) == 0 or fenceNodes == '[null]':
+    if len(fenceNodes) == 0 or fenceNodes == '[null]' or fenceNodes == '[]':
         details = {
             "exceptionDetailMsg":"null",
             "msg":"empty?",
@@ -356,7 +362,7 @@ def previewFence(request):
     for p in pointSeqs:
         idx = int(p)
         fenceData.append({
-            "createDataTime":"2018-11-08 20:46:57",
+            "createDataTime":fd["createDataTime"],
             "createDataUsername":fd["createDataUsername"],
             "description":fd["description"],
             "flag":1,
@@ -367,8 +373,8 @@ def previewFence(request):
             "polygonId":pgo["polygonId"],
             "sortOrder":idx,
             "type":pgo["ftype"],
-            "updateDataTime":"null",
-            "updateDataUsername":"null"
+            "updateDataTime":fd["updateDataTime"],
+            "updateDataUsername":fd["updateDataUsername"]
             })
 
     details = {
@@ -377,7 +383,7 @@ def previewFence(request):
         "obj":[
             {"fenceType":"zw_m_polygon",
             "polygon":{
-                "createDataTime":"2018-11-10 17:30:06",
+                "createDataTime":fd["createDataTime"],
                 "createDataUsername":fd["createDataUsername"],
                 "description":fd["description"],
                 "flag":1,
@@ -387,8 +393,8 @@ def previewFence(request):
                 "name":fd["name"],
                 "polygonId":"null",
                 "sortOrder":"null",
-                "type":"普通区域",
-                "updateDataTime":"2018-11-10 18:02:07",
+                "type":pgo["ftype"],
+                "updateDataTime":fd["updateDataTime"],
                 "updateDataUsername":fd["updateDataUsername"]
             },
             "fenceData":fenceData
@@ -416,3 +422,123 @@ def deteleFence(request):
     }
 
     return JsonResponse(details)
+
+
+def saveRectangles(request):
+    print("saveRectangles",request.POST)
+    addOrUpdateRectangleFlag = request.POST.get("addOrUpdateRectangleFlag")
+    rectangleId = request.POST.get("rectangleId")
+    name = request.POST.get("name")
+    zonetype = request.POST.get("type")
+    lnglatQuery_LU = request.POST.get("lnglatQuery_LU")
+    lnglatQuery_RD = request.POST.get("lnglatQuery_RD")
+    dma_no = request.POST.get("dma_no")
+    shape = request.POST.get("shape")
+    description = request.POST.get("description")
+    pointSeqs = request.POST.get("pointSeqs")
+    longitudes = request.POST.get("longitudes")
+    latitudes = request.POST.get("latitudes")
+
+    createDataUsername = request.user.user_name
+
+    if addOrUpdateRectangleFlag == "1":
+        f = FenceDistrict.objects.get(cid=shapeId)
+        p = FenceShape.objects.get(shapeId=shapeId)
+        f.name = name
+        f.description = description
+        f.save()
+        p.name = name
+        p.zonetype = zonetype
+        p.lnglatQuery_LU = lnglatQuery_LU
+        p.lnglatQuery_RD = lnglatQuery_RD
+        p.pointSeqs = pointSeqs
+        p.longitudes = longitudes
+        p.latitudes = latitudes
+        p.save()
+        
+    else:
+        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_rectangle")
+        FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=zonetype,shape=shape,lnglatQuery_LU=lnglatQuery_LU,lnglatQuery_RD=lnglatQuery_RD,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
+
+    return HttpResponse(json.dumps({"success":1}))
+
+
+def saveCircles(request):
+    print("saveCircles",request.POST)
+    addOrUpdateCircleFlag = request.POST.get("addOrUpdateCircleFlag")
+    shapeId = request.POST.get("circleId")
+    name = request.POST.get("name")
+    zonetype = request.POST.get("type")
+    centerPointLat = request.POST.get("centerPointLat")
+    centerPointLng = request.POST.get("centerPointLng")
+    centerRadius = request.POST.get("centerRadius")
+    latitude = request.POST.get("latitude")
+    longitude = request.POST.get("longitude")
+    dma_no = request.POST.get("dma_no")
+    shape = request.POST.get("shape")
+    description = request.POST.get("description")
+    centerRadius = request.POST.get("centerRadius")
+    radius = request.POST.get("radius")
+    
+
+    createDataUsername = request.user.user_name
+
+    if addOrUpdateCircleFlag == "1":
+        f = FenceDistrict.objects.get(cid=shapeId)
+        p = FenceShape.objects.get(shapeId=shapeId)
+        f.name = name
+        f.description = description
+        f.save()
+        p.name = name
+        p.zonetype = zonetype
+        p.centerPointLat = centerPointLat
+        p.centerPointLng = centerPointLng
+        p.centerRadius = centerRadius
+        
+        p.save()
+        
+    else:
+        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_circle")
+        FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=zonetype,shape=shape,centerPointLat=centerPointLat,centerPointLng=centerPointLng,centerRadius=centerRadius,dma_no=dma_no)
+
+    return HttpResponse(json.dumps({"success":1}))
+
+
+def addAdministration(request):
+    print("addAdministration",request.POST)
+    addOrUpdateCircleFlag = request.POST.get("addOrUpdateCircleFlag")
+    shapeId = request.POST.get("administrativeAreaId")
+    province = request.POST.get("province")
+    city = request.POST.get("city")
+    district = request.POST.get("district")
+    name = request.POST.get("name")
+    description = request.POST.get("description")
+    administrativeLngLat = request.POST.get("administrativeLngLat")
+
+    # zonetype = request.POST.get("type")
+    
+    dma_no = request.POST.get("dma_no")
+    
+    
+
+    createDataUsername = request.user.user_name
+
+    if addOrUpdateCircleFlag == "1":
+        f = FenceDistrict.objects.get(cid=shapeId)
+        p = FenceShape.objects.get(shapeId=shapeId)
+        f.name = name
+        f.description = description
+        f.save()
+        p.name = name
+        p.zonetype = zonetype
+        p.centerPointLat = centerPointLat
+        p.centerPointLng = centerPointLng
+        p.centerRadius = centerRadius
+        
+        p.save()
+        
+    else:
+        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_administration")
+        FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=zonetype,shape=shape,province=province,city=city,district=district,administrativeLngLat=administrativeLngLat,dma_no=dma_no)
+
+    return HttpResponse(json.dumps({"success":1}))
