@@ -313,7 +313,7 @@ def getFenceDetails(request):
             "latitude":latitudes[idx],
             "longitude":longitudes[idx],
             "name":"null",
-            "polygonId":"037f67e5-acfa-466f-a6b0-60916d88d8a2",
+            "polygonId":pgo["polygonId"],
             "sortOrder":idx,
             "type":"null",
             "updateDataTime":"null",

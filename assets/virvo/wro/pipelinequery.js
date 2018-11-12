@@ -5192,7 +5192,7 @@
                         $('#drivenRoute').hide();
                         infoWindow.close();
                         fenceOperation.deleteFence(treeNode);
-                        //fenceOperation.fenceHidden(treeNode.id);
+                        fenceOperation.fenceHidden(treeNode.id);
 
                         return false;
                     });
