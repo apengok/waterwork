@@ -38,7 +38,7 @@ from django.conf import settings
 
 from waterwork.mixins import AjaxableResponseMixin
 
-from .models import FenceDistrict,Polygon
+from .models import FenceDistrict,Polygon,FenceShape
 
 # Create your views here.
 
@@ -99,7 +99,7 @@ def fenceTree(request):
             "open":"true"
             }
         if fs["pId"] == "zw_m_polygon":
-            polygon["iconSkin"]="zw_m_rectangle_skin",
+            polygon["iconSkin"]="zw_m_polygon_skin",
         if fs["pId"] == "zw_m_rectangle":
             polygon["iconSkin"]="zw_m_rectangle_skin",
         if fs["pId"] == "zw_m_circle":
@@ -213,12 +213,12 @@ def savePolygons(request):
 
     if addOrUpdatePolygonFlag == "1":
         f = FenceDistrict.objects.get(cid=polygonId)
-        p = Polygon.objects.get(polygonId=polygonId)
+        p = FenceShape.objects.get(shapeId=polygonId)
         f.name = name
         f.description = description
         f.save()
         p.name = name
-        p.ftype = ftype
+        p.zonetype = ftype
         p.pointSeqs = pointSeqs
         p.longitudes = longitudes
         p.latitudes = latitudes
@@ -226,7 +226,7 @@ def savePolygons(request):
         
     else:
         instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_polygon")
-        Polygon.objects.create(polygonId=instance.cid,name=name,ftype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
+        FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
 
     return HttpResponse(json.dumps({"success":1}))
 
@@ -294,45 +294,96 @@ def getFenceDetails(request):
         return JsonResponse(details)
     
     fenceNodes_json = json.loads(fenceNodes)
-    # print("json ?",fenceNodes_json,type(fenceNodes_json[0]))
-    name=fenceNodes_json[0]["name"]
-    pgo = Polygon.objects.filter(name=name).values().first()
+    # print("json ?",fenceNodes_json,type(fenceNodes_json[0]),len(fenceNodes_json))
+    details_obj = []
+    for i in range(len(fenceNodes_json)):
+        
+        name=fenceNodes_json[i]["name"]
+        pId = fenceNodes_json[i]["pId"]
 
-    
+        fd = FenceDistrict.objects.filter(name=name).values().first()
+        pgo = FenceShape.objects.filter(name=name).values().first()
+        fenceData = []
+        if pId == "zw_m_polygon":
 
-    fenceData = []
-    pointSeqs = pgo["pointSeqs"].split(",")
-    longitudes = pgo["longitudes"].split(",")
-    latitudes = pgo["latitudes"].split(",")
-    # print(pointSeqs,type(pointSeqs))
-    # print(longitudes,type(longitudes))
-    # print(latitudes,type(latitudes))
+            
+            pointSeqs = pgo["pointSeqs"].split(",")
+            longitudes = pgo["longitudes"].split(",")
+            latitudes = pgo["latitudes"].split(",")
+            # print(pointSeqs,type(pointSeqs))
+            # print(longitudes,type(longitudes))
+            # print(latitudes,type(latitudes))
 
-    for p in pointSeqs:
-        idx = int(p)
-        fenceData.append({
-            "createDataTime":"2018-11-08 20:46:57",
-            "createDataUsername":"admin",
-            "description":"null",
-            "flag":1,
-            "id":"null",
-            "latitude":latitudes[idx],
-            "longitude":longitudes[idx],
-            "name":"null",
-            "polygonId":pgo["polygonId"],
-            "sortOrder":idx,
-            "type":"null",
-            "updateDataTime":"null",
-            "updateDataUsername":"null"
+            for p in pointSeqs:
+                idx = int(p)
+                fenceData.append({
+                    "createDataTime":fd["createDataTime"],
+                    "createDataUsername":fd["createDataUsername"],
+                    "description":fd["description"],
+                    "flag":1,
+                    "id":"null",
+                    "latitude":latitudes[idx],
+                    "longitude":longitudes[idx],
+                    "name":"null",
+                    "polygonId":pgo["shapeId"],
+                    "sortOrder":idx,
+                    "type":pgo["zonetype"],
+                    "updateDataTime":fd["updateDataTime"],
+                    "updateDataUsername":fd["updateDataUsername"]
+                    })
+
+        if pId == "zw_m_rectangle":
+
+            leftLongitude,leftLatitude = pgo["lnglatQuery_LU"].split(",")
+            rightLongitude,rightLatitude = pgo["lnglatQuery_RD"].split(",")
+            
+            fenceData.append({
+                "createDataTime":fd["createDataTime"],
+                "createDataUsername":fd["createDataUsername"],
+                "description":fd["description"],
+                "flag":1,
+                "id":pgo["shapeId"],
+                "leftLatitude":leftLatitude,
+                "leftLongitude":leftLongitude,
+                "rightLatitude":rightLatitude,
+                "rightLongitude":rightLongitude,
+                "name":pgo["name"],
+                "type":pgo["zonetype"],
+                "updateDataTime":fd["updateDataTime"],
+                "updateDataUsername":fd["updateDataUsername"]
+                })
+
+        if pId == "zw_m_circle":
+
+            latitude = pgo["centerPointLat"]
+            longitude = pgo["centerPointLng"]
+            radius = pgo["centerRadius"]
+            
+            fenceData.append({
+                "createDataTime":fd["createDataTime"],
+                "createDataUsername":fd["createDataUsername"],
+                "description":fd["description"],
+                "flag":1,
+                "id":pgo["shapeId"],
+                "latitude":latitude,
+                "longitude":longitude,
+                "radius":radius,
+                "name":pgo["name"],
+                "type":pgo["zonetype"],
+                "updateDataTime":fd["updateDataTime"],
+                "updateDataUsername":fd["updateDataUsername"]
+                })
+
+
+        details_obj.append({"fenceType":pId,
+            "fenceData":fenceData
             })
+    
 
     details = {
         "exceptionDetailMsg":"null",
         "msg":"null",
-        "obj":[
-            {"fenceType":"zw_m_polygon",
-            "fenceData":fenceData
-            }],
+        "obj":details_obj,
         "success":1
     }
 
@@ -347,42 +398,87 @@ def previewFence(request):
     fenceId,shape = fenceIdShape.split("#")
 
     fd = FenceDistrict.objects.filter(cid=fenceId).values().first()
-    pgo = Polygon.objects.filter(polygonId=fenceId).values().first()
+    pgo = FenceShape.objects.filter(shapeId=fenceId).values().first()
 
-    
-
+    details_obj = []
     fenceData = []
-    pointSeqs = pgo["pointSeqs"].split(",")
-    longitudes = pgo["longitudes"].split(",")
-    latitudes = pgo["latitudes"].split(",")
-    # print(pointSeqs,type(pointSeqs))
-    # print(longitudes,type(longitudes))
-    # print(latitudes,type(latitudes))
+    if shape == "zw_m_polygon":
 
-    for p in pointSeqs:
-        idx = int(p)
+            
+        pointSeqs = pgo["pointSeqs"].split(",")
+        longitudes = pgo["longitudes"].split(",")
+        latitudes = pgo["latitudes"].split(",")
+        # print(pointSeqs,type(pointSeqs))
+        # print(longitudes,type(longitudes))
+        # print(latitudes,type(latitudes))
+
+        for p in pointSeqs:
+            idx = int(p)
+            fenceData.append({
+                "createDataTime":fd["createDataTime"],
+                "createDataUsername":fd["createDataUsername"],
+                "description":fd["description"],
+                "flag":1,
+                "id":"null",
+                "latitude":latitudes[idx],
+                "longitude":longitudes[idx],
+                "name":"null",
+                "polygonId":pgo["shapeId"],
+                "sortOrder":idx,
+                "type":pgo["zonetype"],
+                "updateDataTime":fd["updateDataTime"],
+                "updateDataUsername":fd["updateDataUsername"]
+                })
+
+    if shape == "zw_m_rectangle":
+
+        leftLongitude,leftLatitude = pgo["lnglatQuery_LU"].split(",")
+        rightLongitude,rightLatitude = pgo["lnglatQuery_RD"].split(",")
+        
         fenceData.append({
             "createDataTime":fd["createDataTime"],
             "createDataUsername":fd["createDataUsername"],
             "description":fd["description"],
             "flag":1,
-            "id":"null",
-            "latitude":latitudes[idx],
-            "longitude":longitudes[idx],
-            "name":"null",
-            "polygonId":pgo["polygonId"],
-            "sortOrder":idx,
-            "type":pgo["ftype"],
+            "id":pgo["shapeId"],
+            "leftLatitude":leftLatitude,
+            "leftLongitude":leftLongitude,
+            "rightLatitude":rightLatitude,
+            "rightLongitude":rightLongitude,
+            "name":pgo["name"],
+            "type":pgo["zonetype"],
             "updateDataTime":fd["updateDataTime"],
             "updateDataUsername":fd["updateDataUsername"]
             })
 
-    details = {
-        "exceptionDetailMsg":"null",
-        "msg":"null",
-        "obj":[
-            {"fenceType":"zw_m_polygon",
-            "polygon":{
+    if shape == "zw_m_circle":
+
+        latitude = pgo["centerPointLat"]
+        longitude = pgo["centerPointLng"]
+        radius = pgo["centerRadius"]
+        
+        fenceData.append({
+            "createDataTime":fd["createDataTime"],
+            "createDataUsername":fd["createDataUsername"],
+            "description":fd["description"],
+            "flag":1,
+            "id":pgo["shapeId"],
+            "latitude":latitude,
+            "longitude":longitude,
+            "radius":radius,
+            "name":pgo["name"],
+            "type":pgo["zonetype"],
+            "updateDataTime":fd["updateDataTime"],
+            "updateDataUsername":fd["updateDataUsername"]
+            })
+
+
+    details_obj.append({"fenceType":shape,
+        "fenceData":fenceData
+        })
+
+    if shape == "zw_m_polygon":
+        details_obj[0]["polygon"] = {
                 "createDataTime":fd["createDataTime"],
                 "createDataUsername":fd["createDataUsername"],
                 "description":fd["description"],
@@ -393,24 +489,28 @@ def previewFence(request):
                 "name":fd["name"],
                 "polygonId":"null",
                 "sortOrder":"null",
-                "type":pgo["ftype"],
+                "type":pgo["zonetype"],
                 "updateDataTime":fd["updateDataTime"],
                 "updateDataUsername":fd["updateDataUsername"]
-            },
-            "fenceData":fenceData
-            }],
+            }
+
+    
+    details = {
+        "exceptionDetailMsg":"null",
+        "msg":"null",
+        "obj":details_obj,
         "success":1
     }
 
     return JsonResponse(details)
 
 
-def deteleFence(request):
+def deleteFence(request):
     print("deteleFence",request.POST)
     fenceId = request.POST.get("fenceId")
 
     fd = FenceDistrict.objects.get(cid=fenceId)
-    pgo = Polygon.objects.get(polygonId=fenceId)
+    pgo = FenceShape.objects.get(shapeId=fenceId)
     pgo.delete()
     fd.delete()
 

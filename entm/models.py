@@ -32,6 +32,17 @@ class Organizations(MPTTModel):
     phone_number       = models.CharField('电话号码',max_length=300,null=True,blank=True)
     firm_address       = models.CharField('地址',max_length=300,null=True,blank=True)
 
+    # add new
+    coorType    = models.CharField(max_length=30,null=True,blank=True)
+    longitude   = models.CharField(max_length=30,null=True,blank=True)
+    latitude    = models.CharField(max_length=30,null=True,blank=True)
+    zoomIn      = models.CharField(max_length=30,null=True,blank=True)
+    islocation  = models.CharField(max_length=30,null=True,blank=True)
+    location    = models.CharField(max_length=30,null=True,blank=True)
+    province    = models.CharField(max_length=30,null=True,blank=True)
+    city        = models.CharField(max_length=30,null=True,blank=True)
+    district    = models.CharField(max_length=30,null=True,blank=True)
+
     cid           = models.CharField(max_length=300,null=True,blank=True)
     pId           = models.CharField(max_length=300,null=True,blank=True)
     is_org        = models.BooleanField(max_length=300,blank=True)

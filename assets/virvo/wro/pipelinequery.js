@@ -4168,8 +4168,9 @@
                 $("#latitudesPolygons").val(latitudes);
                 pageLayout.closeVideo();
                 setTimeout(function () {
-                    $("#myModal").modal("show");
                     console.log("timeout show?")
+                    $("#myModal").modal("show");
+                    
                 }, 200);
             }
         },
@@ -5592,11 +5593,15 @@
                         }
                         ;
                         $("#rectangleAllPointShow").html(html);
+                        $("#zTreeContent").show();
                         $("#addOrUpdatePolygonFlag").val("0");
                         fenceOperation.initDMAList();
-                        customFucn.userTree();
+                        
                         pageLayout.closeVideo();
+                        
                         $("#myModal").modal('show');
+                        // customFucn.userTree();
+                        console.log("timeout show2?")
                     }
                 }
                 ;
@@ -8608,7 +8613,7 @@
             var setting = {
                 async: {
                     url: "/entm/user/oranizationtree/",
-                    tyoe: "post",
+                    type: "post",
                     enable: true,
                     autoParam: ["id"],
                     contentType: "application/json",
@@ -8689,7 +8694,7 @@
         onBodyDown: function (event) {
             if (!(event.target.id == "zTreeOrganSel"||event.target.id == "menuBtn" || event.target.id == "zTreeContent" || $(
                     event.target).parents("#zTreeContent").length > 0)) {
-                customFucn.hideMenu();
+                // customFucn.hideMenu();
             }
         },
         //组织树预处理函数
@@ -8756,7 +8761,7 @@
     pageLayout.responseSocket();
     fenceOperation.init();
     fenceOperation.fenceBindList();
-    customFucn.userTree();
+    // customFucn.userTree();
     fenceOperation.initDMAList();
     // fenceOperation.fenceEnterprise();
     amapOperation.init();

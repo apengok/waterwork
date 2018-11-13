@@ -20,7 +20,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('admin','is_active')
     
     fieldsets = (
-        (None, {'fields': ('user_name','password','belongto','Role','is_active','expire_date','real_name','sex','phone_number','email','idstr','uuid')}),
+        (None, {'fields': ('user_name','password','belongto','Role','is_active','admin','expire_date','real_name','sex','phone_number','email','idstr','uuid')}),
         
     )
 
@@ -34,7 +34,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('user_name', 'password1', 'password2','belongto','Role','is_active','expire_date','real_name','sex','phone_number','email')}
+            'fields': ('user_name', 'password1', 'password2','belongto','Role','is_active','admin','expire_date','real_name','sex','phone_number','email')}
         ),
     )
     search_fields = ('user_name',)

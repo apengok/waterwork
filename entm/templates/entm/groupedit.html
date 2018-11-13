@@ -12,10 +12,16 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="col-md-3 control-label"><label class="text-danger">*</label> 组织名称：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input id="name" onkeydown="if(event.keyCode==32) return false" placeholder="请输入组织名称"
                                type="text" maxlength="50" class="form-control" name="name" value="{{ form.name.value|default:'' }}"/>
                         <label id="name-error" style="display: none" class="error" for="name">不能为空</label>
+                    </div>
+                    <label class="col-md-3 control-label">组织机构性质：</label>
+                    <div class="col-md-3">
+                        <select class="form-control" id="operation" name="attribute">
+                            <option selected="selected" value="{{ form.attribute.value }}">{{ form.attribute.value }}</option>
+                        </select>
                     </div>
                 </div>
                 <!-- <div class="form-group">
@@ -26,42 +32,33 @@
                     </div>
                 </div> -->
                 <div class="form-group">
+                    <label class="col-md-3 control-label"> 负责人：</label>
+                    <div class="col-md-3">
+                        <input placeholder="请输入负责人" type="text" maxlength="50"
+                               class="form-control" id="principal" name="owner_name" value="{{ form.owner_name.value|default:'' }}"/>
+                    </div>
                     <label class="col-md-3 control-label">注册日期：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input id="registerDateEdit" style="cursor: pointer; background-color: #fafafa;"
                                class="form-control layer-date laydate-icon"
                                placeholder="请选择注册日期" name="register_date" value="{{ form.register_date.value|default:'' }}"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">组织机构性质：</label>
-                    <div class="col-md-7">
-                        <select class="form-control" id="operation" name="attribute">
-                            <option selected="selected" value="{{ form.attribute.value }}">{{ form.attribute.value }}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label"> 负责人：</label>
-                    <div class="col-md-7">
-                        <input placeholder="请输入负责人" type="text" maxlength="50"
-                               class="form-control" id="principal" name="owner_name" value="{{ form.owner_name.value|default:'' }}"/>
-                    </div>
-                </div>
+                
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 电话号码：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input placeholder="请输入电话号码" type="text" maxlength="11"
                                class="form-control" id="phone" name="phone_number" value="{{ form.phone_number.value|default:'' }}"/>
                     </div>
-                </div>
-                <div class="form-group">
                     <label class="col-md-3 control-label"> 地址：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input maxlength="50" placeholder="请输入地址" type="text"
                                class="form-control" id="address" name="firm_address" value="{{ form.firm_address.value|default:'' }}"/>
                     </div>
                 </div>
+                
+
                 <!-- <div class="form-group">
                     <label class="col-md-3 control-label">描述：</label>
                     <div class="col-md-7">
@@ -69,10 +66,83 @@
                                   class="form-control" id="description" name="description"></textarea>
                     </div>
                 </div> -->
+
+                <div class="form-group ">
+
+
+                        <div class="form-group-1">
+                            <label class="col-md-3 control-label"><label class="text-danger">*</label>坐标体系：</label>
+                            <div class="col-md-3">
+                                <select id="coorType" class="form-control" name="coorType" placeholder="请选择坐标体系">
+                                    <option value="WGS84">地球坐标</option>
+                                    <option value="GCJ-02">火星坐标</option>
+                                    <option value="BD-09">百度坐标</option>
+                                    <option value="IAG75">西安坐标</option>
+                                    <option value="CGCS2000">大地坐标</option>
+                                </select>
+                            </div>
+                            <label class="col-md-3 control-label"><label class="text-danger">*</label> 地图中心点经度：</label>
+                            <div class="col-md-3">
+                                <input name="longitude" value="{{ form.longitude.value|default:'' }}" type="text" maxlength="50" class="form-control" id="longitude">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+
+
+                        <label class="col-md-3 control-label"> 放大倍率：</label>
+                        <div class="col-md-3">
+                            <input id="zoomIn" name="zoomIn" value="{{ form.zoomIn.value|default:'' }}" type="text" maxlength="13" class="form-control">
+                        </div>
+                        <label class="col-md-3 control-label"><label class="text-danger">*</label> 地图中心点纬度：</label>
+                        <div class="col-md-3">
+                            <input name="latitude" value="{{ form.latitude.value|default:'' }}" type="text" maxlength="50" class="form-control" id="latitude">
+                        </div>
+
+
+                    </div>
+                <div id="target">
+                    <div class="form-group ">
+
+                        
+                        <label class="col-md-3 control-label"><input id="islocation" name="islocation" type="checkbox"> 地名：</label>
+                        <div class="col-md-3">
+                            <input id="location" name="location" value="{{ form.location.value|default:'' }}" type="text" maxlength="13" class="form-control">
+                        </div>
+                        <label class="col-md-3 control-label"><label class="text-danger">*</label>省：</label>
+                        <div class="col-md-3">
+                            <select id="province" name="province" data-province="{{ form.province.value|default:'请选择省'}}" class="form-control" name="attribute" placeholder="请选择省">
+                            </select>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group ">
+
+
+                        <label class="col-md-3 control-label"><label class="text-danger">*</label>市：</label>
+                        <div class="col-md-3">
+                            <select id="city" name="city" data-city="{{ form.city.value|default:'请选择市'}}" class="form-control"  placeholder="请选择市">
+                            </select>
+                        </div>
+                        <label class="col-md-3 control-label"><label class="text-danger">*</label>区：</label>
+                        <div class="col-md-3">
+                            <select id="district" name="district" data-city="{{ form.district.value|default:'请选择区'}}" class="form-control"  placeholder="请选择区">
+                            </select>
+                        </div>
+
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
     <div class="modal-footer">
+        
         <button id="doSubmitEdit" class="btn btn-primary" type="button">
             <strong>提 交</strong>
         </button>
@@ -81,10 +151,320 @@
         </button>
     </div>
 </form>
-
+<script src="{% static 'virvo/resources/js/distpicker.data.js' %}"></script>
 <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
+<script type="text/javascript">
+    
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as anonymous module.
+    define(['jquery', 'ChineseDistricts'], factory);
+  } else if (typeof exports === 'object') {
+    // Node / CommonJS
+    factory(require('jquery'), require('ChineseDistricts'));
+  } else {
+    // Browser globals.
+    factory(jQuery, ChineseDistricts);
+  }
+})(function ($, ChineseDistricts) {
+
+  'use strict';
+
+  if (typeof ChineseDistricts === 'undefined') {
+    throw new Error('The file "distpicker.data.js" must be included first!');
+  }
+
+  var NAMESPACE = 'distpicker';
+  var EVENT_CHANGE = 'change.' + NAMESPACE;
+  var PROVINCE = 'province';
+  var CIRY = 'city';
+  var DISTRICT = 'district';
+
+  function Distpicker(element, options) {
+    this.$element = $(element);
+    this.options = $.extend({}, Distpicker.DEFAULTS, $.isPlainObject(options) && options);
+    this.placeholders = $.extend({}, Distpicker.DEFAULTS);
+    this.active = false;
+    this.init();
+  }
+
+  Distpicker.prototype = {
+    constructor: Distpicker,
+
+    init: function () {
+      var options = this.options;
+      var $select = this.$element.find('select');
+      var length = $select.length;
+      var data = {};
+
+      $select.each(function () {
+        $.extend(data, $(this).data());
+      });
+
+      $.each([PROVINCE, CIRY, DISTRICT], $.proxy(function (i, type) {
+        if (data[type]) {
+          options[type] = data[type];
+          this['$' + type] = $select.filter('[data-' + type + ']');
+        } else {
+          this['$' + type] = length > i ? $select.eq(i) : null;
+        }
+      }, this));
+
+      this.bind();
+
+      // Reset all the selects (after event binding)
+      this.reset();
+
+      this.active = true;
+    },
+
+    bind: function () {
+      if (this.$province) {
+        this.$province.on(EVENT_CHANGE, (this._changeProvince = $.proxy(function () {
+          this.output(CIRY);
+          this.output(DISTRICT);
+        }, this)));
+      }
+
+      if (this.$city) {
+        this.$city.on(EVENT_CHANGE, (this._changeCity = $.proxy(function () {
+          this.output(DISTRICT);
+        }, this)));
+      }
+    },
+
+    unbind: function () {
+      if (this.$province) {
+        this.$province.off(EVENT_CHANGE, this._changeProvince);
+      }
+
+      if (this.$city) {
+        this.$city.off(EVENT_CHANGE, this._changeCity);
+      }
+    },
+
+    output: function (type) {
+      var options = this.options;
+      var placeholders = this.placeholders;
+      var $select = this['$' + type];
+      var districts = {};
+      var data = [];
+      var code;
+      var matched;
+      var value;
+
+      if (!$select || !$select.length) {
+        return;
+      }
+
+      value = options[type];
+
+      code = (
+        type === PROVINCE ? 86 :
+        type === CIRY ? this.$province && this.$province.find(':selected').data('code') :
+        type === DISTRICT ? this.$city && this.$city.find(':selected').data('code') : code
+      );
+
+      districts = $.isNumeric(code) ? ChineseDistricts[code] : null;
+
+      if ($.isPlainObject(districts)) {
+        $.each(districts, function (code, address) {
+          var selected = address === value;
+
+          if (selected) {
+            matched = true;
+          }
+
+          data.push({
+            code: code,
+            address: address,
+            selected: selected
+          });
+        });
+      }
+
+      if (!matched) {
+        if (data.length && (options.autoSelect || options.autoselect)) {
+          data[0].selected = true;
+        }
+
+        // Save the unmatched value as a placeholder at the first output
+        if (!this.active && value) {
+          placeholders[type] = value;
+        }
+      }
+
+      // Add placeholder option
+      if (options.placeholder) {
+        data.unshift({
+          code: '',
+          address: placeholders[type],
+          selected: false
+        });
+      }
+
+      $select.html(this.getList(data));
+    },
+
+    getList: function (data) {
+      var list = [];
+
+      $.each(data, function (i, n) {
+        list.push(
+          '<option' +
+          ' value="' + (n.address && n.code ? n.address : '') + '"' +
+          ' data-code="' + (n.code || '') + '"' +
+          (n.selected ? ' selected' : '') +
+          '>' +
+            (n.address || '') +
+          '</option>'
+        );
+      });
+
+      return list.join('');
+    },
+
+    reset: function (deep) {
+      if (!deep) {
+        this.output(PROVINCE);
+        this.output(CIRY);
+        this.output(DISTRICT);
+      } else if (this.$province) {
+        this.$province.find(':first').prop('selected', true).trigger(EVENT_CHANGE);
+      }
+    },
+
+    destroy: function () {
+      this.unbind();
+      this.$element.removeData(NAMESPACE);
+    }
+  };
+
+  Distpicker.DEFAULTS = {
+    autoSelect: false,
+    placeholder: true,
+    province: '—— 省 ——',
+    city: '—— 市 ——',
+    district: '—— 区 ——'
+  };
+
+  Distpicker.setDefaults = function (options) {
+    $.extend(Distpicker.DEFAULTS, options);
+  };
+
+  // Save the other distpicker
+  Distpicker.other = $.fn.distpicker;
+
+  // Register as jQuery plugin
+  $.fn.distpicker = function (option) {
+    var args = [].slice.call(arguments, 1);
+
+    return this.each(function () {
+      var $this = $(this);
+      var data = $this.data(NAMESPACE);
+      var options;
+      var fn;
+
+      if (!data) {
+        if (/destroy/.test(option)) {
+          return;
+        }
+
+        options = $.extend({}, $this.data(), $.isPlainObject(option) && option);
+        $this.data(NAMESPACE, (data = new Distpicker(this, options)));
+      }
+
+      if (typeof option === 'string' && $.isFunction(fn = data[option])) {
+        fn.apply(data, args);
+      }
+    });
+  };
+
+  $.fn.distpicker.Constructor = Distpicker;
+  $.fn.distpicker.setDefaults = Distpicker.setDefaults;
+
+  // No conflict
+  $.fn.distpicker.noConflict = function () {
+    $.fn.distpicker = Distpicker.other;
+    return this;
+  };
+
+  $(function () {
+    $('[data-toggle="distpicker"]').distpicker();
+  });
+});
+
+</script>
 <script>
     $(function () {
+
+        var coorType_old = $("#coorType").val()
+        $("#coorType option").each(function (){
+                if($(this).val()==coorType_old){ 
+                $(this).attr("selected","selected"); 
+            }});
+
+        var islocation_old = {{ form.islocation.value|default:0 }};
+        console.log("islocation_old",islocation_old)
+        if(islocation_old == 1){
+            $("#islocation").prop("checked", true);
+
+            $("#coorType").attr("disabled","disabled")
+            $("#longitude").attr("disabled","disabled")
+            $("#latitude").attr("disabled","disabled")
+            $("#zoomIn").attr("disabled","disabled")
+
+            $("#location").attr("disabled",false)
+            $("#province").attr("disabled",false)
+            $("#city").attr("disabled",false)
+            $("#district").attr("disabled",false)
+        }else{
+            $("#islocation").prop("checked", false);
+
+            $("#coorType").attr("disabled",false)
+            $("#longitude").attr("disabled",false)
+            $("#latitude").attr("disabled",false)
+            $("#zoomIn").attr("disabled",false)
+
+            $("#location").attr("disabled","disabled")
+            $("#province").attr("disabled","disabled")
+            $("#city").attr("disabled","disabled")
+            $("#district").attr("disabled","disabled")
+        }
+
+        $("#islocation").bind("click", function(e){
+            
+            // $("input[name='islocation']").not(':disabled').prop("checked", e.checked);
+            if($('#islocation').is(":checked") == true){
+                $("#coorType").attr("disabled","disabled")
+                $("#longitude").attr("disabled","disabled")
+                $("#latitude").attr("disabled","disabled")
+                $("#zoomIn").attr("disabled","disabled")
+
+                $("#location").attr("disabled",false)
+                $("#province").attr("disabled",false)
+                $("#city").attr("disabled",false)
+                $("#district").attr("disabled",false)
+
+            }else{
+                $("#coorType").attr("disabled",false)
+                $("#longitude").attr("disabled",false)
+                $("#latitude").attr("disabled",false)
+                $("#zoomIn").attr("disabled",false)
+
+                $("#location").attr("disabled","disabled")
+                $("#province").attr("disabled","disabled")
+                $("#city").attr("disabled","disabled")
+                $("#district").attr("disabled","disabled")
+
+            }
+        });
+
+    $('#target').distpicker({
+             province: '--请选择省份--',
+             city: '--请选择市--',
+             district: '--请选择区/县--'
+});
 
             //提交方法
             function doSubmit() {
@@ -193,7 +573,7 @@
             laydate.render({elem: '#registerDateEdit', theme: '#6dcff6', trigger: 'click'});
 
             $.ajax({
-                url: 'group/findOperations',
+                url: '/entm/group/findOperations',
                 type: 'POST',
                 data: null,
                 async: false,

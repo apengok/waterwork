@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^fence/managefence/polygons',views.savePolygons,name='savePolygons'),
     url(r'^fence/bindfence/getFenceDetails',views.getFenceDetails,name='getFenceDetails'),
     url(r'^fence/managefence/previewFence',views.previewFence,name='previewFence'),
-    url(r'^fence/managefence/delete_/',views.deteleFence,name='deteleFence'),
+    url(r'^fence/managefence/delete_/',views.deleteFence,name='deleteFence'),
     # url(r'^fence/managefence/delete_/(?P<fendeId>\w+)/',views.deteleFence,name='deteleFence'),
 
     # save rectangle

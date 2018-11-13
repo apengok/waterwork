@@ -53,6 +53,7 @@
                     render: function (data, type, row, meta) {
                         var editUrlPath = myTable.editUrl + row.id + "/"; //修改地址
                         var result = '';
+                        console.log(row.meter)
                         //修改按钮
                         result += '<button href="' + editUrlPath + '" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                         // if (!row.brand) {
@@ -61,7 +62,7 @@
                         //     result += '<button onclick="simCardManagement.sendSimParam(\''+row.id+'\',\''+row.vehicleId+'\',\''+row.configId+'\',\''+row.paramId+'\')" class="editBtn editBtn-info" type="button"><i class="glyphicon glyphicon-circle-arrow-down"></i>下发参数</button>&nbsp;'
                         // }
                         //删除按钮
-                        if(row.meter != ""){
+                        if(row.meter != null){
                             // result += '<button type="button" onclick="simCardManagement.releaseRelate(\'' + row.id + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>解除关联</button>';
                             result += '<button disabled type="button" onclick="myTable.deleteItem(\'' + row.id + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
 

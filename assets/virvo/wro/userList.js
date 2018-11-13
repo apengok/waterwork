@@ -448,6 +448,7 @@
                             async:false,
                             dataType: 'json',
                             success: function (data) {
+                                
                                 var data2 = JSON.stringify(data);
                                 var addData =  JSON.parse(data2);     
                                 if(addData.length != oldData){
@@ -456,10 +457,11 @@
                                     var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
                                     var treenode = treeObj.getNodeByParam("name", lastData.name, null);
                                     var treeObj = $.fn.zTree.getZTreeObj('treeDemo');treeObj.expandAll(true);
+
                                    /* treeObj.expandNode(treenode, true, true, true);
                                     treeObj.selectNode(treenode);*/
                                 }
-                                treeObj.expandAll(true);
+                                // treeObj.expandAll(true);
                             },
                             error: function () {
                                 layer.msg(systemError, {move: false});
