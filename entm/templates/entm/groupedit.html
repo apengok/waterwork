@@ -130,7 +130,7 @@
                         </div>
                         <label class="col-md-3 control-label"><label class="text-danger">*</label>区：</label>
                         <div class="col-md-3">
-                            <select id="district" name="district" data-city="{{ form.district.value|default:'请选择区'}}" class="form-control"  placeholder="请选择区">
+                            <select id="district" name="district" data-district="{{ form.district.value|default:'请选择区'}}" class="form-control"  placeholder="请选择区">
                             </select>
                         </div>
 
@@ -404,58 +404,80 @@
                 $(this).attr("selected","selected"); 
             }});
 
-        var islocation_old = {{ form.islocation.value|default:0 }};
+        // var province_val = $("#province").attr("data-province")
+        // $("#province option").each(function (){
+        //         if($(this).val()==province_val){ 
+        //         $(this).attr("selected","selected"); 
+        //     }});
+
+        // var city_val = $("#city").attr("data-city")
+        // $("#city option").each(function (){
+        //         if($(this).val()==city_val){ 
+        //         $(this).attr("selected","selected"); 
+        //     }});
+
+        // var district_val = $("#district").attr("data-district")
+        // $("#district option").each(function (){
+        //         if($(this).val()==district_val){ 
+        //         $(this).attr("selected","selected"); 
+        //     }});
+
+        // console.log(province_val,city_val,district_val)
+
+        var islocation_old = 0 ;//{{ form.islocation.value|default:0 }};
         console.log("islocation_old",islocation_old)
         if(islocation_old == 1){
             $("#islocation").prop("checked", true);
 
-            $("#coorType").attr("disabled","disabled")
-            $("#longitude").attr("disabled","disabled")
-            $("#latitude").attr("disabled","disabled")
-            $("#zoomIn").attr("disabled","disabled")
+            // $("#descrip").prop("readonly",true);
+            
+            $("#coorType").prop("readonly",true)
+            $("#longitude").prop("readonly",true)
+            $("#latitude").prop("readonly",true)
+            $("#zoomIn").prop("readonly",true)
 
-            $("#location").attr("disabled",false)
-            $("#province").attr("disabled",false)
-            $("#city").attr("disabled",false)
-            $("#district").attr("disabled",false)
+            $("#location").prop("readonly",false)
+            $("#province").prop("readonly",false)
+            $("#city").prop("readonly",false)
+            $("#district").prop("readonly",false)
         }else{
             $("#islocation").prop("checked", false);
 
-            $("#coorType").attr("disabled",false)
-            $("#longitude").attr("disabled",false)
-            $("#latitude").attr("disabled",false)
-            $("#zoomIn").attr("disabled",false)
+            $("#coorType").prop("readonly",false)
+            $("#longitude").prop("readonly",false)
+            $("#latitude").prop("readonly",false)
+            $("#zoomIn").prop("readonly",false)
 
-            $("#location").attr("disabled","disabled")
-            $("#province").attr("disabled","disabled")
-            $("#city").attr("disabled","disabled")
-            $("#district").attr("disabled","disabled")
+            $("#location").prop("readonly",true)
+            $("#province").prop("readonly",true)
+            $("#city").prop("readonly",true)
+            $("#district").prop("readonly",true)
         }
 
         $("#islocation").bind("click", function(e){
             
             // $("input[name='islocation']").not(':disabled').prop("checked", e.checked);
             if($('#islocation').is(":checked") == true){
-                $("#coorType").attr("disabled","disabled")
-                $("#longitude").attr("disabled","disabled")
-                $("#latitude").attr("disabled","disabled")
-                $("#zoomIn").attr("disabled","disabled")
+                $("#coorType").prop("readonly","readonly")
+            $("#longitude").prop("readonly",true)
+            $("#latitude").prop("readonly",true)
+            $("#zoomIn").prop("readonly",true)
 
-                $("#location").attr("disabled",false)
-                $("#province").attr("disabled",false)
-                $("#city").attr("disabled",false)
-                $("#district").attr("disabled",false)
+            $("#location").prop("readonly",false)
+            $("#province").prop("readonly",false)
+            $("#city").prop("readonly",false)
+            $("#district").prop("readonly",false)
 
             }else{
-                $("#coorType").attr("disabled",false)
-                $("#longitude").attr("disabled",false)
-                $("#latitude").attr("disabled",false)
-                $("#zoomIn").attr("disabled",false)
+                $("#coorType").prop("readonly",false)
+                $("#longitude").prop("readonly",false)
+                $("#latitude").prop("readonly",false)
+                $("#zoomIn").prop("readonly",false)
 
-                $("#location").attr("disabled","disabled")
-                $("#province").attr("disabled","disabled")
-                $("#city").attr("disabled","disabled")
-                $("#district").attr("disabled","disabled")
+                $("#location").prop("readonly",true)
+                $("#province").attr("readonly","readonly")
+                $("#city").attr("readonly","readonly")
+                $("#district").attr("readonly","readonly")
 
             }
         });

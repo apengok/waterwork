@@ -21,7 +21,197 @@
 
     var $contentLeft = $("#content-left"), $contentRight = $("#content-right");
 
+    var travelLineList,AdministrativeRegionsList,fenceIdList,
+  administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
+    newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight, dbclickCheckedId, oldDbclickCheckedId,
+    onClickVId, oldOnClickVId, zTree, clickStateChar,logTime,operationLogLength, licensePlateInformation, groupIconSkin, markerListT = [], markerRealTimeT,
+    zoom = 18, requestStrS, cheakNodec = [], realTimeSet = [], alarmSet = [], neverOline = [], lineVid = [], zTreeIdJson = {}, cheakdiyuealls = [], lineAr = [],
+    lineAs = [], lineAa = [], lineAm = [], lineOs = [], changeMiss = [], diyueall = [], params = [], lineV = [], lineHb = [], cluster, fixedPoint = null, fixedPointPosition = null,
+    flog = true, mapVehicleTimeW, mapVehicleTimeQ, markerMap, mapflog, mapVehicleNum, infoWindow, paths = null, uptFlag = true, flagState = true,
+    videoHeight, addaskQuestionsIndex = 2, dbClickHeighlight = false, checkedVehicles = [], runVidArray = [], stopVidArray = [], msStartTime, msEndTime,
+    videoTimeIndex,voiceTimeIndex,charFlag = true, fanceID = "", newCount = 1, mouseTool, mouseToolEdit, clickRectangleFlag = false, isAddFlag = false, isAreaSearchFlag = false, isDistanceCount = false, fenceIDMap, PolyEditorMap,
+    sectionPointMarkerMap, fenceSectionPointMap, travelLineMap, fenceCheckLength = 0, amendCircle, amendPolygon, amendLine, polyFence, changeArray, trid = [], parametersID, brand, clickFenceCount = 0,
+    clickLogCount = 0, fenceIdArray = [], fenceOpenArray = [], save, moveMarkerBackData, moveMarkerFenceId, monitoringObjMapHeight, carNameMarkerContentMap, carNameMarkerMap, carNameContentLUMap,
+    lineSpotMap, isEdit = true, sectionMarkerPointArray, stateName = [], stateIndex = 1, alarmName = [], alarmIndex = 1, activeIndex = 1, queryFenceId = [], crrentSubV=[], crrentSubName=[],
+    suFlag=true, administrationMap, lineRoute, contextMenu, dragPointMarkerMap, isAddDragRoute = false, misstype=false,misstypes = false, alarmString, saveFenceName, saveFenceType, alarmSub = 0, cancelList = [], hasBegun=[],
+    isDragRouteFlag = false, flagSwitching = true, isCarNameShow = true, notExpandNodeInit,vinfoWindwosClickVid, $myTab = $("#myTab"), $MapContainer = $("#MapContainer"), $panDefLeft = $("#panDefLeft"), 
+    $contentLeft = $("#content-left"), $contentRight = $("#content-right"), $sidebar = $(".sidebar"), $mainContentWrapper = $(".main-content-wrapper"), $thetree = $("#thetree"),
+    $realTimeRC = $("#realTimeRC"), $goShow = $("#goShow"), $chooseRun = $("#chooseRun"), $chooseNot = $("#chooseNot"), $chooseAlam = $("#chooseAlam"), $chooseStop = $("#chooseStop"),
+    $chooseOverSeep = $("#chooseOverSeep"), $online = $("#online"), $chooseMiss = $("#chooseMiss"), $scrollBar = $("#scrollBar"), $mapPaddCon = $(".mapPaddCon"), $realTimeVideoReal = $(".realTimeVideoReal"),
+    $realTimeStateTableList = $("#realTimeStateTable"), $alarmTable = $("#alarmTable"), $logging=$("#logging"), $showAlarmWinMark = $("#showAlarmWinMark"), $alarmFlashesSpan = $(".alarmFlashes span"),
+    $alarmSoundSpan = $(".alarmSound span"), $alarmMsgBox = $("#alarmMsgBox"), $alarmSoundFont = $(".alarmSound font"), $alarmFlashesFont = $(".alarmFlashes font"), $alarmMsgAutoOff = $("#alarmMsgAutoOff"),
+    rMenu = $("#rMenu"), alarmNum = 0, carAddress, msgSNAck, setting, ztreeStyleDbclick, $tableCarAll = $("#table-car-all"), $tableCarOnline = $("#table-car-online"), $tableCarOffline = $("#table-car-offline"),
+    $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"), $tableCarOnlinePercent = $("#table-car-online-percent"),longDeviceType,tapingTime,loadInitNowDate = new Date(),loadInitTime,
+    checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
+
+    var fenceOperation = {
+        //行政区域选择
+        administrativeAreaSelect: function (obj) {
+            var provin = $("#province").val();
+            if (provin == "province") {
+                $("#provinceError").css("display", "none");
+            }
+            else if (provin == "--请选择--") {
+                $("#provinceError").css("display", "block");
+            }
+            for (var i = 0, l = administrativeAreaFence.length; i < l; i++) {
+                administrativeAreaFence[i].setMap(null);
+            }
+            var option = obj[obj.options.selectedIndex];
+            var keyword = option.text; //关键字
+            var adcode = option.adcode;
+            district.setLevel(option.value); //行政区级别
+            district.setExtensions('all');
+            //行政区查询
+            //按照adcode进行查询可以保证数据返回的唯一性
+            district.search(adcode, function (status, result) {
+                if (status === 'complete') {
+                    fenceOperation.getData(result.districtList[0]);
+                }
+            });
+        },
+        //行政区域选择后数据处理
+        getData: function (data) {
+            var bounds = data.boundaries;
+            if (bounds) {
+                // $('#administrativeLngLat').val(bounds.join('-'));
+                for (var i = 0, l = bounds.length; i < l; i++) {
+                    var polygon = new AMap.Polygon({
+                        map: map,
+                        strokeWeight: 1,
+                        strokeColor: '#CC66CC',
+                        fillColor: '#CCF3FF',
+                        fillOpacity: 0.5,
+                        path: bounds[i]
+                    });
+                    administrativeAreaFence.push(polygon);
+                    map.setFitView(polygon);//地图自适应
+                }
+                ;
+            }
+            ;
+            var subList = data.districtList;
+            var level = data.level;
+            //清空下一级别的下拉列表
+            if (level === 'province') {
+                document.getElementById('city').innerHTML = '';
+                document.getElementById('district').innerHTML = '';
+            } else if (level === 'city') {
+                document.getElementById('district').innerHTML = '';
+            } else if (level === 'district') {
+            }
+            if (subList) {
+                var contentSub = new Option('--请选择--');
+                for (var i = 0, l = subList.length; i < l; i++) {
+                    var name = subList[i].name;
+                    var levelSub = subList[i].level;
+                    if (levelSub == 'street') {
+                        return false;
+                    }
+                    ;
+                    var cityCode = subList[i].citycode;
+                    if (i == 0) {
+                        document.querySelector('#' + levelSub).add(contentSub);
+                    }
+                    contentSub = new Option(name);
+                    contentSub.setAttribute("value", levelSub);
+                    contentSub.center = subList[i].center;
+                    contentSub.adcode = subList[i].adcode;
+                    document.querySelector('#' + levelSub).add(contentSub);
+                }
+            }
+        },
+        //显示行政区域
+        drawAdministration: function (data, aId, showMap) {
+            var polygonAarry = [];
+            if (administrationMap.containsKey(aId)) {
+                var this_fence = administrationMap.get(aId);
+                map.remove(this_fence);
+                administrationMap.remove(aId);
+            }
+            ;
+            for (var i = 0, l = data.length; i < 1; i++) {
+                var polygon = new AMap.Polygon({
+                    map: map,
+                    strokeWeight: 1,
+                    strokeColor: '#CC66CC',
+                    fillColor: '#CCF3FF',
+                    fillOpacity: 0.5,
+                    path: data
+                });
+                polygonAarry.push(polygon);
+                administrativeAreaFence.push(polygon);
+            }
+            ;
+            administrationMap.put(aId, polygonAarry);
+            map.setFitView(polygon);//地图自适应
+        },
+    }
+
     mapStation = {
+         // 地图初始化
+        amapinit: function () {
+            // 创建地图
+            map = new AMap.Map("map-container", {
+                resizeEnable: true,   //是否监控地图容器尺寸变化
+                zoom: 18,       //地图显示的缩放级别
+            });
+            // // 输入提示
+            // var startPoint = new AMap.Autocomplete({
+            //     input: "startPoint"
+            // });
+            // startPoint.on('select', fenceOperation.dragRoute);
+            // var endPoint = new AMap.Autocomplete({
+            //     input: "endPoint"
+            // });
+            // endPoint.on('select', fenceOperation.dragRoute);
+            // 行政区划查询
+            var opts = {
+                subdistrict: 0,   //获取边界不需要返回下级行政区
+                extensions: 'all',  //返回行政区边界坐标组等具体信息
+                level: 'city'  //查询行政级别为 市
+            };
+            district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
+            district.search('341021', function (status, result) {
+                console.log(status,result,result.districtList[0])
+                if (status == 'complete') {
+                    fenceOperation.getData(result.districtList[0]);
+                }
+            });
+            // 地图移动结束后触发，包括平移和缩放
+            mouseTool = new AMap.MouseTool(map);
+            // mouseTool.on("draw", fenceOperation.createSuccess);
+            mouseToolEdit = new AMap.MouseTool(map);
+            // 实例化3D楼块图层
+            buildings = new AMap.Buildings();
+            // 在map中添加3D楼块图层
+            buildings.setMap(map);
+            // 地图标尺
+            var mapScale = AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function () {
+                map.addControl(new AMap.ToolBar());
+                map.addControl(new AMap.Scale());
+            });
+            // 卫星地图
+            satellLayer = new AMap.TileLayer.Satellite();
+            satellLayer.setMap(map);
+            satellLayer.hide();
+            // // 实时路况
+            // realTimeTraffic = new AMap.TileLayer.Traffic({zIndex: 1});
+            // realTimeTraffic.setMap(map);
+            // realTimeTraffic.hide();
+            // 当范围缩小时触发该方法
+            // var clickEventListener = map.on('zoomend', amapOperation.clickEventListener);
+            // 当拖拽结束时触发该方法
+            // var clickEventListener2 = map.on('dragend', amapOperation.clickEventListener2);
+            // 地图点击隐藏车辆树右键菜单
+            map.on("click", function () {
+                $("#rMenu").css("visibility", "hidden");
+                $("#disSetMenu").slideUp();
+                $("#mapDropSettingMenu").slideUp();
+                $("#fenceTool>.dropdown-menu").hide();
+            });
+            infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -10), closeWhenClickMap: true});
+        },
         init: function(){
 
             var winHeight = $(window).height();//可视区域高度
@@ -65,22 +255,24 @@ console.log("$newMapHeight",$("#map-container").height());
                 "height": 388 + "px"
             });
 
-            // map
-            var layer = new AMap.TileLayer({
-                  zooms:[3,20],    //可见级别
-                  visible:true,    //是否可见
-                  opacity:1,       //透明度
-                  zIndex:0         //叠加层级
-            });
+            mapStation.amapinit();
+
+            // // map
+            // var layer = new AMap.TileLayer({
+            //       zooms:[3,20],    //可见级别
+            //       visible:true,    //是否可见
+            //       opacity:1,       //透明度
+            //       zIndex:0         //叠加层级
+            // });
             
 
-            map = new AMap.Map('map-container',{
-                zoom: 15,  //设置地图显示的缩放级别
-                center: [118.438781,29.871515],
-                layers:[layer], //当只想显示标准图层时layers属性可缺省
-                viewMode: '2D',  //设置地图模式
-                lang:'zh_cn',  //设置地图语言类型
-            });
+            // map = new AMap.Map('map-container',{
+            //     zoom: 15,  //设置地图显示的缩放级别
+            //     center: [118.438781,29.871515],
+            //     layers:[layer], //当只想显示标准图层时layers属性可缺省
+            //     viewMode: '2D',  //设置地图模式
+            //     lang:'zh_cn',  //设置地图语言类型
+            // });
 
             
             
