@@ -133,7 +133,7 @@ DATABASES = {
         'NAME': 'waterwork',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '192.168.1.27',    #120.78.255.129 192.168.197.134
+        'HOST': 'localhost',    #120.78.255.129 192.168.197.134
         'PORT': '3306',
         'STORAGE_ENGINE': 'INNODB',
         'OPTIONS': {'charset': 'utf8mb4'},
@@ -144,7 +144,7 @@ DATABASES = {
         'NAME': 'zncb',
         'USER': 'scada',
         'PASSWORD': 'scada',
-        'HOST': '192.168.1.27',  #120.78.255.129   220.179.118.150--shexian
+        'HOST': 'localhost',  #120.78.255.129   220.179.118.150--shexian
         'PORT': '3306',
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
