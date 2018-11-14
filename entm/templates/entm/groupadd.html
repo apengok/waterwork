@@ -593,6 +593,18 @@
             $('input').inputClear();
             $("#name,#organizationCode,#registerDate,#license,#owner_name,#phone_number,#firm_address").on("change",groupAdd.clearPreviousValue);
 
+            $("#islocation").prop("checked", false);
+
+            $("#coorType").prop("readonly",false)
+            $("#longitude").prop("readonly",false)
+            $("#latitude").prop("readonly",false)
+            $("#zoomIn").prop("readonly",false)
+
+            $("#location").prop("readonly",true)
+            $("#province").prop("disabled",true)
+            $("#city").prop("disabled",true)
+            $("#district").prop("disabled",true)
+
             $("#islocation").bind("click", function(e){
             
                     // $("input[name='islocation']").not(':disabled').prop("checked", e.checked);
