@@ -332,12 +332,31 @@ def getFenceDetails(request):
                     "updateDataUsername":fd["updateDataUsername"]
                     })
 
+            details_obj.append({"fenceType":pId,
+            "fenceData":fenceData
+            })
+
         if pId == "zw_m_rectangle":
 
             leftLongitude,leftLatitude = pgo["lnglatQuery_LU"].split(",")
             rightLongitude,rightLatitude = pgo["lnglatQuery_RD"].split(",")
             
-            fenceData.append({
+            # fenceData.append({
+            #     "createDataTime":fd["createDataTime"],
+            #     "createDataUsername":fd["createDataUsername"],
+            #     "description":fd["description"],
+            #     "flag":1,
+            #     "id":pgo["shapeId"],
+            #     "leftLatitude":leftLatitude,
+            #     "leftLongitude":leftLongitude,
+            #     "rightLatitude":rightLatitude,
+            #     "rightLongitude":rightLongitude,
+            #     "name":pgo["name"],
+            #     "type":pgo["zonetype"],
+            #     "updateDataTime":fd["updateDataTime"],
+            #     "updateDataUsername":fd["updateDataUsername"]
+            #     })
+            fenceData1 = {
                 "createDataTime":fd["createDataTime"],
                 "createDataUsername":fd["createDataUsername"],
                 "description":fd["description"],
@@ -351,7 +370,11 @@ def getFenceDetails(request):
                 "type":pgo["zonetype"],
                 "updateDataTime":fd["updateDataTime"],
                 "updateDataUsername":fd["updateDataUsername"]
-                })
+                }
+
+            details_obj.append({"fenceType":pId,
+            "fenceData":fenceData1
+            })
 
         if pId == "zw_m_circle":
 
@@ -359,7 +382,7 @@ def getFenceDetails(request):
             longitude = pgo["centerPointLng"]
             radius = pgo["centerRadius"]
             
-            fenceData.append({
+            fenceData1 = {
                 "createDataTime":fd["createDataTime"],
                 "createDataUsername":fd["createDataUsername"],
                 "description":fd["description"],
@@ -372,12 +395,32 @@ def getFenceDetails(request):
                 "type":pgo["zonetype"],
                 "updateDataTime":fd["updateDataTime"],
                 "updateDataUsername":fd["updateDataUsername"]
-                })
+                }
 
-
-        details_obj.append({"fenceType":pId,
-            "fenceData":fenceData
+            details_obj.append({"fenceType":pId,
+            "fenceData":fenceData1
             })
+
+        if pId == "zw_m_administration":
+
+            latitude = pgo["centerPointLat"]
+            longitude = pgo["centerPointLng"]
+            administrativeLngLats = pgo["administrativeLngLat"].split('-')
+            for i in range(len(administrativeLngLats)):
+                plists = administrativeLngLats[i].split(',')
+                tmp = []
+                for j in range(0,len(plists),2):
+                    p = [plists[j],plists[j+1]]
+                    tmp.append(p)
+                fenceData.append(tmp)
+            
+            
+
+
+            details_obj.append({"fenceType":pId,
+                "fenceData":fenceData,
+                "aId":pgo["shapeId"]
+                })
     
 
     details = {
@@ -419,10 +462,10 @@ def previewFence(request):
                 "createDataUsername":fd["createDataUsername"],
                 "description":fd["description"],
                 "flag":1,
-                "id":"null",
+                "id":pgo["shapeId"],
                 "latitude":latitudes[idx],
                 "longitude":longitudes[idx],
-                "name":"null",
+                "name":fd["name"],
                 "polygonId":pgo["shapeId"],
                 "sortOrder":idx,
                 "type":pgo["zonetype"],
@@ -435,7 +478,7 @@ def previewFence(request):
         leftLongitude,leftLatitude = pgo["lnglatQuery_LU"].split(",")
         rightLongitude,rightLatitude = pgo["lnglatQuery_RD"].split(",")
         
-        fenceData.append({
+        fenceData = {
             "createDataTime":fd["createDataTime"],
             "createDataUsername":fd["createDataUsername"],
             "description":fd["description"],
@@ -449,7 +492,7 @@ def previewFence(request):
             "type":pgo["zonetype"],
             "updateDataTime":fd["updateDataTime"],
             "updateDataUsername":fd["updateDataUsername"]
-            })
+            }
 
     if shape == "zw_m_circle":
 
@@ -457,7 +500,7 @@ def previewFence(request):
         longitude = pgo["centerPointLng"]
         radius = pgo["centerRadius"]
         
-        fenceData.append({
+        fenceData = {
             "createDataTime":fd["createDataTime"],
             "createDataUsername":fd["createDataUsername"],
             "description":fd["description"],
@@ -470,7 +513,7 @@ def previewFence(request):
             "type":pgo["zonetype"],
             "updateDataTime":fd["updateDataTime"],
             "updateDataUsername":fd["updateDataUsername"]
-            })
+            }
 
 
     details_obj.append({"fenceType":shape,
@@ -483,7 +526,7 @@ def previewFence(request):
                 "createDataUsername":fd["createDataUsername"],
                 "description":fd["description"],
                 "flag":1,
-                "id":pgo["polygonId"],
+                "id":pgo["shapeId"],
                 "latitude":"null",
                 "longitude":"null",
                 "name":fd["name"],
@@ -527,7 +570,7 @@ def deleteFence(request):
 def saveRectangles(request):
     print("saveRectangles",request.POST)
     addOrUpdateRectangleFlag = request.POST.get("addOrUpdateRectangleFlag")
-    rectangleId = request.POST.get("rectangleId")
+    shapeId = request.POST.get("rectangleId")
     name = request.POST.get("name")
     zonetype = request.POST.get("type")
     lnglatQuery_LU = request.POST.get("lnglatQuery_LU")
@@ -618,6 +661,7 @@ def addAdministration(request):
     # zonetype = request.POST.get("type")
     
     dma_no = request.POST.get("dma_no")
+    organ = Organizations.objects.first()
     
     
 
@@ -638,7 +682,7 @@ def addAdministration(request):
         p.save()
         
     else:
-        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_administration")
-        FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=zonetype,shape=shape,province=province,city=city,district=district,administrativeLngLat=administrativeLngLat,dma_no=dma_no)
+        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_administration",belongto=organ)
+        FenceShape.objects.create(shapeId=instance.cid,name=name,province=province,city=city,district=district,administrativeLngLat=administrativeLngLat,dma_no=dma_no)
 
     return HttpResponse(json.dumps({"success":1}))

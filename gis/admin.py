@@ -26,5 +26,5 @@ class FenceShapeAdmin(admin.ModelAdmin):
         ('Polygon', {'fields': ('pointSeqs','longitudes','latitudes')}),
         ('Rectangle', {'fields': ('lnglatQuery_LU','lnglatQuery_RD')}),
         ('Circle', {'fields': ('centerPointLat','centerPointLng','centerRadius')}),
-        ('Administrator', {'fields': ('province','city','district')}),
+        ('Administrator', {'fields': ('province','city','district','administrativeLngLat')}),
     )

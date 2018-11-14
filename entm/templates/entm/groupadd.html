@@ -1,13 +1,5 @@
 {% load staticfiles %}
 
-<style type="text/css">
-    col-md-3 {
-    width:15%
-}
-.col-md-7 {
-    width:25.33333333%
-}
-
 </style>
 
 <form id="addForm" role="form" action="{% url 'entm:groupadd' %}" method="post" class="form-horizontal">{% csrf_token %}
@@ -24,12 +16,12 @@
                 <div class="form-group ">
 
                     <label class="col-md-3 control-label"><label class="text-danger">*</label> 组织机构名称：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input name="name" placeholder="请输入组织名称" type="text" maxlength="50" class="form-control" id="name">
                     </div>
 
                     <label class="col-md-3 control-label"><label class="text-danger">*</label>组织机构性质：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <select id="operation" class="form-control" name="attribute" placeholder="请选择组织机构性质">
                         </select>
                     </div>
@@ -40,11 +32,11 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">注册日期：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon" id="registerDate" name="register_date" placeholder="请选择注册日期" lay-key="2">
                     </div>
                     <label class="col-md-3 control-label"> 负责人：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input name="owner_name" placeholder="请输入负责人" type="text" maxlength="20" class="form-control">
                     </div>
                 </div>
@@ -52,29 +44,33 @@
 
                 <div class="form-group">
                     <label class="col-md-3 control-label"> 电话号码：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input name="phone_number" placeholder="请输入电话号码" type="text" maxlength="13" class="form-control">
                     </div>
                     <label class="col-md-3 control-label">地址：</label>
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <input name="firm_address" placeholder="请输入地址" type="text" maxlength="50" class="form-control">
                     </div>
                 </div>
 
-                <div class="modal-footer">
-
-                    <div class="form-group ">
+                <div class="form-group ">
 
 
                         <div class="form-group-1">
                             <label class="col-md-3 control-label"><label class="text-danger">*</label>坐标体系：</label>
-                            <div class="col-md-7">
-                                <select id="operation2" class="form-control" name="attribute" placeholder="请选择坐标体系">
+                            <div class="col-md-3">
+                                <input type="hidden" id="coorTypeVal" name="coorType" value="WGS84">
+                                <select id="coorType" class="form-control"  placeholder="请选择坐标体系">
+                                    <option value="WGS84">地球坐标</option>
+                                    <option value="GCJ-02">火星坐标</option>
+                                    <option value="BD-09">百度坐标</option>
+                                    <option value="IAG75">西安坐标</option>
+                                    <option value="CGCS2000">大地坐标</option>
                                 </select>
                             </div>
                             <label class="col-md-3 control-label"><label class="text-danger">*</label> 地图中心点经度：</label>
-                            <div class="col-md-7">
-                                <input name="name" placeholder="请输入经度" type="text" maxlength="50" class="form-control" id="name2">
+                            <div class="col-md-3">
+                                <input name="longitude" value="" type="text" maxlength="50" class="form-control" id="longitude">
                             </div>
                         </div>
                     </div>
@@ -83,27 +79,28 @@
 
 
                         <label class="col-md-3 control-label"> 放大倍率：</label>
-                        <div class="col-md-7">
-                            <input name="phone_number" placeholder="请输入放大倍率" type="text" maxlength="13" class="form-control">
+                        <div class="col-md-3">
+                            <input id="zoomIn" name="zoomIn" value="14" type="text" maxlength="13" class="form-control">
                         </div>
                         <label class="col-md-3 control-label"><label class="text-danger">*</label> 地图中心点纬度：</label>
-                        <div class="col-md-7">
-                            <input name="name" placeholder="请输入纬度" type="text" maxlength="50" class="form-control" id="name3">
+                        <div class="col-md-3">
+                            <input name="latitude" value="" type="text" maxlength="50" class="form-control" id="latitude">
                         </div>
 
 
                     </div>
-
+                <div id="target">
                     <div class="form-group ">
 
-
-                        <label class="col-md-3 control-label"><input type="checkbox"> 地名：</label>
-                        <div class="col-md-7">
-                            <input name="phone_number" placeholder="请输入地名" type="text" maxlength="13" class="form-control">
+                        
+                        <label class="col-md-3 control-label"><input id="islocation" name="islocation" state="" type="checkbox"> 地名：</label>
+                        <div class="col-md-3">
+                            <input id="location" name="location" value="" type="text" maxlength="13" class="form-control">
                         </div>
                         <label class="col-md-3 control-label"><label class="text-danger">*</label>省：</label>
-                        <div class="col-md-7">
-                            <select id="operation3" class="form-control" name="attribute" placeholder="请选择省">
+                        <input type="hidden" id="provinceVal" name="province" value="">
+                        <div class="col-md-3">
+                            <select id="province"  class="form-control" placeholder="请选择省">
                             </select>
                         </div>
 
@@ -113,21 +110,21 @@
 
                     <div class="form-group ">
 
-
-                        <label class="col-md-3 control-label"><label class="text-danger">*</label>市：</label>
-                        <div class="col-md-7">
-                            <select id="operation4" class="form-control" name="attribute" placeholder="请选择市">
+                        <label class="col-md-3 control-label">市：</label>
+                        <div class="col-md-3">
+                            <input type="hidden" id="cityVal" name="city" value="">
+                            <select id="city"  class="form-control"  placeholder="请选择市">
                             </select>
                         </div>
-                        <label class="col-md-3 control-label"><label class="text-danger">*</label>区：</label>
-                        <div class="col-md-7">
-                            <select id="operation5" class="form-control" name="attribute" placeholder="请选择区">
+                        <label class="col-md-3 control-label">区：</label>
+                        <div class="col-md-3">
+                            <input type="hidden" id="districtVal" name="district" value="">
+                            <select id="district"  class="form-control"  placeholder="请选择区">
                             </select>
                         </div>
 
 
                     </div>
-
                 </div>
 
             </div>
@@ -135,6 +132,9 @@
     
     </div>
     <div class="modal-footer">
+        <input type="hidden" id="adcode" name="adcode" value="">
+        <input type="hidden" id="districtlevel" name="districtlevel" value="">
+
         <button id="submitAdd"  class="btn btn-primary" type="button">
             <strong>提 交</strong>
         </button>
@@ -144,9 +144,256 @@
     </div>
     <input  type="hidden" value="ef6c759b-ef14-46f7-bec1-5819d0c322fa" name="avoidRepeatSubmitToken" id="avoidRepeatSubmitToken">
 </form>
-<!-- <script type="text/javascript" src="/clbs/resources/js/sendAjax.js"></script> -->
+
+<script src="{% static 'virvo/resources/js/distpicker.data.js' %}"></script>
 <script src="{% static 'virvo/resources/js/sendAjax.js' %}"></script>
+
+<script type="text/javascript">
+    
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as anonymous module.
+    define(['jquery', 'ChineseDistricts'], factory);
+  } else if (typeof exports === 'object') {
+    // Node / CommonJS
+    factory(require('jquery'), require('ChineseDistricts'));
+  } else {
+    // Browser globals.
+    factory(jQuery, ChineseDistricts);
+  }
+})(function ($, ChineseDistricts) {
+
+  'use strict';
+
+  if (typeof ChineseDistricts === 'undefined') {
+    throw new Error('The file "distpicker.data.js" must be included first!');
+  }
+
+  var NAMESPACE = 'distpicker';
+  var EVENT_CHANGE = 'change.' + NAMESPACE;
+  var PROVINCE = 'province';
+  var CIRY = 'city';
+  var DISTRICT = 'district';
+
+  function Distpicker(element, options) {
+    this.$element = $(element);
+    this.options = $.extend({}, Distpicker.DEFAULTS, $.isPlainObject(options) && options);
+    this.placeholders = $.extend({}, Distpicker.DEFAULTS);
+    this.active = false;
+    this.init();
+  }
+
+  Distpicker.prototype = {
+    constructor: Distpicker,
+
+    init: function () {
+      var options = this.options;
+      var $select = this.$element.find('select');
+      var length = $select.length;
+      var data = {};
+
+      $select.each(function () {
+        $.extend(data, $(this).data());
+      });
+
+      $.each([PROVINCE, CIRY, DISTRICT], $.proxy(function (i, type) {
+        if (data[type]) {
+          options[type] = data[type];
+          this['$' + type] = $select.filter('[data-' + type + ']');
+        } else {
+          this['$' + type] = length > i ? $select.eq(i) : null;
+        }
+      }, this));
+
+      this.bind();
+
+      // Reset all the selects (after event binding)
+      this.reset();
+
+      this.active = true;
+    },
+
+    bind: function () {
+      if (this.$province) {
+        this.$province.on(EVENT_CHANGE, (this._changeProvince = $.proxy(function () {
+          this.output(CIRY);
+          this.output(DISTRICT);
+        }, this)));
+      }
+
+      if (this.$city) {
+        this.$city.on(EVENT_CHANGE, (this._changeCity = $.proxy(function () {
+          this.output(DISTRICT);
+        }, this)));
+      }
+    },
+
+    unbind: function () {
+      if (this.$province) {
+        this.$province.off(EVENT_CHANGE, this._changeProvince);
+      }
+
+      if (this.$city) {
+        this.$city.off(EVENT_CHANGE, this._changeCity);
+      }
+    },
+
+    output: function (type) {
+      var options = this.options;
+      var placeholders = this.placeholders;
+      var $select = this['$' + type];
+      var districts = {};
+      var data = [];
+      var code;
+      var matched;
+      var value;
+
+      if (!$select || !$select.length) {
+        return;
+      }
+
+      value = options[type];
+
+      code = (
+        type === PROVINCE ? 86 :
+        type === CIRY ? this.$province && this.$province.find(':selected').data('code') :
+        type === DISTRICT ? this.$city && this.$city.find(':selected').data('code') : code
+      );
+
+      districts = $.isNumeric(code) ? ChineseDistricts[code] : null;
+
+      if ($.isPlainObject(districts)) {
+        $.each(districts, function (code, address) {
+          var selected = address === value;
+
+          if (selected) {
+            matched = true;
+          }
+
+          data.push({
+            code: code,
+            address: address,
+            selected: selected
+          });
+        });
+      }
+
+      if (!matched) {
+        if (data.length && (options.autoSelect || options.autoselect)) {
+          data[0].selected = true;
+        }
+
+        // Save the unmatched value as a placeholder at the first output
+        if (!this.active && value) {
+          placeholders[type] = value;
+        }
+      }
+
+      // Add placeholder option
+      if (options.placeholder) {
+        data.unshift({
+          code: '',
+          address: placeholders[type],
+          selected: false
+        });
+      }
+
+      $select.html(this.getList(data));
+    },
+
+    getList: function (data) {
+      var list = [];
+
+      $.each(data, function (i, n) {
+        list.push(
+          '<option' +
+          ' value="' + (n.address && n.code ? n.address : '') + '"' +
+          ' data-code="' + (n.code || '') + '"' +
+          (n.selected ? ' selected' : '') +
+          '>' +
+            (n.address || '') +
+          '</option>'
+        );
+      });
+
+      return list.join('');
+    },
+
+    reset: function (deep) {
+      if (!deep) {
+        this.output(PROVINCE);
+        this.output(CIRY);
+        this.output(DISTRICT);
+      } else if (this.$province) {
+        this.$province.find(':first').prop('selected', true).trigger(EVENT_CHANGE);
+      }
+    },
+
+    destroy: function () {
+      this.unbind();
+      this.$element.removeData(NAMESPACE);
+    }
+  };
+
+  Distpicker.DEFAULTS = {
+    autoSelect: false,
+    placeholder: true,
+    province: '—— 省 ——',
+    city: '—— 市 ——',
+    district: '—— 区 ——'
+  };
+
+  Distpicker.setDefaults = function (options) {
+    $.extend(Distpicker.DEFAULTS, options);
+  };
+
+  // Save the other distpicker
+  Distpicker.other = $.fn.distpicker;
+
+  // Register as jQuery plugin
+  $.fn.distpicker = function (option) {
+    var args = [].slice.call(arguments, 1);
+
+    return this.each(function () {
+      var $this = $(this);
+      var data = $this.data(NAMESPACE);
+      var options;
+      var fn;
+
+      if (!data) {
+        if (/destroy/.test(option)) {
+          return;
+        }
+
+        options = $.extend({}, $this.data(), $.isPlainObject(option) && option);
+        $this.data(NAMESPACE, (data = new Distpicker(this, options)));
+      }
+
+      if (typeof option === 'string' && $.isFunction(fn = data[option])) {
+        fn.apply(data, args);
+      }
+    });
+  };
+
+  $.fn.distpicker.Constructor = Distpicker;
+  $.fn.distpicker.setDefaults = Distpicker.setDefaults;
+
+  // No conflict
+  $.fn.distpicker.noConflict = function () {
+    $.fn.distpicker = Distpicker.other;
+    return this;
+  };
+
+  $(function () {
+    $('[data-toggle="distpicker"]').distpicker();
+  });
+});
+
+</script>
+
 <script>
+
+    
 
 
     (function($,window){
@@ -179,6 +426,13 @@
             doSubmit: function(){
                 console.log('validas...');
                 groupAdd.validates();
+                if($('#islocation').is(":checked") == true){
+                    var provinceVal = $("#provinceVal").val()
+                    if(provinceVal == ''){
+                        layer.msg("请选择省")
+                        return
+                    }
+                }
                 if(groupAdd.validates() == true){
                     var s = $("#operation").val();
                     if (s == null) {
@@ -226,6 +480,34 @@
                 $("#registerDate").val(maxTime);
                 return maxTime
             },
+            administrativeAreaSelect:function(obj) {
+                var provin = $("#province").val();
+                if (provin == "province") {
+                    $("#provinceError").css("display", "none");
+                }
+                else if (provin == "--请选择--") {
+                    $("#provinceError").css("display", "block");
+                }
+                
+                var option = obj[obj.options.selectedIndex];
+                var keyword = option.text; //关键字
+                var adcode = option.dataset.code;
+                if(obj.id == 'province'){
+                    $("#provinceVal").attr("value",keyword)
+                    $("#districtlevel").attr("value","province")
+                } else if(obj.id == 'city'){
+                    $("#cityVal").attr("value",keyword)
+                    $("#districtlevel").attr("value","city")
+
+                }else if(obj.id == 'district'){
+                    $("#districtVal").attr("value",keyword)
+                    $("#districtlevel").attr("value","district")
+
+                }
+                $("#adcode").attr("value",adcode)
+                console.log(keyword,adcode,option.value)
+                
+            },
             //校验
             validates: function(){
                 return $("#addForm").validate({
@@ -259,6 +541,15 @@
                         firm_address:{
                             maxlength : 50
                         },
+                        longitude:{
+                            required:true
+                        },
+                        latitude:{
+                            required:true
+                        },
+                        // province:{
+                        //     required:true
+                        // }
                     },
                     messages : {
                         name:{
@@ -282,6 +573,15 @@
                         },
                         firm_address:{
                             maxlength : "\u957F\u5EA6\u4E0D\u8D85\u8FC750\u4F4D"
+                        },
+                        longitude:{
+                            required:"请输入地图中点点经度"
+                        },
+                        latitude:{
+                            required:"请输入地图中点点纬度"
+                        },
+                        province:{
+                            required:"请选择省"
                         }
                     }
                 }).form();
@@ -292,6 +592,53 @@
             $("#submitAdd").on("click",groupAdd.doSubmit);
             $('input').inputClear();
             $("#name,#organizationCode,#registerDate,#license,#owner_name,#phone_number,#firm_address").on("change",groupAdd.clearPreviousValue);
+
+            $("#islocation").bind("click", function(e){
+            
+                    // $("input[name='islocation']").not(':disabled').prop("checked", e.checked);
+                    if($('#islocation').is(":checked") == true){
+                        $("#coorType").prop("disabled","disabled")
+                        $("#longitude").prop("readonly",true)
+                        $("#latitude").prop("readonly",true)
+                        $("#zoomIn").prop("readonly",true)
+
+                        $("#location").prop("readonly",false)
+                        $("#province").prop("disabled",false)
+                        $("#city").prop("disabled",false)
+                        $("#district").prop("disabled",false)
+
+                    }else{
+                        $("#coorType").prop("disabled",false)
+                        $("#longitude").prop("readonly",false)
+                        $("#latitude").prop("readonly",false)
+                        $("#zoomIn").prop("readonly",false)
+
+                        $("#location").prop("readonly",true)
+                        $("#province").attr("disabled","disabled")
+                        $("#city").attr("disabled","disabled")
+                        $("#district").attr("disabled","disabled")
+
+                    }
+                });
+
+            $('#target').distpicker({
+                province: '--请选择省份--',
+                city: '--请选择市--',
+                district: '--请选择区/县--'
+            });
+
+            
+
+            $('#province, #city, #district').on('change', function () {
+                groupAdd.administrativeAreaSelect(this)
+            });
+
+            $('#coorType').on('change',function(){
+                
+                var option = this[this.options.selectedIndex];
+                console.log(option)
+                $("#coorTypeVal").attr("value",option.value)
+            })
         });
     })($,window)
 </script>

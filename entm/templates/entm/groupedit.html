@@ -112,9 +112,9 @@
                             <input id="location" name="location" value="{{ form.location.value|default:'' }}" type="text" maxlength="13" class="form-control">
                         </div>
                         <label class="col-md-3 control-label"><label class="text-danger">*</label>省：</label>
-                        <input type="hidden" id="provinceVal" name="province" value="{{ form.province.value }}">
+                        <input type="hidden" id="provinceVal" name="province" value="{{ form.province.value|default:'' }}">
                         <div class="col-md-3">
-                            <select id="province"  data-province="{{ form.province.value|default:'请选择省'}}" class="form-control" name="attribute" placeholder="请选择省">
+                            <select id="province"  data-province="{{ form.province.value|default:'请选择省'}}" class="form-control"  placeholder="请选择省">
                             </select>
                         </div>
 
@@ -126,13 +126,13 @@
 
                         <label class="col-md-3 control-label">市：</label>
                         <div class="col-md-3">
-                            <input type="hidden" id="cityVal" name="city" value="{{ form.city.value }}">
+                            <input type="hidden" id="cityVal" name="city" value="{{ form.city.value|default:'' }}">
                             <select id="city"  data-city="{{ form.city.value|default:'请选择市'}}" class="form-control"  placeholder="请选择市">
                             </select>
                         </div>
                         <label class="col-md-3 control-label">区：</label>
                         <div class="col-md-3">
-                            <input type="hidden" id="districtVal" name="district" value="{{ form.district.value }}">
+                            <input type="hidden" id="districtVal" name="district" value="{{ form.district.value|default:'' }}">
                             <select id="district" data-district="{{ form.district.value|default:'请选择区'}}" class="form-control"  placeholder="请选择区">
                             </select>
                         </div>

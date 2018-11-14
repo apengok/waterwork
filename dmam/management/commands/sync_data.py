@@ -13,6 +13,8 @@ import string
 from dmam.models import VConcentrator,VWatermeter,VCommunity,Station,Meter,SimCard,DMABaseinfo,DmaStation
 from entm.models import Organizations
 
+from gis.models import FenceDistrict,Polygon,FenceShape
+
 logger_info = logging.getLogger('info_logger')
 
 
@@ -52,12 +54,42 @@ class Command(BaseCommand):
             help='import listname to new db'
         )
 
+        parser.add_argument(
+            '--gisupdate',
+            action='store_true',
+            dest='gisupdate',
+            default=False,
+            help='import gisupdate to new db'
+        )
+
+
 
     def handle(self, *args, **options):
         # sTime = options['sTime']
         t1=time.time()
         count = 0
         aft = 0
+
+        if options['gisupdate']:
+            fds = FenceDistrict.objects.exclude(cid__startswith='zw_m').all()
+            polys = Polygon.objects.all()
+
+            for fence in fds:
+                cid = fence.cid
+                shap = FenceShape.objects.filter(shapeId=cid)
+                if not shap.exists():
+                    pol = Polygon.objects.filter(polygonId=cid)
+                    if pol.exists():
+                        p = pol.first()
+                        name = p.name
+                        shape = p.shape
+                        pointSeqs = p.pointSeqs
+                        longitudes = p.longitudes
+                        latitudes = p.latitudes
+                        ftype = p.ftype
+                        dma_no = p.dma_no
+                        FenceShape.objects.create(shapeId=cid,name=name,zonetype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
+
         
 
         if options['station-bigmeter']:
