@@ -73,7 +73,8 @@
                         <div class="form-group-1">
                             <label class="col-md-3 control-label"><label class="text-danger">*</label>坐标体系：</label>
                             <div class="col-md-3">
-                                <select id="coorType" class="form-control" name="coorType" placeholder="请选择坐标体系">
+                                <input type="hidden" id="coorTypeVal" name="coorType" value="{{ form.coorType.value|default:'WGS84' }}">
+                                <select id="coorType" class="form-control"  placeholder="请选择坐标体系">
                                     <option value="WGS84">地球坐标</option>
                                     <option value="GCJ-02">火星坐标</option>
                                     <option value="BD-09">百度坐标</option>
@@ -106,13 +107,14 @@
                     <div class="form-group ">
 
                         
-                        <label class="col-md-3 control-label"><input id="islocation" name="islocation" type="checkbox"> 地名：</label>
+                        <label class="col-md-3 control-label"><input id="islocation" name="islocation" state="{{ form.islocation.value }}" type="checkbox"> 地名：</label>
                         <div class="col-md-3">
                             <input id="location" name="location" value="{{ form.location.value|default:'' }}" type="text" maxlength="13" class="form-control">
                         </div>
                         <label class="col-md-3 control-label"><label class="text-danger">*</label>省：</label>
+                        <input type="hidden" id="provinceVal" name="province" value="{{ form.province.value }}">
                         <div class="col-md-3">
-                            <select id="province" name="province" data-province="{{ form.province.value|default:'请选择省'}}" class="form-control" name="attribute" placeholder="请选择省">
+                            <select id="province"  data-province="{{ form.province.value|default:'请选择省'}}" class="form-control" name="attribute" placeholder="请选择省">
                             </select>
                         </div>
 
@@ -122,15 +124,16 @@
 
                     <div class="form-group ">
 
-
-                        <label class="col-md-3 control-label"><label class="text-danger">*</label>市：</label>
+                        <label class="col-md-3 control-label">市：</label>
                         <div class="col-md-3">
-                            <select id="city" name="city" data-city="{{ form.city.value|default:'请选择市'}}" class="form-control"  placeholder="请选择市">
+                            <input type="hidden" id="cityVal" name="city" value="{{ form.city.value }}">
+                            <select id="city"  data-city="{{ form.city.value|default:'请选择市'}}" class="form-control"  placeholder="请选择市">
                             </select>
                         </div>
-                        <label class="col-md-3 control-label"><label class="text-danger">*</label>区：</label>
+                        <label class="col-md-3 control-label">区：</label>
                         <div class="col-md-3">
-                            <select id="district" name="district" data-district="{{ form.district.value|default:'请选择区'}}" class="form-control"  placeholder="请选择区">
+                            <input type="hidden" id="districtVal" name="district" value="{{ form.district.value }}">
+                            <select id="district" data-district="{{ form.district.value|default:'请选择区'}}" class="form-control"  placeholder="请选择区">
                             </select>
                         </div>
 
@@ -142,6 +145,9 @@
         </div>
     </div>
     <div class="modal-footer">
+
+        <input type="hidden" id="adcode" name="adcode" value="{{ form.adcode.value|default:'' }}">
+        <input type="hidden" id="districtlevel" name="districtlevel" value="{{ form.districtlevel.value|default:'' }}">
         
         <button id="doSubmitEdit" class="btn btn-primary" type="button">
             <strong>提 交</strong>
@@ -398,11 +404,11 @@
 <script>
     $(function () {
 
-        var coorType_old = $("#coorType").val()
+        var coorType_old = $("#coorTypeVal").val()
         $("#coorType option").each(function (){
-                if($(this).val()==coorType_old){ 
-                $(this).attr("selected","selected"); 
-            }});
+            if($(this).val()==coorType_old){ 
+            $(this).attr("selected","selected"); 
+        }});
 
         // var province_val = $("#province").attr("data-province")
         // $("#province option").each(function (){
@@ -424,14 +430,14 @@
 
         // console.log(province_val,city_val,district_val)
 
-        var islocation_old = 0 ;//{{ form.islocation.value|default:0 }};
+        var islocation_old = $("#islocation").attr("state");
         console.log("islocation_old",islocation_old)
-        if(islocation_old == 1){
+        if(islocation_old == "on"){
             $("#islocation").prop("checked", true);
 
             // $("#descrip").prop("readonly",true);
             
-            $("#coorType").prop("readonly",true)
+            $("#coorType").prop("disabled","disabled")
             $("#longitude").prop("readonly",true)
             $("#latitude").prop("readonly",true)
             $("#zoomIn").prop("readonly",true)
@@ -449,44 +455,96 @@
             $("#zoomIn").prop("readonly",false)
 
             $("#location").prop("readonly",true)
-            $("#province").prop("readonly",true)
-            $("#city").prop("readonly",true)
-            $("#district").prop("readonly",true)
+            $("#province").prop("disabled",true)
+            $("#city").prop("disabled",true)
+            $("#district").prop("disabled",true)
         }
 
         $("#islocation").bind("click", function(e){
             
             // $("input[name='islocation']").not(':disabled').prop("checked", e.checked);
             if($('#islocation').is(":checked") == true){
-                $("#coorType").prop("readonly","readonly")
-            $("#longitude").prop("readonly",true)
-            $("#latitude").prop("readonly",true)
-            $("#zoomIn").prop("readonly",true)
+                $("#coorType").prop("disabled","disabled")
+                $("#longitude").prop("readonly",true)
+                $("#latitude").prop("readonly",true)
+                $("#zoomIn").prop("readonly",true)
 
-            $("#location").prop("readonly",false)
-            $("#province").prop("readonly",false)
-            $("#city").prop("readonly",false)
-            $("#district").prop("readonly",false)
+                $("#location").prop("readonly",false)
+                $("#province").prop("disabled",false)
+                $("#city").prop("disabled",false)
+                $("#district").prop("disabled",false)
 
             }else{
-                $("#coorType").prop("readonly",false)
+                $("#coorType").prop("disabled",false)
                 $("#longitude").prop("readonly",false)
                 $("#latitude").prop("readonly",false)
                 $("#zoomIn").prop("readonly",false)
 
                 $("#location").prop("readonly",true)
-                $("#province").attr("readonly","readonly")
-                $("#city").attr("readonly","readonly")
-                $("#district").attr("readonly","readonly")
+                $("#province").attr("disabled","disabled")
+                $("#city").attr("disabled","disabled")
+                $("#district").attr("disabled","disabled")
 
             }
         });
 
     $('#target').distpicker({
-             province: '--请选择省份--',
-             city: '--请选择市--',
-             district: '--请选择区/县--'
-});
+        province: '--请选择省份--',
+        city: '--请选择市--',
+        district: '--请选择区/县--'
+    });
+
+    function administrativeAreaSelect(obj) {
+        console.log(obj)
+
+        var provin = $("#province").val();
+        if (provin == "province") {
+            $("#provinceError").css("display", "none");
+        }
+        else if (provin == "--请选择--") {
+            $("#provinceError").css("display", "block");
+        }
+        
+        var option = obj[obj.options.selectedIndex];
+        var keyword = option.text; //关键字
+        var adcode = option.dataset.code;
+        if(obj.id == 'province'){
+            $("#provinceVal").attr("value",keyword)
+            $("#districtlevel").attr("value","province")
+        } else if(obj.id == 'city'){
+            $("#cityVal").attr("value",keyword)
+            $("#districtlevel").attr("value","city")
+
+        }else if(obj.id == 'district'){
+            $("#districtVal").attr("value",keyword)
+            $("#districtlevel").attr("value","district")
+
+        }
+        $("#adcode").attr("value",adcode)
+        console.log(keyword,adcode,option.value)
+        // district.setLevel(option.value); //行政区级别
+        // district.setExtensions('all');
+        // //行政区查询
+        // //按照adcode进行查询可以保证数据返回的唯一性
+        // district.search(adcode, function (status, result) {
+        //     if (status === 'complete') {
+        //         fenceOperation.getData(result.districtList[0]);
+        //     }
+        // });
+    }
+
+    $('#province, #city, #district').on('change', function () {
+        administrativeAreaSelect(this)
+    });
+
+    $('#coorType').on('change',function(){
+        
+        var option = this[this.options.selectedIndex];
+        console.log(option)
+        $("#coorTypeVal").attr("value",option.value)
+    })
+
+
 
             //提交方法
             function doSubmit() {

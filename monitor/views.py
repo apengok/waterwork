@@ -152,6 +152,11 @@ def getmapstationlist(request):
     groupName = request.POST.get("groupName")
     user = request.user
     organs = user.belongto
+    print(organs,type(organs))
+    if groupName == '':
+        selectedgroup = Organizations.objects.filter(cid=organs.cid).values().first()
+    else:
+        selectedgroup = Organizations.objects.filter(cid=groupName).values().first()
 
     stations = user.station_list_queryset('') 
     
@@ -205,10 +210,22 @@ def getmapstationlist(request):
         if ret is not None:
             data.append(ret)
 
+    entminfo = {
+        "coorType":selectedgroup["coorType"],
+        "longitude":selectedgroup["longitude"],
+        "latitude":selectedgroup["latitude"],
+        "zoomIn":selectedgroup["zoomIn"],
+        "islocation":selectedgroup["islocation"],
+        "adcode":selectedgroup["adcode"],
+        "districtlevel":selectedgroup["districtlevel"],
+
+    }
 
     result = dict()
     result["success"] = "true"
     result["obj"] = data
+    result["entminfo"] = entminfo
+
     
     
     return HttpResponse(json.dumps(result))

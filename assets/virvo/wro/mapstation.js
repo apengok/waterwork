@@ -84,42 +84,12 @@
                         fillOpacity: 0.5,
                         path: bounds[i]
                     });
-                    administrativeAreaFence.push(polygon);
+                    // administrativeAreaFence.push(polygon);
                     map.setFitView(polygon);//地图自适应
                 }
                 ;
-            }
-            ;
-            var subList = data.districtList;
-            var level = data.level;
-            //清空下一级别的下拉列表
-            if (level === 'province') {
-                document.getElementById('city').innerHTML = '';
-                document.getElementById('district').innerHTML = '';
-            } else if (level === 'city') {
-                document.getElementById('district').innerHTML = '';
-            } else if (level === 'district') {
-            }
-            if (subList) {
-                var contentSub = new Option('--请选择--');
-                for (var i = 0, l = subList.length; i < l; i++) {
-                    var name = subList[i].name;
-                    var levelSub = subList[i].level;
-                    if (levelSub == 'street') {
-                        return false;
-                    }
-                    ;
-                    var cityCode = subList[i].citycode;
-                    if (i == 0) {
-                        document.querySelector('#' + levelSub).add(contentSub);
-                    }
-                    contentSub = new Option(name);
-                    contentSub.setAttribute("value", levelSub);
-                    contentSub.center = subList[i].center;
-                    contentSub.adcode = subList[i].adcode;
-                    document.querySelector('#' + levelSub).add(contentSub);
-                }
-            }
+            };
+            
         },
         //显示行政区域
         drawAdministration: function (data, aId, showMap) {
@@ -166,18 +136,25 @@
             // });
             // endPoint.on('select', fenceOperation.dragRoute);
             // 行政区划查询
-            var opts = {
-                subdistrict: 0,   //获取边界不需要返回下级行政区
-                extensions: 'all',  //返回行政区边界坐标组等具体信息
-                level: 'city'  //查询行政级别为 市
-            };
-            district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
-            district.search('341021', function (status, result) {
-                console.log(status,result,result.districtList[0])
-                if (status == 'complete') {
-                    fenceOperation.getData(result.districtList[0]);
-                }
-            });
+            adcode = $("#entadcode").val()
+            if(adcode != ""){
+                var entislocation = $("#entislocation").val()
+                var entdistrictlevel = $("#entdistrictlevel").val()
+
+                console.log(entislocation,entdistrictlevel,adcode)
+                var opts = {
+                    subdistrict: 0,   //获取边界不需要返回下级行政区
+                    extensions: 'all',  //返回行政区边界坐标组等具体信息
+                    level: 'district'  //查询行政级别为 市
+                };
+                district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
+                district.search('china', function (status, result) {
+                    console.log(status,result,result.districtList[0])
+                    if (status == 'complete') {
+                        fenceOperation.getData(result.districtList[0]);
+                    }
+                });
+            }
             // 地图移动结束后触发，包括平移和缩放
             mouseTool = new AMap.MouseTool(map);
             // mouseTool.on("draw", fenceOperation.createSuccess);
@@ -559,6 +536,10 @@ console.log("$newMapHeight",$("#map-container").height());
             //     console.log(marker);
             //     map.remove(marker)
             // }
+            if(data.entminfo != null && data.entminfo != ""){
+                entminfo = data.entminfo
+                mapStation.adaptMap(entminfo)
+            }
             map.remove(markerList)
             markerList = [];
             if (data.obj != null && data.obj != ""){
@@ -577,10 +558,42 @@ console.log("$newMapHeight",$("#map-container").height());
                 map.add(markerList);
 
             }
-            if(data.success == true){
-                
-            }
+
             
+        },
+        adaptMap:function(data){
+            console.log(data)
+            var islocation = data.islocation;
+            var zoomIn = data.zoomIn;
+            var coorType = data.coorType;
+            var longitude = data.longitude;
+            var latitude = data.latitude;
+            var districtlevel = data.districtlevel;
+            var adcode = data.adcode;
+
+            if(islocation == "on"){
+                var opts = {
+                    subdistrict: 0,   //获取边界不需要返回下级行政区
+                    extensions: 'all',  //返回行政区边界坐标组等具体信息
+                    level: districtlevel  //查询行政级别为 市
+                };
+                district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
+                district.search(adcode, function (status, result) {
+                    console.log(status,result,result.districtList[0])
+                    if (status == 'complete') {
+                        fenceOperation.getData(result.districtList[0]);
+                    }
+                });
+            }else{
+                if(longitude == null || latitude == null || zoomIn == null){
+                    longitude = 113.93678
+                    latitude = 22.527372
+                    zoomIn = 14
+                }
+                map.setCenter([longitude,latitude]);
+                map.setZoom(zoomIn)
+            }
+
         },
         // ajax参数
         ajaxDataParamFun: function(d){

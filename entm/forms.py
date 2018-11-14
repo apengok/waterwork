@@ -19,7 +19,7 @@ class OrganizationsAddForm(forms.ModelForm):
     class Meta:
         model = Organizations
         fields = ('name','attribute','register_date','owner_name','phone_number','firm_address','cid','pId',
-            'coorType','zoomIn','longitude','latitude','islocation','location','province','city','district')
+            'coorType','zoomIn','longitude','latitude','islocation','location','province','city','district','adcode','districtlevel')
 
     def __init__(self,*args,**kwargs):
         print('form init',args,kwargs)
@@ -36,7 +36,7 @@ class OrganizationsEditForm(forms.ModelForm):
     class Meta:
         model = Organizations
         fields = ('name','attribute','register_date','owner_name','phone_number','firm_address','cid','pId',
-            'coorType','zoomIn','longitude','latitude','islocation','location','province','city','district')
+            'coorType','zoomIn','longitude','latitude','islocation','location','province','city','district','adcode','districtlevel')
 
     
 

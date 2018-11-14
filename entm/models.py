@@ -48,6 +48,9 @@ class Organizations(MPTTModel):
     is_org        = models.BooleanField(max_length=300,blank=True)
     uuid          = models.CharField(max_length=300,null=True,blank=True)
 
+    adcode        = models.CharField(max_length=300,null=True,blank=True) #行政代码
+    districtlevel = models.CharField(max_length=300,null=True,blank=True)   #行政级别
+
     parent  = TreeForeignKey('self', null=True, blank=True,on_delete=models.CASCADE, related_name='children', db_index=True)
 
     class MPTTMeta:

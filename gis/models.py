@@ -34,7 +34,7 @@ class FenceDistrict(MPTTModel):
     cid           = models.CharField(max_length=100,null=True,blank=True)
     pId           = models.CharField(max_length=100,null=True,blank=True)
 
-    # belongto      = models.ForeignKey(Organizations,on_delete=models.CASCADE,null=True)
+    belongto      = models.ForeignKey(Organizations,on_delete=models.CASCADE,null=True)
 
     parent  = TreeForeignKey('self', null=True, blank=True,on_delete=models.CASCADE, related_name='children', db_index=True)
 
@@ -102,6 +102,7 @@ class FenceShape(models.Model):
     province   = models.CharField(max_length=30,null=True,blank=True)
     city   = models.CharField(max_length=30,null=True,blank=True)
     district   = models.CharField(max_length=30,null=True,blank=True)
+    administrativeLngLat = models.TextField()
 
     # 边框和区域填色
     strokeColor   = models.CharField(max_length=100,blank=True,null=True)

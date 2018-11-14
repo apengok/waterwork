@@ -103,6 +103,16 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
             <!--sidebar start-->
             {% include 'sidenav.html' %}
 <!--sidebar end-->
+<!-- 地图信息相关 -->
+<input value="{{ user.belongto.coorType|default:'' }}" id="entcoorType" type="hidden"  />
+<input value="{{ user.belongto.longitude|default:'' }}" id="entlongitude" type="hidden"  />
+<input value="{{ user.belongto.latitude|default:'' }}" id="entlatitude" type="hidden"  />
+<input value="{{ user.belongto.zoomIn|default:'' }}" id="entzoomIn" type="hidden"  />
+<input value="{{ user.belongto.islocation|default:'' }}" id="entislocation" type="hidden"  />
+<input value="{{ user.belongto.adcode|default:'' }}" id="entadcode" type="hidden"  />
+<input value="{{ user.belongto.districtlevel|default:'' }}" id="entdistrictlevel" type="hidden"  />
+
+
 <!--权限控制 -->
 <input value="{{ user.groups.all.0 }}" id="permission" type="hidden"  />
 
