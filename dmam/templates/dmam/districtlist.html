@@ -221,15 +221,18 @@
                   <div class="row">
                     
                     <div class="col-md-2">
-                      <div><button disabled="disabled" id="drawDistrict" type="button" class="btn btn-primary" style="margin-top: 20px;" name="1" onclick="">绘制区域</button>
+                      
+                      <div><button type="button" class="btn btn-primary " >蒙层颜色</button><input type='text' id="fillColor" />
                       </div>
-                      <div><button id="getFillColor" type="button" class="btn btn-primary " name="1" onclick="">蒙层颜色</button>
+                      <div><button type="button" class="btn btn-primary " >边框颜色</button><input type='text'  id="strokeColor" />
                       </div>
-                      <div><button id="getFrameColor" type="button" class="btn btn-primary " name="1" onclick="">边框颜色</button>
-                      </div>
-                      <div><button disabled="disabled" id="saveDmaGisinfo" type="button" class="btn btn-primary " name="1" onclick="">保存</button>
-                      </div>
-                      <!-- <input type='text' id="custom" /> -->
+                      
+                      
+                      
+                      <!-- <div class="example">
+                        <input type="text" value="blanchedalmond" name="toggle" id="toggle" style="display: none;"><div class="sp-replacer sp-light"><div class="sp-preview"><div class="sp-preview-inner" style="background-color: rgb(255, 235, 205);"></div></div><div class="sp-dd">▼</div></div>
+                        <button id="btn-toggle">Toggle</button>
+                      </div> -->
                     </div>
                     <div class="col-md-4">
                       <div style="text-align: left;">图形预览：</div>
@@ -338,9 +341,11 @@
 <script src="{% static 'virvo/wro/spectrum.js' %}"></script>
 
 <script>
-$("#custom").spectrum({
-    color: "#f00"
+$("#btn-toggle").click(function() {
+    $("#toggle").spectrum("toggle");
+    return false;
 });
+
 </script>
 
 {% endblock %}

@@ -240,38 +240,42 @@ def getFenceDetails(request):
     # print("fenceNodes",fenceNodes)
 
     if dma_no != '':
-        pgo = FenceShape.objects.filter(dma_no=dma_no).values().first()
-        fd = FenceDistrict.objects.filter(cid=pgo["shapeId"]).values().first()
         fenceData = []
         details_obj = []
-        pointSeqs = pgo["pointSeqs"].split(",")
-        longitudes = pgo["longitudes"].split(",")
-        latitudes = pgo["latitudes"].split(",")
-        # print(pointSeqs,type(pointSeqs))
-        # print(longitudes,type(longitudes))
-        # print(latitudes,type(latitudes))
+        if FenceShape.objects.filter(dma_no=dma_no).exists():
+            pgo = FenceShape.objects.filter(dma_no=dma_no).values().first()
+            fd = FenceDistrict.objects.filter(cid=pgo["shapeId"]).values().first()
+            
+            pointSeqs = pgo["pointSeqs"].split(",")
+            longitudes = pgo["longitudes"].split(",")
+            latitudes = pgo["latitudes"].split(",")
+            # print(pointSeqs,type(pointSeqs))
+            # print(longitudes,type(longitudes))
+            # print(latitudes,type(latitudes))
 
-        for p in pointSeqs:
-            idx = int(p)
-            fenceData.append({
-                "createDataTime":fd["createDataTime"],
-                "createDataUsername":fd["createDataUsername"],
-                "description":fd["description"],
-                "flag":1,
-                "id":"null",
-                "latitude":latitudes[idx],
-                "longitude":longitudes[idx],
-                "name":"null",
-                "polygonId":pgo["shapeId"],
-                "sortOrder":idx,
-                "type":pgo["zonetype"],
-                "updateDataTime":fd["updateDataTime"],
-                "updateDataUsername":fd["updateDataUsername"]
-                })
+            for p in pointSeqs:
+                idx = int(p)
+                fenceData.append({
+                    "createDataTime":fd["createDataTime"],
+                    "createDataUsername":fd["createDataUsername"],
+                    "description":fd["description"],
+                    "flag":1,
+                    "id":"null",
+                    "latitude":latitudes[idx],
+                    "longitude":longitudes[idx],
+                    "name":"null",
+                    "polygonId":pgo["shapeId"],
+                    "sortOrder":idx,
+                    "type":pgo["zonetype"],
+                    "updateDataTime":fd["updateDataTime"],
+                    "updateDataUsername":fd["updateDataUsername"]
+                    })
 
-        details_obj.append({"fenceType":"zw_m_polygon",
-            "fenceData":fenceData
-        })
+            details_obj.append({"fenceType":"zw_m_polygon",
+                "fillColor":pgo["fillColor"],
+                "strokeColor":pgo["strokeColor"],
+                "fenceData":fenceData
+            })
         details = {
             "exceptionDetailMsg":"null",
             "msg":"null",
@@ -722,5 +726,33 @@ def addAdministration(request):
     else:
         instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_administration",belongto=organ)
         FenceShape.objects.create(shapeId=instance.cid,name=name,province=province,city=city,district=district,administrativeLngLat=administrativeLngLat,dma_no=dma_no)
+
+    return HttpResponse(json.dumps({"success":1}))
+
+
+def alterFillColor(request):
+    dma_no = request.POST.get("dma_no")
+    fillColor = request.POST.get("fillColor")
+
+    pgo = FenceShape.objects.filter(dma_no=dma_no)
+
+    if pgo.exists():
+        p = pgo.first()
+        p.fillColor = fillColor
+        p.save()
+
+    return HttpResponse(json.dumps({"success":1}))
+
+
+def alterstrokeColor(request):
+    dma_no = request.POST.get("dma_no")
+    strokeColor = request.POST.get("strokeColor")
+
+    pgo = FenceShape.objects.filter(dma_no=dma_no)
+
+    if pgo.exists():
+        p = pgo.first()
+        p.strokeColor = strokeColor
+        p.save()
 
     return HttpResponse(json.dumps({"success":1}))

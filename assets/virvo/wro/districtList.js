@@ -34,6 +34,10 @@
     var pipe_private = $("#id_pipe_private").val();
     var flag1 = false;
     var modify_flag = false;
+
+    var fillColor_seted = "#1791fc";
+    var strokeColor_seted = "#FF33FF"
+    var polyFence = null;
     var DMABaseEdit = {
         //初始化
         init:function(){
@@ -312,8 +316,8 @@
             mouseTool.on('draw', function(event) {
               // event.obj 为绘制出来的覆盖物对象
                 pgpath = event.obj.getPath();
-                console.log(pgpath);
-                console.log('覆盖物对象绘制完成')
+                // console.log(pgpath);
+                // console.log('覆盖物对象绘制完成')
                 dmaManage.saveDmaGisinfo(event.obj);
             })
         },
@@ -327,41 +331,184 @@
                 async:false,
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
-                    polygon = data.obj[0].fenceData
-                    var dataArr = new Array();
-                    if (polygon != null && polygon.length > 0) {
-                        for (var i = 0; i < polygon.length; i++) {
-                            dataArr.push([polygon[i].longitude, polygon[i].latitude]);
+                    var dataList = data.obj;
+                    if (dataList != null && dataList.length > 0) {
+                        polygon = data.obj[0].fenceData;
+                        fillColor_seted = fillColor = data.obj[0].fillColor
+                        strokeColor_seted = strokeColor = data.obj[0].strokeColor
+                        if(fillColor === null){
+                            fillColor_seted = fillColor = "#1791fc"
                         }
-                    };
-                    if(data.obj !== null){
-                        polyFence = new AMap.Polygon({
-                            path: dataArr,//设置多边形边界路径
-                            strokeColor: "#FF33FF", //线颜色
-                            strokeOpacity: 0.2, //线透明度
-                            strokeWeight: 3, //线宽
-                            fillColor: "#1791fc", //填充色
-                            fillOpacity: 0.35
-                            //填充透明度
-                        });
-                        polyFence.setMap(map);
-                        map.setFitView(polyFence);
-                        // 创建 geoJSON 实例
-                        // var geoJson = new AMap.GeoJSON({
-                        //     geoJSON: data.obj[0].geoJsonData,//JSON.parse(data.obj.geoJsonData),   // GeoJSON对象
-                        //     getPolygon:  function(geojson, lnglats) {//还可以自定义getMarker和getPolyline
-                        //         console.log(geojson,lnglats,data.obj[0].strokeColor,data.obj[0].fillColor)
-                        //         return new AMap.Polygon({
-                        //             path: lnglats,
-                        //             fillOpacity: .8,
-                        //             strokeColor:data.obj[0].strokeColor,
-                        //             fillColor:data.obj[0].fillColor
-                        //         });   
-                        //     }
-                        // }); 
+                        if(strokeColor === null){
+                            strokeColor_seted = strokeColor = "#FF33FF"
+                        }
+                        var dataArr = new Array();
+                        if (polygon != null && polygon.length > 0) {
+                            for (var i = 0; i < polygon.length; i++) {
+                                dataArr.push([polygon[i].longitude, polygon[i].latitude]);
+                            }
+                        };
+                        if(data.obj !== null){
+                            polyFence = new AMap.Polygon({
+                                path: dataArr,//设置多边形边界路径
+                                strokeColor:strokeColor,// "#FF33FF", //线颜色
+                                strokeOpacity: 0.2, //线透明度
+                                strokeWeight: 3, //线宽
+                                fillColor:fillColor,// "#1791fc", //填充色
+                                fillOpacity: 0.35
+                                //填充透明度
+                            });
+                            polyFence.setMap(map);
+                            map.setFitView(polyFence);
+                            // 创建 geoJSON 实例
+                            // var geoJson = new AMap.GeoJSON({
+                            //     geoJSON: data.obj[0].geoJsonData,//JSON.parse(data.obj.geoJsonData),   // GeoJSON对象
+                            //     getPolygon:  function(geojson, lnglats) {//还可以自定义getMarker和getPolyline
+                            //         console.log(geojson,lnglats,data.obj[0].strokeColor,data.obj[0].fillColor)
+                            //         return new AMap.Polygon({
+                            //             path: lnglats,
+                            //             fillOpacity: .8,
+                            //             strokeColor:data.obj[0].strokeColor,
+                            //             fillColor:data.obj[0].fillColor
+                            //         });   
+                            //     }
+                            // }); 
 
-                        // map.add(geoJson);
+                            // map.add(geoJson);
+                        }
+                    }
+                },      
+            });
+            
+        },
+        alterFillColor:function(fillColor){
+            dma_no = $("#current_dma_no").val();
+            map.clearMap();
+            $.ajax({
+                type: 'POST',
+                url: '/gis/fence/bindfence/alterFillColor/',
+                data: {"dma_no" : dma_no,"fillColor":fillColor},
+                async:false,
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if(data.success){
+
+                        amapbase.loadGeodata();
+                        layer.msg("修改成功")
+                    }
+                },      
+            });
+            
+        },
+        previewFillColor:function(color){
+            dma_no = $("#current_dma_no").val();
+            map.clearMap();
+            $.ajax({
+                type: 'POST',
+                url: '/gis/fence/bindfence/getFenceDetails/',
+                data: {"dma_no" : $("#current_dma_no").val()},
+                async:false,
+                dataType: 'json',
+                success: function (data) {
+                    var dataList = data.obj;
+                    if (dataList != null && dataList.length > 0) {
+                        polygon = data.obj[0].fenceData
+                        fillColor = data.obj[0].fillColor
+                        strokeColor = data.obj[0].strokeColor
+                        if(fillColor === null){
+                            fillColor = "#1791fc"
+                        }
+                        if(strokeColor === null){
+                            strokeColor = "#FF33FF"
+                        }
+                        var dataArr = new Array();
+                        if (polygon != null && polygon.length > 0) {
+                            for (var i = 0; i < polygon.length; i++) {
+                                dataArr.push([polygon[i].longitude, polygon[i].latitude]);
+                            }
+                        };
+                        if(data.obj !== null){
+                            polyFence = new AMap.Polygon({
+                                path: dataArr,//设置多边形边界路径
+                                strokeColor: strokeColor, //线颜色
+                                strokeOpacity: 0.2, //线透明度
+                                strokeWeight: 3, //线宽
+                                fillColor: color, //填充色
+                                fillOpacity: 0.35
+                                //填充透明度
+                            });
+                            polyFence.setMap(map);
+                            map.setFitView(polyFence);
+                            
+                        }
+                    }
+                },      
+            });
+            
+        },
+        alterstrokeColor:function(strokeColor){
+            dma_no = $("#current_dma_no").val();
+            map.clearMap();
+            $.ajax({
+                type: 'POST',
+                url: '/gis/fence/bindfence/alterstrokeColor/',
+                data: {"dma_no" : dma_no,"strokeColor":strokeColor},
+                async:false,
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if(data.success){
+
+                        amapbase.loadGeodata();
+                        layer.msg("修改成功")
+                    }
+                },      
+            });
+            
+        },
+        previewstrokeColor:function(color){
+            dma_no = $("#current_dma_no").val();
+            map.clearMap();
+            $.ajax({
+                type: 'POST',
+                url: '/gis/fence/bindfence/getFenceDetails/',
+                data: {"dma_no" : $("#current_dma_no").val()},
+                async:false,
+                dataType: 'json',
+                success: function (data) {
+                    var dataList = data.obj;
+                    if (dataList != null && dataList.length > 0) {
+                        polygon = data.obj[0].fenceData
+                        fillColor = data.obj[0].fillColor
+                        strokeColor = data.obj[0].strokeColor
+                        console.log(fillColor,strokeColor)
+                        if(fillColor === null){
+                            fillColor = "#1791fc"
+                        }
+                        if(strokeColor === null){
+                            strokeColor = "#FF33FF"
+                        }
+                        var dataArr = new Array();
+                        if (polygon != null && polygon.length > 0) {
+                            for (var i = 0; i < polygon.length; i++) {
+                                dataArr.push([polygon[i].longitude, polygon[i].latitude]);
+                            }
+                        };
+                        if(data.obj !== null){
+                            polyFence = new AMap.Polygon({
+                                path: dataArr,//设置多边形边界路径
+                                strokeColor: color, //线颜色
+                                strokeOpacity: 0.2, //线透明度
+                                strokeWeight: 3, //线宽
+                                fillColor: fillColor, //填充色
+                                fillOpacity: 0.35
+                                //填充透明度
+                            });
+                            polyFence.setMap(map);
+                            map.setFitView(polyFence);
+                            
+                        }
                     }
                 },      
             });
@@ -743,6 +890,7 @@
                 $("#current_dma_no").attr("value",treeNode.dma_no);
                 $("#current_dma_name").attr("value",treeNode.name);
                 dmaManage.getBaseinfo();
+                polyFence = null;
                 amapbase.loadGeodata();
 
 
@@ -1111,6 +1259,72 @@
             dmaManage.getBaseinfo();
         });
 
+        $("#fillColor").spectrum({
+            color: fillColor_seted,
+            move: function(tinycolor) {
+              var fillcolor = tinycolor.toHexString(); // #ff0000
+              console.log("move:",fillcolor)
+              if(polyFence == null){
+                layer.msg("没有分区框图")
+                return
+              }
+              amapbase.previewFillColor(fillcolor)
+              
+            },
+            // show: function(tinycolor) { 
+            //   var fillcolor = tinycolor.toHexString(); // #ff0000
+            //   console.log("show",fillcolor)
+            // },
+            // hide: function(tinycolor) { 
+            //   var fillcolor = tinycolor.toHexString(); // #ff0000
+            //   console.log("hide",fillcolor)
+            // },
+            // beforeShow: function(tinycolor) { 
+            //   var fillcolor = tinycolor.toHexString(); // #ff0000
+            //   console.log("beforeShow",fillcolor)
+            // },
+            change: function(tinycolor) {
+              var fillcolor = tinycolor.toHexString(); // #ff0000
+              console.log(fillcolor)
+              if(polyFence == null){
+                layer.msg("没有分区框图")
+                return
+              }
+              amapbase.alterFillColor(fillcolor)
+            }
+        });
+
+
+        $("#strokeColor").spectrum({
+            color: strokeColor_seted,
+            move: function(tinycolor) {
+              var fillcolor = tinycolor.toHexString(); // #ff0000
+              console.log("move:",fillcolor)
+              amapbase.previewstrokeColor(fillcolor)
+              
+            },
+            // show: function(tinycolor) { 
+            //   var fillcolor = tinycolor.toHexString(); // #ff0000
+            //   console.log("show",fillcolor)
+            // },
+            // hide: function(tinycolor) { 
+            //   var fillcolor = tinycolor.toHexString(); // #ff0000
+            //   console.log("hide",fillcolor)
+            // },
+            // beforeShow: function(tinycolor) { 
+            //   var fillcolor = tinycolor.toHexString(); // #ff0000
+            //   console.log("beforeShow",fillcolor)
+            // },
+            change: function(tinycolor) {
+              var fillcolor = tinycolor.toHexString(); // #ff0000
+              console.log(fillcolor)
+              if(polyFence == null){
+                layer.msg("没有分区框图")
+                return
+              }
+              amapbase.alterstrokeColor(fillcolor)
+            }
+        });
 
 
 
