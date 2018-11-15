@@ -4,12 +4,244 @@
 
 {% load staticfiles %}
 
+{% block stylesheet %}
+<style type="text/css">
+.u15486_input {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:183px;
+  height:51px;
+  background-color:transparent;
+  font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
+  font-weight:700;
+  font-style:normal;
+  font-size:28px;
+  text-decoration:none;
+  color:#FFFFFF;
+  text-align:left;
+  border-color:transparent;
+  outline-style:none;
+}
+</style>
+
+{% endblock %}
+
 {% block main_content %}
 
 
 <div class="row">
     <div class="col-md-12">
-        <p style="margin-top: 100px;margin-left: 400px;font-weight: 600;font-size: 36px;">数据维护中......</p>
+        <div class="panel panel-default">
+            <div class="panel-heading" id="stretch">
+                <h3 class="panel-title fwb">运行大数据</h3>
+                <div class="actions pull-right">
+                    <i class="fa chevron-down" id="stretch-chevron"></i>
+                </div>
+            </div>
+            <div class="panel-body fixed-table-body" id="stretch-body">
+                <div class="form-group all-statistics-area">
+                    <div class="col-md-6">
+                        <div class="col-md-6 report-group">
+                            <div class="col-md-12 area" style="position:relative;">
+                                <div class="col-md-12 speedName">
+                                    <div class="col-md-12 groupNameShow">
+                                        <span id="selectGroup"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-right">
+                                    <span id="selectTotalMile">75583700 次</span>
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-12 report-group-more" id="checkGroup" >
+                                <div class="col-md-6"><span style="cursor:pointer;">出厂水年度总水量</span></div>
+                                <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
+                            </div>
+                        </div>
+                        <div class="col-md-6 report-time">
+                            <div class="col-md-12 area">
+                                <div class="col-md-12">
+                                    <div class="col-md-12 speedName">
+                                        <span class="reportTimeName"></span>
+                                    </div>
+                                    <div class="col-md-12 text-right">
+                                        <span id="selectTotalTravelTime">189台</span>
+                                    </div>
+                                    <!-- <div class="col-md-12 avgTravelTime">
+                                        <span class="avgTravelTime">平均：</span>
+                                        <span id="avgTravelTime">0秒</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="col-md-12 report-time-more" id="">
+                                <!-- <a onclick="window.open('{% static 'virvo/m/reportManagement/mileageReport/list')"> -->
+                                    <div class="col-md-6">
+                                        <span style="cursor:pointer;">年度总售水量</span>
+                                    </div>
+                                    <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
+                                <!-- </a> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6 report-speed">
+                            <div class="col-md-12 area">
+                                <!-- <div class="col-md-12 speedName">
+                                    <span class="speedNum"></span>
+                                </div> -->
+                                <div class="col-md-12 text-right">
+                                    <span id="selectTotalOverSpeedTimes">4 家</span>
+                                </div>
+                                <!-- <div class="col-md-12 reportSpeedAvg">
+                                    <span class="reportSpeedAvg">平均：</span>
+                                    <span id="reportSpeedAvg">0次</span>
+                                </div> -->
+                            </div>
+                            <div class="col-md-12 report-speed-more" id="">
+                                <!-- <a onclick="window.open('{% static 'virvo/m/reportManagement/speedReport/list')"> -->
+                                    <div class="col-md-6">
+                                        <span style="cursor:pointer;">厂家统计表</span>
+                                    </div>
+                                    <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
+                                <!-- </a> -->
+                            </div>
+                        </div>
+                        <div class="col-md-6 report-stoptime">
+                            <div class="col-md-12 area">
+                                <!-- <div class="col-md-12 speedName">
+                                    <span class="reportStoptimeName">停驶时长</span>
+                                </div> -->
+                                <div class="col-md-12 text-right sgstvc-center">
+                                    <span id="selectTotalDownTime">4 家</span>
+                                </div>
+                                <!-- <div class="col-md-12 avgDownTime">
+                                    <span class="avgDownTime">平均：</span>
+                                    <span id="avgDownTime">0秒</span>
+                                </div> -->
+                            </div>
+                            <div class="col-md-12 report-stoptime-more" id="">
+                                <!-- <a onclick="window.open('{% static 'virvo/m/reportManagement/parkingReport/list')"> -->
+                                    <div class="col-md-6" id="skipStop">
+                                        <span style="cursor:pointer;">厂家统计表</span>
+                                    </div>
+                                    <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
+                                </a> -->
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12 cycle-comparison">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch2">
+                            <h3 class="panel-title">水量趋势图</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch2-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch2-body">
+                            <div id="cycleVS" class="cycleVS"></div>
+                            <div class="cycleComparisonInfo">
+                                <ul>
+                                    <!-- <li class="col-md-12"><font color="#6dcff6">里程数：<span style="color:#5D5F63" id="totalMile">0</span><span style="color:#5D5F63">km</span></font>丨<font><span id="lastTotalMile">0</span>km</font> <span id="differTotalMile"></span></span> </li>
+                                    <li class="col-md-12"><font color="#78af3a">行驶时间：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalTravelTime">0秒</span></font>丨<font><span id="lastTotalTravelTime">0秒</span></font> <span id="differTotalTravelTime"></span> </li>
+                                    <li class="col-md-12"><font color="#c80002">停驶时长：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalDownTime">0秒</span></font>丨<font><span id="lastTotalDownTime">0秒</span></font> <span id="differTotalDownTime"></span> </li>
+                                    <li class="col-md-12"><font color="#960ba3">超速次数：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalOverSpeedTimes">0</span><span style="color:#5D5F63">次</span></font>丨<font><span id="lastTotalOverSpeedTimes">0</span>次</font> <span id="differTotalOverSpeedTimes"></span></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12 mileage-comparison">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch3">
+                            <h3 class="panel-title">水力分布图</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down"  id="stretch3-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch3-body">
+                            <div id="mileageVS" class="mileageVS"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12 mileage-statistics">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch4">
+                            <h3 class="panel-title">大用户排行榜<span id="curCar"></span></h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch4-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch4-body">
+                            <div id="mileageStatistics" class="mileageStatistics"></div>
+                            <div class="mileageStatisticsInfo">
+                                <ul>
+                                    <!-- <li class="col-md-6"><font color="#78af3a">行驶时长：</font><span id = "travelTimeByVehicle">0秒</span></li>
+                                    <li class="col-md-6"><font color="#c80002">停驶时长：</font><span id = "downTimeByVehicle">0秒</span></li>
+                                    <li class="col-md-6"><font color="#6dcff6">行驶里程：</font><span id = "mileByVehicle">0km</span></li>
+                                    <li class="col-md-6"><font color="#78af3a">行驶次数：</font><span id = "travelTimesByVehicle">0次</span></li>
+                                    <li class="col-md-6"><font color="#960ba3">超速次数：</font><span id = "alarmTimesByVehicle">0次</span></li>
+                                    <li class="col-md-12"><font color="#6dcff6">里程数</font>超越了<span id = "milePercent">0%</span>的车辆</li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch5">
+                            <h3 class="panel-title">散点图</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch5-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch5-body">
+                            <div class="hotspoteChart" id="hotspoteChart"></div>
+                            <div class="cityStayTime">
+                                <ul>
+                                    <li class="col-md-12">城市轨迹信息点月分布排名</li>
+                                    <li class="col-md-12"><span id = "one"></span></li>
+                                    <li class="col-md-12"><span id = "two"></span></li>
+                                    <li class="col-md-12"><span id = "three"></span></li>
+                                    <li class="col-md-12"><span id = "four"></span></li>
+                                    <li class="col-md-12"><span id = "five"></span></li>
+                                </ul>
+                            </div>
+                            <div class="toThePlace">
+                                <ul>
+                                    <!-- <li class="col-md-12">到过最东的地方：<span id = "east"></span></li>
+                                    <li class="col-md-12">到过最西的地方：<span id = "west"></span></li>
+                                    <li class="col-md-12">到过最南的地方：<span id = "south"></span></li>
+                                    <li class="col-md-12">到过最北的地方：<span id = "north"></span></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch6">
+                            <h3 class="panel-title">排行榜</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch6-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch6-body">
+                            <ul class="heroRanking">
+                                <!-- <li><i class="bigDataHero mostDiligent">本月最勤奋的车是：<span id="mostDiligent">无</span>，是不是应该给点奖励</i></li>
+                                <li><i class="bigDataHero mostLazy">本月最懒惰的车是：<span id="mostLazy">无</span>，是不是应该来点电疗处罚了</i></li>
+                                <li><i class="bigDataHero mostFar">本月开得最多的车是：<span id="mostFar">无</span>，最大里程是<span id="maxMile"></span>km</i></li>
+                                <li><i class="bigDataHero mintFar">本月几乎没动的车是：<span id="mintFar">无</span>，最小里程是<span id="minMile"></span>km</i></li>
+                                <li><i class="bigDataHero safe">本月最遵守规则的车是：<span id="safe">无</span>，老哥，稳！</i></li>
+                                <li><i class="bigDataHero danger">本月最危险的车是：<span id="danger">无</span>，千里之行，慎于足下！</i></li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

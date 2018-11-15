@@ -858,7 +858,7 @@ h3.timeline-title{color:#C8CCD7;font-size:20px;font-weight:400;margin:0 0 5px;te
 .report-group #selectGroup{font-size:22px;font-weight:700}
 .report-group .groupNameShow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
 .report-group #selectTotalMile{font-size:18px;font-weight:700}
-.report-group #selectTotalVehicleCount,.report-group .selectTotalVehicleCount{font-size:12px;margin:10px 0 0 0}
+.report-group #selectTotalVehicleCount,.report-group .selectTotalVehicleCount{font-size:28px;margin:10px 0 0 0}
 .report-group,.report-group a,.report-speed,.report-speed a,.report-stoptime,.report-stoptime a,.report-time,.report-time a{color:#fff!important}
 .report-group .area,.report-speed .area,.report-stoptime .area,.report-time .area{height:105px;padding:0 15px 0 15px!important}
 .report-group .report-group-more{height:35px;line-height:35px;background-color:#2295c9!important;font-size:12px}

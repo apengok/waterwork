@@ -19,7 +19,7 @@ class PolygonAdmin(admin.ModelAdmin):
 
 @admin.register(models.FenceShape)
 class FenceShapeAdmin(admin.ModelAdmin):
-    list_display = ['shapeId','name','zonetype','shape','pointSeqs','longitudes','latitudes','lnglatQuery_LU','lnglatQuery_RD']
+    list_display = ['shapeId','name','zonetype','shape','dma_no','pointSeqs','longitudes','latitudes','lnglatQuery_LU','lnglatQuery_RD']
 
     fieldsets = (
         (None, {'fields': ('shapeId', 'name','zonetype','shape')}),
