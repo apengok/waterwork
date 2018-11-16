@@ -3790,6 +3790,8 @@
                                 ;
                                 var lineSpot = dataList[i].lineSpot == undefined ? [] : dataList[i].lineSpot;
                                 var lineSegment = dataList[i].lineSegment == undefined ? [] : dataList[i].lineSegment;
+                                var polygon_fillColor = dataList[i].fillColor == undefined ? "#1791fc" : dataList[i].fillColor;
+                                var polygon_strokeColor = dataList[i].strokeColor == undefined ? "#FF33FF" : dataList[i].strokeColor;
                                 if (fenceType == "zw_m_marker") { // 标注
                                     fenceOperation.drawMark(fenceData, showMap);
                                 } else if (fenceType == "zw_m_line") { // 线
@@ -3797,7 +3799,7 @@
                                 } else if (fenceType == "zw_m_rectangle") { // 矩形
                                     fenceOperation.drawRectangle(fenceData, showMap);
                                 } else if (fenceType == "zw_m_polygon") { // 多边形
-                                    fenceOperation.drawPolygon(fenceData, showMap);
+                                    fenceOperation.drawPolygon(fenceData, showMap,polygon_fillColor,polygon_strokeColor);
                                 } else if (fenceType == "zw_m_circle") { // 圆形
                                     fenceOperation.drawCircle(fenceData, showMap);
                                 } else if (fenceType == "zw_m_administration") { // 行政区域
@@ -3859,6 +3861,9 @@
                                         var lineSegment = dataList[i].lineSegment == undefined ? [] : dataList[i].lineSegment;
                                         var lineSpot = [];
                                         var polygon = dataList[i].polygon;
+                                        // pwl polygon fillColor and strokeColor
+                                        var polygon_fillColor = dataList[i].fillColor == undefined ? "#1791fc" : dataList[i].fillColor;
+                                        var polygon_strokeColor = dataList[i].strokeColor == undefined ? "#FF33FF" : dataList[i].strokeColor;
                                         if (fenceType == "zw_m_marker") { // 标注
                                             layer.msg(fenceOperationLableEdit);
                                             map.off("rightclick", amendLine);
@@ -3975,7 +3980,7 @@
                                             map.off("rightclick", amendPolygon);
                                             map.off("rightclick", amendCircle);
                                         } else if (fenceType == "zw_m_polygon") { // 多边形
-                                            fenceOperation.drawPolygon(fenceData, map);
+                                            fenceOperation.drawPolygon(fenceData, map,polygon_fillColor,polygon_strokeColor);
                                             if (PolyEditorMap.containsKey(fenceId)) {
                                                 PolyEditorMap.remove(fenceId);
                                             }
@@ -4914,6 +4919,8 @@
                                 var fenceData = dataList[i].fenceData;
                                 var lineSpot = dataList[i].lineSpot;
                                 var lineSegment = dataList[i].lineSegment == undefined ? [] : dataList[i].lineSegment;
+                                var polygon_fillColor = dataList[i].fillColor == undefined ? "#1791fc" : dataList[i].fillColor;
+                                var polygon_strokeColor = dataList[i].strokeColor == undefined ? "#FF33FF" : dataList[i].strokeColor;
                                 if (fenceType == "zw_m_marker") { // 标注
                                     fenceOperation.drawMark(fenceData, map);
                                 } else if (fenceType == "zw_m_line") { // 线
@@ -4921,7 +4928,7 @@
                                 } else if (fenceType == "zw_m_rectangle") { // 矩形
                                     fenceOperation.drawRectangle(fenceData, map);
                                 } else if (fenceType == "zw_m_polygon") { // 多边形
-                                    fenceOperation.drawPolygon(fenceData, map);
+                                    fenceOperation.drawPolygon(fenceData, map,polygon_fillColor,polygon_strokeColor);
                                 } else if (fenceType == "zw_m_circle") { // 圆形
                                     fenceOperation.drawCircle(fenceData, map);
                                 }
@@ -4966,7 +4973,7 @@
             ;
         },
         //多边形
-        drawPolygon: function (polygon, thisMap) {
+        drawPolygon: function (polygon, thisMap,fillColor,strokeColor) {
             var polygonId = polygon[0].polygonId;
             if (fenceIDMap.containsKey(polygonId)) {
                 var thisFence = fenceIDMap.get(polygonId);
@@ -5000,10 +5007,10 @@
             $("#rectangleAllPointShow").html(html);
             polyFence = new AMap.Polygon({
                 path: dataArr,//设置多边形边界路径
-                strokeColor: "#FF33FF", //线颜色
+                strokeColor: strokeColor, // "#FF33FF", //线颜色
                 strokeOpacity: 0.2, //线透明度
                 strokeWeight: 3, //线宽
-                fillColor: "#1791fc", //填充色
+                fillColor: fillColor, // "#1791fc", //填充色
                 fillOpacity: 0.35
                 //填充透明度
             });

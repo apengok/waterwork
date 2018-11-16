@@ -285,42 +285,7 @@ def getFenceDetails(request):
 
         return JsonResponse(details)
 
-        # pointSeqs = pgo["pointSeqs"].split(",")
-        # longitudes = pgo["longitudes"].split(",")
-        # latitudes = pgo["latitudes"].split(",")
-        # # print(pointSeqs,type(pointSeqs))
-        # # print(longitudes,type(longitudes))
-        # # print(latitudes,type(latitudes))
-
-        # for p in pointSeqs:
-        #     idx = int(p)
-        #     fenceData.append({
-        #         "createDataTime":"2018-11-08 20:46:57",
-        #         "createDataUsername":"admin",
-        #         "description":"null",
-        #         "flag":1,
-        #         "id":"null",
-        #         "latitude":latitudes[idx],
-        #         "longitude":longitudes[idx],
-        #         "name":"null",
-        #         "polygonId":pgo["shapeId"],
-        #         "sortOrder":idx,
-        #         "type":"null",
-        #         "updateDataTime":"null",
-        #         "updateDataUsername":"null"
-        #         })
-
-        # details = {
-        #     "exceptionDetailMsg":"null",
-        #     "msg":"null",
-        #     "obj":[
-        #         {"fenceType":"zw_m_polygon",
-        #         "fenceData":fenceData
-        #         }],
-        #     "success":1
-        # }
-
-        # return JsonResponse(details)
+        
 
     if len(fenceNodes) == 0 or fenceNodes == '[null]' or fenceNodes == '[]':
         details = {
@@ -375,7 +340,9 @@ def getFenceDetails(request):
                     })
 
             details_obj.append({"fenceType":pId,
-            "fenceData":fenceData
+                "fillColor":pgo["fillColor"],
+                "strokeColor":pgo["strokeColor"],
+                "fenceData":fenceData
             })
 
         if pId == "zw_m_rectangle":
@@ -578,6 +545,8 @@ def previewFence(request):
                 "updateDataTime":fd["updateDataTime"],
                 "updateDataUsername":fd["updateDataUsername"]
             }
+        details_obj[0]["fillColor"] = pgo["fillColor"]
+        details_obj[0]["strokeColor"] = pgo["strokeColor"]
 
     
     details = {
