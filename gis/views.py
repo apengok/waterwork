@@ -754,7 +754,7 @@ def getDMAFenceDetails(request):
 
         dma = DMABaseinfo.objects.get(dma_no=dma_no)
         if dflag == '1':
-            if dma.belongto not in organ.sub_organizations():
+            if dma.belongto not in organ.sub_organizations(include_self=True):
                 continue
 
         fd = FenceDistrict.objects.filter(cid=shapeId).values().first()
