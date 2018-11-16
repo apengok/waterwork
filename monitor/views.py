@@ -108,7 +108,7 @@ class MapMonitorView(LoginRequiredMixin,TemplateView):
 
 
 class MapMonitorView2(LoginRequiredMixin,TemplateView):
-    template_name = "monitor/mapmonitor2.html"
+    template_name = "monitor/mapmonitor.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(MapMonitorView2, self).get_context_data(*args, **kwargs)

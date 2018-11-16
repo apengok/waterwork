@@ -16,7 +16,7 @@ from django.utils.functional import cached_property
 import time
 from legacy.utils import (HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,HdbFlow_monthly,hdb_watermeter_flow_monthly,
         Hdbflow_from_hdbflowmonth,
-        ZERO_monthly_dict,generat_year_month_from)
+        ZERO_monthly_dict,generat_year_month,generat_year_month_from)
 from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
@@ -288,6 +288,33 @@ class DMABaseinfo(models.Model):
             'water_uncount':water_uncount,
             'monthly_uncount':monthly_uncount,
 
+        }
+
+    def dmaMapStatistic(self):
+        '''
+            DMA 在线监控页面 dma分区的统计信息
+        '''
+        month_list = generat_year_month()
+        print(month_list)
+        dmareport = self.dma_statistic2(month_list)
+
+        water_in = dmareport['water_in']
+        monthly_sale = dmareport['monthly_sale']
+        print('monthly_sale',monthly_sale)
+        today = datetime.date.today()
+        month_str = today.strftime("%Y-%m")
+        lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=1)
+        lastmonth_str = lastmonth.strftime("%Y-%m")
+
+        return {
+            "dma_name":self.dma_name,
+            "belongto":self.belongto.name,
+            "dma_level":"二级",
+            "state":"在线",
+            "water_in":water_in,
+            "month_sale":monthly_sale[month_str],
+            "last_month_sale":monthly_sale[lastmonth_str],
+            "last_add_ratio":"34%"
         }
 
 '''

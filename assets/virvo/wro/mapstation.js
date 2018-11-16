@@ -45,31 +45,7 @@
     checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
 
     var fenceOperation = {
-        //行政区域选择
-        administrativeAreaSelect: function (obj) {
-            var provin = $("#province").val();
-            if (provin == "province") {
-                $("#provinceError").css("display", "none");
-            }
-            else if (provin == "--请选择--") {
-                $("#provinceError").css("display", "block");
-            }
-            for (var i = 0, l = administrativeAreaFence.length; i < l; i++) {
-                administrativeAreaFence[i].setMap(null);
-            }
-            var option = obj[obj.options.selectedIndex];
-            var keyword = option.text; //关键字
-            var adcode = option.adcode;
-            district.setLevel(option.value); //行政区级别
-            district.setExtensions('all');
-            //行政区查询
-            //按照adcode进行查询可以保证数据返回的唯一性
-            district.search(adcode, function (status, result) {
-                if (status === 'complete') {
-                    fenceOperation.getData(result.districtList[0]);
-                }
-            });
-        },
+        
         //行政区域选择后数据处理
         getData: function (data) {
             var bounds = data.boundaries;

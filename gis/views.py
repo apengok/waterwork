@@ -725,3 +725,68 @@ def alterstrokeColor(request):
         p.save()
 
     return HttpResponse(json.dumps({"success":1}))
+
+
+# DMA在线监视dma group dmaMapStatistic
+def getDMAFenceDetails(request):
+    print("getDMAFenceDetails",request.POST)
+    dma_no = request.POST.get("dma_no") or ''
+    fenceNodes = request.POST.get("fenceNodes")
+    # print("dma_no",dma_no)
+    # print("fenceNodes",fenceNodes)
+
+    allfence = FenceShape.objects.values()
+
+    details_obj = []
+    for pgo in allfence:
+        dma_no = pgo["dma_no"]
+        shapeId = pgo["shapeId"]
+        if dma_no == '' or dma_no == None:
+            continue
+
+        dma = DMABaseinfo.objects.get(dma_no=dma_no)
+        fd = FenceDistrict.objects.filter(cid=shapeId).values().first()
+        fenceData = []
+        pointSeqs = pgo["pointSeqs"].split(",")
+        longitudes = pgo["longitudes"].split(",")
+        latitudes = pgo["latitudes"].split(",")
+        
+        for p in pointSeqs:
+            idx = int(p)
+            fenceData.append({
+                "createDataTime":fd["createDataTime"],
+                "createDataUsername":fd["createDataUsername"],
+                "description":fd["description"],
+                "flag":1,
+                "id":"null",
+                "latitude":latitudes[idx],
+                "longitude":longitudes[idx],
+                "name":"null",
+                "polygonId":pgo["shapeId"],
+                "sortOrder":idx,
+                "type":pgo["zonetype"],
+                "updateDataTime":fd["updateDataTime"],
+                "updateDataUsername":fd["updateDataUsername"]
+                })
+
+        details_obj.append({"fenceType":"zw_m_polygon",
+            "fillColor":pgo["fillColor"],
+            "strokeColor":pgo["strokeColor"],
+            "dmaMapStatistic":dma.dmaMapStatistic(),
+            "fenceData":fenceData
+        })
+
+            
+            
+    details = {
+        "exceptionDetailMsg":"null",
+        "msg":"null",
+        "obj":details_obj,
+        "success":1
+    }
+
+    return JsonResponse(details)
+
+        
+
+

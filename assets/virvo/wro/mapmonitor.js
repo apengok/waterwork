@@ -16,7 +16,339 @@
     var vagueSearchlast = $("#userType").val();
     var overlay;
     var getdmamapusedata_flag = 0;
+
+    var travelLineList,AdministrativeRegionsList,fenceIdList,
+  administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
+    newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight, dbclickCheckedId, oldDbclickCheckedId,
+    onClickVId, oldOnClickVId, zTree, clickStateChar,logTime,operationLogLength, licensePlateInformation, groupIconSkin, markerListT = [], markerRealTimeT,
+    zoom = 18, requestStrS, cheakNodec = [], realTimeSet = [], alarmSet = [], neverOline = [], lineVid = [], zTreeIdJson = {}, cheakdiyuealls = [], lineAr = [],
+    lineAs = [], lineAa = [], lineAm = [], lineOs = [], changeMiss = [], diyueall = [], params = [], lineV = [], lineHb = [], cluster, fixedPoint = null, fixedPointPosition = null,
+    flog = true, mapVehicleTimeW, mapVehicleTimeQ, markerMap, mapflog, mapVehicleNum, infoWindow, paths = null, uptFlag = true, flagState = true,
+    videoHeight, addaskQuestionsIndex = 2, dbClickHeighlight = false, checkedVehicles = [], runVidArray = [], stopVidArray = [], msStartTime, msEndTime,
+    videoTimeIndex,voiceTimeIndex,charFlag = true, fanceID = "", newCount = 1, mouseTool, mouseToolEdit, clickRectangleFlag = false, isAddFlag = false, isAreaSearchFlag = false, isDistanceCount = false, fenceIDMap, PolyEditorMap,
+    sectionPointMarkerMap, fenceSectionPointMap, travelLineMap, fenceCheckLength = 0, amendCircle, amendPolygon, amendLine, polyFence, changeArray, trid = [], parametersID, brand, clickFenceCount = 0,
+    clickLogCount = 0, fenceIdArray = [], fenceOpenArray = [], save, moveMarkerBackData, moveMarkerFenceId, monitoringObjMapHeight, carNameMarkerContentMap, carNameMarkerMap, carNameContentLUMap,
+    lineSpotMap, isEdit = true, sectionMarkerPointArray, stateName = [], stateIndex = 1, alarmName = [], alarmIndex = 1, activeIndex = 1, queryFenceId = [], crrentSubV=[], crrentSubName=[],
+    suFlag=true, administrationMap, lineRoute, contextMenu, dragPointMarkerMap, isAddDragRoute = false, misstype=false,misstypes = false, alarmString, saveFenceName, saveFenceType, alarmSub = 0, cancelList = [], hasBegun=[],
+    isDragRouteFlag = false, flagSwitching = true, isCarNameShow = true, notExpandNodeInit,vinfoWindwosClickVid, $myTab = $("#myTab"), $MapContainer = $("#MapContainer"), $panDefLeft = $("#panDefLeft"), 
+    $contentLeft = $("#content-left"), $contentRight = $("#content-right"), $sidebar = $(".sidebar"), $mainContentWrapper = $(".main-content-wrapper"), $thetree = $("#thetree"),
+    $realTimeRC = $("#realTimeRC"), $goShow = $("#goShow"), $chooseRun = $("#chooseRun"), $chooseNot = $("#chooseNot"), $chooseAlam = $("#chooseAlam"), $chooseStop = $("#chooseStop"),
+    $chooseOverSeep = $("#chooseOverSeep"), $online = $("#online"), $chooseMiss = $("#chooseMiss"), $scrollBar = $("#scrollBar"), $mapPaddCon = $(".mapPaddCon"), $realTimeVideoReal = $(".realTimeVideoReal"),
+    $realTimeStateTableList = $("#realTimeStateTable"), $alarmTable = $("#alarmTable"), $logging=$("#logging"), $showAlarmWinMark = $("#showAlarmWinMark"), $alarmFlashesSpan = $(".alarmFlashes span"),
+    $alarmSoundSpan = $(".alarmSound span"), $alarmMsgBox = $("#alarmMsgBox"), $alarmSoundFont = $(".alarmSound font"), $alarmFlashesFont = $(".alarmFlashes font"), $alarmMsgAutoOff = $("#alarmMsgAutoOff"),
+    rMenu = $("#rMenu"), alarmNum = 0, carAddress, msgSNAck, setting, ztreeStyleDbclick, $tableCarAll = $("#table-car-all"), $tableCarOnline = $("#table-car-online"), $tableCarOffline = $("#table-car-offline"),
+    $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"), $tableCarOnlinePercent = $("#table-car-online-percent"),longDeviceType,tapingTime,loadInitNowDate = new Date(),loadInitTime,
+    checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
+
+
+    var fenceOperation = {
+        
+        //行政区域选择后数据处理
+        getData: function (data) {
+            var bounds = data.boundaries;
+            if (bounds) {
+                // $('#administrativeLngLat').val(bounds.join('-'));
+                for (var i = 0, l = bounds.length; i < l; i++) {
+                    var polygon = new AMap.Polygon({
+                        map: map,
+                        strokeWeight: 1,
+                        strokeColor: '#CC66CC',
+                        fillColor: '#CCF3FF',
+                        fillOpacity: 0.5,
+                        path: bounds[i]
+                    });
+                    // administrativeAreaFence.push(polygon);
+                    map.setFitView(polygon);//地图自适应
+                }
+                ;
+            };
+            
+        },
+        //显示行政区域
+        drawAdministration: function (data, aId, showMap) {
+            var polygonAarry = [];
+            if (administrationMap.containsKey(aId)) {
+                var this_fence = administrationMap.get(aId);
+                map.remove(this_fence);
+                administrationMap.remove(aId);
+            }
+            ;
+            for (var i = 0, l = data.length; i < 1; i++) {
+                var polygon = new AMap.Polygon({
+                    map: map,
+                    strokeWeight: 1,
+                    strokeColor: '#CC66CC',
+                    fillColor: '#CCF3FF',
+                    fillOpacity: 0.5,
+                    path: data
+                });
+                polygonAarry.push(polygon);
+                administrativeAreaFence.push(polygon);
+            }
+            ;
+            administrationMap.put(aId, polygonAarry);
+            map.setFitView(polygon);//地图自适应
+        },
+    }
+
+
+
     mapMonitor = {
+         // 地图初始化
+        amapinit: function () {
+            console.log("$newMapHeight",$("#map-container").height());
+            $contentLeft.css({
+                "height": newMapHeight + "px",
+            });
+            console.log("$contentLeft",$contentLeft.height());
+            var newContLeftH = winHeight - headerHeight ;
+
+            $("#sidebar").css({
+                "height": newMapHeight + "px"
+            });
+            console.log("$sidebar height",$(".sidebar").height());
+
+            $("#treeDemo").css({
+                "height": 388 + "px"
+            });
+            // 创建地图
+            map = new AMap.Map("map-container", {
+                resizeEnable: true,   //是否监控地图容器尺寸变化
+                zoom: 18,       //地图显示的缩放级别
+            });
+            // // 输入提示
+            // var startPoint = new AMap.Autocomplete({
+            //     input: "startPoint"
+            // });
+            // startPoint.on('select', fenceOperation.dragRoute);
+            // var endPoint = new AMap.Autocomplete({
+            //     input: "endPoint"
+            // });
+            // endPoint.on('select', fenceOperation.dragRoute);
+            // 行政区划查询
+            adcode = $("#entadcode").val()
+            if(adcode != ""){
+                var entislocation = $("#entislocation").val()
+                var entdistrictlevel = $("#entdistrictlevel").val()
+
+                console.log(entislocation,entdistrictlevel,adcode)
+                var opts = {
+                    subdistrict: 0,   //获取边界不需要返回下级行政区
+                    extensions: 'all',  //返回行政区边界坐标组等具体信息
+                    level: 'district'  //查询行政级别为 市
+                };
+                district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
+                district.search('china', function (status, result) {
+                    console.log(status,result,result.districtList[0])
+                    if (status == 'complete') {
+                        fenceOperation.getData(result.districtList[0]);
+                    }
+                });
+            }
+            // 地图移动结束后触发，包括平移和缩放
+            mouseTool = new AMap.MouseTool(map);
+            // mouseTool.on("draw", fenceOperation.createSuccess);
+            mouseToolEdit = new AMap.MouseTool(map);
+            // 实例化3D楼块图层
+            buildings = new AMap.Buildings();
+            // 在map中添加3D楼块图层
+            buildings.setMap(map);
+            // 地图标尺
+            var mapScale = AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function () {
+                map.addControl(new AMap.ToolBar());
+                map.addControl(new AMap.Scale());
+            });
+            // 卫星地图
+            satellLayer = new AMap.TileLayer.Satellite();
+            satellLayer.setMap(map);
+            satellLayer.hide();
+            // // 实时路况
+            // realTimeTraffic = new AMap.TileLayer.Traffic({zIndex: 1});
+            // realTimeTraffic.setMap(map);
+            // realTimeTraffic.hide();
+            // 当范围缩小时触发该方法
+            // var clickEventListener = map.on('zoomend', amapOperation.clickEventListener);
+            // 当拖拽结束时触发该方法
+            // var clickEventListener2 = map.on('dragend', amapOperation.clickEventListener2);
+            // 地图点击隐藏车辆树右键菜单
+            map.on("click", function () {
+                $("#rMenu").css("visibility", "hidden");
+                $("#disSetMenu").slideUp();
+                $("#mapDropSettingMenu").slideUp();
+                $("#fenceTool>.dropdown-menu").hide();
+            });
+            infoWindow = new AMap.InfoWindow({isCustom: true, offset: new AMap.Pixel(100, -100), closeWhenClickMap: true});
+
+            mapMonitor.loadGeodata()
+        },
+
+        loadGeodata:function(){
+            dma_no = "dma0002";  //$("#current_dma_no").val();
+            map.clearMap();
+            $.ajax({
+                type: 'POST',
+                url: '/gis/fence/bindfence/getDMAFenceDetails/',
+                data: {"dma_no" : dma_no},
+                async:false,
+                dataType: 'json',
+                success: function (data) {
+                    var dataList = data.obj;
+                    if (dataList != null && dataList.length > 0) {
+                        dma_list = []
+                        for(var j = 0;j < dataList.length;j++){
+                            polygon = data.obj[j].fenceData;
+                            dmaMapStatistic = data.obj[j].dmaMapStatistic
+                            fillColor_seted = fillColor = data.obj[j].fillColor
+                            strokeColor_seted = strokeColor = data.obj[j].strokeColor
+                            if(fillColor === null){
+                                fillColor_seted = fillColor = "#1791fc"
+                            }
+                            if(strokeColor === null){
+                                strokeColor_seted = strokeColor = "#FF33FF"
+                            }
+                            var dataArr = new Array();
+                            if (polygon != null && polygon.length > 0) {
+                                for (var i = 0; i < polygon.length; i++) {
+                                    dataArr.push([polygon[i].longitude, polygon[i].latitude]);
+                                }
+                            };
+                            if(data.obj !== null){
+                                polyFence = new AMap.Polygon({
+                                    path: dataArr,//设置多边形边界路径
+                                    strokeColor:strokeColor,// "#FF33FF", //线颜色
+                                    strokeOpacity: 0.2, //线透明度
+                                    strokeWeight: 3, //线宽
+                                    fillColor:fillColor,// "#1791fc", //填充色
+                                    fillOpacity: 0.35
+                                    //填充透明度
+                                });
+
+                                // var position = new AMap.LngLat(polygon[0].longitude,polygon[0].latitude);
+                                polyFence.on("mouseover",function(e){
+                    
+                                    var position = e.lnglat;
+                                    // console.log(position);
+                                    conts = mapMonitor.createStationInfo(dmaMapStatistic.dma_name, dmaMapStatistic)
+
+                                    infoWindow.setContent(conts);
+                                    // markerInfoWindow.setSize(AMap.Size(400,300));
+                                    infoWindow.open(map,position);
+                                });
+
+                                polyFence.on("mouseout",function(){
+                                    infoWindow.close();
+                                })
+
+                                dma_list.push(polyFence)
+                                // polyFence.setMap(map);
+                                // map.setFitView(polyFence);
+                                
+                            }
+                        }
+
+                        map.add(dma_list)
+                        map.setFitView(dma_list);
+                    }
+                },      
+            });
+            
+        },
+        createStationInfo:function (title, content) {
+            var info = document.createElement("div");
+            info.className = "info";
+     
+            //可以通过下面的方式修改自定义窗体的宽高
+            //info.style.width = "400px";
+            // 定义顶部标题
+            var stationname = document.createElement("div");
+            stationname.innerHTML = "分区名称:" ;
+            var span = document.createElement("span");
+            span.className = "span2";
+            span.innerHTML = content.dma_name;
+            stationname.appendChild(span);
+            info.appendChild(stationname);
+            
+            var belongto = document.createElement("div");
+            belongto.innerHTML = "所属组织:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.belongto;
+            belongto.appendChild(span);
+            info.appendChild(belongto);
+            
+            var relatemeter = document.createElement("div");
+            relatemeter.innerHTML = "分区层级:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.dma_level;
+            relatemeter.appendChild(span);
+            info.appendChild(relatemeter);
+            
+            
+            var meterstate = document.createElement("div");
+            meterstate.innerHTML = "状&nbsp; &nbsp; &nbsp; 态:";
+            var span = document.createElement("span");
+            // if(content.status == "在线"){
+            //     span.className = "span3";
+            // }else{
+            //     span.className = "span4";
+            // }
+            span.innerHTML = content.state;
+            meterstate.appendChild(span);
+            info.appendChild(meterstate);
+            
+            var split = document.createElement("img");
+            split.src = "/static/virvo/images/u3922.png";
+            info.appendChild(split);
+
+            
+
+            var readtime = document.createElement("div");
+            readtime.innerHTML = "分区流量:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.water_in;
+            readtime.appendChild(span);
+            info.appendChild(readtime);
+            
+            var flux = document.createElement("div");
+            flux.innerHTML = "当月售水量:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.month_sale;
+            flux.appendChild(span);
+            info.appendChild(flux);
+            
+            var accumuflux = document.createElement("div");
+            accumuflux.innerHTML = "上月售水量:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.last_month_sale;
+            accumuflux.appendChild(span);
+            info.appendChild(accumuflux);
+            
+            var press = document.createElement("div");
+            press.innerHTML = "上月增长比例:";
+            var span = document.createElement("span");
+            span.className = "span1";
+            span.innerHTML = content.last_add_ratio;
+            press.appendChild(span);
+            info.appendChild(press);
+            
+            
+            // 定义底部内容
+            var bottom = document.createElement("div");
+            bottom.className = "info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '10px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "http://webapi.amap.com/images/sharp.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
+            return info;
+        },
+
         init: function(){
             // map
             var extent = [-2000, -2000, 2000, 2000];
@@ -438,7 +770,8 @@
         var map;
         mapMonitor.userTree();
         
-        mapMonitor.init();
+        mapMonitor.amapinit();
+        // mapMonitor.init();
         
         // map.on(['pointermove', 'singleclick'], mapMonitor.moveonmapevent);
         

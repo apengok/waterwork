@@ -1261,6 +1261,8 @@
 
         $("#fillColor").spectrum({
             color: fillColor_seted,
+            preferredFormat: "hex",
+            showInput: true,
             move: function(tinycolor) {
               var fillcolor = tinycolor.toHexString(); // #ff0000
               console.log("move:",fillcolor)
@@ -1297,6 +1299,8 @@
 
         $("#strokeColor").spectrum({
             color: strokeColor_seted,
+            preferredFormat: "hex",
+            showInput: true,
             move: function(tinycolor) {
               var fillcolor = tinycolor.toHexString(); // #ff0000
               console.log("move:",fillcolor)
@@ -1326,8 +1330,10 @@
             }
         });
 
+    $("#fillColor").css("display", "none");
 
-
+    $("#strokeColor").css("display", "none");
+    
 
     })
 })($,window)

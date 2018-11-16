@@ -222,9 +222,9 @@
                     
                     <div class="col-md-2">
                       
-                      <div><button type="button" class="btn btn-primary " >蒙层颜色</button><input type='text' id="fillColor" />
+                      <div><button type="button" id="btnFillColor" class="btn btn-primary " >蒙层颜色</button><input type='text' id="fillColor" style="display: none;" />
                       </div>
-                      <div><button type="button" class="btn btn-primary " >边框颜色</button><input type='text'  id="strokeColor" />
+                      <div><button type="button" id="btnstrokColor" class="btn btn-primary " >边框颜色</button><input type='text'  id="strokeColor" />
                       </div>
                       
                       
@@ -341,8 +341,16 @@
 <script src="{% static 'virvo/wro/spectrum.js' %}"></script>
 
 <script>
-$("#btn-toggle").click(function() {
-    $("#toggle").spectrum("toggle");
+  
+$("#btnFillColor").click(function() {
+  console.log("btn-toggle clicked")
+    $("#fillColor").spectrum("toggle");
+    return false;
+});
+
+$("#btnstrokColor").click(function() {
+  console.log("btn-toggle clicked")
+    $("#strokeColor").spectrum("toggle");
     return false;
 });
 
