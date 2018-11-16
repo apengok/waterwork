@@ -40,6 +40,7 @@
     $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"), $tableCarOnlinePercent = $("#table-car-online-percent"),longDeviceType,tapingTime,loadInitNowDate = new Date(),loadInitTime,
     checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
 
+    var dma_list = [];
 
     var fenceOperation = {
         
@@ -179,22 +180,25 @@
             });
             infoWindow = new AMap.InfoWindow({isCustom: true, offset: new AMap.Pixel(100, -100), closeWhenClickMap: true});
 
-            mapMonitor.loadGeodata()
+            mapMonitor.loadGeodata(0)
         },
 
-        loadGeodata:function(){
-            dma_no = "dma0002";  //$("#current_dma_no").val();
+        loadGeodata:function(dflag){
+            dma_no = $("#current_dma_no").val();
+            current_organ = $("#current_organ_id").val()
             map.clearMap();
+            map.remove(dma_list)
+            dma_list=[]
             $.ajax({
                 type: 'POST',
                 url: '/gis/fence/bindfence/getDMAFenceDetails/',
-                data: {"dma_no" : dma_no},
+                data: {"dma_no" : dma_no,"current_organ":current_organ,"dflag":dflag},
                 async:false,
                 dataType: 'json',
                 success: function (data) {
                     var dataList = data.obj;
                     if (dataList != null && dataList.length > 0) {
-                        dma_list = []
+                        
                         for(var j = 0;j < dataList.length;j++){
                             polygon = data.obj[j].fenceData;
                             dmaMapStatistic = data.obj[j].dmaMapStatistic
@@ -561,6 +565,7 @@
                     data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
                         "isOrg" : "1",
+                        "isDma" : "1",
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: mapMonitor.ajaxDataFilter
@@ -746,7 +751,19 @@
             selectDistrictId = treeNode.districtid;
             selectTreeIdAdd=treeNode.uuid;
             $('#simpleQueryParam').val("");
-            myTable.requestData();
+            if(treeNode.type == "dma"){
+                var pNode = treeNode.getParentNode();
+                // $("#organ_name").attr("value",pNode.name);
+                $("#current_dma_no").attr("value",treeNode.dma_no);
+                organ = pNode.id;
+                station = treeNode.id;
+
+                mapMonitor.loadGeodata(2)
+            }else{
+                $("#current_organ_id").attr("value",treeNode.id);
+
+                mapMonitor.loadGeodata(1)
+            }
         },
         // ajax参数
         ajaxDataParamFun: function(d){

@@ -731,11 +731,19 @@ def alterstrokeColor(request):
 def getDMAFenceDetails(request):
     print("getDMAFenceDetails",request.POST)
     dma_no = request.POST.get("dma_no") or ''
+    dflag = request.POST.get("dflag") #0:all 1:organization 2:dma
+    current_organ = request.POST.get("current_organ")
     fenceNodes = request.POST.get("fenceNodes")
     # print("dma_no",dma_no)
     # print("fenceNodes",fenceNodes)
 
-    allfence = FenceShape.objects.values()
+    if dflag == '0':
+        allfence = FenceShape.objects.values()
+    elif dflag == '2':
+        allfence = FenceShape.objects.filter(dma_no=dma_no).values()
+    else:
+        organ = Organizations.objects.get(cid=current_organ)
+        allfence = FenceShape.objects.values()
 
     details_obj = []
     for pgo in allfence:
@@ -745,6 +753,10 @@ def getDMAFenceDetails(request):
             continue
 
         dma = DMABaseinfo.objects.get(dma_no=dma_no)
+        if dflag == '1':
+            if dma.belongto not in organ.sub_organizations():
+                continue
+
         fd = FenceDistrict.objects.filter(cid=shapeId).values().first()
         fenceData = []
         pointSeqs = pgo["pointSeqs"].split(",")

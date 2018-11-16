@@ -295,12 +295,12 @@ class DMABaseinfo(models.Model):
             DMA 在线监控页面 dma分区的统计信息
         '''
         month_list = generat_year_month()
-        print(month_list)
+        # print(month_list)
         dmareport = self.dma_statistic2(month_list)
 
         water_in = dmareport['water_in']
         monthly_sale = dmareport['monthly_sale']
-        print('monthly_sale',monthly_sale)
+        # print('monthly_sale',monthly_sale)
         today = datetime.date.today()
         month_str = today.strftime("%Y-%m")
         lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=1)
@@ -311,9 +311,9 @@ class DMABaseinfo(models.Model):
             "belongto":self.belongto.name,
             "dma_level":"二级",
             "state":"在线",
-            "water_in":water_in,
-            "month_sale":monthly_sale[month_str],
-            "last_month_sale":monthly_sale[lastmonth_str],
+            "water_in":round(float(water_in),2),
+            "month_sale":round(float(monthly_sale[month_str]),2) ,
+            "last_month_sale":round(float(monthly_sale[lastmonth_str]),2) ,
             "last_add_ratio":"34%"
         }
 

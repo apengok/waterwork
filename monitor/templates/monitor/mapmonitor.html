@@ -105,6 +105,53 @@
     </style>
 {% endblock %}
 
+
+{% block content_left %}
+    <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
+        <div style="background-color: rgba(0, 153, 204, 1);" >
+            <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(1251)
+            </div>
+        </div>
+        <div style="background:#fff;">
+            <div class="form-group">
+              <label class="col-md-6 control-label" style="margin-top:10px;color: #1627e0;">在线(6)</label>
+              <label class="col-md-6 control-label" style="margin-top:10px;color: grey;">离线(0)</label>
+            </div>
+            <div class="form-group">
+              <label class="col-md-6 control-label" style="margin-top:10px;color: #f20804;">报警站点(0)</label>
+              <label class="col-md-6 control-label" style="margin-top:10px;color: #02470e;">关注站点(0)</label>
+            </div>
+            <div class="form-group">
+              <label class="col-md-6 control-label" style="margin-top:10px;margin-bottom:20px;color: #8c4380;">大用户站点(0)</label>
+              
+            </div>
+        </div>
+
+        <div class="col-md-12" style="padding-right: 0px; padding-left: 0px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title fwb">DMA分区</h3>
+                  <div class="actions  listActions">
+                    <i class="fa fa-chevron-down"></i>
+                  </div>
+                </div>
+                <div class="panel-body" style="padding: 0px;">
+                  <div class="form-group" style="margin-top: 15px;">
+                    <div class="col-md-12">
+                      <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
+                    </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:80%!important">
+                    <ul id="treeDemo" class="ztreee" style="overflow:auto;height:460px!important"></ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock content_left %}
+
 {% block main_content %}
 
 <div id="content-right" class="col-md-10 content-right" >
@@ -112,6 +159,9 @@
         <!-- <div id="js-map" class="map"></div> -->
         
       <div id="map-container" ></div> 
+      <input type="hidden" id="current_dma_no" name="">
+      <input type="hidden" id="current_organ_id" name="">
+
       <div id="js-overlay" class="overlay2" >
             <div class="form-group">
               <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区名称:</label>
