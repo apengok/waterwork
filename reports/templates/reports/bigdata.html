@@ -132,24 +132,16 @@
                         
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-12 col-xs-12 cycle-comparison">
+                <div class="col-md-6 col-sm-12 col-xs-12 mileage-comparison">
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="stretch2">
-                            <h3 class="panel-title">水量趋势图</h3>
+                        <div class="panel-heading" id="stretch3">
+                            <h3 class="panel-title">水力趋势图</h3>
                             <div class="actions pull-right">
-                                <i class="fa chevron-down" id="stretch2-chevron"></i>
+                                <i class="fa chevron-down"  id="stretch3-chevron"></i>
                             </div>
                         </div>
-                        <div class="panel-body" id="stretch2-body">
-                            <div id="cycleVS" class="cycleVS"></div>
-                            <div class="cycleComparisonInfo">
-                                <ul>
-                                    <!-- <li class="col-md-12"><font color="#6dcff6">里程数：<span style="color:#5D5F63" id="totalMile">0</span><span style="color:#5D5F63">km</span></font>丨<font><span id="lastTotalMile">0</span>km</font> <span id="differTotalMile"></span></span> </li>
-                                    <li class="col-md-12"><font color="#78af3a">行驶时间：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalTravelTime">0秒</span></font>丨<font><span id="lastTotalTravelTime">0秒</span></font> <span id="differTotalTravelTime"></span> </li>
-                                    <li class="col-md-12"><font color="#c80002">停驶时长：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalDownTime">0秒</span></font>丨<font><span id="lastTotalDownTime">0秒</span></font> <span id="differTotalDownTime"></span> </li>
-                                    <li class="col-md-12"><font color="#960ba3">超速次数：</font><font color="#6dcff6"><span style="color:#5D5F63" id="totalOverSpeedTimes">0</span><span style="color:#5D5F63">次</span></font>丨<font><span id="lastTotalOverSpeedTimes">0</span>次</font> <span id="differTotalOverSpeedTimes"></span></li> -->
-                                </ul>
-                            </div>
+                        <div class="panel-body" id="stretch3-body">
+                            <div id="onlineGraphics" style="height:310px;width:100%;"></div>
                         </div>
                     </div>
                 </div>
@@ -162,7 +154,7 @@
                             </div>
                         </div>
                         <div class="panel-body" id="stretch3-body">
-                            <div id="mileageVS" class="mileageVS"></div>
+                            <!-- <div id="onlineGraphics" style="height:310px;width:100%;"></div> -->
                         </div>
                     </div>
                 </div>
@@ -253,5 +245,11 @@
 
 
 {% block javascript %}
+
+<script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
+<script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
+
+<script src="{% static 'virvo/wro/bigDataReport.js' %}"></script>
+<script src="{% static 'virvo/wro/china.js' %}"></script>
 
 {% endblock %}

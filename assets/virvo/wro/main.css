@@ -861,12 +861,12 @@ h3.timeline-title{color:#C8CCD7;font-size:20px;font-weight:400;margin:0 0 5px;te
 .report-group #selectTotalVehicleCount,.report-group .selectTotalVehicleCount{font-size:28px;margin:10px 0 0 0}
 .report-group,.report-group a,.report-speed,.report-speed a,.report-stoptime,.report-stoptime a,.report-time,.report-time a{color:#fff!important}
 .report-group .area,.report-speed .area,.report-stoptime .area,.report-time .area{height:105px;padding:0 15px 0 15px!important}
-.report-group .report-group-more{height:35px;line-height:35px;background-color:#2295c9!important;font-size:12px}
+.report-group .report-group-more{height:35px;line-height:35px;background-color:#2295c9!important;font-size:28px,font-weight:700}
 .report-group .report-group-more>div{padding:0}
 .report-group .report-group-more:hover{background-color:#1f8aba!important;}
 #monment{padding:0;height:200px;width:100%;background-color:#ddf5ff;position:absolute;top:140px;right:0;display:none;z-index:999999999999;overflow:auto}
 .report-time{background-color:#28b779;width:49%;padding:0}
-.report-time .report-time-more{height:35px;line-height:35px;background-color:#17a769!important;font-size:12px}
+.report-time .report-time-more{height:35px;line-height:35px;background-color:#17a769!important;font-size:28px,font-weight:700}
 .report-time .report-time-more:hover{background-color:#159a61!important;}
 .report-time .report-time-more>div{padding:0}
 .report-time .sgstvc-top{font-size:22px;font-weight:700;margin:7px 0 0 0}
@@ -874,14 +874,14 @@ h3.timeline-title{color:#C8CCD7;font-size:20px;font-weight:400;margin:0 0 5px;te
 .reportStoptimeName,.reportTimeName{font-size:22px;font-weight:700}
 .report-time #selectTotalTravelTime{font-size:18px;font-weight:700}
 .report-stoptime{background-color:#ed4e2a;width:49%;margin:0 2% 0 0;padding:0}
-.report-stoptime .report-stoptime-more{height:35px;line-height:35px;background-color:#c54224!important;font-size:12px}
+.report-stoptime .report-stoptime-more{height:35px;line-height:35px;background-color:#c54224!important;font-size:28px,font-weight:700}
 .report-stoptime .report-stoptime-more:hover{background-color:#bc3f23!important;}
 .report-stoptime .report-stoptime-more>div{padding:0}
 .report-stoptime .sgstvc-top{font-size:22px;font-weight:700;margin:7px 0 0 0}
 .report-stoptime .avgDownTime{font-size:12px;font-weight:300;margin:10px 0 0 0}
 .report-stoptime #selectTotalDownTime{font-size:18px;font-weight:700}
 .report-speed{background-color:#852b99;width:49%;padding:0}
-.report-speed .report-speed-more{height:35px;line-height:35px;background-color:#751e88!important;font-size:12px}
+.report-speed .report-speed-more{height:35px;line-height:35px;background-color:#751e88!important;font-size:28px,font-weight:700}
 .report-speed .report-speed-more:hover{background-color:#6c1c7e!important;}
 .report-speed .report-speed-more>div{padding:0}
 .report-speed .sgstvc-speed-top{font-size:22px;font-weight:700;margin:26px 0 0 0}

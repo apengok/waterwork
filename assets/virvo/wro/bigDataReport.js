@@ -13,6 +13,7 @@
     var cycleDate;
     var sum = 0;
     var point = 0;
+    // http://echartsjs.com/vendors/echarts/map/json/province/anhui.json
     var geoCoordMap = {
         '北京市':[116.410,39.907],
         '上海市':[121.471,31.224],
@@ -380,12 +381,485 @@
         ceshi: function(){
             bigDataReport.hotspoteChart(hotspoteChartData,geoCoordMap);
         },
+        inquireClick: function (num) {
+            $(".mileage-Content").css("display", "block");  //显示图表主体
+            
+            dataListArray = [];
+            var url = "/reports/bigdata/bigDataReport/";
+            // var endTime = $("#endtime").val()
+
+            var data = {"organ": "virvo_organization_rzav_ehou_yslh","dma_no":"301","endTime": "2018-11"};
+            json_ajax("POST", url, "json", false, data, bigDataReport.findOnline);     //发送请求
+        },
+        // 水量趋势图
+        findOnline: function (data) {//回调函数    数据组装
+            var list = [];
+            var myChart = echarts.init(document.getElementById('onlineGraphics'));
+            var online = "";
+            var influx;
+            var outflux;
+            var total;
+            var leak;
+            var uncharg;
+            var cp_month;
+            var sale;
+            var cxc;
+            var cxc_percent;
+            var broken_pipe;
+            var mnf;
+            var leak_percent;
+            var back_leak;
+            var stasticinfo = "";
+            
+            if (data.obj != null && data.obj != "") {
+                online = data.obj.online;
+                stasticinfo = data.obj.stationsstastic;
+                influx = data.obj.influx;
+                outflux = data.obj.outflux;
+                total = data.obj.total;
+                leak = data.obj.leak;
+                uncharg = data.obj.uncharg;
+                sale = data.obj.sale;
+                cxc = data.obj.cxc;
+                cxc_percent = data.obj.cxc_percent;
+                broken_pipe = data.obj.broken_pipe;
+                mnf = data.obj.mnf;
+                back_leak = data.obj.back_leak;
+                leak_percent = data.obj.leak_percent;
+            }
+            if (data.success == true) {
+                // carLicense = [];
+                // activeDays = [];
+                hdates = [];
+                dosages = [];
+                leakages = [];
+                uncharged = [];
+                cp_month  = [];
+                stationdataListArray = [];//用来储存显示数据
+                for (var i = 0; i < online.length; i++) {
+                    list =
+                        [i + 1, online[i].hdate,
+                            online[i].color,
+                            online[i].dosage,
+                            // online[i].allDays == null ? "0" : online[i].allDays,
+                            online[i].ratio == null ? "0" : online[i].ratio,
+                            online[i].assignmentName == null ? "无" : online[i].assignmentName,
+                            // online[i].professionalNames == "" ? "无" : online[i].professionalNames,
+                            online[i].leak,
+                            online[i].uncharged,
+                            online[i].cp_month,
+                        ]
+
+                    dataListArray.push(list);                                       //组装完成，传入  表格
+                };
+                // 子分区统计信息
+                for(var i=0;i<stasticinfo.length;i++){
+                    var leak_tmp_str;
+                    var leak_tmp = stasticinfo[i].leak_percent;
+                        if(leak_tmp < 12 ){
+                          leak_tmp_str = '<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 100%;border:none;text-align:center;background-color:#008000;color:#ffffff;"value="'+ leak_tmp+'"  readonly="true"/>';
+                        }else if(leak_tmp<16){
+                            leak_tmp_str = '<input type="text"  style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 100%;border:none;text-align:center; background-color:#FFCC00;color:#ffffff;"value="'+ leak_tmp+'"  readonly="true"/>';
+                        }else{
+                            leak_tmp_str = '<input type="text"  style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 100%;border:none;text-align:center; background-color:#FF3300;color:#ffffff;"value="'+ leak_tmp+'"  readonly="true"/>';
+                            }
+                    var dateList=
+                        [
+                          i+1,
+                          stasticinfo[i].statis_date,
+                          stasticinfo[i].organ,
+                          stasticinfo[i].total,
+                          stasticinfo[i].sale,
+                          stasticinfo[i].uncharg,
+                          stasticinfo[i].leak,
+                          stasticinfo[i].cxc,
+                          stasticinfo[i].cxc_percent,
+                          stasticinfo[i].huanbi,
+                          // stasticinfo[i].leak_percent,
+                          leak_tmp_str,
+                          stasticinfo[i].tongbi,
+                          stasticinfo[i].mnf,
+                          stasticinfo[i].back_leak,
+                          stasticinfo[i].other_leak,
+                        ];
+//                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
+//                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
+//                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
+                        stationdataListArray.push(dateList);
+//                      }
+                }
+                // dmaReport.reloadData(stationdataListArray);
+
+                for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
+                    hdates.push(dataListArray[j][1]);
+                    dosages.push(dataListArray[j][3]);
+                    leakages.push(dataListArray[j][6]);
+                    uncharged.push(dataListArray[j][7]);
+                    cp_month.push(dataListArray[j][8]);
+                }
+                
+
+                // dmaReport.reloadData(dataListArray);
+                $("#simpleQueryParam").val("");
+                $("#search_button").click();
+            } else {
+                if (data.msg != null) {
+                    layer.msg(data.msg, {move: false});
+                }
+                hdates = [];
+                dosages = [];
+                hdates.push("");
+                dosages.push("");
+                leakages = [];
+                uncharged = [];
+                leakages.push("");
+                uncharged.push("");
+                cp_month = [];
+                cp_month.push("");
+                stationdataListArray = [];
+            }
+            var start;
+            var end;
+            var length;
+            length = online.length;
+            if (length < 4) {
+                barWidth = "30%";
+            } else if (length < 6) {
+                barWidth = "20%";
+            } else {
+                barWidth = null;
+            }
+            ;
+            if (length <= 200) {
+                start = 0;
+                end = 100;
+            } else {
+                start = 0;
+                end = 100 * (200 / length);
+            }
+            ;
+            // wjk
+            //carLicense = dmaReport.platenumbersplitFun(carLicense);
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    formatter: function (a) {
+                        // console.log(a);
+                        var tsale = parseFloat(a[0].value)*10000;
+                        var tuncount = parseFloat(a[1].value)*10000;
+                        var tleak = parseFloat(a[2].value)*10000;
+                        var ttotal = tsale + tuncount + tleak;
+                        var tleak_percent = 0;
+                        if (ttotal == 0){
+                            tleak_percent = 0
+                        }else{
+                            tleak_percent = (tleak/ttotal)*100;
+                        }
+                        
+                        var relVal = "";
+                        //var relValTime = a[0].name;
+                        relVal = hdates[a[0].dataIndex] + ' 月';
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:grey'></span>供水量:" + ttotal.toFixed(2) + " m³";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + tsale.toFixed(2) + " m³";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[1].color + "'></span>未计费水量：" + tuncount.toFixed(2) + " m³";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[2].color + "'></span>" + a[2].seriesName + "：" + tleak.toFixed(2) + " m³";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[3].color + "'></span>" + a[3].seriesName + "：" + a[3].value[1] + "%";
+                        relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:red'></span>漏损率:" + tleak_percent.toFixed(2) + "%";
+
+                        
+                        return relVal;
+                    }
+                },
+                legend: {
+                    data: ['售水量','未计费水量','漏水量','产销差率'],
+                    left: 'auto',
+                },
+                toolbox: {
+                    show: false
+                },
+                grid: {
+                    left: '80',
+                    bottom:'50',
+                    right:'80'
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
+                    name: "",
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        rotate: 0
+                    },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:200,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    splitLine: {
+                        show: false,
+                        offset:5,
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    data: bigDataReport.platenumbersplitYear(hdates)
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '供水总量 （万m³/月）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:60,
+                        scale: false,
+                        position: 'left',
+
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'grey',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+
+                        },
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    {
+                        type : 'value',
+                        name :'产销差率(%)',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:35,
+                        min: 0,
+                        max: 100,
+                        interval: 25,
+                        axisLine : {    // 轴线
+                            show: true,
+                            lineStyle: {
+                                color: 'grey',
+                                type: 'dashed',
+                                width: 1
+                            }
+                        },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        offset : 18
+                    }
+                ],
+                // dataZoom: [{
+                //     type: 'inside',
+                //     start: start,
+                //     end: end
+                // }, {
+
+                //     show: true,
+                //     height: 20,
+                //     type: 'slider',
+                //     top: 'top',
+                //     xAxisIndex: [0],
+                //     start: 0,
+                //     end: 10,
+                //     showDetail: false,
+                // }],
+                series: [
+                    {
+                        name: '售水量',
+                        yAxisIndex: 0,
+                        type: 'bar',
+                        stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#7cb4ed'
+                            }
+                        },
+                        data: dosages,
+                        // markLine : {
+                        //   symbol : 'none',
+                        //   itemStyle : {
+                        //     normal : {
+                        //       color:'#1e90ff',
+                        //       label : {
+                        //         show:true
+                        //       }
+                        //     }
+                        //   },
+                        //   data : [{type : 'average', name: '平均值'}]
+                        // }
+                    },
+                    {
+                        name: '未计费水量',
+                        yAxisIndex: 0,
+                        type: 'bar',
+                        stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#474249'
+                            }
+                        },
+                        data: uncharged
+                    },
+                    {
+                        name: '漏水量',
+                        yAxisIndex: 0,
+                        xAxisIndex: 0,
+                        type: 'bar',
+                        stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#92eb7f'
+                            }
+                        },
+                        data: leakages
+                    },
+                    {
+                        name: '产销差率',
+                        yAxisIndex: 1,
+                        xAxisIndex: 0,
+                        type: 'scatter',
+                        // stack:'dma',
+                        
+                        itemStyle: {
+                            normal: {
+                                color: '#f4e804'
+                            }
+                        },
+                        data: bigDataReport.buildScatterdata(cp_month,hdates)
+                    }
+                ]
+            };
+            myChart.setOption(option);
+            
+            $("#influx").html( influx);
+            $("#outflux").html( outflux);
+            $("#total").html( total);
+            $("#leak").html( leak);
+            $("#uncharg").html( uncharg);
+            $("#sale").html( sale);
+            $("#cxc").html( cxc);
+            $("#cxc_percent").html( cxc_percent);
+            $("#broken_pipe").html( broken_pipe);
+            $("#back_leak").html( back_leak);
+            $("#leak_percent").html( leak_percent);
+            $("#mnf").html( mnf);
+            
+            
+
+            window.onresize = myChart.resize;
+            
+        },
+        buildScatterdata:function(arr,xarr){
+            var newArr = [];
+            var i = 0;
+            arr.forEach(function(item){
+                item = [xarr[i],item,3];
+                i++;
+                newArr.push(item)
+            })
+            return newArr
+        },
+        platenumbersplitYear:function(arr){
+            // var newArr = [ '08','09','10','11',
+            //     {
+            //         value:'12',
+            //         textStyle: {
+            //             color: 'red',
+                        
+            //         }
+            //     },
+            //     '01','02','03','04','05','06','07'];
+
+            var newArr = [];
+            this_month = parseInt(arr[arr.length - 1],10);
+            arr.forEach(function(item){
+                if (parseInt(item,10) > this_month) {
+                    item = {
+                        value:item,
+                        textStyle:{
+                            color:'red',
+                        }
+                    }
+                }
+                newArr.push(item)
+            })
+            return newArr
+        },
+        platenumbersplitFun:function(arr){
+            var newArr = [];
+            arr.forEach(function(item){
+                if (item.length > 8) {
+                    item = item.substring(0,7) + '...'
+                }
+                newArr.push(item)
+            })
+            return newArr
+        },
         //初始化
         init: function(){
             //初始化文件树
             var treeSetting = {
                 async : {
-                    url : "/clbs/m/basicinfo/enterprise/professionals/tree",
+                    url : "/dmam/district/dmatree/",
                     tyoe : "post",
                     enable : true,
                     autoParam : [ "id" ],
@@ -906,7 +1380,7 @@
                    }
                },
                geo: {
-                   map: 'china',
+                   map: '广东省',
                    label: {
                        emphasis: {
                            show: false
@@ -1259,10 +1733,10 @@
             };
         },
         windowResize: function(){
-            bigDataReport.cycleVS(cycleDate,thisMouthData,lastMouthData);
-            bigDataReport.mileageVS(mileageDate,mileageVSData);
-            bigDataReport.mileageStatistics(dateForMonth,mileageStatisticsData);
-            bigDataReport.hotspoteChart(hotspoteChartData,geoCoordMap);
+            // bigDataReport.cycleVS(cycleDate,thisMouthData,lastMouthData);
+            // bigDataReport.mileageVS(mileageDate,mileageVSData);
+            // bigDataReport.mileageStatistics(dateForMonth,mileageStatisticsData);
+            // bigDataReport.hotspoteChart(hotspoteChartData,geoCoordMap);
         },
         fiterNumber : function(data){
             if(data==null||data==undefined||data==""){
@@ -1287,9 +1761,10 @@
     }
     $(function(){
         var validVehicleCount = 0; // 有数据的车辆数量
-        bigDataReport.init();
+        bigDataReport.inquireClick(1);
+        // bigDataReport.init();
         bigDataReport.ceshi();
-        $("#checkGroup").bind("click",bigDataReport.checkGroup);
+        // $("#checkGroup").bind("click",bigDataReport.checkGroup);
         $(document).bind('click',bigDataReport.hideGroup);
         $(window).resize(bigDataReport.windowResize);
     })

@@ -36,5 +36,6 @@ urlpatterns = [
     url(r'^vehicle/?$',views.VehicleView.as_view(),name='vehicle'),
     # 大数据报表
     url(r'^bigdata/?$',views.BigdataView.as_view(),name='bigdata'),
+    url(r'^bigdata/bigDataReport/?$',views.bigDataReport,name='bigDataReport'),
         
 ]
