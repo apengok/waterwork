@@ -37,6 +37,7 @@ urlpatterns = [
     # url(r'^$',TemplateView.as_view(template_name='_vbase.html'),name='home'),
 
     url(r'^(?P<page>.+\.html)$', StaticView.as_view()),
+    url(r'^echarts/map/province/(?P<page>.+\.json)$', StaticView.as_view()),
 
     #使用hplus页面布局是iframe加载的首页项
     url(r'^index/$', TemplateView.as_view(template_name='_hplus_vbase.html'), name='index'),

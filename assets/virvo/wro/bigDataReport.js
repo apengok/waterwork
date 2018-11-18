@@ -376,10 +376,30 @@
         '迪庆藏族自治州':[99.700,27.832]
 
     };
+    var data1 = [
+     {name: '合肥市', value: 9},
+     {name: '芜湖市', value: 12},
+     {name: '蚌埠市', value: 12},
+     {name: '淮南市', value: 12},
+     {name: '马鞍山市', value: 14},
+     {name: '淮北市', value: 15},
+     {name: '铜陵市', value: 16},
+     {name: '安庆市', value: 18},
+     {name: '黄山市', value: 18},
+     {name: '滁州市', value: 19},
+     {name: '阜阳市', value: 21},
+     {name: '宿州市', value: 21},
+     {name: '六安市', value: 21},
+     {name: '亳州市', value: 22},
+     {name: '池州市', value: 23},
+     {name: '宣城市', value: 24},
+     ];
+    var provinceCoordMap;
     var bigDataReport = {
         //测试数据
         ceshi: function(){
             bigDataReport.hotspoteChart(hotspoteChartData,geoCoordMap);
+            bigDataReport.hydropowerChart();
         },
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
@@ -482,13 +502,11 @@
                           stasticinfo[i].back_leak,
                           stasticinfo[i].other_leak,
                         ];
-//                      if(stasticinfo[i].majorstasticinfo!=null||  stasticinfo[i].speedstasticinfo!=null|| stasticinfo[i].vehicleII!=null
-//                        ||stasticinfo[i].timeoutParking!=null||stasticinfo[i].routeDeviation!=null||
-//                       stasticinfo[i].tiredstasticinfo!=null||stasticinfo[i].inOutArea!=null||stasticinfo[i].inOutLine!=null){
+
                         stationdataListArray.push(dateList);
-//                      }
+
                 }
-                // dmaReport.reloadData(stationdataListArray);
+                
 
                 for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
                     hdates.push(dataListArray[j][1]);
@@ -854,6 +872,178 @@
             })
             return newArr
         },
+        // 水力分布图
+        hydropowerChart:function() {
+            var convertData = function (data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var geoCoord = provinceCoordMap[data1[i].name];
+                    if (geoCoord) {
+                        res.push({
+                            name: data[i].name,
+                            value: geoCoord.concat(data1[i].value)
+                        });
+                    }
+                }
+                return res;
+            };
+            var name = 'hn';
+
+            // myChart.showLoading();
+            var uploadedDataURL = "/echarts/map/province/anhui.json";
+            var hydropowerChart = echarts.init(document.getElementById('hydropowerChart'));
+
+            $.get(uploadedDataURL, function(geoJson) {
+
+                // myChart.hideLoading();
+                g = JSON.parse(geoJson);
+                var jsonobj = [],tmpobj={};
+                if(g.features.length > 0 ){
+                    for(var i = 0;i < g.features.length;i++){
+                        name = g.features[i].properties.name;
+                        cp = g.features[i].properties.cp;
+                        tmpobj[name] = cp;
+                    }
+                    jsonobj.push(tmpobj);
+                    console.log(jsonobj)
+                }
+
+                console.log(provinceCoordMap)
+                provinceCoordMap = JSON.stringify(jsonobj)
+
+                echarts.registerMap(name, geoJson);
+
+                hydropowerChart.setOption(option = {
+                   
+                    title: {
+                        text: "安徽省",
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    
+                    series: [{
+                        type: 'map',
+                        mapType: name,
+                        label: {
+                            normal: {
+                                show: true
+                            },
+                            emphasis: {
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#031525',
+                                borderColor: '#3B5077',
+                                borderWidth: 1
+                            },
+                            emphasis: {
+                                areaColor: '#0f2c70'
+                            }
+                        },
+                        animation: false,
+                        
+                    data:[
+                        {name: '豪州市', value: 100},
+                        {name: '淮北市', value: 10},
+                        {name: '宿州市', value: 20},
+                        {name: '阜阳市', value: 30},
+                        {name: '蚌埠市', value: 40},
+                        {name: '淮南市', value: 41},
+                        {name: '滁州市', value: 15},
+                        {name: '合肥市', value: 25},
+                        {name: '六安市', value: 35},
+                        {name: '马鞍山市', value: 35},
+                        {name: '芜湖市', value: 35},
+                        {name: '铜陵市', value: 35},
+                        {name: '宣城市', value: 35},
+                        {name: '池州市', value: 35},
+                        {name: '安庆市', value: 35},
+                        {name: '黄山市', value: 35},
+                        
+                    ]
+                            
+                    },
+                    {
+                        name: '城市',
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        data: convertData(data1),
+                        symbolSize: function (val) {
+                            return val[2] / 20;
+                        },
+                        label: {
+                            normal: {
+                                formatter: '{b}',
+                                position: 'right',
+                                show: false
+                            },
+                            emphasis: {
+                                show: true
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#ddb926'
+                            }
+                        }
+                    },
+                    {
+                       type: 'effectScatter',
+                       coordinateSystem: 'geo',
+                       data: [
+                            {name: '豪州市', value: 100},
+                            {name: '淮北市', value: 10},
+                            {name: '宿州市', value: 20},
+                            {name: '阜阳市', value: 30},
+                            {name: '蚌埠市', value: 40},
+                            {name: '淮南市', value: 41},
+                            {name: '滁州市', value: 15},
+                            {name: '合肥市', value: 25},
+                            {name: '六安市', value: 35},
+                            {name: '马鞍山市', value: 35},
+                            {name: '芜湖市', value: 35},
+                            {name: '铜陵市', value: 35},
+                            {name: '宣城市', value: 35},
+                            {name: '池州市', value: 35},
+                            {name: '安庆市', value: 35},
+                            {name: '黄山市', value: 35},
+                            
+                        ],
+                       symbolSize: function (val) {
+                           return val[2] / 10;
+                       },
+                       showEffectOn: 'render',
+                       rippleEffect: {
+                           brushType: 'stroke'
+                       },
+                       hoverAnimation: true,
+                       label: {
+                           normal: {
+                               formatter: '{b}',
+                               position: 'right',
+                               show: true
+                           }
+                       },
+                       itemStyle: {
+                           normal: {
+                               color: '#f4e925',
+                               shadowBlur: 10,
+                               shadowColor: '#333'
+                           }
+                       },
+                       zlevel: 1
+                   }],
+                    
+                });
+            });
+        },
+
         //初始化
         init: function(){
             //初始化文件树
@@ -1380,7 +1570,7 @@
                    }
                },
                geo: {
-                   map: '广东省',
+                   map: 'china',
                    label: {
                        emphasis: {
                            show: false

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import get_object_or_404,render,redirect
-from django.http import HttpResponse,JsonResponse,HttpResponseRedirect,StreamingHttpResponse
+from django.http import HttpResponse,JsonResponse,HttpResponseRedirect,StreamingHttpResponse,Http404
 from django.contrib import messages
 from django.template import TemplateDoesNotExist
 import json
