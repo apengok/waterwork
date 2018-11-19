@@ -170,10 +170,12 @@
                                 <table id="exampleTableFromData" >
                                     <thead >
                                         <tr>
-                                            <th data-field="Tid">ID</th>
-                                            <th data-field="First">姓名</th>
-                                            <th data-field="sex">性别</th>
-                                            <th data-field="Score">评分</th>
+                                            <th data-field="rank">排名</th>
+                                            <th data-field="client_name">客户名称</th>
+                                            <th data-field="belongto">所属组织</th>
+                                            <th data-field="watertype">用水性质</th>
+                                            <th data-field="year_use">年度用水量</th>
+                                            <th data-field="zhanbi">总水量占比</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -182,57 +184,392 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="col-md-6 col-sm-12 col-xs-12 mileage-statistics">
                     <div class="panel panel-default">
                         <div class="panel-heading" id="stretch5">
-                            <h3 class="panel-title">散点图</h3>
+                            <h3 class="panel-title">行业用水统计<span id="curCar"></span></h3>
                             <div class="actions pull-right">
                                 <i class="fa chevron-down" id="stretch5-chevron"></i>
                             </div>
                         </div>
                         <div class="panel-body" id="stretch5-body">
-                            <div class="hotspoteChart" id="hotspoteChart"></div>
-                            <div class="cityStayTime">
-                                <ul>
-                                    <li class="col-md-12">城市轨迹信息点月分布排名</li>
-                                    <li class="col-md-12"><span id = "one"></span></li>
-                                    <li class="col-md-12"><span id = "two"></span></li>
-                                    <li class="col-md-12"><span id = "three"></span></li>
-                                    <li class="col-md-12"><span id = "four"></span></li>
-                                    <li class="col-md-12"><span id = "five"></span></li>
-                                </ul>
-                            </div>
-                            <div class="toThePlace">
-                                <ul>
-                                    <!-- <li class="col-md-12">到过最东的地方：<span id = "east"></span></li>
-                                    <li class="col-md-12">到过最西的地方：<span id = "west"></span></li>
-                                    <li class="col-md-12">到过最南的地方：<span id = "south"></span></li>
-                                    <li class="col-md-12">到过最北的地方：<span id = "north"></span></li> -->
-                                </ul>
-                            </div>
+                            
+                                <table id="waterusestatistic" >
+                                    <thead >
+                                        <tr>
+                                            
+                                            <th data-field="watertype">用水性质</th>
+                                            <th data-field="year_use">年度用水量</th>
+                                            <th data-field="zhanbi">总量占比</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            
+                            
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="col-md-12 col-sm-12 col-xs-12 mileage-statistics">
                     <div class="panel panel-default">
                         <div class="panel-heading" id="stretch6">
-                            <h3 class="panel-title">排行榜</h3>
+                            <h3 class="panel-title">资产大数据<span id="curCar"></span></h3>
                             <div class="actions pull-right">
                                 <i class="fa chevron-down" id="stretch6-chevron"></i>
                             </div>
                         </div>
                         <div class="panel-body" id="stretch6-body">
-                            <ul class="heroRanking">
-                                <!-- <li><i class="bigDataHero mostDiligent">本月最勤奋的车是：<span id="mostDiligent">无</span>，是不是应该给点奖励</i></li>
-                                <li><i class="bigDataHero mostLazy">本月最懒惰的车是：<span id="mostLazy">无</span>，是不是应该来点电疗处罚了</i></li>
-                                <li><i class="bigDataHero mostFar">本月开得最多的车是：<span id="mostFar">无</span>，最大里程是<span id="maxMile"></span>km</i></li>
-                                <li><i class="bigDataHero mintFar">本月几乎没动的车是：<span id="mintFar">无</span>，最小里程是<span id="minMile"></span>km</i></li>
-                                <li><i class="bigDataHero safe">本月最遵守规则的车是：<span id="safe">无</span>，老哥，稳！</i></li>
-                                <li><i class="bigDataHero danger">本月最危险的车是：<span id="danger">无</span>，千里之行，慎于足下！</i></li> -->
-                            </ul>
+                            <div class="col-md-6 ">
+                                <div class="col-md-3" >
+                                    <div class="ibox" style="border: 1px solid grey">
+                                        <div class="ibox-content">
+                                            <h5>管网材质统计</h5>
+                                            <table class="table table-stripped small m-t-md">
+                                                <thead>
+                                                    <tr>
+                                                        <th>38367.16</th>
+                                                        <th>米</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="no-borders">
+                                                        球墨铸铁
+                                                    </td>
+                                                    <td class="no-borders">
+                                                        1
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        PE管
+                                                    </td>
+                                                    <td>
+                                                        2
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        钢管
+                                                    </td>
+                                                    <td>
+                                                        3
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>铁</td>
+                                                        <td>4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>其他</td>
+                                                        <td>0</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" >
+                                    <div class="ibox" style="border: 1px solid grey">
+                                        <div class="ibox-content">
+                                            <h5>户表厂家统计</h5>
+                                            <table class="table table-stripped small m-t-md">
+                                                <thead>
+                                                    <tr>
+                                                        <th>103568</th>
+                                                        <th>台</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="no-borders">
+                                                        中科君达
+                                                    </td>
+                                                    <td class="no-borders">
+                                                        1
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        常州天厚
+                                                    </td>
+                                                    <td>
+                                                        2
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        三川水表
+                                                    </td>
+                                                    <td>
+                                                        3
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>东海仪表</td>
+                                                        <td>4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>宁波水表</td>
+                                                        <td>0</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3" >
+                                    <div class="ibox" style="border: 1px solid grey">
+                                        <div class="ibox-content">
+                                            <h5>大表厂家统计</h5>
+                                            <table class="table table-stripped small m-t-md">
+                                                <thead>
+                                                    <tr>
+                                                        <th>236</th>
+                                                        <th>台</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="no-borders">
+                                                        威尔沃
+                                                    </td>
+                                                    <td class="no-borders">
+                                                        1
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        中科君达
+                                                    </td>
+                                                    <td>
+                                                        2
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        拓安信
+                                                    </td>
+                                                    <td>
+                                                        3
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>江苏迈拓</td>
+                                                        <td>4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>唐山汇中</td>
+                                                        <td>0</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3" >
+                                    <div class="ibox" style="border: 1px solid grey">
+                                        <div class="ibox-content">
+                                            <h5>集中器厂家统计</h5>
+                                            <table class="table table-stripped small m-t-md">
+                                                <thead>
+                                                    <tr>
+                                                        <th>338</th>
+                                                        <th>台</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="no-borders">
+                                                        中科君达
+                                                    </td>
+                                                    <td class="no-borders">
+                                                        1
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        常州天厚
+                                                    </td>
+                                                    <td>
+                                                        2
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        双佳水表
+                                                    </td>
+                                                    <td>
+                                                        3
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>江苏迈拓</td>
+                                                        <td>4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>其他</td>
+                                                        <td>12</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div id="realassets" style="height:310px;width:100%;"></div>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch7">
+                            <h3 class="panel-title">设备统计</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch7-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch7-body">
+                            <!--  -->
+                            <div class="col-md-4 pc-realtime">
+                                <div class="fenceUrl">
+                                    <a href="#">
+                                     <div class="IcoBG"></div>
+                                     <h2>二供设备</h2>
+                                    </a>
+                                 </div>   
+                             </div>
+                             <div class="col-md-4 pc-realtime">
+                                <div class="fenceUrl">
+                                    <a href="#">
+                                     <div class="IcoBG"></div>
+                                     <h2>消防栓</h2>
+                                    </a>
+                                 </div>   
+                             </div>
+                             <div class="col-md-4 pc-realtime">
+                                <div class="fenceUrl">
+                                    <a href="#">
+                                     <div class="IcoBG"></div>
+                                     <h2>阀门井</h2>
+                                    </a>
+                                 </div>   
+                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch8">
+                            <h3 class="panel-title">设备统计</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch8-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch8-body">
+                            <!--  -->
+                            <div class="col-md-4 pc-realtime">
+                                <div class="fenceUrl">
+                                    <a href="#">
+                                     <div class="IcoBG"></div>
+                                     <h2>抄表率</h2>
+                                    </a>
+                                 </div>   
+                             </div>
+                             <div class="col-md-4 pc-realtime">
+                                <div class="fenceUrl">
+                                    <a href="#">
+                                     <div class="IcoBG"></div>
+                                     <h2>大表故障率</h2>
+                                    </a>
+                                 </div>   
+                             </div>
+                             <div class="col-md-4 pc-realtime">
+                                <div class="fenceUrl">
+                                    <a href="#">
+                                     <div class="IcoBG"></div>
+                                     <h2>抄表率</h2>
+                                    </a>
+                                 </div>   
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="stretch9">
+                            <h3 class="panel-title">管网运维大数据</h3>
+                            <div class="actions pull-right">
+                                <i class="fa chevron-down" id="stretch9-chevron"></i>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="stretch9-body">
+                            <div class="col-md-6 col-sm-12 col-xs-12 mileage-statistics">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="stretch10">
+                                        <h3 class="panel-title">二级分区漏损排行榜<span id="curCar"></span></h3>
+                                        <div class="actions pull-right">
+                                            <i class="fa chevron-down" id="stretch10-chevron"></i>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="stretch10-body">
+                                        
+                                            <table id="dma2leakage" >
+                                                <thead >
+                                                    <tr>
+                                                        <th data-field="rank">排名</th>
+                                                        <th data-field="client_name">分区名称</th>
+                                                        <th data-field="belongto">所属组织</th>
+                                                        <th data-field="watertype">年度供水量</th>
+                                                        <th data-field="year_use">年度漏水量</th>
+                                                        <th data-field="zhanbi">漏损率</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  -->
+                            <div class="col-md-6 col-sm-12 col-xs-12 mileage-statistics">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="stretch11">
+                                        <h3 class="panel-title">三级分区漏损排行榜<span id="curCar"></span></h3>
+                                        <div class="actions pull-right">
+                                            <i class="fa chevron-down" id="stretch11-chevron"></i>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body" id="stretch11-body">
+                                        
+                                            <table id="dma3leakage" >
+                                                <thead >
+                                                    <tr>
+                                                        <th data-field="rank">排名</th>
+                                                        <th data-field="client_name">分区名称</th>
+                                                        <th data-field="belongto">所属组织</th>
+                                                        <th data-field="watertype">年度供水量</th>
+                                                        <th data-field="year_use">年度漏水量</th>
+                                                        <th data-field="zhanbi">漏损率</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
             </div>
         </div>
     </div>

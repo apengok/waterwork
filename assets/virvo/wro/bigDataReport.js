@@ -398,10 +398,14 @@
     var bigDataReport = {
         //测试数据
         ceshi: function(){
-            bigDataReport.hotspoteChart(hotspoteChartData,geoCoordMap);
+            // bigDataReport.hotspoteChart(hotspoteChartData,geoCoordMap);
             bigDataReport.hydropowerChart();
             bigDataReport.hydropressflowChart();
             bigDataReport.bigUserOrderly();
+            bigDataReport.WWaterTypeUseOrderly();
+            bigDataReport.realassetsForm();
+            bigDataReport.dma2leakage();
+            bigDataReport.dma3leakage();
         },
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
@@ -1182,48 +1186,195 @@
         bigUserOrderly:function(){
             "use strict";
             var e = [{
-                Tid: "1",
-                First: "奔波儿灞",
-                sex: "男",
-                Score: "50"
-            }, {
-                Tid: "2",
-                First: "灞波儿奔",
-                sex: "男",
-                Score: "94"
-            }, {
-                Tid: "3",
-                First: "作家崔成浩",
-                sex: "男",
-                Score: "80"
-            }, {
-                Tid: "4",
-                First: "韩寒",
-                sex: "男",
-                Score: "67"
-            }, {
-                Tid: "5",
-                First: "郭敬明",
-                sex: "男",
-                Score: "100"
-            }, {
-                Tid: "6",
-                First: "马云",
-                sex: "男",
-                Score: "77"
-            }, {
-                Tid: "7",
-                First: "范爷",
-                sex: "女",
-                Score: "87"
-            }];
+                rank: "1",
+                client_name: "徽州学校",
+                belongto: "古城区",
+                watertype: "居民用水",
+                year_use: "5198.12",
+                zhanbi: "4.45"
+            }, 
+            {
+                rank: "2",
+                client_name: "黄山金磊新材料有限公司",
+                belongto: "城西工业区",
+                watertype: "工业用水",
+                year_use: "4337.12",
+                zhanbi: "3.45"
+            },];
             $("#exampleTableFromData").bootstrapTable({
                 data: e,
                 classes: 'table table-condensed table-no-bordered', 
                 striped: false,
-                height: "500"
+                height: "300"
             })
             $("#exampleTableFromData").bootstrapTable('hideLoading')
+        },
+
+        // 行业用水统计
+        WWaterTypeUseOrderly:function(){
+            "use strict";
+
+            var progressstr1 = '<div class="progress" style="background-color:orange;">'+
+                                  '<div class="progress-bar"  role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+                                '</div>';
+            var progressstr2 = '<div class="progress">'+
+                                  '<div class="progress-bar" role="progressbar" style="width: 35%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+                                '</div>'
+            var progressstr3 = '<div class="progress">'+
+                                  '<div class="progress-bar" role="progressbar" style="width: 45%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+                                '</div>'
+            var progressstr4 = '<div class="progress">'+
+                                  '<div class="progress-bar" role="progressbar" style="width: 5%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+                                '</div>'                                
+            var e = [
+            {
+                
+                watertype: "居民用水",
+                year_use: "5198.12",
+                zhanbi: progressstr1
+            }, 
+            {
+                watertype: "工业用水",
+                year_use: "4337.12",
+                zhanbi: progressstr2
+            },{
+                
+                watertype: "特种行业用水",
+                year_use: "5198.12",
+                zhanbi: progressstr3
+            }, 
+            {
+                watertype: "其他",
+                year_use: "4337.12",
+                zhanbi: progressstr4
+            },];
+            $("#waterusestatistic").bootstrapTable({
+                data: e,
+                classes: 'table table-condensed table-no-bordered', 
+                striped: false,
+                height: "300"
+            })
+            $("#waterusestatistic").bootstrapTable('hideLoading')
+        },
+
+        // 资产大数据图表
+        realassetsForm:function(){
+            options = {
+                backgroundColor: '#FFFFFF',
+                title: {
+                    text: '流量曲线图',
+                    left:'left'
+                },
+                // tooltip: {
+                //     trigger: 'axis',
+                //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                //         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                //     }
+                // },
+                
+                legend: {
+                    data: ['流量']
+                },
+
+                
+                xAxis: [{
+                    type: 'category',
+                    show:false,
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
+                }],
+                yAxis: [{
+                    type: 'value',
+                    //name: '投诉举报数',
+                    show:false,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }],
+                series: [{
+                    name: 'flow',
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            color: '#01949B'
+                        },
+                    },
+                    // markPoint: {
+                    //     data: [{
+                    //             type: 'max',
+                    //             name: '最大值'
+                    //         },
+                    //         {
+                    //             type: 'min',
+                    //             name: '最小值'
+                    //         }
+                    //     ]
+                    // },
+                    // markLine: {
+                    //     data: [{
+                    //         type: 'average',
+                    //         name: '平均值'
+                    //     }]
+                    // },
+                    data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
+                }]
+            };
+
+            var realassets = echarts.init(document.getElementById('realassets'));
+            realassets.setOption(options);
+        },
+        // 二级分区漏损排行榜
+        dma2leakage:function(){
+            "use strict";
+            var e = [{
+                rank: "1",
+                client_name: "徽州学校",
+                belongto: "古城区",
+                watertype: "居民用水",
+                year_use: "5198.12",
+                zhanbi: "4.45"
+            }, 
+            {
+                rank: "2",
+                client_name: "黄山金磊新材料有限公司",
+                belongto: "城西工业区",
+                watertype: "工业用水",
+                year_use: "4337.12",
+                zhanbi: "3.45"
+            },];
+            $("#dma2leakage").bootstrapTable({
+                data: e,
+                classes: 'table table-condensed table-no-bordered', 
+                striped: false,
+                height: "300"
+            })
+            $("#dma2leakage").bootstrapTable('hideLoading')
+        },
+        // 三级分区漏损排行榜
+        dma3leakage:function(){
+            "use strict";
+            var e = [{
+                rank: "1",
+                client_name: "徽州学校",
+                belongto: "古城区",
+                watertype: "居民用水",
+                year_use: "5198.12",
+                zhanbi: "4.45"
+            }, 
+            {
+                rank: "2",
+                client_name: "黄山金磊新材料有限公司",
+                belongto: "城西工业区",
+                watertype: "工业用水",
+                year_use: "4337.12",
+                zhanbi: "3.45"
+            },];
+            $("#dma3leakage").bootstrapTable({
+                data: e,
+                classes: 'table table-condensed table-no-bordered', 
+                striped: false,
+                height: "300"
+            })
+            $("#dma3leakage").bootstrapTable('hideLoading')
         },
 
         //初始化
