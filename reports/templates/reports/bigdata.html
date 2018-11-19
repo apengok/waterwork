@@ -5,7 +5,10 @@
 {% load staticfiles %}
 
 {% block stylesheet %}
+<link rel="stylesheet" href="{% static 'virvo/resources/js/bootstrap/css/bootstrap-table.min.css' %}" >
+
 <style type="text/css">
+
 .u15486_input {
   position:absolute;
   left:0px;
@@ -44,89 +47,76 @@
                     <div class="col-md-6">
                         <div class="col-md-6 report-group">
                             <div class="col-md-12 area" style="position:relative;">
-                                <div class="col-md-12 speedName">
-                                    <div class="col-md-12 groupNameShow">
-                                        <span id="selectGroup"></span>
+                                <div class="col-md-4 speedName" style="font-size: 50px;"><i class="fa fa-bar-chart-o"></i></div>
+                                <div class="col-md-8 " style="margin: 22px 0 0 0">
+                                    <div class="col-md-12 text-left">
+                                        <span >出厂水年度总水量:</span>
+                                    </div>
+                                    <div class="col-md-12 text-left" >
+                                        <span id="selectTotalMile">75583700 m³</span>
                                     </div>
                                 </div>
-                                <div class="col-md-12 text-right">
-                                    <span id="selectTotalMile">75583700 次</span>
-                                </div>
-                                
+                            
                             </div>
                             <div class="col-md-12 report-group-more" id="checkGroup" >
-                                <div class="col-md-6"><span style="cursor:pointer;">出厂水年度总水量</span></div>
-                                <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
+                                <div class="col-md-4"><span style="cursor:pointer;">本月水量</span></div>
+                                <div class="col-md-8 text-center">56234.00 m³</div>
                             </div>
                         </div>
                         <div class="col-md-6 report-time">
-                            <div class="col-md-12 area">
-                                <div class="col-md-12">
-                                    <div class="col-md-12 speedName">
-                                        <span class="reportTimeName"></span>
+                            <div class="col-md-12 area" style="position:relative;">
+                                <div class="col-md-4 speedName" style="font-size: 50px;"><i class="fa fa-usd"></i></div>
+                                <div class="col-md-8 " style="margin: 22px 0 0 0">
+                                    <div class="col-md-12 text-left">
+                                        <span >年度总售水量:</span>
                                     </div>
-                                    <div class="col-md-12 text-right">
-                                        <span id="selectTotalTravelTime">189台</span>
+                                    <div class="col-md-12 text-left" >
+                                        <span id="selectTotalMile">75583700 m³</span>
                                     </div>
-                                    <!-- <div class="col-md-12 avgTravelTime">
-                                        <span class="avgTravelTime">平均：</span>
-                                        <span id="avgTravelTime">0秒</span>
-                                    </div> -->
                                 </div>
+                            
                             </div>
                             <div class="col-md-12 report-time-more" id="">
-                                <!-- <a onclick="window.open('{% static 'virvo/m/reportManagement/mileageReport/list')"> -->
-                                    <div class="col-md-6">
-                                        <span style="cursor:pointer;">年度总售水量</span>
-                                    </div>
-                                    <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
-                                <!-- </a> -->
+                                <div class="col-md-6"><span style="cursor:pointer;">本月售水量</span></div>
+                                <div class="col-md-6 text-center">56234.00 m³</div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="col-md-6 report-speed">
-                            <div class="col-md-12 area">
-                                <!-- <div class="col-md-12 speedName">
-                                    <span class="speedNum"></span>
-                                </div> -->
-                                <div class="col-md-12 text-right">
-                                    <span id="selectTotalOverSpeedTimes">4 家</span>
-                                </div>
-                                <!-- <div class="col-md-12 reportSpeedAvg">
-                                    <span class="reportSpeedAvg">平均：</span>
-                                    <span id="reportSpeedAvg">0次</span>
-                                </div> -->
-                            </div>
-                            <div class="col-md-12 report-speed-more" id="">
-                                <!-- <a onclick="window.open('{% static 'virvo/m/reportManagement/speedReport/list')"> -->
-                                    <div class="col-md-6">
-                                        <span style="cursor:pointer;">厂家统计表</span>
-                                    </div>
-                                    <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div> -->
-                                <!-- </a> -->
-                            </div>
-                        </div>
                         <div class="col-md-6 report-stoptime">
-                            <div class="col-md-12 area">
-                                <!-- <div class="col-md-12 speedName">
-                                    <span class="reportStoptimeName">停驶时长</span>
-                                </div> -->
-                                <div class="col-md-12 text-right sgstvc-center">
-                                    <span id="selectTotalDownTime">4 家</span>
+                            <div class="col-md-12 area" style="position:relative;">
+                                <div class="col-md-4 speedName" style="font-size: 50px;"><i class="fa fa-user"></i></div>
+                                <div class="col-md-8 " style="margin: 22px 0 0 0">
+                                    <div class="col-md-12 text-left">
+                                        <span >大用户数量:</span>
+                                    </div>
+                                    <div class="col-md-12 text-left" >
+                                        <span id="selectTotalMile">234 家</span>
+                                    </div>
                                 </div>
-                                <!-- <div class="col-md-12 avgDownTime">
-                                    <span class="avgDownTime">平均：</span>
-                                    <span id="avgDownTime">0秒</span>
-                                </div> -->
+                            
                             </div>
                             <div class="col-md-12 report-stoptime-more" id="">
-                                <!-- <a onclick="window.open('{% static 'virvo/m/reportManagement/parkingReport/list')"> -->
-                                    <div class="col-md-6" id="skipStop">
-                                        <span style="cursor:pointer;">厂家统计表</span>
+                                <div class="col-md-8"><span style="cursor:pointer;">本月新增大用户数量</span></div>
+                                <div class="col-md-4 text-center">13 家</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 report-speed">
+                            <div class="col-md-12 area" style="position:relative;">
+                                <div class="col-md-4 speedName" style="font-size: 50px;"><i class="fa fa-th-list"></i></div>
+                                <div class="col-md-8 " style="margin: 22px 0 0 0">
+                                    <div class="col-md-12 text-left">
+                                        <span >大用户用水量占比:</span>
                                     </div>
-                                    <!-- <div class="col-md-6 text-right"><i class="fa fa-arrow-circle-o-right fa-lg"></i></div>
-                                </a> -->
+                                    <div class="col-md-12 text-left" >
+                                        <span id="selectTotalMile">23.45%</span>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            <div class="col-md-12 report-speed-more" id="">
+                                <div class="col-md-8"><span style="cursor:pointer;">本月新增大用户用水量</span></div>
+                                <div class="col-md-4 text-center">56234.00 m³</div>
                             </div>
                         </div>
                         
@@ -154,8 +144,16 @@
                             </div>
                         </div>
                         <div class="panel-body" id="stretch3-body">
-                            <div class="hotspoteChart" id="hydropowerChart"></div>
-                            <!-- <div id="onlineGraphics" style="height:310px;width:100%;"></div> -->
+                            <div class="col-md-6 col-sm-12 col-xs-12 " style="height:310px;" id="hydropowerChart"></div>
+                            <div class="col-md-6 col-sm-12 col-xs-12" >
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div id="hydroflow" style="height:150px;width:100%;"></div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div id="hydropress" style="height:150px;width:100%;"></div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,17 +166,19 @@
                             </div>
                         </div>
                         <div class="panel-body" id="stretch4-body">
-                            <div id="mileageStatistics" class="mileageStatistics"></div>
-                            <div class="mileageStatisticsInfo">
-                                <ul>
-                                    <!-- <li class="col-md-6"><font color="#78af3a">行驶时长：</font><span id = "travelTimeByVehicle">0秒</span></li>
-                                    <li class="col-md-6"><font color="#c80002">停驶时长：</font><span id = "downTimeByVehicle">0秒</span></li>
-                                    <li class="col-md-6"><font color="#6dcff6">行驶里程：</font><span id = "mileByVehicle">0km</span></li>
-                                    <li class="col-md-6"><font color="#78af3a">行驶次数：</font><span id = "travelTimesByVehicle">0次</span></li>
-                                    <li class="col-md-6"><font color="#960ba3">超速次数：</font><span id = "alarmTimesByVehicle">0次</span></li>
-                                    <li class="col-md-12"><font color="#6dcff6">里程数</font>超越了<span id = "milePercent">0%</span>的车辆</li> -->
-                                </ul>
-                            </div>
+                            
+                                <table id="exampleTableFromData" >
+                                    <thead >
+                                        <tr>
+                                            <th data-field="Tid">ID</th>
+                                            <th data-field="First">姓名</th>
+                                            <th data-field="sex">性别</th>
+                                            <th data-field="Score">评分</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -248,6 +248,7 @@
 {% block javascript %}
 
 <script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
+<script src="{% static 'virvo/resources/js/bootstrap/js/bootstrap-table.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
 
 <script src="{% static 'virvo/wro/bigDataReport.js' %}"></script>

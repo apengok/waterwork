@@ -400,6 +400,8 @@
         ceshi: function(){
             bigDataReport.hotspoteChart(hotspoteChartData,geoCoordMap);
             bigDataReport.hydropowerChart();
+            bigDataReport.hydropressflowChart();
+            bigDataReport.bigUserOrderly();
         },
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
@@ -917,11 +919,31 @@
                    
                     title: {
                         text: "安徽省",
-                        left: 'center'
+                        left: 'left'
                     },
                     tooltip: {
                         trigger: 'item'
                     },
+                    legend: {
+                        left: 'left',
+                        // data: ['强', '中', '弱'],
+                        // textStyle: {
+                        //     color: '#ccc'
+                        // }
+                    },
+                    //                 backgroundColor: {
+                    //     type: 'linear',
+                    //     x: 0,
+                    //     y: 0,
+                    //     x2: 1,
+                    //     y2: 1,
+                    //     colorStops: [{
+                    //         offset: 0, color: '#0f2c70' // 0% 处的颜色
+                    //     }, {
+                    //         offset: 1, color: '#091732' // 100% 处的颜色
+                    //     }],
+                    //     globalCoord: false // 缺省为 false
+                    // },
                     
                     series: [{
                         type: 'map',
@@ -936,16 +958,16 @@
                                 }
                             }
                         },
-                        itemStyle: {
-                            normal: {
-                                areaColor: '#031525',
-                                borderColor: '#3B5077',
-                                borderWidth: 1
-                            },
-                            emphasis: {
-                                areaColor: '#0f2c70'
-                            }
-                        },
+                        // itemStyle: {
+                        //     normal: {
+                        //         areaColor: '#031525',
+                        //         borderColor: '#3B5077',
+                        //         borderWidth: 1
+                        //     },
+                        //     emphasis: {
+                        //         areaColor: '#0f2c70'
+                        //     }
+                        // },
                         animation: false,
                         
                     data:[
@@ -1042,6 +1064,166 @@
                     
                 });
             });
+
+
+        },
+        // 水力分布流量和压力图标
+        hydropressflowChart:function(){
+
+            options = [{
+                backgroundColor: '#FFFFFF',
+                title: {
+                    text: '流量曲线图',
+                    left:'left'
+                },
+                // tooltip: {
+                //     trigger: 'axis',
+                //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                //         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                //     }
+                // },
+                
+                legend: {
+                    data: ['流量']
+                },
+
+                
+                xAxis: [{
+                    type: 'category',
+                    show:false,
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
+                }],
+                yAxis: [{
+                    type: 'value',
+                    //name: '投诉举报数',
+                    show:false,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }],
+                series: [{
+                    name: 'flow',
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            color: '#01949B'
+                        },
+                    },
+                    // markPoint: {
+                    //     data: [{
+                    //             type: 'max',
+                    //             name: '最大值'
+                    //         },
+                    //         {
+                    //             type: 'min',
+                    //             name: '最小值'
+                    //         }
+                    //     ]
+                    // },
+                    // markLine: {
+                    //     data: [{
+                    //         type: 'average',
+                    //         name: '平均值'
+                    //     }]
+                    // },
+                    data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
+                }]
+            }, 
+            {
+                backgroundColor: '#FFFFFF',
+                title: {
+                    text: '压力曲线图',
+                    left:'left'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['压力']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    show:false,
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
+                },
+                yAxis: {
+                    type: 'value',
+                    show:false,
+                    name: '压力',
+                    min: 0,
+                    max: 10,
+                    interval: 10,
+                },
+                series: [{
+                        name: '同比',
+                        type: 'bar',
+
+                        stack: '总量',
+                        data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
+
+                    }
+                ]
+            }];
+
+            var hydroflow = echarts.init(document.getElementById('hydroflow'));
+            hydroflow.setOption(options[0]);
+            var hydropress = echarts.init(document.getElementById('hydropress'));
+            hydropress.setOption(options[1]);
+        },
+        // 大用户排行榜
+        bigUserOrderly:function(){
+            "use strict";
+            var e = [{
+                Tid: "1",
+                First: "奔波儿灞",
+                sex: "男",
+                Score: "50"
+            }, {
+                Tid: "2",
+                First: "灞波儿奔",
+                sex: "男",
+                Score: "94"
+            }, {
+                Tid: "3",
+                First: "作家崔成浩",
+                sex: "男",
+                Score: "80"
+            }, {
+                Tid: "4",
+                First: "韩寒",
+                sex: "男",
+                Score: "67"
+            }, {
+                Tid: "5",
+                First: "郭敬明",
+                sex: "男",
+                Score: "100"
+            }, {
+                Tid: "6",
+                First: "马云",
+                sex: "男",
+                Score: "77"
+            }, {
+                Tid: "7",
+                First: "范爷",
+                sex: "女",
+                Score: "87"
+            }];
+            $("#exampleTableFromData").bootstrapTable({
+                data: e,
+                classes: 'table table-condensed table-no-bordered', 
+                striped: false,
+                height: "500"
+            })
+            $("#exampleTableFromData").bootstrapTable('hideLoading')
         },
 
         //初始化
