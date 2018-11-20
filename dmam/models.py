@@ -824,6 +824,42 @@ def ensure_bigmeter_exists(sender, **kwargs):
 
 
 
+
+# 集中器
+class VConcentrator(models.Model):
+    name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    commaddr = models.CharField('通讯识别码',max_length=50, null=True,blank=True) # 同simcard's simcardNumber
+    belongto = models.ForeignKey(
+        Organizations,
+        on_delete=models.CASCADE,
+        related_name='concentrator',
+        # primary_key=True,
+    )
+
+    lng = models.CharField(db_column='Lng', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    lat = models.CharField(db_column='Lat', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    coortype = models.CharField(db_column='CoorType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+
+    # simcardNumber       = models.CharField(db_column='SIMID', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    model = models.CharField(db_column='Model', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    serialnumber = models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.出厂编号
+    manufacturer = models.CharField(db_column='Manufacturer', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    madedate = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
+
+
+    class Meta:
+        managed = True
+        db_table = 'vconcentrator'
+
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+
+
 # 小区
 class VCommunity(MPTTModel):
     name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
@@ -837,37 +873,14 @@ class VCommunity(MPTTModel):
         related_name='community',
         # primary_key=True,
     )
-
+    
     commutid = models.IntegerField( blank=True, null=True) #对应抄表系统Community表的id
+    
+    vconcentrators = models.ManyToManyField( VConcentrator )
 
     class Meta:
         managed = True
         db_table = 'vcommunity'
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):
-        return self.name
-
-
-# 集中器
-class VConcentrator(models.Model):
-    name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    commaddr = models.CharField('通讯识别码',max_length=50, null=True,blank=True)
-    belongto = models.ForeignKey(
-        Organizations,
-        on_delete=models.CASCADE,
-        related_name='concentrator',
-        # primary_key=True,
-    )
-
-    communityid = models.ManyToManyField( VCommunity )
-
-    class Meta:
-        managed = True
-        db_table = 'vconcentrator'
-
 
     def __str__(self):
         return self.name
@@ -889,8 +902,21 @@ class VWatermeter(models.Model):
         # primary_key=True,
     )
 
-    communityid = models.ForeignKey( VCommunity ,on_delete=models.CASCADE,
-        related_name='watermeter',)
+    communityid = models.ForeignKey( VCommunity ,on_delete=models.CASCADE,related_name='watermeter')    #所属小区
+    concentrator = models.ForeignKey( VConcentrator ,on_delete=models.CASCADE,null=True, blank=True,)    #所属集中器
+
+    numbersth = models.CharField(db_column='NumberSth', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    buildingname = models.CharField(db_column='BuildingName', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    roomname = models.CharField(db_column='RoomName', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    nodeaddr = models.CharField(db_column='NodeAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    usertel = models.CharField(db_column='UserTel', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    dn = models.CharField(db_column='Dn', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    serialnumber = models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    manufacturer = models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    madedate = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    ValveMeter  = models.CharField(db_column='ValveMeter', max_length=30, blank=True, null=True)# 阀控表
+    
 
     class Meta:
         managed = True

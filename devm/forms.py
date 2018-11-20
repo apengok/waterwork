@@ -8,7 +8,7 @@ from django.contrib.postgres.forms.ranges import DateRangeField, RangeWidget
 
 
 from entm.models import Organizations
-from dmam.models import WaterUserType,DMABaseinfo,Station,Meter,SimCard
+from dmam.models import WaterUserType,DMABaseinfo,Station,Meter,SimCard,VConcentrator,VCommunity,VWatermeter
 import datetime
 
 
@@ -67,3 +67,80 @@ class SimCardEditForm(forms.ModelForm):
 
         # self.fields['password'].widget = forms.PasswordInput()
         self.fields['belongto'].initial = self.instance.belongto.name
+
+
+class VConcentratorAddForm(forms.ModelForm):
+    belongto  = forms.CharField()
+    
+    class Meta:
+        model = VConcentrator
+        fields = ['name','lng','lat','coortype','model','serialnumber','manufacturer','madedate','commaddr']
+
+
+class VConcentratorEditForm(forms.ModelForm):
+    belongto  = forms.CharField()
+    
+    class Meta:
+        model = VConcentrator
+        fields = ['name','lng','lat','coortype','model','serialnumber','manufacturer','madedate','commaddr']
+
+    def __init__(self,*args,**kwargs):
+        super(VConcentratorEditForm, self).__init__(*args, **kwargs)
+
+        self.fields['belongto'].initial = self.instance.belongto.name
+
+
+
+class VCommunityAddForm(forms.ModelForm):
+    belongto  = forms.CharField()
+    vconcentrator1 = forms.CharField()
+    vconcentrator2 = forms.CharField()
+    vconcentrator3 = forms.CharField()
+    vconcentrator4 = forms.CharField()
+    
+    class Meta:
+        model = VCommunity
+        fields = ['name','address']
+
+
+class VCommunityEditForm(forms.ModelForm):
+    belongto  = forms.CharField()
+    vconcentrator1 = forms.CharField()
+    vconcentrator2 = forms.CharField()
+    vconcentrator3 = forms.CharField()
+    vconcentrator4 = forms.CharField()
+    
+    class Meta:
+        model = VCommunity
+        fields = ['name','address']
+
+    def __init__(self,*args,**kwargs):
+        super(VCommunityEditForm, self).__init__(*args, **kwargs)
+
+        self.fields['belongto'].initial = self.instance.belongto.name
+        self.fields['vconcentrator1'].initial = self.instance.vconcentrators.first().name
+
+
+
+class VWatermeterAddForm(forms.ModelForm):
+    communityid  = forms.CharField()
+    concentrator = forms.CharField()
+
+    class Meta:
+        model = VWatermeter
+        fields = ['name','numbersth','buildingname','roomname','username','usertel','dn','serialnumber','manufacturer','madedate','ValveMeter']
+
+
+class VWatermeterEditForm(forms.ModelForm):
+    communityid  = forms.CharField()
+    concentrator = forms.CharField()
+    
+    class Meta:
+        model = VWatermeter
+        fields = ['name','numbersth','buildingname','roomname','username','usertel','dn','serialnumber','manufacturer','madedate','ValveMeter']
+
+    def __init__(self,*args,**kwargs):
+        super(VWatermeterEditForm, self).__init__(*args, **kwargs)
+
+        self.fields['communityid'].initial = self.instance.communityid.name
+        self.fields['concentrator'].initial = self.instance.concentrator.name

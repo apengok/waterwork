@@ -32,7 +32,7 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Concentrator,MeterParameter
-from dmam.models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,SimCard,VConcentrator
+from dmam.models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,SimCard,VConcentrator,VCommunity,VWatermeter
 import os
 from django.conf import settings
 
@@ -44,7 +44,7 @@ logger_error = logging.getLogger('error_logger')
 
 
 
-from .forms import MeterAddForm,MeterEditForm,SimCardAddForm,SimCardEditForm
+from .forms import MeterAddForm,MeterEditForm,SimCardAddForm,SimCardEditForm,VConcentratorAddForm,VCommunityAddForm,VWatermeterAddForm,VConcentratorEditForm,VCommunityEditForm,VWatermeterEditForm
 # Create your views here.
 
 # 表具管理/表具列表 dataTable
@@ -870,6 +870,213 @@ class ConcentratorMangerView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "设备管理"
         
         return context  
+
+
+
+"""
+User add, manager
+"""
+class ConcentratorAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
+    model = Meter
+    form_class = MeterAddForm
+    template_name = "devm/concentratoradd.html"
+    success_url = reverse_lazy("devm:concentratormanager")
+    # permission_required = ('entm.rolemanager_perms_basemanager_edit', 'entm.dmamanager_perms_basemanager_edit')
+
+    # @method_decorator(permission_required("dma.change_meters"))
+    def dispatch(self, *args, **kwargs):
+        #uuid is selectTreeIdAdd namely organizations uuid
+        if self.request.method == 'GET':
+            uuid = self.request.GET.get("uuid")
+            kwargs["uuid"] = uuid
+
+        if self.request.method == 'POST':
+            uuid = self.request.POST.get("uuid")
+            kwargs["uuid"] = uuid
+        print("uuid:",kwargs.get('uuid'))
+        return super(ConcentratorAddView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('concentratormanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "新增集中器",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("concentrator  add here?:",self.request.POST)
+        print(self.kwargs,self.args)
+        # print(form)
+        # do something
+        user = self.request.user
+        user_groupid = user.belongto.cid
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+        
+
+        return super(ConcentratorAddView,self).form_valid(form)   
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ConcentratorAddView, self).get_context_data(*args, **kwargs)
+
+        uuid = self.request.GET.get('uuid') or ''
+        
+        groupId = ''
+        groupname = ''
+        if len(uuid) > 0:
+            organ = Organizations.objects.get(uuid=uuid)
+            groupId = organ.cid
+            groupname = organ.name
+        # else:
+        #     user = self.request.user
+        #     groupId = user.belongto.cid
+        #     groupname = user.belongto.name
+        
+        context["groupId"] = groupId
+        context["groupname"] = groupname
+
+        
+
+        return context  
+
+
+"""
+User edit, manager
+"""
+class ConcentratorEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+    model = Meter
+    form_class = MeterEditForm
+    template_name = "devm/meteredit.html"
+    success_url = reverse_lazy("devm:metermanager")
+    
+    # @method_decorator(permission_required("dma.change_meters"))
+    def dispatch(self, *args, **kwargs):
+        # self.user_id = kwargs["pk"]
+        return super(ConcentratorEditView, self).dispatch(*args, **kwargs)
+
+    def get_object(self):
+        return Meter.objects.get(id=self.kwargs["pk"])
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('concentratormanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改集中器",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_invalid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("user edit form_invalid:::")
+        return super(ConcentratorEditView,self).form_invalid(form)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print(form)
+        print(self.request.POST)
+
+        
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+        
+        # instance.uuid=unique_uuid_generator(instance)
+        return super(ConcentratorEditView,self).form_valid(form)
+       
+
+
+def concentratordeletemore(request):
+    # print('userdeletemore',request,request.POST)
+
+    if not request.user.has_menu_permission_edit('metermanager_devm'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    deltems = request.POST.get("deltems")
+    print('deltems:',deltems)
+    deltems_list = deltems.split(',')
+
+    for uid in deltems_list:
+        u = VConcentrator.objects.get(id=int(uid))
+        # print('delete user ',u)
+        #删除用户 并且删除用户在分组中的角色
+        
+        u.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
+
+"""
+Assets comment deletion, manager
+"""
+class ConcentratorDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
+    model = Meter
+    # template_name = "aidsbank/asset_comment_confirm_delete.html"
+
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission_edit('metermanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        HttpResponse(json.dumps(data))
+        # return render(self.request,"entm/permission_error.html",data)
+
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs["pk"]
+
+        print("user delete:",args,kwargs)
+        
+        return super(ConcentratorDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        # print("delete objects:",self.kwargs,kwargs)
+        return VConcentrator.objects.get(pk=kwargs["pk"])
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print("delete?",args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+
+        
+
+        self.object.delete()
+        result = dict()
+        # result["success"] = 1
+        return HttpResponse(json.dumps({"success":1}))
+        
 
 
 def concentratorlist(request):
