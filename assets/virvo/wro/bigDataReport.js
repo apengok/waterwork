@@ -406,6 +406,7 @@
             bigDataReport.realassetsForm();
             bigDataReport.dma2leakage();
             bigDataReport.dma3leakage();
+            bigDataReport.readMeterRatio();
         },
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
@@ -1259,68 +1260,330 @@
 
         // 资产大数据图表
         realassetsForm:function(){
-            options = {
-                backgroundColor: '#FFFFFF',
-                title: {
-                    text: '流量曲线图',
-                    left:'left'
-                },
-                // tooltip: {
-                //     trigger: 'axis',
-                //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                //         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                //     }
-                // },
-                
-                legend: {
-                    data: ['流量']
-                },
-
-                
-                xAxis: [{
-                    type: 'category',
-                    show:false,
-                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
-                }],
-                yAxis: [{
-                    type: 'value',
-                    //name: '投诉举报数',
-                    show:false,
-                    axisLabel: {
-                        formatter: '{value}'
-                    }
-                }],
-                series: [{
-                    name: 'flow',
-                    type: 'bar',
-                    itemStyle: {
-                        normal: {
-                            color: '#01949B'
-                        },
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {
+                        fontSize: 20
                     },
-                    // markPoint: {
-                    //     data: [{
-                    //             type: 'max',
-                    //             name: '最大值'
-                    //         },
-                    //         {
-                    //             type: 'min',
-                    //             name: '最小值'
-                    //         }
-                    //     ]
-                    // },
-                    // markLine: {
-                    //     data: [{
-                    //         type: 'average',
-                    //         name: '平均值'
-                    //     }]
-                    // },
-                    data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
-                }]
+                    // formatter: function (a) {
+                    //     // console.log(a);
+                    //     var tsale = parseFloat(a[0].value)*10000;
+                    //     var tuncount = parseFloat(a[1].value)*10000;
+                    //     var tleak = parseFloat(a[2].value)*10000;
+                    //     var ttotal = tsale + tuncount + tleak;
+                    //     var tleak_percent = 0;
+                    //     if (ttotal == 0){
+                    //         tleak_percent = 0
+                    //     }else{
+                    //         tleak_percent = (tleak/ttotal)*100;
+                    //     }
+                        
+                    //     var relVal = "";
+                    //     //var relValTime = a[0].name;
+                    //     relVal = hdates[a[0].dataIndex] + ' 月';
+                    //     relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:grey'></span>供水量:" + ttotal.toFixed(2) + " m³";
+                    //     relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[0].color + "'></span>" + a[0].seriesName + "：" + tsale.toFixed(2) + " m³";
+                    //     relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[1].color + "'></span>未计费水量：" + tuncount.toFixed(2) + " m³";
+                    //     relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[2].color + "'></span>" + a[2].seriesName + "：" + tleak.toFixed(2) + " m³";
+                    //     relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:" + a[3].color + "'></span>" + a[3].seriesName + "：" + a[3].value[1] + "%";
+                    //     relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:red'></span>漏损率:" + tleak_percent.toFixed(2) + "%";
+
+                        
+                    //     return relVal;
+                    // }
+                },
+                legend: {
+                    data: ['长度','大表数量'],
+                    left: 'auto',
+                },
+                toolbox: {
+                    show: false
+                },
+                grid: {
+                    left: '80',
+                    bottom:'50',
+                    right:'80'
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
+                    name: "",
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        rotate: 0
+                    },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:200,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    splitLine: {
+                        show: false,
+                        offset:5,
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    data: [40,50,80,100,150,200,250,300,400,500,600,800]
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '总长度 （万m）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:60,
+                        scale: false,
+                        position: 'left',
+
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'grey',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+
+                        },
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    {
+                        type : 'value',
+                        name :'大表数量(台)',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:35,
+                        min: 0,
+                        max: 100,
+                        interval: 25,
+                        axisLine : {    // 轴线
+                            show: true,
+                            lineStyle: {
+                                color: 'grey',
+                                type: 'dashed',
+                                width: 1
+                            }
+                        },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        offset : 18
+                    }
+                ],
+                barGap:'1%',
+                // barCategoryGap:'10%',
+                // dataZoom: [{
+                //     type: 'inside',
+                //     start: start,
+                //     end: end
+                // }, {
+
+                //     show: true,
+                //     height: 20,
+                //     type: 'slider',
+                //     top: 'top',
+                //     xAxisIndex: [0],
+                //     start: 0,
+                //     end: 10,
+                //     showDetail: false,
+                // }],
+                series: [
+                    {
+                        name: '长度',
+                        yAxisIndex: 0,
+                        type: 'bar',
+                        // stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#7cb4ed'
+                            }
+                        },
+                        data: [3,2,1,4,3,2,2,3,4,5,1,2],
+                        // markLine : {
+                        //   symbol : 'none',
+                        //   itemStyle : {
+                        //     normal : {
+                        //       color:'#1e90ff',
+                        //       label : {
+                        //         show:true
+                        //       }
+                        //     }
+                        //   },
+                        //   data : [{type : 'average', name: '平均值'}]
+                        // }
+                    },
+                    {
+                        name: '大表数量',
+                        yAxisIndex: 1,
+                        type: 'bar',
+                        // stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#474249'
+                            }
+                        },
+                        data: [23,12,15,14,33,23,26,31,34,55,21,32]
+                    }
+                ]
             };
 
             var realassets = echarts.init(document.getElementById('realassets'));
-            realassets.setOption(options);
+            realassets.setOption(option);
+        },
+        // 抄表率readmeteratio
+        readMeterRatio:function(){
+            var labelTop = {
+                normal : {
+                    label : {
+                        show : true,
+                        position : 'center',
+                        formatter : '{b}',
+                        textStyle: {
+                            baseline : 'bottom'
+                        }
+                    },
+                    labelLine : {
+                        show : false
+                    }
+                }
+            };
+            var labelFromatter = {
+                normal : {
+                    label : {
+                        formatter : function (params){
+                            return '+' + 100 - params.value + '%'
+                        },
+                        textStyle: {
+                            baseline : 'top'
+                        }
+                    }
+                },
+            }
+            var labelBottom = {
+                normal : {
+                    color: '#ccc',
+                    label : {
+                        show : true,
+                        position : 'center'
+                    },
+                    labelLine : {
+                        show : false
+                    }
+                },
+                emphasis: {
+                    color: 'rgba(0,0,0,0)'
+                }
+            };
+            var radius = [50, 55];
+            option = {
+                legend: {
+                    x : 'center',
+                    y : 'bottom',
+                    // show:false,
+                    itemGap:80,
+                    data:[
+                        '抄表率','大表故障率','抄表率2'
+                    ]
+                },
+                clockWise:true,
+                // title : {
+                //     text: 'The App World',
+                //     subtext: 'from global web index',
+                //     x: 'center'
+                // },
+                
+                series : [
+                    {
+                        type : 'pie',
+                        center : ['20%', '40%'],
+                        radius : radius,
+                        x: '0%', // for funnel
+                        itemStyle : labelFromatter,
+                        data : [
+                            {name:'other', value:46, itemStyle : labelTop},
+                            {name:'抄表率', value:54,itemStyle : labelBottom}
+                        ]
+                    },
+                    {
+                        type : 'pie',
+                        center : ['50%', '40%'],
+                        radius : radius,
+                        x:'20%', // for funnel
+                        itemStyle : labelFromatter,
+                        data : [
+                            {name:'other', value:56, itemStyle : labelBottom},
+                            {name:'大表故障率', value:44,itemStyle : labelTop}
+                        ]
+                    },
+                    {
+                        type : 'pie',
+                        center : ['80%', '40%'],
+                        radius : radius,
+                        x:'40%', // for funnel
+                        itemStyle : labelFromatter,
+                        data : [
+                            {name:'other', value:65, itemStyle : labelBottom},
+                            {name:'抄表率2', value:35,itemStyle : labelTop}
+                        ]
+                    }
+                ]
+            };
+            var readmeteratio = echarts.init(document.getElementById('readmeteratio'));
+            readmeteratio.setOption(option);
         },
         // 二级分区漏损排行榜
         dma2leakage:function(){
@@ -1468,519 +1731,7 @@
             var parameter={"groupId": checkGroupNode[0].uuid};
             json_ajax("POST",url,"json",true,parameter, bigDataReport.reportDataCallback);
          },
-        //周期对比
-        cycleVS: function(date,thisMouthData,lastMouthData){
-            var myChart = echarts.init(document.getElementById('cycleVS'));
-            var option = {
-                tooltip: {
-                    trigger: 'axis',
-                    textStyle: {
-                        fontSize: 20
-                    },
-                    formatter: function (a) {
-                        var date = new Date();
-                        var nowYear = date.getFullYear();
-                        var nowMouth = date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : (date.getMonth()+1);
-                        var relVal = '';
-                        relVal = nowYear + "-" + nowMouth + "-" + (a[0].name < 10 ? "0" + a[0].name : a[0].name);
-                        if(a[0].data == null){
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a[0].color +"'></span>"+ a[0].seriesName +"："+ "无相关数据" +"";
-                        }else{
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a[0].color +"'></span>"+ a[0].seriesName +"："+ a[0].value +" km";
-                        }
-                        if (a[1].data == null) {
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a[1].color +"'></span>"+ a[1].seriesName +"："+ "无相关数据" +"";
-                        } else {
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a[1].color +"'></span>"+ a[1].seriesName +"："+ a[1].value +" km";
-                        }
-                        return relVal;
-                    }
-                },
-                legend: {
-                    data: ['本月', '上月'],
-                    left: 'auto',
-                },
-                toolbox: {
-                    show: false
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    name: "日期",
-                    nameLocation: "end",
-                    data: date
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: '里程(km)',
-                        scale: true,
-                        position: '',
-                        axisLabel: {
-                            formatter: '{value}'
-                        },
-                        splitLine:{
-                            show:false
-                        }
-                    },
-                ],
-                series: [
-                    {
-                        name: '本月',
-                        yAxisIndex: 0,
-                        type: 'line',
-                        smooth: true,
-                        symbol: 'none',
-                        symbolSize: 7,
-                        sampling: 'average',
-                        showAllSymbol : true,
-                        smooth: false,                  //是否平滑
-                        symbol: 'emptyCircle',          //标记类型
-                        itemStyle: {
-                            normal: {
-                                color: '#6dcff6'
-                            }
-                        },
-                        data: thisMouthData
-                    },
-                    {
-                        name: '上月',
-                        yAxisIndex: 0,
-                        type: 'line',
-                        smooth: true,
-                        symbolSize: 7,
-                        showAllSymbol : true,
-                        symbol: 'none',
-                        sampling: 'average',
-                        smooth: false,                  //是否平滑
-                        symbol: 'emptyCircle',          //标记类型
-                        itemStyle: {
-                            normal: {
-                                color: 'rgb(248, 123, 0)'
-                            }
-                        },
-                        data: lastMouthData
-                    },
-                ]
-            };
-            myChart.setOption(option);
-            window.onresize = myChart.resize;
-        },
-        //里程对比
-        mileageVS: function(date,mileageData){
-            // wjk
-            //date = bigDataReport.platenumbersplitFun(date);
-
-            var bgArray = [];
-            var maxValue = Math.max.apply(null, mileageData);
-            for(var i = 0, len = mileageData.length; i < len; i++){
-                bgArray.push(maxValue);
-            };
-            var start;
-            var end;
-            var length = mileageData.length;
-            if(length < 4){
-                barWidth = "30%";
-            }else if(length < 6){
-                barWidth = "20%";
-            }else{
-                barWidth = null;
-            };
-            if(length <= 20){
-                start = 0;
-                end = 100;
-            }else{
-                start = 0;
-                end = 100*(20/length);
-            };
-            var myChart = echarts.init(document.getElementById('mileageVS'));
-            var option = {
-                tooltip: {
-                    trigger: 'axis',
-                    textStyle: {
-                        fontSize: 20
-                    },
-                    formatter: function (a) {
-                        var relVal =date[a[1].dataIndex];
-                        if (a[1].name != "") {
-                            var mileValue=bigDataReport.fiterNumber(a[1].value);
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a[1].color +"'></span>"+ a[1].seriesName +"："+ mileValue +" km";
-                        } else {
-                            relVal = "无相关数据";
-                        }
-                        return relVal;
-                    
-                    },
-                },
-                legend: {
-                    data: ['里程'],
-                    left: 'auto',
-                },
-                toolbox: {
-                    show: false
-                },
-                grid: {
-                    left: '100',
-                    bottom:'100'
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: true,
-                    name: "车牌号",
-                    axisLabel: {
-                        show: true,
-                        interval: 0,  
-                        rotate: 45
-                    },
-                    data: bigDataReport.platenumbersplitFun(date)
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: '里程(km)',
-                        scale: false,
-                        position: '',
-                        axisLabel: {
-                            formatter: '{value}'
-                        },
-                        splitLine:{
-                            show:false
-                        }
-                    },
-                ],
-                dataZoom: [{
-                    type: 'inside',
-                    start: start,
-                    end: end
-                }, {
-                    
-                    show: true,
-                    height: 20,
-                    type: 'slider',
-                    top: 'top',
-                    xAxisIndex: [0],
-                    start: 0,
-                    end: 10,
-                    showDetail: false,
-                }],
-                series: [
-                    {
-                        type: 'bar',
-                        itemStyle: {
-                            normal: {color: 'rgba(0,0,0,0.05)'}
-                        },
-                        barGap:'-100%',
-                        barCategoryGap:'40%',
-                        data: bgArray,
-                        animation: false
-                    },     
-                    {
-                        name: '里程',
-                        yAxisIndex: 0,
-                        type: 'bar',
-                        smooth: true,
-                        symbol: 'none',
-                        barWidth: barWidth,
-                        sampling: 'average',
-                        itemStyle: {
-                            normal: {
-                                color: '#6dcff6'
-                            }
-                        },
-                        data: mileageData
-                    }
-                ]
-            };
-            myChart.setOption(option);
-            window.onresize = myChart.resize;
-            myChart.on('click', bigDataReport.chartsEvent);
-        },
-        //里程对比图例点击事件，点击柱形查询单车的里程统计数据
-        chartsEvent: function(params){
-            if($(".panel-body").is(":hidden")){
-                $(".panel-body").show();
-            };
-            var brand = params.name;
-            $("#curCar").text("：" + brand);
-            // 树节点选中的id
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            var checkGroupNode = zTree.getCheckedNodes();
-            var url = "getMileData"; // 大数据月表接口
-            // var url = "getMileCompareData"; // 平台原接口
-            var vehicleId = params.id;
-            if(vehicleId == undefined || vehicleId == "" || vehicleId == null){
-                var dataIndex = params.dataIndex;//点击柱状图的数值序列(下标)
-                vehicleId = vehicleIds[dataIndex];
-            }
-            var data = {"vehicleId":vehicleId,"groupId":checkGroupNode[0].uuid};
-            // var data = {"vehicleId":vehicleId,"brand":brand,"groupId":checkGroupNode[0].uuid};
-            json_ajax("POST", url, "json", true, data, bigDataReport.ajaxListCallback);
-        },
-        // 里程对比图，点击柱形查询单车的里程统计数据回调
-        ajaxListCallback : function (data) {
-            if (data != null && data != "null" && data != undefined && data.success==true) {
-                var dayDataByVehicle = data.obj.dayDataByVehicle; // 车辆一月每天里程
-                var monthDataByVehicle = data.obj.monthDataByVehicle; // 车辆一月总数据
-                var smallMileCount = data.obj.smallMileCount; // 里程小于当前车辆一个月里程的车辆数量
-                $("#plateNumber").html(monthDataByVehicle != null?monthDataByVehicle.plateNumber:"无"); // 车牌号
-                $("#travelTimeByVehicle").html(monthDataByVehicle != null?bigDataReport.formatSeconds(monthDataByVehicle.travelTime,true):"<font style='font-size:18px'>0</font>秒"); // 行驶时长
-                $("#downTimeByVehicle").html(monthDataByVehicle != null?bigDataReport.formatSeconds(monthDataByVehicle.downTime,true):"<font style='font-size:18px'>0</font>秒"); // 停驶时长
-                var monthGpsMile;
-                if (monthDataByVehicle == null) {
-                    monthGpsMile = 0.0;
-                } else {
-                    monthGpsMile= bigDataReport.fiterNumber(monthDataByVehicle.gpsMile.toFixed(1));
-                }
-                $("#mileByVehicle").html(monthDataByVehicle != null?"<font style='font-size:18px'> "+monthGpsMile+" </font><font style='font-size:12px'>km</font>":"<font style='font-size:18px'>0.0</font>km"); // 行驶里程
-                $("#travelTimesByVehicle").html(monthDataByVehicle != null?"<font style='font-size:18px'> "+monthDataByVehicle.travelTimes+" </font><font style='font-size:12px'>次</font>":"<font style='font-size:18px'>0</font>次"); // 行驶次数
-                $("#alarmTimesByVehicle").html(monthDataByVehicle != null?"<font style='font-size:18px'> "+monthDataByVehicle.overSpeedTimes+" </font><font style='font-size:12px'>次</font>":"<font style='font-size:18px'>0</font>次"); // 报警次数
-                var totalVehicleCountStr = $("#selectTotalVehicleCount").text();
-                var totalVehicleCount = totalVehicleCountStr.substring(0,totalVehicleCountStr.length-1);
-                var percentCount = smallMileCount + (totalVehicleCount - validVehicleCount); // 里程小的车辆数量 + 没有数据的车辆数量
-                var percent = 0;
-                if (monthDataByVehicle != null && monthDataByVehicle!=undefined && monthDataByVehicle != 0) {
-                    if (monthDataByVehicle.gpsMile != 0 && monthDataByVehicle.gpsMile != 0.0 ) {
-                        percent = Math.round(percentCount/ totalVehicleCount * 10000) / 100.00;
-                    }
-                }
-                $("#milePercent").html(percent+"%"); // 里程百分比
-                mileageStatisticsData = [];
-                var today = new Date();
-                today = today.getDate();
-                for (var j=0; j<dateForMonth.length; j++) {
-                    var flagDate = false; // 标识日期 
-                    if (dayDataByVehicle != null && dayDataByVehicle != "null" && dayDataByVehicle != undefined && dayDataByVehicle.length > 0) {
-                        for(var i = 0; i < dayDataByVehicle.length; i++){
-                            var timeStr = new Date(parseInt(dayDataByVehicle[i].dayTime) * 1000).getDate();
-                            if (dateForMonth[j] == timeStr) {
-                                flagDate = true;
-                                mileageStatisticsData.push(dayDataByVehicle[i].gpsMile.toFixed(1));
-                                break;
-                            }
-                        }
-                    }
-                    if (!flagDate && parseInt(dateForMonth[j]) <= parseInt(today)) {
-                        mileageStatisticsData.push(0);
-                    } 
-                    if (parseInt(dateForMonth[j]) > parseInt(today)) {
-                        mileageStatisticsData.push(null);
-                    }
-                }
-                bigDataReport.mileageStatistics(dateForMonth,mileageStatisticsData);
-            }else{
-                layer.msg(data.msg,{move:false});
-            }
-        },
-        //里程月统计
-        mileageStatistics: function(date,mileageStatisticsData){
-            var myChart = echarts.init(document.getElementById('mileageStatistics'));
-            var option = {
-                tooltip: {
-                    trigger: 'axis',
-                    textStyle: {
-                        fontSize: 20
-                    },
-                    formatter: function (a) {
-                        var date = new Date();
-                        var nowYear = date.getFullYear();
-                        var nowMouth = date.getMonth()+1 < 10 ? "0" + (date.getMonth()+1) : (date.getMonth()+1);
-                        var relVal = '';
-                        relVal = nowYear + "-" + nowMouth + "-" + (a[0].name < 10 ? "0" + a[0].name : a[0].name);
-                        if(a[0].data == null){
-                            relVal = "无相关数据";
-                        }else{
-                            var mileValue=bigDataReport.fiterNumber(a[0].value);
-                            relVal += "<br/><span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a[0].color +"'></span>"+ a[0].seriesName +"："+ mileValue +" km";
-                        }
-                        return relVal;
-                    }
-                },
-                legend: {
-                    data: ['里程'],
-                    left: 'auto',
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: false}
-                    }
-                },
-                xAxis: {
-                    type: 'category',
-                    boundaryGap: false,
-                    name: "日期",
-                    nameLocation: "end",
-                    axisLabel: {
-                        show: true,
-                        interval: 0  
-                    },
-                    inverse: false,
-                    data: date
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: '里程(km)',
-                        scale: false,
-                        position: '',
-                        axisLabel: {
-                            formatter: '{value}'
-                        },
-                        splitLine:{
-                            show:false
-                        }
-                    },
-                ],
-                series: [
-                    {
-                        name: '里程',
-                        yAxisIndex: 0,
-                        type: 'line',
-                        symbolSize: 7,
-                        showAllSymbol : true,
-                        smooth: false,              //是否平滑
-                        symbol: 'emptyCircle',          //标记类型
-                        sampling: 'average',
-                        itemStyle: {
-                            normal: {
-                                color: '#6dcff6'
-                            }
-                        },
-                        data: mileageStatisticsData
-                    }
-                ]
-            };
-            myChart.setOption(option);
-            window.onresize = myChart.resize;
-        },
-        //热点图
-        hotspoteChart: function(data,geoCoordMap){              
-           var convertData = function (data) {
-               var res = [];
-               for (var i = 0; i < data.length; i++) {
-                   var geoCoord = geoCoordMap[data[i].name];
-                   if (geoCoord) {
-                       res.push({
-                           name: data[i].name,
-                           value: geoCoord.concat(data[i].value)
-                       });
-                   }
-               }
-               return res;
-           };
-            hostMyChart = echarts.init(document.getElementById('hotspoteChart'));
-           var option = {
-               backgroundColor: '#404a59',
-               title: {
-                   text: '所有轨迹信息点月分布图',
-                   left: 'center',
-                   textStyle: {
-                       color: 'rgb(64, 74, 89)'
-                   }
-               },
-               tooltip : {
-                   trigger: 'item',
-                   formatter: function (a) {
-                       var relVal = "";
-                       if(point == 1){
-                           relVal = "<span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a.color +"'></span>"+ a.name +":" + Math.round(a.value[2]/100*sum) +"";
-                       }else if(point<10 && point> 1){
-                           relVal = "<span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a.color +"'></span>"+ a.name +":" + Math.round(a.value[2]/500*sum) +"";
-                       }else{
-                           relVal = "<span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:"+ a.color +"'></span>"+ a.name +":" + Math.round(a.value[2]/1000*sum) +"";
-                       }
-                       return relVal;
-                   }
-
-               },
-               legend: {
-                   orient: 'vertical',
-                   y: 'bottom',
-                   x:'right',
-                   data:['全部展示'],
-                   textStyle: {
-                       color: '#ff1320'
-                   }
-               },
-               geo: {
-                   map: 'china',
-                   label: {
-                       emphasis: {
-                           show: false
-                       }
-                   },
-                   zoom: 0.9,
-                   roam: true,
-                   itemStyle: {
-                       normal: {
-                           areaColor: '#323c48',
-                           borderColor: '#111'
-                       },
-                       emphasis: {
-                           areaColor: '#2a333d'
-                       }
-                   }
-               },
-               series : [
-                   {
-                       name: '全部展示',
-                       type: 'scatter',
-                       coordinateSystem: 'geo',
-                       data: convertData(data),
-                       symbolSize: function (val) {
-                           return val[2] / 10;
-                       },
-                       label: {
-                           normal: {
-                               formatter: '{b}',
-                               position: 'right',
-                               show: true
-                           },
-                           emphasis: {
-                               show: true
-                           }
-                       },
-                       itemStyle: {
-                           normal: {
-                               color: '#ddb926'
-                           }
-                       }
-                   },
-                  {
-                       type: 'effectScatter',
-                       coordinateSystem: 'geo',
-                       data: convertData(data.sort(function (a, b) {
-                           return b.value - a.value;
-                       }).slice(0, 5)),
-                       symbolSize: function (val) {
-                           return val[2] / 10;
-                       },
-                       showEffectOn: 'render',
-                       rippleEffect: {
-                           brushType: 'stroke'
-                       },
-                       hoverAnimation: true,
-                       label: {
-                           normal: {
-                               formatter: '{b}',
-                               position: 'right',
-                               show: true
-                           }
-                       },
-                       itemStyle: {
-                           normal: {
-                               color: '#f4e925',
-                               shadowBlur: 10,
-                               shadowColor: '#333'
-                           }
-                       },
-                       zlevel: 1
-                   }
-               ]
-           };
-            hostMyChart.setOption(option);
-           window.onresize = hostMyChart.resize;
-        }, 
+        
         //选择组织
         checkGroup: function(){
             $("#monment").show();

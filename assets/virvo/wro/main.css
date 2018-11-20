@@ -853,6 +853,12 @@ h3.timeline-title{color:#C8CCD7;font-size:20px;font-weight:400;margin:0 0 5px;te
 .cycle-comparison,.mileage-comparison{margin:15px 0 0 0}
 .all-statistics-area .area{height:120px}
 .all-statistics-area .area>div,.all-statistics-area .area>div>div{padding:0}
+.valve-stastic{background-color:#f4f7fc;width:29%;margin:0 2% 0 0;padding:0}
+.valve-stastic .valve-stastic-footer{height:35px;line-height:35px;background-color:#b74224!important;font-size:28px,font-weight:700}
+
+.realrest-stastic{background-color:#f4f7fc;width:23%;margin:0 2% 0 0;padding:0}
+.realrest-stastic .realrest-stastic-footer{height:35px;line-height:35px;background-color:#b74224!important;font-size:28px,font-weight:700}
+
 .report-group{background-color:#27a9e3;width:49%;margin:0 2% 0 0;padding:0}
 .report-group ul a{color:#333!important}
 .report-group #selectGroup{font-size:22px;font-weight:700}
