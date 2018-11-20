@@ -229,7 +229,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
-    
+    os.path.join(BASE_DIR,"echarts","map","province"),
 ]
 
 MEDIA_URL = '/media/'

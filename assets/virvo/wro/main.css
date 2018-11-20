@@ -3,9 +3,9 @@
 * @ AUTNOR ZoomWell Team
 * @ LINK WWW.ZWLBS.COM
 */
-/*html{overflow-y: scroll;}
+html{overflow-y: scroll;}
 :root{overflow-y: auto;overflow-x: hidden;}
-:root body{position: absolute;}*/
+:root body{position: absolute;}
 body{user-select:none;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;width: 100vw;}
 select.form-control{padding: 6px 40px 6px 11px}
 #container{

@@ -238,5 +238,9 @@
         $("#search_condition").on("input oninput",function(){
             search_ztree('treeDemo', 'search_condition', 'assignment');
         });
+
+        // $("#addId").bind("click",function(){
+        //     $("#addDistrictForm").modal("show")
+        // })
     })
 })(window,$)
