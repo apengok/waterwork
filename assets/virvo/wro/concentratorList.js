@@ -53,7 +53,7 @@
                             var roleUrlPre = /*[[@{/c/user/roleList_{id}.gsp}]]*/'url';
                             var result = '';
                             //修改按钮
-                            result += '<button disabled href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
+                            result += '<button  href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                             //删除按钮
                             if(row.station != ""){
                                 result += '<button disabled type="button" onclick="myTable.deleteItem(\''
@@ -81,7 +81,7 @@
                         "class" : "text-center",
                         
                     }, {
-                        "data" : "installationsite",
+                        "data" : "address",
                         "class" : "text-center",
                         
                     },{
@@ -89,11 +89,6 @@
                         "class" : "text-center",
                         
                     } ,
-                    // {
-                    //     "data" : "version",
-                    //     "class" : "text-center",
-                        
-                    // }, 
                     {
                         "data" : "model",
                         "class" : "text-center",
@@ -124,20 +119,6 @@
                         "data" : "simid",
                         "class" : "text-center",
                        
-                    },{
-                        "data" : "gpflow",
-                        "class" : "text-center",
-                        
-                    
-                    },{
-                        "data":"uplimitflow",
-                        "class":"text-center",
-                        
-                    },{
-                        "data":"monthdownflow",
-                        "class":"text-center",
-                        
-
                     },{
                         "data":"communityid",
                         "class":"text-center",

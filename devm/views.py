@@ -144,6 +144,8 @@ def repetition(request):
     # return HttpResponse(json.dumps(bflag))
     return HttpResponse(json.dumps({"success":bflag}))
 
+
+
 class MeterMangerView(LoginRequiredMixin,TemplateView):
     template_name = "devm/meterlist.html"
 
@@ -872,13 +874,20 @@ class ConcentratorMangerView(LoginRequiredMixin,TemplateView):
         return context  
 
 
+def concentrator_repetition(request):
+    name = request.POST.get("name")
+    bflag = not VConcentrator.objects.filter(name=name).exists()
+
+    # return HttpResponse(json.dumps(bflag))
+    return HttpResponse(json.dumps({"success":bflag}))
+
 
 """
 User add, manager
 """
 class ConcentratorAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
     model = Meter
-    form_class = MeterAddForm
+    form_class = VConcentratorAddForm
     template_name = "devm/concentratoradd.html"
     success_url = reverse_lazy("devm:concentratormanager")
     # permission_required = ('entm.rolemanager_perms_basemanager_edit', 'entm.dmamanager_perms_basemanager_edit')
@@ -957,10 +966,10 @@ class ConcentratorAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
 User edit, manager
 """
 class ConcentratorEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
-    model = Meter
-    form_class = MeterEditForm
-    template_name = "devm/meteredit.html"
-    success_url = reverse_lazy("devm:metermanager")
+    model = VConcentrator
+    form_class = VConcentratorEditForm
+    template_name = "devm/concentratoredit.html"
+    success_url = reverse_lazy("devm:concentratormanager")
     
     # @method_decorator(permission_required("dma.change_meters"))
     def dispatch(self, *args, **kwargs):
@@ -968,7 +977,7 @@ class ConcentratorEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView)
         return super(ConcentratorEditView, self).dispatch(*args, **kwargs)
 
     def get_object(self):
-        return Meter.objects.get(id=self.kwargs["pk"])
+        return VConcentrator.objects.get(id=self.kwargs["pk"])
 
     def test_func(self):
         if self.request.user.has_menu_permission_edit('concentratormanager_devm'):
@@ -1116,45 +1125,42 @@ def concentratorlist(request):
     user = request.user
     organs = user.belongto
 
-    # meters = user.meter_list_queryset(simpleQueryParam)
-    meters = Concentrator.objects.all() #.filter(communityid=105)  #文欣苑105
+    user_concentrators = user.meter_concentrator_queryset(simpleQueryParam)
+    concentrators = user_concentrators.values("id","name","belongto__name","address","manufacturer","model","madedate",
+                "lng","lat","coortype","commaddr") #.filter(communityid=105)  #文欣苑105
 
     def m_info(m):
-        commaddr = m.commaddr
-        v=VConcentrator.objects.get(commaddr=commaddr)
+        commaddr = m["commaddr"]
+        
         return {
-            "id":m.pk,
+            "id":m["id"],
+            "name":m["name"],
+            "belongto":m["belongto__name"],
+            "address":m["address"],
+            "manufacturer":m["manufacturer"],
+            "model":m["model"],
+            "madedate":m["madedate"],
+            "lng":m["lng"],
+            "lat":m["lat"],
+            "coortype":m["coortype"],
+            "commaddr":m["commaddr"],#simcard
             # "simid":m.simid,
-            # "dn":m.dn,
-            # "belongto":m.belongto.name,#current_user.belongto.name,
-            # "metertype":m.metertype,
-            "name":v.name,
-            "belongto":v.belongto.name,
-            "installationsite":m.installationsite,
-            "manufacturer":m.manufacturer,
-            "model":m.model,
-            "madedate":m.madedate,
-            "lng":m.lng,
-            "lat":m.lat,
-            "coortype":m.coortype,
-            "commaddr":m.commaddr,
-            "simid":m.simid,
-            "gpflow":m.gpflow,
-            "uplimitflow":m.uplimitflow,
-            "monthdownflow":m.monthdownflow,
-            "communityid":m.communityid,
+            # "gpflow":m.gpflow,
+            # "uplimitflow":m.uplimitflow,
+            # "monthdownflow":m.monthdownflow,
+            "communityid":"",
             # "station":m.station_set.first().username if m.station_set.count() > 0 else ""
         }
     data = []
 
-    for m in meters[start:start+length]:
+    for m in concentrators:
         data.append(m_info(m))
 
-    recordsTotal = len(meters)
-    # recordsTotal = len(data)
+    recordsTotal = concentrators.count()
+    
     
     result = dict()
-    result["records"] = data
+    result["records"] = data[start:start+length]
     result["draw"] = draw
     result["success"] = "true"
     result["pageSize"] = pageSize

@@ -13,7 +13,7 @@
                         class="text-danger">*</label> 集中器名称：</label>
                     <div class="col-md-4">
                         <input name="name" placeholder="请输入集中器名称" type="text" id= "name" class="form-control" />
-                        <!-- <label id="serialnumber-error" style="display: none" class="error" for="serialnumber">请输入终端号，范围：7~15</label> -->
+                        <label id="name-error" style="display: none" class="error" for="name">请输集中器名称</label>
                     </div>
                     <label class="col-md-2 control-label"><label class="text-danger">*</label> 所属组织：</label>
                     <div class="has-feedback col-md-4">
@@ -27,11 +27,6 @@
                         <label id="error_label_add" class="error" style="display: none;"></label>
                     </div>
                     
-                    <!-- <div class="col-md-4">
-                        <input name="simid" placeholder="请输入表具编号" type="text" id= "simid"
-                            class="form-control" />
-                        
-                    </div> -->
                 </div>
                 
                 <div class="form-group">
@@ -40,15 +35,16 @@
                         <input name="lng"  type="text" id= "lng" class="form-control" />
                         <!-- <label id="deviceNumber-error" style="display: none" class="error" for="deviceNumber">请输入终端号，范围：7~15</label> -->
                     </div>
-                    <label class="col-md-2 control-label"><label class="text-danger">*</label> 坐标类型：</label>
+                    <label class="col-md-2 control-label"> 坐标类型：</label>
                     <div class="col-md-4">
-                        <input type="hidden" name="coortype">
-                        <select name="mtype" id="mtype" autocomplete="off"  class="form-control">
+                        <!-- <input type="hidden" name="coortype"> -->
+                        <select name="coortype" id="coortype" autocomplete="off"  class="form-control">
                             <!-- <option  value="">- 请选择类型 -</option> -->
-                            <option  value="0">地球坐标</option>
-                            <option  value="1">超声水表</option>
-                            <option  value="2">机械水表</option>
-                            <option  value="3">插入电磁</option>
+                            <option value="WGS84">地球坐标</option>
+                            <option value="GCJ-02">火星坐标</option>
+                            <option value="BD-09">百度坐标</option>
+                            <option value="IAG75">西安坐标</option>
+                            <option value="CGCS2000">大地坐标</option>
                             
                         </select>
                     </div>
@@ -64,10 +60,10 @@
                     <div class="col-sm-4 col-md-4 form-group" style="padding-top:10px; margin:0px;">
                         <div style="position:relative;">
                             <span style="overflow:hidden;">
-                                <input type="hidden" id="commaddr" name="commaddr" value=""/>
+                                <input type="hidden" id="simID" name="simID" value=""/>
                                 </span>
                                 <div class="input-group">
-                                    <input value=""  type="text" placeholder="" class="form-control" maxlength="20" id="sims" name="simid">
+                                    <input readonly="true" value=""  type="text"  class="form-control" maxlength="20" id="sims" name="commaddr">
                                     
                                     <div class="input-group-btn">
                                         <!-- <input type="hidden" class="hidenSubmitControl"/> -->
@@ -84,53 +80,37 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">位置描述：</label>
                     <div class="col-md-10">
-                        <input name="address" id="address" placeholder="请输入条码" type="text" class="form-control" />
+                        <input name="address" id="address" placeholder="请输入安装位置描述" type="text" class="form-control" />
                     </div>
                     
                 </div>
                 <br>
                 
                 <div class="form-group">
-                    <label class="col-md-2 control-label"><label class="text-danger">*</label> 型号：</label>
+                    <label class="col-md-2 control-label"> 型号：</label>
 
                     <div class="col-md-4">
                         <input name="model" id="model" type="text" class="form-control" />
                     </div>
-                    <label class="col-md-2 control-label"><label class="text-danger">*</label> 出厂编号：</label>
+                    <label class="col-md-2 control-label"> 出厂编号：</label>
                     <div class="col-md-4">
                         <input name="serialnumber" id="serialnumber" type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     
-                    <label class="col-md-2 control-label"><label class="text-danger">*</label>厂家：</label>
+                    <label class="col-md-2 control-label">厂家：</label>
                     <div class="col-md-4">
                         <input name="manufacturer"  type="hidden" class="form-control" />
-                        <select name="q3" id="q3" autocomplete="off"  class="form-control">
+                        <select name="manufacturerSelect" id="manufacturerSelect" autocomplete="off"  class="form-control">
                             <option  value="常州天厚">常州天厚</option>
-                            <option  value="10">10</option>
-                            <option  value="100">100</option>
-                            <option  value="1000">1000</option>
-                            <option  value="1.6">1.6</option>
-                            <option  value="16">16</option>
-                            <option  value="160">160</option>
-                            <option  value="1600">1600</option>
-                            <option  value="2.5">2.5</option>
-                            <option  value="25">25</option>
-                            <option  value="250">250</option>
-                            <option  value="2500">2500</option>
-                            <option  value="4">4</option>
-                            <option  value="40">40</option>
-                            <option  value="400">400</option>
-                            <option  value="4000">4000</option>
-                            <option  value="6.3">6.3</option>
-                            <option  value="63">63</option>
-                            <option  value="630">630</option>
-                            <option  value="6300">6300</option>
+                            <option  value="威盛集团">威盛集团</option>
+                            <option  value="常德水表">常德水表</option>
+                            
                             
                         </select>
                     </div>
-                    <label class="col-md-2 control-label"><label class="text-danger">*</label>生产日期：</label>
+                    <label class="col-md-2 control-label">生产日期：</label>
                     <div class="col-md-4">
                         <input name="madedate" id="madedate" type="text" class="form-control" />
                     </div>

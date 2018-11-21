@@ -58,6 +58,7 @@ urlpatterns = [
     url(r'^concentrator/edit/(?P<pk>\w+)/?$',views.ConcentratorEditView.as_view(),name='concentratoredit'),
     url(r'^concentrator/delete/(?P<pk>[0-9]+)/?$',views.ConcentratorDeleteView.as_view(),name='concentratordelete'),
     url(r'^concentrator/deletemore',views.concentratordeletemore,name='concentratordeletemore'),
+    url(r'^concentrator/repetition/$',views.concentrator_repetition,name='concentrator_repetition'),
     # url(r'^concentrator/getConcentratorSelect/$',views.getconcentratorSelect,name='getconcentratorSelect'),
     # url(r'^concentrator/add',views.ConcentratorAddView.as_view(),name='concentratoradd'),
     # url(r'^concentrator/edit/(?P<pk>\w+)/?$',views.ConcentratorEditView.as_view(),name='concentratoredit'),

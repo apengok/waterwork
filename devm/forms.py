@@ -74,7 +74,7 @@ class VConcentratorAddForm(forms.ModelForm):
     
     class Meta:
         model = VConcentrator
-        fields = ['name','lng','lat','coortype','model','serialnumber','manufacturer','madedate','commaddr']
+        fields = ['name','lng','lat','coortype','model','serialnumber','manufacturer','madedate','commaddr','address']
 
 
 class VConcentratorEditForm(forms.ModelForm):
@@ -82,7 +82,7 @@ class VConcentratorEditForm(forms.ModelForm):
     
     class Meta:
         model = VConcentrator
-        fields = ['name','lng','lat','coortype','model','serialnumber','manufacturer','madedate','commaddr']
+        fields = ['name','lng','lat','coortype','model','serialnumber','manufacturer','madedate','commaddr','address']
 
     def __init__(self,*args,**kwargs):
         super(VConcentratorEditForm, self).__init__(*args, **kwargs)

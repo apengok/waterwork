@@ -11,7 +11,7 @@ import json
 from django.db.models import Q
 
 from entm.models import Organizations
-from dmam.models import Meter,Station,SimCard
+from dmam.models import Meter,Station,SimCard,VConcentrator,VCommunity,VWatermeter
 
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
@@ -290,6 +290,21 @@ class User(AbstractBaseUser,PermissionsMixin):
             simcardlist |= g.simcard_set.search(q)
             
         return simcardlist
+
+    #组织及下属组织下的所有集中器
+    def meter_concentrator_queryset(self,q):
+        # userlist = []
+        if self.is_admin:
+            return VConcentrator.objects.search(q)
+
+        concentratorlist = VConcentrator.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            concentratorlist |= g.vconcentrator_set.search(q)
+            
+        return concentratorlist
 
     def user_list(self):
         userlist = []

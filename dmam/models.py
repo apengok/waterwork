@@ -11,7 +11,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
 from django.db.models import Avg, Max, Min, Sum
-from legacy.models import Bigmeter,District
+from legacy.models import Bigmeter,District,Community,Concentrator,Watermeter
 from django.utils.functional import cached_property
 import time
 from legacy.utils import (HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,HdbFlow_monthly,hdb_watermeter_flow_monthly,
@@ -826,15 +826,30 @@ def ensure_bigmeter_exists(sender, **kwargs):
 
 
 # 集中器
+class VConcentratorQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(name__icontains=query)|
+                Q(commaddr__icontains=query)|
+                Q(serialnumber__icontains=query)
+                ).distinct()
+        return self
+
+
+class VConcentratorManager(models.Manager):
+    def get_queryset(self):
+        return VConcentratorQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
 class VConcentrator(models.Model):
     name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
     commaddr = models.CharField('通讯识别码',max_length=50, null=True,blank=True) # 同simcard's simcardNumber
-    belongto = models.ForeignKey(
-        Organizations,
-        on_delete=models.CASCADE,
-        related_name='concentrator',
-        # primary_key=True,
-    )
+    belongto = models.ForeignKey(Organizations,on_delete=models.CASCADE)
+    address = models.CharField(db_column='Address', max_length=128, blank=True, null=True)  # Field name made lowercase.
 
     lng = models.CharField(db_column='Lng', max_length=30, blank=True, null=True)  # Field name made lowercase.
     lat = models.CharField(db_column='Lat', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -846,6 +861,7 @@ class VConcentrator(models.Model):
     manufacturer = models.CharField(db_column='Manufacturer', max_length=64, blank=True, null=True)  # Field name made lowercase.
     madedate = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
 
+    objects = VConcentratorManager()
 
     class Meta:
         managed = True
@@ -858,6 +874,65 @@ class VConcentrator(models.Model):
     def __unicode__(self):
         return self.name
 
+@receiver(post_save, sender=VConcentrator)
+def ensure_Concentrator_exists(sender, **kwargs):
+    district = District.objects.first()
+    districtid = district.id
+    community = Community.objects.first()
+    commutid = community.id
+    if kwargs.get('created', False):
+        instance=kwargs.get('instance')
+        name= instance.name
+        installationsite = instance.address
+        manufacturer = instance.manufacturer
+        model = instance.model
+        serialnumber = instance.serialnumber
+        madedate = instance.madedate
+        coortype = instance.coortype
+        lng=instance.lng
+        lat=instance.lat
+        commaddr=instance.commaddr
+        simid = instance.commaddr
+
+        Concentrator.objects.get_or_create(name=name,lng=lng,lat=lat,commaddr=commaddr,simid=simid,communityid=commutid,
+            installationsite=installationsite,manufacturer=manufacturer,model=model,serialnumber=serialnumber,madedate=madedate,
+            coortype=coortype)   
+    else:
+        instance=kwargs.get('instance')
+        name = instance.name
+        installationsite = instance.address
+        manufacturer = instance.manufacturer
+        model = instance.model
+        serialnumber = instance.serialnumber
+        madedate = instance.madedate
+        coortype = instance.coortype
+        lng =instance.lng
+        lat =instance.lat
+        commaddr =instance.commaddr
+        simid = instance.commaddr
+
+        contor = Concentrator.objects.filter(commaddr=commaddr)
+        if contor.exists():
+            # print(instance.username,bigm.first().username)
+            b=contor.first()
+            b.name= name
+            b.installationsite = installationsite
+            b.manufacturer = manufacturer
+            b.model = model
+            b.serialnumber = serialnumber
+            b.madedate = madedate
+            b.coortype = coortype
+            b.lng=lng
+            b.lat=lat
+            b.commaddr=commaddr
+            b.simid = commaddr
+            
+            b.save()
+        else:
+            Concentrator.objects.create(name=name,lng=lng,lat=lat,commaddr=commaddr,simid=simid,communityid=commutid,
+            installationsite=installationsite,manufacturer=manufacturer,model=model,serialnumber=serialnumber,madedate=madedate,
+            coortype=coortype)  
+
 
 
 # 小区
@@ -867,12 +942,7 @@ class VCommunity(MPTTModel):
     
     address = models.CharField(db_column='Address', max_length=128, blank=True, null=True)  # Field name made lowercase.
 
-    belongto = models.ForeignKey(
-        Organizations,
-        on_delete=models.CASCADE,
-        related_name='community',
-        # primary_key=True,
-    )
+    belongto = models.ForeignKey(Organizations,on_delete=models.CASCADE)
     
     commutid = models.IntegerField( blank=True, null=True) #对应抄表系统Community表的id
     
@@ -895,12 +965,7 @@ class VWatermeter(models.Model):
     # 适应歙县小表watermeterid
     waterid = models.IntegerField(db_column='WaterId', blank=True, null=True)  # Field name made lowercase.
     wateraddr = models.CharField(db_column='WaterAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    belongto = models.ForeignKey(
-        Organizations,
-        on_delete=models.CASCADE,
-        related_name='watermeter',
-        # primary_key=True,
-    )
+    belongto = models.ForeignKey(Organizations,on_delete=models.CASCADE)
 
     communityid = models.ForeignKey( VCommunity ,on_delete=models.CASCADE,related_name='watermeter')    #所属小区
     concentrator = models.ForeignKey( VConcentrator ,on_delete=models.CASCADE,null=True, blank=True,)    #所属集中器

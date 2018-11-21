@@ -2,12 +2,10 @@
     var submissionFlag = false;
     var simInput = $("#sims");
     var simCardId = $("#simID").val();
-    var simCard = $("#simCard").val();
-    var serialnumber = $("#serialnumber").val();
-    var deviceType = $("#deviceType").val();
-    var serialnumberError = $("#serialnumber-error");
+    var name = $("#name").val();
+    var nameError = $("#name-error");
     var deviceFlag = false;
-    addMeterManagement = {
+    addCentratorManagement = {
         init: function () {
             var setting = {
                 async: {
@@ -17,7 +15,7 @@
                     autoParam: ["id"],
                     contentType: "application/json",
                     dataType: "json",
-                    dataFilter: addMeterManagement.ajaxDataFilter
+                    dataFilter: addCentratorManagement.ajaxDataFilter
                 },
                 view: {
                     dblClickExpand: false
@@ -28,14 +26,14 @@
                     }
                 },
                 callback: {
-                    beforeClick: addMeterManagement.beforeClick,
-                    onClick: addMeterManagement.onClick
+                    beforeClick: addCentratorManagement.beforeClick,
+                    onClick: addCentratorManagement.onClick
                 }
             };
             $.fn.zTree.init($("#ztreeDemo"), setting, null);
             // laydate.render({elem: '#installDate', theme: '#6dcff6'});
             // laydate.render({elem: '#procurementDate', theme: '#6dcff6'});
-            addMeterManagement.InitCallback();
+            addCentratorManagement.InitCallback();
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);
@@ -84,17 +82,17 @@
             } else {
                 $("#zTreeContent").hide();
             }
-            $("body").bind("mousedown", addMeterManagement.onBodyDown);
+            $("body").bind("mousedown", addCentratorManagement.onBodyDown);
         },
         //隐藏菜单
         hideMenu: function () {
             $("#zTreeContent").fadeOut("fast");
-            $("body").unbind("mousedown", addMeterManagement.onBodyDown);
+            $("body").unbind("mousedown", addCentratorManagement.onBodyDown);
         },
         onBodyDown: function (event) {
             if (!(event.target.id == "menuBtn" || event.target.id == "zTreeContent" || $(
                     event.target).parents("#zTreeContent").length > 0)) {
-                addMeterManagement.hideMenu();
+                addCentratorManagement.hideMenu();
             }
         },
         //显示或隐藏输入框
@@ -125,16 +123,16 @@
         },
         InitCallback: function(){
             //sim卡
-            addMeterManagement.initSimCard("/devm/simcard/getSimcardSelect/");
+            addCentratorManagement.initSimCard("/devm/simcard/getSimcardSelect/");
             
         },
         initSimCard: function (url) {
-            addMeterManagement.initDataList(simInput, url, simCardId,addMeterManagement.simsChange);
+            addCentratorManagement.initDataList(simInput, url, simCardId,addCentratorManagement.simsChange);
         },
         simsChange: function (keyword) {
             // datas = keyword.key;
             // json_ajax("POST", "/devm/getSimcardInfoBySimcardNumber/", "json", true,
-            //     {simcardNumber: datas}, addMeterManagement.simsChangeCallback);
+            //     {simcardNumber: datas}, addCentratorManagement.simsChangeCallback);
         },
         simsChangeCallback: function(data){
             if(data.success){
@@ -179,11 +177,11 @@
                             callback(keyword)
                         }
                         //限制输入
-                        addMeterManagement.showHideValueCase(0,dataInput);
-                        addMeterManagement.hideErrorMsg();
+                        addCentratorManagement.showHideValueCase(0,dataInput);
+                        addCentratorManagement.hideErrorMsg();
                     }).on('onUnsetSelectValue', function () {
                         //放开输入
-                        addMeterManagement.showHideValueCase(1,dataInput);
+                        addCentratorManagement.showHideValueCase(1,dataInput);
                     });
                     
                     dataInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
@@ -195,7 +193,7 @@
         },
         //组织树预处理函数
         ajaxDataFilter: function (treeId, parentNode, responseData) {
-            addMeterManagement.hideErrorMsg();//隐藏错误提示样式
+            addCentratorManagement.hideErrorMsg();//隐藏错误提示样式
             var isAdminStr = $("#isAdmin").attr("value");    // 是否是admin
             var isAdmin = isAdminStr == 'true';
             var userGroupId = $("#userGroupId").attr("value");  // 用户所属组织 id
@@ -211,7 +209,7 @@
                 }
                 return responseData;
             } else {
-                addMeterManagement.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
+                addCentratorManagement.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
                 return;
             }
         },
@@ -219,12 +217,11 @@
             if (submissionFlag) {  // 防止重复提交
                 return;
             } else {
-                deviceType = $("#deviceType").val();
-                serialnumber = $("#serialnumber").val();
+                name = $("#name").val();
                 console.log("doSubmit");
-                addMeterManagement.serialnumberValidates();
-                if ($("#serialnumber").val() != "" && deviceFlag) {
-                    if (addMeterManagement.validates()) {
+                addCentratorManagement.nameValidates();
+                if ($("#name").val() != "" && deviceFlag) {
+                    if (addCentratorManagement.validates()) {
                         submissionFlag = true;
                         $("#addForm").ajaxSubmit(function (data) {
                             var json = eval("(" + data + ")");
@@ -239,138 +236,69 @@
                 }
             }
         },
-        serialnumberValidates: function () {
+        nameValidates: function () {
         
-            var serialnumber = $("#serialnumber").val();
+            var name = $("#name").val();
             var sn = /^[A-Za-z0-9]+$/;;
             
-            if (serialnumber == "") {
-                serialnumberError.html("请输入表具编号，长度12，大写字母或数字");
-                serialnumberError.show();
-                deviceFlag = false;
-            }else if (!(serialnumber.length <= 12 && sn.test(serialnumber))) {
-                serialnumberError.html("请输入表具编号，长度12，大写字母或数字");
-                serialnumberError.show();
+            if (name == "") {
+                nameError.html("请输入集中器名称");
+                nameError.show();
                 deviceFlag = false;
             }else {
                 console.log("deviceAjax")
-                addMeterManagement.deviceAjax();
+                addCentratorManagement.deviceAjax();
             }
             
         },
         validates: function () {
             return $("#addForm").validate({
                 rules: {
-                    /*serialnumber: {
-                        required: true,
-                        checkDeviceNumber: "#deviceType",
-                        isRightfulString: true,
-                        remote: {
-                            type: "post",
-                            async: false,
-                            url: "/devm/meter/repetition",
-                            data: {
-                                username: function () {
-                                    return $("#serialnumber").val();
-                                }
-                            }
-                        }
-                    },*/
                     
+                    name: {
+                        required: true
+                    },
+                    lng: {
+                        required: true
+                    },
+                    lat: {
+                        required: true
+                    },
                     belongto: {
                         required: true
                     },
-                    simid: {
+                    commaddr: {
                         required: true,
                         maxlength: 50
                     },
-                    mtype: {
-                        required: true,
-                        maxlength: 50
-                    },
-                    // isVideo: {
-                    //     maxlength: 6
-                    // },
-                    protocol: {
-                        required: true
-                    },
-                    check_cycle: {
-                        maxlength: 11
-                    },
-                    dn: {
-                        required: false,
-                        maxlength: 6
-                    },
-                    // manuFacturer: {
-                    //     maxlength: 100
-                    // },
-                    R: {
-                        maxlength: 100
-                    },
-                    q4: {
-                        required: true,
-                    },
-                    q3: {
-                        required: true,
-                    },
-                    q2: {
-                        required: true,
-                    },
-                    q1: {
-                        required: true,
-                    }
+                    
                 },
                 messages: {
-                    /*serialnumber: {
-                        required: serialnumberNull,
-                        checkDeviceNumber: serialnumberError,
-                        isRightfulString: serialnumberError,
-                        remote: serialnumberExists
-                    },*/
+                    name: {
+                        required: "集中器名称不能为空",
+                    },
+                    lng: {
+                        required: "经度不能为空",
+                    },
+                    lat: {
+                        required: "纬度不能为空",
+                    },
                     belongto: {
                         required: "所属组织不能为空",
                         maxlength: publicSize50
                     },
-                    simid: {
+                    commaddr: {
                         required: publicNull
                     },
-                    mtype: {
-                        required: deviceTypeNull,
-                        maxlength: publicSize50
-                    },
-                    protocol: {
-                        required: publicNull,
-                        maxlength: publicSize50
-                    },
-                    check_cycle: {
-                        maxlength: publicSize6
-                    },
-                    dn: {
-                        maxlength: publicSize64
-                    },
-                    R: {
-                        maxlength: publicSize10
-                    },
-                    q4: {
-                        required: "q4 值不能为空",
-                    },
-                    q3: {
-                        required: "q3 值不能为空",
-                    },
-                    q2: {
-                        required: "q2 值不能为空",
-                    },
-                    q1: {
-                        required: "q1 值不能为空",
-                    }
+                    
                 },
                 submitHandler: function (form) {
-                    var typeVal = $("#deviceType").val();
-                    var serialnumber = $("#serialnumber").val();
+                    // var typeVal = $("#deviceType").val();
+                    // var name = $("#name").val();
                     // if (typeVal == "5") {
-                    //     $("#serialnumber-error").html("请输入终端号，范围：1~20");
+                    //     $("#name-error").html("请输入终端号，范围：1~20");
                     //     var reg = /^(?=.*[0-9a-zA-Z])[0-9a-zA-Z-]{1,20}$/;
-                    //     if (!reg.test(serialnumber)) {
+                    //     if (!reg.test(name)) {
                     //         alert("请输入终端号，范围：1~20");
                     //         return;
                     //     }
@@ -378,23 +306,7 @@
                 }
             }).form();
         },
-        deviceTypeChange: function () {
-            if ($("#deviceType").val() == 5) {
-                $("#functionalType").find("option[value='" + 1 + "']").remove();
-                $("#functionalType").find("option[value='" + 2 + "']").remove();
-                $("#functionalType").find("option[value='" + 3 + "']").remove();
-                $("#functionalType").find("option[value='" + 4 + "']").remove();
-                $("#functionalType").find("option[value='" + 5 + "']").remove();
-                $("#functionalType").append("<option value='4'>手咪设备</option>");
-            } else {
-                $("#functionalType").find("option[value='" + 1 + "']").remove();
-                $("#functionalType").find("option[value='" + 2 + "']").remove();
-                $("#functionalType").find("option[value='" + 3 + "']").remove();
-                $("#functionalType").find("option[value='" + 4 + "']").remove();
-                $("#functionalType").find("option[value='" + 5 + "']").remove();
-                $("#functionalType").append("<option value='1'>简易型车机</option><option value='2'>行车记录仪</option><option value='3'>对讲设备</option><option  value='5'>超长待机设备</option>");
-            }
-        },
+        
         showErrorMsg: function (msg, inputId) {
             if ($("#error_label_add").is(":hidden")) {
                 $("#error_label_add").text(msg);
@@ -412,73 +324,53 @@
         deviceAjax: function () {
             $.ajax({
                     type: "post",
-                    url: "/devm/meter/repetition/",
-                    data: {serialnumber: serialnumber},
+                    url: "/devm/concentrator/repetition/",
+                    data: {name: name},
                     success: function (d) {
                         var result = $.parseJSON(d);
                         // if (!result) {
                         if (result.success == false) {
-                            serialnumberError.html("表具编号已存在！");
-                            serialnumberError.show();
+                            nameError.html("集中器已存在！");
+                            nameError.show();
                             deviceFlag = false;
                         }
                         else {
-                            serialnumberError.hide();
+                            nameError.hide();
                             deviceFlag = true;
                         }
                     }
                 }
             )
         },
-        initQR:function(){
-            rvalue = $("#R").val();
-            q3v = $("#q3").val();
-            r = parseFloat(rvalue);
-            q3 = parseFloat(q3v)
-            q1 =  q3/r;
-            q2 = q1 * 1.6;
-            q4 = q3 * 1.25;
-            $("#q1").attr("value",q1);
-            $("#q2").attr("value",q2);
-            $("#q4").attr("value",q4);
-        }
+        
     }
     $(function () {
         $('input').inputClear();
         //初始化
-        addMeterManagement.init();
-        addMeterManagement.initQR();
+        addCentratorManagement.init();
+        
         $('input').inputClear();
 
-        $("#serialnumber").on("change", function () {
-            deviceType = $(this).val();
-            serialnumber = $("#serialnumber").val();
-            addMeterManagement.serialnumberValidates();
+        $("#name").on("change", function () {
+            name = $("#name").val();
+            addCentratorManagement.nameValidates();
         });
-        $("#R").on("change", function () {
-            addMeterManagement.initQR();
-
-        });
-        $("#q3").on("change", function () {
-            addMeterManagement.initQR();
-
-        });
-        $("#serialnumber").bind("input propertychange change", function (event) {
-            // deviceType = $("#deviceType").val();
-            serialnumber = $(this).val();
+        
+        $("#name").bind("input propertychange change", function (event) {
+            name = $(this).val();
             $.ajax({
                     type: "post",
-                    url: "/devm/meter/repetition/",
-                    data: {serialnumber: serialnumber},
+                    url: "/devm/concentrator/repetition/",
+                    data: {name: name},
                     success: function (d) {
                         var result = $.parseJSON(d);
                         if (!result) {
-                            serialnumberError.html("表具编号已存在！");
-                            serialnumberError.show();
+                            nameError.html("集中器名称已存在！");
+                            nameError.show();
                             deviceFlag = false;
                         }
                         else {
-                            addMeterManagement.serialnumberValidates();
+                            addCentratorManagement.nameValidates();
                         }
                     }
                 }
@@ -486,8 +378,8 @@
         });
 
         //显示菜单
-        $("#zTreeOrganSel").bind("click", addMeterManagement.showMenu);
+        $("#zTreeOrganSel").bind("click", addCentratorManagement.showMenu);
         //提交
-        $("#doSubmit").bind("click", addMeterManagement.doSubmit);
+        $("#doSubmit").bind("click", addCentratorManagement.doSubmit);
     })
 })(window, $)
