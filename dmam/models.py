@@ -936,6 +936,24 @@ def ensure_Concentrator_exists(sender, **kwargs):
 
 
 # 小区
+class VCommunityQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(name__icontains=query)
+                ).distinct()
+        return self
+
+
+class VCommunityManager(models.Manager):
+    def get_queryset(self):
+        return VCommunityQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
+
 class VCommunity(MPTTModel):
     name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
     parent  = TreeForeignKey('self', null=True, blank=True,on_delete=models.CASCADE, related_name='children', db_index=True)
@@ -947,6 +965,8 @@ class VCommunity(MPTTModel):
     commutid = models.IntegerField( blank=True, null=True) #对应抄表系统Community表的id
     
     vconcentrators = models.ManyToManyField( VConcentrator )
+
+    objects = VCommunityManager()
 
     class Meta:
         managed = True
@@ -960,6 +980,25 @@ class VCommunity(MPTTModel):
 
 
 # 水表 小表
+class VWatermeterQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(name__icontains=query)|
+                Q(commaddr__icontains=query)
+                ).distinct()
+        return self
+
+
+class VWatermeterManager(models.Manager):
+    def get_queryset(self):
+        return VWatermeterQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
+
 class VWatermeter(models.Model):
     name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
     # 适应歙县小表watermeterid
@@ -982,6 +1021,7 @@ class VWatermeter(models.Model):
     madedate = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
     ValveMeter  = models.CharField(db_column='ValveMeter', max_length=30, blank=True, null=True)# 阀控表
     
+    objects = VWatermeterManager()
 
     class Meta:
         managed = True

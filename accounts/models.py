@@ -292,7 +292,7 @@ class User(AbstractBaseUser,PermissionsMixin):
         return simcardlist
 
     #组织及下属组织下的所有集中器
-    def meter_concentrator_queryset(self,q):
+    def concentrator_list_queryset(self,q):
         # userlist = []
         if self.is_admin:
             return VConcentrator.objects.search(q)
@@ -305,6 +305,36 @@ class User(AbstractBaseUser,PermissionsMixin):
             concentratorlist |= g.vconcentrator_set.search(q)
             
         return concentratorlist
+
+     #组织及下属组织下的所有小区
+    def community_list_queryset(self,q):
+        # userlist = []
+        if self.is_admin:
+            return VCommunity.objects.search(q)
+
+        communitylist = VCommunity.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            communitylist |= g.vcommunity_set.search(q)
+            
+        return communitylist
+
+     #组织及下属组织下的所有户表
+    def watermeter_list_queryset(self,q):
+        # userlist = []
+        if self.is_admin:
+            return VWatermeter.objects.search(q)
+
+        watermeterlist = VWatermeter.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            watermeterlist |= g.vwatermeter_set.search(q)
+            
+        return watermeterlist
 
     def user_list(self):
         userlist = []

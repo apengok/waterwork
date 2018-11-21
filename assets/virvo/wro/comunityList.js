@@ -53,7 +53,7 @@
                             var roleUrlPre = /*[[@{/c/user/roleList_{id}.gsp}]]*/'url';
                             var result = '';
                             //修改按钮
-                            result += '<button disabled href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
+                            result += '<button href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                             //删除按钮
                             if(row.station != ""){
                                 result += '<button disabled type="button" onclick="myTable.deleteItem(\''
@@ -99,11 +99,11 @@
             var setting = {
                 suffix  : '/',
                 listUrl : '/dmam/community/list/',
-                editUrl : '/devm/concentrator/edit/',
-                deleteUrl : '/devm/concentrator/delete/',
-                deletemoreUrl : '/devm/concentrator/deletemore/',
-                enableUrl : '/devm/concentrator/enable_',
-                disableUrl : '/devm/concentrator/disable_',
+                editUrl : '/dmam/community/edit/',
+                deleteUrl : '/dmam/community/delete/',
+                deletemoreUrl : '/dmam/community/deletemore/',
+                enableUrl : '/dmam/community/enable_',
+                disableUrl : '/dmam/community/disable_',
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
                 dataTableDiv : 'dataTable', //表格

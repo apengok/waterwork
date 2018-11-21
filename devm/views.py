@@ -1033,6 +1033,11 @@ def concentratordeletemore(request):
         u = VConcentrator.objects.get(id=int(uid))
         # print('delete user ',u)
         #删除用户 并且删除用户在分组中的角色
+        commaddr = u.commaddr
+        zncb_concentrator = Concentrator.objects.filter(commaddr=commaddr)
+        if zncb_concentrator.exists():
+            z = zncb_concentrator.first()
+            z.delete()
         
         u.delete()
 
@@ -1042,7 +1047,7 @@ def concentratordeletemore(request):
 Assets comment deletion, manager
 """
 class ConcentratorDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
-    model = Meter
+    model = VConcentrator
     # template_name = "aidsbank/asset_comment_confirm_delete.html"
 
     def test_func(self):
@@ -1080,12 +1085,45 @@ class ConcentratorDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteVie
         self.object = self.get_object(*args,**kwargs)
 
         
-
-        self.object.delete()
+        commaddr = self.object.commaddr
+        
         result = dict()
+        # 同时删除zncb Concentrator记录
+        zncb_concentrator = Concentrator.objects.filter(commaddr=commaddr)
+        if zncb_concentrator.exists():
+            z = zncb_concentrator.first()
+            z.delete()
+        self.object.delete()
         # result["success"] = 1
         return HttpResponse(json.dumps({"success":1}))
         
+
+
+def getConcentratorSelect(request):
+    # meters = Meter.objects.all()
+    concentrators = request.user.concentrator_list_queryset('').values()
+
+    def m_info(m):
+        
+        return {
+            "id":m["id"],
+            "name":m["name"],
+            
+        }
+    data = []
+
+    for m in concentrators:
+        data.append(m_info(m))
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":data,
+        "success":True
+    }
+   
+    # print(operarions_list)
+    return JsonResponse(operarions_list)
 
 
 def concentratorlist(request):
@@ -1125,7 +1163,7 @@ def concentratorlist(request):
     user = request.user
     organs = user.belongto
 
-    user_concentrators = user.meter_concentrator_queryset(simpleQueryParam)
+    user_concentrators = user.concentrator_list_queryset(simpleQueryParam)
     concentrators = user_concentrators.values("id","name","belongto__name","address","manufacturer","model","madedate",
                 "lng","lat","coortype","commaddr") #.filter(communityid=105)  #文欣苑105
 

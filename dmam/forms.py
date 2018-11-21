@@ -11,7 +11,6 @@ from entm.models import Organizations
 from .models import WaterUserType,DMABaseinfo,Station,Meter
 import datetime
 
-
 class DMACreateForm(forms.ModelForm):
 
     class Meta:

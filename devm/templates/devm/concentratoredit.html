@@ -37,8 +37,8 @@
                     </div>
                     <label class="col-md-2 control-label"> 坐标类型：</label>
                     <div class="col-md-4">
-                        <!-- <input type="hidden" name="coortype"> -->
-                        <select name="coortype" id="coortype" autocomplete="off"  class="form-control">
+                        
+                        <select name="coortype"  id="coortype" value="{{ form.coortype.value }}" autocomplete="off"  class="form-control">
                             <!-- <option  value="">- 请选择类型 -</option> -->
                             <option value="WGS84">地球坐标</option>
                             <option value="GCJ-02">火星坐标</option>
@@ -101,7 +101,7 @@
                     
                     <label class="col-md-2 control-label">厂家：</label>
                     <div class="col-md-4">
-                        <input name="manufacturer" value="{{ form.manufacturer.value|default:'' }}"  type="hidden" class="form-control" />
+                        <input id="manufacturer" name="manufacturer" value="{{ form.manufacturer.value|default:'' }}"  type="hidden" class="form-control" />
                         <select name="manufacturerSelect" id="manufacturerSelect" autocomplete="off"  class="form-control">
                             <option  value="常州天厚">常州天厚</option>
                             <option  value="威盛集团">威盛集团</option>
@@ -148,6 +148,10 @@
     var publicSize100="\u957F\u5EA6\u4E0D\u8D85\u8FC7100\u4F4D";
     var phoneError = "\u770B\u8D77\u6765\u4E0D\u50CF\u624B\u673A\u53F7\u5462";
     var publicNull = "\u4E0D\u80FD\u4E3A\u7A7A";
+
+    var manufacturer = "{{ form.manufacturer.value|default:'' }}"
+    var coortype = "{{ form.coortype.value|default:'' }}"
+
 </script>
 
 

@@ -1,21 +1,10 @@
 (function (window, $) {
     var submissionFlag = false;
-    var simInput = $("#sims");
-    var simCardId = $("#simID").val();
-    var old_name = $("#name").val();
+    
+    var name = $("#name").val();
     var nameError = $("#name-error");
-    // var lng = $("#lng").val();
-    // var lat = $("#lat").val();
-    // var coortype = $("#coortype").val();
-    // var address = $("#address").val();
-    // var commaddr = $("#sims").val();
-    // var model = $("#model").val();
-    // var serialnumber = $("#serialnumber").val();
-    // var manufacturer = $("#manufacturer").val();
-    // var madedate = $("#madedate").val();
-    console.log(old_name,coortype,manufacturer,lng);
     var deviceFlag = false;
-    editCentratorManagement = {
+    editConmunityManagement = {
         init: function () {
             var setting = {
                 async: {
@@ -25,7 +14,7 @@
                     autoParam: ["id"],
                     contentType: "application/json",
                     dataType: "json",
-                    dataFilter: editCentratorManagement.ajaxDataFilter
+                    dataFilter: editConmunityManagement.ajaxDataFilter
                 },
                 view: {
                     dblClickExpand: false
@@ -36,27 +25,14 @@
                     }
                 },
                 callback: {
-                    beforeClick: editCentratorManagement.beforeClick,
-                    onClick: editCentratorManagement.onClick
+                    beforeClick: editConmunityManagement.beforeClick,
+                    onClick: editConmunityManagement.onClick
                 }
             };
             $.fn.zTree.init($("#ztreeDemo"), setting, null);
             // laydate.render({elem: '#installDate', theme: '#6dcff6'});
             // laydate.render({elem: '#procurementDate', theme: '#6dcff6'});
-            editCentratorManagement.InitCallback();
-
-            //init paramter input
-            $("#manufacturerSelect option").each(function (){
-                if($(this).val()==manufacturer){ 
-                $(this).attr("selected","selected"); 
-            }});
-
-            $("#coortype option").each(function (){
-                if($(this).val()==coortype){ 
-                $(this).attr("selected","selected"); 
-            }});
-
-
+            editConmunityManagement.InitCallback();
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);
@@ -105,118 +81,70 @@
             } else {
                 $("#zTreeContent").hide();
             }
-            $("body").bind("mousedown", editCentratorManagement.onBodyDown);
+            $("body").bind("mousedown", editConmunityManagement.onBodyDown);
         },
         //隐藏菜单
         hideMenu: function () {
             $("#zTreeContent").fadeOut("fast");
-            $("body").unbind("mousedown", editCentratorManagement.onBodyDown);
+            $("body").unbind("mousedown", editConmunityManagement.onBodyDown);
         },
         onBodyDown: function (event) {
             if (!(event.target.id == "menuBtn" || event.target.id == "zTreeContent" || $(
                     event.target).parents("#zTreeContent").length > 0)) {
-                editCentratorManagement.hideMenu();
+                editConmunityManagement.hideMenu();
             }
         },
-        //显示或隐藏输入框
-        showHideValueCase: function(type,dataInput){
-            var dataInputType = dataInput.selector;
-            if (type == 0) {//限制输入
-                
-                if ("#sims" == dataInputType) { //sim卡限制
-                    $(".simsList").attr("readonly",true);
-                    $("#simParentGroupName").css("background-color","");
-                    $("#simGroupDiv").css("display","block");
-                    $("#operatorTypeDiv").css("display","block");
-                    simFlag = false;
-                }
-            } else if (type == 1) {//放开输入
-                
-                if ("#sims" == dataInputType) { //sim卡放开
-                    $(".simsList").removeAttr("readonly");
-                    $("#simParentGroupName").css("background-color","#fafafa");
-                    $("#simGroupDiv").css("display","none");
-                    $("#operatorTypeDiv").css("display","none");
-                    simFlag = true;
-                }
-            }
-        },
+        
         hideErrorMsg: function(){
             $("#error_label").hide();
         },
         InitCallback: function(){
             //sim卡
-            editCentratorManagement.initSimCard("/devm/simcard/getSimcardSelect/");
+            var url="/devm/concentrator/getConcentratorSelect/";
+            var parameter={};
+            json_ajax("POST",url,"json",true,parameter, editConmunityManagement.initConcentratorList);
             
         },
-        initSimCard: function (url) {
-            editCentratorManagement.initDataList(simInput, url, simCardId,editCentratorManagement.simsChange);
-        },
-        simsChange: function (keyword) {
-            // datas = keyword.key;
-            // json_ajax("POST", "/devm/getSimcardInfoBySimcardNumber/", "json", true,
-            //     {simcardNumber: datas}, editCentratorManagement.simsChangeCallback);
-        },
-        simsChangeCallback: function(data){
-            if(data.success){
-                console.log("simsChangeCallback");
-                // $("#iccidSim").val(data.obj.simcardInfo.ICCID);
-                // $("#simParentGroupName").val(data.obj.simcardInfo.groupName);
-                // $("#operator").val(data.obj.simcardInfo.operator);
-                // $("#simFlow").val(data.obj.simcardInfo.simFlow);
-                // $("#openCardTime").val(data.obj.simcardInfo.openCardTime);
-            }else{
-                layer.msg(data.msg);
-            }
-        },
-        initDataList: function (dataInput, urlString, id, callback,moreCallback) {
-            console.log(dataInput,id);
-            // if(id.indexOf('#')<0){
-            //     dataInput.attr('data-id',id);
-            // }
-            //if(dataInput.attr('name').indexOf('_')<0){
-            //  dataInput.attr('name',dataInput.attr('name')+'__');
-            //}
-            $.ajax({
-                type: "POST",
-                url: urlString,
-                data: {},   //{configId: $("#configId").val()},
-                dataType: "json",
-                success: function (data) {
-                    var itemList = data.obj;
-                    console.log(itemList);
-                    var suggest=dataInput.bsSuggest({
-                        indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
-                        indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
-                        data: {value:itemList},
-                        idField: "id",
-                        keyField: "name",
-                        effectiveFields: ["name"]
-                    }).on('onDataRequestSuccess', function (e, result) {
-                    }).on("click",function(){
-                    }).on('onSetSelectValue', function (e, keyword, data) {
-                        if(callback){
-                            dataInput.closest('.form-group').find('.dropdown-menu').hide()
-                            callback(keyword)
-                        }
-                        //限制输入
-                        editCentratorManagement.showHideValueCase(0,dataInput);
-                        editCentratorManagement.hideErrorMsg();
-                    }).on('onUnsetSelectValue', function () {
-                        //放开输入
-                        editCentratorManagement.showHideValueCase(1,dataInput);
-                    });
-                    
-                    dataInput.next().find('button').removeClass('disabled loading-state-button').find('i').attr("class", 'caret');
-                    if(moreCallback){
-                        moreCallback()
-                    }
+        initConcentratorList: function(data){
+            console.log(data);
+                //集中器list
+            var ConcentratorList = data.obj;
+            // 初始化集中器数据
+            var dataList = {value: []};
+            if (ConcentratorList !== null && ConcentratorList.length > 0) {
+                for (var i=0; i< ConcentratorList.length; i++) {
+                    var obj = {};
+                    obj.id = ConcentratorList[i].id;
+                    obj.name = ConcentratorList[i].name;
+                    dataList.value.push(obj);
                 }
+                
+            }
+            $("#concentrator1,#concentrator2,#concentrator3,#concentrator4").bsSuggest({
+                indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+                indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+                idField: "id",
+                keyField: "name",
+                effectiveFields: ["name"],
+                searchFields:["id"],
+                data: dataList
+            }).on('onDataRequestSuccess', function (e, result) {
+            }).on('onSetSelectValue', function (e, keyword, data) {
+                // 当选择集中器
+                // var vehicleId = keyword.id;
+                // var url="/clbs/v/monitoring/command/getCommandParam";
+                // var minotor = realTimeCommand.getMinotorObj(currentCommandType);
+                // var parameter={"vid": vehicleId,"commandType":currentCommandType,"isRefer":true,"minotor":minotor};
+                // json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
+            }).on('onUnsetSelectValue', function () {
             });
+        
         },
+
+        
         //组织树预处理函数
         ajaxDataFilter: function (treeId, parentNode, responseData) {
-            editCentratorManagement.hideErrorMsg();//隐藏错误提示样式
+            editConmunityManagement.hideErrorMsg();//隐藏错误提示样式
             var isAdminStr = $("#isAdmin").attr("value");    // 是否是admin
             var isAdmin = isAdminStr == 'true';
             var userGroupId = $("#userGroupId").attr("value");  // 用户所属组织 id
@@ -232,7 +160,7 @@
                 }
                 return responseData;
             } else {
-                editCentratorManagement.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
+                editConmunityManagement.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
                 return;
             }
         },
@@ -242,9 +170,9 @@
             } else {
                 name = $("#name").val();
                 console.log("doSubmit");
-                editCentratorManagement.nameValidates();
+                editConmunityManagement.nameValidates();
                 if ($("#name").val() != "" && deviceFlag) {
-                    if (editCentratorManagement.validates()) {
+                    if (editConmunityManagement.validates()) {
                         submissionFlag = true;
                         $("#editForm").ajaxSubmit(function (data) {
                             var json = eval("(" + data + ")");
@@ -265,11 +193,11 @@
             var sn = /^[A-Za-z0-9]+$/;;
             
             if (name == "") {
-                nameError.html("请输入集中器名称");
+                nameError.html("请输入小区名称");
                 nameError.show();
                 deviceFlag = false;
             }else {
-                editCentratorManagement.deviceAjax();
+                editConmunityManagement.deviceAjax();
             }
             
         },
@@ -280,37 +208,25 @@
                     name: {
                         required: true
                     },
-                    lng: {
-                        required: true
-                    },
-                    lat: {
-                        required: true
-                    },
                     belongto: {
                         required: true
                     },
-                    commaddr: {
-                        required: true,
-                        maxlength: 50
-                    },
+                    vconcentrator1:{
+                        required:true
+                    }
                     
                 },
                 messages: {
                     name: {
                         required: "集中器名称不能为空",
                     },
-                    lng: {
-                        required: "经度不能为空",
-                    },
-                    lat: {
-                        required: "纬度不能为空",
-                    },
                     belongto: {
                         required: "所属组织不能为空",
                         maxlength: publicSize50
                     },
-                    commaddr: {
-                        required: publicNull
+                    vconcentrator1: {
+                        required: "至少选择一个集中器",
+                        
                     },
                     
                 },
@@ -348,13 +264,13 @@
             if(old_name != edit_name){
                 $.ajax({
                         type: "post",
-                        url: "/devm/concentrator/repetition/",
+                        url: "/dmam/community/repetition/",
                         data: {name: name},
                         success: function (d) {
                             var result = $.parseJSON(d);
                             // if (!result) {
                             if (result.success == false) {
-                                nameError.html("集中器已存在！");
+                                nameError.html("小区名称已存在！");
                                 nameError.show();
                                 deviceFlag = false;
                             }
@@ -374,40 +290,30 @@
     $(function () {
         $('input').inputClear();
         //初始化
-        editCentratorManagement.init();
+        editConmunityManagement.init();
         
         $('input').inputClear();
 
         $("#name").on("change", function () {
             name = $("#name").val();
-            editCentratorManagement.nameValidates();
+            editConmunityManagement.nameValidates();
         });
-
-        $("#coortypeSelect").on("change",function(){
-            console.log($(this).val())
-            $("#coortype").attr("value",$(this).val())
-        })
-
-        $("#manufacturerSelect").on("change",function(){
-            console.log($(this).val())
-            $("#manufacturer").attr("value",$(this).val())
-        })
         
         $("#name").bind("input propertychange change", function (event) {
             name = $(this).val();
             $.ajax({
                     type: "post",
-                    url: "/devm/concentrator/repetition/",
+                    url: "/dmam/community/repetition/",
                     data: {name: name},
                     success: function (d) {
                         var result = $.parseJSON(d);
                         if (!result) {
-                            nameError.html("集中器名称已存在！");
+                            nameError.html("小区名称已存在！");
                             nameError.show();
                             deviceFlag = false;
                         }
                         else {
-                            editCentratorManagement.nameValidates();
+                            editConmunityManagement.nameValidates();
                         }
                     }
                 }
@@ -415,8 +321,8 @@
         });
 
         //显示菜单
-        $("#zTreeOrganSel").bind("click", editCentratorManagement.showMenu);
+        $("#zTreeOrganSel").bind("click", editConmunityManagement.showMenu);
         //提交
-        $("#doSubmit").bind("click", editCentratorManagement.doSubmit);
+        $("#doSubmit").bind("click", editConmunityManagement.doSubmit);
     })
 })(window, $)

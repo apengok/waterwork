@@ -93,10 +93,10 @@ class VConcentratorEditForm(forms.ModelForm):
 
 class VCommunityAddForm(forms.ModelForm):
     belongto  = forms.CharField()
-    vconcentrator1 = forms.CharField()
-    vconcentrator2 = forms.CharField()
-    vconcentrator3 = forms.CharField()
-    vconcentrator4 = forms.CharField()
+    vconcentrator1 = forms.CharField(required=False)
+    vconcentrator2 = forms.CharField(required=False)
+    vconcentrator3 = forms.CharField(required=False)
+    vconcentrator4 = forms.CharField(required=False)
     
     class Meta:
         model = VCommunity
@@ -105,10 +105,10 @@ class VCommunityAddForm(forms.ModelForm):
 
 class VCommunityEditForm(forms.ModelForm):
     belongto  = forms.CharField()
-    vconcentrator1 = forms.CharField()
-    vconcentrator2 = forms.CharField()
-    vconcentrator3 = forms.CharField()
-    vconcentrator4 = forms.CharField()
+    vconcentrator1 = forms.CharField(required=False)
+    vconcentrator2 = forms.CharField(required=False)
+    vconcentrator3 = forms.CharField(required=False)
+    vconcentrator4 = forms.CharField(required=False)
     
     class Meta:
         model = VCommunity
@@ -118,8 +118,20 @@ class VCommunityEditForm(forms.ModelForm):
         super(VCommunityEditForm, self).__init__(*args, **kwargs)
 
         self.fields['belongto'].initial = self.instance.belongto.name
-        self.fields['vconcentrator1'].initial = self.instance.vconcentrators.first().name
+        vconcents = self.instance.vconcentrators.all()
+        v_count = vconcents.count()
+        self.fields['vconcentrator1'].initial = vconcents[0].name
+        if v_count == 2:
+            self.fields['vconcentrator2'].initial = vconcents[1].name
 
+        if v_count == 3:
+            self.fields['vconcentrator2'].initial = vconcents[1].name
+            self.fields['vconcentrator3'].initial = vconcents[2].name
+
+        if v_count == 4:
+            self.fields['vconcentrator2'].initial = vconcents[1].name
+            self.fields['vconcentrator3'].initial = vconcents[2].name
+            self.fields['vconcentrator4'].initial = vconcents[3].name
 
 
 class VWatermeterAddForm(forms.ModelForm):

@@ -85,6 +85,11 @@ urlpatterns = [
     # 小区管理
     url(r'^neighborhoodmanager/?$', views.NeighborhoodMangerView.as_view(), name='neighborhoodmanager'),
     url(r'^community/list/$',views.communitylist,name='communitylist'),
+    url(r'^community/add',views.CommunityAddView.as_view(),name='communityadd'),
+    url(r'^community/edit/(?P<pk>\w+)/?$',views.CommunityEditView.as_view(),name='communityedit'),
+    url(r'^community/delete/(?P<pk>[0-9]+)/?$',views.CommunityDeleteView.as_view(),name='communitydelete'),
+    url(r'^community/deletemore',views.communitydeletemore,name='communitydeletemore'),
+    url(r'^community/repetition/$',views.community_repetition,name='community_repetition'),
 
 
 

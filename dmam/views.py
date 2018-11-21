@@ -38,6 +38,7 @@ from .forms import StationsForm,StationsEditForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssignForm
 import os
 from django.conf import settings
+from devm.forms import VCommunityAddForm,VWatermeterAddForm,VCommunityEditForm,VWatermeterEditForm
 
 from waterwork.mixins import AjaxableResponseMixin
 import logging
@@ -1614,7 +1615,7 @@ class VehicleMangerView(LoginRequiredMixin,TemplateView):
         
         return context  
 
-
+# 小区管理，取错名字，将就着先
 class NeighborhoodMangerView(LoginRequiredMixin,TemplateView):
     template_name = "dmam/neighborhoodmanager.html"
 
@@ -1624,6 +1625,286 @@ class NeighborhoodMangerView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "基础管理"
         
         return context  
+
+
+
+def community_repetition(request):
+    name = request.POST.get("name")
+    bflag = not VCommunity.objects.filter(name=name).exists()
+
+    # return HttpResponse(json.dumps(bflag))
+    return HttpResponse(json.dumps({"success":bflag}))
+
+
+"""
+User add, manager
+"""
+class CommunityAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
+    model = Meter
+    form_class = VCommunityAddForm
+    template_name = "dmam/communityadd.html"
+    success_url = reverse_lazy("dmam:neighborhoodmanager")
+    # permission_required = ('entm.rolemanager_perms_basemanager_edit', 'entm.dmamanager_perms_basemanager_edit')
+
+    # @method_decorator(permission_required("dma.change_meters"))
+    def dispatch(self, *args, **kwargs):
+        #uuid is selectTreeIdAdd namely organizations uuid
+        if self.request.method == 'GET':
+            uuid = self.request.GET.get("uuid")
+            kwargs["uuid"] = uuid
+
+        if self.request.method == 'POST':
+            uuid = self.request.POST.get("uuid")
+            kwargs["uuid"] = uuid
+        print("uuid:",kwargs.get('uuid'))
+        return super(CommunityAddView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('neighborhoodmanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "新增集中器",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("community  add here?:",self.request.POST)
+        print(self.kwargs,self.args)
+        # print(form)
+        # do something
+        user = self.request.user
+        user_groupid = user.belongto.cid
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+
+        instance.save()
+        vconcentrator1 = self.request.POST.get('vconcentrator1') #集中器1名称
+        vconcentrator2 = self.request.POST.get('vconcentrator2') #集中器2名称
+        vconcentrator3 = self.request.POST.get('vconcentrator3') #集中器3名称
+        vconcentrator4 = self.request.POST.get('vconcentrator4') #集中器4名称
+        vc1 = VConcentrator.objects.filter(name=vconcentrator1)
+        
+        if vc1.exists():
+            instance.vconcentrators.add(vc1.first())
+
+        if vconcentrator2 != '':
+            vc2 = VConcentrator.objects.filter(name=vconcentrator2)
+            if vc2.exists():
+                instance.vconcentrators.add(vc2.first())
+
+        if vconcentrator3 != '':
+            vc3 = VConcentrator.objects.filter(name=vconcentrator3)
+            if vc3.exists():
+                instance.vconcentrators.add(vc3.first())
+
+        if vconcentrator4 != '':
+            vc4 = VConcentrator.objects.filter(name=vconcentrator4)
+            if vc4.exists():
+                instance.vconcentrators.add(vc4.first())
+
+        
+
+        return super(CommunityAddView,self).form_valid(form)   
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CommunityAddView, self).get_context_data(*args, **kwargs)
+
+        uuid = self.request.GET.get('uuid') or ''
+        
+        groupId = ''
+        groupname = ''
+        if len(uuid) > 0:
+            organ = Organizations.objects.get(uuid=uuid)
+            groupId = organ.cid
+            groupname = organ.name
+        # else:
+        #     user = self.request.user
+        #     groupId = user.belongto.cid
+        #     groupname = user.belongto.name
+        
+        context["groupId"] = groupId
+        context["groupname"] = groupname
+
+        
+
+        return context  
+
+
+"""
+User edit, manager
+"""
+class CommunityEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+    model = VCommunity
+    form_class = VCommunityEditForm
+    template_name = "dmam/communityedit.html"
+    success_url = reverse_lazy("dmam:neighborhoodmanager")
+    
+    # @method_decorator(permission_required("dma.change_meters"))
+    def dispatch(self, *args, **kwargs):
+        # self.user_id = kwargs["pk"]
+        return super(CommunityEditView, self).dispatch(*args, **kwargs)
+
+    def get_object(self):
+        return VCommunity.objects.get(id=self.kwargs["pk"])
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('neighborhoodmanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改集中器",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_invalid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("user edit form_invalid:::")
+        return super(CommunityEditView,self).form_invalid(form)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print(form)
+        print(self.request.POST)
+
+        
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+
+        # 直接清除
+        instance.vconcentrators.clear()
+
+        vconcentrator1 = self.request.POST.get('vconcentrator1') #集中器1名称
+        vconcentrator2 = self.request.POST.get('vconcentrator2') #集中器2名称
+        vconcentrator3 = self.request.POST.get('vconcentrator3') #集中器3名称
+        vconcentrator4 = self.request.POST.get('vconcentrator4') #集中器4名称
+        vc1 = VConcentrator.objects.filter(name=vconcentrator1)
+        
+        if vc1.exists():
+            instance.vconcentrators.add(vc1.first())
+
+        if vconcentrator2 != '':
+            vc2 = VConcentrator.objects.filter(name=vconcentrator2)
+            if vc2.exists():
+                instance.vconcentrators.add(vc2.first())
+
+        if vconcentrator3 != '':
+            vc3 = VConcentrator.objects.filter(name=vconcentrator3)
+            if vc3.exists():
+                instance.vconcentrators.add(vc3.first())
+
+        if vconcentrator4 != '':
+            vc4 = VConcentrator.objects.filter(name=vconcentrator4)
+            if vc4.exists():
+                instance.vconcentrators.add(vc4.first())
+
+        
+        # instance.uuid=unique_uuid_generator(instance)
+        return super(CommunityEditView,self).form_valid(form)
+       
+
+
+def communitydeletemore(request):
+    # print('userdeletemore',request,request.POST)
+
+    if not request.user.has_menu_permission_edit('metermanager_devm'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    deltems = request.POST.get("deltems")
+    print('deltems:',deltems)
+    deltems_list = deltems.split(',')
+
+    for uid in deltems_list:
+        u = VCommunity.objects.get(id=int(uid))
+        # print('delete user ',u)
+        #删除用户 并且删除用户在分组中的角色
+        commaddr = u.commaddr
+        zncb_community = Community.objects.filter(commaddr=commaddr)
+        if zncb_community.exists():
+            z = zncb_community.first()
+            z.delete()
+        
+        u.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
+
+"""
+Assets comment deletion, manager
+"""
+class CommunityDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
+    model = VCommunity
+    # template_name = "aidsbank/asset_comment_confirm_delete.html"
+
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission_edit('metermanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        HttpResponse(json.dumps(data))
+        # return render(self.request,"entm/permission_error.html",data)
+
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs["pk"]
+
+        print("user delete:",args,kwargs)
+        
+        return super(CommunityDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        # print("delete objects:",self.kwargs,kwargs)
+        return VCommunity.objects.get(pk=kwargs["pk"])
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print("delete?",args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+
+        
+        commaddr = self.object.commaddr
+        
+        result = dict()
+        # 同时删除zncb Community记录
+        zncb_community = Community.objects.filter(commaddr=commaddr)
+        if zncb_community.exists():
+            z = zncb_community.first()
+            z.delete()
+        self.object.delete()
+        # result["success"] = 1
+        return HttpResponse(json.dumps({"success":1}))
+        
 
 # 小区列表
 def communitylist(request):
@@ -1663,35 +1944,33 @@ def communitylist(request):
     user = request.user
     organs = user.belongto
 
-    # meters = user.meter_list_queryset(simpleQueryParam)
-    meters = Community.objects.all() #.filter(communityid=105)  #文欣苑105
+    comunities = user.community_list_queryset(simpleQueryParam).values("id","name","belongto__name","address")
+    # meters = Community.objects.all() #.filter(communityid=105)  #文欣苑105
 
     def m_info(m):
         
-        v=VCommunity.objects.filter(name=m.name).first()
-
         return {
-            "id":m.pk,
+            "id":m["id"],
             # "simid":m.simid,
             # "dn":m.dn,
             # "belongto":m.belongto.name,#current_user.belongto.name,
             # "metertype":m.metertype,
-            "name":v.name,
-            "belongto":v.belongto.name,
-            "address":m.address,
+            "name":m["name"],
+            "belongto":m["belongto__name"],
+            "address":m["address"],
             "concentrator":''
             # "station":m.station_set.first().username if m.station_set.count() > 0 else ""
         }
     data = []
 
-    for m in meters[start:start+length]:
+    for m in comunities:
         data.append(m_info(m))
 
-    recordsTotal = len(meters)
+    recordsTotal = comunities.count()
     # recordsTotal = len(data)
     
     result = dict()
-    result["records"] = data
+    result["records"] = data[start:start+length]
     result["draw"] = draw
     result["success"] = "true"
     result["pageSize"] = pageSize
