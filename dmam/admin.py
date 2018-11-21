@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo
+from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo,VCommunity,VConcentrator,VWatermeter
 # Register your models here.
 from legacy.models import Bigmeter,District
 
@@ -69,3 +69,28 @@ class SimCardAdmin(admin.ModelAdmin):
 @admin.register(DmaGisinfo)
 class DmaGisInfoAdmin(admin.ModelAdmin):
     list_display = ['dma_no','geodata','strokeColor','fillColor']
+
+@admin.register(VConcentrator)
+class VConcentratorAdmin(admin.ModelAdmin):
+    list_display = ['name','belongto','commaddr','address','lng','lat','coortype','model','serialnumber','manufacturer','madedate']
+    search_fields = ['name']
+
+
+class MembershipInline(admin.TabularInline):
+    model = VCommunity.vconcentrators.through
+
+
+@admin.register(VCommunity)
+class VCommunityAdmin(admin.ModelAdmin):
+    inlines = [
+        MembershipInline,
+    ]
+    list_display = ['name','belongto','commutid','address','parent']
+
+    search_fields = ['name']
+
+@admin.register(VWatermeter)
+class VWatermeterAdmin(admin.ModelAdmin):
+    list_display = ['name','belongto','communityid','concentrator','numbersth','buildingname','roomname','waterid','wateraddr','serialnumber','madedate']
+    search_fields = ['name']
+

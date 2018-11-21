@@ -54,6 +54,7 @@ def dmatree(request):
     
     stationflag = request.POST.get("isStation") or ''
     dmaflag = request.POST.get("isDma") or ''
+    communityflag = request.POST.get("isCommunity") or ''
     user = request.user
     
     # if user.is_anonymous:
@@ -121,6 +122,26 @@ def dmatree(request):
                     "icon":"/static/virvo/resources/img/station.png",
                     "uuid":''
                 })
+
+        #community
+        if communityflag == '1':
+
+            for s in o.vcommunity_set.values('name','pk'):
+                
+                # if s.dmaid is None: #已分配dma分区的不显示
+                organtree.append({
+                    "name":s['name'],
+                    "id":s['pk'],
+                    "districtid":'',
+                    "pId":o.cid,
+                    "type":"community",
+                    "dma_no":'',
+
+                    "commaddr":'commaddr',
+                    "dma_station_type":"2", # 在dma站点分配中标识该是站点还是小区
+                    "icon":"/static/virvo/resources/img/station.png",
+                    "uuid":''
+                })
             
     # district
     # districts = District.objects.all()
@@ -134,20 +155,7 @@ def dmatree(request):
     #         "icon":"/static/virvo/resources/img/u8836.png",
     #         "uuid":''
     #     })
-        # bigmeters = Bigmeter.objects.filter(districtid=d.id)
-        # for b in bigmeters:
-        #     organtree.append({
-        #     "name":b.username,
-        #     "id":b.userid,
-        #     "stationid":b.userid,
-        #     "pId":d.id,
-        #     "type":"station",
-        #     "icon":"/static/virvo/resources/img/u8836.png",
-        #     "uuid":''
-        # })
-
-    #bigmeter
-
+        
     
     result = dict()
     result["data"] = organtree

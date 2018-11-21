@@ -26,7 +26,12 @@ urlpatterns = [
     
     # 户表管理
     url(r'^neighborhoodmetermanager/?$',views.NeighborhoodmeterMangerView.as_view(),name='neighborhoodmetermanager'),
-   
+   url(r'^watermeter/list/$',views.watermeterlist,name='watermeterlist'),
+    url(r'^watermeter/add',views.WatermeterAddView.as_view(),name='watermeteradd'),
+    url(r'^watermeter/edit/(?P<pk>\w+)/?$',views.WatermeterEditView.as_view(),name='watermeteredit'),
+    url(r'^watermeter/delete/(?P<pk>[0-9]+)/?$',views.WatermeterDeleteView.as_view(),name='watermeterdelete'),
+    url(r'^watermeter/deletemore',views.watermeterdeletemore,name='watermeterdeletemore'),
+    url(r'^watermeter/repetition/$',views.watermeter_repetition,name='watermeter_repetition'),
 
     
 ]
