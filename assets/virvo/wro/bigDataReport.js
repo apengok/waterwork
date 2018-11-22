@@ -1077,10 +1077,10 @@
 
             options = [{
                 backgroundColor: '#FFFFFF',
-                // title: {
-                //     text: '流量曲线图',
-                //     left:'left'
-                // },
+                title: {
+                    text: '流量曲线图',
+                    left:'left'
+                },
                 // tooltip: {
                 //     trigger: 'axis',
                 //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -1089,19 +1089,25 @@
                 // },
                 
                 legend: {
-                    data: ['流量曲线图']
+                    data: ['流量']
                 },
-
+					grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+					},
                 
                 xAxis: [{
                     type: 'category',
-                    // show:false,
+					 boundaryGap: false,
+                    //show:false,
                     data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
                 }],
                 yAxis: {
                     type: 'value',
-                    // show:false,
-                    name: '流量曲线图',
+                    //show:false,
+                    name: '流量',
                     // min: 0,
                     // max: 10,
                     interval: 10,
@@ -1111,11 +1117,10 @@
                     type: 'line',
                     itemStyle: {
                         normal: {
-                            color: '#01949B',
-                            areaStyle: {type: 'default'}
+                            color: '#7acf88',
+							areaStyle:{type:'default'}
                         },
                     },
-                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
                     // markPoint: {
                     //     data: [{
                     //             type: 'max',
@@ -1138,15 +1143,15 @@
             }, 
             {
                 backgroundColor: '#FFFFFF',
-                // title: {
-                //     text: '压力曲线图',
-                //     left:'left'
-                // },
+                title: {
+                    text: '压力曲线图',
+                    left:'left'
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['压力曲线图']
+                    data: ['压力']
                 },
                 grid: {
                     left: '3%',
@@ -1158,13 +1163,13 @@
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    // show:false,
+                    //show:false,
                     data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
                 },
                 yAxis: {
                     type: 'value',
-                    // show:false,
-                    name: '压力曲线图',
+                    //show:false,
+                    name: '压力',
                     min: 0,
                     max: 10,
                     interval: 10,
@@ -1172,8 +1177,13 @@
                 series: [{
                         name: '同比',
                         type: 'line',
-                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                        
+						itemStyle: {
+							normal: {
+								color: '#eb8c82',
+								areaStyle:{type:'default'}
+							},
+						},
+                        stack: '总量',
                         data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
 
                     }
@@ -1188,47 +1198,93 @@
         // 大用户排行榜
         bigUserOrderly:function(){
             "use strict";
-            var e = [{
-                rank: "1",
-                client_name: "徽州学校",
-                belongto: "古城区",
-                watertype: "居民用水",
-                year_use: "5198.12",
-                zhanbi: "4.45"
+			var one1 ='<input style=" border:none; width: 28px;text-align:center;" value="1" readonly="true">';
+			var one2 ='<input style=" border:none; width: 100%; margin-right:150px;text-align:center" value="徽州学校" readonly="true">';
+			var one3 ='<input style=" border:none;  width: 100%;text-align:center" value="古城区" readonly="true">';
+			var one4 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 65px;border:none;text-align:center; background-color:#0099ff;color:#ffffff;" value="居民用水" readonly="true">'
+			var one5 ='<input style=" border:none; width: 100%;text-align:center" value="5198.12" readonly="true">';
+			var one6 ='<input style=" border:none; width: 100%;text-align:center" value="4.45" readonly="true">';
+			
+			var two1 ='<input style=" border:none; width:  28px;text-align:center;" value="2" readonly="true">';
+			var two2 ='<input style=" border:none; width: 100%;text-align:center" value="黄山金磊新材料有限公司" readonly="true">';
+			var two3 ='<input style=" border:none;  width:100%;text-align:center" value="城西工业区" readonly="true">';
+			var two4 ='<input type="text" style="left:-30px;-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width:65px;border:none;text-align:center; background-color:#FF3300;color:#ffffff;" value="工业用水" readonly="true">'
+			var two5 ='<input style=" border:none; width: 100%;text-align:center" value="4337.12" readonly="true">';
+			var two6 ='<input style=" border:none; width: 100%;text-align:center" value="3.45" readonly="true">';       
+		   var e = [{
+                rank: one1,
+                client_name: one2,
+                belongto: one3,
+                watertype: one4 ,
+                year_use: one5,
+                zhanbi: one6
             }, 
             {
-                rank: "2",
-                client_name: "黄山金磊新材料有限公司",
-                belongto: "城西工业区",
-                watertype: "工业用水",
-                year_use: "4337.12",
-                zhanbi: "3.45"
-            },];
+                rank: two1,
+                client_name: two2,
+                belongto: two3,
+                watertype: two4,
+                year_use: two5,
+                zhanbi: two6
+            },
+			{
+                rank: two1,
+                client_name: two2,
+                belongto: two3,
+                watertype: two4,
+                year_use: two5,
+                zhanbi: two6
+            },
+			 {
+                rank: two1,
+                client_name: two2,
+                belongto: two3,
+                watertype: two4,
+                year_use: two5,
+                zhanbi: two6
+            },
+			 {
+                rank: two1,
+                client_name: two2,
+                belongto: two3,
+                watertype: two4,
+                year_use: two5,
+                zhanbi: two6
+            },
+			 {
+                rank: two1,
+                client_name: two2,
+                belongto: two3,
+                watertype: two4,
+                year_use: two5,
+                zhanbi: two6
+            },
+			];
             $("#exampleTableFromData").bootstrapTable({
                 data: e,
                 classes: 'table table-condensed table-no-bordered', 
                 striped: false,
                 height: "300"
             })
-            $("#exampleTableFromData").bootstrapTable('hideLoading')
+         
         },
 
         // 行业用水统计
         WWaterTypeUseOrderly:function(){
             "use strict";
 
-            var progressstr1 = '<div class="progress" style="background-color:orange;">'+
-                                  '<div class="progress-bar"  role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+             var progressstr1 = '<div class="progress" style="background-color:orange;width: 300px;">'+
+                                  '<div class="progress-bar"   role="progressbar" style="width: 25%;background-color:#ff3266;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
                                 '</div>';
-            var progressstr2 = '<div class="progress">'+
-                                  '<div class="progress-bar" role="progressbar" style="width: 35%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+            var progressstr2 = '<div class="progress" style="background-color:orange;width: 300px;">'+
+                                  '<div class="progress-bar" role="progressbar" style="width: 35%;background-color:#0099ff;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
                                 '</div>'
-            var progressstr3 = '<div class="progress">'+
-                                  '<div class="progress-bar" role="progressbar" style="width: 45%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+            var progressstr3 = '<div class="progress" style="background-color:orange;">'+
+                                  '<div class="progress-bar" role="progressbar" style="width: 45%;background-color:#99cd00;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
                                 '</div>'
-            var progressstr4 = '<div class="progress">'+
-                                  '<div class="progress-bar" role="progressbar" style="width: 5%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
-                                '</div>'                                
+            var progressstr4 = '<div class="progress" style="background-color:orange;">'+
+                                  '<div class="progress-bar" role="progressbar" style="width: 5%;background-color:#cd66ff;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
+                                '</div>'                           
             var e = [
             {
                 
@@ -1556,8 +1612,8 @@
                         x: '0%', // for funnel
                         itemStyle : labelFromatter,
                         data : [
-                            {name:'other', value:46, itemStyle : labelTop},
-                            {name:'抄表率', value:54,itemStyle : labelBottom}
+                            {name:'other', value:46, itemStyle :labelBottom  },
+                            {name:'抄表率', value:54,itemStyle : labelTop}
                         ]
                     },
                     {
@@ -1587,16 +1643,20 @@
             var readmeteratio = echarts.init(document.getElementById('readmeteratio'));
             readmeteratio.setOption(option);
         },
-        // 二级分区漏损排行榜
+		  // 二级分区漏损排行榜
         dma2leakage:function(){
             "use strict";
+			var one6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="4.45" readonly="true">'
+			var two6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="3.45" readonly="true">'
+      
+			
             var e = [{
                 rank: "1",
                 client_name: "徽州学校",
                 belongto: "古城区",
                 watertype: "居民用水",
                 year_use: "5198.12",
-                zhanbi: "4.45"
+                zhanbi:one6
             }, 
             {
                 rank: "2",
@@ -1604,7 +1664,7 @@
                 belongto: "城西工业区",
                 watertype: "工业用水",
                 year_use: "4337.12",
-                zhanbi: "3.45"
+                zhanbi: two6
             },];
             $("#dma2leakage").bootstrapTable({
                 data: e,
@@ -1617,13 +1677,16 @@
         // 三级分区漏损排行榜
         dma3leakage:function(){
             "use strict";
+			var one6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="4.45" readonly="true">'
+			var two6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="3.45" readonly="true">'
+      
             var e = [{
                 rank: "1",
                 client_name: "徽州学校",
                 belongto: "古城区",
                 watertype: "居民用水",
                 year_use: "5198.12",
-                zhanbi: "4.45"
+                zhanbi: one6
             }, 
             {
                 rank: "2",
@@ -1631,7 +1694,7 @@
                 belongto: "城西工业区",
                 watertype: "工业用水",
                 year_use: "4337.12",
-                zhanbi: "3.45"
+                zhanbi: two6
             },];
             $("#dma3leakage").bootstrapTable({
                 data: e,

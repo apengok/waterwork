@@ -423,8 +423,11 @@ class FlowsView(LoginRequiredMixin,TemplateView):
         context["page_title"] = "历史数据"
         context["page_menu"] = "统计报表"
 
-        # bigmeter = Bigmeter.objects.first()
-        context["station"] = "新建170"
+        bigmeter = Bigmeter.objects.first()
+        user = self.request.user
+        station = user.station_list_queryset('').first()
+        context["station"] = station.username
+        context["commaddr"] = station.commaddr
         context["organ"] = "歙县自来水公司"
         
         return context  
@@ -465,7 +468,7 @@ def stationhistorylist(request):
     
     user = request.user
     organs = user.belongto
-
+    print(commaddr,sTime,eTime)
     # commaddr = '13470906292'
     # sTime = '2015-09-20'
     # eTime = '2015-09-21'
@@ -474,8 +477,8 @@ def stationhistorylist(request):
     press = HdbPressureData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values_list("readtime","pressure")
     press_dict = dict(press)
 
-    bgm = Bigmeter.objects.filter(commaddr=commaddr).values_list("commaddr","signlen")
-    bgm_dict = dict(bgm)
+    # bgm = Bigmeter.objects.filter(commaddr=commaddr).values_list("commaddr","signlen")
+    # bgm_dict = dict(bgm)
     
     
     def flows_data(b):
@@ -484,8 +487,8 @@ def stationhistorylist(request):
         if readtime in press_dict.keys():
             p = press_dict[readtime]
         signlen = ''
-        if commaddr in bgm_dict.keys():
-            signlen = bgm_dict[commaddr]
+        # if commaddr in bgm_dict.keys():
+        #     signlen = bgm_dict[commaddr]
         return {
             # "stationname":s[1],
             "readtime":readtime ,
@@ -559,7 +562,7 @@ class BiaowuView(LoginRequiredMixin,TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BiaowuView, self).get_context_data(*args, **kwargs)
-        context["page_title"] = "表务表况"
+        context["page_title"] = "表务表况综合统计"
         context["page_menu"] = "统计报表"
         
         return context  

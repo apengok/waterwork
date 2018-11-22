@@ -1320,43 +1320,10 @@
                             </ul>
                         </li>
                         {% endif %}
-                        {% if  'biguser_reports' in user.permissiontree %}
-                        <li class="second-menu">
-                            <a href="/reports/biguser/">
-                                <i class="fa fa-location-arrow"></i><span>大用户报表</span> 
-                                <i></i> 
-                            </a>
-                            <ul>
-                                
-                            </ul>
-                        </li>
-                        {% endif %}
-                        {% if  'dmastatics_reports' in user.permissiontree %}
-                        <li class="second-menu">
-                            <a href="/reports/dmastatics/">
-                                <i class="fa fa-location-arrow"></i><span>DMA报表</span> 
-                                <i></i> 
-                            </a>
-                            <ul>
-                                
-                            </ul>
-                        </li>
-                        {% endif %}
                         {% if  'flows_reports' in user.permissiontree %}
                         <li class="second-menu">
                             <a href="/reports/flows/">
-                                <i class="fa fa-location-arrow"></i><span>流量报表</span> 
-                                <i></i> 
-                            </a>
-                            <ul>
-                                
-                            </ul>
-                        </li>
-                        {% endif %}
-                        {% if  'waters_reports' in user.permissiontree %}
-                        <li class="second-menu">
-                            <a href="/reports/waters/">
-                                <i class="fa fa-location-arrow"></i><span>水量报表</span> 
+                                <i class="fa fa-location-arrow"></i><span>历史数据</span> 
                                 <i></i> 
                             </a>
                             <ul>
@@ -1375,10 +1342,44 @@
                             </ul>
                         </li>
                         {% endif %}
+                        {% if  'waters_reports' in user.permissiontree %}
+                        <li class="second-menu">
+                            <a href="/reports/waters/">
+                                <i class="fa fa-location-arrow"></i><span>水量报表</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        {% endif %}
                         {% if  'vehicle_reports' in user.permissiontree %}
                         <li class="second-menu">
                             <a href="/reports/vehicle/">
                                 <i class="fa fa-location-arrow"></i><span>车辆报表</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        {% endif %}
+                        
+                        {% if  'biguser_reports' in user.permissiontree %}
+                        <li class="second-menu">
+                            <a href="/reports/biguser/">
+                                <i class="fa fa-location-arrow"></i><span>大用户报表</span> 
+                                <i></i> 
+                            </a>
+                            <ul>
+                                
+                            </ul>
+                        </li>
+                        {% endif %}
+                        {% if  'dmastatics_reports' in user.permissiontree %}
+                        <li class="second-menu">
+                            <a href="/reports/dmastatics/">
+                                <i class="fa fa-location-arrow"></i><span>DMA报表</span> 
                                 <i></i> 
                             </a>
                             <ul>

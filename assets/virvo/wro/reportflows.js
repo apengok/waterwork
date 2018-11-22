@@ -33,7 +33,8 @@
     var size;//当前权限监控对象数量
     var online_length;
 
-    var commaddr = "";
+    var commaddr = $("#commaddr").val();
+    console.log("commaddr",commaddr)
     //显示隐藏列
     var menu_text = "";
     var table = $("#dataTable tr th:gt(1)");
