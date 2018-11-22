@@ -113,12 +113,12 @@ choicetreedict["reports"] = {
         "submenu":[{
             "querylog":{"name":"日志查询","url":"/reports/querylog/","sub":{"name":"可写"}},
             "alarm":{"name":"报警报表","url":"/reports/alarm/","sub":{"name":"可写"}},
+            "flows":{"name":"历史数据","url":"/reports/flows/","sub":{"name":"可写"}},
+            "biaowu":{"name":"表务表况","url":"/reports/biaowu/","sub":{"name":"可写"}},
+            "waters":{"name":"水量报表","url":"/reports/waters/","sub":{"name":"可写"}},
+            "vehicle":{"name":"车辆报表","url":"/reports/vehicle/","sub":{"name":"可写"}},
             "biguser":{"name":"大用户报表","url":"/reports/biguser/","sub":{"name":"可写"}},
             "dmastatics":{"name":"DMA报表","url":"/reports/dmastatics/","sub":{"name":"可写"}},
-            "flows":{"name":"流量报表","url":"/reports/flows/","sub":{"name":"可写"}},
-            "waters":{"name":"水量报表","url":"/reports/waters/","sub":{"name":"可写"}},
-            "biaowu":{"name":"表务表况","url":"/reports/biaowu/","sub":{"name":"可写"}},
-            "vehicle":{"name":"车辆报表","url":"/reports/vehicle/","sub":{"name":"可写"}},
             "bigdata":{"name":"大数据报表","url":"/reports/bigdata/","sub":{"name":"可写"}},
         }],
     }

@@ -26,8 +26,10 @@ urlpatterns = [
     url(r'^dmastatics/?$',views.DmastaticsView.as_view(),name='dmastatics'),
     url(r'^dmareport/?$',views.dmareport,name='dmareport'),
     url(r'^wenxinyuan/?$',views.WenxinyuanView.as_view(),name='wenxinyuan'),
-    # 流量报表
+    # 流量报表-->历史数据
     url(r'^flows/?$',views.FlowsView.as_view(),name='flows'),
+    url(r'^historydata/?$',views.stationhistorylist,name='stationhistorylist'),
+    url(r'^historydata/export/?$',views.historydataexport,name='historydataexport'),
     # 水量报表
     url(r'^waters/?$',views.WatersView.as_view(),name='waters'),
     # 表务表况

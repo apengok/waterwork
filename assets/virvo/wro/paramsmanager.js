@@ -579,7 +579,7 @@
             //     return;
             // };
             commaddr = $("#commaddr").val();
-
+            var ROOT_PATH = "http://192.168.2.100:8080/amrs";
             // 通讯参数
             if (currentCommandType == "11") {
                 tcpresendcount = $("#tcpresendcount").val();
@@ -593,6 +593,8 @@
                 data = {"commaddr":commaddr,"tcpresendcount":tcpresendcount,"tcpresponovertime":tcpresponovertime,
                     "udpresendcount":udpresendcount,"udpresponovertime":udpresponovertime,"smsresendcount":smsresendcount,
                     "smsresponovertime":smsresponovertime,"heartbeatperiod":heartbeatperiod}
+
+                url = "/devm/paramsmanager/command/saveCommand/";
             }
             // 终端参数
             if(currentCommandType == "12"){
@@ -601,7 +603,7 @@
                 entrypoint = $("#entrypoint").val();
 
                 data = {"commaddr":commaddr,"ipaddr":ipaddr,"port":port,"entrypoint":entrypoint}
-                
+                url = ROOT_PATH + "/amrssocket?action=modifyIpAndPort";
             }
             // 采集指令
             if(currentCommandType == "13"){
@@ -617,6 +619,8 @@
                 data = {"commaddr":commaddr,"updatastarttime":updatastarttime,"updatamode":updatamode,
                     "collectperiod":collectperiod,"updataperiod":updataperiod,"updatatime1":updatatime1,
                     "updatatime2":updatatime2,"updatatime3":updatatime3,"updatatime4":updatatime4}
+
+                url = "/devm/paramsmanager/command/saveCommand/";
             }
             // 基表设置
             if(currentCommandType == "14"){
@@ -641,15 +645,17 @@
                     "smallsignalcutpoint":smallsignalcutpoint,"isflowzerovalue":isflowzerovalue,"flowzerovalue":flowzerovalue,
                     "pressurepermit":pressurepermit,"flowdorient":flowdorient,"plusaccumupreset":plusaccumupreset
                 }
+
+                url = "/devm/paramsmanager/command/saveCommand/";
             }
-            url = "/devm/paramsmanager/command/saveCommand/";
+            // url = "/devm/paramsmanager/command/saveCommand/";
 
             json_ajax("POST",url,"json",true,data, realTimeCommand.saveCommandback);
               
         },
         saveCommandback:function(data){
             console.log("saveCommandback",data);
-            if(data.success){
+            if(data.ret == 10001){
                 layer.msg("下发成功")
                 myTable.refresh()
             }

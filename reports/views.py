@@ -20,6 +20,9 @@ from dmam.models import DMABaseinfo,DmaStation,Station
 from entm.models import Organizations
 from legacy.utils import generat_year_month_from,generat_year_month,ZERO_monthly_dict
 
+from django.utils.encoding import escape_uri_path
+from . resources import HdbFlowDataResource
+
 # Create your views here.
 
 class QuerylogView(LoginRequiredMixin,TemplateView):
@@ -417,10 +420,129 @@ class FlowsView(LoginRequiredMixin,TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(FlowsView, self).get_context_data(*args, **kwargs)
-        context["page_title"] = "流量报表"
+        context["page_title"] = "历史数据"
         context["page_menu"] = "统计报表"
+
+        # bigmeter = Bigmeter.objects.first()
+        context["station"] = "新建170"
+        context["organ"] = "歙县自来水公司"
         
         return context  
+
+# 返回历史数据页面站点历史数据
+def stationhistorylist(request):
+    
+    draw = 1
+    length = 0
+    start=0
+    
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        order_column = int(request.POST.get("order[0][column]", None))
+        order = request.POST.get("order[0][dir]", None)
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        sTime = request.POST.get("startTime") #or '2018-10-31 00:00:00'
+        eTime = request.POST.get("endTime") #or '2018-11-01 23:59:59'
+        commaddr = request.POST.get("commaddr") or '064893856864'
+    
+    
+    user = request.user
+    organs = user.belongto
+
+    # commaddr = '13470906292'
+    # sTime = '2015-09-20'
+    # eTime = '2015-09-21'
+    
+    flows = HdbFlowData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values()
+    press = HdbPressureData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values_list("readtime","pressure")
+    press_dict = dict(press)
+
+    bgm = Bigmeter.objects.filter(commaddr=commaddr).values_list("commaddr","signlen")
+    bgm_dict = dict(bgm)
+    
+    
+    def flows_data(b):
+        readtime = b["readtime"]
+        p = ''
+        if readtime in press_dict.keys():
+            p = press_dict[readtime]
+        signlen = ''
+        if commaddr in bgm_dict.keys():
+            signlen = bgm_dict[commaddr]
+        return {
+            # "stationname":s[1],
+            "readtime":readtime ,
+            "influx":round(float(b["flux"]),2) if b["flux"] else '',
+            "plusflux":round(float(b["plustotalflux"]),2)  if b["plustotalflux"] else '',
+            "revertflux":round(float(b["reversetotalflux"]),2) if b["reversetotalflux"] else '',
+            "press":p,
+            "baseelectricity":round(float(b["meterv"]),2) if b["meterv"] else '',
+            "remoteelectricity":round(float(b["gprsv"]),2) if b["gprsv"] else '',
+            "signal":signlen, #signlen
+            
+        }
+        
+    data = []
+    
+    
+    for b in flows:  #[start:start+length]
+        
+        ret=flows_data(b)
+        
+        if ret is not None:
+            data.append(ret)
+    
+    
+    recordsTotal = flows.count()
+    # recordsTotal = bgms.count()
+    
+    result = dict()
+    result["records"] = data[start:start+length]
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    # print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+
+
+def historydataexport(request):
+    commaddr = request.GET.get("commaddr") or '064893856864'
+    sTime = request.GET.get("startTime") or '2018-10-31 00:00:00'
+    eTime = request.GET.get("endTime") or '2018-11-01 23:59:59'
+    print(commaddr,sTime,eTime)
+    flows = HdbFlowData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime])
+    user_resource = HdbFlowDataResource()
+    # f= HdbFlowData.objects.filter(commaddr='064811210332',readtime__range=['2018-10-31 00:00:00','2018-10-31 23:59:59'])
+    user_query_set = flows #request.user.user_list_queryset()
+    dataset = user_resource.export(user_query_set)
+    response = HttpResponse(dataset.xls, content_type='text/xls')
+    response['Content-Disposition'] = 'attachment; filename='+ escape_uri_path("导出历史数据.xls")
+    
+    return response
 
 class WatersView(LoginRequiredMixin,TemplateView):
     template_name = "reports/waters.html"

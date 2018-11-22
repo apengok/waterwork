@@ -1077,10 +1077,10 @@
 
             options = [{
                 backgroundColor: '#FFFFFF',
-                title: {
-                    text: '流量曲线图',
-                    left:'left'
-                },
+                // title: {
+                //     text: '流量曲线图',
+                //     left:'left'
+                // },
                 // tooltip: {
                 //     trigger: 'axis',
                 //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -1089,31 +1089,33 @@
                 // },
                 
                 legend: {
-                    data: ['流量']
+                    data: ['流量曲线图']
                 },
 
                 
                 xAxis: [{
                     type: 'category',
-                    show:false,
+                    // show:false,
                     data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
                 }],
-                yAxis: [{
+                yAxis: {
                     type: 'value',
-                    //name: '投诉举报数',
-                    show:false,
-                    axisLabel: {
-                        formatter: '{value}'
-                    }
-                }],
+                    // show:false,
+                    name: '流量曲线图',
+                    // min: 0,
+                    // max: 10,
+                    interval: 10,
+                },
                 series: [{
                     name: 'flow',
-                    type: 'bar',
+                    type: 'line',
                     itemStyle: {
                         normal: {
-                            color: '#01949B'
+                            color: '#01949B',
+                            areaStyle: {type: 'default'}
                         },
                     },
+                    itemStyle: {normal: {areaStyle: {type: 'default'}}},
                     // markPoint: {
                     //     data: [{
                     //             type: 'max',
@@ -1136,15 +1138,15 @@
             }, 
             {
                 backgroundColor: '#FFFFFF',
-                title: {
-                    text: '压力曲线图',
-                    left:'left'
-                },
+                // title: {
+                //     text: '压力曲线图',
+                //     left:'left'
+                // },
                 tooltip: {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['压力']
+                    data: ['压力曲线图']
                 },
                 grid: {
                     left: '3%',
@@ -1156,22 +1158,22 @@
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    show:false,
+                    // show:false,
                     data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
                 },
                 yAxis: {
                     type: 'value',
-                    show:false,
-                    name: '压力',
+                    // show:false,
+                    name: '压力曲线图',
                     min: 0,
                     max: 10,
                     interval: 10,
                 },
                 series: [{
                         name: '同比',
-                        type: 'bar',
-
-                        stack: '总量',
+                        type: 'line',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        
                         data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
 
                     }

@@ -408,7 +408,7 @@ def watermeterlist(request):
     user = request.user
     organs = user.belongto
 
-    watermeters = user.watermeter_list_queryset(simpleQueryParam).values("id","serialnumber","numbersth","buildingname","roomname","belongto__name","installationsite","username",
+    watermeters = user.watermeter_list_queryset(simpleQueryParam).values("id","name","serialnumber","numbersth","buildingname","roomname","belongto__name","installationsite","username",
         "usertel","dn","manufacturer","madedate","ValveMeter","communityid__name","concentrator__name")
     # meters = Watermeter.objects.all() #.filter(watermeterid=105)  #文欣苑105
 
