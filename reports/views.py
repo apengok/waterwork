@@ -879,3 +879,19 @@ def bigDataReport(request):
     
     
     return HttpResponse(json.dumps(ret))
+
+
+def biaowudata(request):
+
+
+    ret = {"exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":{
+                
+
+            },
+            "success":1}
+
+    
+    
+    return HttpResponse(json.dumps(ret))
