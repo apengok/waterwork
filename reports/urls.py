@@ -35,6 +35,8 @@ urlpatterns = [
     # 表务表况
     url(r'^biaowu/?$',views.BiaowuView.as_view(),name='biaowu'),
     url(r'^biaowu/biaowudata/?$',views.biaowudata,name='biaowudata'),
+    url(r'^meter/list/$',views.meterlist,name='meterlist'),
+   
     # 车辆报表
     url(r'^vehicle/?$',views.VehicleView.as_view(),name='vehicle'),
     # 大数据报表

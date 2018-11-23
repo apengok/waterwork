@@ -895,3 +895,147 @@ def biaowudata(request):
     
     
     return HttpResponse(json.dumps(ret))
+
+# 表具管理/表具列表 dataTable
+def meterlist(request):
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    print("get userlist:",draw,length,start,search_value)
+
+    user = request.user
+    organs = user.belongto
+
+    meters = user.meter_list_queryset(simpleQueryParam).values("pk","serialnumber","simid__simcardNumber","version","dn",
+        "metertype","belongto__name","mtype","manufacturer","protocol","R","q3","q1","check_cycle","state","station__username")
+    # meters = Meter.objects.all()
+    # flow_today
+    today = datetime.date.today()
+    yestoday = today - datetime.timedelta(days=1)
+
+    b_yestoday =today - datetime.timedelta(days=2)
+    today_str = today.strftime("%Y-%m-%d")
+    yestoday_str = yestoday.strftime("%Y-%m-%d")
+    b_yestoday_str = b_yestoday.strftime("%Y-%m-%d")
+
+    
+
+
+    month_str = today.strftime("%Y-%m")
+    month_flow = HdbFlowDataMonth.objects.filter(hdate=month_str)
+    yesmonth = datetime.datetime(year=today.year,month=today.month-1,day=today.day)
+    yesmonth_str = yesmonth.strftime("%Y-%m")
+    lastmonth = datetime.datetime(year=today.year,month=today.month-2,day=today.day)
+    lastmonth_str = lastmonth.strftime("%Y-%m")
+    
+
+    def m_info(m):
+        commaddr = m["simid__simcardNumber"]
+        today_flow = HdbFlowDataDay.objects.filter(commaddr=commaddr,hdate__range=[b_yestoday_str,today_str]).values_list('hdate','dosage')
+        lastmonth_flow = HdbFlowDataMonth.objects.filter(commaddr=commaddr,hdate__range=[lastmonth_str,month_str]).values_list('hdate','dosage')
+        # print("today_flow",today_flow)
+        flow_today = ''
+        flow_yestoday = ''
+        flow_b_yestoday = ''
+        if today_flow.exists():
+            flow_dict = dict(today_flow)
+            if today_str in flow_dict.keys():
+                flow_today = round(float(flow_dict[today_str]),2)
+            if yestoday_str in flow_dict.keys():
+                flow_yestoday = round(float(flow_dict[yestoday_str]),2)
+            if b_yestoday_str in flow_dict.keys():
+                flow_b_yestoday = round(float(flow_dict[b_yestoday_str]),2)
+
+        flow_tomon = ''
+        flow_yestomon = ''
+        flow_b_yestomon = ''
+        if lastmonth_flow.exists():
+            mflow_dict = dict(lastmonth_flow)
+            if month_str in mflow_dict.keys():
+                flow_tomon = round(float(mflow_dict[month_str]),2)
+            if yesmonth_str in mflow_dict.keys():
+                flow_yestomon = round(float(mflow_dict[yesmonth_str]),2)
+            if lastmonth_str in mflow_dict.keys():
+                flow_b_yestomon = round(float(mflow_dict[lastmonth_str]),2)
+            
+            
+        return {
+            "id":m["pk"],
+            # "simid":m.simid,
+            # "dn":m.dn,
+            # "belongto":m.belongto.name,#current_user.belongto.name,
+            # "metertype":m.metertype,
+            "serialnumber":m["serialnumber"],
+            "simid":m["simid__simcardNumber"] if m["simid__simcardNumber"] else "",
+            "version":m["version"],
+            "dn":m["dn"],
+            "metertype":m["metertype"],
+            "belongto":m["belongto__name"],
+            "mtype":m["mtype"],
+            "manufacturer":m["manufacturer"],
+            "protocol":m["protocol"],
+            "R":m["R"],
+            "q3":m["q3"],
+            "q1":m["q1"],
+            "check_cycle":m["check_cycle"],
+            "state":m["state"],
+            "station_name":m["station__username"],
+            "station":m["station__username"],
+            "flow_today":flow_today, 
+            "flow_yestoday":flow_yestoday, 
+            "flow_b_yestoday":flow_b_yestoday, 
+            "flow_tomon":flow_tomon, 
+            "flow_yestomon":flow_yestomon, 
+            "flow_b_yestomon":flow_b_yestomon, 
+        }
+    data = []
+
+    for m in meters[start:start+length]:
+        data.append(m_info(m))
+
+    recordsTotal = meters.count()
+    # recordsTotal = len(data)
+    
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+

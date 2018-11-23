@@ -407,6 +407,7 @@
             bigDataReport.dma2leakage();
             bigDataReport.dma3leakage();
             bigDataReport.readMeterRatio();
+            bigDataReport.findOnline2();
         },
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
@@ -417,6 +418,258 @@
 
             var data = {"organ": "virvo_organization_rzav_ehou_yslh","dma_no":"301","endTime": "2018-11"};
             json_ajax("POST", url, "json", false, data, bigDataReport.findOnline);     //发送请求
+        },
+        // 水量趋势图
+        findOnline2: function (data) {//回调函数    数据组装
+            var list = [];
+            var myChart = echarts.init(document.getElementById('onlineGraphics'));
+            var online = "";
+            var influx;
+            var outflux;
+            var total;
+            var leak;
+            var uncharg;
+            var cp_month;
+            var sale;
+            var cxc;
+            var cxc_percent;
+            var broken_pipe;
+            var mnf;
+            var leak_percent;
+            var back_leak;
+            var stasticinfo = "";
+            
+            
+            // wjk
+            //carLicense = dmaReport.platenumbersplitFun(carLicense);
+            var option = {
+                
+                legend: {
+                    data: ['售水量','未计费水量','漏水量','产销差率'],
+                    left: 'auto',
+                },
+                toolbox: {
+                    show: false
+                },
+                grid: {
+                    left: '80',
+                    bottom:'50',
+                    right:'80'
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
+                    name: "",
+                    
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        rotate: 0
+                    },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:200,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    splitLine: {
+                        show: false,
+                        offset:5,
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    
+                    data: [1,2,3,4,5,6,7,8,9,10,11,12]
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '供水总量 （万m³/月）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:60,
+                        scale: false,
+                        position: 'left',
+
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'grey',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+
+                        },
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    {
+                        type : 'value',
+                        name :'产销差率(%)',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:35,
+                        min: 0,
+                        max: 100,
+                        interval: 25,
+                        axisLine : {    // 轴线
+                            show: true,
+                            lineStyle: {
+                                color: 'grey',
+                                type: 'dashed',
+                                width: 1
+                            }
+                        },
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        offset : 18
+                    }
+                ],
+                
+                
+                // dataZoom: [{
+                //     type: 'inside',
+                //     start: start,
+                //     end: end
+                // }, {
+
+                //     show: true,
+                //     height: 20,
+                //     type: 'slider',
+                //     top: 'top',
+                //     xAxisIndex: [0],
+                //     start: 0,
+                //     end: 10,
+                //     showDetail: false,
+                // }],
+                series: [
+                    {
+                        name: '售水量',
+                        yAxisIndex: 0,
+                        barMaxWidth:33,//最大宽度
+                        type: 'bar',
+                        stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#7cb4ed'
+                            }
+                        },
+                        data: [1,2,3,4,5,6,7,8,9,10,11,0],
+                        // markLine : {
+                        //   symbol : 'none',
+                        //   itemStyle : {
+                        //     normal : {
+                        //       color:'#1e90ff',
+                        //       label : {
+                        //         show:true
+                        //       }
+                        //     }
+                        //   },
+                        //   data : [{type : 'average', name: '平均值'}]
+                        // }
+                    },
+                    {
+                        name: '未计费水量',
+                        yAxisIndex: 0,
+                        type: 'bar',
+                        stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#474249'
+                            }
+                        },
+                        data: [1,2,3,4,5,6,7,8,9,10,11,0]
+                    },
+                    {
+                        name: '漏水量',
+                        yAxisIndex: 0,
+                        xAxisIndex: 0,
+                        type: 'bar',
+                        stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#92eb7f'
+                            }
+                        },
+                        data: [1,2,3,4,5,6,7,8,9,10,11,0]
+                    },
+                    {
+                        name: '产销差率',
+                        yAxisIndex: 1,
+                        xAxisIndex: 0,
+                        type: 'scatter',
+                        // stack:'dma',
+                        
+                        itemStyle: {
+                            normal: {
+                                color: '#f4e804'
+                            }
+                        },
+                        data: [1,2,3,4,5,6,7,8,9,10,11]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+            
+            
+            window.onresize = myChart.resize;
+            
         },
         // 水量趋势图
         findOnline: function (data) {//回调函数    数据组装
@@ -614,6 +867,7 @@
                     type: 'category',
                     boundaryGap: true,  // 让折线图从X轴0刻度开始
                     name: "",
+                    
                     axisLabel: {
                         show: true,
                         interval: 0,
@@ -639,6 +893,7 @@
                             width: 0.5
                         }
                     },
+                    
                     data: bigDataReport.platenumbersplitYear(hdates)
                 },
                 yAxis: [
@@ -666,6 +921,7 @@
                                 width: 2
                             }
                         },
+                        
                         axisLabel : {
                             show:true,
                             interval: 'auto',    // {number}
@@ -723,6 +979,8 @@
                         offset : 18
                     }
                 ],
+                
+                
                 // dataZoom: [{
                 //     type: 'inside',
                 //     start: start,
@@ -742,6 +1000,7 @@
                     {
                         name: '售水量',
                         yAxisIndex: 0,
+                        barMaxWidth:33,//最大宽度
                         type: 'bar',
                         stack:'dma',
                         smooth: true,
@@ -924,8 +1183,13 @@
                    
                     title: {
                         text: "安徽省",
-                        left: 'left'
+                        left: 'left',
+                        textStyle:{
+                        fontSize:18,
+                        fontWeight:'100'
                     },
+                    },
+                    
                     tooltip: {
                         trigger: 'item'
                     },
@@ -1077,9 +1341,14 @@
 
             options = [{
                 backgroundColor: '#FFFFFF',
+                
                 title: {
                     text: '流量曲线图',
-                    left:'left'
+                    left:'left',
+                    textStyle:{
+                        fontSize:18,
+                        fontWeight:'100'
+                    },
                 },
                 // tooltip: {
                 //     trigger: 'axis',
@@ -1089,28 +1358,37 @@
                 // },
                 
                 legend: {
-                    data: ['流量']
+                    data: ['流量'],
+                    
                 },
-					grid: {
+                    grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '3%',
+                    bottom: '15%',
                     containLabel: true
-					},
+                    },
                 
                 xAxis: [{
                     type: 'category',
-					 boundaryGap: false,
+                     boundaryGap: false,
                     //show:false,
-                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40'],
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:10
+                        }
+                    }
                 }],
                 yAxis: {
                     type: 'value',
                     //show:false,
-                    name: '流量',
+                  //  name: '流量',
                     // min: 0,
-                    // max: 10,
+                     max: 10,
                     interval: 10,
+                    splitLine:{
+                        show:false,
+                    }
                 },
                 series: [{
                     name: 'flow',
@@ -1118,7 +1396,7 @@
                     itemStyle: {
                         normal: {
                             color: '#7acf88',
-							areaStyle:{type:'default'}
+                            areaStyle:{type:'default'}
                         },
                     },
                     // markPoint: {
@@ -1145,7 +1423,11 @@
                 backgroundColor: '#FFFFFF',
                 title: {
                     text: '压力曲线图',
-                    left:'left'
+                    left:'left',
+                    textStyle:{
+                        fontSize:18,
+                        fontWeight:'100'
+                    },
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -1156,7 +1438,7 @@
                 grid: {
                     left: '3%',
                     right: '4%',
-                    bottom: '3%',
+                    bottom: '15%',
                     containLabel: true
                 },
                 
@@ -1164,25 +1446,33 @@
                     type: 'category',
                     boundaryGap: false,
                     //show:false,
-                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40']
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40'],
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:10
+                        }
+                    }
                 },
                 yAxis: {
                     type: 'value',
                     //show:false,
-                    name: '压力',
-                    min: 0,
+                    //name: '压力',
+                   // min: 0,
                     max: 10,
                     interval: 10,
+                    splitLine:{
+                        show:false,
+                    }
                 },
                 series: [{
                         name: '同比',
                         type: 'line',
-						itemStyle: {
-							normal: {
-								color: '#eb8c82',
-								areaStyle:{type:'default'}
-							},
-						},
+                        itemStyle: {
+                            normal: {
+                                color: '#eb8c82',
+                                areaStyle:{type:'default'}
+                            },
+                        },
                         stack: '总量',
                         data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
 
@@ -1198,20 +1488,50 @@
         // 大用户排行榜
         bigUserOrderly:function(){
             "use strict";
-			var one1 ='<input style=" border:none; width: 28px;text-align:center;" value="1" readonly="true">';
-			var one2 ='<input style=" border:none; width: 100%; margin-right:150px;text-align:center" value="徽州学校" readonly="true">';
-			var one3 ='<input style=" border:none;  width: 100%;text-align:center" value="古城区" readonly="true">';
-			var one4 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 65px;border:none;text-align:center; background-color:#0099ff;color:#ffffff;" value="居民用水" readonly="true">'
-			var one5 ='<input style=" border:none; width: 100%;text-align:center" value="5198.12" readonly="true">';
-			var one6 ='<input style=" border:none; width: 100%;text-align:center" value="4.45" readonly="true">';
-			
-			var two1 ='<input style=" border:none; width:  28px;text-align:center;" value="2" readonly="true">';
-			var two2 ='<input style=" border:none; width: 100%;text-align:center" value="黄山金磊新材料有限公司" readonly="true">';
-			var two3 ='<input style=" border:none;  width:100%;text-align:center" value="城西工业区" readonly="true">';
-			var two4 ='<input type="text" style="left:-30px;-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width:65px;border:none;text-align:center; background-color:#FF3300;color:#ffffff;" value="工业用水" readonly="true">'
-			var two5 ='<input style=" border:none; width: 100%;text-align:center" value="4337.12" readonly="true">';
-			var two6 ='<input style=" border:none; width: 100%;text-align:center" value="3.45" readonly="true">';       
-		   var e = [{
+            var one1 ='<input style=" border:none; width: 28px;text-align:center;height:20px" value="1" readonly="true">';
+            var one2 ='<input style=" border:none; width: 100%; margin-right:150px;;height:20px" value="徽州学校" readonly="true">';
+            var one3 ='<input style=" border:none;  width: 100%;;height:20px" value="古城区" readonly="true">';
+            var one4 ='<input type="text" style="height:20px;-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 65px;border:none;text-align:center; background-color:#0099ff;color:#ffffff;" value="居民用水" readonly="true">'
+            var one5 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="5198.12" readonly="true">';
+            var one6 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="4.45" readonly="true">';
+            
+            var two1 ='<input style=" border:none; width:  28px;text-align:center;height:20px" value="2" readonly="true">';
+            var two2 ='<input style=" border:none; width: 100%;height:20px" value="黄山金磊新材料有限公司" readonly="true">';
+            var two3 ='<input style=" border:none;  width:100%;height:20px" value="城西工业区" readonly="true">';
+            var two4 ='<input type="text" style="left:-30px;-moz-border-radius: 4px;height:20px;-webkit-border-radius: 4px; border-radius: 4px;width:65px;border:none;text-align:center; background-color:#FF3300;color:#ffffff;" value="工业用水" readonly="true">'
+            var two5 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="4337.12" readonly="true">';
+            var two6 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="3.45" readonly="true">';       
+            
+            var three1 ='<input style=" border:none; width:  28px;text-align:center;height:20px" value="3" readonly="true">';
+            var three2 ='<input style=" border:none; width: 100%;height:20px" value="安徽善弗材料有限公司" readonly="true">';
+            var three3 ='<input style=" border:none;  width:100%;height:20px" value="城西工业区" readonly="true">';
+            var three4 ='<input type="text" style="left:-30px;-moz-border-radius: 4px;height:20px;-webkit-border-radius: 4px; border-radius: 4px;width:65px;border:none;text-align:center; background-color:#FF3300;color:#ffffff;" value="工业用水" readonly="true">'
+            var three5 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="3883.56" readonly="true">';
+            var three6 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="3.09" readonly="true">';       
+            
+            var four1 ='<input style=" border:none; width:  28px;text-align:center;height:20px" value="4" readonly="true">';
+            var four2 ='<input style=" border:none; width: 100%;height:20px" value="县人民医院" readonly="true">';
+            var four3 ='<input style=" border:none;  width:100%;height:20px" value="古城区" readonly="true">';
+            var four4 ='<input type="text" style="height:20px;-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 65px;border:none;text-align:center; background-color:#0099ff;color:#ffffff;" value="居民用水" readonly="true">'
+            var four5 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="2157.46" readonly="true">';
+            var four6 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="2.75" readonly="true">';       
+            
+            var five1 ='<input style=" border:none; width:  28px;text-align:center;height:20px" value="5" readonly="true">';
+            var five2 ='<input style=" border:none; width: 100%;height:20px" value="博晶纺织" readonly="true">';
+            var five3 ='<input style=" border:none;  width:100%;height:20px" value="经济开发区" readonly="true">';
+            var five4 ='<input type="text" style="left:-30px;-moz-border-radius: 4px;height:20px;-webkit-border-radius: 4px; border-radius: 4px;width:65px;border:none;text-align:center; background-color:#FF3300;color:#ffffff;" value="工业用水" readonly="true">'
+            var five5 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="2105.46" readonly="true">';
+            var five6 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="2.74" readonly="true">';       
+            
+            var six1 ='<input style=" border:none; width:  28px;text-align:center;height:20px" value="6" readonly="true">';
+            var six2 ='<input style=" border:none; width: 100%;height:20px" value="立国汽车部件有限公司" readonly="true">';
+            var six3 ='<input style=" border:none;  width:100%;height:20px" value="经济开发区" readonly="true">';
+            var six4 ='<input type="text" style="left:-30px;-moz-border-radius: 4px;height:20px;-webkit-border-radius: 4px; border-radius: 4px;width:65px;border:none;text-align:center; background-color:#FF3300;color:#ffffff;" value="工业用水" readonly="true">'
+            var six5 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="2011.33" readonly="true">';
+            var six6 ='<input style=" border:none; width: 100%;text-align:center;height:20px" value="1.35" readonly="true">';       
+            
+            
+           var e = [{
                 rank: one1,
                 client_name: one2,
                 belongto: one3,
@@ -1227,39 +1547,39 @@
                 year_use: two5,
                 zhanbi: two6
             },
-			{
-                rank: two1,
-                client_name: two2,
-                belongto: two3,
-                watertype: two4,
-                year_use: two5,
-                zhanbi: two6
+            {
+                rank: three1,
+                client_name:three2,
+                belongto: three3,
+                watertype: three4,
+                year_use: three5,
+                zhanbi: three6
             },
-			 {
-                rank: two1,
-                client_name: two2,
-                belongto: two3,
-                watertype: two4,
-                year_use: two5,
-                zhanbi: two6
+             {
+                rank: four1,
+                client_name:four2,
+                belongto:four3,
+                watertype:four4,
+                year_use:four5,
+                zhanbi:four6
             },
-			 {
-                rank: two1,
-                client_name: two2,
-                belongto: two3,
-                watertype: two4,
-                year_use: two5,
-                zhanbi: two6
+             {
+                rank:five1,
+                client_name:five2,
+                belongto:five3,
+                watertype:five4,
+                year_use:five5,
+                zhanbi:five6
             },
-			 {
-                rank: two1,
-                client_name: two2,
-                belongto: two3,
-                watertype: two4,
-                year_use: two5,
-                zhanbi: two6
+             {
+                rank:six1,
+                client_name:six2,
+                belongto:six3,
+                watertype:six4,
+                year_use:six5,
+                zhanbi:six6
             },
-			];
+            ];
             $("#exampleTableFromData").bootstrapTable({
                 data: e,
                 classes: 'table table-condensed table-no-bordered', 
@@ -1278,33 +1598,41 @@
                                 '</div>';
             var progressstr2 = '<div class="progress" style="background-color:orange;width: 300px;">'+
                                   '<div class="progress-bar" role="progressbar" style="width: 35%;background-color:#0099ff;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
-                                '</div>'
+                                '</div>';
             var progressstr3 = '<div class="progress" style="background-color:orange;">'+
                                   '<div class="progress-bar" role="progressbar" style="width: 45%;background-color:#99cd00;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
-                                '</div>'
+                                '</div>';
             var progressstr4 = '<div class="progress" style="background-color:orange;">'+
                                   '<div class="progress-bar" role="progressbar" style="width: 5%;background-color:#cd66ff;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>'+
-                                '</div>'                           
+                                '</div>' ;
+
+            var one ='<span style="margin-left:5%">5198.12</span>';
+            var two ='<span style="margin-left:5%">4337.12</span>'
+            var three ='<span style="margin-left:5%">5198.12</span>'
+            var four ='<span style="margin-left:5%">4337.12</span>'
+            
+            
+                                
             var e = [
             {
                 
                 watertype: "居民用水",
-                year_use: "5198.12",
+                year_use: one,
                 zhanbi: progressstr1
             }, 
             {
                 watertype: "工业用水",
-                year_use: "4337.12",
+                year_use: two,
                 zhanbi: progressstr2
             },{
                 
                 watertype: "特种行业用水",
-                year_use: "5198.12",
+                year_use: three,
                 zhanbi: progressstr3
             }, 
             {
                 watertype: "其他",
-                year_use: "4337.12",
+                year_use: four,
                 zhanbi: progressstr4
             },];
             $("#waterusestatistic").bootstrapTable({
@@ -1643,13 +1971,13 @@
             var readmeteratio = echarts.init(document.getElementById('readmeteratio'));
             readmeteratio.setOption(option);
         },
-		  // 二级分区漏损排行榜
+          // 二级分区漏损排行榜
         dma2leakage:function(){
             "use strict";
-			var one6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="4.45" readonly="true">'
-			var two6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="3.45" readonly="true">'
+            var one6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="4.45" readonly="true">'
+            var two6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="3.45" readonly="true">'
       
-			
+            
             var e = [{
                 rank: "1",
                 client_name: "徽州学校",
@@ -1677,8 +2005,8 @@
         // 三级分区漏损排行榜
         dma3leakage:function(){
             "use strict";
-			var one6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="4.45" readonly="true">'
-			var two6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="3.45" readonly="true">'
+            var one6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="4.45" readonly="true">'
+            var two6 ='<input type="text" style="-moz-border-radius: 4px;-webkit-border-radius: 4px; border-radius: 4px;width: 50px;border:none;text-align:center; background-color:#008100;color:#ffffff;" value="3.45" readonly="true">'
       
             var e = [{
                 rank: "1",
@@ -2100,7 +2428,7 @@
     }
     $(function(){
         var validVehicleCount = 0; // 有数据的车辆数量
-        bigDataReport.inquireClick(1);
+        //bigDataReport.inquireClick(1);
         // bigDataReport.init();
         bigDataReport.ceshi();
         // $("#checkGroup").bind("click",bigDataReport.checkGroup);
