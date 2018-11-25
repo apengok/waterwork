@@ -63,7 +63,7 @@ class StationsForm(forms.ModelForm):
 
     class Meta:
         model = Station    
-        fields= ('username','description','usertype','madedate','lng','lat','locate')
+        fields= ('username','description','usertype','madedate','lng','lat','locate','focus','biguser')
 
 
 class StationsEditForm(forms.ModelForm):
@@ -93,7 +93,7 @@ class StationsEditForm(forms.ModelForm):
 
     class Meta:
         model = Station    
-        fields= ('username','description','usertype','madedate','lng','lat','locate')
+        fields= ('username','description','usertype','madedate','lng','lat','locate','focus','biguser')
 
 
 class AssignStationForm(forms.Form):

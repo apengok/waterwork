@@ -159,7 +159,14 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary pull-left" >重点关注</button>
+        <input type="hidden" name="focus" id="focusVal" value="{{ form.focus.value|default:'0' }}">
+        <input type="hidden" name="biguser" id="biguserVal"  value="{{ form.biguser.value|default:'0' }}">
+        <div class="form-group pull-left">
+            <button type="button" id="focusBtn" class="btn btn-default" ><strong>重点关注</strong></button>
+
+            <button type="button" id="biguserBtn" class="btn btn-default" ><strong>大用户</strong></button>
+        </div>
+
         <button id="doSubmitEdit" class="btn btn-primary" type="button">
             <strong>提 交</strong>
         </button>
@@ -192,7 +199,35 @@
     var publicEditError = "\u4FEE\u6539\u5931\u8D25";
     var userGroupSelectNull = "\u8BF7\u9009\u62E9\u7EC4\u7EC7";
 
-    var locate = "{{ form.locate.value }}"
+    var locate = "{{ form.locate.value }}";
+
+    
+
+    $("#focusBtn").on('click',function(){
+        var nowcss = $(this).attr("class").indexOf("btn btn-default"); 
+        if(nowcss != (-1)){
+            $(this).removeClass("btn btn-default").attr("class","btn btn-primary")
+            $("#focusVal").attr("value","1")
+        }else{
+            $(this).removeClass("btn btn-primary").attr("class","btn btn-default")
+            $("#focusVal").attr("value","0")
+
+        }
+        
+    })
+
+    $("#biguserBtn").on('click',function(){
+        var nowcss = $(this).attr("class").indexOf("btn btn-default"); 
+        if(nowcss != (-1)){
+            $(this).removeClass("btn btn-default").attr("class","btn btn-primary")
+            $("#biguserVal").attr("value","1")
+        }else{
+            $(this).removeClass("btn btn-primary").attr("class","btn btn-default")
+            $("#biguserVal").attr("value","0")
+
+        }
+        
+    })
 </script>
 
 

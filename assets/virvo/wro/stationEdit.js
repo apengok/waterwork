@@ -14,6 +14,8 @@
     var madedate = $("#madedate").val();
     var lng = $("#lng").val();
     var lat = $("#lat").val();
+    var focus = $("#focusVal").val();
+    var biguser = $("#biguserVal").val();
     // var locate = $("#locate").val();
 
     var flag1 = false;
@@ -61,6 +63,14 @@
            $("#locatesel option").filter(function() {
                 return $(this).text() == locate;
             }).attr('selected', true);
+            
+            if(focus == "1"){
+                $("#focusBtn").removeClass("btn btn-default").attr("class","btn btn-primary")
+            }
+
+            if(biguser == "1"){
+                $("#biguserBtn").removeClass("btn btn-default").attr("class","btn btn-primary")
+            }
 
            // $('#relate_meter').val(relate_meter).trigger('onSetSelectValue', [relate_meter]);
         },
@@ -127,9 +137,11 @@
             var edit_lng = $("#lng").val();
             var edit_lat = $("#lat").val();
             var edit_locate = $("#locate").val();
+            var edit_focus = $("#focusVal").val();
+            var edit_biguser = $("#biguserVal").val();
             // 值已经发生改变
             if (username != edit_username || description != edit_description || zTreeStationSelEdit != edit_zTreeStationSelEdit || usertype != edit_usertype
-                || madedate != edit_madedate || lng != edit_lng || lat != edit_lat || locate != edit_locate
+                || madedate != edit_madedate || lng != edit_lng || lat != edit_lat || locate != edit_locate || focus != edit_focus || biguser != edit_biguser
                 || relate_meter != edit_relate_meter ) {
                     flag1 = true;
             } else { // 表单值没有发生改变
