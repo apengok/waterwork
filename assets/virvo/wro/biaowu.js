@@ -277,9 +277,13 @@
             //     content += '<tr><td>' + 'result ' +  i + '</td></tr>';
             // }
             // content += "</table>"
-            var table = $('<table>').addClass('table table-stripped small m-t-md');
+            var table = $('<table>');
             for(i=0; i<3; i++){
-                var row = $('<tr>').text(' 沙田水厂淡水DN800 ' + i);
+                var row = $('<tr>')
+                var td1 = $('<td>').addClass('custom-col1').text(' 沙田水厂淡水DN800 ' + i);
+                var td2 = $('<td>').addClass('custom-col2').text('colwqre');
+                row.append(td1);
+                row.append(td2);
                 table.append(row);
             }
 

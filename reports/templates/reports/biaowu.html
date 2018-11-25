@@ -5,9 +5,16 @@
 {% load staticfiles %}
 
 {% block stylesheet %}
-<style type="text/css">
 <link rel="stylesheet" href="{% static 'virvo/resources/js/bootstrap/css/bootstrap-table.min.css' %}" >
-    
+<style type="text/css">
+    .custom-col1{
+        width: 200px;
+        border: 1px solid white;
+    }
+    .custom-col2{
+        border: 1px solid white;
+        width: 80px;
+    }
 </style>
 {% endblock %}
 
