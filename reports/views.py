@@ -15,11 +15,13 @@ from waterwork.mixins import AjaxableResponseMixin
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 
 from accounts.models import User,MyRoles
-from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Watermeter
-from dmam.models import DMABaseinfo,DmaStation,Station
+from legacy.models import (District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,
+                            HdbWatermeterMonth,Concentrator,Watermeter,Alarm)
+from dmam.models import DMABaseinfo,DmaStation,Station,Meter
+
 from entm.models import Organizations
 from legacy.utils import generat_year_month_from,generat_year_month,ZERO_monthly_dict
-
+from django.db.models import Avg, Max, Min, Sum,Count
 from django.utils.encoding import escape_uri_path
 from . resources import HdbFlowDataResource
 
@@ -882,13 +884,75 @@ def bigDataReport(request):
 
 
 def biaowudata(request):
+    user_stations = request.user.station_list_queryset('')
+    commaddr_name = user_stations.values_list("meter__simid__simcardNumber","username")
+    cname = dict(commaddr_name)
+    # 故障排行 alarmtype=13
+    fault_count = 0
+    alams_sets = Alarm.objects.filter(alarmtype=13,commaddr__in=cname.keys()).exclude(commaddr="").values('commaddr').annotate(num_alrms=Count('id')).order_by('-num_alrms')[:5]
+    alarm_data = []
+    for ad in alams_sets:
+        name = cname[ad['commaddr']]
+        count = ad['num_alrms']
+        alarm_data.append({
+            'name':name,
+            'count':count
+            })
+        fault_count += count
 
+
+    # 口径统计
+    dn_count = 0
+    dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-num_dn')
+    dn_data = []
+    for dd in dn_sets:
+        name = dd['meter__dn']
+        count = dd['num_dn']
+        dn_data.append({
+            'name':name,
+            'count':count
+            })
+        dn_count += count
+    # 厂家统计 manufacturer
+    manufacturer_count = 0
+    manufacturer_sets = user_stations.values('meter__manufacturer').annotate(num_manufacturer=Count('id')).order_by('-num_manufacturer')
+    manufacturer_data = []
+    for md in manufacturer_sets:
+        name = md['meter__manufacturer']
+        count = md['num_manufacturer']
+        manufacturer_data.append({
+            'name':name if name != None else "其他",
+            'count':count
+            })
+        manufacturer_count += count
+
+    # 类型统计
+    usertype_count = 0
+    usertype_sets = user_stations.values('usertype').annotate(num_type=Count('id')).order_by('-num_type')
+    usertype_data = []
+    for ud in usertype_sets:
+        name = ud['usertype']
+        count = ud['num_type']
+        usertype_data.append({
+            'name':name if name != None else "其他",
+            'count':count
+            })
+        usertype_count += count
+    # 使用年限
+    # 用水性质
+    # 排行榜
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                
-
+                'fault_count':fault_count,
+                'dn_count':dn_count,
+                'manufacturer_count':manufacturer_count,
+                'usertype_count':usertype_count,
+                'alarm_data':alarm_data,
+                'dn_data':dn_data,
+                'manufacturer_data':manufacturer_data,
+                'usertype_data':usertype_data,
             },
             "success":1}
 

@@ -24,7 +24,7 @@
             // biaowu.hotspoteChart(hotspoteChartData,geoCoordMap);
             biaowu.pieChart();
             biaowu.waterattrPie();
-            biaowu.generalInfo();
+            // biaowu.generalInfo();
         },
         inquireClick: function (num) {
             $(".mileage-Content").css("display", "block");  //显示图表主体
@@ -38,256 +38,86 @@
         },
         reportDataCallback:function (data) {
             if (data != null) {
-                if (data.success) { // 成功！
-                    cycleDate = [];
+                if (data.success) { 
                     var obj = data.obj;
-                    var vehicleCount = obj.vehicleCount; // 车辆数量
-                    var totalMile = obj.totalMile;  // 里程
-                    var totalTravelTime = obj.totalTravelTime; // 行驶时长
-                    var totalDownTime = obj.totalDownTime; // 停驶时长
-                    var totalOverSpeedTimes = obj.totalOverSpeedTimes; // 超速报警次数
-                    var lastTotalMile = obj.lastTotalMile;  // 里程
-                    var lastTotalTravelTime = obj.lastTotalTravelTime; // 行驶时长
-                    var lastTotalDownTime = obj.lastTotalDownTime; // 停驶时长
-                    var lastTotalOverSpeedTimes = obj.lastTotalOverSpeedTimes; // 超速报警次数
-                    var mostDiligent = obj.mostDiligent; // 最勤奋的车
-                    var mostLazy = obj.mostLazy; // 最懒惰的车
-                    var mostFar = obj.mostFar; // 开得最远的车
-                    var mintFar = obj.mintFar; // 几乎没动的车
-                    var safe = obj.safe; // 最安全的车
-                    var danger = obj.danger; // 最危险的车
-                    var maxMile = obj.maxMile; // 最大里程
-                    var minMile = obj.minMile; // 最小里程
-                    cycleDate = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
-                    thisMouthData = [];
-                    lastMouthData = [];
-                    var dailyMiles = obj.dailyMile;
-                    var lastDailyMiles = obj.lastDailyMile;
-                    var today = new Date();
-                    today = today.getDate();
-                    for(var i = 0; i < cycleDate.length; i++){
-                        var flagJ = false;
-                        var flagK = false;
-                        if(i < today){
-                            if (dailyMiles != null && dailyMiles != undefined && dailyMiles.length > 0) {
-                                for(var j = 0; j < dailyMiles.length; j++){
-                                    // 访问接口从大数据月表接口修改为平台原来接口时,monthDay字段要修改为day.反之修改为monthDay
-                                    if((dailyMiles[j].monthDay)==i){
-                                        flagJ = true;
-                                        var dailyMilesGpsMile=biaowu.fiterNumber(dailyMiles[j].gpsMile.toFixed(1))
-                                        thisMouthData.push(dailyMilesGpsMile);
-                                    }
-                                }
-                            }
-                            if(!flagJ){
-                                thisMouthData.push(0);
-                            }
-                        }else{
-                            thisMouthData.push(null);
-                        }
-                        if (lastDailyMiles != null && lastDailyMiles != undefined && lastDailyMiles.length > 0) {
-                            for(var k = 0; k < lastDailyMiles.length; k++){
-                                // 访问接口从大数据月表接口修改为平台原来接口时,monthDay字段要修改为day.反之修改为monthDay
-                                if((lastDailyMiles[k].monthDay)==i){
-                                    flagK = true;
-                                    var dailyMilesGpsMile=biaowu.fiterNumber(lastDailyMiles[k].gpsMile.toFixed(1))
-                                    lastMouthData.push(dailyMilesGpsMile);
-                                }
-                            }
-                        }
-                        if(!flagK){
-                            lastMouthData.push(0);
-                        }
-                    }
-                    biaowu.cycleVS(cycleDate,thisMouthData,lastMouthData);
-                    $("#selectTotalVehicleCount").html("<font style='font-size:18px'> "+vehicleCount + "</font> 辆");
-                    totalMile=biaowu.fiterNumber(totalMile.toFixed(1));
-                    totalCount=biaowu.fiterNumber((totalMile/vehicleCount).toFixed(1));
-                    $("#selectTotalMile").html(totalMile+"<font style='font-size:12px'> km</font>");
-                    $("#mileageAvg").html(vehicleCount!=0?"<font style='font-size:18px'> "+totalCount+"</font>km":"<font style='font-size:18px'>0</font>km");
-                    $("#selectTotalTravelTime").html(biaowu.formatSeconds(totalTravelTime,true));
-                    $("#avgTravelTime").html(biaowu.formatSeconds(vehicleCount!=0?(totalTravelTime/vehicleCount):0,true));
-                    $("#selectTotalDownTime").html(biaowu.formatSeconds(totalDownTime,true));
-                    $("#avgDownTime").html(biaowu.formatSeconds(vehicleCount!=0?(totalDownTime/vehicleCount):0,true));
-                    $("#selectTotalOverSpeedTimes").html(totalOverSpeedTimes+"<font style='font-size:12px'> 次</font>");
-                    reportSpeedAvgCount=biaowu.fiterNumber((totalOverSpeedTimes/vehicleCount).toFixed(1));
-                    $("#reportSpeedAvg").html(vehicleCount!=0?"<font style='font-size:18px'> "+reportSpeedAvgCount+"</font>次":"<font style='font-size:18px'> "+0+"</font>次");
-                    $("#mostDiligent").html(mostDiligent!=""?mostDiligent:"无");
-                    $("#mostLazy").html(mostLazy!=""?mostLazy:"无");
-                    $("#mostFar").html(mostFar!=""?mostFar:"无");
-                    $("#mintFar").html(mintFar!=""?mintFar:"无");
-                    $("#safe").html(safe!=""?safe:"无");
-                    $("#danger").html(danger!=""?danger:"无");
-                    maxMile=biaowu.fiterNumber(maxMile);
-                    minMile=biaowu.fiterNumber(minMile);
-                    $("#maxMile").html(maxMile);
-                    $("#minMile").html(minMile);
-                    lastTotalMile=biaowu.fiterNumber(lastTotalMile.toFixed(1));
-                    $("#lastTotalMile").html(lastTotalMile);
-                    $("#lastTotalTravelTime").html(biaowu.formatSeconds(lastTotalTravelTime,false));
-                    $("#lastTotalDownTime").html(biaowu.formatSeconds(lastTotalDownTime,false));
-                    $("#lastTotalOverSpeedTimes").html(lastTotalOverSpeedTimes);
-                    totalMile=biaowu.fiterNumber(totalMile.toFixed(1));
-                    $("#totalMile").html(totalMile);
-                    $("#totalTravelTime").html(biaowu.formatSeconds(totalTravelTime,false));
-                    $("#totalDownTime").html(biaowu.formatSeconds(totalDownTime,false));
-                    $("#totalOverSpeedTimes").html(totalOverSpeedTimes);
-                    var differTotalMile = totalMile - lastTotalMile;  // 里程
-                    var differTotalTravelTime = totalTravelTime - lastTotalTravelTime; // 行驶时长
-                    var differTotalDownTime = totalDownTime - lastTotalDownTime; // 停驶时长
-                    var differTotalOverSpeedTimes = totalOverSpeedTimes - lastTotalOverSpeedTimes; // 超速报警次数
-                    if(differTotalTravelTime < 0){
-                        differTotalTravelTime = "，比上月少" + biaowu.formatSeconds(Math.abs(differTotalTravelTime),true);
-                    }else if(differTotalTravelTime == 0){
-                        differTotalTravelTime = "";
-                    }else{
-                        differTotalTravelTime = "，比上月多" +biaowu.formatSeconds(differTotalTravelTime,true);
-                    }
-                    
-                    if(differTotalDownTime < 0){
-                        differTotalDownTime = "，比上月少" + biaowu.formatSeconds(Math.abs(differTotalDownTime),true);
-                    }else if(differTotalDownTime == 0){
-                        differTotalDownTime = "";
-                    }else{
-                        differTotalDownTime = "，比上月多" +biaowu.formatSeconds(differTotalDownTime,true);
+                    var alarm_data = obj.alarm_data;
+                    var dn_data = obj.dn_data;
+                    var manufacturer_data = obj.manufacturer_data;
+                    var usertype_data = obj.usertype_data;
 
+                    if(alarm_data != null && alarm_data.length > 0){
+                        biaowu.faultRank(alarm_data);
                     }
-                    if(differTotalMile < 0){
-                        differTotalMile = "，比上月少<font style='font-size:18px;color:#6dcff6'>" + Math.abs(differTotalMile.toFixed(1))+"</font>km";
-                    }else if(differTotalMile == 0){
-                        differTotalMile = "";
-                    }else{
-                        differTotalMile = "，比上月多<font style='font-size:18px;color:#6dcff6;'> " +differTotalMile.toFixed(1)+" </font>km";
-
+                    if(dn_data != null && dn_data.length > 0){
+                        biaowu.dnStatstic(dn_data);
                     }
-                    if(differTotalOverSpeedTimes < 0){
-                        differTotalOverSpeedTimes = "，比上月少<font style='font-size:18px;color:#960ba3'> " + Math.abs(differTotalOverSpeedTimes)+" </font>次";
-                    }else if(differTotalOverSpeedTimes == 0){
-                        differTotalOverSpeedTimes = "";
-                    }else{
-                        differTotalOverSpeedTimes = "，比上月多<font style='font-size:18px'>" + differTotalOverSpeedTimes+"</font>次";
+                    if(manufacturer_data != null && manufacturer_data.length > 0){
+                        biaowu.manuStastic(manufacturer_data);
                     }
-                    
-                    $("#differTotalMile").html(differTotalMile);
-                    $("#differTotalTravelTime").html(differTotalTravelTime);
-                    $("#differTotalDownTime").html(differTotalDownTime);
-                    $("#differTotalOverSpeedTimes").html(differTotalOverSpeedTimes);
-                    //里程对比
-                    mileageDate = obj.mileCompareBrands;
-                    mileageVSData = obj.mileCompareMiles;
-                    vehicleIds = obj.vehicleIds;
-                    biaowu.mileageVS(mileageDate,mileageVSData);
-                    validVehicleCount = obj.validVehicleCount; // 有数据的车辆数量
-                    // 里程月统计图表：默认显示里程对比图表中的第一辆车的数据
-                    if (null != mileageDate && ""!= mileageDate && typeof(mileageDate) != undefined && typeof(mileageDate) != "undefined") {
-                        var params = new Object();
-                        params.name = mileageDate[0];
-                        params.id = vehicleIds[0];
-                        biaowu.chartsEvent(params);
-                    }else{
-                         // 里程对比按车清空
-                        $("#travelTimeByVehicle").html("<font style='font-size:18px'> 0</font>秒"); // 行驶时长
-                        $("#downTimeByVehicle").html("<font style='font-size:18px'> 0</font>秒"); // 停驶时长
-                        $("#mileByVehicle").html("<font style='font-size:18px'>0</font>km"); // 行驶里程
-                        $("#travelTimesByVehicle").html("<font style='font-size:18px'> 0</font>次"); // 行驶次数
-                        $("#alarmTimesByVehicle").html("<font style='font-size:18px'> 0</font>次"); // 报警次数
-                        $("#milePercent").html("0%"); // 里程百分比
-                        //里程月统计
-                        $("#curCar").text("");
-                        var mileageStatisticsDate = [];
-                        var mileageStatisticsData = [];
-                        biaowu.mileageStatistics(mileageStatisticsDate,mileageStatisticsData);
+                    if(usertype_data != null && usertype_data.length > 0){
+                        biaowu.typeStastic(usertype_data);
                     }
-                    var log = obj.result;
-                    sum = obj.sum;
-                    $("#east").text(obj.east);
-                    $("#west").text(obj.west);
-                    $("#north").text(obj.north);
-                    $("#south").text(obj.south);
-                    var list =[];
-                    if(log.length == 0) {
-                        $("#one").text("");
-                        $("#two").text("");
-                        $("#three").text("");
-                        $("#four").text("");
-                        $("#five").text("");
-                    }else{
-                        point = log.length;
-                        for (var i = 0; i < log.length; i++) {
-                            var name = log[i].name;
-                            var count;
-                            if (log.length == 1) {
-                                count = (log[i].count / sum) * 100;
-                                count = count < 1 ? 1 : count;
-                            } else if (log.length < 10 && log.length > 1) {
-                                count = (log[i].count / sum) * 500;
-                                count = count < 1 ? 1 : count;
-                            } else {
-                                count = (log[i].count / sum) * 1000;
-                                count = count < 1 ? 1 : count;
-                            }
-                            var map = {};
-                            map["name"] = name;
-                            map["value"] = count;
-                            list.push(map)
-                            if (i == 0) {
-                                $("#one").text("1." + name);
-                                if (log.length == 1) {
-                                    $("#two").text("");
-                                    $("#three").text("");
-                                    $("#four").text("");
-                                    $("#five").text("");
-                                }
-                            } else if (i == 1) {
-                                $("#two").text("2." + name);
-                                if (log.length == 2) {
-                                    $("#three").text("");
-                                    $("#four").text("");
-                                    $("#five").text("");
-                                }
-                            } else if (i == 2) {
-                                $("#three").text("3." + name);
-                                if (log.length == 3) {
-                                    $("#four").text("");
-                                    $("#five").text("");
-                                }
-                            } else if (i == 3) {
-                                $("#four").text("4." + name);
-                                if (log.length == 4) {
-                                    $("#five").text("");
-                                }
-                            } else if (i == 4) {
-                                $("#five").text("5." + name);
-                            }
-
-                        }
-                    }
-                    hotspoteChartData = list;
-                    biaowu.hotspoteChart(hotspoteChartData,geoCoordMap);
                 }else{
                     layer.msg(data.msg,{move:false});
                 }
             }
         },
 
-        // 综合信息
-        generalInfo:function(){
-            // var content = "<table>"
-            // for(i=0; i<3; i++){
-            //     content += '<tr><td>' + 'result ' +  i + '</td></tr>';
-            // }
-            // content += "</table>"
+        // 综合信息 -故障排行
+        faultRank:function(data){
             var table = $('<table>');
-            for(i=0; i<3; i++){
+            for(i=0; i<data.length; i++){
                 var row = $('<tr>')
-                var td1 = $('<td>').addClass('custom-col1').text(' 沙田水厂淡水DN800 ' + i);
-                var td2 = $('<td>').addClass('custom-col2').text('colwqre');
+                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
+                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
                 row.append(td1);
                 row.append(td2);
                 table.append(row);
             }
 
             $('#faultRank').append(table);
+        },
+        // 综合信息 -口径统计
+        dnStatstic:function(data){
+            var table = $('<table>');
+            for(i=0; i<data.length; i++){
+                var row = $('<tr>')
+                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
+                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
+                row.append(td1);
+                row.append(td2);
+                table.append(row);
+            }
+
+            $('#dnStatstic').append(table);
+        },
+        // 综合信息 -厂家统计
+        manuStastic:function(data){
+            var table = $('<table>');
+            for(i=0; i<data.length; i++){
+                var row = $('<tr>')
+                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
+                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
+                row.append(td1);
+                row.append(td2);
+                table.append(row);
+            }
+
+            $('#manuStastic').append(table);
+        },
+        // 综合信息 -类型统计
+        typeStastic:function(data){
+            var table = $('<table>');
+            for(i=0; i<data.length; i++){
+                var row = $('<tr>')
+                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
+                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
+                row.append(td1);
+                row.append(td2);
+                table.append(row);
+            }
+
+            $('#typeStastic').append(table);
         },
         
         // 使用年限饼图
@@ -643,7 +473,7 @@
     }
     $(function(){
         var validVehicleCount = 0; // 有数据的车辆数量
-        // biaowu.inquireClick(1);
+        biaowu.inquireClick(1);
         biaowu.init_table();
         biaowu.ceshi();
         // $("#checkGroup").bind("click",biaowu.checkGroup);
