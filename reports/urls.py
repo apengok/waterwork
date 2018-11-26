@@ -21,6 +21,8 @@ urlpatterns = [
     
     # 大用户报表
     url(r'^biguser/?$',views.BiguserView.as_view(),name='biguser'),
+    url(r'^biguser/biguserdata/?$',views.biguserdata,name='biguserdata'),
+    url(r'^meter/biguserlist/$',views.bigusermeterlist,name='bigusermeterlist'),
     
     # DMA报表
     url(r'^dmastatics/?$',views.DmastaticsView.as_view(),name='dmastatics'),

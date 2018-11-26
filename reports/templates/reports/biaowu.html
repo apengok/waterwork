@@ -36,7 +36,7 @@
                         <div style="left: -10px" class=" col-md-6 report-group">
                             <div class="col-md-12 report-group-more" id="checkGroup" >
                                 <div class="col-md-6"><span style="cursor:pointer;font-size:14px">故障率排行旁</span></div>
-                                <div class="col-md-6 text-center"  style="font-size:14px">45次</div>
+                                <div class="col-md-6 text-center"  style="font-size:14px"><span id="fault_count"></span></div>
                             </div>
                             <div class="col-md-12 area" style="position:relative;" id="faultRank">
                                 <!-- <table></table> -->
@@ -50,7 +50,7 @@
                             
                             <div class="col-md-12 report-time-more" id="">
                                 <div class="col-md-6"><span style="cursor:pointer;font-size:14px">口径统计表</span></div>
-                                <div class="col-md-6 text-center"style="font-size:14px">189台</div>
+                                <div class="col-md-6 text-center" style="font-size:14px"><span id="dn_count"></span></div>
                             </div>
                             <div class="col-md-12 area" style="position:relative;" id="dnStatstic">
                                 
@@ -65,7 +65,7 @@
                         <div class="col-md-6 report-stoptime">
                             <div class="col-md-12 report-stoptime-more" id="">
                                 <div class="col-md-6"><span style="cursor:pointer;">厂家统计表</span></div>
-                                <div class="col-md-6 text-center">4 家</div>
+                                <div class="col-md-6 text-center"><span id="manufacturer_count"></span></div>
                             </div>
                             <div class="col-md-12 area" style="position:relative;" id="manuStastic">
                                 
@@ -78,7 +78,7 @@
                         <div style="left: 5px" class="col-md-6 report-speed">
                             <div class="col-md-12 report-speed-more" id="">
                                 <div class="col-md-6"><span style="cursor:pointer;">类型统计表</span></div>
-                                <div class="col-md-6 text-center">4家</div>
+                                <div class="col-md-6 text-center"><span id="metertype_count"></span></div>
                             </div>
                             <div class="col-md-12 area" style="position:relative;" id="typeStastic">
                                 
@@ -116,11 +116,11 @@
                             </div>
                             <div class="panel-body" id="stretch3-body">
                                 <ul class="heroRanking">
-                                    <li><i class="bigDataHero mostDiligent">本月新增表具：<span id="mostDiligent">无</span></i></li>
-                                    <li><i class="bigDataHero mostLazy">本月更换表具：<span id="mostLazy">无</span></i></li>
-                                    <li><i class="bigDataHero mostFar">本月用水超限报警表具：<span id="mostFar">无</span></i></li>
-                                    <li><i class="bigDataHero mintFar">本月用水量最多表具：<span id="mintFar">无</span>，最大用水量是<span id="minMile"></span>m³</i></li>
-                                    <li><i class="bigDataHero safe">本月用水量最少表具：<span id="safe">无</span>最小用水量是<span id="minMile"></span>m³</i></li>
+                                    <li><i class="bigDataHero thisMonAdd">本月新增表具：<span id="thisMonAdd">无</span></i></li>
+                                    <li><i class="bigDataHero thisMonAlter">本月更换表具：<span id="thisMonAlter">无</span></i></li>
+                                    <li><i class="bigDataHero thisMonOverAlarm">本月用水超限报警表具：<span id="thisMonOverAlarm">无</span></i></li>
+                                    <li><i class="bigDataHero thisMonMax">本月用水量最多表具：<span id="thisMonMax">无</span>，最大用水量是<span id="maxFlow"></span>m³</i></li>
+                                    <li><i class="bigDataHero thisMonMin">本月用水量最少表具：<span id="thisMonMin">无</span>，最小用水量是<span id="minFlow"></span>m³</i></li>
                                     
                                 </ul>
                             </div>
@@ -158,17 +158,17 @@
                                  <input id="hiddenText" type="text" style="display:none" />
                              </form>
                           </div>
-                          <div class="dropdown pull-left">
+                          <!-- <div class="dropdown pull-left">
                               <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">操作菜单<span class="caret"></span>
                               </button>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                   <li><a href="/devm/meter/add/" id="addId" data-toggle="modal" data-target="#commonWin"><i class="glyphicon glyphicon-plus icoPaddingLeft"></i>新增</a></li>
-                                  <!-- <li><a href="/clbs/m/basicinfo/equipment/device/export" id="exportId"><i class="glyphicon glyphicon-log-out icoPaddingLeft"></i>导出</a></li>
-                                  <li><a href="/clbs/m/basicinfo/equipment/device/import" id="importId" data-toggle="modal" data-target="#commonSmWin"><i class="glyphicon glyphicon-log-in icoPaddingLeft"></i>导入</a></li> -->
+                                  <li><a href="/clbs/m/basicinfo/equipment/device/export" id="exportId"><i class="glyphicon glyphicon-log-out icoPaddingLeft"></i>导出</a></li>
+                                  <li><a href="/clbs/m/basicinfo/equipment/device/import" id="importId" data-toggle="modal" data-target="#commonSmWin"><i class="glyphicon glyphicon-log-in icoPaddingLeft"></i>导入</a></li>
                                   <li><a href="#" id="del_model"><i class="glyphicon glyphicon-trash icoPaddingLeft"></i>批量删除</a></li>
                                   
                               </ul>
-                          </div>
+                          </div> -->
                       </div>
                       <div class="columns btn-group pull-right terminalManagement">
                           <button id="refreshTable" class="btn btn-default" type="button" name="refresh" title="刷新">

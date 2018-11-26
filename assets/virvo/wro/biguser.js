@@ -22,7 +22,7 @@
         //测试数据
         ceshi: function(){
             // biaowu.hotspoteChart(hotspoteChartData,geoCoordMap);
-            biaowu.pieChart();
+            biaowu.biguserFlowChart();
             // biaowu.waterattrPie();
             // biaowu.generalInfo();
         },
@@ -30,7 +30,7 @@
             $(".mileage-Content").css("display", "block");  //显示图表主体
             
             dataListArray = [];
-            var url = "/reports/biaowu/biaowudata/";
+            var url = "/reports/biguser/biguserdata/";
             // var endTime = $("#endtime").val()
 
             var data = {"organ": "virvo_organization_rzav_ehou_yslh","dma_no":"301","endTime": "2018-11"};
@@ -88,209 +88,92 @@
             }
         },
 
-        // 综合信息 -故障排行
-        faultRank:function(data){
-            var table = $('<table>');
-            for(i=0; i<data.length; i++){
-                var row = $('<tr>')
-                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
-                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
-                row.append(td1);
-                row.append(td2);
-                table.append(row);
-            }
-
-            $('#faultRank').append(table);
-        },
-        // 综合信息 -口径统计
-        dnStatstic:function(data){
-            var table = $('<table>');
-            for(i=0; i<data.length; i++){
-                var row = $('<tr>')
-                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
-                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
-                row.append(td1);
-                row.append(td2);
-                table.append(row);
-            }
-
-            $('#dnStatstic').append(table);
-        },
-        // 综合信息 -厂家统计
-        manuStastic:function(data){
-            var table = $('<table>');
-            for(i=0; i<data.length; i++){
-                var row = $('<tr>')
-                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
-                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
-                row.append(td1);
-                row.append(td2);
-                table.append(row);
-            }
-
-            $('#manuStastic').append(table);
-        },
-        // 综合信息 -类型统计
-        typeStastic:function(data){
-            var table = $('<table>');
-            for(i=0; i<data.length; i++){
-                var row = $('<tr>')
-                var td1 = $('<td>').addClass('custom-col1').text(data[i].name );
-                var td2 = $('<td>').addClass('custom-col2').text(data[i].count);
-                row.append(td1);
-                row.append(td2);
-                table.append(row);
-            }
-
-            $('#typeStastic').append(table);
-        },
+        
         
         // 使用年限饼图
-        pieChart:function(){
-            var legend_stastic = {};
-
+        biguserFlowChart:function(){
+            
             option = {
                 title : {
-                    text: '使用年限饼状图',
-                    x:'left'
+                    text : '本年度大用户用水曲线图',
+                    // subtext : 'dataZoom支持'
                 },
                 tooltip : {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    formatter : function (params) {
+                        var date = new Date(params.value[0]);
+                        data = date.getFullYear() + '-'
+                               + (date.getMonth() + 1) + '-'
+                               + date.getDate() + ' '
+                               + date.getHours() + ':'
+                               + date.getMinutes();
+                        return data + '<br/>'
+                               + params.value[1] + ', ' 
+                               + params.value[2];
+                    }
                 },
-                legend: {
-                    orient : 'vertical',
-                    x : 'left',
-                    y : 'center',
-                    formatter:function(a){
-                        console.log(a)
-                        return a + ' '+ legend_stastic[a] + '%';
-                    },
-                    data:['2017','2016','2015','2014','2013']
+                // toolbox: {
+                //     show : true,
+                //     feature : {
+                //         mark : {show: true},
+                //         dataView : {show: true, readOnly: false},
+                //         restore : {show: true},
+                //         saveAsImage : {show: true}
+                //     }
+                // },
+                dataZoom: {
+                    show: true,
+                    start : 70
                 },
-                
-                calculable : true,
+                legend : {
+                    data : ['series1'],
+                    show:false
+                },
+                grid: {
+                    y2: 80
+                },
+                xAxis : [
+                    {
+                        type : 'time',
+                        splitNumber:10
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
                 series : [
                     {
-                        name:'使用年限',
-                        type:'pie',
-                        radius : '35%',
-                        center: ['60%', '50%'],
-                        itemStyle:{
-                            normal : {
-                                label : {
-                                    show : false,
-                                    position : 'outer',
-                                    formatter : function(p){
-                                        // console.log(p)
-                                        legend_stastic[p.name] = p.percent;
-                                        return p.name + p.percent;
-                                    },
-                                    textStyle: {
-                                        baseline : 'bottom'
-                                    }
-                                },
-                                labelLine : {
-                                    show : false
-                                }
-                            }
+                        name: 'series1',
+                        type: 'line',
+                        showAllSymbol: true,
+                        symbolSize: function (value){
+                            return Math.round(value[2]/10) + 2;
                         },
-                        data:[
-                            {value:335, name:'2017'},
-                            {value:310, name:'2016'},
-                            {value:234, name:'2015'},
-                            {value:135, name:'2014'},
-                            {value:1548, name:'2013'}
-                        ]
+                        data: (function () {
+                            var d = [];
+                            var len = 0;
+                            var now = new Date();
+                            var value;
+                            while (len++ < 200) {
+                                d.push([
+                                    new Date(2018, 0, 0, 0, len * 2380),
+                                    (Math.random()*30).toFixed(2) - 0,
+                                    (Math.random()*100).toFixed(2) - 0
+                                ]);
+                            }
+                            return d;
+                        })()
                     }
                 ]
             };
 
-            var yearsPie = echarts.init(document.getElementById('yearsPie'));
-            yearsPie.setOption(option);
+            var biguserFlowChart = echarts.init(document.getElementById('biguserFlowChart'));
+            biguserFlowChart.setOption(option);
         },
 
-        // 用水性质饼图
-        waterattrPie:function(data){
-            var legend_stastic = {};
-
-            var data_legend = [];
-            var data_usertype = [];
-
-            if(data != null && data.length > 0){
-                for(var i =0;i<data.length;i++){
-                    data_legend.push(data[i].name);
-                    var obj = {};
-                    obj.value = data[i].count;
-                    obj.name = data[i].name;
-                    data_usertype.push(obj)
-                }
-            }
-
-            console.log(data_legend)
-            console.log(data_usertype)
-
-            option = {
-                title : {
-                    text: '用水性质',
-                    x:'left'
-                },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    orient : 'vertical',
-                    x : 'left',
-                    y : 'center',
-                    formatter:function(a){
-                        console.log(a)
-                        return a + ' '+ legend_stastic[a] + '%';
-                    },
-                    data:data_legend, //['居民用水','工业用水','特种用水','商业用水','其他用水']
-                },
-                
-                calculable : true,
-                series : [
-                    {
-                        name:'用水性质',
-                        type:'pie',
-                        radius : '35%',
-                        center: ['70%', '50%'],
-                        itemStyle:{
-                            normal : {
-                                label : {
-                                    show : false,
-                                    position : 'outer',
-                                    formatter : function(p){
-                                        // console.log(p)
-                                        legend_stastic[p.name] = p.percent;
-                                        return p.name + p.percent;
-                                    },
-                                    textStyle: {
-                                        baseline : 'bottom'
-                                    }
-                                },
-                                labelLine : {
-                                    show : false
-                                }
-                            }
-                        },
-                        data:data_usertype,
-                        // [
-                        //     {value:335, name:'居民用水'},
-                        //     {value:310, name:'工业用水'},
-                        //     {value:234, name:'特种用水'},
-                        //     {value:135, name:'商业用水'},
-                        //     {value:154, name:'其他用水'}
-                        // ]
-                    }
-                ]
-            };
-
-            var waterattrPie = echarts.init(document.getElementById('waterattrPie'));
-            waterattrPie.setOption(option);
-        },
+        
         
         // 配表初始化
         init_table: function(){
@@ -436,7 +319,7 @@
             //表格setting
             var setting = {
                 suffix  : '/',
-                listUrl : '/reports/meter/list/',
+                listUrl : '/reports/meter/biguserlist/',
                 
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
@@ -515,7 +398,7 @@
     }
     $(function(){
         var validVehicleCount = 0; // 有数据的车辆数量
-        biaowu.inquireClick(1);
+        // biaowu.inquireClick(1);
         biaowu.init_table();
         biaowu.ceshi();
         // $("#checkGroup").bind("click",biaowu.checkGroup);

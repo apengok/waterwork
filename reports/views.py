@@ -903,7 +903,7 @@ def biaowudata(request):
 
     # 口径统计
     dn_count = 0
-    dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-num_dn')
+    dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-meter__dn')
     dn_data = []
     for dd in dn_sets:
         name = dd['meter__dn']
@@ -915,7 +915,7 @@ def biaowudata(request):
         dn_count += count
     # 厂家统计 manufacturer
     manufacturer_count = 0
-    manufacturer_sets = user_stations.values('meter__manufacturer').annotate(num_manufacturer=Count('id')).order_by('-num_manufacturer')
+    manufacturer_sets = user_stations.values('meter__manufacturer').annotate(num_manufacturer=Count('id')).order_by('-meter__manufacturer')
     manufacturer_data = []
     for md in manufacturer_sets:
         name = md['meter__manufacturer']
@@ -924,11 +924,34 @@ def biaowudata(request):
             'name':name if name != None else "其他",
             'count':count
             })
-        manufacturer_count += count
+    manufacturer_count = manufacturer_sets.count()
 
     # 类型统计
+    metertype_count = 0
+    metertype_sets = user_stations.values('meter__mtype').annotate(num_type=Count('id')).order_by('-meter__mtype')
+    metertype_data = []
+    for ud in metertype_sets:
+        name = ud['meter__mtype']
+        if name == "0":
+            name = "电磁水表"
+        elif name == "1":
+            name = "超声水表"
+        elif name == "2":
+            name = "机械水表"
+        elif name == "3":
+            name = "插入电磁"
+        else:
+            name = "其他"
+        count = ud['num_type']
+        metertype_data.append({
+            'name':name,
+            'count':count
+            })
+        metertype_count += count
+    # 使用年限
+    # 用水性质
     usertype_count = 0
-    usertype_sets = user_stations.values('usertype').annotate(num_type=Count('id')).order_by('-num_type')
+    usertype_sets = user_stations.values('usertype').annotate(num_type=Count('id')).order_by('-usertype')
     usertype_data = []
     for ud in usertype_sets:
         name = ud['usertype']
@@ -938,9 +961,22 @@ def biaowudata(request):
             'count':count
             })
         usertype_count += count
-    # 使用年限
-    # 用水性质
     # 排行榜
+    today = datetime.date.today()
+    month_str = today.strftime("%Y-%m")
+
+    # 最大流量
+    max_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Max('dosage'))
+    mon_max_flow = max_flows["dosage__max"]
+    max_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_max_flow).values("commaddr")[0]["commaddr"]
+    max_flow_station = cname[max_commaddr]
+    # 最小流量
+    min_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Min('dosage'))
+    mon_min_flow = min_flows["dosage__min"]
+    min_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_min_flow).values("commaddr")[0]["commaddr"]
+    min_flow_station = cname[min_commaddr]
+
+
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
@@ -948,11 +984,17 @@ def biaowudata(request):
                 'fault_count':fault_count,
                 'dn_count':dn_count,
                 'manufacturer_count':manufacturer_count,
+                'metertype_count':metertype_count,
                 'usertype_count':usertype_count,
                 'alarm_data':alarm_data,
                 'dn_data':dn_data,
                 'manufacturer_data':manufacturer_data,
+                'metertype_data':metertype_data,
                 'usertype_data':usertype_data,
+                'mon_max_flow':mon_max_flow,
+                'max_flow_station':max_flow_station,
+                'mon_min_flow':mon_min_flow,
+                'min_flow_station':min_flow_station,
             },
             "success":1}
 
@@ -999,6 +1041,274 @@ def meterlist(request):
     organs = user.belongto
 
     meters = user.meter_list_queryset(simpleQueryParam).values("pk","serialnumber","simid__simcardNumber","version","dn",
+        "metertype","belongto__name","mtype","manufacturer","protocol","R","q3","q1","check_cycle","state","station__username")
+    # meters = Meter.objects.all()
+    # flow_today
+    today = datetime.date.today()
+    yestoday = today - datetime.timedelta(days=1)
+
+    b_yestoday =today - datetime.timedelta(days=2)
+    today_str = today.strftime("%Y-%m-%d")
+    yestoday_str = yestoday.strftime("%Y-%m-%d")
+    b_yestoday_str = b_yestoday.strftime("%Y-%m-%d")
+
+    
+
+
+    month_str = today.strftime("%Y-%m")
+    month_flow = HdbFlowDataMonth.objects.filter(hdate=month_str)
+    yesmonth = datetime.datetime(year=today.year,month=today.month-1,day=today.day)
+    yesmonth_str = yesmonth.strftime("%Y-%m")
+    lastmonth = datetime.datetime(year=today.year,month=today.month-2,day=today.day)
+    lastmonth_str = lastmonth.strftime("%Y-%m")
+    
+
+    def m_info(m):
+        commaddr = m["simid__simcardNumber"]
+        today_flow = HdbFlowDataDay.objects.filter(commaddr=commaddr,hdate__range=[b_yestoday_str,today_str]).values_list('hdate','dosage')
+        lastmonth_flow = HdbFlowDataMonth.objects.filter(commaddr=commaddr,hdate__range=[lastmonth_str,month_str]).values_list('hdate','dosage')
+        # print("today_flow",today_flow)
+        flow_today = ''
+        flow_yestoday = ''
+        flow_b_yestoday = ''
+        if today_flow.exists():
+            flow_dict = dict(today_flow)
+            if today_str in flow_dict.keys():
+                flow_today = round(float(flow_dict[today_str]),2)
+            if yestoday_str in flow_dict.keys():
+                flow_yestoday = round(float(flow_dict[yestoday_str]),2)
+            if b_yestoday_str in flow_dict.keys():
+                flow_b_yestoday = round(float(flow_dict[b_yestoday_str]),2)
+
+        flow_tomon = ''
+        flow_yestomon = ''
+        flow_b_yestomon = ''
+        if lastmonth_flow.exists():
+            mflow_dict = dict(lastmonth_flow)
+            if month_str in mflow_dict.keys():
+                flow_tomon = round(float(mflow_dict[month_str]),2)
+            if yesmonth_str in mflow_dict.keys():
+                flow_yestomon = round(float(mflow_dict[yesmonth_str]),2)
+            if lastmonth_str in mflow_dict.keys():
+                flow_b_yestomon = round(float(mflow_dict[lastmonth_str]),2)
+            
+            
+        return {
+            "id":m["pk"],
+            # "simid":m.simid,
+            # "dn":m.dn,
+            # "belongto":m.belongto.name,#current_user.belongto.name,
+            # "metertype":m.metertype,
+            "serialnumber":m["serialnumber"],
+            "simid":m["simid__simcardNumber"] if m["simid__simcardNumber"] else "",
+            "version":m["version"],
+            "dn":m["dn"],
+            "metertype":m["metertype"],
+            "belongto":m["belongto__name"],
+            "mtype":m["mtype"],
+            "manufacturer":m["manufacturer"],
+            "protocol":m["protocol"],
+            "R":m["R"],
+            "q3":m["q3"],
+            "q1":m["q1"],
+            "check_cycle":m["check_cycle"],
+            "state":m["state"],
+            "station_name":m["station__username"],
+            "station":m["station__username"],
+            "flow_today":flow_today, 
+            "flow_yestoday":flow_yestoday, 
+            "flow_b_yestoday":flow_b_yestoday, 
+            "flow_tomon":flow_tomon, 
+            "flow_yestomon":flow_yestomon, 
+            "flow_b_yestomon":flow_b_yestomon, 
+        }
+    data = []
+
+    for m in meters[start:start+length]:
+        data.append(m_info(m))
+
+    recordsTotal = meters.count()
+    # recordsTotal = len(data)
+    
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+
+
+
+def biguserdata(request):
+    user_stations = request.user.station_list_queryset('')
+    commaddr_name = user_stations.values_list("meter__simid__simcardNumber","username")
+    cname = dict(commaddr_name)
+    # 故障排行 alarmtype=13
+    fault_count = 0
+    alams_sets = Alarm.objects.filter(alarmtype=13,commaddr__in=cname.keys()).exclude(commaddr="").values('commaddr').annotate(num_alrms=Count('id')).order_by('-num_alrms')[:5]
+    alarm_data = []
+    for ad in alams_sets:
+        name = cname[ad['commaddr']]
+        count = ad['num_alrms']
+        alarm_data.append({
+            'name':name,
+            'count':count
+            })
+        fault_count += count
+
+
+    # 口径统计
+    dn_count = 0
+    dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-meter__dn')
+    dn_data = []
+    for dd in dn_sets:
+        name = dd['meter__dn']
+        count = dd['num_dn']
+        dn_data.append({
+            'name':name,
+            'count':count
+            })
+        dn_count += count
+    # 厂家统计 manufacturer
+    manufacturer_count = 0
+    manufacturer_sets = user_stations.values('meter__manufacturer').annotate(num_manufacturer=Count('id')).order_by('-meter__manufacturer')
+    manufacturer_data = []
+    for md in manufacturer_sets:
+        name = md['meter__manufacturer']
+        count = md['num_manufacturer']
+        manufacturer_data.append({
+            'name':name if name != None else "其他",
+            'count':count
+            })
+    manufacturer_count = manufacturer_sets.count()
+
+    # 类型统计
+    metertype_count = 0
+    metertype_sets = user_stations.values('meter__mtype').annotate(num_type=Count('id')).order_by('-meter__mtype')
+    metertype_data = []
+    for ud in metertype_sets:
+        name = ud['meter__mtype']
+        if name == "0":
+            name = "电磁水表"
+        elif name == "1":
+            name = "超声水表"
+        elif name == "2":
+            name = "机械水表"
+        elif name == "3":
+            name = "插入电磁"
+        else:
+            name = "其他"
+        count = ud['num_type']
+        metertype_data.append({
+            'name':name,
+            'count':count
+            })
+        metertype_count += count
+    # 使用年限
+    # 用水性质
+    usertype_count = 0
+    usertype_sets = user_stations.values('usertype').annotate(num_type=Count('id')).order_by('-usertype')
+    usertype_data = []
+    for ud in usertype_sets:
+        name = ud['usertype']
+        count = ud['num_type']
+        usertype_data.append({
+            'name':name if name != None else "其他",
+            'count':count
+            })
+        usertype_count += count
+    # 排行榜
+    today = datetime.date.today()
+    month_str = today.strftime("%Y-%m")
+
+    # 最大流量
+    max_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Max('dosage'))
+    mon_max_flow = max_flows["dosage__max"]
+    max_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_max_flow).values("commaddr")[0]["commaddr"]
+    max_flow_station = cname[max_commaddr]
+    # 最小流量
+    min_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Min('dosage'))
+    mon_min_flow = min_flows["dosage__min"]
+    min_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_min_flow).values("commaddr")[0]["commaddr"]
+    min_flow_station = cname[min_commaddr]
+
+
+
+    ret = {"exceptionDetailMsg":"null",
+            "msg":"null",
+            "obj":{
+                'fault_count':fault_count,
+                'dn_count':dn_count,
+                'manufacturer_count':manufacturer_count,
+                'metertype_count':metertype_count,
+                'usertype_count':usertype_count,
+                'alarm_data':alarm_data,
+                'dn_data':dn_data,
+                'manufacturer_data':manufacturer_data,
+                'metertype_data':metertype_data,
+                'usertype_data':usertype_data,
+                'mon_max_flow':mon_max_flow,
+                'max_flow_station':max_flow_station,
+                'mon_min_flow':mon_min_flow,
+                'min_flow_station':min_flow_station,
+            },
+            "success":1}
+
+    
+    
+    return HttpResponse(json.dumps(ret))
+
+# 表具管理/表具列表 dataTable
+def bigusermeterlist(request):
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    print("get userlist:",draw,length,start,search_value)
+
+    user = request.user
+    organs = user.belongto
+
+    user_stations = user.station_list_queryset('')
+    commaddr_name = user_stations.filter(biguser=1).values_list("meter__simid__simcardNumber","username")
+    cname = dict(commaddr_name)
+
+    meters = user.meter_list_queryset(simpleQueryParam).filter(simid__simcardNumber__in=cname.keys()).values("pk","serialnumber","simid__simcardNumber","version","dn",
         "metertype","belongto__name","mtype","manufacturer","protocol","R","q3","q1","check_cycle","state","station__username")
     # meters = Meter.objects.all()
     # flow_today

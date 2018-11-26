@@ -433,7 +433,8 @@ class Meter(models.Model):
     dn          = models.CharField(db_column='Dn', max_length=30, blank=True, null=True)  # Field name made lowercase.
     metertype   = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
     belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE)
-    mtype       = models.CharField(db_column='Type', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    # 0 - 电磁水表 1-超声水表 2-机械水表 3-插入电磁
+    mtype       = models.CharField(db_column='Type', max_length=30, blank=True, null=True)  # Field name made lowercase. 
     manufacturer= models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
     protocol    = models.CharField(db_column='Protocol', max_length=64, blank=True, null=True)  # Field name made lowercase.
     R           = models.CharField(db_column='R', max_length=64, blank=True, null=True)  # Field name made lowercase.

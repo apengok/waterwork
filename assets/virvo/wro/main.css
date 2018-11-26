@@ -898,11 +898,11 @@ h3.timeline-title{color:#C8CCD7;font-size:20px;font-weight:400;margin:0 0 5px;te
 .heroRanking li{margin:0 0 8px 0;height:28px;white-space:nowrap;text-overflow:ellipsis;-o-text-overflow:ellipsis;overflow:hidden}
 /* 大数据报表排行榜 */
 .bigDataHero{height:28px;padding:0 0 0 32px;line-height:28px;font-style:normal}
-#mostDiligent{color:#f90;font-size:16px}
-#mostLazy{color:#999;font-size:16px}
-#mostFar{color:#169bd5;font-size:16px}
-#mintFar{color:#c80002;font-size:16px}
-#safe{color:#78af3a;font-size:16px}
+#thisMonAdd{color:#f90;font-size:16px}
+#thisMonAlter{color:#999;font-size:16px}
+#thisMonOverAlarm{color:#169bd5;font-size:16px}
+#thisMonMax,#maxFlow{color:#c80002;font-size:16px}
+#thisMonMin,#minFlow{color:#78af3a;font-size:16px}
 #danger{color:#960ba3;font-size:16px}
 .heroRanking li:nth-child(1){background: #fafafa url(/static/virvo/resources/img/mostDiligent.svg) no-repeat;background-size: 28px 28px;}
 .heroRanking li:nth-child(2){background: #fafafa url(/static/virvo/resources/img/mostLazy.svg) no-repeat;background-size: 28px 28px;}
