@@ -947,7 +947,7 @@ def biaowudata(request):
             'name':name,
             'count':count
             })
-        metertype_count += count
+        metertype_count = metertype_sets.count()
     # 使用年限
     # 用水性质
     usertype_count = 0
@@ -1146,119 +1146,20 @@ def meterlist(request):
     return HttpResponse(json.dumps(result))
 
 
-
+# 大用户报表初始化页面数据
 def biguserdata(request):
     user_stations = request.user.station_list_queryset('')
     commaddr_name = user_stations.values_list("meter__simid__simcardNumber","username")
     cname = dict(commaddr_name)
-    # 故障排行 alarmtype=13
-    fault_count = 0
-    alams_sets = Alarm.objects.filter(alarmtype=13,commaddr__in=cname.keys()).exclude(commaddr="").values('commaddr').annotate(num_alrms=Count('id')).order_by('-num_alrms')[:5]
-    alarm_data = []
-    for ad in alams_sets:
-        name = cname[ad['commaddr']]
-        count = ad['num_alrms']
-        alarm_data.append({
-            'name':name,
-            'count':count
-            })
-        fault_count += count
-
-
-    # 口径统计
-    dn_count = 0
-    dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-meter__dn')
-    dn_data = []
-    for dd in dn_sets:
-        name = dd['meter__dn']
-        count = dd['num_dn']
-        dn_data.append({
-            'name':name,
-            'count':count
-            })
-        dn_count += count
-    # 厂家统计 manufacturer
-    manufacturer_count = 0
-    manufacturer_sets = user_stations.values('meter__manufacturer').annotate(num_manufacturer=Count('id')).order_by('-meter__manufacturer')
-    manufacturer_data = []
-    for md in manufacturer_sets:
-        name = md['meter__manufacturer']
-        count = md['num_manufacturer']
-        manufacturer_data.append({
-            'name':name if name != None else "其他",
-            'count':count
-            })
-    manufacturer_count = manufacturer_sets.count()
-
-    # 类型统计
-    metertype_count = 0
-    metertype_sets = user_stations.values('meter__mtype').annotate(num_type=Count('id')).order_by('-meter__mtype')
-    metertype_data = []
-    for ud in metertype_sets:
-        name = ud['meter__mtype']
-        if name == "0":
-            name = "电磁水表"
-        elif name == "1":
-            name = "超声水表"
-        elif name == "2":
-            name = "机械水表"
-        elif name == "3":
-            name = "插入电磁"
-        else:
-            name = "其他"
-        count = ud['num_type']
-        metertype_data.append({
-            'name':name,
-            'count':count
-            })
-        metertype_count += count
-    # 使用年限
-    # 用水性质
-    usertype_count = 0
-    usertype_sets = user_stations.values('usertype').annotate(num_type=Count('id')).order_by('-usertype')
-    usertype_data = []
-    for ud in usertype_sets:
-        name = ud['usertype']
-        count = ud['num_type']
-        usertype_data.append({
-            'name':name if name != None else "其他",
-            'count':count
-            })
-        usertype_count += count
-    # 排行榜
-    today = datetime.date.today()
-    month_str = today.strftime("%Y-%m")
-
-    # 最大流量
-    max_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Max('dosage'))
-    mon_max_flow = max_flows["dosage__max"]
-    max_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_max_flow).values("commaddr")[0]["commaddr"]
-    max_flow_station = cname[max_commaddr]
-    # 最小流量
-    min_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Min('dosage'))
-    mon_min_flow = min_flows["dosage__min"]
-    min_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_min_flow).values("commaddr")[0]["commaddr"]
-    min_flow_station = cname[min_commaddr]
-
+    # 大用户数量
+    biguserCount = user_stations.filter(biguser=1).count()
 
 
     ret = {"exceptionDetailMsg":"null",
             "msg":"null",
             "obj":{
-                'fault_count':fault_count,
-                'dn_count':dn_count,
-                'manufacturer_count':manufacturer_count,
-                'metertype_count':metertype_count,
-                'usertype_count':usertype_count,
-                'alarm_data':alarm_data,
-                'dn_data':dn_data,
-                'manufacturer_data':manufacturer_data,
-                'metertype_data':metertype_data,
-                'usertype_data':usertype_data,
-                'mon_max_flow':mon_max_flow,
-                'max_flow_station':max_flow_station,
-                'mon_min_flow':mon_min_flow,
-                'min_flow_station':min_flow_station,
+                'biguserCount':biguserCount,
+                
             },
             "success":1}
 

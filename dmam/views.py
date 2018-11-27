@@ -241,12 +241,12 @@ def getmeterParam(request):
 
     return JsonResponse(operarions_list)
 
+# dma管理-站点管理页面站点列表
 def stationlist(request):
-    # print("userlist",request.POST)
     draw = 1
     length = 0
     start=0
-    
+    t1 = time.time()
     if request.method == "GET":
         draw = int(request.GET.get("draw", 1))
         length = int(request.GET.get("length", 10))
@@ -266,7 +266,7 @@ def stationlist(request):
         search_value = request.POST.get("search[value]", None)
         # order_column = request.POST.get("order[0][column]", None)[0]
         # order = request.POST.get("order[0][dir]", None)[0]
-        groupName = request.POST.get("groupName")
+        groupName = request.POST.get("groupName")   #selected treeid
         districtId = request.POST.get("districtId")
         simpleQueryParam = request.POST.get("simpleQueryParam")
         # print(request.POST.get("draw"))
@@ -279,35 +279,9 @@ def stationlist(request):
     #当前登录用户
     current_user = request.user
 
-    def u_info(u):  #u means station
-
-        simcardNumber = ""
-        if u.meter:
-            s = u.meter.simid
-            if s:
-                simcardNumber = s.simcardNumber
-        
-        return {
-            "id":u.pk,
-            "username":u.username,
-            "usertype":u.usertype,
-            "simid":simcardNumber,
-            "dn":u.meter.dn if u.meter else '',
-            "belongto":u.belongto.name,# if u.meter else '',#current_user.belongto.name,
-            "metertype":u.meter.metertype if u.meter else '',
-            "serialnumber":u.meter.serialnumber if u.meter else '',
-            "big_user":1,
-            "focus":1,
-            "createdate":u.madedate,
-            "related":True if u.dmaid.all().count() else False
-        }
+    
     data = []
     
-    
-    # userl = current_user.user_list()
-
-    # bigmeters = Bigmeter.objects.all()
-    # stations = Station.objects.all()
     stations = current_user.station_list_queryset(simpleQueryParam)
 
     if districtId != '': #dma
@@ -318,32 +292,32 @@ def stationlist(request):
         filter_group = Organizations.objects.get(cid=groupName)
         stations = [s for s in stations if s.belongto == filter_group]
     
-    
-    
-    
-    # def search_user(u):
-    #     if simpleQueryParam in u.user_name or simpleQueryParam in u.real_name or simpleQueryParam in u.email or simpleQueryParam in u.phone_number :
-    #         return True
+    def u_info(u):  #u means station
 
+        return {
+            "id":u["id"],
+            "username":u["username"],
+            "usertype":u["usertype"],
+            "simid":u["meter__simid__simcardNumber"],
+            "dn":u["meter__dn"],
+            "belongto":u["belongto__name"],# if u.meter else '',#current_user.belongto.name,
+            "metertype":u["meter__metertype"],
+            "serialnumber":u["meter__serialnumber"],
+            "big_user":u["biguser"],
+            "focus":u["focus"],
+            "createdate":u["madedate"],
+            "related":False if u["dmaid__dma_no"] is None else True
+        }
 
-    # if simpleQueryParam != "":
-    #     print('simpleQueryParam:',simpleQueryParam)
-    #     # userl = userl.filter(real_name__icontains=simpleQueryParam)
-    #     userl = [u for u in userl if search_user(u) is True]
-    
-    # for u in userl[start:start+length]:
-    #     data.append(u_info(u))
-
-    
-
-    for m in stations[start:start+length]:
+    for m in stations.values("id","username","usertype","meter__dn","biguser","focus",
+                    "meter__metertype","meter__serialnumber","meter__simid__simcardNumber","madedate","belongto__name","dmaid__dma_no"):
         data.append(u_info(m))
     
     recordsTotal = len(stations)
     # recordsTotal = len(data)
     
     result = dict()
-    result["records"] = data
+    result["records"] = data[start:start+length]
     result["draw"] = draw
     result["success"] = "true"
     result["pageSize"] = pageSize
@@ -354,12 +328,12 @@ def stationlist(request):
     result["end"] = 0
 
     
-    
+    print("dma station time last ",time.time()-t1)
     return HttpResponse(json.dumps(result))
 
 
 def dmastationlist(request):
-    print("userlist",request.POST,request.kwargs)
+    print("dmastationlist where are from?",request.POST,request.kwargs)
     draw = 1
     length = 0
     start=0
@@ -452,7 +426,7 @@ def dmastationlist(request):
 #     form_class = DMABaseinfoForm
 # DMA管理基础页面
 def dmabaseinfo(request):
-
+    t1 = time.time()
     if request.method == 'GET':
         
         data = []
@@ -489,37 +463,22 @@ def dmabaseinfo(request):
 
         dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
 
-        def u_info(u):
-            commaddr = u.stationid
         
-            return {
-                "id":u.pk,
-                "username":u.username,
-                "usertype":u.usertype,
-                "simid":u.meter.simid.simcardNumber if u.meter and u.meter.simid else '',
-                "dn":u.meter.dn if u.meter else '',
-                "belongto":u.meter.belongto.name if u.meter else '',#current_user.belongto.name,
-                "metertype":u.meter.metertype if u.meter else '',
-                "serialnumber":u.meter.serialnumber if u.meter else '',
-                "big_user":1,
-                "focus":1,
-                "createdate":u.madedate
-            }
-
         def assigned(a):
-            commaddr = a.station_id     # 大表 通讯地址commaddr 或者 小区关联的集中器commaddr，由station_type 标识
-            station_type = a.station_type # 大表还是小区 1-大表 2-小区
+            commaddr = a["station_id"]     # 大表 通讯地址commaddr 或者 小区关联的集中器commaddr，由station_type 标识
+            station_type = a["station_type"] # 大表还是小区 1-大表 2-小区
             if station_type == '1':
-                s = Station.objects.get(meter__simid__simcardNumber=commaddr)
-                edit_id = s.pk
-                username = s.username
-                usertype = s.usertype
+                s = Station.objects.filter(meter__simid__simcardNumber=commaddr).values("id","username","usertype","meter__dn",
+                    "meter__metertype","meter__serialnumber","madedate","meter__belongto__name")[0]
+                edit_id = s["id"]
+                username = s["username"]
+                usertype = s["usertype"]
                 simid =commaddr
-                dn = s.meter.dn
-                belongto_name = s.meter.belongto.name
-                metertype = s.meter.metertype
-                serialnumber = s.meter.serialnumber
-                createdate = s.madedate
+                dn = s["meter__dn"]
+                belongto_name = s["meter__belongto__name"]
+                metertype = s["meter__metertype"]
+                serialnumber = s["meter__serialnumber"]
+                createdate = s["madedate"]
             elif station_type == '2':
                 d = Community.objects.get(commaddr=commaddr)
         
@@ -542,9 +501,8 @@ def dmabaseinfo(request):
         # for s in stations:
         #     data.append(u_info(s))
         # 从DmaStation获取dma分配的站点
-        stations = dmabase.station_assigned()
+        stations = dmabase.station_assigned().values()
         for s in stations:
-            print("498:",s)
             data.append(assigned(s))
 
         operarions_list = {
@@ -572,7 +530,7 @@ def dmabaseinfo(request):
             "success":True
         }
        
-
+        print("dmabase time last ",time.time()-t1)
         return JsonResponse(operarions_list)
 
     if request.method == 'POST':

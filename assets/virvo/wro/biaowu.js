@@ -60,7 +60,7 @@
                     $("#fault_count").html(fault_count + " 次")
                     $("#dn_count").html(dn_count + " 台")
                     $("#manufacturer_count").html(manufacturer_count + " 家")
-                    $("#usertype_count").html(usertype_count + " 家")
+                    $("#metertype_count").html(metertype_count + " 家")
 
                     $("#maxFlow").html(mon_max_flow);
                     $("#thisMonMax").html(max_flow_station);

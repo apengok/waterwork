@@ -41,47 +41,12 @@
                 if (data.success) { 
                     console.log(data)
                     var obj = data.obj;
-                    var fault_count = obj.fault_count;
-                    var dn_count = obj.dn_count;
-                    var manufacturer_count = obj.manufacturer_count;
-                    var metertype_count = obj.metertype_count;
-                    var usertype_count = obj.usertype_count;
-                    var alarm_data = obj.alarm_data;
-                    var dn_data = obj.dn_data;
-                    var manufacturer_data = obj.manufacturer_data;
-                    var usertype_data = obj.usertype_data;
-                    var metertype_data = obj.metertype_data;
+                    var biguserCount = obj.biguserCount;
+                    
 
-                    var mon_max_flow = obj.mon_max_flow;
-                    var max_flow_station = obj.max_flow_station;
-                    var mon_min_flow = obj.mon_min_flow;
-                    var min_flow_station = obj.min_flow_station;
-
-                    $("#fault_count").html(fault_count + " 次")
-                    $("#dn_count").html(dn_count + " 台")
-                    $("#manufacturer_count").html(manufacturer_count + " 家")
-                    $("#usertype_count").html(usertype_count + " 家")
-
-                    $("#maxFlow").html(mon_max_flow);
-                    $("#thisMonMax").html(max_flow_station);
-                    $("#minFlow").html(mon_min_flow);
-                    $("#thisMonMin").html(min_flow_station);
-
-                    if(alarm_data != null && alarm_data.length > 0){
-                        biaowu.faultRank(alarm_data);
-                    }
-                    if(dn_data != null && dn_data.length > 0){
-                        biaowu.dnStatstic(dn_data);
-                    }
-                    if(manufacturer_data != null && manufacturer_data.length > 0){
-                        biaowu.manuStastic(manufacturer_data);
-                    }
-                    if(metertype_data != null && metertype_data.length > 0){
-                        biaowu.typeStastic(metertype_data);
-                    }
-                    if(usertype_data != null && usertype_data.length > 0){
-                        biaowu.waterattrPie(usertype_data);
-                    }
+                    $("#bigUserCount").html(biguserCount + " 个")
+                    $("#bigUserAddCount").html(biguserCount + " 个")
+                    
                 }else{
                     layer.msg(data.msg,{move:false});
                 }
@@ -90,7 +55,7 @@
 
         
         
-        // 使用年限饼图
+        // 本年度大用户用水曲线图
         biguserFlowChart:function(){
             
             option = {
@@ -398,7 +363,7 @@
     }
     $(function(){
         var validVehicleCount = 0; // 有数据的车辆数量
-        // biaowu.inquireClick(1);
+        biaowu.inquireClick(1);
         biaowu.init_table();
         biaowu.ceshi();
         // $("#checkGroup").bind("click",biaowu.checkGroup);

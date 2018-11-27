@@ -7,15 +7,19 @@
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'virvo/resources/js/bootstrap/css/bootstrap-table.min.css' %}" >
 <style type="text/css">
-.biguser-group{background-color:#27a9e3;margin:0 2% 0 0;padding:0}
+.biguser-group{background-color:#27a9e3;margin:0 2% 0 0;padding:0;color:white}
 .biguser-group .groupNameShow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
-.biguser-group #bigUserCount{font-size:28px;padding: 100px 0 0 0}
-.biguser-group .area{height:105px;padding:0 15px 0 15px!important}
+.biguser-group .bigUserCount{font-size:28px;}
+.biguser-group .area{height:105px;padding:40px 15px 0 15px!important}
+.biguser-group .area .bigUserCount{margin-top: 500px;margin-left:  175px;}
+
 .biguser-group .biguser-group-more{height:35px;line-height:35px;background-color:#2295c9!important;font-size:28px,font-weight:700}
 .biguser-group .biguser-group-more:hover{background-color:#1f8aba!important;}
 
-.biguser-add{background-color:#28b779;margin:2% 0 0 0;padding:0}
-.biguser-add .area{height:105px;padding:0 15px 0 15px!important}
+.biguser-add{background-color:#28b779;margin:2% 0 0 0;padding:0;color:white}
+.biguser-add .bigUserAddCount{font-size:28px;padding: 100px 0 0 0,margin: 100px 0 0 0}
+.biguser-add .area{height:105px;padding:40px 15px 0 15px!important}
+.biguser-add .area .bigUserAddCount{margin-top: 50px;margin-left:  175px;font-size:28px,font-weight:700;color:white}
 .biguser-add .biguser-add-more{height:35px;line-height:35px;background-color:#17a769!important;font-size:28px,font-weight:700}
 
 </style>
@@ -38,10 +42,11 @@
                 <div class="col-md-4" >
                     <div class="col-md-12 biguser-group">
                         <div class="col-md-12 area" style="position:relative;">
-                            <div class="col-md-12" >
+                            <span class="bigUserCount" id="bigUserCount"></span>
+                            <!-- <div class="col-md-12" >
                                 <span id="bigUserCount">234 个</span>
                                   
-                            </div>
+                            </div> -->
                         
                         </div>
                         
@@ -54,10 +59,8 @@
 
                     <div class="col-md-12 biguser-add">
                         <div class="col-md-12 area" style="position:relative;">
-                            <div class="col-md-12" >
-                                <span id="bigUserCount">3 个</span>
-                                  
-                            </div>
+                            <span class="bigUserAddCount" id="bigUserAddCount"></span>
+                            
                         
                         </div>
                         
