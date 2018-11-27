@@ -42,6 +42,7 @@ from devm.forms import VCommunityAddForm,VWatermeterAddForm,VCommunityEditForm,V
 
 from waterwork.mixins import AjaxableResponseMixin
 import logging
+import itertools
 
 logger_info = logging.getLogger('info_logger')
 logger_error = logging.getLogger('error_logger')
@@ -49,7 +50,189 @@ logger_error = logging.getLogger('error_logger')
 
 
 
+"""
+When you call values() on a queryset where the Model has a ManyToManyField
+and there are multiple related items, it returns a separate dictionary for each
+related item. This function merges the dictionaries so that there is only
+one dictionary per id at the end, with lists of related items for each.
+"""
+def merge_values(values):
+    grouped_results = itertools.groupby(values, key=lambda value: value['id'])
+    
+    merged_values = []
+    for k, g in grouped_results:
+        
+        groups = list(g)
+        merged_value = {}
+        for group in groups:
+            for key, val in group.items():
+                if not merged_value.get(key):
+                    merged_value[key] = val
+                elif val != merged_value[key]:
+                    if isinstance(merged_value[key], list):
+                        if val not in merged_value[key]:
+                            merged_value[key].append(val)
+                    else:
+                        old_val = merged_value[key]
+                        merged_value[key] = [old_val, val]
+        merged_values.append(merged_value)
+    return merged_values
+
+
 def dmatree(request):   
+    organtree = []
+    
+    stationflag = request.POST.get("isStation") or ''
+    dmaflag = request.POST.get("isDma") or ''
+    communityflag = request.POST.get("isCommunity") or ''
+    user = request.user
+    
+    # if user.is_anonymous:
+    if not user.is_authenticated:
+        organs = Organizations.objects.first()
+    else:
+        organs = user.belongto #Organizations.objects.all()
+    print("dmatree",organs)
+    t1 = time.time()
+    o_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","dma__pk","dma__dma_name","dma__dma_no",
+        "station__pk","station__username","station__meter__simid__simcardNumber",
+        "vcommunity__pk","vcommunity__name")
+    t2=time.time()
+    print("merge time last *&&&&&&&&&S^D",t2-t1)
+    mergeds = merge_values(o_lists)
+    print("merge time last",time.time()-t2)
+    for o in mergeds:
+        # o1 = o.objects.all().values("name","cid","pId","uuid","dma__dma_no")
+        if isinstance(o["dma__pk"],list):
+            p_dma_no = o["dma__dma_no"][0]
+        elif isinstance(o["dma__pk"],int):
+            p_dma_no = o["dma__pk"]
+        else:
+            p_dma_no = ''
+        organtree.append({
+            "name":o["name"],
+            "id":o["cid"],
+            "pId":o["pId"],
+            "districtid":'',
+            "type":"group",
+            "dma_no":p_dma_no,  #如果存在dma分区，分配第一个dma分区的dma_no，点击数条目的时候使用
+            "icon":"/static/virvo/resources/img/wenjianjia.png",
+            "uuid":o["uuid"]
+        })
+
+        #dma
+        if dmaflag == '1':
+            if isinstance(o["dma__pk"],list):
+                for i in range(len(o["dma__pk"])):
+
+                    organtree.append({
+                    "name":o["dma__dma_name"][i],
+                    "id":o["dma__pk"][i],
+                    "districtid":o["dma__pk"],
+                    "pId":o["cid"],
+                    "type":"dma",
+                    "dma_no":o["dma__dma_no"][i],
+                    "icon":"/static/virvo/resources/img/dma.png",
+                    "uuid":''
+                })
+            elif isinstance(o["dma__pk"],int):
+                organtree.append({
+                    "name":o["dma__dma_name"],
+                    "id":o["dma__pk"],
+                    "districtid":o["dma__pk"],
+                    "pId":o["cid"],
+                    "type":"dma",
+                    "dma_no":o["dma__dma_no"],
+                    "icon":"/static/virvo/resources/img/dma.png",
+                    "uuid":''
+                })
+            
+            
+
+        #station
+        if stationflag == '1':
+            print(o["station__pk"],o['station__username'],o['station__meter__simid__simcardNumber'])
+            if isinstance(o["station__username"],list):
+                print(len(o["station__pk"]),len(o['station__username']),len(o['station__meter__simid__simcardNumber']))
+                for i in range(len(o["station__username"])):
+                    
+                    organtree.append({
+                        "name":o['station__username'][i],
+                        "id":o['station__pk'][i],
+                        "districtid":'',
+                        "pId":o["cid"],
+                        "type":"station",
+                        "dma_no":'',
+
+                        "commaddr":o["station__meter__simid__simcardNumber"][i],
+                        "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                        "icon":"/static/virvo/resources/img/station.png",
+                        "uuid":''
+                    })
+
+        #community
+        if communityflag == '1':
+            if o["vcommunity__pk"] != None and  len(o["vcommunity__pk"]) > 0:
+                for i in range(len(o["vcommunity__pk"])):
+                    community_name = o['vcommunity__name'][i]
+                    # 小区列表
+                    organtree.append({
+                        "name":o['vcommunity__name'][i],
+                        "id":o['vcommunity__pk'][i],
+                        "districtid":'',
+                        "pId":o["cid"],
+                        "type":"community",
+                        "dma_no":'',
+                        "open":False,
+                        "commaddr":'commaddr',
+                        "dma_station_type":"2", # 在dma站点分配中标识该是站点还是小区
+                        "icon":"/static/virvo/resources/img/home.png",
+                        "uuid":''
+                    })
+
+                    # 小区下级栋列表
+                    wt = VWatermeter.objects.filter(communityid__name=community_name).values('buildingname').distinct()
+                    # if s['name'] == '新城花苑':
+                    for w in wt:
+                        organtree.append({
+                            "name":w["buildingname"],
+                            "id":'',
+                            "districtid":'',
+                            "pId":o['vcommunity__pk'][i],
+                            "type":"building",
+                            "dma_no":'',
+                            "open":False,
+                            "commaddr":'commaddr',
+                            # "dma_station_type":"", # 在dma站点分配中标识该是站点还是小区
+                            "icon":"/static/virvo/resources/img/buildingno.png",
+                            "uuid":''
+                        })
+            
+    # district
+    # districts = District.objects.all()
+    # for d in districts:
+    #     organtree.append({
+    #         "name":d.name,
+    #         "id":d.id,
+    #         "districtid":d.id,
+    #         "pId":organs.cid,
+    #         "type":"district",
+    #         "icon":"/static/virvo/resources/img/u8836.png",
+    #         "uuid":''
+    #     })
+        
+    
+    result = dict()
+    result["data"] = organtree
+    
+    # print(json.dumps(result))
+    
+    return HttpResponse(json.dumps(organtree))
+
+
+
+
+def dmatree_preserver(request):   
     organtree = []
     
     stationflag = request.POST.get("isStation") or ''
@@ -305,10 +488,11 @@ def stationlist(request):
     if districtId != '': #dma
         dma = DMABaseinfo.objects.get(pk=int(districtId))
         dma_stations = dma.station_set.all()
-        stations = [s for s in dma_stations if s in stations]
+        # stations = [s for s in dma_stations if s in stations]
     elif groupName != '':
         filter_group = Organizations.objects.get(cid=groupName)
-        stations = [s for s in stations if s.belongto == filter_group]
+        filter_group_name = filter_group.name
+        # stations = [s for s in stations if s.belongto == filter_group]
     
     def u_info(u):  #u means station
 
@@ -329,6 +513,9 @@ def stationlist(request):
 
     for m in stations.values("id","username","usertype","meter__dn","biguser","focus",
                     "meter__metertype","meter__serialnumber","meter__simid__simcardNumber","madedate","belongto__name","dmaid__dma_no"):
+        if groupName != "":
+            if filter_group_name != m["belongto__name"]:
+                continue
         data.append(u_info(m))
     
     recordsTotal = len(stations)
@@ -479,7 +666,7 @@ def dmabaseinfo(request):
             return JsonResponse(operarions_list)
             
 
-        dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
+        # dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
 
         
         def assigned(a):
@@ -519,29 +706,32 @@ def dmabaseinfo(request):
         # for s in stations:
         #     data.append(u_info(s))
         # 从DmaStation获取dma分配的站点
+        dmabase = DMABaseinfo.objects.get(dma_no=dma_no)
+        belongto_name = dmabase.belongto.name
         stations = dmabase.station_assigned().values()
         for s in stations:
             data.append(assigned(s))
 
+        dmabase = DMABaseinfo.objects.filter(dma_no=dma_no).values()[0]
         operarions_list = {
             "exceptionDetailMsg":"null",
             "msg":None,
             "obj":{
                     "baseinfo":{
-                        "dma_no":dmabase.dma_no,
-                        "pepoles_num":dmabase.pepoles_num,
-                        "acreage":dmabase.acreage,
-                        "user_num":dmabase.user_num,
-                        "pipe_texture":dmabase.pipe_texture,
-                        "pipe_length":dmabase.pipe_length,
-                        "pipe_links":dmabase.pipe_links,
-                        "pipe_years":dmabase.pipe_years,
-                        "pipe_private":dmabase.pipe_private,
-                        "ifc":dmabase.ifc,
-                        "aznp":dmabase.aznp,
-                        "night_use":dmabase.night_use,
-                        "cxc_value":dmabase.cxc_value,
-                        "belongto":dmabase.belongto.name
+                        "dma_no":dmabase["dma_no"],
+                        "pepoles_num":dmabase["pepoles_num"],
+                        "acreage":dmabase["acreage"],
+                        "user_num":dmabase["user_num"],
+                        "pipe_texture":dmabase["pipe_texture"],
+                        "pipe_length":dmabase["pipe_length"],
+                        "pipe_links":dmabase["pipe_links"],
+                        "pipe_years":dmabase["pipe_years"],
+                        "pipe_private":dmabase["pipe_private"],
+                        "ifc":dmabase["ifc"],
+                        "aznp":dmabase["aznp"],
+                        "night_use":dmabase["night_use"],
+                        "cxc_value":dmabase["cxc_value"],
+                        "belongto":belongto_name
                         },
                     "dmastationlist":data
             },

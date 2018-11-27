@@ -9,6 +9,7 @@ import time
 import datetime
 import logging
 import string
+import itertools
 
 from dmam.models import VConcentrator,VWatermeter,VCommunity,Station,Meter,SimCard,DMABaseinfo,DmaStation
 from entm.models import Organizations
@@ -20,6 +21,35 @@ logger_info = logging.getLogger('info_logger')
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+"""
+When you call values() on a queryset where the Model has a ManyToManyField
+and there are multiple related items, it returns a separate dictionary for each
+related item. This function merges the dictionaries so that there is only
+one dictionary per id at the end, with lists of related items for each.
+"""
+def merge_values(values):
+    grouped_results = itertools.groupby(values, key=lambda value: value['id'])
+    print(grouped_results)
+    merged_values = []
+    for k, g in grouped_results:
+        print( k)
+        groups = list(g)
+        merged_value = {}
+        for group in groups:
+            for key, val in group.items():
+                if not merged_value.get(key):
+                    merged_value[key] = val
+                elif val != merged_value[key]:
+                    if isinstance(merged_value[key], list):
+                        if val not in merged_value[key]:
+                            merged_value[key].append(val)
+                    else:
+                        old_val = merged_value[key]
+                        merged_value[key] = [old_val, val]
+        merged_values.append(merged_value)
+    return merged_values
 
 class Command(BaseCommand):
     help = 'import data from A to B'
@@ -71,12 +101,34 @@ class Command(BaseCommand):
         )
 
 
+        parser.add_argument(
+            '--mergetest',
+            action='store_true',
+            dest='mergetest',
+            default=False,
+            help='import mergetest to new db'
+        )
+
+
 
     def handle(self, *args, **options):
         # sTime = options['sTime']
         t1=time.time()
         count = 0
         aft = 0
+
+        if options['mergetest']:
+            organ_info = merge_values(Organizations.objects.all().values("id","name","cid","pId","uuid","station","station__username"))
+            results = [
+                        {'universities': 1, 'name': u'Course Name', 'categories': 1, 'id': 2}, 
+                        {'universities': 2, 'name': u'Course Name', 'categories': 1, 'id': 2}, 
+                        {'universities': 1, 'name': u'Course Name', 'categories': 5, 'id': 2}, 
+                        {'universities': 2, 'name': u'Course Name', 'categories': 5, 'id': 2}, 
+                        {'universities': 1, 'name': u'Course Name', 'categories': 6, 'id': 2}, 
+                        {'universities': 2, 'name': u'Course Name', 'categories': 6, 'id': 2}
+                    ]
+            # organ_info=merge_values(results)
+            print(organ_info)
 
         if options['gisupdate']:
             fds = FenceDistrict.objects.exclude(cid__startswith='zw_m').all()
