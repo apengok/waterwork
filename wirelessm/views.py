@@ -397,8 +397,11 @@ def watermeterlist(request):
         # order = request.POST.get("order[0][dir]", None)[0]
         groupName = request.POST.get("groupName")
         districtId = request.POST.get("districtId")
+        selectCommunity = request.POST.get("selectCommunity")
+        selectBuilding = request.POST.get("selectBuilding")
+        selectTreeType = request.POST.get("selectTreeType")
         simpleQueryParam = request.POST.get("simpleQueryParam")
-        # print(request.POST.get("draw"))
+        print(request.POST.get("selectBuilding"))
         print("groupName",groupName)
         print("districtId:",districtId)
         # print("post simpleQueryParam",simpleQueryParam)
@@ -411,6 +414,9 @@ def watermeterlist(request):
     watermeters = user.watermeter_list_queryset(simpleQueryParam).values("id","name","serialnumber","numbersth","buildingname","roomname","belongto__name","installationsite","username",
         "usertel","dn","manufacturer","madedate","ValveMeter","communityid__name","concentrator__name")
     # meters = Watermeter.objects.all() #.filter(watermeterid=105)  #文欣苑105
+
+    if selectBuilding != "":
+        watermeters = [w for w in watermeters if selectBuilding == w["buildingname"]]
 
     def m_info(m):
         
@@ -438,8 +444,8 @@ def watermeterlist(request):
     for m in watermeters:
         data.append(m_info(m))
 
-    recordsTotal = watermeters.count()
-    # recordsTotal = len(data)
+    # recordsTotal = watermeters.count()
+    recordsTotal = len(watermeters)
     
     result = dict()
     result["records"] = data[start:start+length]

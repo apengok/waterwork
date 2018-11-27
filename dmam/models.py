@@ -1020,7 +1020,7 @@ class VWatermeter(models.Model):
     serialnumber = models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
     manufacturer = models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
     madedate = models.CharField(db_column='MadeDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    ValveMeter  = models.CharField(db_column='ValveMeter', max_length=30, blank=True, null=True)# 阀控表
+    ValveMeter  = models.CharField(db_column='ValveMeter', max_length=30, blank=True, null=True)# 阀控表 zncb---MeterControl
     installationsite = models.CharField(db_column='InstallationSite', max_length=30, blank=True, null=True)  # Field name made lowercase.
     
     objects = VWatermeterManager()

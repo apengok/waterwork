@@ -62,6 +62,14 @@ class Command(BaseCommand):
             help='import gisupdate to new db'
         )
 
+        parser.add_argument(
+            '--vwatermeter',
+            action='store_true',
+            dest='vwatermeter',
+            default=False,
+            help='import vwatermeter to new db'
+        )
+
 
 
     def handle(self, *args, **options):
@@ -170,6 +178,34 @@ class Command(BaseCommand):
                     print(d.dma_name,station_id,meter_type,station_type)
                     DmaStation.objects.create(dmaid=d,station_id=station_id,meter_type=meter_type,station_type=station_type)
                     
+
+        if options['vwatermeter']:
+            
+            zncb_watermeters = Watermeter.objects.values()
+            for w in zncb_watermeters:
+                waterid = w["id"]
+                v = VWatermeter.objects.filter(waterid=waterid)
+                if not v.exists():
+                    print(waterid," not in virvo vwatermeter")
+                    continue
+
+                v = VWatermeter.objects.get(waterid=waterid)
+                v.wateraddr = w["wateraddr"]
+                v.numbersth = w["numbersth"]
+                v.buildingname = w["buildingname"]
+                v.roomname = w["roomname"]
+                v.nodeaddr = w["nodeaddr"]
+                v.username = w["username"]
+                v.usertel = w["usertel"]
+                v.dn = w["dn"]
+                v.serialnumber = w["serialnumber"]
+                v.manufacturer = w["manufacturer"]
+                v.madedate = w["madedate"]
+                # v.ValveMeter = w["ValveMeter"]
+                v.installationsite = w["installationsite"]
+
+                v.save()
+                
 
         
                     

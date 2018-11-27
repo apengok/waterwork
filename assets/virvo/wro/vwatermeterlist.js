@@ -3,6 +3,9 @@
     var selectTreepId="";
     var selectTreeType = '';
 
+    var selectCommunity = "";
+    var selectBuilding = "";
+
     //显示隐藏列
     var menu_text = "";
     var table = $("#dataTable tr th:gt(1)");
@@ -90,24 +93,22 @@
             
             
             // dmaManage.getBaseinfo();
-            if(treeNode.type == "dma"){
+            if(treeNode.type == "community"){
                 var pNode = treeNode.getParentNode();
-                current_dma_pk = treeNode.id;
-                $("#current_dma_pk").attr("value",treeNode.id);
-                $("#current_dma_no").attr("value",treeNode.dma_no);
-                $("#current_dma_name").attr("value",treeNode.name);
+                selectCommunity = treeNode.name;
+                selectTreeType = "community";
+
                 
 
-                // var organ = pNode.id;
-                // dma_no = pNode.id;
-                // dma_name = treeNode.name;
-                // var url="/dmam/district/dmabaseinfo/";
-                // var parameter={"dma_no":treeNode.id,"dma_name":treeNode.name};
-                // json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
+            }else if(treeNode.type == "building"){
+                var pNode = treeNode.getParentNode();
+                selectBuilding = treeNode.name;
+                selectTreeType = "building";
+                selectCommunity = pNode.name;
             }else{
-                // myTable.requestData();
-
+                selectTreeType = "group";
             }
+            myTable.requestData();
         },
     },
     vwatermeterManagement = {
@@ -169,7 +170,11 @@
                             return result;
                         }
                     }, {
-                        "data" : "numbersth",
+                        "data" : "serialnumber",
+                        "class" : "text-center",
+                        
+                    },{
+                        "data" : "numbersth",//户号
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
                             if (data != null) {
@@ -224,6 +229,9 @@
                 d.simpleQueryParam = $('#simpleQueryParam').val(); //模糊查询
                 d.groupName = selectTreeId;
                 d.groupType = selectTreeType;
+                d.selectBuilding = selectBuilding;
+                d.selectCommunity = selectCommunity;
+                d.selectTreeType = selectTreeType;
 
             };
             //表格setting

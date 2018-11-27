@@ -10,15 +10,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="col-md-2 control-label" style="padding-right: 0px;"><label class="text-danger">*</label> 户名：</label>
+                    <label class="col-md-2 control-label" style="padding-right: 0px;"><label class="text-danger">*</label> 户号：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入户名" type="text" maxlength="50" class="form-control" id="name"/>
-                        <label id="name-error" style="display: none" class="error" for="name">请输入户名</label>
+                        <input name="numbersth" placeholder="请输入户号" type="text" maxlength="50" class="form-control" id="numbersth"/>
+                        <label id="numbersth-error" style="display: none" class="error" for="numbersth">请输入户名</label>
                     </div>
                     <label class="col-md-2 control-label" style="padding-right: 0px;"><label class="text-danger">*</label> 栋号：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入栋号" type="text" maxlength="50" class="form-control" id="name"/>
-                        <label id="name-error" style="display: none" class="error" for="name">请输入栋号</label>
+                        <input name="buildingname" placeholder="请输入栋号" type="text" maxlength="50" class="form-control" id="buildingname"/>
+                        <label id="buildingname-error" style="display: none" class="error" for="buildingname">请输入栋号</label>
                     </div>
                     <!-- <label class="col-md-2 control-label"><label class="text-danger">*</label> 所属组织：</label>
                     <div class="has-feedback col-md-4">
@@ -35,13 +35,13 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" style="padding-right: 0px;"><label class="text-danger">*</label> 房号：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入房号" type="text" maxlength="50" class="form-control" id="name"/>
-                        <label id="name-error" style="display: none" class="error" for="name">请输入房号</label>
+                        <input name="roomname" placeholder="请输入房号" type="text" maxlength="50" class="form-control" id="roomname"/>
+                        <label id="roomname-error" style="display: none" class="error" for="roomname">请输入房号</label>
                     </div>
                     <label class="col-md-2 control-label">所属小区：</label>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input name="vconcentrator2" type="text" class="form-control" id="concentrator2">
+                            <input name="communityid" type="text" class="form-control" id="communityid">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-white dropdown-toggle"
                                     data-toggle="dropdown">
@@ -59,13 +59,13 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" style="padding-right: 0px;"><label class="text-danger">*</label> 编号：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入编号" type="text" maxlength="50" class="form-control" id="name"/>
-                        <label id="name-error" style="display: none" class="error" for="name">请输入编号</label>
+                        <input name="serialnumber" placeholder="请输入编号" type="text" maxlength="50" class="form-control" id="serialnumber"/>
+                        <label id="serialnumber-error" style="display: none" class="error" for="serialnumber">请输入编号</label>
                     </div>
                     <label class="col-md-2 control-label">所属集中器：</label>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input name="vconcentrator4" type="text" class="form-control" id="concentrator4">
+                            <input name="concentrator" type="text" class="form-control" id="concentrator">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-white dropdown-toggle"
                                     data-toggle="dropdown">
@@ -82,12 +82,12 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" style="padding-right: 0px;"> 用户姓名：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入户名" type="text" maxlength="50" class="form-control" id="name"/>
+                        <input name="username" placeholder="请输入用户姓名" type="text" maxlength="50" class="form-control" id="username"/>
                         
                     </div>
                     <label class="col-md-2 control-label" style="padding-right: 0px;">用户电话：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入栋号" type="text" maxlength="50" class="form-control" id="name"/>
+                        <input name="usertel" placeholder="用户电话" type="text" maxlength="50" class="form-control" id="usertel"/>
                         
                     </div>
                     
@@ -95,12 +95,16 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" style="padding-right: 0px;"> 口径：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入户名" type="text" maxlength="50" class="form-control" id="name"/>
-                        
+                        <select name="dn" id="dn" autocomplete="off"  class="form-control">
+                            <option  value="15">15</option>
+                            <option  value="20">20</option>
+                            <option  value="25">25</option>
+                            
+                        </select>
                     </div>
                     <label class="col-md-2 control-label" style="padding-right: 0px;"> 厂家：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入栋号" type="text" maxlength="50" class="form-control" id="name"/>
+                        <input name="manufacturer" placeholder="请输入厂家" type="text" maxlength="50" class="form-control" id="manufacturer"/>
                         
                     </div>
                     
@@ -108,13 +112,18 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label" style="padding-right: 0px;">阀控表：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入户名" type="text" maxlength="50" class="form-control" id="name"/>
+                        <select name="ValveMeter" id="ValveMeter" autocomplete="off"  class="form-control">
+                            <!-- <option  value="">- 请选择类型 -</option> -->
+                            <option value="0">非阀控表</option>
+                            <option value="1">阀控表</option>
+                            
+                        </select>
                         
                     </div>
                     <label class="col-md-2 control-label" style="padding-right: 0px;"> 生产日期：</label>
                     <div class="col-md-4">
-                        <input name="name" placeholder="请输入栋号" type="text" maxlength="50" class="form-control" id="name"/>
-                        
+                        <input style="cursor: pointer;  background-color: #fafafa;" class="form-control layer-date laydate-icon"
+                               id="madedate" name="madedate" placeholder=""/>
                     </div>
                     
                 </div>
@@ -149,6 +158,8 @@ var deviceNumberNull = "\u7EC8\u7AEF\u53F7\u4E0D\u80FD\u4E3A\u7A7A";
     var publicSize100="\u957F\u5EA6\u4E0D\u8D85\u8FC7100\u4F4D";
     var phoneError = "\u770B\u8D77\u6765\u4E0D\u50CF\u624B\u673A\u53F7\u5462";
     var publicNull = "\u4E0D\u80FD\u4E3A\u7A7A";
+
+    laydate.render({elem: '#madedate',theme: '#6dcff6'});
 </script>
 
-<script src="{% static 'virvo/wro/comunityAdd.js' %}"></script>
+<script src="{% static 'virvo/wro/watermeterAdd.js' %}"></script>

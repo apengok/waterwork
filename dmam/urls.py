@@ -90,6 +90,7 @@ urlpatterns = [
     url(r'^community/delete/(?P<pk>[0-9]+)/?$',views.CommunityDeleteView.as_view(),name='communitydelete'),
     url(r'^community/deletemore',views.communitydeletemore,name='communitydeletemore'),
     url(r'^community/repetition/$',views.community_repetition,name='community_repetition'),
+    url(r'^community/getCommunitySelect/$',views.getCommunitySelect,name='getCommunitySelect'),
 
 
 

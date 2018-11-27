@@ -32,8 +32,8 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
-from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
-from . models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,VCommunity,VConcentrator,DmaGisinfo
+from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Watermeter
+from . models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,VCommunity,VConcentrator,DmaGisinfo,VWatermeter
 from .forms import StationsForm,StationsEditForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssignForm
 import os
@@ -128,7 +128,7 @@ def dmatree(request):
 
             for s in o.vcommunity_set.values('name','pk'):
                 
-                # if s.dmaid is None: #已分配dma分区的不显示
+                # 小区列表
                 organtree.append({
                     "name":s['name'],
                     "id":s['pk'],
@@ -136,12 +136,30 @@ def dmatree(request):
                     "pId":o.cid,
                     "type":"community",
                     "dma_no":'',
-
+                    "open":False,
                     "commaddr":'commaddr',
                     "dma_station_type":"2", # 在dma站点分配中标识该是站点还是小区
-                    "icon":"/static/virvo/resources/img/station.png",
+                    "icon":"/static/virvo/resources/img/home.png",
                     "uuid":''
                 })
+
+                # 小区下级栋列表
+                wt = VWatermeter.objects.filter(communityid__name=s["name"]).values('buildingname').distinct()
+                # if s['name'] == '新城花苑':
+                for w in wt:
+                    organtree.append({
+                        "name":w["buildingname"],
+                        "id":'',
+                        "districtid":'',
+                        "pId":s['pk'],
+                        "type":"building",
+                        "dma_no":'',
+                        "open":False,
+                        "commaddr":'commaddr',
+                        # "dma_station_type":"", # 在dma站点分配中标识该是站点还是小区
+                        "icon":"/static/virvo/resources/img/buildingno.png",
+                        "uuid":''
+                    })
             
     # district
     # districts = District.objects.all()
@@ -1871,6 +1889,33 @@ class CommunityDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         # result["success"] = 1
         return HttpResponse(json.dumps({"success":1}))
         
+
+def getCommunitySelect(request):
+    # meters = Meter.objects.all()
+    communitys = request.user.community_list_queryset('').values()
+
+    def m_info(m):
+        
+        return {
+            "id":m["id"],
+            "name":m["name"],
+            
+        }
+    data = []
+
+    for m in communitys:
+        data.append(m_info(m))
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":data,
+        "success":True
+    }
+   
+    # print(operarions_list)
+    return JsonResponse(operarions_list)
+
 
 # 小区列表
 def communitylist(request):
