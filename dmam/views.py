@@ -39,44 +39,14 @@ from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssig
 import os
 from django.conf import settings
 from devm.forms import VCommunityAddForm,VWatermeterAddForm,VCommunityEditForm,VWatermeterEditForm
-
+from .utils import merge_values
 from waterwork.mixins import AjaxableResponseMixin
 import logging
-import itertools
 
 logger_info = logging.getLogger('info_logger')
 logger_error = logging.getLogger('error_logger')
 
 
-
-
-"""
-When you call values() on a queryset where the Model has a ManyToManyField
-and there are multiple related items, it returns a separate dictionary for each
-related item. This function merges the dictionaries so that there is only
-one dictionary per id at the end, with lists of related items for each.
-"""
-def merge_values(values):
-    grouped_results = itertools.groupby(values, key=lambda value: value['id'])
-    
-    merged_values = []
-    for k, g in grouped_results:
-        
-        groups = list(g)
-        merged_value = {}
-        for group in groups:
-            for key, val in group.items():
-                if not merged_value.get(key):
-                    merged_value[key] = val
-                elif val != merged_value[key]:
-                    if isinstance(merged_value[key], list):
-                        if val not in merged_value[key]:
-                            merged_value[key].append(val)
-                    else:
-                        old_val = merged_value[key]
-                        merged_value[key] = [old_val, val]
-        merged_values.append(merged_value)
-    return merged_values
 
 
 def dmatree(request):   
@@ -93,14 +63,15 @@ def dmatree(request):
     else:
         organs = user.belongto #Organizations.objects.all()
     print("dmatree",organs)
-    t1 = time.time()
+    # 组织
     o_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","dma__pk","dma__dma_name","dma__dma_no",
         "station__pk","station__username","station__meter__simid__simcardNumber",
         "vcommunity__pk","vcommunity__name")
-    t2=time.time()
-    print("merge time last *&&&&&&&&&S^D",t2-t1)
+    
     mergeds = merge_values(o_lists)
-    print("merge time last",time.time()-t2)
+
+
+    
     for o in mergeds:
         # o1 = o.objects.all().values("name","cid","pId","uuid","dma__dma_no")
         if isinstance(o["dma__pk"],list):
@@ -150,10 +121,9 @@ def dmatree(request):
             
 
         #station
+        # 会出现pk 和 username list长度不等的情况，可能有同名站点
         if stationflag == '1':
-            print(o["station__pk"],o['station__username'],o['station__meter__simid__simcardNumber'])
             if isinstance(o["station__username"],list):
-                print(len(o["station__pk"]),len(o['station__username']),len(o['station__meter__simid__simcardNumber']))
                 for i in range(len(o["station__username"])):
                     
                     organtree.append({
@@ -169,6 +139,20 @@ def dmatree(request):
                         "icon":"/static/virvo/resources/img/station.png",
                         "uuid":''
                     })
+            elif isinstance(o["station__username"],int):
+                organtree.append({
+                    "name":o['station__username'],
+                    "id":o['station__pk'],
+                    "districtid":'',
+                    "pId":o["cid"],
+                    "type":"station",
+                    "dma_no":'',
+
+                    "commaddr":o["station__meter__simid__simcardNumber"],
+                    "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                    "icon":"/static/virvo/resources/img/station.png",
+                    "uuid":''
+                })
 
         #community
         if communityflag == '1':
@@ -208,19 +192,7 @@ def dmatree(request):
                             "uuid":''
                         })
             
-    # district
-    # districts = District.objects.all()
-    # for d in districts:
-    #     organtree.append({
-    #         "name":d.name,
-    #         "id":d.id,
-    #         "districtid":d.id,
-    #         "pId":organs.cid,
-    #         "type":"district",
-    #         "icon":"/static/virvo/resources/img/u8836.png",
-    #         "uuid":''
-    #     })
-        
+    
     
     result = dict()
     result["data"] = organtree
@@ -2145,7 +2117,8 @@ def communitylist(request):
     user = request.user
     organs = user.belongto
 
-    comunities = user.community_list_queryset(simpleQueryParam).values("id","name","belongto__name","address")
+    comunities = user.community_list_queryset(simpleQueryParam).values("id","name","belongto__name","address","vconcentrators__name")
+    meged_community = merge_values(comunities)
     # meters = Community.objects.all() #.filter(communityid=105)  #文欣苑105
 
     def m_info(m):
@@ -2159,16 +2132,16 @@ def communitylist(request):
             "name":m["name"],
             "belongto":m["belongto__name"],
             "address":m["address"],
-            "concentrator":''
+            "concentrator":m["vconcentrators__name"]
             # "station":m.station_set.first().username if m.station_set.count() > 0 else ""
         }
     data = []
 
-    for m in comunities:
+    for m in meged_community:
         data.append(m_info(m))
 
     recordsTotal = comunities.count()
-    # recordsTotal = len(data)
+    # recordsTotal = len(meged_community)
     
     result = dict()
     result["records"] = data[start:start+length]

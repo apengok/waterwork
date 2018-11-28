@@ -93,8 +93,11 @@ class NeighborhoodmeterMangerView(LoginRequiredMixin,TemplateView):
 
 
 def watermeter_repetition(request):
-    name = request.POST.get("name")
-    bflag = not VWatermeter.objects.filter(name=name).exists()
+    numbersth = request.POST.get("numbersth")
+    buildingname = request.POST.get("buildingname")
+    roomname = request.POST.get("roomname")
+
+    bflag = not VWatermeter.objects.filter(numbersth=numbersth,buildingname=buildingname,roomname=roomname).exists()
 
     # return HttpResponse(json.dumps(bflag))
     return HttpResponse(json.dumps({"success":bflag}))
@@ -148,36 +151,24 @@ class WatermeterAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         user = self.request.user
         user_groupid = user.belongto.cid
         instance = form.save(commit=False)
-        organ_name = self.request.POST.get('belongto')
+        # organ_name = self.request.POST.get('belongto')
         
-        organization = Organizations.objects.get(name=organ_name)
-        instance.belongto = organization
+        # organization = Organizations.objects.get(name=organ_name)
+        communityname = self.request.POST.get("communityid")
+        community = VCommunity.objects.get(name=communityname)
+        instance.communityid = community
+        instance.belongto = community.belongto
+
 
         instance.save()
-        vconcentrator1 = self.request.POST.get('vconcentrator1') #集中器1名称
-        vconcentrator2 = self.request.POST.get('vconcentrator2') #集中器2名称
-        vconcentrator3 = self.request.POST.get('vconcentrator3') #集中器3名称
-        vconcentrator4 = self.request.POST.get('vconcentrator4') #集中器4名称
-        vc1 = VConcentrator.objects.filter(name=vconcentrator1)
+        concentrator = self.request.POST.get('concentrator') #集中器1名称
+        
+        vc1 = VConcentrator.objects.filter(name=concentrator)
         
         if vc1.exists():
-            instance.vconcentrators.add(vc1.first())
+            instance.concentrator = vc1.first()
 
-        if vconcentrator2 != '':
-            vc2 = VConcentrator.objects.filter(name=vconcentrator2)
-            if vc2.exists():
-                instance.vconcentrators.add(vc2.first())
-
-        if vconcentrator3 != '':
-            vc3 = VConcentrator.objects.filter(name=vconcentrator3)
-            if vc3.exists():
-                instance.vconcentrators.add(vc3.first())
-
-        if vconcentrator4 != '':
-            vc4 = VConcentrator.objects.filter(name=vconcentrator4)
-            if vc4.exists():
-                instance.vconcentrators.add(vc4.first())
-
+        
         
 
         return super(WatermeterAddView,self).form_valid(form)   
@@ -251,40 +242,31 @@ class WatermeterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print(form)
         print(self.request.POST)
 
-        
+        user = self.request.user
+        user_groupid = user.belongto.cid
         instance = form.save(commit=False)
-        organ_name = self.request.POST.get('belongto')
+        # organ_name = self.request.POST.get('belongto')
         
-        organization = Organizations.objects.get(name=organ_name)
-        instance.belongto = organization
+        # organization = Organizations.objects.get(name=organ_name)
+        communityname = self.request.POST.get("communityid")
+        community = VCommunity.objects.get(name=communityname)
+        instance.communityid = community
+        instance.belongto = community.belongto
 
-        # 直接清除
-        instance.vconcentrators.clear()
 
-        vconcentrator1 = self.request.POST.get('vconcentrator1') #集中器1名称
-        vconcentrator2 = self.request.POST.get('vconcentrator2') #集中器2名称
-        vconcentrator3 = self.request.POST.get('vconcentrator3') #集中器3名称
-        vconcentrator4 = self.request.POST.get('vconcentrator4') #集中器4名称
-        vc1 = VConcentrator.objects.filter(name=vconcentrator1)
+        instance.save()
+        concentrator = self.request.POST.get('concentrator') #集中器1名称
+        
+        vc1 = VConcentrator.objects.filter(name=concentrator)
         
         if vc1.exists():
-            instance.vconcentrators.add(vc1.first())
-
-        if vconcentrator2 != '':
-            vc2 = VConcentrator.objects.filter(name=vconcentrator2)
-            if vc2.exists():
-                instance.vconcentrators.add(vc2.first())
-
-        if vconcentrator3 != '':
-            vc3 = VConcentrator.objects.filter(name=vconcentrator3)
-            if vc3.exists():
-                instance.vconcentrators.add(vc3.first())
-
-        if vconcentrator4 != '':
-            vc4 = VConcentrator.objects.filter(name=vconcentrator4)
-            if vc4.exists():
-                instance.vconcentrators.add(vc4.first())
-
+            instance.concentrator = vc1.first()
+        
+        
+        # 直接清除
+        # instance.vconcentrators.clear()
+# 
+        
         
         # instance.uuid=unique_uuid_generator(instance)
         return super(WatermeterEditView,self).form_valid(form)
@@ -305,8 +287,8 @@ def watermeterdeletemore(request):
         u = VWatermeter.objects.get(id=int(uid))
         # print('delete user ',u)
         #删除用户 并且删除用户在分组中的角色
-        commaddr = u.commaddr
-        zncb_watermeter = Watermeter.objects.filter(commaddr=commaddr)
+        waterid = u.waterid
+        zncb_watermeter = Watermeter.objects.filter(id=waterid)
         if zncb_watermeter.exists():
             z = zncb_watermeter.first()
             z.delete()
@@ -357,11 +339,11 @@ class WatermeterDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView)
         self.object = self.get_object(*args,**kwargs)
 
         
-        commaddr = self.object.commaddr
+        waterid = self.object.waterid
         
-        result = dict()
+        
         # 同时删除zncb Watermeter记录
-        zncb_watermeter = Watermeter.objects.filter(commaddr=commaddr)
+        zncb_watermeter = Watermeter.objects.filter(id=waterid)
         if zncb_watermeter.exists():
             z = zncb_watermeter.first()
             z.delete()
@@ -414,6 +396,9 @@ def watermeterlist(request):
     watermeters = user.watermeter_list_queryset(simpleQueryParam).values("id","name","serialnumber","numbersth","buildingname","roomname","belongto__name","installationsite","username",
         "usertel","dn","manufacturer","madedate","ValveMeter","communityid__name","concentrator__name")
     # meters = Watermeter.objects.all() #.filter(watermeterid=105)  #文欣苑105
+
+    if selectCommunity != "":
+        watermeters = [w for w in watermeters if selectCommunity == w["communityid__name"]]
 
     if selectBuilding != "":
         watermeters = [w for w in watermeters if selectBuilding == w["buildingname"]]

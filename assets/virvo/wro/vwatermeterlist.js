@@ -218,6 +218,13 @@
                     },{
                         "data" : "ValveMeter",
                         "class" : "text-center",
+                        render : function(data, type, row, meta) {
+                            if (data == "1") {
+                                return "是";
+                            } else{
+                                return "";
+                            }
+                        }
                         
                     }, {
                         "data" : "madedate",

@@ -155,4 +155,5 @@ class VWatermeterEditForm(forms.ModelForm):
         super(VWatermeterEditForm, self).__init__(*args, **kwargs)
 
         self.fields['communityid'].initial = self.instance.communityid.name
-        self.fields['concentrator'].initial = self.instance.concentrator.name
+        if self.instance.concentrator:
+            self.fields['concentrator'].initial = self.instance.concentrator.name

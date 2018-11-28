@@ -7,9 +7,19 @@
     var buildingnameError = $("#buildingname-error");
     var roomname = $("#roomname").val(); //房号
     var roomnameError = $("#roomname-error");
+    var communityid = $("#communityid").val();
+    var serialnumber = $("#serialnumber").val();
+    var concentrator = $("#concentrator").val();
+    var username = $("#username").val();
+    var usertel = $("#usertel").val();
+    var dn = $("#dn").val();
+    var manufacturer = $("#manufacturer").val();
+    var ValveMeter = $("#ValveMeter").val();
+    var madedate = $("#madedate").val();
 
     var deviceFlag = false;
-    waterMeterAdd = {
+    var flag1 = false;
+    waterMeterEdit = {
         init: function () {
             var setting = {
                 async: {
@@ -19,7 +29,7 @@
                     autoParam: ["id"],
                     contentType: "application/json",
                     dataType: "json",
-                    dataFilter: waterMeterAdd.ajaxDataFilter
+                    dataFilter: waterMeterEdit.ajaxDataFilter
                 },
                 view: {
                     dblClickExpand: false
@@ -30,15 +40,16 @@
                     }
                 },
                 callback: {
-                    beforeClick: waterMeterAdd.beforeClick,
-                    onClick: waterMeterAdd.onClick
+                    beforeClick: waterMeterEdit.beforeClick,
+                    onClick: waterMeterEdit.onClick
                 }
             };
             $.fn.zTree.init($("#ztreeDemo"), setting, null);
             // laydate.render({elem: '#installDate', theme: '#6dcff6'});
             // laydate.render({elem: '#procurementDate', theme: '#6dcff6'});
-            waterMeterAdd.Initcommunity();
-            waterMeterAdd.InitCallback();
+            waterMeterEdit.Initcommunity();
+            waterMeterEdit.InitCallback();
+            console.log('init')
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);
@@ -87,17 +98,17 @@
             } else {
                 $("#zTreeContent").hide();
             }
-            $("body").bind("mousedown", waterMeterAdd.onBodyDown);
+            $("body").bind("mousedown", waterMeterEdit.onBodyDown);
         },
         //隐藏菜单
         hideMenu: function () {
             $("#zTreeContent").fadeOut("fast");
-            $("body").unbind("mousedown", waterMeterAdd.onBodyDown);
+            $("body").unbind("mousedown", waterMeterEdit.onBodyDown);
         },
         onBodyDown: function (event) {
             if (!(event.target.id == "menuBtn" || event.target.id == "zTreeContent" || $(
                     event.target).parents("#zTreeContent").length > 0)) {
-                waterMeterAdd.hideMenu();
+                waterMeterEdit.hideMenu();
             }
         },
         
@@ -108,11 +119,10 @@
             //sim卡
             var url="/dmam/community/getCommunitySelect/";
             var parameter={};
-            json_ajax("POST",url,"json",true,parameter, waterMeterAdd.initcommunityList);
+            json_ajax("POST",url,"json",true,parameter, waterMeterEdit.initcommunityList);
             
         },
         initcommunityList: function(data){
-            console.log(data);
                 //集中器list
             var ConcentratorList = data.obj;
             // 初始化集中器数据
@@ -151,11 +161,10 @@
             //sim卡
             var url="/devm/concentrator/getConcentratorSelect/";
             var parameter={};
-            json_ajax("POST",url,"json",true,parameter, waterMeterAdd.initConcentratorList);
+            json_ajax("POST",url,"json",true,parameter, waterMeterEdit.initConcentratorList);
             
         },
         initConcentratorList: function(data){
-            console.log(data);
                 //集中器list
             var ConcentratorList = data.obj;
             // 初始化集中器数据
@@ -191,7 +200,7 @@
         },
         //组织树预处理函数
         ajaxDataFilter: function (treeId, parentNode, responseData) {
-            waterMeterAdd.hideErrorMsg();//隐藏错误提示样式
+            waterMeterEdit.hideErrorMsg();//隐藏错误提示样式
             var isAdminStr = $("#isAdmin").attr("value");    // 是否是admin
             var isAdmin = isAdminStr == 'true';
             var userGroupId = $("#userGroupId").attr("value");  // 用户所属组织 id
@@ -207,36 +216,70 @@
                 }
                 return responseData;
             } else {
-                waterMeterAdd.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
+                waterMeterEdit.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
                 return;
             }
         },
-        doSubmit: function () {
-            if (submissionFlag) {  // 防止重复提交
-                return;
-            } else {
+        valueChange:function () { // 判断值是否改变
+            var edit_numbersth = $("#numbersth").val();  //户号
+            var edit_buildingname = $("#buildingname").val(); //栋号
+            var edit_roomname = $("#roomname").val(); //房号
+            var edit_communityid = $("#communityid").val();
+            var edit_serialnumber = $("#serialnumber").val();
+            var edit_concentrator = $("#concentrator").val();
+            var edit_username = $("#username").val();
+            var edit_usertel = $("#usertel").val();
+            var edit_dn = $("#dn").val();
+            var edit_manufacturer = $("#manufacturer").val();
+            var edit_ValveMeter = $("#ValveMeter").val();
+            var edit_madedate = $("#madedate").val();
+            // 值已经发生改变
+            if (numbersth != edit_numbersth || buildingname != edit_buildingname || roomname != edit_roomname || communityid != edit_communityid
+                || serialnumber != edit_serialnumber || concentrator != edit_concentrator || username != edit_username || usertel != edit_usertel
+                || dn != edit_dn || manufacturer != edit_manufacturer || madedate != edit_madedate || ValveMeter != edit_ValveMeter ) {
+                    flag1 = true;
+            } else { // 表单值没有发生改变
                 
-                waterMeterAdd.nameValidates();
-                if ( deviceFlag) {
-                    if (waterMeterAdd.validates()) {
-                        submissionFlag = true;
-                        $("#addForm").ajaxSubmit(function (data) {
-                            var json = eval("(" + data + ")");
-                            if (json.success) {
-                                $("#commonWin").modal("hide");
-                                layer.msg("新建水表成功");
-                                myTable.requestData();
-                            } else {
-                                layer.msg(json.msg);
-                            }
-                        });
+                flag1 = false;
+            }
+        },
+        doSubmit: function () {
+            console.log("1.flag1",flag1);
+            console.log("1.deviceFlag",deviceFlag);
+            waterMeterEdit.valueChange();
+            console.log("2.flag1",flag1);
+            console.log("2.deviceFlag",deviceFlag);
+            if(flag1){
+                if (submissionFlag) {  // 防止重复提交
+                    return;
+                } else {
+                    
+                    waterMeterEdit.nameValidates();
+                    console.log("3.flag1",flag1);
+                    console.log("3.deviceFlag",deviceFlag);
+                    if ( deviceFlag) {
+                        if (waterMeterEdit.validates()) {
+                            submissionFlag = true;
+                            $("#editForm").ajaxSubmit(function (data) {
+                                var json = eval("(" + data + ")");
+                                if (json.success) {
+                                    $("#commonWin").modal("hide");
+                                    layer.msg("修改成功");
+                                    myTable.requestData();
+                                } else {
+                                    layer.msg(json.msg);
+                                }
+                            });
+                        }
                     }
                 }
+            }else{
+                $("#commonWin").modal("hide");
             }
         },
         nameValidates: function () {
         
-            numbersth = $("numbersth").val();
+            numbersth = $("#numbersth").val();
             buildingname = $("#buildingname").val()
             roomname = $("#roomname").val()
             
@@ -254,12 +297,12 @@
                 roomnameError.show();
                 deviceFlag = false;
             }else{
-                waterMeterAdd.deviceAjax();
+                waterMeterEdit.deviceAjax();
             }
             
         },
         validates: function () {
-            return $("#addForm").validate({
+            return $("#editForm").validate({
                 rules: {
                     
                     numbersth: {
@@ -317,39 +360,47 @@
             $("#error_label_add").hide();
         },
         deviceAjax: function () {
-            $.ajax({
-                    type: "post",
-                    url: "/wirelessm/communitymeter/repetition/",
-                    data: {"numbersth": numbersth,"buildingname":buildingname,"roomname":roomname},
-                    success: function (d) {
-                        var result = $.parseJSON(d);
-                        // if (!result) {
-                        if (result.success == false) {
-                            numbersthError.html("小区名称已存在！");
-                            numbersthError.show();
-                            deviceFlag = false;
-                        }
-                        else {
-                            numbersthError.hide();
-                            deviceFlag = true;
+            var edit_numbersth = $("#numbersth").val();  //户号
+            var edit_buildingname = $("#buildingname").val(); //栋号
+            var edit_roomname = $("#roomname").val(); //房号
+            if(numbersth != edit_numbersth || buildingname != edit_buildingname || roomname != edit_roomname){
+                $.ajax({
+                        type: "post",
+                        url: "/wirelessm/communitymeter/repetition/",
+                        data: {"numbersth": numbersth,"buildingname":buildingname,"roomname":roomname},
+                        success: function (d) {
+                            var result = $.parseJSON(d);
+                            // if (!result) {
+                            if (result.success == false) {
+                                numbersthError.html("小区名称已存在！");
+                                numbersthError.show();
+                                deviceFlag = false;
+                            }
+                            else {
+                                numbersthError.hide();
+                                deviceFlag = true;
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
+            else{
+                deviceFlag = true;
+            }
         },
         
     }
     $(function () {
         $('input').inputClear();
         //初始化
-        waterMeterAdd.init();
+        waterMeterEdit.init();
         
         $('input').inputClear();
 
-        $("#numbersth").on("change", function () {
-            numbersth = $("#numbersth").val();
-            waterMeterAdd.nameValidates();
-        });
+        // $("#numbersth").on("change", function () {
+        //     numbersth = $("#numbersth").val();
+        //     waterMeterEdit.nameValidates();
+        // });
         
         // $("#numbersth,#buildingname,#roomname").bind("input propertychange change", function (event) {
         //     numbersth = $("numbersth").val();
@@ -367,7 +418,7 @@
         //                     deviceFlag = false;
         //                 }
         //                 else {
-        //                     waterMeterAdd.nameValidates();
+        //                     waterMeterEdit.nameValidates();
         //                 }
         //             }
         //         }
@@ -375,8 +426,8 @@
         // });
 
         //显示菜单
-        $("#zTreeOrganSel").bind("click", waterMeterAdd.showMenu);
+        $("#zTreeOrganSel").bind("click", waterMeterEdit.showMenu);
         //提交
-        $("#doSubmit").bind("click", waterMeterAdd.doSubmit);
+        $("#doSubmit").bind("click", waterMeterEdit.doSubmit);
     })
 })(window, $)

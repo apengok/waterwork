@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^watermeter/edit/(?P<pk>\w+)/?$',views.WatermeterEditView.as_view(),name='watermeteredit'),
     url(r'^watermeter/delete/(?P<pk>[0-9]+)/?$',views.WatermeterDeleteView.as_view(),name='watermeterdelete'),
     url(r'^watermeter/deletemore',views.watermeterdeletemore,name='watermeterdeletemore'),
-    url(r'^watermeter/repetition/$',views.watermeter_repetition,name='watermeter_repetition'),
+    url(r'^communitymeter/repetition/$',views.watermeter_repetition,name='watermeter_repetition'),
 
     
 ]

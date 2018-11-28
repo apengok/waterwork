@@ -19,6 +19,8 @@ from legacy.utils import (HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,H
         ZERO_monthly_dict,generat_year_month,generat_year_month_from)
 from mptt.models import MPTTModel, TreeForeignKey
 
+from .utils import merge_values
+
 # Create your models here.
 
 '''
@@ -980,6 +982,42 @@ class VCommunity(MPTTModel):
         return self.name
 
 
+@receiver(post_save, sender=VCommunity)
+def ensure_vcommunity_exists(sender, **kwargs):
+    district = District.objects.first()
+    districtid = district.id
+    
+    if kwargs.get('created', False):
+        instance=kwargs.get('instance')
+        name= instance.name
+        address = instance.address
+        
+
+        zncb_community = Community.objects.create(name=name,address=address,districtid=districtid)  
+        instance.commutid = zncb_community.id
+        instance.save() 
+    else:
+        instance=kwargs.get('instance')
+        name= instance.name
+        address = instance.address
+        commutid = instance.commutid
+
+        contor = Community.objects.filter(id=commutid)
+        if contor.exists():
+            # print(instance.username,bigm.first().username)
+            b=contor.first()
+            b.name= name
+            b.address = address
+            
+            b.save()
+        else:
+            zncb_community = Community.objects.create(name=name,address=address,districtid=districtid)  
+            instance.commutid = zncb_community.id
+            instance.save()   
+
+
+
+
 # 水表 小表
 class VWatermeterQuerySet(models.query.QuerySet):
     def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
@@ -987,7 +1025,11 @@ class VWatermeterQuerySet(models.query.QuerySet):
             query = query.strip()
             return self.filter(
                 Q(name__icontains=query)|
-                Q(commaddr__icontains=query)
+                Q(numbersth__icontains=query)|
+                Q(buildingname__icontains=query)|
+                Q(roomname__icontains=query)|
+                Q(serialnumber__icontains=query)|
+                Q(nodeaddr__icontains=query)
                 ).distinct()
         return self
 
@@ -1035,3 +1077,74 @@ class VWatermeter(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+# Watermeter : unique_together = (('communityid', 'nodeaddr', 'wateraddr'),)
+@receiver(post_save, sender=VWatermeter)
+def ensure_vmatermeter_exists(sender, **kwargs):
+    district = District.objects.first()
+    districtid = district.id
+    community = Community.objects.first()
+    commutid = community.id
+    if kwargs.get('created', False):
+        instance=kwargs.get('instance')
+        numbersth= instance.numbersth
+        buildingname = instance.buildingname
+        roomname = instance.roomname
+        manufacturer = instance.manufacturer
+        serialnumber = instance.serialnumber
+        madedate = instance.madedate
+        username = instance.username
+        usertel = instance.usertel 
+        dn = instance.dn 
+        metercontrol = instance.ValveMeter
+        installationsite = instance.installationsite
+        communityid = instance.communityid.commutid
+        nodeaddr = instance.serialnumber
+        wateraddr = instance.serialnumber
+
+        zncb_watermeter = Watermeter.objects.create(numbersth=numbersth,buildingname=buildingname,roomname=roomname,username=username,usertel=usertel,
+            communityid=communityid,installationsite=installationsite,manufacturer=manufacturer,metercontrol=metercontrol,serialnumber=serialnumber,
+            madedate=madedate,dn=dn,nodeaddr=nodeaddr,wateraddr=wateraddr)  
+        instance.waterid = zncb_watermeter.id
+        instance.save() 
+    else:
+        instance=kwargs.get('instance')
+        numbersth= instance.numbersth
+        buildingname = instance.buildingname
+        roomname = instance.roomname
+        manufacturer = instance.manufacturer
+        serialnumber = instance.serialnumber
+        madedate = instance.madedate
+        username = instance.username
+        usertel = instance.usertel 
+        dn = instance.dn 
+        metercontrol = instance.ValveMeter
+        installationsite = instance.installationsite
+        communityid = instance.communityid.commutid
+        waterid = instance.waterid
+
+        contor = Watermeter.objects.filter(id=waterid)
+        if contor.exists():
+            # print(instance.username,bigm.first().username)
+            b=contor.first()
+            b.numbersth= numbersth
+            b.installationsite = installationsite
+            b.manufacturer = manufacturer
+            b.buildingname = buildingname
+            b.serialnumber = serialnumber
+            b.madedate = madedate
+            b.username = username
+            b.usertel=usertel
+            b.dn=dn
+            b.metercontrol=metercontrol
+            
+            
+            b.save()
+        else:
+            zncb_watermeter = Watermeter.objects.create(numbersth=numbersth,buildingname=buildingname,roomname=roomname,username=username,usertel=usertel,
+                    communityid=communityid,installationsite=installationsite,manufacturer=manufacturer,metercontrol=metercontrol,serialnumber=serialnumber,
+                    madedate=madedate,dn=dn,nodeaddr=nodeaddr,wateraddr=wateraddr)  
+            instance.waterid = zncb_watermeter.id
+            instance.save()  
+
