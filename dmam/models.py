@@ -327,7 +327,7 @@ class DMABaseinfo(models.Model):
 '''
 class DmaStation(models.Model):
     dmaid           = models.ForeignKey(DMABaseinfo,blank=True, null=True,on_delete=models.CASCADE) 
-    station_id      = models.CharField(max_length=30)   # 大表 通讯地址commaddr 或者 小区关联的集中器commaddr，由station_type 标识
+    station_id      = models.CharField(max_length=30)   # 大表 通讯地址commaddr 或者 小区id(由于小区可能关联多个集中器，所以不能直接保存集中器的commaddr)，由station_type 标识
     meter_type      = models.CharField(max_length=30)   # dma计算类型 ["出水表","进水表","贸易结算表","未计费水表","管网检测表"]
     station_type    = models.CharField(max_length=30)   # 大表还是小区 1-大表 2-小区
 
@@ -657,7 +657,7 @@ class Station(models.Model):
             ret_str = "{} m³".format(round(float(flow_value),2))
         return ret_str
 
-# 按小时统计的聚合Alarm.objects.values('commaddr').annotate(Count('id'))
+    # 按小时统计的聚合Alarm.objects.values('commaddr').annotate(Count('id'))
     def flow_hour_aggregate(self,startTime,endTime):
 
         avg_str = "-"

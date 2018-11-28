@@ -55,6 +55,7 @@ def dmatree(request):
     stationflag = request.POST.get("isStation") or ''
     dmaflag = request.POST.get("isDma") or ''
     communityflag = request.POST.get("isCommunity") or ''
+    buidlingflag = request.POST.get("isBuilding") or ''
     user = request.user
     
     # if user.is_anonymous:
@@ -156,8 +157,9 @@ def dmatree(request):
 
         #community
         if communityflag == '1':
-            if o["vcommunity__pk"] != None and  len(o["vcommunity__pk"]) > 0:
-                for i in range(len(o["vcommunity__pk"])):
+            if isinstance(o["vcommunity__name"],list):
+
+                for i in range(len(o["vcommunity__name"])):
                     community_name = o['vcommunity__name'][i]
                     # 小区列表
                     organtree.append({
@@ -168,13 +170,50 @@ def dmatree(request):
                         "type":"community",
                         "dma_no":'',
                         "open":False,
-                        "commaddr":'commaddr',
+                        "commaddr":o['vcommunity__pk'][i],
                         "dma_station_type":"2", # 在dma站点分配中标识该是站点还是小区
                         "icon":"/static/virvo/resources/img/home.png",
                         "uuid":''
                     })
 
                     # 小区下级栋列表
+                    if buidlingflag == "1":
+                        wt = VWatermeter.objects.filter(communityid__name=community_name).values('buildingname').distinct()
+                        # if s['name'] == '新城花苑':
+                        for w in wt:
+                            organtree.append({
+                                "name":w["buildingname"],
+                                "id":'',
+                                "districtid":'',
+                                "pId":o['vcommunity__pk'][i],
+                                "type":"building",
+                                "dma_no":'',
+                                "open":False,
+                                "commaddr":'commaddr',
+                                # "dma_station_type":"", # 在dma站点分配中标识该是站点还是小区
+                                "icon":"/static/virvo/resources/img/buildingno.png",
+                                "uuid":''
+                            })
+
+            elif isinstance(o["vcommunity__name"],int):
+                community_name = o['vcommunity__name']
+                # 小区列表
+                organtree.append({
+                    "name":o['vcommunity__name'],
+                    "id":o['vcommunity__pk'],
+                    "districtid":'',
+                    "pId":o["cid"],
+                    "type":"community",
+                    "dma_no":'',
+                    "open":False,
+                    "commaddr":o['vcommunity__pk'],
+                    "dma_station_type":"2", # 在dma站点分配中标识该是站点还是小区
+                    "icon":"/static/virvo/resources/img/home.png",
+                    "uuid":''
+                })
+
+                # 小区下级栋列表
+                if buidlingflag == "1":
                     wt = VWatermeter.objects.filter(communityid__name=community_name).values('buildingname').distinct()
                     # if s['name'] == '新城花苑':
                     for w in wt:
@@ -642,7 +681,7 @@ def dmabaseinfo(request):
 
         
         def assigned(a):
-            commaddr = a["station_id"]     # 大表 通讯地址commaddr 或者 小区关联的集中器commaddr，由station_type 标识
+            commaddr = a["station_id"]     # 大表 通讯地址commaddr 或者 小区关联的集中器pk(or id)，由station_type 标识
             station_type = a["station_type"] # 大表还是小区 1-大表 2-小区
             if station_type == '1':
                 s = Station.objects.filter(meter__simid__simcardNumber=commaddr).values("id","username","usertype","meter__dn",
@@ -657,7 +696,16 @@ def dmabaseinfo(request):
                 serialnumber = s["meter__serialnumber"]
                 createdate = s["madedate"]
             elif station_type == '2':
-                d = Community.objects.get(commaddr=commaddr)
+                s = VCommunity.objects.filter(id=commaddr).values("id","name","vconcentrators__name","belongto__name")[0]
+                edit_id = s["id"]
+                username = s["name"]
+                usertype = "小区"
+                simid =commaddr
+                dn = ""
+                belongto_name = s["belongto__name"]
+                metertype = "小区"
+                serialnumber = ""
+                createdate = ""
         
             return {
                 "id":edit_id,
@@ -1154,7 +1202,7 @@ class DistrictAssignStationView(LoginRequiredMixin,AjaxableResponseMixin,UserPas
                 username = s.username
                 
             elif station_type == '2':
-                d = VConcentrator.objects.get(commaddr=commaddr)
+                d = VConcentrator.objects.get(id=commaddr)
                 edit_id = d.pk
                 username = d.name
 
@@ -1238,10 +1286,18 @@ def getdmastationsbyId(request):
     
     for a in assigned_station:
         commaddr = a.station_id
-        s= Station.objects.get(meter__simid__simcardNumber=commaddr)
+        station_type = a.station_type
+        if station_type == "1":
+            s= Station.objects.get(meter__simid__simcardNumber=commaddr)
+            edit_id = s.id
+            username = s.username
+        else:
+            s = VCommunity.objects.get(id=commaddr)
+            edit_id = s.id
+            username = s.name
         data.append({
-            "id":s.pk,
-            "username":s.username,
+            "id":edit_id,
+            "username":username,
             "pid":dma.belongto.cid,
             "dmametertype":a.meter_type,
             "commaddr":a.station_id,

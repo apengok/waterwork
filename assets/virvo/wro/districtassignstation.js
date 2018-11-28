@@ -35,6 +35,7 @@
 
     var organ = '';     //组织
     var station = '';
+    var community = '';
     var dma_pk = $("#dma_pk").val(); //分区id
     var dma_no = $("#dma_no").val(); //分区编号
     var dma_name = $("#dma_name").val(); //分区名
@@ -96,6 +97,7 @@
                     otherParam : {  // 是否可选 Organization
                         "isStation" : "1",
                         "isDma":"1",
+                        "isCommunity":"1",
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: dmaStation.ajaxDataFilter
@@ -135,7 +137,7 @@
         },
         beforeClick: function(treeId, treeNode){
             var zTree = $.fn.zTree.getZTreeObj("stationtreeDemo");
-            if(treeNode.type != "station" || treeNode.type != "dma"){
+            if(treeNode.type != "station" || treeNode.type != "dma" || treeNode.type != "community"){
                 zTree.cancelSelectedNode(treeNode);
                 
             }
@@ -253,6 +255,35 @@
                 //     station = treeNode.id;
                 // }
 
+            }else if(treeNode.type == "community"){  //选择了小区
+                
+                community = treeNode.id;
+                
+                var pNode = treeNode.getParentNode(); //父节点---组织
+                var dma_group = $("#dma_group").val();
+                if(dma_group != pNode.name){
+                    // layer.msg("非当前组织站点");
+                    layer.confirm("选择了非当前分区组织的站点,是否继续",{
+                        title :'操作确认',
+                        icon : 3, // 问号图标
+                        btn: ['确认','取消'] // 按钮
+                    },function(index){
+                        layer.close(index,{move:false});
+                        
+                    },function(index){
+                        zTree.cancelSelectedNode(treeNode);
+                        layer.close(index,{move:false});
+                    });
+                }
+                
+                // if(treeNode.type == "dma"){
+                    
+                //     // $("#organ_name").attr("value",pNode.name);
+                //     $("#station_name").attr("value",treeNode.name);
+                //     organ = pNode.id;
+                //     station = treeNode.id;
+                // }
+
             }else{
                 zTree.cancelSelectedNode(treeNode);
             }
@@ -286,8 +317,8 @@
                     continue;
                 }
 
-                if(nodes[i].type != "station"){
-                    layer.msg("dma分区不能导入，请选择站点导入");
+                if(nodes[i].type == "group" || nodes[i].type == "dma"){
+                    layer.msg("请选择站点或小区导入");
                     continue;
                 }
             
