@@ -216,7 +216,13 @@ class DMABaseinfo(models.Model):
         for m in meter_in:
             commaddr = m.station_id
             
-            monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
+            if m.station_type == "2": #小区-- commaddr=VCommunity id
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
+                community_id = community["commutid"]
+                monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
+
+            else:
+                monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
             
             # print(m.username,commaddr,monthly_use)
             for k in monthly_in.keys():
@@ -232,7 +238,13 @@ class DMABaseinfo(models.Model):
         meter_out = dmastations_list.filter(meter_type='出水表')
         for m in meter_out:
             commaddr = m.station_id
-            monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
+            if m.station_type == "2": #小区-- commaddr=VCommunity id
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
+                community_id = community["commutid"]
+                monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
+
+            else:
+                monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
             # print(m.username,commaddr,monthly_use)
             for k in monthly_out.keys():
                 if k in monthly_use.keys():
@@ -248,9 +260,13 @@ class DMABaseinfo(models.Model):
 
         for m in meter_sale:
             commaddr = m.station_id
+            # print("&*^&*%&$*(&^&---",commaddr,m.station_type)
             # if m.username == "文欣苑户表总表":
-            if commaddr == '4022':
-                monthly_use = hdb_watermeter_flow_monthly(105,month_list)
+            # if commaddr == '4022':
+            if m.station_type == "2": #小区-- commaddr=VCommunity id
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
+                community_id = community["commutid"]
+                monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
 
             else:
                 monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
@@ -269,7 +285,13 @@ class DMABaseinfo(models.Model):
         meter_uncount = dmastations_list.filter(meter_type='未计费水表')
         for m in meter_uncount:
             commaddr = m.station_id
-            monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
+            if m.station_type == "2": #小区-- commaddr=VCommunity id
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
+                community_id = community["commutid"]
+                monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
+
+            else:
+                monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
             # print(m.username,commaddr,monthly_use)
             for k in monthly_uncount.keys():
                 if k in monthly_use.keys():

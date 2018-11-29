@@ -32,6 +32,8 @@ class Organizations(MPTTModel):
     phone_number       = models.CharField('电话号码',max_length=300,null=True,blank=True)
     firm_address       = models.CharField('地址',max_length=300,null=True,blank=True)
 
+    # 组织级别
+    organlevel         = models.CharField('Level',max_length=30,null=True,blank=True)
     # add new
     coorType    = models.CharField(max_length=30,null=True,blank=True)
     longitude   = models.CharField(max_length=30,null=True,blank=True)

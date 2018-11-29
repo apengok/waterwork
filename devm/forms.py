@@ -120,7 +120,8 @@ class VCommunityEditForm(forms.ModelForm):
         self.fields['belongto'].initial = self.instance.belongto.name
         vconcents = self.instance.vconcentrators.all()
         v_count = vconcents.count()
-        self.fields['vconcentrator1'].initial = vconcents[0].name
+        if v_count == 1:
+            self.fields['vconcentrator1'].initial = vconcents[0].name
         if v_count == 2:
             self.fields['vconcentrator2'].initial = vconcents[1].name
 

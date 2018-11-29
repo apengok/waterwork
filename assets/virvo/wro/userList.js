@@ -401,6 +401,9 @@
             var id = (100 + newCount);
             var pid = treeNode.id;
             pid = window.encodeURI(window.encodeURI(pid));
+            var attribute = treeNode.attribute;
+            var organlevel = treeNode.organlevel;
+            console.log("hover",attribute,organlevel);
             
             var addStr = "<span class='button add' id='addBtn_"
                     + treeNode.tId

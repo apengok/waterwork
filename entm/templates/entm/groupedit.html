@@ -6,8 +6,8 @@
         <h4 class="modal-title">编辑组织</h4>
     </div>
     <div class="modal-body">
-        <input type="text" class="hidden" id="cid" name="cid" value="{{ form.cid.value }}"/>
-        <input type="text" class="hidden" id="pid" name="pId" value="{{ form.pId.value }}"/>
+        <input type="text" class="hidden" id="parent_attribute" name="parent_attribute" value="{{ parent_attribute }}"/>
+        <input type="text" class="hidden" id="parent_level" name="parent_level" value="{{ parent_level }}"/>
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -404,7 +404,7 @@
 <script>
     $(function () {
 
-        var coorType_old = $("#coorTypeVal").val()
+        var coorType_old = $("#coorTypeVal").val();
         $("#coorType option").each(function (){
             if($(this).val()==coorType_old){ 
             $(this).attr("selected","selected"); 
@@ -487,6 +487,13 @@
 
             }
         });
+
+        var parent_level = $("#parent_level").val();
+        console.log("parent_level",parent_level);
+        if(parent_level == "1"){
+          $("#operation").prop("readonly",true);
+        }
+
 
     $('#target').distpicker({
         province: '--请选择省份--',

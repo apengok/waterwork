@@ -530,15 +530,17 @@ def oranizationtree(request):
 
     user = request.user
     organs = user.belongto #Organizations.objects.all()
-    
-    for o in organs.get_descendants(include_self=True):
+    organ_list = organs.get_descendants(include_self=True)
+    for o in organ_list.values("id","name","cid","pId","uuid","organlevel","attribute"):
         organtree.append({
-            "name":o.name,
-            "id":o.cid,
-            "pId":o.pId,
+            "name":o["name"],
+            "id":o["cid"],
+            "pId":o["pId"],
+            "attribute":o["attribute"],
+            "organlevel":o["organlevel"],
             "type":"group",
             "icon":"/static/virvo/resources/img/wenjianjia.png",
-            "uuid":o.uuid
+            "uuid":o["uuid"]
         })
 
     
@@ -837,7 +839,8 @@ class UserGroupEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print("group update here?:",self.request.POST)
         # print(form)
         # do something
-        
+        # self.object.groups.clear()
+        # self.object.groups.add(form.cleaned_data['group'])
                 
 
         return super(UserGroupEditView,self).form_valid(form)
@@ -845,8 +848,31 @@ class UserGroupEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
     def get_object(self):
         print(self.kwargs)
         return Organizations.objects.get(cid=self.kwargs["pId"])
-        
 
+    def get_initial(self):
+        initial = super(UserGroupEditView, self).get_initial()
+        try:
+            # current_group = self.object.groups.get()
+            parent_level = ''
+            parent_attribute = ''
+            obj = self.get_object()
+            if obj.parent:
+                parent_level = obj.parent.organlevel
+                parent_attribute = obj.parent.attribute
+            print("&%^*((&*^%&*---",parent_attribute,parent_level)
+            
+        except:
+            # exception can occur if the edited user has no groups
+            # or has more than one group
+            pass
+        else:
+            initial["parent_attribute"] = parent_attribute
+            initial["parent_level"] = parent_level
+
+        print("initial:",initial)
+        return initial
+        
+    
 """
 Group Detail, manager
 """

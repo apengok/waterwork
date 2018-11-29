@@ -170,7 +170,7 @@ def dmatree(request):
                         "type":"community",
                         "dma_no":'',
                         "open":False,
-                        "commaddr":o['vcommunity__pk'][i],
+                        "commaddr":o['vcommunity__pk'][i],#在dma站点分配中需要加入小区的分配，在这里传入小区的id，在后续处理中通过小区id查找小区及对应的集中器等
                         "dma_station_type":"2", # 在dma站点分配中标识该是站点还是小区
                         "icon":"/static/virvo/resources/img/home.png",
                         "uuid":''

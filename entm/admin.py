@@ -7,4 +7,4 @@ from . import models
 
 @admin.register(models.Organizations)
 class OrganizationsAdmin(admin.ModelAdmin):
-    list_display = ['name','parent','attribute','register_date','owner_name','phone_number','firm_address','cid','pId','is_org','uuid']
+    list_display = ['name','parent','attribute','organlevel','register_date','owner_name','phone_number','firm_address','cid','pId','is_org','uuid']
