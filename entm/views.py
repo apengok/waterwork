@@ -849,28 +849,28 @@ class UserGroupEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         print(self.kwargs)
         return Organizations.objects.get(cid=self.kwargs["pId"])
 
-    def get_initial(self):
-        initial = super(UserGroupEditView, self).get_initial()
-        try:
-            # current_group = self.object.groups.get()
-            parent_level = ''
-            parent_attribute = ''
-            obj = self.get_object()
-            if obj.parent:
-                parent_level = obj.parent.organlevel
-                parent_attribute = obj.parent.attribute
-            print("&%^*((&*^%&*---",parent_attribute,parent_level)
+    # def get_initial(self):
+    #     initial = super(UserGroupEditView, self).get_initial()
+    #     try:
+    #         # current_group = self.object.groups.get()
+    #         parent_level = ''
+    #         parent_attribute = ''
+    #         obj = self.get_object()
+    #         if obj.parent:
+    #             parent_level = obj.parent.organlevel
+    #             parent_attribute = obj.parent.attribute
+    #         print("&%^*((&*^%&*---",parent_attribute,parent_level)
             
-        except:
-            # exception can occur if the edited user has no groups
-            # or has more than one group
-            pass
-        else:
-            initial["parent_attribute"] = parent_attribute
-            initial["parent_level"] = parent_level
+    #     except:
+    #         # exception can occur if the edited user has no groups
+    #         # or has more than one group
+    #         pass
+    #     else:
+    #         initial["parent_attribute"] = parent_attribute
+    #         initial["parent_level"] = parent_level
 
-        print("initial:",initial)
-        return initial
+    #     print("initial:",initial)
+    #     return initial
         
     
 """

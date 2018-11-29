@@ -33,10 +33,20 @@ class OrganizationsAddForm(forms.ModelForm):
 class OrganizationsEditForm(forms.ModelForm):
     """docstring for OrganizationsEditForm"""
 
+    parent_attribute = forms.CharField()
+    parent_organlevel = forms.CharField()
+
     class Meta:
         model = Organizations
-        fields = ('name','attribute','register_date','owner_name','phone_number','firm_address','cid','pId',
+        fields = ('name','attribute','organlevel','register_date','owner_name','phone_number','firm_address','cid','pId',
             'coorType','zoomIn','longitude','latitude','islocation','location','province','city','district','adcode','districtlevel')
+
+
+    def __init__(self,*args,**kwargs):
+        super(OrganizationsEditForm, self).__init__(*args, **kwargs)
+        if self.instance.parent:
+            self.fields['parent_organlevel'].initial = self.instance.parent.organlevel
+            self.fields['parent_attribute'].initial = self.instance.parent.attribute
 
     
 
