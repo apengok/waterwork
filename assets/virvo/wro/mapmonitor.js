@@ -42,6 +42,114 @@
 
     var dma_list = [];
 
+    var pageLayout = {
+        // 页面布局
+        init: function(){
+          var url = "/clbs/v/monitoring/getHost";
+            // ajax_submit("POST", url, "json", true, {}, true, function(data){
+            //  hostUrl = 'http://' + data.obj.host + '/F3/sockjs/webSocket';
+            // });
+            winHeight = $(window).height();//可视区域高度
+            headerHeight = $("#header").height();//头部高度
+            var tabHeight = $myTab.height();//信息列表table选项卡高度
+            var tabContHeight = $("#myTabContent").height();//table表头高度
+            var fenceTreeHeight = winHeight - 380;//围栏树高度
+            $("#treeDemo").css('height',fenceTreeHeight + "px");//电子围栏树高度
+            //地图高度
+            newMapHeight = winHeight - headerHeight - tabHeight - 10;
+            $MapContainer.css({
+                "height": newMapHeight + 'px'
+            });
+            //车辆树高度
+            var newContLeftH = winHeight - headerHeight;
+            //sidebar高度
+            $(".sidebar").css('height',newContLeftH + 'px');
+            //计算顶部logo相关padding
+            logoWidth = $("#header .brand").width();
+            btnIconWidth = $("#header .toggle-navigation").width();
+            windowWidth = $(window).width();
+            newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
+            //左右自适应宽度
+            $contentLeft.css({
+                "width": newwidth + "%"
+            });
+            $contentRight.css({
+                "width": 100 - newwidth + "%"
+            });
+            //加载时隐藏left同时计算宽度
+            $sidebar.attr("class", "sidebar sidebar-toggle");
+            //$mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
+            //操作树高度自适应
+            var newTreeH = winHeight - headerHeight - 203;
+            $thetree.css({
+                "height": newTreeH + "px"
+            });
+            //视频区域自适应
+            var mainContentHeight = $contentLeft.height();
+            var adjustHeight = $(".adjust-area").height();
+            videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
+            $(".videoArea").css("height", videoHeight + "px");
+            //地图拖动改变大小
+            oldMapHeight = $MapContainer.height();
+            myTabHeight = $myTab.height();
+            wHeight = $(window).height();
+            // 页面区域定位
+            $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
+            // 监听浏览器窗口大小变化
+            var sWidth = $(window).width();
+            if (sWidth < 1200) {
+                $("body").css("overflow", "auto");
+                $("#content-left,#panDefLeft").css("height", "auto");
+                $panDefLeft.css("margin-bottom", "0px");
+                if (sWidth <= 414) {
+                    $sidebar.removeClass("sidebar-toggle");
+                    $mainContentWrapper.removeClass("main-content-toggle-left");
+                }
+            } else {
+                $("body").css("overflow", "hidden");
+            };
+            window.onresize=function(){
+              winHeight = $(window).height();//可视区域高度
+              headerHeight = $("#header").height();//头部高度
+                var tabHeight = $myTab.height();//信息列表table选项卡高度
+                var tabContHeight = $("#myTabContent").height();//table表头高度
+                var fenceTreeHeight = winHeight - 193;//围栏树高度
+                $("#treeDemo").css('height',fenceTreeHeight + "px");//电子围栏树高度
+                //地图高度
+                newMapHeight = winHeight - headerHeight - tabHeight - 10;
+                $MapContainer.css({
+                    "height": newMapHeight + 'px'
+                });
+                //车辆树高度
+                var newContLeftH = winHeight - headerHeight;
+                //sidebar高度
+                $(".sidebar").css('height',newContLeftH + 'px');
+                //计算顶部logo相关padding
+                logoWidth = $("#header .brand").width();
+                btnIconWidth = $("#header .toggle-navigation").width();
+                windowWidth = $(window).width();
+                newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
+                //左右自适应宽度
+                $contentLeft.css({
+                    "width": newwidth + "%"
+                });
+                $contentRight.css({
+                    "width": 100 - newwidth + "%"
+                });
+              //操作树高度自适应
+                var newTreeH = winHeight - headerHeight - 203;
+                $thetree.css({
+                    "height": newTreeH + "px"
+                });
+                //视频区域自适应
+                var mainContentHeight = $contentLeft.height();
+                var adjustHeight = $(".adjust-area").height();
+                videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
+                $(".videoArea").css("height", videoHeight + "px");
+        }
+        },
+    };
+
     var fenceOperation = {
         
         //行政区域选择后数据处理
@@ -90,6 +198,38 @@
             administrationMap.put(aId, polygonAarry);
             map.setFitView(polygon);//地图自适应
         },
+        TabCarBox: function () {
+            monitoringObjMapHeight = $("#MapContainer").height();
+            $("#carInfoTable").hide();
+            $("#dragDIV").hide();
+            $("#fenceBindTable").css("display", "block");
+            $("#fenceBindTable").show();
+            var bingLength = $('#dataTableBind tbody tr').length;
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            // var checkNode = treeObj.getCheckedNodes(true);
+            if ( 0) {
+                $("#MapContainer").css("height", newMapHeight + 'px');
+            } else {
+                if ($('#bingListClick i').hasClass('fa fa-chevron-down')) {
+                    if (bingLength == 0) {
+                        $("#MapContainer").css("height", newMapHeight + 'px');
+                    } else {
+                        $("#MapContainer").css('height', (newMapHeight - 80 - 44 * bingLength - 105) + 'px');
+                    }
+                    ;
+                } else {
+                    $("#MapContainer").css("height", newMapHeight + 'px');
+                }
+                ;
+            }
+            ;
+            $("#MapContainer").css('height', (newMapHeight - 80 - 44 * bingLength - 105) + 'px');
+            // 订阅电子围栏
+            // if (clickFenceCount == 0) {
+            //     webSocket.subscribe(headers, "/user/" + $("#userName").text() + '/fencestatus', fenceOperation.updataFenceData, null, null);
+            // };
+            clickFenceCount = 1;
+        },
     }
 
 
@@ -97,7 +237,7 @@
     mapMonitor = {
          // 地图初始化
         amapinit: function () {
-            console.log("$newMapHeight",$("#map-container").height());
+            console.log("$newMapHeight",$("#MapContainer").height());
             $contentLeft.css({
                 "height": newMapHeight + "px",
             });
@@ -109,11 +249,11 @@
             });
             console.log("$sidebar height",$(".sidebar").height());
 
-            $("#treeDemo").css({
-                "height": 388 + "px"
-            });
+            // $("#treeDemo").css({
+            //     "height": 388 + "px"
+            // });
             // 创建地图
-            map = new AMap.Map("map-container", {
+            map = new AMap.Map("MapContainer", {
                 resizeEnable: true,   //是否监控地图容器尺寸变化
                 zoom: 18,       //地图显示的缩放级别
             });
@@ -759,6 +899,7 @@
                 station = treeNode.id;
 
                 mapMonitor.loadGeodata(2)
+                fenceOperation.TabCarBox();
             }else{
                 $("#current_organ_id").attr("value",treeNode.id);
 
@@ -785,6 +926,7 @@
             };
         });
         var map;
+        pageLayout.init();
         mapMonitor.userTree();
         
         mapMonitor.amapinit();

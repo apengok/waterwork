@@ -81,7 +81,7 @@
             });
             //加载时隐藏left同时计算宽度
             $sidebar.attr("class", "sidebar sidebar-toggle");
-    //        $mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
+            //$mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
             //操作树高度自适应
             var newTreeH = winHeight - headerHeight - 203;
             $thetree.css({
@@ -7238,11 +7238,12 @@
             monitoringObjMapHeight = $("#MapContainer").height();
             $("#carInfoTable").hide();
             $("#dragDIV").hide();
+            $("#fenceBindTable").css("display", "block");
             $("#fenceBindTable").show();
             var bingLength = $('#dataTableBind tbody tr').length;
-            var treeObj = $.fn.zTree.getZTreeObj("fenceDemo");
-            var checkNode = treeObj.getCheckedNodes(true);
-            if (checkNode.length == 0) {
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            // var checkNode = treeObj.getCheckedNodes(true);
+            if ( 0) {
                 $("#MapContainer").css("height", newMapHeight + 'px');
             } else {
                 if ($('#bingListClick i').hasClass('fa fa-chevron-down')) {
@@ -7258,11 +7259,11 @@
                 ;
             }
             ;
+            $("#MapContainer").css('height', (newMapHeight - 80 - 44 * bingLength - 105) + 'px');
             // 订阅电子围栏
-            if (clickFenceCount == 0) {
-                webSocket.subscribe(headers, "/user/" + $("#userName").text() + '/fencestatus', fenceOperation.updataFenceData, null, null);
-            }
-            ;
+            // if (clickFenceCount == 0) {
+            //     webSocket.subscribe(headers, "/user/" + $("#userName").text() + '/fencestatus', fenceOperation.updataFenceData, null, null);
+            // };
             clickFenceCount = 1;
         },
         TabFenceBox: function () {
@@ -8836,8 +8837,10 @@
     $('#tableCheckAll').on('click', function () {
         $("input[name='subChk']").prop("checked", this.checked);
     });
-
+    // $("#fenceBindTable").modal('show');
+    fenceOperation.TabCarBox();
     $("#zTreeOrganSel").bind("click", customFucn.showMenu);
         
     })
+
 })($,window)

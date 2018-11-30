@@ -25,7 +25,7 @@
 
                     <label class="col-md-3 control-label"><label class="text-danger">*</label>组织机构性质：</label>
                     <div class="col-md-3">
-                        <input type="hidden" id="attributeVal" name="attribute" >
+                        <input type="hidden" id="attributeVal" name="attribute" value="非自来水公司" >
                         <select class="form-control" id="attribute" >
                           <option value="非自来水公司">非自来水公司</option>
                           <option value="自来水公司">自来水公司</option>
@@ -617,12 +617,20 @@
               $("#organlevel").attr("value",parseInt(parent_organlevel)+1);
 
             }
-
+            // 企业属性变化时处理
             $('#attribute').on('change',function(){
         
                 var option = this[this.options.selectedIndex];
                 console.log(option)
-                $("#attributeVal").attr("value",option.value)
+                $("#attributeVal").attr("value",option.value);
+                var orig_level = $("#organlevel").val();
+                // 如果公司性质是自来水公司，则其子组织性质默认是自来水公司且不可选择修改
+                if(option.value == "自来水公司"){
+                  $("#organlevel").attr("value",1);
+                }else{
+                  $("#organlevel").attr("value","");
+
+                }
             })
 
             $("#islocation").prop("checked", false);
