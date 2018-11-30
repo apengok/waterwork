@@ -66,7 +66,7 @@ def dmatree(request):
     print("dmatree",organs)
     # 组织
     o_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","dma__pk","dma__dma_name","dma__dma_no",
-        "station__pk","station__username","station__meter__simid__simcardNumber",
+        "station__pk","station__username","station__meter__simid__simcardNumber","organlevel","attribute",
         "vcommunity__pk","vcommunity__name")
     
     mergeds = merge_values(o_lists)
@@ -85,6 +85,8 @@ def dmatree(request):
             "name":o["name"],
             "id":o["cid"],
             "pId":o["pId"],
+            "attribute":o["attribute"],
+            "organlevel":o["organlevel"],
             "districtid":'',
             "type":"group",
             "dma_no":p_dma_no,  #如果存在dma分区，分配第一个dma分区的dma_no，点击数条目的时候使用

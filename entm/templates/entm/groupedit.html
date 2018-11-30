@@ -10,6 +10,7 @@
         <input type="text" class="hidden" id="pId" name="pId" value="{{ form.pId.value }}"/>
         <input type="text" class="hidden" id="parent_attribute" name="parent_attribute" value="{{ form.parent_attribute.value }}"/>
         <input type="text" class="hidden" id="parent_organlevel" name="parent_organlevel" value="{{ form.parent_organlevel.value }}"/>
+        <input type="text" class="hidden" id="organlevel" name="organlevel" value="{{ form.organlevel.value }}"/>
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -21,7 +22,7 @@
                     </div>
                     <label class="col-md-3 control-label">组织机构性质：</label>
                     <div class="col-md-3">
-                      <input type="hidden" id="attributeVal" name="attribute" value="{{ form.attribute.value|default:'' }}">
+                        <input type="hidden" id="attributeVal" name="attribute" value="{{ form.attribute.value|default:'' }}">
                         <select class="form-control" id="attribute" >
                           <option value="非自来水公司">非自来水公司</option>
                           <option value="自来水公司">自来水公司</option>
@@ -499,13 +500,23 @@
             }
         });
 
-        var parent_level = $("#parent_organlevel").val();
-        console.log("parent_organlevel",parent_level);
-        if(parent_level == "1"){
-          console.log("parent_organlevel",parent_level);
-          $("#attribute").prop("readonly",true);
-          $("#attribute").prop("disabled","disabled");
-        }
+        var parent_attribute = $("#parent_attribute").val();
+          console.log("parent_attribute",parent_attribute);
+          if(parent_attribute == "自来水公司"){
+            console.log("parent_attribute",parent_attribute);
+            $("#attribute").attr("value",parent_attribute);
+            $("#attribute").prop("disabled","disabled");
+            $("#attributeVal").attr("value",parent_attribute);
+
+            $("#attribute option").each(function (){
+              if($(this).val()==parent_attribute){ 
+              $(this).attr("selected","selected"); 
+            }});
+
+            var parent_organlevel = $("#parent_organlevel").val();
+            $("#organlevel").attr("value",parseInt(parent_organlevel)+1);
+
+          }
 
 
     $('#target').distpicker({

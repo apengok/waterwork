@@ -798,6 +798,10 @@ class UserGroupAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
         # initial_base["menu"] = Menu.objects.get(id=1)
         initial_base["cid"] = kwargs.get("cid")
         initial_base["pId"] = kwargs.get("pId")
+        organizaiton_belong = Organizations.objects.get(cid=kwargs.get("pId"))
+        initial_base["parent_attribute"] = organizaiton_belong.attribute
+        initial_base["parent_organlevel"] = organizaiton_belong.organlevel
+        print(organizaiton_belong,organizaiton_belong.organlevel,organizaiton_belong.attribute)
         form.initial = initial_base
         
         return render(request,self.template_name,

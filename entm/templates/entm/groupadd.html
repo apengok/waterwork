@@ -10,6 +10,9 @@
     <div class="modal-body" style="height: auto; max-height: 568px;">
         <input  type="text" class="hidden" id="cid" name="cid" value="{{ form.cid.value }}" />
         <input  type="text" class="hidden" id="pid" name="pId" value="{{ form.pId.value }}"/>
+        <input type="text" class="hidden" id="parent_attribute" name="parent_attribute" value="{{ form.parent_attribute.value }}"/>
+        <input type="text" class="hidden" id="parent_organlevel" name="parent_organlevel" value="{{ form.parent_organlevel.value }}"/>
+        <input type="text" class="hidden" id="organlevel" name="organlevel" value="{{ form.organlevel.value }}"/>
         <div class="row">
             <div class="col-md-12">
 
@@ -22,7 +25,11 @@
 
                     <label class="col-md-3 control-label"><label class="text-danger">*</label>组织机构性质：</label>
                     <div class="col-md-3">
-                        <select id="operation" class="form-control" name="attribute" placeholder="请选择组织机构性质">
+                        <input type="hidden" id="attributeVal" name="attribute" >
+                        <select class="form-control" id="attribute" >
+                          <option value="非自来水公司">非自来水公司</option>
+                          <option value="自来水公司">自来水公司</option>
+                          
                         </select>
                     </div>
 
@@ -399,27 +406,27 @@
     (function($,window){
         groupAdd = {
             init: function(){
-                $.ajax({
-                    url: '/entm/group/findOperations',
-                    type: 'POST',
-                    data: "",
-                    async:false,
-                    dataType: 'json',
-                    success: function (data) {
-                        if(data.success==true){
-                            var operations=[];
-                            var selector=$("#operation");
-                            selector.append('<option  value = "">'+"请选择组织结构性质"+'</option>');
-                            //selector.append('<optgroup label="请选择运营资质类别"></optgroup>');
-                            if(data.obj.operation != null && data.obj.operation.length > 0){
-                                var calldata = data.obj.operation;
-                                for(var i=0;i<calldata.length;i++){
-                                    selector.append('<option  value="'+calldata[i].operationType+'">'+calldata[i].operationType+'</option>');
-                                }
-                            }
-                        }
-                    },
-                });
+                // $.ajax({
+                //     url: '/entm/group/findOperations',
+                //     type: 'POST',
+                //     data: "",
+                //     async:false,
+                //     dataType: 'json',
+                //     success: function (data) {
+                //         if(data.success==true){
+                //             var operations=[];
+                //             var selector=$("#operation");
+                //             selector.append('<option  value = "">'+"请选择组织结构性质"+'</option>');
+                //             //selector.append('<optgroup label="请选择运营资质类别"></optgroup>');
+                //             if(data.obj.operation != null && data.obj.operation.length > 0){
+                //                 var calldata = data.obj.operation;
+                //                 for(var i=0;i<calldata.length;i++){
+                //                     selector.append('<option  value="'+calldata[i].operationType+'">'+calldata[i].operationType+'</option>');
+                //                 }
+                //             }
+                //         }
+                //     },
+                // });
                 laydate.render({elem: '#registerDate',max: groupAdd.getsTheMaxTime(),theme: '#6dcff6'});
             },
             // 提交
@@ -592,6 +599,31 @@
             $("#submitAdd").on("click",groupAdd.doSubmit);
             $('input').inputClear();
             $("#name,#organizationCode,#registerDate,#license,#owner_name,#phone_number,#firm_address").on("change",groupAdd.clearPreviousValue);
+
+            var parent_attribute = $("#parent_attribute").val();
+            console.log("parent_attribute",parent_attribute);
+            if(parent_attribute == "自来水公司"){
+              console.log("parent_attribute",parent_attribute);
+              $("#attribute").attr("value",parent_attribute);
+              $("#attribute").prop("disabled","disabled");
+              $("#attributeVal").attr("value",parent_attribute);
+
+              $("#attribute option").each(function (){
+                if($(this).val()==parent_attribute){ 
+                $(this).attr("selected","selected"); 
+              }});
+
+              var parent_organlevel = $("#parent_organlevel").val();
+              $("#organlevel").attr("value",parseInt(parent_organlevel)+1);
+
+            }
+
+            $('#attribute').on('change',function(){
+        
+                var option = this[this.options.selectedIndex];
+                console.log(option)
+                $("#attributeVal").attr("value",option.value)
+            })
 
             $("#islocation").prop("checked", false);
 

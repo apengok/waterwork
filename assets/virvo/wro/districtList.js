@@ -772,7 +772,12 @@
             // sDetails.after(detailsStr);
             // sEdit.after(editStr);
             // sObj.after(addStr);
-            if(treeNode.type == "group"){
+            var organlevel = parseInt(treeNode.organlevel);
+            var permission = "false";
+            if(treeNode.attribute == "自来水公司" && organlevel <= 3){
+                permission = "true";
+            }
+            if(treeNode.type == "group" && permission == "true"){
                 sObj.after(addStr);
             }
             if(treeNode.type == "dma"){
@@ -914,7 +919,6 @@
             json_ajax("GET",url,"json",true,parameter, dmaManage.setBaseinfo);
         },
         setBaseinfo:function(data){
-            console.log(data);
             if(data.success == true){
                 // $("#phoneBookObject").val(data.obj.vid);
                 // if(data.msg == null&&data.obj.referVehicleList!= null){
@@ -943,7 +947,6 @@
                 var stationdataListArray = [];//用来储存显示数据
                 if(data.obj.dmastationlist !=null&&data.obj.dmastationlist.length!=0){
                     var ustasticinfo=data.obj.dmastationlist;
-                    console.log(ustasticinfo);
                     for(var i=0;i<ustasticinfo.length;i++){
                         
                         var dateList=
@@ -964,7 +967,6 @@
                             stationdataListArray.push(dateList);
 //                      }
                     }
-                    console.log(dateList);
                     dmaManage.reloadData(stationdataListArray);
                     
                 }else{

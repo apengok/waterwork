@@ -422,6 +422,7 @@
                     + "' title='详情'  href='/entm/user/group/detail/"
                     + pid
                     + "/' data-target='#commonWin' data-toggle='modal'</span>";
+            
             sDetails.after(detailsStr);
             sEdit.after(editStr);
             sObj.after(addStr);
