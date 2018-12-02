@@ -56,19 +56,6 @@
     float: right;
 }
 
-.info {
-    /*display: none;*/
-    /*position: absolute;*/
-    padding: 10px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.9);
-    font-family:'微软雅黑';
-    font-weight:400;
-    font-style:normal;
-    font-size:12px;
-    
-    
-}
 
 .span2 {
   font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
@@ -100,6 +87,55 @@
   font-size:12px;
   color:red;
   margin-left: 10px;
+}
+
+
+.info hr {
+  margin-right: 0;
+  margin-left: 0;
+  border-top-color: grey;
+}
+
+.info {
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: .25rem;
+  position: fixed;
+  top: 40rem;
+  background-color: white;
+  width: auto;
+  min-width: 35rem;
+  border-width: 0;
+  right: 95rem;
+  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+}
+
+.info-seach-btn {
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: .25rem;
+  position: fixed;
+  top: 40rem;
+  background-color: rgba(204, 51, 153, 1);
+  width: auto;
+  /*min-width: 22rem;*/
+  border-width: 0;
+  right: 126rem;
+  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+  color: white;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  /*border: 3px solid purple;*/
+}
+
+th, td {
+  padding: 0px;
+  height: 20px;
 }
 
     </style>
@@ -144,6 +180,7 @@
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:100%!important">
                     <ul id="treeDemo" class="ztreee" style="overflow:scroll;overflow-y: auto;height:460px!important"></ul>
                   </div>
+
                 </div>
             </div>
         </div>
@@ -161,6 +198,20 @@
         <!-- <div id="js-map" class="map"></div> -->
         
       <div id="MapContainer" ></div> 
+      <div class="info-seach-btn">
+          <div style="margin-left: 15px; "><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+          <div>搜<br>索</div>
+      </div>
+      <div class="info">
+          <div >
+              <input style="cursor: pointer; background-color: #fafafa;"
+                  class="form-control layer-date laydate-icon"
+                  id="timeInterval" name="timeInterval" readonly />
+              <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
+          </div>
+          <button id="queryClick" type="button" class="btn btn-primary pull-right" name="0" >查询</button>
+      </div>
+
       <input type="hidden" id="current_dma_no" name="">
       <input type="hidden" id="current_organ_id" name="">
 
@@ -200,111 +251,270 @@
             </div>
           
           
-    </div>
+      </div>
         
 
     </div>
+
+    <!-- dma绑定 -->
+    <div style="cursor: default;" class="modal fade" id="fenceBind" aria-hidden="true" data-backdrop="static" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document" style="width:80%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">起始时间：2018-11-15 12：00:00  结束时间：2018-12-10 12：00:00</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="form-horizontal"> -->
+                        <!-- <div class="row"> -->
+                            <input id="fenceID" name="search" class="form-control" type="hidden"/>
+                            <input id="fenceName" name="search" class="form-control" type="hidden"/>
+                            <input id="fenceInfoId" name="search" class="form-control" type="hidden"/>
+                            
+                            
+                            <div class="col-md-4">
+                              <table border="1">
+                                
+                                <tbody>
+                                  <tr>
+                                    <td >序号</td>
+                                    <td >内容</td>
+                                    <td >项目值</td>
+                                    
+                                  </tr>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>时段最小流量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>2</td>
+                                    <td>时段最小流量出现时间</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>3</td>
+                                    <td>夜间允许流量</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>4</td>
+                                    <td>时段供水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>5</td>
+                                    <td>时段漏失总量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>6</td>
+                                    <td>单位管长漏失水量</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>7</td>
+                                    <td>时段漏失率</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>8</td>
+                                    <td>时段售水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>9</td>
+                                    <td>时段产销差水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>10</td>
+                                    <td>时段产销差率</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>11</td>
+                                    <td>时段MNF/ADD最小值</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>12</td>
+                                    <td>时段最大流量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>13</td>
+                                    <td>时段最大流量出现时间</td>
+                                    <td></td>
+                                  </tr>
+                                   
+                                    
+
+                                  
+                                </tbody>
+                              </table>
+                              
+                            </div>
+                            <div class="col-md-8" style="border: 1px solid blue;">
+                              
+                              <div id="bindflowpress" style="height:450px;width:100%;"></div>
+                            </div>
+                        <!-- </div> -->
+                    <!-- </div> -->
+                </div>
+                <div class="modal-footer">
+        
+                  <button class="btn btn-primary" type="button" id="doSubmit">
+                      <strong>导出</strong>
+                  </button>
+                  <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal">
+                      <strong>关 闭</strong>
+                  </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row" id="fenceBindTable">
           <div class="col-md-12">
               <div class="panel panel-default">
                   <div class="panel-heading">
-                      <h3 class="panel-title fwb">绑定列表</h3>
+                      <h3 class="panel-title fwb" id="binddmaname"></h3>
                       <div class="pull-right" id="bingListClick">
-                          <i class="fa fa-chevron-up"></i>
+                          <i class="fa fa-chevron-down"></i>
                       </div>
                   </div>
                   <div class="panel-body fixed-table-body">
                       <!--工具面板-->
-                      <div class="ToolPanel">
-                          <div class="bars pull-left">
-                              <div class="btn-group pull-left barsMargin" role="group">
-                                  <form role="form">
-                                      <label><input type="text"
-                                                    class="Inlinesearch form-control"
-                                                    id="simpleQueryParam"
-                                                    name="simpleQueryParam"
-                                                    style="width:300px"
-                                                    placeholder="请输入监控对象/围栏 关键字"></label>
-                                      <button id="search_button" type="button"
-                                              class="btn btn-outline btn-default">搜索
-                                      </button>
-                                      <input id="hiddenText" type="text"
-                                             style="display:none"/>
-                                  </form>
-                              </div>
-                              <div class="dropdown pull-left">
-                                  <button class="btn btn-default dropdown-toggle"
-                                          type="button" id="dropdownMenu1"
-                                          data-toggle="dropdown" aria-haspopup="true"
-                                          aria-expanded="true">
-                                      操作菜单<span class="caret"></span>
-                                  </button>
-                                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                      <li><a href="javascript:void(0);" id="send_model"><i
-                                              class="glyphicon glyphicon-circle-arrow-down icoPaddingLeft"></i>批量下发</a>
-                                      </li>
-                                      <li><a href="javascript:void(0);" id="del_model"><i
-                                              class="glyphicon glyphicon-trash icoPaddingLeft"></i>批量解除</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                          </div>
-                          <div class="columns btn-group pull-right fenceBinding">
-                              <button id="refreshTable" class="btn btn-default" type="button"
-                                      name="refresh" title="刷新">
-                                  <i class="glyphicon glyphicon-refresh icon-refresh"></i>
-                              </button>
-                              <div class="keep-open btn-group" title="定制显示列">
-                                  <button id="customizeColumns" type="button"
-                                          class="btn btn-default dropdown-toggle"
-                                          data-toggle="dropdown">
-                                      <i class="glyphicon glyphicon-th icon-th"></i> <span
-                                          class="caret"></span>
-                                  </button>
-                                  <ul class="dropdown-menu" role="menu"
-                                      id="Ul-menu-text-bind">
-                                  </ul>
-                              </div>
-                          </div>
+                      <div class="col-md-5">
+                        <table id="dataTableBind" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="3">月供水(万m³)</td>
+                              <td colspan="5">日供水(万m³)</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>前月</td>
+                              <td>上月</td>
+                              <td>本月</td>
+                              <td>类型</td>
+                              <td>11月29日</td>
+                              <td>前日</td>
+                              <td>昨日</td>
+                              <td>今日</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td>供水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td>进水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td>出水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td>漏水量</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                      <table id="dataTableBind"
-                             class="table table-striped table-bordered table-hover"
-                             cellspacing="0" width="100%">
-                          <thead>
-                          <tr>
-                              <th style=" width:1px; padding:0"></th>
-                              <th style="width:30px; padding:8px"><input type="checkbox"
-                                                                         id="tableCheckAll">
-                              </th>
-                              <th>操作设置</th>
-                              <th>围栏类型</th>
-                              <th>围栏名称</th>
-                              <th>监控对象</th>
-                              <th>下发状态</th>
-                              <th>下发类型</th>
-                              <th>报警来源</th>
-                              <th>开始日期</th>
-                              <th>结束日期</th>
-                              <th>开始时间</th>
-                              <th>结束时间</th>
-                              <th>驶入报警给平台</th>
-                              <th>驶出报警给平台</th>
-                              <th>驶入报警给驾驶员</th>
-                              <th>驶出报警给驾驶员</th>
-                              <th>最高速度(km/h)</th>
-                              <th>超速持续时间(s)</th>
-                              <th>行驶时间过长阈值(s)</th>
-                              <th>行驶时间不足阈值(s)</th>
-                              <th>允许开门</th>
-                              <th>进区域开启通信模块</th>
-                              <th>进区域不采集GNSS定位数据</th>
-                          </tr>
-                          </thead>
-                      </table>
+                      <div class="col-md-3">
+                        <table border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="4">夜间最小流量MNF(万m³)</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>11月29日</td>
+                              <td>前日</td>
+                              <td>昨日</td>
+                              <td>今日</td>
+                            </tr>
+                            <tr>
+                              <td>96.37</td>
+                              <td>96.34</td>
+                              <td>90.45</td>
+                              <td>85.63</td>
+                            </tr>
+                            
+                          </tbody>
+                        </table>
+                        <table border="1">
+                          
+                          <tbody>
+                            
+                            <tr>
+                              <td colspan="3">报警设定值</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>日用水基准</td>
+                              <td>产销差基准</td>
+                              <td>MNF基准</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-4">
+                        <table border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td>实时流量</td>
+                              <td>12.45 m³/h</td>
+                              <td>实时压力</td>
+                              <td>0.45 MPa</td>
+                              <td>2018-12-01</td>
+                            </tr>
+                            
+                          </tbody>
+                        </table>
+                        <div id="recent7flowpress" style="height:150px;width:100%;"></div>
+                      </div>
+                      
                   </div>
               </div>
           </div>
-      </div>
+    </div>
 
 </div>
 
@@ -323,6 +533,7 @@
  </script>
     <!-- <script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch"></script> -->
     <script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch,AMap.MouseTool,AMap.Driving,AMap.Autocomplete,AMap.Geocoder,AMap.PlaceSearch,AMap.PolyEditor,AMap.CircleEditor,AMap.MarkerClusterer"></script>
+<script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
 
 <script src="{% static 'virvo/wro/mapmonitor.js' %}"></script>
  

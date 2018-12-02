@@ -198,14 +198,30 @@
             administrationMap.put(aId, polygonAarry);
             map.setFitView(polygon);//地图自适应
         },
+        //收缩绑定列表
+        bingListClick: function () {
+            if ($(this).children('i').hasClass('fa-chevron-down')) {
+                $(this).children('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                $("#MapContainer").animate({'height': newMapHeight + "px"});
+            } else {
+                $(this).children('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                var trLength = $('#dataTableBind tbody tr').length;
+                $("#MapContainer").animate({'height': (winHeight - 80 - trLength * 46 - 220) + "px"});
+            }
+            ;
+        },
         TabCarBox: function () {
             monitoringObjMapHeight = $("#MapContainer").height();
             $("#carInfoTable").hide();
             $("#dragDIV").hide();
             $("#fenceBindTable").css("display", "block");
-            $("#fenceBindTable").show();
+            
             var bingLength = $('#dataTableBind tbody tr').length;
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getSelectedNodes()
+            var stype = nodes[0].type;
+            console.log("tree selete type ",stype);
+
             // var checkNode = treeObj.getCheckedNodes(true);
             if ( 0) {
                 $("#MapContainer").css("height", newMapHeight + 'px');
@@ -214,7 +230,7 @@
                     if (bingLength == 0) {
                         $("#MapContainer").css("height", newMapHeight + 'px');
                     } else {
-                        $("#MapContainer").css('height', (newMapHeight - 80 - 44 * bingLength - 105) + 'px');
+                        $("#MapContainer").css('height', (newMapHeight - 80 - 30 * bingLength - 105) + 'px');
                     }
                     ;
                 } else {
@@ -223,12 +239,38 @@
                 ;
             }
             ;
-            $("#MapContainer").css('height', (newMapHeight - 80 - 44 * bingLength - 105) + 'px');
+            if(stype == "dma"){
+                $("#fenceBindTable").show();
+                // findOperation.fenceBind();
+            }
+            else{
+                // $("#fenceBindTable").hide();
+                $("#MapContainer").css("height", newMapHeight + 'px');
+                // if ($('#bingListClick i').hasClass('fa fa-chevron-down')){
+                //     $("#MapContainer").animate({'height': newMapHeight + "px"});
+                // }
+                
+            }
+            // $("#MapContainer").css('height', (newMapHeight - 80 - 44 * bingLength - 205) + 'px');
             // 订阅电子围栏
             // if (clickFenceCount == 0) {
             //     webSocket.subscribe(headers, "/user/" + $("#userName").text() + '/fencestatus', fenceOperation.updataFenceData, null, null);
             // };
             clickFenceCount = 1;
+        },
+        //围栏绑定
+        fenceBind: function (fenceId, fenceName, fenceInfoId, fenceIdstr) {
+            // fenceOperation.clearFenceBind();
+            $("#fenceID").val(fenceId);
+            $("#fenceName").val(fenceName);
+            $("#fenceInfoId").val(fenceInfoId);
+            // pageLayout.closeVideo();
+            $("#fenceBind").modal('show');
+            
+            // json_ajax("post", '/clbs/m/functionconfig/fence/bindfence/getVehicleIdsByFenceId', "json", false, {"fenceId": fenceIdstr}, function (data) {
+            //     oldFencevehicleIds = data.obj;
+            // })
+            return false;
         },
     }
 
@@ -899,12 +941,17 @@
                 station = treeNode.id;
 
                 mapMonitor.loadGeodata(2)
-                fenceOperation.TabCarBox();
+                $("#binddmaname").html(treeNode.name);
+                mapMonitor.hydropressflowChart();
             }else{
                 $("#current_organ_id").attr("value",treeNode.id);
-
+                $("#fenceBindTable").css("display", "none");
                 mapMonitor.loadGeodata(1)
             }
+            
+            fenceOperation.TabCarBox();
+            fenceOperation.fenceBind(treeNode.pId, treeNode.name, treeNode.type,treeNode.id);
+
         },
         // ajax参数
         ajaxDataParamFun: function(d){
@@ -916,7 +963,300 @@
             if(event.keyCode==13){
                 mapMonitor.findOperation();
             }
-        }
+        },
+        // 水力分布流量和压力图标
+        hydropressflowChart:function(){
+
+            options = {
+                backgroundColor: '#FFFFFF',
+                
+                title: {
+                    text: '近7日流量压力曲线图',
+                    left:'left',
+                    textStyle:{
+                        fontSize:12,
+                        fontWeight:'100'
+                    },
+                },
+                // tooltip: {
+                //     trigger: 'axis',
+                //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                //         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                //     }
+                // },
+                
+                legend: {
+                    data: ['流量'],
+                    
+                },
+                    grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    containLabel: true
+                    },
+                
+                xAxis: [{
+                    type: 'category',
+                     boundaryGap: false,
+                    //show:false,
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40'],
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:10
+                        }
+                    }
+                }],
+                yAxis: {
+                    type: 'value',
+                    //show:false,
+                  //  name: '流量',
+                    // min: 0,
+                     max: 10,
+                    interval: 10,
+                    splitLine:{
+                        show:false,
+                    }
+                },
+                series: [{
+                    name: 'flow',
+                    type: 'line',
+                    itemStyle: {
+                        normal: {
+                            color: '#7acf88',
+                            // areaStyle:{type:'default'}
+                        },
+                    },
+                    
+                    data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
+                }]
+            };
+
+            var recent7flowpress = echarts.init(document.getElementById('recent7flowpress'));
+            recent7flowpress.setOption(options);
+            
+        },
+        // 水力分布流量和压力图标
+        bindflowpress:function(){
+
+            option = {
+                title : {
+                    text: '未来一周气温变化',
+                    subtext: '纯属虚构'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['最高气温','最低气温']
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : ['周一','周二','周三','周四','周五','周六','周日']
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value} °C'
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'最高气温',
+                        type:'line',
+                        data:[11, 11, 15, 13, 12, 13, 10],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: '最大值'},
+                                {type : 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name:'最低气温',
+                        type:'line',
+                        data:[1, -2, 2, 5, 3, 2, 0],
+                        markPoint : {
+                            data : [
+                                {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name : '平均值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+                                
+
+            var bindflowpress = echarts.init(document.getElementById('bindflowpress'));
+            bindflowpress.setOption(option);
+            
+        },
+        //开始时间
+        startDay: function (day) {
+            var timeInterval = $('#timeInterval').val().split('--');
+            var startValue = timeInterval[0];
+            var endValue = timeInterval[1];
+            if (startValue == "" || endValue == "") {
+                var today = new Date();
+                var targetday_milliseconds = today.getTime() + 1000 * 60 * 60
+                    * 24 * day;
+
+                today.setTime(targetday_milliseconds); //注意，这行是关键代码
+
+                var tYear = today.getFullYear();
+                var tMonth = today.getMonth();
+                var tDate = today.getDate();
+                tMonth = mapMonitor.doHandleMonth(tMonth + 1);
+                tDate = mapMonitor.doHandleMonth(tDate);
+                var num = -(day + 1);
+                startTime = tYear + "-" + tMonth + "-" + tDate + " "
+                    + "00:00:00";
+                var end_milliseconds = today.getTime() + 1000 * 60 * 60 * 24
+                    * parseInt(num);
+                today.setTime(end_milliseconds); //注意，这行是关键代码
+                var endYear = today.getFullYear();
+                var endMonth = today.getMonth();
+                var endDate = today.getDate();
+                endMonth = mapMonitor.doHandleMonth(endMonth + 1);
+                endDate = mapMonitor.doHandleMonth(endDate);
+                endTime = endYear + "-" + endMonth + "-" + endDate + " "
+                    + "23:59:59";
+            } else {
+                var startTimeIndex = startValue.slice(0, 10).replace("-", "/").replace("-", "/");
+                var vtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * day;
+                var dateList = new Date();
+                dateList.setTime(vtoday_milliseconds);
+                var vYear = dateList.getFullYear();
+                var vMonth = dateList.getMonth();
+                var vDate = dateList.getDate();
+                vMonth = mapMonitor.doHandleMonth(vMonth + 1);
+                vDate = mapMonitor.doHandleMonth(vDate);
+                startTime = vYear + "-" + vMonth + "-" + vDate + " "
+                    + "00:00:00";
+                if (day == 1) {
+                    endTime = vYear + "-" + vMonth + "-" + vDate + " "
+                        + "23:59:59";
+                } else {
+                    var endNum = -1;
+                    var vendtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * parseInt(endNum);
+                    var dateEnd = new Date();
+                    dateEnd.setTime(vendtoday_milliseconds);
+                    var vendYear = dateEnd.getFullYear();
+                    var vendMonth = dateEnd.getMonth();
+                    var vendDate = dateEnd.getDate();
+                    vendMonth = mapMonitor.doHandleMonth(vendMonth + 1);
+                    vendDate = mapMonitor.doHandleMonth(vendDate);
+                    endTime = vendYear + "-" + vendMonth + "-" + vendDate + " "
+                        + "23:59:59";
+                }
+            }
+        },
+        doHandleMonth: function (month) {
+            var m = month;
+            if (month.toString().length == 1) {
+                m = "0" + month;
+            }
+            return m;
+        },
+        //当前时间
+        getsTheCurrentTime: function () {
+            var nowDate = new Date();
+            startTime = nowDate.getFullYear()
+                + "-"
+                + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                    + parseInt(nowDate.getMonth() + 1)
+                    : parseInt(nowDate.getMonth() + 1))
+                + "-"
+                + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                    : nowDate.getDate()) + " " + "00:00:00";
+            endTime = nowDate.getFullYear()
+                + "-"
+                + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
+                    + parseInt(nowDate.getMonth() + 1)
+                    : parseInt(nowDate.getMonth() + 1))
+                + "-"
+                + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
+                    : nowDate.getDate())
+                + " "
+                + ("23")
+                + ":"
+                + ("59")
+                + ":"
+                + ("59");
+            var atime = $("#atime").val();
+            if (atime != undefined && atime != "") {
+                startTime = atime;
+            }
+        },
+        estimate: function () {
+            var timeInterval = $('#timeInterval').val().split('--');
+            sTime = timeInterval[0];
+            eTime = timeInterval[1];
+            mapMonitor.getsTheCurrentTime();
+            if (eTime > endTime) {                              //查询判断
+                layer.msg(endTimeGtNowTime, {move: false});
+                key = false
+                return;
+            }
+            if (sTime > eTime) {
+                layer.msg(endtimeComStarttime, {move: false});
+                key = false;
+                return;
+            }
+            var nowdays = new Date();                       // 获取当前时间  计算上个月的第一天
+            var year = nowdays.getFullYear();
+            var month = nowdays.getMonth();
+            if (month == 0) {
+                month = 12;
+                year = year - 1;
+            }
+            if (month < 10) {
+                month = "0" + month;
+            }
+            var firstDay = year + "-" + month + "-" + "01 00:00:00";//上个月的第一天
+            if (sTime < firstDay) {                                 //查询判断开始时间不能超过       上个月的第一天
+                $("#timeInterval-error").html(starTimeExceedOne).show();
+                /*layer.msg(starTimeExceedOne, {move: false});
+                key = false;*/
+                return;
+            }
+            $("#timeInterval-error").hide();
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");       //遍历树节点，获取vehicleID 存入集合
+            var nodes = treeObj.getCheckedNodes(true);
+            vid = "";
+            for (var j = 0; j < nodes.length; j++) {
+                if (nodes[j].type == "vehicle") {
+                    vid += nodes[j].id + ",";
+                }
+            }
+            key = true;
+        },
+
     }
     $(function(){
         $('input').inputClear().on('onClearEvent',function(e,data){
@@ -930,6 +1270,18 @@
         mapMonitor.userTree();
         
         mapMonitor.amapinit();
+
+        $('#timeInterval').dateRangePicker({dateLimit:30});
+        mapMonitor.getsTheCurrentTime();  
+        mapMonitor.startDay(-7);  
+        $('#timeInterval').val(startTime + '--' + endTime);
+
+        $("#bingListClick").bind("click", fenceOperation.bingListClick);
+
+        $("#queryClick").bind("click",function(){
+            $("#fenceBind").modal('show');
+            mapMonitor.bindflowpress();
+        })
         // mapMonitor.init();
         
         // map.on(['pointermove', 'singleclick'], mapMonitor.moveonmapevent);
