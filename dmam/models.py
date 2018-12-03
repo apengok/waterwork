@@ -826,7 +826,7 @@ def ensure_bigmeter_exists(sender, **kwargs):
         lat=instance.lat
         commaddr=instance.commaddr
         simid = instance.commaddr
-        bigm = Bigmeter.objects.filter(commaddr=instance.commaddr)
+        bigm = Bigmeter.objects.filter(commaddr=instance.commaddr) #如果站点名存在但commaddr为空，这样会创建同名的大表数据.
         if bigm.exists():
             # print(instance.username,bigm.first().username)
             b=bigm.first()
@@ -845,7 +845,18 @@ def ensure_bigmeter_exists(sender, **kwargs):
             # bigm.first().dosagealarm = 1
             b.save()
         else:
-            Bigmeter.objects.create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
+            bigm = Bigmeter.objects.filter(username=instance.username) #如果站点名存在但commaddr为空，这样会创建同名的大表数据.
+            if bigm.exists():
+                # print(instance.username,bigm.first().username)
+                b=bigm.first()
+                b.username= instance.username
+                b.lng=instance.lng
+                b.lat=instance.lat
+                b.commaddr=instance.commaddr
+                b.simid = instance.commaddr
+                b.save()
+            else:
+                Bigmeter.objects.create(username=username,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
 
 
 

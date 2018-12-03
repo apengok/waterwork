@@ -728,6 +728,7 @@ def alterstrokeColor(request):
 
 
 # DMA在线监视dma group dmaMapStatistic
+# 一般水司只有一个DMA一级分区，用户登录后显示所属组织所有二级分区，当选择二级分区时再显示该二级分区的所有三级分区
 def getDMAFenceDetails(request):
     print("getDMAFenceDetails",request.POST)
     dma_no = request.POST.get("dma_no") or ''

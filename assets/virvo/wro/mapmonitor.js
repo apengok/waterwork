@@ -16,6 +16,7 @@
     var vagueSearchlast = $("#userType").val();
     var overlay;
     var getdmamapusedata_flag = 0;
+    var bindflowpressChart;
 
     var travelLineList,AdministrativeRegionsList,fenceIdList,
   administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
@@ -223,29 +224,32 @@
             console.log("tree selete type ",stype);
 
             // var checkNode = treeObj.getCheckedNodes(true);
-            if ( 0) {
-                $("#MapContainer").css("height", newMapHeight + 'px');
-            } else {
-                if ($('#bingListClick i').hasClass('fa fa-chevron-down')) {
-                    if (bingLength == 0) {
-                        $("#MapContainer").css("height", newMapHeight + 'px');
-                    } else {
-                        $("#MapContainer").css('height', (newMapHeight - 80 - 30 * bingLength - 105) + 'px');
-                    }
-                    ;
-                } else {
-                    $("#MapContainer").css("height", newMapHeight + 'px');
-                }
-                ;
-            }
-            ;
+            // if ( 0) {
+            //     $("#MapContainer").css("height", newMapHeight + 'px');
+            // } else {
+            //     if ($('#bingListClick i').hasClass('fa fa-chevron-down')) {
+            //         if (bingLength == 0) {
+            //             $("#MapContainer").css("height", newMapHeight + 'px');
+            //         } else {
+            //             $("#MapContainer").css('height', (newMapHeight - 80 - 30 * bingLength - 105) + 'px');
+            //         }
+            //         ;
+            //     } else {
+            //         $("#MapContainer").css("height", newMapHeight + 'px');
+            //     }
+            //     ;
+            // };
             if(stype == "dma"){
+                $("#MapContainer").css('height', (newMapHeight - 80 - 30 * bingLength - 105) + 'px');
                 $("#fenceBindTable").show();
                 // findOperation.fenceBind();
             }
             else{
                 // $("#fenceBindTable").hide();
                 $("#MapContainer").css("height", newMapHeight + 'px');
+                $("#searchBtn").hide()
+                $("#searchInput").hide()
+
                 // if ($('#bingListClick i').hasClass('fa fa-chevron-down')){
                 //     $("#MapContainer").animate({'height': newMapHeight + "px"});
                 // }
@@ -943,15 +947,24 @@
                 mapMonitor.loadGeodata(2)
                 $("#binddmaname").html(treeNode.name);
                 mapMonitor.hydropressflowChart();
+                // mapMonitor.showSearchBtn();
+                $(".info-seach-btn").css("left","320px");
+                $("#searchBtn").show();
             }else{
                 $("#current_organ_id").attr("value",treeNode.id);
                 $("#fenceBindTable").css("display", "none");
                 mapMonitor.loadGeodata(1)
+                $("#searchBtn").hide();
+                $("#searchInput").hide();
             }
             
             fenceOperation.TabCarBox();
-            fenceOperation.fenceBind(treeNode.pId, treeNode.name, treeNode.type,treeNode.id);
+            // fenceOperation.fenceBind(treeNode.pId, treeNode.name, treeNode.type,treeNode.id);
 
+        },
+        // 搜索按钮
+        showSearchBtn:function(){
+            $("#searchBtn").show();
         },
         // ajax参数
         ajaxDataParamFun: function(d){
@@ -1040,80 +1053,71 @@
         bindflowpress:function(){
 
             option = {
-                title : {
-                    text: '未来一周气温变化',
-                    subtext: '纯属虚构'
-                },
+                // title : {
+                //     text: '未来一周气温变化',
+                //     subtext: '纯属虚构'
+                // },
                 tooltip : {
                     trigger: 'axis'
                 },
                 legend: {
-                    data:['最高气温','最低气温']
+                    data:['MNF','流量','压力','背景漏损']
                 },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
-                    }
-                },
+                
                 calculable : true,
                 xAxis : [
                     {
                         type : 'category',
                         boundaryGap : false,
-                        data : ['周一','周二','周三','周四','周五','周六','周日']
+                        data : ['2018-11-15','2018-11-16','2018-11-17','2018-11-18','2018-11-19','2018-11-20','2018-11-21']
                     }
                 ],
                 yAxis : [
                     {
                         type : 'value',
+                        name : '时用水量(m³/h)',
+                        nameLocation : 'middle',
+                        nameGap : 80,
                         axisLabel : {
-                            formatter: '{value} °C'
+                            formatter: '{value} '
                         }
                     }
                 ],
                 series : [
                     {
-                        name:'最高气温',
+                        name:'MNF',
                         type:'line',
                         data:[11, 11, 15, 13, 12, 13, 10],
-                        markPoint : {
-                            data : [
-                                {type : 'max', name: '最大值'},
-                                {type : 'min', name: '最小值'}
-                            ]
-                        },
-                        markLine : {
-                            data : [
-                                {type : 'average', name: '平均值'}
-                            ]
-                        }
+                        
                     },
                     {
-                        name:'最低气温',
+                        name:'流量',
+                        type:'line',
+                        data:[10, 12, 7, 5, 9, 2, 6],
+                        
+                    },
+                    {
+                        name:'压力',
+                        type:'line',
+                        data:[2, 5, 8, 7, 9, 3, 10],
+                        
+                    },
+                    {
+                        name:'背景漏损',
                         type:'line',
                         data:[1, -2, 2, 5, 3, 2, 0],
-                        markPoint : {
-                            data : [
-                                {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
-                            ]
-                        },
-                        markLine : {
-                            data : [
-                                {type : 'average', name : '平均值'}
-                            ]
-                        }
+                        
                     }
                 ]
             };
                                 
 
-            var bindflowpress = echarts.init(document.getElementById('bindflowpress'));
-            bindflowpress.setOption(option);
+            bindflowpressChart = echarts.init(document.getElementById('bindflowpress'));
+            bindflowpressChart.setOption(option);
+
+            $('#fenceBind').on('shown.bs.modal',function(){
+                bindflowpressChart.resize()
+            })
             
         },
         //开始时间
@@ -1278,10 +1282,19 @@
 
         $("#bingListClick").bind("click", fenceOperation.bingListClick);
 
+        $("#searchBtn").bind("click",function(){
+                $(".info-seach-btn").css("left","710px");
+
+            $("#searchInput").show()
+        })
+
         $("#queryClick").bind("click",function(){
             $("#fenceBind").modal('show');
             mapMonitor.bindflowpress();
+
         })
+
+        
         // mapMonitor.init();
         
         // map.on(['pointermove', 'singleclick'], mapMonitor.moveonmapevent);
