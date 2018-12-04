@@ -17,7 +17,7 @@ class DmaStationAdmin(admin.ModelAdmin):
 
 @admin.register(DMABaseinfo)
 class DMABaseinfoAdmin(admin.ModelAdmin):
-    list_display = ['dma_no','dma_name','creator','create_date','belongto']
+    list_display = ['dma_no','dma_level','dma_name','creator','create_date','belongto']
 
 
 @admin.register(Meter)

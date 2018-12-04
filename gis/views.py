@@ -735,16 +735,19 @@ def getDMAFenceDetails(request):
     dflag = request.POST.get("dflag") #0:all 1:organization 2:dma
     current_organ = request.POST.get("current_organ")
     fenceNodes = request.POST.get("fenceNodes")
+    dma_level = request.POST.get("dma_level") or '2'
     # print("dma_no",dma_no)
     # print("fenceNodes",fenceNodes)
+    user = request.user
+    dma_no_list = user.dma_list_queryset().filter(belongto__cid__icontains=current_organ).filter(belongto__organlevel=dma_level).values_list("dma_no")
+    print("dma_no_list:",dma_no_list)
 
-    if dflag == '0':
-        allfence = FenceShape.objects.values()
-    elif dflag == '2':
+    if dflag == '2':
         allfence = FenceShape.objects.filter(dma_no=dma_no).values()
+        # allfence = user.dma_list_queryset("","3",dma_no).values()
+        # print("allfence",allfence)
     else:
-        organ = Organizations.objects.get(cid=current_organ)
-        allfence = FenceShape.objects.values()
+        allfence = FenceShape.objects.filter(dma_no__in=dma_no_list).values()
 
     details_obj = []
     for pgo in allfence:
@@ -754,9 +757,9 @@ def getDMAFenceDetails(request):
             continue
 
         dma = DMABaseinfo.objects.get(dma_no=dma_no)
-        if dflag == '1':
-            if dma.belongto not in organ.sub_organizations(include_self=True):
-                continue
+        # if dflag == '1':
+        #     if dma.belongto not in organ.sub_organizations(include_self=True):
+        #         continue
 
         fd = FenceDistrict.objects.filter(cid=shapeId).values().first()
         fenceData = []

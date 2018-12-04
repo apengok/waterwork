@@ -39,6 +39,33 @@ class WaterUserType(models.Model):
         return self.usertype
         
 
+
+class DMABaseinfoQuerySet(models.query.QuerySet):
+    def search(self, cid,organlevel,dma_no): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if dma_no:
+            dma_no = dma_no.strip()
+            return self.filter(
+                Q(dma_no__iexact=dma_no)
+                ).distinct()
+        else:
+            cid = cid.strip()
+            organlevel = organlevel.strip()
+            return self.filter(
+                Q(belongto__cid__icontains=cid)|
+                Q(belongto__organlevel__iexact=organlevel)
+                # Q(meter__simid__simcardNumber__iexact=query)
+                ).distinct()
+        return self
+
+
+class DMABaseinfoManager(models.Manager):
+    def get_queryset(self):
+        return DMABaseinfoQuerySet(self.model, using=self._db)
+
+    def search(self, cid,organlevel,dma_no): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(cid,organlevel,dma_no)
+
+
 class DMABaseinfo(models.Model):
     dma_no        = models.CharField('分区编号',max_length=50, unique=True)
     dma_name      = models.CharField('分区名称',max_length=50, unique=True)
@@ -66,10 +93,16 @@ class DMABaseinfo(models.Model):
         # primary_key=True,
     )
 
+    objects = DMABaseinfoManager()
+
     class Meta:
         managed=True
         unique_together = ('dma_no', )
         db_table = 'dmabaseinfo'
+
+    @property
+    def dma_level(self):
+        return self.belongto.organlevel
 
         
 

@@ -413,21 +413,47 @@
                                     //填充透明度
                                 });
 
-                                // var position = new AMap.LngLat(polygon[0].longitude,polygon[0].latitude);
-                                polyFence.on("mouseover",function(e){
-                    
-                                    var position = e.lnglat;
-                                    // console.log(position);
-                                    conts = mapMonitor.createStationInfo(dmaMapStatistic.dma_name, dmaMapStatistic)
 
-                                    infoWindow.setContent(conts);
-                                    // markerInfoWindow.setSize(AMap.Size(400,300));
-                                    infoWindow.open(map,position);
+                                // 创建纯文本标记
+                                var text = new AMap.Text({
+                                    text:dmaMapStatistic.dma_name,
+                                    textAlign:'center', // 'left' 'right', 'center',
+                                    verticalAlign:'middle', //middle 、bottom
+                                    draggable:true,
+                                    cursor:'pointer',
+                                    angle:10,
+                                    style:{
+                                        'padding': '.75rem 1.25rem',
+                                        'margin-bottom': '1rem',
+                                        'border-radius': '.25rem',
+                                        'background-color': 'white',
+                                        'width': '15rem',
+                                        'border-width': 0,
+                                        'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
+                                        'text-align': 'center',
+                                        'font-size': '20px',
+                                        'color': 'blue'
+                                    },
+                                    position: dataArr[0] //[116.396923,39.918203]
                                 });
 
-                                polyFence.on("mouseout",function(){
-                                    infoWindow.close();
-                                })
+                                // text.setMap(map);
+
+                                // // var position = new AMap.LngLat(polygon[0].longitude,polygon[0].latitude);
+                                // polyFence.on("mouseover",function(e){
+                    
+                                //     var position = e.lnglat;
+                                //     // console.log(position);
+                                //     conts = mapMonitor.createStationInfo(dmaMapStatistic.dma_name, dmaMapStatistic)
+
+                                //     infoWindow.setContent(conts);
+                                //     // markerInfoWindow.setSize(AMap.Size(400,300));
+                                //     infoWindow.open(map,position);
+                                // });
+
+                                // polyFence.on("mouseout",function(){
+                                //     infoWindow.close();
+                                // })
 
                                 dma_list.push(polyFence)
                                 // polyFence.setMap(map);

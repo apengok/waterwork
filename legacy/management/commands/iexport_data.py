@@ -458,33 +458,36 @@ class Command(BaseCommand):
             
             
             # data_qset=HdbFlowData.objects.using("virvo").filter(readtime__range=[sTime,'2018-09-20'])
-            data_qset=Bigmeter.objects.using("shexian").values_list('commaddr','commstate','meterstate','gprsv','meterv',
+            data_qset=Bigmeter.objects.using("shexian").values('commaddr','commstate','meterstate','gprsv','meterv',
                 'signlen','lastonlinetime','pressure','plustotalflux','reversetotalflux','flux','totalflux','pressurereadtime',
                 'fluxreadtime','username')
-            
             for d in data_qset:
-                commaddr = d[0]
+                commaddr = d["commaddr"]
+                username = d["username"]
+                print("shexian:",username,commaddr)
                 try:
-                    d2=Bigmeter.objects.using("zncb").get(commaddr=commaddr)
+                    dt=Bigmeter.objects.using("zncb").filter(commaddr=commaddr)
                 except:
-                    print("{} {} not exists in virovo db".format(d[14],d[0]))
+                    print("{} {} not exists in virovo db".format(d["username"],d["commaddr"]))
                     continue
-                if d2:
-                    d2.commstate = d[1]
-                    d2.meterstate = d[2]
-                    d2.gprsv = d[3]
-                    d2.meterv = d[4]
-                    d2.signlen = d[5]
-                    d2.lastonlinetime = d[6]
-                    d2.pressure = d[7]
-                    d2.plustotalflux = d[8]
-                    d2.reversetotalflux = d[9]
-                    d2.flux = d[10]
-                    d2.totalflux = d[11]
-                    d2.pressurereadtime = d[12]
-                    d2.fluxreadtime = d[13]
-                    
-                    d2.save(using='zncb')
+                if dt.exists():
+                    for d2 in dt:
+                        print(" &*^*%&*---virvo:",d2.username,d2.commaddr)
+                        d2.commstate = d["commstate"]
+                        d2.meterstate = d["meterstate"]
+                        d2.gprsv = d["gprsv"]
+                        d2.meterv = d["meterv"]
+                        d2.signlen = d["signlen"]
+                        d2.lastonlinetime = d["lastonlinetime"]
+                        d2.pressure = d["pressure"]
+                        d2.plustotalflux = d["plustotalflux"]
+                        d2.reversetotalflux = d["reversetotalflux"]
+                        d2.flux = d["flux"]
+                        d2.totalflux = d["totalflux"]
+                        d2.pressurereadtime = d["pressurereadtime"]
+                        d2.fluxreadtime = d["fluxreadtime"]
+                        
+                        d2.save(using='zncb')
                     
 
         if options['watermeter']:
