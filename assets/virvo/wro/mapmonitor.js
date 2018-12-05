@@ -369,6 +369,32 @@
             mapMonitor.loadGeodata(0)
         },
 
+        calculateCenter: function(lnglatarr){
+          var total = lnglatarr.length;
+          var X=0,Y=0,Z=0;
+          $.each(lnglatarr, function(index, lnglat) {
+            var lng = lnglat.lng * Math.PI / 180;
+            var lat = lnglat.lat * Math.PI / 180;
+            var x,y,z;
+            x = Math.cos(lat) * Math.cos(lng);
+            y = Math.cos(lat) * Math.sin(lng);
+            z = Math.sin(lat);
+            X += x;
+            Y += y;
+            Z += z;
+          });
+
+          X = X/total;
+          Y = Y/total;
+          Z = Z/total;
+
+          var Lng = Math.atan2(Y,X);
+          var Hyp = Math.sqrt(X*X + Y*Y);
+          var Lat = Math.atan2(Z,Hyp);
+
+          return new AMap.LngLat(Lng*180/Math.PI,Lat*180/Math.PI);
+        },
+
         loadGeodata:function(dflag){
             dma_no = $("#current_dma_no").val();
             current_organ = $("#current_organ_id").val()
@@ -434,10 +460,10 @@
                                         'font-size': '20px',
                                         'color': 'blue'
                                     },
-                                    position: dataArr[0] //[116.396923,39.918203]
+                                    position: mapMonitor.calculateCenter(dataArr) //[116.396923,39.918203]
                                 });
 
-                                // text.setMap(map);
+                                text.setMap(map);
 
                                 // // var position = new AMap.LngLat(polygon[0].longitude,polygon[0].latitude);
                                 // polyFence.on("mouseover",function(e){
