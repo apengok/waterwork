@@ -32,7 +32,7 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Concentrator,MeterParameter
-from dmam.models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,SimCard,VConcentrator,VCommunity,VWatermeter
+from dmam.models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure
 import os
 from django.conf import settings
 
@@ -44,7 +44,9 @@ logger_error = logging.getLogger('error_logger')
 
 
 
-from .forms import MeterAddForm,MeterEditForm,SimCardAddForm,SimCardEditForm,VConcentratorAddForm,VCommunityAddForm,VWatermeterAddForm,VConcentratorEditForm,VCommunityEditForm,VWatermeterEditForm
+from .forms import (
+    MeterAddForm,MeterEditForm,SimCardAddForm,SimCardEditForm,VConcentratorAddForm,VCommunityAddForm,VWatermeterAddForm,
+    VConcentratorEditForm,VCommunityEditForm,VWatermeterEditForm,VPressureAddForm,VPressureEditForm)
 # Create your views here.
 
 # 表具管理/表具列表 dataTable
@@ -841,6 +843,106 @@ def getMeterSelect(request):
     return JsonResponse(operarions_list)
 
 
+
+# 压力管理/压力表列表 dataTable
+def pressurelist(request):
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    print("get userlist:",draw,length,start,search_value)
+
+    user = request.user
+    organs = user.belongto
+
+    meters = user.pressure_list_queryset(simpleQueryParam).values("pk","serialnumber","simid__simcardNumber","version","dn",
+        "metertype","belongto__name","mtype","manufacturer","protocol","lng","lat","coortype","check_cycle","state")
+    # meters = Meter.objects.all()
+
+    def m_info(m):
+        
+        return {
+            "id":m["pk"],
+            # "simid":m.simid,
+            # "dn":m.dn,
+            # "belongto":m.belongto.name,#current_user.belongto.name,
+            # "metertype":m.metertype,
+            "serialnumber":m["serialnumber"],
+            "simid":m["simid__simcardNumber"] if m["simid__simcardNumber"] else "",
+            "version":m["version"],
+            "dn":m["dn"],
+            "metertype":m["metertype"],
+            "belongto":m["belongto__name"],
+            "mtype":m["mtype"],
+            "manufacturer":m["manufacturer"],
+            "protocol":m["protocol"],
+            "lng":m["lng"],
+            "lat":m["lat"],
+            "coortype":m["coortype"],
+            "check_cycle":m["check_cycle"],
+            "state":m["state"],
+            
+        }
+    data = []
+
+    for m in meters[start:start+length]:
+        data.append(m_info(m))
+
+    recordsTotal = meters.count()
+    # recordsTotal = len(data)
+    
+    result = dict()
+    result["records"] = data
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+
+
+def pressure_repetition(request):
+    serialnumber = request.POST.get("serialnumber")
+    bflag = not VPressure.objects.filter(serialnumber=serialnumber).exists()
+
+    # return HttpResponse(json.dumps(bflag))
+    return HttpResponse(json.dumps({"success":bflag}))
+
+
+
 class PressureMangerView(LoginRequiredMixin,TemplateView):
     template_name = "devm/pressuremanager.html"
 
@@ -850,6 +952,256 @@ class PressureMangerView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "设备管理"
         
         return context  
+
+
+
+"""
+User add, manager
+"""
+class VPressureAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
+    model = VPressure
+    form_class = VPressureAddForm
+    template_name = "devm/pressureadd.html"
+    success_url = reverse_lazy("devm:pressuremanager")
+    # permission_required = ('entm.rolemanager_perms_basemanager_edit', 'entm.dmamanager_perms_basemanager_edit')
+
+    # @method_decorator(permission_required("dma.change_pressures"))
+    def dispatch(self, *args, **kwargs):
+        #uuid is selectTreeIdAdd namely organizations uuid
+        if self.request.method == 'GET':
+            uuid = self.request.GET.get("uuid")
+            kwargs["uuid"] = uuid
+
+        if self.request.method == 'POST':
+            uuid = self.request.POST.get("uuid")
+            kwargs["uuid"] = uuid
+        print("uuid:",kwargs.get('uuid'))
+        return super(VPressureAddView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('pressuremanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "增加用户",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("pressure  add here?:",self.request.POST)
+        print(self.kwargs,self.args)
+        # print(form)
+        # do something
+        user = self.request.user
+        user_groupid = user.belongto.cid
+        instance = form.save(commit=False)
+        if instance.username == None:
+            instance.username = instance.serialnumber
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+        simcardNumber = self.request.POST.get('simid') or ''
+        if SimCard.objects.filter(simcardNumber=simcardNumber).exists():
+            instance.simid = SimCard.objects.get(simcardNumber=simcardNumber)
+        # else:
+        #     tmp=SimCard.objects.create(simcardNumber=simcardNumber,belongto=organization)
+        #     instance.simid = tmp
+        # instance.simid = SimCard.objects.get_or_create(simcardNumber=simcardNumber)
+        # instance.simid = SimCard.objects.get_or_create(simcardNumber=simcardNumber)
+
+        return super(VPressureAddView,self).form_valid(form)   
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VPressureAddView, self).get_context_data(*args, **kwargs)
+
+        print('useradd context',args,kwargs,self.request)
+        uuid = self.request.GET.get('uuid') or ''
+        
+        groupId = ''
+        groupname = ''
+        if len(uuid) > 0:
+            organ = Organizations.objects.get(uuid=uuid)
+            groupId = organ.cid
+            groupname = organ.name
+        # else:
+        #     user = self.request.user
+        #     groupId = user.belongto.cid
+        #     groupname = user.belongto.name
+        
+        context["groupId"] = groupId
+        context["groupname"] = groupname
+
+        
+
+        return context  
+
+
+"""
+User edit, manager
+"""
+class VPressureEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+    model = VPressure
+    form_class = VPressureEditForm
+    template_name = "devm/pressureedit.html"
+    success_url = reverse_lazy("devm:pressuremanager")
+    
+    # @method_decorator(permission_required("dma.change_pressures"))
+    def dispatch(self, *args, **kwargs):
+        # self.user_id = kwargs["pk"]
+        return super(VPressureEditView, self).dispatch(*args, **kwargs)
+
+    def get_object(self):
+        return VPressure.objects.get(id=self.kwargs["pk"])
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('pressuremanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改站点",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_invalid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("user edit form_invalid:::")
+        return super(VPressureEditView,self).form_invalid(form)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print(form)
+        print(self.request.POST)
+
+        
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+        
+        simcardNumber = self.request.POST.get('simid') or ''
+        if SimCard.objects.filter(simcardNumber=simcardNumber).exists():
+            instance.simid = SimCard.objects.get(simcardNumber=simcardNumber)
+        
+        if instance.username == None:
+            instance.username = instance.serialnumber
+            
+        # instance.uuid=unique_uuid_generator(instance)
+        return super(VPressureEditView,self).form_valid(form)
+        # role_list = MyRoles.objects.get(id=self.role_id)
+        # return HttpResponse(render_to_string("dma/role_manager.html", {"role_list":role_list}))
+
+    # def get(self,request, *args, **kwargs):
+    #     print("get::::",args,kwargs)
+    #     form = super(VPressureEditView, self).get_form()
+    #     print("edit form:",form)
+    #     # Set initial values and custom widget
+    #     initial_base = self.get_initial() #Retrieve initial data for the form. By default, returns a copy of initial.
+    #     # initial_base["menu"] = Menu.objects.get(id=1)
+    #     self.object = self.get_object()
+
+    #     initial_base["belongto"] = self.object.belongto.name
+    #     initial_base["serialnumber"] = self.object.pressure.serialnumber
+    #     initial_base["dn"] = self.object.pressure.dn
+    #     initial_base["pressure"] = self.object.pressure.serialnumber
+    #     initial_base["simid"] = self.object.pressure.simid
+    #     form.initial = initial_base
+        
+    #     return render(request,self.template_name,
+    #                   {"form":form,"object":self.object})
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(UserEditView, self).get_context_data(**kwargs)
+    #     context["page_title"] = "修改用户"
+    #     return context
+
+
+
+def pressuredeletemore(request):
+    # print('userdeletemore',request,request.POST)
+
+    if not request.user.has_menu_permission_edit('pressuremanager_devm'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    deltems = request.POST.get("deltems")
+    print('deltems:',deltems)
+    deltems_list = deltems.split(',')
+
+    for uid in deltems_list:
+        u = VPressure.objects.get(id=int(uid))
+        # print('delete user ',u)
+        #删除用户 并且删除用户在分组中的角色
+        
+        u.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
+
+"""
+Assets comment deletion, manager
+"""
+class VPressureDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
+    model = VPressure
+    # template_name = "aidsbank/asset_comment_confirm_delete.html"
+
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission_edit('pressuremanager_devm'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        HttpResponse(json.dumps(data))
+        # return render(self.request,"entm/permission_error.html",data)
+
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs["pk"]
+
+        print("user delete:",args,kwargs)
+        
+        return super(VPressureDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        # print("delete objects:",self.kwargs,kwargs)
+        return VPressure.objects.get(pk=kwargs["pk"])
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print("delete?",args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+
+        
+
+        self.object.delete()
+        result = dict()
+        # result["success"] = 1
+        return HttpResponse(json.dumps({"success":1}))
+        
 
 
 class FireboltMangerView(LoginRequiredMixin,TemplateView):

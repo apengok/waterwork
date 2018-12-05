@@ -1214,3 +1214,122 @@ def ensure_vmatermeter_exists(sender, **kwargs):
             instance.waterid = zncb_watermeter.id
             instance.save()  
 
+
+
+
+class VPressureQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(username__icontains=query)|
+                Q(serialnumber__icontains=query)|
+                Q(simid__simcardNumber__icontains=query)
+                ).distinct()
+        return self
+
+
+class VPressureManager(models.Manager):
+    def get_queryset(self):
+        return VPressureQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
+class VPressure(models.Model):
+    username = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    serialnumber= models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    simid       = models.ForeignKey(SimCard,on_delete=models.SET_NULL,null=True) # Field name made lowercase.
+    version     = models.CharField(db_column='version', max_length=30, blank=True, null=True)  # Field name made lowercase.型号
+    dn          = models.CharField(db_column='Dn', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    metertype   = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE)
+    # 0 - 电磁水表 1-超声水表 2-机械水表 3-插入电磁
+    mtype       = models.CharField(db_column='Type', max_length=30, blank=True, null=True)  # Field name made lowercase. 
+    manufacturer= models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    protocol    = models.CharField(db_column='Protocol', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    lng = models.CharField(db_column='Lng', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    lat = models.CharField(db_column='Lat', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    coortype = models.CharField(db_column='CoorType', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    
+    check_cycle = models.CharField(db_column='check cycle', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    state       = models.CharField(db_column='state', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+    # 在抄表系统中管理
+    # pressurealarm = models.IntegerField(db_column='PressureAlarm', blank=True, null=True)  # Field name made lowercase.
+    # pressureup = models.CharField(db_column='PressureUp', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # pressuredown = models.CharField(db_column='PressureDown', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    
+    # readtime = models.CharField(db_column='ReadTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    # meterstate = models.CharField(db_column='MeterState', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    # # pressure value
+    # pressure = models.CharField(db_column='Pressure', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # gprsv = models.CharField(db_column='GprsV', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # meterv = models.CharField(db_column='MeterV', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+
+    objects = VPressureManager()
+
+    class Meta:
+        managed = True
+        db_table = 'vpressure'
+
+    def __unicode__(self):
+        return '%s'%(self.username)   
+
+    def __str__(self):
+        return '%s'%(self.username)    
+
+
+@receiver(post_save, sender=VPressure)
+def ensure_bigmeter_press_exists(sender, **kwargs):
+    district = District.objects.first()
+    districtid = district.id
+    print("ensure_bigmeter_pressure_exists ...")
+
+    instance=kwargs.get('instance')
+    serialnumber = instance.serialnumber
+    username = instance.username
+    if username == None or username == '':
+        username = serialnumber
+    lng=instance.lng
+    lat=instance.lat
+    commaddr=instance.simid.simcardNumber
+    simid = instance.simid.simcardNumber
+
+    print(serialnumber,username)
+
+    if kwargs.get('created', False):
+        
+
+        Bigmeter.objects.get_or_create(username=username,serialnumber=serialnumber,lng=lng,lat=lat,commaddr=commaddr,simid=simid,districtid=districtid,alarmoffline=1,alarmonline=1,
+            alarmgprsvlow=1,alarmmetervlow=1,alarmuplimitflow=1,alarmgpflow=1,pressurealarm=1,dosagealarm=1)   
+    else:
+        
+        bigm = Bigmeter.objects.filter(commaddr=commaddr) #如果站点名存在但commaddr为空，这样会创建同名的大表数据.
+        if bigm.exists():
+            # print(instance.username,bigm.first().username)
+            b=bigm.first()
+            b.username= username
+            b.serialnumber = serialnumber
+            b.lng=instance.lng
+            b.lat=instance.lat
+            b.commaddr=commaddr
+            b.simid = commaddr
+            
+            b.save()
+        else:
+            bigm = Bigmeter.objects.filter(username=username) #如果站点名存在但commaddr为空，这样会创建同名的大表数据.
+            if bigm.exists():
+                # print(instance.username,bigm.first().username)
+                b=bigm.first()
+                b.username= username
+                b.serialnumber = serialnumber
+                b.lng=instance.lng
+                b.lat=instance.lat
+                b.commaddr=commaddr
+                b.simid = commaddr
+                b.save()
+            else:
+                Bigmeter.objects.create(username=username,serialnumber=serialnumber,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
+

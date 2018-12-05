@@ -11,7 +11,7 @@ import json
 from django.db.models import Q
 
 from entm.models import Organizations
-from dmam.models import DMABaseinfo,Meter,Station,SimCard,VConcentrator,VCommunity,VWatermeter
+from dmam.models import DMABaseinfo,Meter,Station,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure
 
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
@@ -321,7 +321,7 @@ class User(AbstractBaseUser,PermissionsMixin):
             
         return communitylist
 
-     #组织及下属组织下的所有户表
+    #组织及下属组织下的所有户表
     def watermeter_list_queryset(self,q):
         # userlist = []
         if self.is_admin:
@@ -335,6 +335,22 @@ class User(AbstractBaseUser,PermissionsMixin):
             watermeterlist |= g.vwatermeter_set.search(q)
             
         return watermeterlist
+
+
+    #组织及下属组织下的所有户表
+    def pressure_list_queryset(self,q):
+        # userlist = []
+        if self.is_admin:
+            return VPressure.objects.search(q)
+
+        pressuremeterlist = VPressure.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            pressuremeterlist |= g.vpressure_set.search(q)
+            
+        return pressuremeterlist
 
     # 组织下dma分区列表--二级和三级列表分开查询,组织cid、级别organlevel、dma_no
     def dma_list_queryset(self):
@@ -411,8 +427,8 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
         else:
             instance.idstr = unique_uuid_generator(instance)
 
-    if instance.password == "pbkdf2_sha256$100000$3AfFLiqYYMQY$jRE3aeohO/9aqgQeTcnseO715IDd4r4rPXL5UxKvi+c=":
-        instance.set_password('hardtoguess')
+    # if instance.password == "pbkdf2_sha256$100000$3AfFLiqYYMQY$jRE3aeohO/9aqgQeTcnseO715IDd4r4rPXL5UxKvi+c=":
+    #     instance.set_password('hardtoguess')
 
 
 

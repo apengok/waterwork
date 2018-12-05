@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo,VCommunity,VConcentrator,VWatermeter
+from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo,VCommunity,VConcentrator,VWatermeter,VPressure
 # Register your models here.
 from legacy.models import Bigmeter,District
 
@@ -23,6 +23,12 @@ class DMABaseinfoAdmin(admin.ModelAdmin):
 @admin.register(Meter)
 class MeterAdmin(admin.ModelAdmin):
     list_display = ['serialnumber','simid','dn','metertype','belongto']
+
+
+
+@admin.register(VPressure)
+class VPressureAdmin(admin.ModelAdmin):
+    list_display = ['username','serialnumber','simid','dn','metertype','belongto']
 
 
 @admin.register(Station)

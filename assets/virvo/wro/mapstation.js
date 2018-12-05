@@ -526,6 +526,11 @@ console.log("$newMapHeight",$("#map-container").height());
                     
                     if(station.lng == null)
                         continue;
+                    // console.log(station.lng,station.lng)
+                    if(station.lng == 'q1')
+                    {
+                        continue;
+                    }
                     marker = mapStation.createMarker(station);
                     markerList.push(marker);
                 }

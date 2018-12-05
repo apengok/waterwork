@@ -79,6 +79,8 @@ def dmatree(request):
             p_dma_no = o["dma__dma_no"][0]
         elif isinstance(o["dma__pk"],int):
             p_dma_no = o["dma__pk"]
+        elif isinstance(o["dma__pk"],str):
+            p_dma_no = o["dma__pk"]
         else:
             p_dma_no = ''
         organtree.append({
@@ -126,6 +128,8 @@ def dmatree(request):
         #station
         # 会出现pk 和 username list长度不等的情况，可能有同名站点
         if stationflag == '1':
+            print(o["station__username"],type(o["station__username"]))
+            
             if isinstance(o["station__username"],list):
                 for i in range(len(o["station__username"])):
                     
@@ -143,6 +147,20 @@ def dmatree(request):
                         "uuid":''
                     })
             elif isinstance(o["station__username"],int):
+                organtree.append({
+                    "name":o['station__username'],
+                    "id":o['station__pk'],
+                    "districtid":'',
+                    "pId":o["cid"],
+                    "type":"station",
+                    "dma_no":'',
+
+                    "commaddr":o["station__meter__simid__simcardNumber"],
+                    "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                    "icon":"/static/virvo/resources/img/station.png",
+                    "uuid":''
+                })
+            elif isinstance(o["station__username"],str):
                 organtree.append({
                     "name":o['station__username'],
                     "id":o['station__pk'],
@@ -197,7 +215,7 @@ def dmatree(request):
                                 "uuid":''
                             })
 
-            elif isinstance(o["vcommunity__name"],int):
+            elif isinstance(o["vcommunity__name"],str):
                 community_name = o['vcommunity__name']
                 # 小区列表
                 organtree.append({

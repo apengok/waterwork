@@ -47,6 +47,12 @@ urlpatterns = [
 
     # 压力管理
     url(r'^pressuremanager/?$', views.PressureMangerView.as_view(), name='pressuremanager'),
+    url(r'^pressure/list/$',views.pressurelist,name='pressurelist'),
+    url(r'^pressure/add',views.VPressureAddView.as_view(),name='pressureadd'),
+    url(r'^pressure/edit/(?P<pk>\w+)/?$',views.VPressureEditView.as_view(),name='pressureedit'),
+    url(r'^pressure/delete/(?P<pk>[0-9]+)/?$',views.VPressureDeleteView.as_view(),name='pressuredelete'),
+    url(r'^pressure/deletemore',views.pressuredeletemore,name='pressuredeletemore'),
+    url(r'^pressure/pressure_repetition/$',views.pressure_repetition,name='pressure_repetition'),
 
     # 消防栓管理
     url(r'^fireboltmanager/?$', views.FireboltMangerView.as_view(), name='fireboltmanager'),

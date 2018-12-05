@@ -8,7 +8,7 @@ from django.contrib.postgres.forms.ranges import DateRangeField, RangeWidget
 
 
 from entm.models import Organizations
-from dmam.models import WaterUserType,DMABaseinfo,Station,Meter,SimCard,VConcentrator,VCommunity,VWatermeter
+from dmam.models import WaterUserType,DMABaseinfo,Station,Meter,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure
 import datetime
 
 
@@ -158,3 +158,32 @@ class VWatermeterEditForm(forms.ModelForm):
         self.fields['communityid'].initial = self.instance.communityid.name
         if self.instance.concentrator:
             self.fields['concentrator'].initial = self.instance.concentrator.name
+
+
+
+
+class VPressureAddForm(forms.ModelForm):
+    belongto  = forms.CharField()
+    simid  = forms.CharField()
+
+    class Meta:
+        model = VPressure
+        fields = ['username','serialnumber','version','dn','metertype','mtype','manufacturer','protocol','lng','lat','coortype','check_cycle','state']
+
+    
+        
+
+class VPressureEditForm(forms.ModelForm):
+    belongto  = forms.CharField()
+    simid  = forms.CharField()
+
+    class Meta:
+        model = VPressure
+        fields = ['username','serialnumber','version','dn','metertype','mtype','manufacturer','protocol','lng','lat','coortype','check_cycle','state']
+
+    def __init__(self,*args,**kwargs):
+        super(VPressureEditForm, self).__init__(*args, **kwargs)
+
+        # self.fields['password'].widget = forms.PasswordInput()
+        self.fields['belongto'].initial = self.instance.belongto.name
+        self.fields['simid'].initial = self.instance.simid.simcardNumber if self.instance.simid else ''
