@@ -18,6 +18,8 @@
     var getdmamapusedata_flag = 0;
     var bindflowpressChart;
 
+    var dma_level = '2';
+
     var travelLineList,AdministrativeRegionsList,fenceIdList,
   administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
     newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight, dbclickCheckedId, oldDbclickCheckedId,
@@ -147,7 +149,7 @@
                 var adjustHeight = $(".adjust-area").height();
                 videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
                 $(".videoArea").css("height", videoHeight + "px");
-        }
+            }
         },
     };
 
@@ -199,6 +201,57 @@
             administrationMap.put(aId, polygonAarry);
             map.setFitView(polygon);//地图自适应
         },
+
+        // 信息列表自适应显示
+        carStateAdapt: function (type) {
+            if (!($("#scalingBtn").hasClass("fa fa-chevron-up"))) {
+              var listLength;
+              var id;
+              if (type == 1) {//状态信息车
+                listLength = stateName.length;
+                id = 'realTimeStateTable-div';
+              } else if (type == 3) { //报警信息车
+                listLength = alarmName.length;
+                id = 'realTimeCall';
+              }
+              ;
+              if (type == 4) {//日志
+                listLength = $("#logging tbody tr").length;
+                id = 'operationLogTable';
+              }
+              if (listLength <= 5 && $('#TabFenceBox').hasClass('active')) {
+                if (listLength == 5) {
+                  $("#" + id).css({
+                    "max-height": "266px",
+                    "overflow": "auto",
+                  });
+                }
+                if (listLength == 0) {
+                  $MapContainer.css({'height': newMapHeight + 'px'});
+                } else {
+                  $MapContainer.css({'height': (newMapHeight - (41 * listLength + 60)) + 'px'});
+                }
+                ;
+              } else {
+                if ($('#scalingBtn').hasClass('fa-chevron-down') && $('#TabFenceBox').hasClass('active')) {
+                  if (id == "operationLogTable") {
+                    $("#" + id).css({
+                      "max-height": "248px",
+                      "overflow": "auto",
+                    });
+                  } else {
+                    $("#" + id).css({
+                      "max-height": "266px",
+                      "overflow": "auto",
+                    });
+                  }
+                  $MapContainer.css({'height': (newMapHeight - (41 * 5 + 60)) + 'px'});
+                }
+                ;
+              }
+              ;
+            }
+        },
         //收缩绑定列表
         bingListClick: function () {
             if ($(this).children('i').hasClass('fa-chevron-down')) {
@@ -215,7 +268,7 @@
             monitoringObjMapHeight = $("#MapContainer").height();
             $("#carInfoTable").hide();
             $("#dragDIV").hide();
-            $("#fenceBindTable").css("display", "block");
+            // $("#fenceBindTable").css("display", "block");
             
             var bingLength = $('#dataTableBind tbody tr').length;
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
@@ -241,7 +294,8 @@
             // };
             if(stype == "dma"){
                 $("#MapContainer").css('height', (newMapHeight - 80 - 30 * bingLength - 105) + 'px');
-                $("#fenceBindTable").show();
+                // $("#fenceBindTable").show();
+                $("#carInfoTable").show();
                 // findOperation.fenceBind();
             }
             else{
@@ -395,6 +449,13 @@
           return new AMap.LngLat(Lng*180/Math.PI,Lat*180/Math.PI);
         },
 
+        textClicked:function(belongto_cid){
+            dma_level = 3;
+            // current_organ = belongto_cid;
+            $("#current_organ_id").attr("value",belongto_cid);
+            mapMonitor.loadGeodata(0)
+        },
+
         loadGeodata:function(dflag){
             dma_no = $("#current_dma_no").val();
             current_organ = $("#current_organ_id").val()
@@ -404,7 +465,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/gis/fence/bindfence/getDMAFenceDetails/',
-                data: {"dma_no" : dma_no,"current_organ":current_organ,"dflag":dflag},
+                data: {"dma_no" : dma_no,"current_organ":current_organ,"dma_level":dma_level,"dflag":dflag},
                 async:false,
                 dataType: 'json',
                 success: function (data) {
@@ -446,22 +507,33 @@
                                     textAlign:'center', // 'left' 'right', 'center',
                                     verticalAlign:'middle', //middle 、bottom
                                     draggable:true,
+                                    clickable:true,
                                     cursor:'pointer',
-                                    angle:10,
+                                    // angle:10,
                                     style:{
                                         'padding': '.75rem 1.25rem',
                                         'margin-bottom': '1rem',
                                         'border-radius': '.25rem',
-                                        'background-color': 'white',
+                                        'background-color': '#169bd5',
                                         'width': '15rem',
                                         'border-width': 0,
                                         'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
                                         'text-align': 'center',
                                         'font-size': '20px',
-                                        'color': 'blue'
+                                        'color': 'white'
+                                    },
+                                    extData:{
+                                        'dma_no':dmaMapStatistic.dma_name,
+                                        'belongto_cid':dmaMapStatistic.belongto_cid,
                                     },
                                     position: mapMonitor.calculateCenter(dataArr) //[116.396923,39.918203]
                                 });
+
+                                text.on("click",function(e){
+                                    console.log(e,e.target.getExtData().belongto_cid);
+                                    var belongto_cid = e.target.getExtData().belongto_cid;
+                                    mapMonitor.textClicked(belongto_cid);
+                                })
 
                                 text.setMap(map);
 
@@ -1002,6 +1074,8 @@
                 // mapMonitor.showSearchBtn();
                 $(".info-seach-btn").css("left","320px");
                 $("#searchBtn").show();
+                fenceOperation.carStateAdapt(1);
+                $("#carInfoTable").show();
             }else{
                 $("#current_organ_id").attr("value",treeNode.id);
                 $("#fenceBindTable").css("display", "none");
@@ -1010,7 +1084,7 @@
                 $("#searchInput").hide();
             }
             
-            fenceOperation.TabCarBox();
+            // fenceOperation.TabCarBox();
             // fenceOperation.fenceBind(treeNode.pId, treeNode.name, treeNode.type,treeNode.id);
 
         },

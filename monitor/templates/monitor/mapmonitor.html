@@ -218,180 +218,42 @@ th, td {
       <input type="hidden" id="current_dma_no" name="">
       <input type="hidden" id="current_organ_id" name="">
 
-      <div id="js-overlay" class="overlay2" >
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区名称:</label>
-              <label class="col-md-7 control-label" id="dma_name"><span style="color: #0099CC;"></span></label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">所属组织:</label>
-              <label class="col-md-7 control-label" id="belongto"><span "></span></label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区层级:</label>
-              <label class="col-md-7 control-label" id="dma_level"><span "></span></label>
-            </div>
-            <br>
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">状态:</label>
-              <label class="col-md-7 control-label" id="dma_status"><span style="color: #2ce80b;"></span></label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">分区流量:</label>
-              <label class="col-md-7 control-label" id="dmaflow"><span ></span></label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">当月售水量:</label>
-              <label class="col-md-7 control-label" id="month_sale"><span ></span></label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-right: 0;text-align: right;">上月售水量:</label>
-              <label class="col-md-7 control-label" id="lastmonth_sale"><span ></span></label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-5 control-label" style="margin-left: 0,margin-right: 0;text-align: right;">上月增长比例:</label>
-              <label class="col-md-7 control-label" id="bili"><span ></span></label>
-            </div>
-          
-          
-      </div>
-        
-
+      
     </div>
 
-    <!-- dma绑定 -->
-    <div style="cursor: default;" class="modal fade" id="fenceBind" aria-hidden="true" data-backdrop="static" role="dialog"
-         aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-lg" role="document" style="width:80%">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">起始时间：2018-11-15 12：00:00  结束时间：2018-12-10 12：00:00</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- <div class="form-horizontal"> -->
-                        <div class="row">
-                            <input id="fenceID" name="search" class="form-control" type="hidden"/>
-                            <input id="fenceName" name="search" class="form-control" type="hidden"/>
-                            <input id="fenceInfoId" name="search" class="form-control" type="hidden"/>
-                            
-                            
-                            <div class="col-md-4">
-                              <table border="1">
-                                
-                                <tbody>
-                                  <tr>
-                                    <td >序号</td>
-                                    <td >内容</td>
-                                    <td >项目值</td>
-                                    
-                                  </tr>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>时段最小流量(m³/h)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>时段最小流量出现时间</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>夜间允许流量</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>时段供水量(m³)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>5</td>
-                                    <td>时段漏失总量(m³/h)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>6</td>
-                                    <td>单位管长漏失水量</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>7</td>
-                                    <td>时段漏失率</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>8</td>
-                                    <td>时段售水量(m³)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>9</td>
-                                    <td>时段产销差水量(m³)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>10</td>
-                                    <td>时段产销差率</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>11</td>
-                                    <td>时段MNF/ADD最小值</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>12</td>
-                                    <td>时段最大流量(m³/h)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>13</td>
-                                    <td>时段最大流量出现时间</td>
-                                    <td></td>
-                                  </tr>
-                                   
-                                    
+    <div id="carInfoTable">
+      <ul id="myTab" class="nav nav-tabs">
+          <!-- <li><h3 class="panel-title fwb" id="binddmaname"></h3></li> -->
+          <!-- <li id="realTimeStatus" class="active"><a href="#realTimeState"  data-toggle="tab">状态信息</a></li> -->
+          <!-- <li id="realTtimeAlarm"><a href="#realTimeCall" data-toggle="tab">报警记录</a>
+          </li>
+          <li id="operationLog"><a href="#operationLogTable"
+                                   data-toggle="tab">日志记录</a></li>
+          <div class="carStateList">
+              <li>(&nbsp;全部：<span id="table-car-all">0</span></li>
+              <li>在线：<span id="table-car-online">0</span></li>
+              <li>离线：<span id="table-car-offline">0</span></li>
+              <li>行驶：<span id="table-car-run">0</span></li>
+              <li>停止：<span id="table-car-stop">0</span></li>
+              <li>在线率：<span id="table-car-online-percent">0%</span></li>
+              <li>营运：<span id="table-car-operating-num">0</span></li>
+              <li>维修：<span id="table-car-repair-num">0</span>&nbsp;)</li>
 
-                                  
-                                </tbody>
-                              </table>
-                              
-                            </div>
-                            <div class="col-md-8" >
-                              
-                              <div id="bindflowpress" style="height:450px;width:100%;"></div>
-                            </div>
-                        </div>
-                    <!-- </div> -->
-                </div>
-                <div class="modal-footer">
-        
-                  <button class="btn btn-primary" type="button" id="doSubmit">
-                      <strong>导出</strong>
-                  </button>
-                  <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal">
-                      <strong>关 闭</strong>
-                  </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" id="fenceBindTable">
-          <div class="col-md-12">
-              <div class="panel panel-default">
-                  <div class="panel-heading">
-                      <h3 class="panel-title fwb" id="binddmaname"></h3>
-                      <div class="pull-right" id="bingListClick">
-                          <i class="fa fa-chevron-down"></i>
-                      </div>
-                  </div>
-                  <div class="panel-body fixed-table-body">
+          </div> -->
+          <div style="float:right;margin:9px 20px 0px 0px;" id="bingListClick">
+              <li style="display:inline-block;cursor:pointer;"><i id="scalingBtn"
+                                                                  class="fa fa-chevron-down"></i>
+              </li>
+          </div>
+      </ul>
+      <div id="myTabContent" class="tab-content" style="overflow-x:auto;">
+                                            <!-- 状态信息 -->
+                                            <div class="tab-pane fade in active" id="realTimeState">
+                                                <div id="realTimeStateTable-div" style="overflow:auto;">
+                                                  <div class="panel-body fixed-table-body">
                       <!--工具面板-->
                       <div class="col-md-5">
-                        <table id="dataTableBind" border="1">
+                        <table id="realTimeStateTable" border="1">
                           
                           <tbody>
                             <tr>
@@ -515,9 +377,139 @@ th, td {
                       </div>
                       
                   </div>
-              </div>
-          </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            <!-- 报警记录 -->
+                                            
+                                            <!-- 日志 -->
+                                            
+                                        </div>
+      <!--  -->
+      
     </div>
+
+    <!-- dma绑定 -->
+    <div style="cursor: default;" class="modal fade" id="fenceBind" aria-hidden="true" data-backdrop="static" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document" style="width:80%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">起始时间：2018-11-15 12：00:00  结束时间：2018-12-10 12：00:00</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="form-horizontal"> -->
+                        <div class="row">
+                            <input id="fenceID" name="search" class="form-control" type="hidden"/>
+                            <input id="fenceName" name="search" class="form-control" type="hidden"/>
+                            <input id="fenceInfoId" name="search" class="form-control" type="hidden"/>
+                            
+                            
+                            <div class="col-md-4">
+                              <table border="1">
+                                
+                                <tbody>
+                                  <tr>
+                                    <td >序号</td>
+                                    <td >内容</td>
+                                    <td >项目值</td>
+                                    
+                                  </tr>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>时段最小流量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>2</td>
+                                    <td>时段最小流量出现时间</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>3</td>
+                                    <td>夜间允许流量</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>4</td>
+                                    <td>时段供水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>5</td>
+                                    <td>时段漏失总量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>6</td>
+                                    <td>单位管长漏失水量</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>7</td>
+                                    <td>时段漏失率</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>8</td>
+                                    <td>时段售水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>9</td>
+                                    <td>时段产销差水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>10</td>
+                                    <td>时段产销差率</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>11</td>
+                                    <td>时段MNF/ADD最小值</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>12</td>
+                                    <td>时段最大流量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>13</td>
+                                    <td>时段最大流量出现时间</td>
+                                    <td></td>
+                                  </tr>
+                                   
+                                    
+
+                                  
+                                </tbody>
+                              </table>
+                              
+                            </div>
+                            <div class="col-md-8" >
+                              
+                              <div id="bindflowpress" style="height:450px;width:100%;"></div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                </div>
+                <div class="modal-footer">
+        
+                  <button class="btn btn-primary" type="button" id="doSubmit">
+                      <strong>导出</strong>
+                  </button>
+                  <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal">
+                      <strong>关 闭</strong>
+                  </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 
 </div>
 
