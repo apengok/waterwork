@@ -63,6 +63,7 @@
         }
 
 
+
         table tr{
             height: 40px;
             text-align: center;
@@ -256,6 +257,8 @@ th, td {
   height: 20px;
 }
 
+
+
     </style>
 {% endblock %}
 
@@ -363,78 +366,78 @@ th, td {
                             
                             
                             <div class="col-md-4">
-                              <table border="1">
+                              <table border="1" >
                                 
                                 <tbody>
                                   <tr>
-                                    <td >序号</td>
-                                    <td >内容</td>
-                                    <td >项目值</td>
+                                    <td width="10%" >序号</td>
+                                    <td width="50%" >内容</td>
+                                    <td width="40%">项目值</td>
                                     
                                   </tr>
                                   <tr>
                                     <td>1</td>
-                                    <td>时段最小流量(m³/h)</td>
+                                    <td style="text-align: left;padding-left: 10px">时段最小流量(m³/h)</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>2</td>
-                                    <td>时段最小流量出现时间</td>
+                                    <td style="text-align: left;padding-left: 10px" >时段最小流量出现时间</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>3</td>
-                                    <td>夜间允许流量</td>
+                                    <td style="text-align: left;padding-left: 10px">夜间允许流量</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>4</td>
-                                    <td>时段供水量(m³)</td>
+                                    <td style="text-align: left;padding-left: 10px">时段供水量(m³)</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>5</td>
-                                    <td>时段漏失总量(m³/h)</td>
+                                    <td style="text-align: left;padding-left: 10px">时段漏失总量(m³/h)</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>6</td>
-                                    <td>单位管长漏失水量</td>
+                                    <td style="text-align: left;padding-left: 10px">单位管长漏失水量</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>7</td>
-                                    <td>时段漏失率</td>
+                                    <td style="text-align: left;padding-left: 10px">时段漏失率</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>8</td>
-                                    <td>时段售水量(m³)</td>
+                                    <td style="text-align: left;padding-left: 10px">时段售水量(m³)</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>9</td>
-                                    <td>时段产销差水量(m³)</td>
+                                    <td style="text-align: left;padding-left: 10px">时段产销差水量(m³)</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>10</td>
-                                    <td>时段产销差率</td>
+                                    <td style="text-align: left;padding-left: 10px">时段产销差率</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>11</td>
-                                    <td>时段MNF/ADD最小值</td>
+                                    <td style="text-align: left;padding-left: 10px">时段MNF/ADD最小值</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>12</td>
-                                    <td>时段最大流量(m³/h)</td>
+                                    <td style="text-align: left;padding-left: 10px">时段最大流量(m³/h)</td>
                                     <td></td>
                                   </tr>
                                   <tr>
                                     <td>13</td>
-                                    <td>时段最大流量出现时间</td>
+                                    <td style="text-align: left;padding-left: 10px">时段最大流量出现时间</td>
                                     <td></td>
                                   </tr>
                                    
@@ -446,18 +449,20 @@ th, td {
                               
                             </div>
                             <div class="col-md-8" >
-                              
-                              <div id="bindflowpress" style="height:450px;width:100%;"></div>
+                              <div style="border:1px solid #CDCDCD;">
+                              <div id="bindflowpress" style="height:530px;width:90%;margin: 15px"></div>
+                            </div>
                             </div>
                         </div>
                     <!-- </div> -->
                 </div>
                 <div class="modal-footer">
         
-                  <button class="btn btn-primary" type="button" id="doSubmit">
-                      <strong>导出</strong>
+                  <button class="btn" type="button" id="doSubmit" style="background-color:#CD3299;color: #fffffF;width: 80px;padding-top: 10px;border-radius:7px">
+                      <strong>导 出</strong>
                   </button>
-                  <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal">
+                    &nbsp;
+                  <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal"  style="width: 80px;border-radius:7px">
                       <strong>关 闭</strong>
                   </button>
                 </div>
@@ -583,7 +588,7 @@ th, td {
                           </tbody>
                         </table>
                       </div>
-                      <div class="col-md-4" >
+                      <div class="col-md-4 recent7flow" >
                         <table  style="border-bottom: 0px" >
                           
                           <tbody>
@@ -597,7 +602,7 @@ th, td {
                             
                           </tbody>
                         </table>
-                        <div id="recent7flowpress" style="height:201px;width:100%;border:1px solid #CDCDCD"></div>
+                        <div id="recent7flowpress" style="height:201px;width:100%;border:1px solid #CDCDCD" ></div>
                       </div>
                       
                   </div>
@@ -618,10 +623,6 @@ th, td {
      
     var  statsinfo = {{ dmastasticinfo|safe }};
 
-    $("#rightshow").bind("click",function(){
-      $("#leftshow").show();
-    })
-    
     
  </script>
     <!-- <script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch"></script> -->

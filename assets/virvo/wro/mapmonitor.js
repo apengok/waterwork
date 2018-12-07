@@ -1464,9 +1464,31 @@
 
         })
 
-        // $("#toggle-left").bind("click",function(){
-        //     console.log("this clicked here?")
-        // })
+        var old_r7fp =  $("#recent7flowpress").width();
+        $("#toggle-left").bind("click",function(){
+            
+            if($("#recent7flowpress").hasClass(".tleft")){
+                $("#recent7flowpress").css("width",old_r7fp);
+                $("#recent7flowpress").removeClass(".tleft").addClass(".tright")
+            }else{
+                $("#recent7flowpress").css("width","85%");
+                $("#recent7flowpress").removeClass(".tright").addClass(".tleft")
+
+            }
+            
+            if(recent7flowpress != null && recent7flowpress != undefined){
+                recent7flowpress.resize();
+
+            }
+           $("#recent7flowpress").css("width","100%");
+        })
+
+        $(window).on('resize', function(){
+            if(recent7flowpress != null && recent7flowpress != undefined){
+                recent7flowpress.resize();
+            }
+
+        });
 
         
         // mapMonitor.init();

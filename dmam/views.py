@@ -128,7 +128,7 @@ def dmatree(request):
         #station
         # 会出现pk 和 username list长度不等的情况，可能有同名站点
         if stationflag == '1':
-            print(o["station__username"],type(o["station__username"]))
+            # print(o["station__username"],type(o["station__username"]))
             
             if isinstance(o["station__username"],list):
                 for i in range(len(o["station__username"])):
