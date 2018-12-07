@@ -17,7 +17,7 @@
         }
 
         #dataTableBind td {
-            padding: 7px 10px;
+
         }
         .toolOperateClick .map-call::before{
             content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-off.png)!important;background-size:22px 22px
@@ -50,7 +50,31 @@
     position: absolute;
     border-top-color: rgba(255,255,255,0.9);
 }
+        table tr:nth-child(odd){
 
+            background: #F1F1F1;
+
+        }
+        table tr:nth-child(even){
+
+            background: #fffffF;
+
+
+        }
+
+
+        table tr{
+            height: 40px;
+            text-align: center;
+            color: #0a0a0c;
+        }
+
+        .col-md-3{
+            width: 24%;
+        }
+        .col-md-5{
+            width: 42.555%;
+        }
 
 .overlay button + button {
     float: right;
@@ -100,30 +124,119 @@
   display: none;
   padding: .75rem 1.25rem;
   margin-bottom: 1rem;
-  border-radius: .25rem;
+
   position: fixed;
-  top: 440px;
+  top:30rem;
   background-color: white;
   width: 390px;
   /*min-width: 35rem;*/
   border-width: 0;
-  left: 320px;
+  /*left: 310px;*/
+  height: 96px;
+  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+}
+
+.info-left {
+  display: none;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+
+  position: fixed;
+  top:30rem;
+  background-color: white;
+  width: 390px;
+  /*min-width: 35rem;*/
+  border-width: 0;
+  /*left: 310px;*/
+  height: 96px;
   box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
 }
 
 .info-seach-btn {
+    margin-top: 0px;
   display: none;
   padding: .75rem 1.25rem;
   margin-bottom: 1rem;
-  border-radius: .25rem;
+ /*margin-left: 310px;*/
   position: fixed;
   top: 30rem;
-  background-color: rgba(204, 51, 153, 1);
+  height: 96px;
+  background-color:#CD3299;
   width: auto;
-  /*min-width: 22rem;*/
+
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+
   border-width: 0;
-  /*right: 126rem;*/
-  left: 710px;
+
+  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+  color: white;
+}
+
+.info-seach-btn-left {
+    margin-top: 0px;
+  display: none;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+ /*margin-left: 70px;*/
+
+  position: fixed;
+  top: 30rem;
+  height: 96px;
+  background-color:#CD3299;
+  width: auto;
+
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+
+  border-width: 0;
+
+  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+  color: white;
+}
+
+
+.info-seach-btn-input {
+  margin-top: 0px;
+  display: none;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+ /*margin-left: 310px;*/
+  position: fixed;
+  top: 30rem;
+  height: 96px;
+  background-color:#CD3299;
+  width: auto;
+  max-width: 480px;
+
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+
+  border-width: 0;
+
+  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+  color: white;
+}
+
+
+.info-seach-btn-input-left {
+  margin-top: 0px;
+  display: none;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+ /*margin-left: 310px;*/
+  position: fixed;
+  top: 30rem;
+  height: 96px;
+  background-color:#CD3299;
+  width: auto;
+  max-width: 480px;
+
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+
+  border-width: 0;
+
   box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
   color: white;
 }
@@ -134,6 +247,8 @@ table {
   border-collapse: collapse;
   text-align: center;
   /*border: 3px solid purple;*/
+    border:1px solid #CDCDCD;
+
 }
 
 th, td {
@@ -196,197 +311,38 @@ th, td {
 
 {% block main_content %}
 
+
+
 <div id="content-right" class="col-md-10 content-right" >
-    <div >
+    <div  >
         <!-- <div id="js-map" class="map"></div> -->
         
       <div id="MapContainer" ></div> 
-      <div class="info-seach-btn" id="searchBtn">
-          <div style="margin-left: 15px; "><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
-          <div>搜<br>索</div>
-      </div>
-      <div class="info" id="searchInput">
+
+      <div class="info-seach-btn-input" id="searchBtnInput">
+        <div class="col-md-10 " style="display: none;" id="searchInput">
           <div >
               <input style="cursor: pointer; background-color: #fafafa;"
                   class="form-control layer-date laydate-icon"
                   id="timeInterval" name="timeInterval" readonly />
               <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
           </div>
-          <button id="queryClick" type="button" class="btn btn-primary pull-right" name="0" >查询</button>
+          <button id="queryClick" type="button" class="btn"  style=" background-color:#CD3299;color: #fffffF;float: right;margin-top: 1.67%;" name="0" >查询</button>
+        </div>
+        <div class="col-md-2" id="searchBtn">
+          <div style="margin-left: 15px; "><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+          <div>搜<br>索</div>
+        </div>
+          
       </div>
-
+       
+      
       <input type="hidden" id="current_dma_no" name="">
       <input type="hidden" id="current_organ_id" name="">
 
       
-    </div>
+        
 
-    <div id="carInfoTable">
-      <ul id="myTab" class="nav nav-tabs">
-          <!-- <li><h3 class="panel-title fwb" id="binddmaname"></h3></li> -->
-          <!-- <li id="realTimeStatus" class="active"><a href="#realTimeState"  data-toggle="tab">状态信息</a></li> -->
-          <!-- <li id="realTtimeAlarm"><a href="#realTimeCall" data-toggle="tab">报警记录</a>
-          </li>
-          <li id="operationLog"><a href="#operationLogTable"
-                                   data-toggle="tab">日志记录</a></li>
-          <div class="carStateList">
-              <li>(&nbsp;全部：<span id="table-car-all">0</span></li>
-              <li>在线：<span id="table-car-online">0</span></li>
-              <li>离线：<span id="table-car-offline">0</span></li>
-              <li>行驶：<span id="table-car-run">0</span></li>
-              <li>停止：<span id="table-car-stop">0</span></li>
-              <li>在线率：<span id="table-car-online-percent">0%</span></li>
-              <li>营运：<span id="table-car-operating-num">0</span></li>
-              <li>维修：<span id="table-car-repair-num">0</span>&nbsp;)</li>
-
-          </div> -->
-          <div style="float:right;margin:9px 20px 0px 0px;" id="bingListClick">
-              <li style="display:inline-block;cursor:pointer;"><i id="scalingBtn"
-                                                                  class="fa fa-chevron-down"></i>
-              </li>
-          </div>
-      </ul>
-      <div id="myTabContent" class="tab-content" style="overflow-x:auto;">
-                                            <!-- 状态信息 -->
-                                            <div class="tab-pane fade in active" id="realTimeState">
-                                                <div id="realTimeStateTable-div" style="overflow:auto;">
-                                                  <div class="panel-body fixed-table-body">
-                      <!--工具面板-->
-                      <div class="col-md-5">
-                        <table id="realTimeStateTable" border="1">
-                          
-                          <tbody>
-                            <tr>
-                              <td colspan="3">月供水(万m³)</td>
-                              <td colspan="5">日供水(万m³)</td>
-                              
-                            </tr>
-                            <tr>
-                              <td>前月</td>
-                              <td>上月</td>
-                              <td>本月</td>
-                              <td>类型</td>
-                              <td>11月29日</td>
-                              <td>前日</td>
-                              <td>昨日</td>
-                              <td>今日</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td>供水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td>进水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td>出水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td>漏水量</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="col-md-3">
-                        <table border="1">
-                          
-                          <tbody>
-                            <tr>
-                              <td colspan="4">夜间最小流量MNF(万m³)</td>
-                              
-                            </tr>
-                            <tr>
-                              <td>11月29日</td>
-                              <td>前日</td>
-                              <td>昨日</td>
-                              <td>今日</td>
-                            </tr>
-                            <tr>
-                              <td>96.37</td>
-                              <td>96.34</td>
-                              <td>90.45</td>
-                              <td>85.63</td>
-                            </tr>
-                            
-                          </tbody>
-                        </table>
-                        <table border="1">
-                          
-                          <tbody>
-                            
-                            <tr>
-                              <td colspan="3">报警设定值</td>
-                              
-                            </tr>
-                            <tr>
-                              <td>日用水基准</td>
-                              <td>产销差基准</td>
-                              <td>MNF基准</td>
-                              
-                            </tr>
-                            <tr>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="col-md-4">
-                        <table border="1">
-                          
-                          <tbody>
-                            <tr>
-                              <td>实时流量</td>
-                              <td>12.45 m³/h</td>
-                              <td>实时压力</td>
-                              <td>0.45 MPa</td>
-                              <td>2018-12-01</td>
-                            </tr>
-                            
-                          </tbody>
-                        </table>
-                        <div id="recent7flowpress" style="height:150px;width:100%;"></div>
-                      </div>
-                      
-                  </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <!-- 报警记录 -->
-                                            
-                                            <!-- 日志 -->
-                                            
-                                        </div>
-      <!--  -->
-      
     </div>
 
     <!-- dma绑定 -->
@@ -509,7 +465,145 @@ th, td {
         </div>
     </div>
 
-    
+    <div class="row" id="fenceInfoTable">
+          <div class="col-md-12">
+              <div class="panel panel-default">
+                  <div class="panel-heading" >
+                      <h3 class="panel-title fwb" id="binddmaname"></h3>
+                      <div class="pull-right" id="bingListClick">
+                          <i class="fa fa-chevron-down"></i>
+                      </div>
+                  </div>
+                  <div class="panel-body fixed-table-body">
+                      <!--工具面板-->
+                      <div class="col-md-5">
+                        <table id="dataTableBind" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="3" style="font-weight: bold">月供水(万m³)</td>
+                              <td colspan="5" style="font-weight: bold">日供水(万m³)</td>
+                              
+                            </tr>
+                            <tr>
+                              <td style="font-weight: bold">前月</td>
+                              <td style="font-weight: bold">上月</td>
+                              <td style="font-weight: bold">本月</td>
+                              <td style="font-weight: bold">类型</td>
+                              <td style="font-weight: bold">11月29日</td>
+                              <td style="font-weight: bold">前日</td>
+                              <td style="font-weight: bold">昨日</td>
+                              <td style="font-weight: bold">今日</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >供水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >进水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >出水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >漏水量</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-3">
+                        <table border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="4" style="font-weight: bold">夜间最小流量MNF(万m³)</td>
+                              
+                            </tr>
+                            <tr>
+                              <td style="font-weight: bold">11月29日</td>
+                              <td style="font-weight: bold">前日</td>
+                              <td style="font-weight: bold">昨日</td>
+                              <td style="font-weight: bold">今日</td>
+                            </tr>
+                            <tr>
+                              <td>96.37</td>
+                              <td>96.34</td>
+                              <td>90.45</td>
+                              <td>85.63</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="font-weight: bold">报警设定值</td>
+
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table border="1"  style="border-top:0px">
+
+                          <tbody>
+                            
+
+                            <tr>
+                              <td style="font-weight: bold">日用水基准</td>
+                              <td style="font-weight: bold">产销差基准</td>
+                              <td style="font-weight: bold">MNF基准</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-4" >
+                        <table  style="border-bottom: 0px" >
+                          
+                          <tbody>
+                            <tr>
+                              <td style="font-weight: bold">实时流量</td>
+                              <td style="background: #fffffF">12.45 m³/h</td>
+                              <td style="font-weight: bold">实时压力</td>
+                              <td style="background: #fffffF">0.45 MPa</td>
+                              <td>2018-12-01</td>
+                            </tr>
+                            
+                          </tbody>
+                        </table>
+                        <div id="recent7flowpress" style="height:201px;width:100%;border:1px solid #CDCDCD"></div>
+                      </div>
+                      
+                  </div>
+              </div>
+          </div>
+    </div>
 
 </div>
 
@@ -523,6 +617,10 @@ th, td {
   <script type="text/javascript">
      
     var  statsinfo = {{ dmastasticinfo|safe }};
+
+    $("#rightshow").bind("click",function(){
+      $("#leftshow").show();
+    })
     
     
  </script>

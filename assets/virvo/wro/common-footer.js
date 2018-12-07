@@ -54,6 +54,8 @@ var app = function() {
             $(".main-content-wrapper").toggleClass("main-content-toggle-left"),
             $(".imitateMenuBg").toggleClass("imitateMenuBg-left"),
             $(".defaultFootBg").toggleClass("defaultFootBg-left"),
+            $(".info-seach-btn-input").toggleClass("info-seach-btn-input-left"),
+            
             e.stopPropagation()
         })
     }
@@ -65,6 +67,7 @@ var app = function() {
             $(".main-content-wrapper").toggleClass("main-content-toggle-right"),
             $(window).width() < 660 && ($(".sidebar").removeClass("sidebar-toggle"),
             $(".main-content-wrapper").removeClass("main-content-toggle-left main-content-toggle-right")),
+            console.log("toggle-right"),
             e.stopPropagation()
         })
     }

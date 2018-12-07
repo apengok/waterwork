@@ -903,7 +903,7 @@ def biaowudata(request):
 
     # 口径统计
     dn_count = 0
-    dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-meter__dn')
+    dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-num_dn')[:5]
     dn_data = []
     for dd in dn_sets:
         name = dd['meter__dn']

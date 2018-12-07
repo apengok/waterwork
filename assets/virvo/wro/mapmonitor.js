@@ -17,8 +17,10 @@
     var overlay;
     var getdmamapusedata_flag = 0;
     var bindflowpressChart;
-
+    var recent7flowpress;
     var dma_level = '2';
+    var dma_selected = false;
+    var dma_bindname = "";
 
     var travelLineList,AdministrativeRegionsList,fenceIdList,
   administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
@@ -55,11 +57,14 @@
             winHeight = $(window).height();//可视区域高度
             headerHeight = $("#header").height();//头部高度
             var tabHeight = $myTab.height();//信息列表table选项卡高度
+            var panhead = $(".panel-heading").height();
+            // tabHeight = panhead;
+            // console.log("tabHeight height ",tabHeight,"panel head",panhead)
             var tabContHeight = $("#myTabContent").height();//table表头高度
             var fenceTreeHeight = winHeight - 380;//围栏树高度
             $("#treeDemo").css('height',fenceTreeHeight + "px");//电子围栏树高度
             //地图高度
-            newMapHeight = winHeight - headerHeight - tabHeight - 10;
+            newMapHeight = winHeight - headerHeight - tabHeight - 10 - panhead;
             $MapContainer.css({
                 "height": newMapHeight + 'px'
             });
@@ -254,21 +259,29 @@
         },
         //收缩绑定列表
         bingListClick: function () {
-            if ($(this).children('i').hasClass('fa-chevron-down')) {
-                $(this).children('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                $("#MapContainer").animate({'height': newMapHeight + "px"});
-            } else {
-                $(this).children('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-                var trLength = $('#dataTableBind tbody tr').length;
-                $("#MapContainer").animate({'height': (winHeight - 80 - trLength * 46 - 220) + "px"});
+            if(dma_selected){
+                if ($(this).children('i').hasClass('fa-chevron-down')) {
+                    $(this).children('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                    //  $("#MapContainer").animate({'height':(winHeight - (winHeight/8)+5  )+ "px"});
+                    $("#MapContainer").animate({'height':(winHeight - 130 )+ "px"});
+                    $("#binddmaname").html("");
+
+                } else {
+                    $(this).children('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                    var trLength = $('#dataTableBind tbody tr').length;
+                    $("#MapContainer").animate({'height': (winHeight  - trLength * 46 - 127) + "px"});
+                };
             }
-            ;
         },
+
+
+
+
+
         TabCarBox: function () {
             monitoringObjMapHeight = $("#MapContainer").height();
-            $("#carInfoTable").hide();
-            $("#dragDIV").hide();
-            // $("#fenceBindTable").css("display", "block");
+            
+            $("#fenceBindTable").css("display", "block");
             
             var bingLength = $('#dataTableBind tbody tr').length;
             var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
@@ -293,16 +306,20 @@
             //     ;
             // };
             if(stype == "dma"){
-                $("#MapContainer").css('height', (newMapHeight - 80 - 30 * bingLength - 105) + 'px');
-                // $("#fenceBindTable").show();
-                $("#carInfoTable").show();
+                $("#MapContainer").css('height', (newMapHeight - 30 * bingLength - 137) + 'px');
+                $("#fenceBindTable").show();
+                recent7flowpress.resize();
+                // $("#binddmaname").html(dma_bindname);
                 // findOperation.fenceBind();
             }
             else{
                 // $("#fenceBindTable").hide();
-                $("#MapContainer").css("height", newMapHeight + 'px');
-                $("#searchBtn").hide()
+                // $("#MapContainer").css("height", (winHeight - (winHeight/8)+10  ) + 'px');
+                $("#MapContainer").css("height", (winHeight - 130  ) + 'px');
+                $("#searchBtnInput").hide()
                 $("#searchInput").hide()
+                $("#binddmaname").html("");
+
 
                 // if ($('#bingListClick i').hasClass('fa fa-chevron-down')){
                 //     $("#MapContainer").animate({'height': newMapHeight + "px"});
@@ -328,6 +345,7 @@
             // json_ajax("post", '/clbs/m/functionconfig/fence/bindfence/getVehicleIdsByFenceId', "json", false, {"fenceId": fenceIdstr}, function (data) {
             //     oldFencevehicleIds = data.obj;
             // })
+
             return false;
         },
     }
@@ -1062,6 +1080,8 @@
             selectTreeIdAdd=treeNode.uuid;
             $('#simpleQueryParam').val("");
             if(treeNode.type == "dma"){
+                dma_selected = true
+                dma_bindname = treeNode.name;
                 var pNode = treeNode.getParentNode();
                 // $("#organ_name").attr("value",pNode.name);
                 $("#current_dma_no").attr("value",treeNode.dma_no);
@@ -1069,28 +1089,36 @@
                 station = treeNode.id;
 
                 mapMonitor.loadGeodata(2)
-                $("#binddmaname").html(treeNode.name);
+                $("#binddmaname").html(dma_bindname);
                 mapMonitor.hydropressflowChart();
                 // mapMonitor.showSearchBtn();
-                $(".info-seach-btn").css("left","320px");
-                $("#searchBtn").show();
-                fenceOperation.carStateAdapt(1);
-                $("#carInfoTable").show();
+                // $(".info-seach-btn").css("left","310px");
+                $("#searchBtnInput").show();
+                $("#searchInput").hide()
+
             }else{
+                dma_selected = false;
                 $("#current_organ_id").attr("value",treeNode.id);
                 $("#fenceBindTable").css("display", "none");
+                $("#binddmaname").html("");
+
                 mapMonitor.loadGeodata(1)
-                $("#searchBtn").hide();
+                $("#searchBtnInput").hide();
                 $("#searchInput").hide();
+
             }
             
-            // fenceOperation.TabCarBox();
+            fenceOperation.TabCarBox();
             // fenceOperation.fenceBind(treeNode.pId, treeNode.name, treeNode.type,treeNode.id);
 
         },
         // 搜索按钮
         showSearchBtn:function(){
-            $("#searchBtn").show();
+
+            $("#searchBtnInput").show();
+            $("#searchInput").hide()
+
+
         },
         // ajax参数
         ajaxDataParamFun: function(d){
@@ -1171,7 +1199,7 @@
                 }]
             };
 
-            var recent7flowpress = echarts.init(document.getElementById('recent7flowpress'));
+            recent7flowpress = echarts.init(document.getElementById('recent7flowpress'));
             recent7flowpress.setOption(options);
             
         },
@@ -1409,9 +1437,25 @@
         $("#bingListClick").bind("click", fenceOperation.bingListClick);
 
         $("#searchBtn").bind("click",function(){
-                $(".info-seach-btn").css("left","710px");
+            // 搜索按钮
 
-            $("#searchInput").show()
+                if ($("#searchBtn").hasClass('de1')) {
+                    $("#searchBtn").removeClass('de1').addClass('dee1');
+
+                    // $(".info-seach-btn").css("left","700px");
+                    $("#searchInput").show()
+
+                } else {
+                    $("#searchBtn").removeClass('dee1').addClass('de1');
+                    // $(".info-seach-btn").css("left","310px");
+                    $("#searchInput").hide()
+
+                };
+
+
+
+
+
         })
 
         $("#queryClick").bind("click",function(){
@@ -1419,6 +1463,10 @@
             mapMonitor.bindflowpress();
 
         })
+
+        // $("#toggle-left").bind("click",function(){
+        //     console.log("this clicked here?")
+        // })
 
         
         // mapMonitor.init();
