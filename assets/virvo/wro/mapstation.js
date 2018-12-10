@@ -192,7 +192,7 @@
             $("#map-container").css({
                 "height": newMapHeight + 'px'
             });
-console.log("$newMapHeight",$("#map-container").height());
+            console.log("$newMapHeight",$("#map-container").height());
             $contentLeft.css({
                 "height": newMapHeight + "px",
             });

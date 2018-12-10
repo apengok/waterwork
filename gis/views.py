@@ -739,7 +739,8 @@ def getDMAFenceDetails(request):
     # print("dma_no",dma_no)
     # print("fenceNodes",fenceNodes)
     user = request.user
-    dma_no_list = user.dma_list_queryset().filter(belongto__cid__icontains=current_organ).filter(belongto__organlevel=dma_level).values_list("dma_no")
+    # dma_no_list = user.dma_list_queryset().filter(belongto__cid__icontains=current_organ).filter(belongto__organlevel=dma_level).values_list("dma_no")
+    dma_no_list = user.dma_list_queryset().filter(belongto__cid__icontains=current_organ).values_list("dma_no")
     print("dma_no_list:",dma_no_list)
 
     if dflag == '2':

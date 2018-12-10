@@ -186,9 +186,8 @@
   height: 96px;
   background-color:#CD3299;
   width: auto;
+    border-radius:5px;
 
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
 
   border-width: 0;
 
@@ -200,13 +199,12 @@
 .info-seach-btn-input {
   margin-top: 0px;
   display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
+
  /*margin-left: 310px;*/
   position: fixed;
   top: 30rem;
   height: 96px;
-  background-color:#CD3299;
+  background-color: #ffffff;
   width: auto;
   max-width: 480px;
 
@@ -220,28 +218,36 @@
 }
 
 
-.info-seach-btn-input-left {
-  margin-top: 0px;
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
- /*margin-left: 310px;*/
-  position: fixed;
-  top: 30rem;
-  height: 96px;
-  background-color:#CD3299;
-  width: auto;
-  max-width: 480px;
+        .info-seach-btn-input-left {
+            margin-top: 0px;
+            display: none;
 
-  border-top-right-radius:5px;
-  border-bottom-right-radius:5px;
+            /*margin-left: 310px;*/
+            position: fixed;
+            top: 30rem;
+            height: 96px;
+            background-color: #ffffff;
+            width: auto;
+            max-width: 480px;
 
-  border-width: 0;
+            border-top-right-radius:5px;
+            border-bottom-right-radius:5px;
 
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-  color: white;
+            border-width: 0;
+
+            box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
+            color: white;
+        }
+.de123{
+    background-color:#CD3299;
+    color: #fffffF;
+    height: 96px;
+    padding-top: 10px;
+    width: 46px;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
 }
-
+        .de123:hover{background-color: #ab3278;}
 table {
   table-layout: fixed;
   width: 100%;
@@ -257,41 +263,40 @@ th, td {
   height: 20px;
 }
 
-
-
     </style>
 {% endblock %}
 
 
 {% block content_left %}
-    <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
-        <div style="background-color: rgba(0, 153, 204, 1);" >
-            <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 14px;color: white;margin: 10px 10px 0 20px;">全部站点(1251)
+<div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
+    <div id="operationMenu" class="panel panel-default panDefMenu">
+        <div class="panel-heading" style="padding:10px;background-color:#ffffff;color:#767676;">
+            <!-- <h3 class="panel-title fwb">轨迹回放</h3> -->
+            <div  >
+                <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 16px;color: inherit;margin: 10px 10px 0 20px;">分区总数(125)
+                </div>
             </div>
-        </div>
-        <div style="background:#fff;">
-            <div class="form-group">
-              <label class="col-md-6 control-label" style="margin-top:10px;color: #1627e0;">在线(6)</label>
-              <label class="col-md-6 control-label" style="margin-top:10px;color: grey;">离线(0)</label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-6 control-label" style="margin-top:10px;color: #f20804;">报警站点(0)</label>
-              <label class="col-md-6 control-label" style="margin-top:10px;color: #02470e;">关注站点(0)</label>
-            </div>
-            <div class="form-group">
-              <label class="col-md-6 control-label" style="margin-top:10px;margin-bottom:20px;color: #8c4380;">大用户站点(0)</label>
-              
-            </div>
-        </div>
 
+        </div>
+        <div class="panel-body fixed-table-body  form-horizontal" style="padding-top:10px;">
+            <div id="station_status" class="form-group">
+                <div class="col-md-12 " id="disable" style="text-align: left;">
+                    <div style="background:#fff;text-align: left;">
+                        <div class="form-group">
+                            <label class="col-md-6 control-label " style="margin-top:10px;padding-left:50px;color: #070b0c;text-align: left;">一级分区(1)</label>
+                            <label class="col-md-6 control-label" style="margin-top:10px;margin-left:-20px;color: #070b0c;text-align: left;">三级分区(111)</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" style="margin-top:10px;padding-left:50px;color: #070b0c;text-align: left;">二级分区(24)</label>
+                            <label class="col-md-6 control-label" style="margin-top:10px;margin-left:-20px;color: #f20804;text-align: left;">报警分区(0)</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         <div class="col-md-12" style="padding-right: 0px; padding-left: 0px;">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title fwb">DMA分区</h3>
-                  <div class="actions  listActions">
-                    <i class="fa fa-chevron-down"></i>
-                  </div>
-                </div>
+
                 <div class="panel-body" style="padding: 0px;">
                   <div class="form-group" style="margin-top: 15px;">
                     <div class="col-md-12">
@@ -299,17 +304,19 @@ th, td {
                     </div>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:100%!important">
-                    <ul id="treeDemo" class="ztreee" style="overflow:scroll;overflow-y: auto;height:460px!important"></ul>
+                    <ul id="treeDemo" class="ztreee" style="overflow:scroll;overflow-y: auto;min-height: 606px!important"></ul>
                   </div>
 
                 </div>
             </div>
         </div>
 
-        
-
-
+        </div>
     </div>
+</div>
+
+
+
 {% endblock content_left %}
 
 {% block main_content %}
@@ -323,7 +330,7 @@ th, td {
       <div id="MapContainer" ></div> 
 
       <div class="info-seach-btn-input" id="searchBtnInput">
-        <div class="col-md-10 " style="display: none;" id="searchInput">
+        <div class="col-md-10 " style="display: none;margin-top: 10px;width: 380px" id="searchInput" >
           <div >
               <input style="cursor: pointer; background-color: #fafafa;"
                   class="form-control layer-date laydate-icon"
@@ -332,9 +339,9 @@ th, td {
           </div>
           <button id="queryClick" type="button" class="btn"  style=" background-color:#CD3299;color: #fffffF;float: right;margin-top: 1.67%;" name="0" >查询</button>
         </div>
-        <div class="col-md-2" id="searchBtn">
+        <div class="col-md-2 de11 de123" id="searchBtn"  >
           <div style="margin-left: 15px; "><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
-          <div>搜<br>索</div>
+          <div>查<br>询</div>
         </div>
           
       </div>
@@ -588,7 +595,7 @@ th, td {
                           </tbody>
                         </table>
                       </div>
-                      <div class="col-md-4 recent7flow" >
+                      <div class="col-md-4" >
                         <table  style="border-bottom: 0px" >
                           
                           <tbody>
@@ -602,7 +609,7 @@ th, td {
                             
                           </tbody>
                         </table>
-                        <div id="recent7flowpress" style="height:201px;width:100%;border:1px solid #CDCDCD" ></div>
+                        <div id="recent7flowpress" style="height:201px;width:100%;border:1px solid #CDCDCD"></div>
                       </div>
                       
                   </div>

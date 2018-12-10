@@ -367,7 +367,7 @@ class DMABaseinfo(models.Model):
             "dma_name":self.dma_name,
             "belongto":self.belongto.name,
             "belongto_cid":self.belongto.cid,
-            "dma_level":"二级",
+            "dma_level":self.belongto.organlevel, #"二级",
             "state":"在线",
             "water_in":round(float(water_in),2),
             "month_sale":round(float(monthly_sale[month_str]),2) ,

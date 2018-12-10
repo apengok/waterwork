@@ -21,6 +21,9 @@
     var dma_level = '2';
     var dma_selected = false;
     var dma_bindname = "";
+    var dma_level2_clicked = "";
+    var show_dma_level = "2";
+
 
     var travelLineList,AdministrativeRegionsList,fenceIdList,
   administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
@@ -71,7 +74,7 @@
             //车辆树高度
             var newContLeftH = winHeight - headerHeight;
             //sidebar高度
-            $(".sidebar").css('height',newContLeftH + 'px');
+            //$(".sidebar").css('height',newContLeftH + 'px');
             //计算顶部logo相关padding
             logoWidth = $("#header .brand").width();
             btnIconWidth = $("#header .toggle-navigation").width();
@@ -86,17 +89,13 @@
             });
             //加载时隐藏left同时计算宽度
             $sidebar.attr("class", "sidebar sidebar-toggle");
-            //$mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
+            $mainContentWrapper.attr("class", "main-content-wrapper main-content-toggle-left");
             //操作树高度自适应
             var newTreeH = winHeight - headerHeight - 203;
             $thetree.css({
                 "height": newTreeH + "px"
             });
-            //视频区域自适应
-            var mainContentHeight = $contentLeft.height();
-            var adjustHeight = $(".adjust-area").height();
-            videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
-            $(".videoArea").css("height", videoHeight + "px");
+            
             //地图拖动改变大小
             oldMapHeight = $MapContainer.height();
             myTabHeight = $myTab.height();
@@ -116,45 +115,42 @@
             } else {
                 $("body").css("overflow", "hidden");
             };
-            window.onresize=function(){
-              winHeight = $(window).height();//可视区域高度
-              headerHeight = $("#header").height();//头部高度
-                var tabHeight = $myTab.height();//信息列表table选项卡高度
-                var tabContHeight = $("#myTabContent").height();//table表头高度
-                var fenceTreeHeight = winHeight - 193;//围栏树高度
-                $("#treeDemo").css('height',fenceTreeHeight + "px");//电子围栏树高度
-                //地图高度
-                newMapHeight = winHeight - headerHeight - tabHeight - 10;
-                $MapContainer.css({
-                    "height": newMapHeight + 'px'
-                });
-                //车辆树高度
-                var newContLeftH = winHeight - headerHeight;
-                //sidebar高度
-                $(".sidebar").css('height',newContLeftH + 'px');
-                //计算顶部logo相关padding
-                logoWidth = $("#header .brand").width();
-                btnIconWidth = $("#header .toggle-navigation").width();
-                windowWidth = $(window).width();
-                newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
-                //左右自适应宽度
-                $contentLeft.css({
-                    "width": newwidth + "%"
-                });
-                $contentRight.css({
-                    "width": 100 - newwidth + "%"
-                });
-              //操作树高度自适应
-                var newTreeH = winHeight - headerHeight - 203;
-                $thetree.css({
-                    "height": newTreeH + "px"
-                });
-                //视频区域自适应
-                var mainContentHeight = $contentLeft.height();
-                var adjustHeight = $(".adjust-area").height();
-                videoHeight = (mainContentHeight - adjustHeight - 65) / 2;
-                $(".videoArea").css("height", videoHeight + "px");
-            }
+            // window.onresize=function(){
+            //     console.log("onresize ??")
+            //     winHeight = $(window).height();//可视区域高度
+            //     headerHeight = $("#header").height();//头部高度
+            //     var tabHeight = $myTab.height();//信息列表table选项卡高度
+            //     var tabContHeight = $("#myTabContent").height();//table表头高度
+            //     var fenceTreeHeight = winHeight - 193;//围栏树高度
+            //     $("#treeDemo").css('height',fenceTreeHeight + "px");//电子围栏树高度
+            //     //地图高度
+            //     newMapHeight = winHeight - headerHeight - tabHeight - 10;
+            //     $MapContainer.css({
+            //         "height": newMapHeight + 'px'
+            //     });
+            //     //车辆树高度
+            //     var newContLeftH = winHeight - headerHeight;
+            //     //sidebar高度
+            //     $(".sidebar").css('height',newContLeftH + 'px');
+            //     //计算顶部logo相关padding
+            //     logoWidth = $("#header .brand").width();
+            //     btnIconWidth = $("#header .toggle-navigation").width();
+            //     windowWidth = $(window).width();
+            //     newwidth = (logoWidth + btnIconWidth + 46) / windowWidth * 100;
+            //     //左右自适应宽度
+            //     $contentLeft.css({
+            //         "width": newwidth + "%"
+            //     });
+            //     $contentRight.css({
+            //         "width": 100 - newwidth + "%"
+            //     });
+            //   //操作树高度自适应
+            //     var newTreeH = winHeight - headerHeight - 203;
+            //     $thetree.css({
+            //         "height": newTreeH + "px"
+            //     });
+                
+            // }
         },
     };
 
@@ -264,7 +260,7 @@
                     $(this).children('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
                     //  $("#MapContainer").animate({'height':(winHeight - (winHeight/8)+5  )+ "px"});
                     $("#MapContainer").animate({'height':(winHeight - 130 )+ "px"});
-                    $("#binddmaname").html("");
+                    // $("#binddmaname").html("");
 
                 } else {
                     $(this).children('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
@@ -318,7 +314,7 @@
                 $("#MapContainer").css("height", (winHeight - 130  ) + 'px');
                 $("#searchBtnInput").hide()
                 $("#searchInput").hide()
-                $("#binddmaname").html("");
+                // $("#binddmaname").html("");
 
 
                 // if ($('#bingListClick i').hasClass('fa fa-chevron-down')){
@@ -355,21 +351,7 @@
     mapMonitor = {
          // 地图初始化
         amapinit: function () {
-            console.log("$newMapHeight",$("#MapContainer").height());
-            $contentLeft.css({
-                "height": newMapHeight + "px",
-            });
-            console.log("$contentLeft",$contentLeft.height());
-            var newContLeftH = winHeight - headerHeight ;
-
-            $("#sidebar").css({
-                "height": newMapHeight + "px"
-            });
-            console.log("$sidebar height",$(".sidebar").height());
-
-            // $("#treeDemo").css({
-            //     "height": 388 + "px"
-            // });
+            
             // 创建地图
             map = new AMap.Map("MapContainer", {
                 resizeEnable: true,   //是否监控地图容器尺寸变化
@@ -439,6 +421,131 @@
             infoWindow = new AMap.InfoWindow({isCustom: true, offset: new AMap.Pixel(100, -100), closeWhenClickMap: true});
 
             mapMonitor.loadGeodata(0)
+
+            AMap.event.addListener(map,'zoomend',function(){
+                mapMonitor.refreshMap();
+            })
+        },
+
+        refreshMap:function(){
+            var mapBounds = map.getBounds();
+            var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
+            var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
+
+            var bounds = new AMap.Bounds(southWest, northEast)
+            var rectangle = new AMap.Rectangle({
+                  map: map,
+                  bounds: bounds,
+                  strokeColor:'#FFFFFF',
+                  strokeWeight:1,
+                  strokeOpacity:0,
+                  fillOpacity:0,
+                  zIndex:0,
+                  bubble:true
+
+                });
+            // console.log(mapBounds)
+            // console.log(bounds)
+            
+            var polygon1_path = rectangle.getPath();
+            // var polygon2_path = polygon2.getPath();
+            // 小圈是否在大圈内
+            // var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+            // 两圈是否交叉
+            // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
+            map.clearMap();
+            var tmp_dma_fresh = []
+            var count_dma_2_in = 0;
+            for(var i=0;i<dma_list.length;i++){
+                var tdma = dma_list[i];
+                var polygon2_path = tdma.getPath();
+                
+                // in
+                var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+                if(isRingInRing ){
+                    var tdma_name = tdma.getExtData().dma_name; 
+                    var tdma_level = tdma.getExtData().dma_level;
+                    if(tdma_level == "2"){
+                        count_dma_2_in += 1;
+                    }
+
+                    
+                    // 创建纯文本标记 
+                    var text = new AMap.Text({
+                        text:tdma_name,
+                        textAlign:'center', // 'left' 'right', 'center',
+                        verticalAlign:'middle', //middle 、bottom
+                        draggable:true,
+                        clickable:true,
+                        cursor:'pointer',
+                        // angle:10,
+                        style:{
+                            'padding': '.75rem 1.25rem',
+                            'margin-bottom': '1rem',
+                            'border-radius': '.25rem',
+                            'background-color': '#169bd5',
+                            'width': '15rem',
+                            'border-width': 0,
+                            'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
+                            'text-align': 'center',
+                            'font-size': '20px',
+                            'color': 'white'
+                        },
+                        extData:{
+                            'dma_name':tdma_name,
+                            'dma_level':tdma_level,
+                            // 'belongto_cid':dmaMapStatistic.belongto_cid,
+                        },
+                        position: mapMonitor.calculateCenter(polygon2_path) //[116.396923,39.918203]
+                    });
+
+                    text.on("click",function(e){
+                        // console.log(e,e.target.getExtData().belongto_cid);
+                        // var belongto_cid = e.target.getExtData().belongto_cid;
+                        // mapMonitor.textClicked(belongto_cid);
+                        dma_level2_clicked = e.target.getExtData().dma_name;
+                        show_dma_level = "3";
+                        mapMonitor.refreshMap();
+                    })
+                    if(show_dma_level == "3"){
+                        // if(tdma_level == "2"){
+                        //     count_dma_2_in += 1;
+                        // }
+                        // if(count_dma_2_in >=2){
+                        //     show_dma_level = "2";
+                        // }
+                        if(tdma_level == show_dma_level || dma_level2_clicked == tdma_name){
+                            tmp_dma_fresh.push(tdma)
+                            // text.setMap(map);
+                        }
+                    }else{
+                        if(tdma_level == show_dma_level){
+                            tmp_dma_fresh.push(tdma)
+                            text.setMap(map);
+                        }
+                    }
+                    // tmp_dma_fresh.push(tdma)
+                    // text.setMap(map);
+                }
+                // intersect
+                // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
+                // if(doesRingRingIntersect){
+                //     map.remove(dma_list[i]);
+                // }
+            }
+
+            console.log("count_dma_2_in:",count_dma_2_in,show_dma_level,"zoom ",map.getZoom())
+
+            if(count_dma_2_in >= 2){
+                show_dma_level = "2";
+                dma_level2_clicked = "";
+            }
+            
+            // map.remove(dma_list)
+            map.add(tmp_dma_fresh)
+            map.setFitView(tmp_dma_fresh);
+
+
         },
 
         calculateCenter: function(lnglatarr){
@@ -511,49 +618,21 @@
                                 polyFence = new AMap.Polygon({
                                     path: dataArr,//设置多边形边界路径
                                     strokeColor:strokeColor,// "#FF33FF", //线颜色
-                                    strokeOpacity: 0.2, //线透明度
+                                    strokeOpacity: 0.9, //线透明度
                                     strokeWeight: 3, //线宽
                                     fillColor:fillColor,// "#1791fc", //填充色
-                                    fillOpacity: 0.35
+                                    fillOpacity: 0.35,
+                                    strokeStyle:"dashed",
+                                    extData:{
+                                        'dma_name':dmaMapStatistic.dma_name,
+                                        'dma_level':dmaMapStatistic.dma_level,
+                                        'belongto_cid':dmaMapStatistic.belongto_cid,
+                                    },
                                     //填充透明度
                                 });
 
 
-                                // 创建纯文本标记
-                                var text = new AMap.Text({
-                                    text:dmaMapStatistic.dma_name,
-                                    textAlign:'center', // 'left' 'right', 'center',
-                                    verticalAlign:'middle', //middle 、bottom
-                                    draggable:true,
-                                    clickable:true,
-                                    cursor:'pointer',
-                                    // angle:10,
-                                    style:{
-                                        'padding': '.75rem 1.25rem',
-                                        'margin-bottom': '1rem',
-                                        'border-radius': '.25rem',
-                                        'background-color': '#169bd5',
-                                        'width': '15rem',
-                                        'border-width': 0,
-                                        'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
-                                        'text-align': 'center',
-                                        'font-size': '20px',
-                                        'color': 'white'
-                                    },
-                                    extData:{
-                                        'dma_no':dmaMapStatistic.dma_name,
-                                        'belongto_cid':dmaMapStatistic.belongto_cid,
-                                    },
-                                    position: mapMonitor.calculateCenter(dataArr) //[116.396923,39.918203]
-                                });
-
-                                text.on("click",function(e){
-                                    console.log(e,e.target.getExtData().belongto_cid);
-                                    var belongto_cid = e.target.getExtData().belongto_cid;
-                                    mapMonitor.textClicked(belongto_cid);
-                                })
-
-                                text.setMap(map);
+                                
 
                                 // // var position = new AMap.LngLat(polygon[0].longitude,polygon[0].latitude);
                                 // polyFence.on("mouseover",function(e){
@@ -580,6 +659,7 @@
 
                         map.add(dma_list)
                         map.setFitView(dma_list);
+                        mapMonitor.refreshMap();
                     }
                 },      
             });
@@ -1100,7 +1180,7 @@
                 dma_selected = false;
                 $("#current_organ_id").attr("value",treeNode.id);
                 $("#fenceBindTable").css("display", "none");
-                $("#binddmaname").html("");
+                // $("#binddmaname").html("");
 
                 mapMonitor.loadGeodata(1)
                 $("#searchBtnInput").hide();
