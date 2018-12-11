@@ -1614,7 +1614,8 @@ def commandlist(request):
     if sid != '':
         station = Station.objects.filter(pk=int(sid)).values("pk","meter__serialnumber","meter__simid__simcardNumber","username","belongto__name")
         
-        
+        # 应该从表具参数数据库获取表的
+        # MeterParameter.objects.values()
         
         data.append({
             "status":0,

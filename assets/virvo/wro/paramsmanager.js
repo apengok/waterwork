@@ -16,6 +16,8 @@
     var zTreeIdJson = {};
     var setChar;
     var realsendflag = true;
+
+    var ROOT_PATH = "http://120.78.255.129:8080/amrs";
     
     realTimeCommand = {
         init: function(){
@@ -245,6 +247,13 @@
                 var url="/devm/paramsmanager/command/getCommandParam";
                 var parameter={"sid": currentStation,"commandType":currentCommandType,"isRefer":false};
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
+				
+				
+				// var ROOT_PATH = "http://localhost:8080/amrs";
+				var commaddr = $("#commaddr").val();
+				var data = {"commaddr":commaddr,"cmd":"modifyIpAndPort","params":"readparam"};
+				url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
+				json_ajax("POST",url,"jsonp",true,data, realTimeCommand.saveCommandback);
             }
         },
         
@@ -523,9 +532,9 @@
             //表格setting
             var setting = {
                 listUrl : "/devm/paramsmanager/command/list/",
-                editUrl : "/devm/paramsmanager/command/edit_",
-                deleteUrl : "/devm/paramsmanager/command/delete_",
-                deletemoreUrl : "/devm/paramsmanager/command/deletemore",
+                // editUrl : "/devm/paramsmanager/command/edit_",
+                // deleteUrl : "/devm/paramsmanager/command/delete_",
+                // deletemoreUrl : "/devm/paramsmanager/command/deletemore",
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
                 dataTableDiv : 'dataTable', //表格
@@ -579,7 +588,8 @@
             //     return;
             // };
             commaddr = $("#commaddr").val();
-            var ROOT_PATH = "http://192.168.2.100:8080/amrs";
+            
+            // var ROOT_PATH = "http://localhost:8080/amrs";
             // 通讯参数
             if (currentCommandType == "11") {
                 tcpresendcount = $("#tcpresendcount").val();
@@ -590,11 +600,13 @@
                 smsresponovertime = $("#smsresponovertime").val();
                 heartbeatperiod = $("#heartbeatperiod").val();
                 
-                data = {"commaddr":commaddr,"tcpresendcount":tcpresendcount,"tcpresponovertime":tcpresponovertime,
-                    "udpresendcount":udpresendcount,"udpresponovertime":udpresponovertime,"smsresendcount":smsresendcount,
-                    "smsresponovertime":smsresponovertime,"heartbeatperiod":heartbeatperiod}
-
-                url = "/devm/paramsmanager/command/saveCommand/";
+                //data = {"commaddr":commaddr,"tcpresendcount":tcpresendcount,"tcpresponovertime":tcpresponovertime,
+                    //"udpresendcount":udpresendcount,"udpresponovertime":udpresponovertime,"smsresendcount":smsresendcount,
+                    //"smsresponovertime":smsresponovertime,"heartbeatperiod":heartbeatperiod}
+				data = {"commaddr":commaddr,"cmd":"modifyIpAndPort","params":tcpresendcount+'@'+tcpresponovertime+'@'+udpresendcount
+											+'@'+udpresponovertime+'@'+smsresendcount+'@'+smsresponovertime+'@'+heartbeatperiod}
+                //url = "/devm/paramsmanager/command/saveCommand/";
+				url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
             }
             // 终端参数
             if(currentCommandType == "12"){
@@ -602,8 +614,16 @@
                 port = $("#port").val();
                 entrypoint = $("#entrypoint").val();
 
-                data = {"commaddr":commaddr,"ipaddr":ipaddr,"port":port,"entrypoint":entrypoint}
-                url = ROOT_PATH + "/amrssocket?action=modifyIpAndPort";
+                //data = {"commaddr":commaddr,"ip":ipaddr,"port":port}
+                //url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
+                
+				
+				data = {"commaddr":commaddr,"cmd":"modifyIpAndPort","params":ipaddr+'@'+port}
+				console.log(data);
+                url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
+				console.log(url);
+
+
             }
             // 采集指令
             if(currentCommandType == "13"){
@@ -616,11 +636,15 @@
                 updatatime3 = $("#updatatime3").val();
                 updatatime4 = $("#updatatime4").val();
                 
-                data = {"commaddr":commaddr,"updatastarttime":updatastarttime,"updatamode":updatamode,
-                    "collectperiod":collectperiod,"updataperiod":updataperiod,"updatatime1":updatatime1,
-                    "updatatime2":updatatime2,"updatatime3":updatatime3,"updatatime4":updatatime4}
-
-                url = "/devm/paramsmanager/command/saveCommand/";
+                //data = {"commaddr":commaddr,"updatastarttime":updatastarttime,"updatamode":updatamode,
+                    //"collectperiod":collectperiod,"updataperiod":updataperiod,"updatatime1":updatatime1,
+                    //"updatatime2":updatatime2,"updatatime3":updatatime3,"updatatime4":updatatime4}
+				
+				data = {"commaddr":commaddr,"cmd":"modifyIpAndPort","params":updatastarttime+'@'+updatamode+'@'+collectperiod
+											+'@'+updataperiod+'@'+updatatime1+'@'+updatatime2+'@'+updatatime3+'@'+updatatime4}
+				
+                //url = "/devm/paramsmanager/command/saveCommand/";
+				url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
             }
             // 基表设置
             if(currentCommandType == "14"){
@@ -639,18 +663,22 @@
                 flowdorient = $("#flowdorient").val();
                 plusaccumupreset = $("#plusaccumupreset").val();
 
-                data = {"commaddr":commaddr,"dn":dn,"liciperoid":liciperoid,
-                    "maintaindate":maintaindate,"transimeterfactor":transimeterfactor,"biaofactor":biaofactor,
-                    "manufacturercode":manufacturercode,"issmallsignalcutpoint":issmallsignalcutpoint,
-                    "smallsignalcutpoint":smallsignalcutpoint,"isflowzerovalue":isflowzerovalue,"flowzerovalue":flowzerovalue,
-                    "pressurepermit":pressurepermit,"flowdorient":flowdorient,"plusaccumupreset":plusaccumupreset
-                }
+                //data = {"commaddr":commaddr,"dn":dn,"liciperoid":liciperoid,
+                    //"maintaindate":maintaindate,"transimeterfactor":transimeterfactor,"biaofactor":biaofactor,
+                    //"manufacturercode":manufacturercode,"issmallsignalcutpoint":issmallsignalcutpoint,
+                    //"smallsignalcutpoint":smallsignalcutpoint,"isflowzerovalue":isflowzerovalue,"flowzerovalue":flowzerovalue,
+                    //"pressurepermit":pressurepermit,"flowdorient":flowdorient,"plusaccumupreset":plusaccumupreset
+                //}
 
-                url = "/devm/paramsmanager/command/saveCommand/";
+				data = {"commaddr":commaddr,"cmd":"modifyIpAndPort","params":dn+'@'+liciperoid+'@'+maintaindate+'@'+transimeterfactor
+											+'@'+biaofactor+'@'+manufacturercode+'@'+issmallsignalcutpoint+'@'+smallsignalcutpoint
+											+'@'+isflowzerovalue+'@'+flowzerovalue+'@'+pressurepermit+'@'+flowdorient+'@'+plusaccumupreset}
+                //url = "/devm/paramsmanager/command/saveCommand/";
+				url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
             }
             // url = "/devm/paramsmanager/command/saveCommand/";
 
-            json_ajax("POST",url,"json",true,data, realTimeCommand.saveCommandback);
+            json_ajax("POST",url,"jsonp",true,data, realTimeCommand.saveCommandback);
               
         },
         saveCommandback:function(data){

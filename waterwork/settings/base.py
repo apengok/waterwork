@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     # 'channels',
     'django_apscheduler',
     'shexian',
+    'publishfiles',
 ]
 
 
@@ -246,6 +247,28 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'data/') # 'data' is my media folder
 # MEDIA_URL = '/media/'
+
+
+# publish process
+# The default file storage backend used during the build process
+PUBLISHFILES_STORAGE = 'publishfiles.storage.PublishFilesStorage'
+
+# List of finder classes that know how to find static files in
+# various locations.
+PUBLISHFILES_FINDERS = [
+    'publishfiles.finders.FileSystemFinder',
+    'publishfiles.finders.AppDirectoriesFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+]
+
+PUBLISH_ROOT = os.path.join(BASE_DIR,'publish')
+PUBLISH_URL = '/publish/'
+
+PUBLISHFILES_DIRS = [
+    BASE_DIR
+    # os.path.join(BASE_DIR, "dmam"),
+    
+]
 
 try:
     from .loggers_development import *
