@@ -353,7 +353,8 @@
                     dataType : "json",
                     otherParam : {  // 是否可选  Organization
                         "isOrg" : "1",
-                        "isStation":"1"
+                        "isStation":"1",
+                        "isPressure":"1",
                     },
                     dataFilter: realtimeData.groupAjaxDataFilter
                 },

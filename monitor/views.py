@@ -300,13 +300,15 @@ def stationlist(request):
     organs = user.belongto
 
     stations = user.station_list_queryset(simpleQueryParam) 
-    
+    pressures = user.pressure_list_queryset(simpleQueryParam)
+    print("pressures ",pressures)
     if groupName != "":
         stations = stations.filter(belongto__uuid=groupName)
+        pressures = pressures.filter(belongto__uuid=groupName)
     
     # 一次获取全部所需数据，减少读取数据库耗时
     stations_value_list = stations.values_list('meter__simid__simcardNumber','username','belongto__name','meter__serialnumber','meter__dn')
-    
+    pressures_value_list = pressures.values_list('simid__simcardNumber','username','belongto__name','serialnumber','dn')
     bgms = Bigmeter.objects.all().order_by('-fluxreadtime').values_list('commaddr','commstate','fluxreadtime','pickperiod','reportperiod',
         'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen')
     
@@ -319,6 +321,7 @@ def stationlist(request):
 
     # 用户权限拥有的站点通讯识别号
     commaddrs = [s[0] for s in stations_value_list ]
+    commaddrs += [s[0] for s in pressures_value_list]
     # print("commaddrs",commaddrs)
     tmp_bgms = [b for b in bgms if b[0] in commaddrs]
     # print("tmp_bgms",tmp_bgms)
@@ -332,6 +335,11 @@ def stationlist(request):
         # print('alarm_count',alarm_count,commaddr)
         s=None
         for s0 in stations_value_list:
+            if s0[0] == commaddr:
+                s=s0
+
+        # pressure
+        for s0 in pressures_value_list:
             if s0[0] == commaddr:
                 s=s0
         # try:

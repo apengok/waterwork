@@ -56,6 +56,7 @@ def dmatree(request):
     dmaflag = request.POST.get("isDma") or ''
     communityflag = request.POST.get("isCommunity") or ''
     buidlingflag = request.POST.get("isBuilding") or ''
+    pressureflag = request.POST.get("isPressure") or ''
     user = request.user
     
     # if user.is_anonymous:
@@ -67,7 +68,7 @@ def dmatree(request):
     # 组织
     o_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","dma__pk","dma__dma_name","dma__dma_no",
         "station__pk","station__username","station__meter__simid__simcardNumber","organlevel","attribute",
-        "vcommunity__pk","vcommunity__name")
+        "vcommunity__pk","vcommunity__name","vpressure__pk","vpressure__username","vpressure__simid__simcardNumber")
     
     mergeds = merge_values(o_lists)
 
@@ -172,6 +173,55 @@ def dmatree(request):
                     "commaddr":o["station__meter__simid__simcardNumber"],
                     "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
                     "icon":"/static/virvo/resources/img/station.png",
+                    "uuid":''
+                })
+
+        # pressure
+        if pressureflag == '1':
+            # print(o["station__username"],type(o["station__username"]))
+            
+            if isinstance(o["vpressure__username"],list):
+                for i in range(len(o["vpressure__username"])):
+                    
+                    organtree.append({
+                        "name":o['vpressure__username'][i],
+                        "id":o['vpressure__pk'][i],
+                        "districtid":'',
+                        "pId":o["cid"],
+                        "type":"pressure",
+                        "dma_no":'',
+
+                        "commaddr":o["vpressure__simid__simcardNumber"][i],
+                        # "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                        "icon":"/static/virvo/resources/img/pressure.png",
+                        "uuid":''
+                    })
+            elif isinstance(o["vpressure__username"],int):
+                organtree.append({
+                    "name":o['vpressure__username'],
+                    "id":o['vpressure__pk'],
+                    "districtid":'',
+                    "pId":o["cid"],
+                    "type":"pressure",
+                    "dma_no":'',
+
+                    "commaddr":o["vpressure__simid__simcardNumber"],
+                    # "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                    "icon":"/static/virvo/resources/img/pressure.png",
+                    "uuid":''
+                })
+            elif isinstance(o["vpressure__username"],str):
+                organtree.append({
+                    "name":o['vpressure__username'],
+                    "id":o['vpressure__pk'],
+                    "districtid":'',
+                    "pId":o["cid"],
+                    "type":"pressure",
+                    "dma_no":'',
+
+                    "commaddr":o["vpressure__simid__simcardNumber"],
+                    # "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                    "icon":"/static/virvo/resources/img/pressure.png",
                     "uuid":''
                 })
 
