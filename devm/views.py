@@ -35,7 +35,7 @@ from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay
 from dmam.models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure
 import os
 from django.conf import settings
-
+from dmam.utils import merge_values_to_dict
 from waterwork.mixins import AjaxableResponseMixin
 import logging
 
@@ -1611,22 +1611,27 @@ def commandlist(request):
         # print("post simpleQueryParam",simpleQueryParam)
 
     data = []
-    if sid != '':
-        station = Station.objects.filter(pk=int(sid)).values("pk","meter__serialnumber","meter__simid__simcardNumber","username","belongto__name")
+    stations = request.user.station_list_queryset(simpleQueryParam) 
+    station_values = stations.values('meter__simid__simcardNumber','username','belongto__name','meter__serialnumber','madedate')
+    merged_station = merge_values_to_dict(station_values,'meter__simid__simcardNumber')
+
         
-        # 应该从表具参数数据库获取表的
-        # MeterParameter.objects.values()
-        
-        data.append({
-            "status":0,
-            "commandType":"12",
-            "sierialnumber":station.first()["meter__serialnumber"],
-            "station_name":station.first()["username"],
-            "simcardnumber":station.first()["meter__simid__simcardNumber"],
-            "belongto":station.first()["belongto__name"],
-            "sendparametertime":"",
-            "readparametertime":"",
-            "createDataTime":"",
+    # 应该从表具参数数据库获取表的
+    meterparams = MeterParameter.objects.values("commaddr","commandstate","commandtype","sendparametertime","readparametertime").order_by('readparametertime')
+    
+    for m in meterparams:
+        commaddr = m["commaddr"]
+        if commaddr in merged_station.keys():
+            data.append({
+                "status":m["commandstate"],
+                "commandType":m["commandtype"],
+                "sierialnumber":merged_station[commaddr]["meter__serialnumber"],
+                "station_name":merged_station[commaddr]["username"],
+                "simcardnumber":merged_station[commaddr]["meter__simid__simcardNumber"],
+                "belongto":merged_station[commaddr]["belongto__name"],
+                "sendparametertime":m["sendparametertime"],
+                "readparametertime":m["readparametertime"],
+                "createDataTime":merged_station[commaddr]["madedate"],
             })
 
     

@@ -1013,6 +1013,10 @@ class MeterParameter(models.Model):
     sendparametertime   = models.CharField(db_column='sendparametertime', max_length=64, blank=True, null=True)  # Field name made lowercase.
     readparametertime   = models.CharField(db_column='readparametertime', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
+    # 下发状态和指令类型
+    commandstate   = models.CharField(db_column='commandstate', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    commandtype  = models.CharField(db_column='commandtype', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
     class Meta:
         managed = True
         db_table = 'meterparameter'

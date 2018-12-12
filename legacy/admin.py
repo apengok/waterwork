@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import Bigmeter,HdbFlowData
+from . models import Bigmeter,HdbFlowData,MeterParameter
 # Register your models here.
 
 
@@ -42,3 +42,11 @@ class HdbFlowDataAdmin(admin.ModelAdmin):
     list_display = ["commaddr","readtime","flux","plustotalflux"]
 
     list_filter = ("commaddr","readtime")
+
+
+
+@admin.register(MeterParameter)
+class HdbFlowDataAdmin(admin.ModelAdmin):
+    list_display = ["commaddr","serialnumber","commandstate","commandtype","sendparametertime","readparametertime"]
+
+    # list_filter = ("commaddr","readtime")
