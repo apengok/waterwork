@@ -5,6 +5,8 @@ __pycache__/
 waterwork/settings/__init__.py
 
 static
+publish
+publishfiles
 
 # C extensions
 *.so

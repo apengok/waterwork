@@ -26,6 +26,9 @@ from accounts.models import User,MyRoles
 from legacy.models import HdbFlowDataDay,HdbFlowDataMonth,Bigmeter,Alarm
 
 from entm.models import Organizations
+
+from dmam.utils import merge_values, merge_values_with,merge_values_to_dict
+
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -262,7 +265,7 @@ class RealTimeDataView(LoginRequiredMixin,TemplateView):
         return context          
 
 # 返回实时数据页面站点列表
-def stationlist(request):
+def stationlist_old(request):
     
     draw = 1
     length = 0
@@ -398,6 +401,144 @@ def stationlist(request):
     
     return HttpResponse(json.dumps(result))
 
+
+# 返回实时数据页面站点列表 new
+def stationlist(request):
+    
+    draw = 1
+    length = 0
+    start=0
+    
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        order_column = int(request.POST.get("order[0][column]", None))
+        order = request.POST.get("order[0][dir]", None)
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        # print("groupName",groupName)
+        # print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+    
+    user = request.user
+    organs = user.belongto
+
+    stations = user.station_list_queryset(simpleQueryParam) 
+    pressures = user.pressure_list_queryset(simpleQueryParam)
+    if groupName != "":
+        stations = stations.filter(belongto__uuid=groupName)
+        pressures = pressures.filter(belongto__uuid=groupName)
+
+    station_values = stations.values('meter__simid__simcardNumber','username','belongto__name','meter__serialnumber','meter__dn')
+    merged_station = merge_values_to_dict(station_values,'meter__simid__simcardNumber')
+    
+    # 一次获取全部所需数据，减少读取数据库耗时
+    
+    pressures_values = pressures.values('simid__simcardNumber','username','belongto__name','serialnumber','dn')
+    merged_pressure = merge_values_to_dict(pressures_values,'simid__simcardNumber')
+    bgms = Bigmeter.objects.all().order_by('-fluxreadtime').values('commaddr','commstate','fluxreadtime','pickperiod','reportperiod',
+        'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen')
+    merged_bgms = merge_values_to_dict(bgms,'commaddr')
+    alams_sets = Alarm.objects.values("commaddr").annotate(Count('id'))
+    
+    alarm_dict = {}
+    
+
+    for alm in alams_sets:
+        alarm_dict[alm['commaddr']] = alm['id__count']
+        
+    
+    
+    
+    # 用户权限拥有的站点通讯识别号
+    
+    
+    data = []
+    
+    for b in merged_bgms.keys():  #[start:start+length]
+        
+        if b in merged_station.keys():
+            alarm_count = alarm_dict.get(b,0)
+            # alarm_count = [a['alm_count'] for a in alams_sets if a['commaddr'] == b ]
+            # alarm_item = list(filter(lambda alarm: alarm[0] == b, alarm_all))[0]
+            
+            data.append({
+                "stationname":merged_station[b]['username'],
+                "belongto":merged_station[b]['belongto__name'],
+                "serialnumber":merged_station[b]['meter__serialnumber'],#
+                "alarm":alarm_count,
+                "status":merged_bgms[b]['commstate'],
+                "dn":merged_station[b]['meter__dn'],
+                "readtime":merged_bgms[b]['fluxreadtime'] ,
+                "collectperiod":merged_bgms[b]['pickperiod'],
+                "updataperiod":merged_bgms[b]['reportperiod'],
+                "influx":round(float(merged_bgms[b]['flux']),2) if merged_bgms[b]['flux'] else '',
+                "plusflux":round(float(merged_bgms[b]['plustotalflux']),2)  if merged_bgms[b]['plustotalflux'] else '',
+                "revertflux":round(float(merged_bgms[b]['reversetotalflux']),2) if merged_bgms[b]['reversetotalflux'] else '',
+                "press":round(float(merged_bgms[b]['pressure']),2) if merged_bgms[b]['pressure'] else '',
+                "baseelectricity":round(float(merged_bgms[b]['meterv']),2) if merged_bgms[b]['meterv'] else '',
+                "remoteelectricity":round(float(merged_bgms[b]['gprsv']),2) if merged_bgms[b]['gprsv'] else '',
+                "signal":round(float(merged_bgms[b]['signlen']),2) if merged_bgms[b]['signlen'] else '',
+                
+            })
+
+        if b in merged_pressure.keys():
+            
+            data.append({
+                "stationname":merged_pressure[b]['username'],
+                "belongto":merged_pressure[b]['belongto__name'],
+                "serialnumber":merged_pressure[b]['serialnumber'],#
+                "alarm":0,
+                "status":merged_bgms[b]['commstate'],
+                "dn":merged_pressure[b]['dn'],
+                "readtime":merged_bgms[b]['fluxreadtime'] ,
+                "collectperiod":merged_bgms[b]['pickperiod'],
+                "updataperiod":merged_bgms[b]['reportperiod'],
+                "influx":'-',
+                "plusflux":'-',
+                "revertflux":'-',
+                "press":round(float(merged_bgms[b]['pressure']),2) if merged_bgms[b]['pressure'] else '',
+                "baseelectricity":round(float(merged_bgms[b]['meterv']),2) if merged_bgms[b]['meterv'] else '',
+                "remoteelectricity":round(float(merged_bgms[b]['gprsv']),2) if merged_bgms[b]['gprsv'] else '',
+                "signal":round(float(merged_bgms[b]['signlen']),2) if merged_bgms[b]['signlen'] else '',
+                
+            })
+        
+        
+    
+    recordsTotal = stations.count() + pressures.count()
+    # recordsTotal = bgms.count()
+    
+    result = dict()
+    result["records"] = data[start:start+length]
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    # print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
 
 
 
