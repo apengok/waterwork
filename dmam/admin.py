@@ -22,9 +22,10 @@ class DMABaseinfoAdmin(admin.ModelAdmin):
 
 @admin.register(Meter)
 class MeterAdmin(admin.ModelAdmin):
-    list_display = ['serialnumber','simid','dn','metertype','belongto']
+    list_display = ['serialnumber','simid','protocol','dn','metertype','belongto']
 
-
+    search_fields = ('serialnumber',)
+    list_filter = ('protocol',) 
 
 @admin.register(VPressure)
 class VPressureAdmin(admin.ModelAdmin):

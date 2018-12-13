@@ -800,7 +800,7 @@ def getSimcardSelect(request):
     data = []
 
     for m in simcards:
-        if m.meter.count() == 0:
+        if m.meter.count() == 0 and m.vpressure_set.count() == 0:
             data.append(m_info(m))
 
     operarions_list = {

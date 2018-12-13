@@ -39,7 +39,7 @@ from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssig
 import os
 from django.conf import settings
 from devm.forms import VCommunityAddForm,VWatermeterAddForm,VCommunityEditForm,VWatermeterEditForm
-from .utils import merge_values
+from .utils import merge_values,merge_values_to_dict
 from waterwork.mixins import AjaxableResponseMixin
 import logging
 
@@ -49,7 +49,7 @@ logger_error = logging.getLogger('error_logger')
 
 # dmaam
 
-def dmatree(request):   
+def dmatree_revise(request):   
     organtree = []
     
     stationflag = request.POST.get("isStation") or ''
@@ -57,6 +57,7 @@ def dmatree(request):
     communityflag = request.POST.get("isCommunity") or ''
     buidlingflag = request.POST.get("isBuilding") or ''
     pressureflag = request.POST.get("isPressure") or ''
+    protocolflag = request.POST.get("isProtocol") or ''
     user = request.user
     
     # if user.is_anonymous:
@@ -67,7 +68,7 @@ def dmatree(request):
     print("dmatree",organs)
     # 组织
     o_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","dma__pk","dma__dma_name","dma__dma_no",
-        "station__pk","station__username","station__meter__simid__simcardNumber","organlevel","attribute",
+        "station__pk","station__username","station__meter__simid__simcardNumber","station__meter__protocol","organlevel","attribute",
         "vcommunity__pk","vcommunity__name","vpressure__pk","vpressure__username","vpressure__simid__simcardNumber")
     
     mergeds = merge_values(o_lists)
@@ -129,11 +130,13 @@ def dmatree(request):
         #station
         # 会出现pk 和 username list长度不等的情况，可能有同名站点
         if stationflag == '1':
-            # print(o["station__username"],type(o["station__username"]))
-            
+            print(o["station__username"],type(o["station__username"]))
+            print('protocolflag',o["station__meter__protocol"],type(o["station__meter__protocol"]))
             if isinstance(o["station__username"],list):
                 for i in range(len(o["station__username"])):
-                    
+                    if protocolflag == '1':
+                        if o["station__meter__protocol"] != '0':
+                            continue
                     organtree.append({
                         "name":o['station__username'][i],
                         "id":o['station__pk'][i],
@@ -147,8 +150,26 @@ def dmatree(request):
                         "icon":"/static/virvo/resources/img/station.png",
                         "uuid":''
                     })
-            elif isinstance(o["station__username"],int):
-                organtree.append({
+            elif isinstance(o["station__username"],int) or isinstance(o["station__username"],str):
+                if protocolflag == '1':
+                    # print('protocolflag',o["station__meter__protocol"])
+
+                    if o["station__meter__protocol"] == '0':
+                        organtree.append({
+                            "name":o['station__username'],
+                            "id":o['station__pk'],
+                            "districtid":'',
+                            "pId":o["cid"],
+                            "type":"station",
+                            "dma_no":'',
+
+                            "commaddr":o["station__meter__simid__simcardNumber"],
+                            "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                            "icon":"/static/virvo/resources/img/station.png",
+                            "uuid":''
+                        })
+                else:
+                    organtree.append({
                     "name":o['station__username'],
                     "id":o['station__pk'],
                     "districtid":'',
@@ -161,20 +182,7 @@ def dmatree(request):
                     "icon":"/static/virvo/resources/img/station.png",
                     "uuid":''
                 })
-            elif isinstance(o["station__username"],str):
-                organtree.append({
-                    "name":o['station__username'],
-                    "id":o['station__pk'],
-                    "districtid":'',
-                    "pId":o["cid"],
-                    "type":"station",
-                    "dma_no":'',
-
-                    "commaddr":o["station__meter__simid__simcardNumber"],
-                    "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
-                    "icon":"/static/virvo/resources/img/station.png",
-                    "uuid":''
-                })
+            
 
         # pressure
         if pressureflag == '1':
@@ -310,6 +318,172 @@ def dmatree(request):
     
     return HttpResponse(json.dumps(organtree))
 
+
+def dmatree(request):   
+    organtree = []
+    
+    stationflag = request.POST.get("isStation") or ''
+    dmaflag = request.POST.get("isDma") or ''
+    communityflag = request.POST.get("isCommunity") or ''
+    buidlingflag = request.POST.get("isBuilding") or ''
+    pressureflag = request.POST.get("isPressure") or ''
+    protocolflag = request.POST.get("isProtocol") or ''
+    user = request.user
+    
+    # if user.is_anonymous:
+    if not user.is_authenticated:
+        organs = Organizations.objects.first()
+    else:
+        organs = user.belongto #Organizations.objects.all()
+    print("dmatree",organs)
+    # 组织
+    organ_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","organlevel","attribute","dma__dma_no")
+    
+    # mergeds = merge_values(o_lists)
+    #dma
+    dma_lists = user.dma_list_queryset().values("pk","dma_name","dma_no","belongto__cid")
+    # merged_dma = merge_values_to_dict(dma_lists,"belongto__cid")
+    #station
+    station_lists = user.station_list_queryset('').values("pk","username","meter__simid__simcardNumber","meter__protocol","belongto__cid")
+    #community
+    comunity_lists = user.community_list_queryset('').values("pk","name","belongto__cid")
+    #pressure
+    pressure_lists = user.pressure_list_queryset('').values("pk","username","simid__simcardNumber","belongto__cid")
+
+    p_dma_no='' #dma_lists[0]['dma_no'] 
+    
+    
+    
+    #dma
+    if dmaflag == '1':
+        for d in dma_lists:
+            organtree.append({
+                "name":d["dma_name"],
+                "id":d["pk"],
+                "districtid":d["pk"],
+                "pId":d["belongto__cid"],
+                "type":"dma",
+                "dma_no":d["dma_no"],
+                "icon":"/static/virvo/resources/img/dma.png",
+                "uuid":''
+            })
+            
+            
+
+        #station
+        # 会出现pk 和 username list长度不等的情况，可能有同名站点
+    if stationflag == '1':
+        for s in station_lists:
+            if protocolflag == '1':
+                if s["meter__protocol"] == '0':
+                    organtree.append({
+                        "name":s['username'],
+                        "id":s['pk'],
+                        "districtid":'',
+                        "pId":s["belongto__cid"],
+                        "type":"station",
+                        "dma_no":'',
+
+                        "commaddr":s["meter__simid__simcardNumber"],
+                        "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                        "icon":"/static/virvo/resources/img/station.png",
+                        "uuid":''
+                    })
+            else:
+                organtree.append({
+                        "name":s['username'],
+                        "id":s['pk'],
+                        "districtid":'',
+                        "pId":s["belongto__cid"],
+                        "type":"station",
+                        "dma_no":'',
+
+                        "commaddr":s["meter__simid__simcardNumber"],
+                        "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                        "icon":"/static/virvo/resources/img/station.png",
+                        "uuid":''
+                    })
+        
+
+    # pressure
+    if pressureflag == '1':
+        for p in pressure_lists:
+                
+            organtree.append({
+                "name":p['username'],
+                "id":p['pk'],
+                "districtid":'',
+                "pId":p["belongto__cid"],
+                "type":"pressure",
+                "dma_no":'',
+
+                "commaddr":p["simid__simcardNumber"],
+                # "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                "icon":"/static/virvo/resources/img/pressure.png",
+                "uuid":''
+            })
+    
+
+    #community
+    if communityflag == '1':
+        for c in comunity_lists:
+            community_name = c['name']
+            # 小区列表
+            organtree.append({
+                "name":c['name'],
+                "id":c['pk'],
+                "districtid":'',
+                "pId":c["belongto__cid"],
+                "type":"community",
+                "dma_no":'',
+                "open":False,
+                "commaddr":c['pk'],#在dma站点分配中需要加入小区的分配，在这里传入小区的id，在后续处理中通过小区id查找小区及对应的集中器等
+                "dma_station_type":"2", # 在dma站点分配中标识该是站点还是小区
+                "icon":"/static/virvo/resources/img/home.png",
+                "uuid":''
+            })
+
+            # 小区下级栋列表
+            if buidlingflag == "1":
+                wt = VWatermeter.objects.filter(communityid__name=community_name).values('buildingname').distinct()
+                # if s['name'] == '新城花苑':
+                for w in wt:
+                    organtree.append({
+                        "name":w["buildingname"],
+                        "id":'',
+                        "districtid":'',
+                        "pId":c['pk'],
+                        "type":"building",
+                        "dma_no":'',
+                        "open":False,
+                        "commaddr":'commaddr',
+                        # "dma_station_type":"", # 在dma站点分配中标识该是站点还是小区
+                        "icon":"/static/virvo/resources/img/buildingno.png",
+                        "uuid":''
+                    })
+
+        
+    for o in organ_lists:
+        organtree.append({
+            "name":o["name"],
+            "id":o["cid"],
+            "pId":o["pId"],
+            "attribute":o["attribute"],
+            "organlevel":o["organlevel"],
+            "districtid":'',
+            "type":"group",
+            "dma_no":o["dma__dma_no"] if o["dma__dma_no"] else '',  #如果存在dma分区，分配第一个dma分区的dma_no，点击数条目的时候使用
+            "icon":"/static/virvo/resources/img/wenjianjia.png",
+            "uuid":o["uuid"]
+        })   
+    
+    
+    result = dict()
+    result["data"] = organtree
+    
+    # print(json.dumps(result))
+    
+    return HttpResponse(json.dumps(organtree))
 
 
 

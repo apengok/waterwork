@@ -56,19 +56,7 @@
                 { id:13, pId:1, name:"采集指令"},
                 { id:14, pId:1, name:"基本设置"},
 
-                // { id:13, pId:1, name:"终端控制",open:true},
-                // { id:131, pId:13, name:"无线升级"},
-                // { id:132, pId:13, name:"控制终端连接指定服务器"},
-
-                // { id:14, pId:1, name:"位置汇报参数"},
-                // { id:15, pId:1, name:"终端属性查询"},
-                // { id:16, pId:1, name:"电话参数"},
-                // { id:17, pId:1, name:"视频拍照参数"},
-                // { id:18, pId:1, name:"GNSS参数"},
-                // { id:19, pId:1, name:"事件设置"},
-                // { id:20, pId:1, name:"电话本设置"},
-                // { id:21, pId:1, name:"信息点播菜单"},
-                // { id:22, pId:1, name:"基站参数设置"},
+                
             ];
             $.fn.zTree.init($("#commandTreeDemo"), setting, zNodes);
             $("[data-toggle='tooltip']").tooltip();
@@ -105,7 +93,8 @@
                     data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
                         "isOrg" : "1",
-                        "isStation": "1"
+                        "isStation": "1",
+                        "isProtocol": "1",
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: realTimeCommand.ajaxDataFilter
@@ -249,11 +238,7 @@
                 json_ajax("POST",url,"json",true,parameter, realTimeCommand.setCommand);
 				
 				
-				// var ROOT_PATH = "http://localhost:8080/amrs";
-				var commaddr = $("#commaddr").val();
-				var data = {"commaddr":commaddr,"cmd":"modifyIpAndPort","params":"readparam"};
-				url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
-				json_ajax("POST",url,"jsonp",true,data, realTimeCommand.saveCommandback);
+				
             }
         },
         
@@ -418,8 +403,8 @@
                     break;
                 //采集指令
                 case "commandTreeDemo_4":
-                    $("#aquiryParameters,.report-para-footer-control").show();
-                    $("#commParameters,#terminalParameters,#meterbaseParameters,.report-para-footer,.report-para-footer-control-1").hide();
+                    $("#aquiryParameters,.report-para-footer").show();
+                    $("#commParameters,#terminalParameters,#meterbaseParameters,.report-para-footer-control,.report-para-footer-control-1").hide();
                     break;
                 //基表设置
                 case "commandTreeDemo_5":
@@ -478,7 +463,7 @@
                             } else if (data == "2") {
                                 return "已读取";
                             } else {
-                                return "";
+                                return data;
                             }
                     }
                 }, {
@@ -577,6 +562,21 @@
         refreshTable: function(){
             $("#simpleQueryParam").val("");
             myTable.requestData();
+        },
+        readCommand:function(){
+            if( currentStation === undefined){
+                layer.msg("请先选择站点");
+                return;
+            }
+            if(currentCommandType === undefined){
+                layer.msg("请选择指令类型");
+                return
+            }
+            // var ROOT_PATH = "http://localhost:8080/amrs";
+            var commaddr = $("#commaddr").val();
+            var data = {"commaddr":commaddr,"cmd":"modifyIpAndPort","params":"readparam"};
+            url = ROOT_PATH + "/amrssocket?action=updateBigMeterInfo";
+            json_ajax("POST",url,"jsonp",true,data, realTimeCommand.saveCommandback);
         },
         saveCommand: function(){
             if(currentCommandType === undefined){
@@ -954,6 +954,7 @@
         $("#del_model").bind("click",realTimeCommand.delModel);
         $("#refreshTable").bind("click",realTimeCommand.refreshTable);
         $("#saveCommand").bind("click",realTimeCommand.saveCommand);
+        $("#readCommand").bind("click",realTimeCommand.readCommand);
         // $("#generateDeviceSearch").on("click",realTimeCommand.generateDeviceSearch);
         // 批量下发
         // $("#send_model").bind("click",realTimeCommand.sendBatch);
