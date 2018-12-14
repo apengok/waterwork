@@ -10,8 +10,8 @@
             if (userName.html() === "experience1") {
                 $("#editPwd").remove();
             }
-            var ip = returnCitySN["cip"];
-            $.cookie('ip', ip);
+            // var ip = returnCitySN["cip"];
+            // $.cookie('ip', ip);
 
             $("#toggle-left-button").on("mouseover", function () {
                 leftToolTip.addClass("in");

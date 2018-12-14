@@ -11,7 +11,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
 from django.db.models import Avg, Max, Min, Sum
-from legacy.models import Bigmeter,District,Community,Concentrator,Watermeter
+from legacy.models import Bigmeter,District,Community,Concentrator,Watermeter,SecondDistrict,SecondWater
 from django.utils.functional import cached_property
 import time
 from legacy.utils import (HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,HdbFlow_monthly,hdb_watermeter_flow_monthly,
@@ -1333,4 +1333,113 @@ def ensure_bigmeter_press_exists(sender, **kwargs):
                 b.save()
             else:
                 Bigmeter.objects.create(username=username,serialnumber=serialnumber,lng=lng,lat=lat,commaddr=commaddr,simid=simid)  
+
+
+# 二供
+
+class VSecondWaterQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(name__icontains=query)|
+                Q(serialnumber__icontains=query)
+                ).distinct()
+        return self
+
+
+class VSecondWaterManager(models.Manager):
+    def get_queryset(self):
+        return VSecondWaterQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query)
+
+
+class VSecondWater(models.Model):
+    name = models.CharField(db_column='Name', max_length=64, unique=True)  # 二供名称
+    serialnumber= models.CharField(db_column='SerialNumber', max_length=30, blank=True, null=True)  # 出厂编号
+    address = models.CharField(db_column='Address', max_length=30, blank=True, null=True)  # 地址描述
+    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE) # 所属组织
+    
+    # 0 - 常州天厚 等
+    version     = models.CharField(db_column='version', max_length=30, blank=True, null=True)  # 型号
+    manufacturer= models.CharField(db_column='Manufacturer', max_length=30, blank=True, null=True)  # 厂家.
+    lng = models.CharField(db_column='Lng', max_length=30, blank=True, null=True)  # 经度
+    lat = models.CharField(db_column='Lat', max_length=30, blank=True, null=True)  # 纬度.
+    coortype = models.CharField(db_column='CoorType', max_length=30, blank=True, null=True)  # 坐标类型.
+    
+    product_date = models.CharField(db_column='product date', max_length=64, blank=True, null=True)  # 生成日期.
+    artist       = models.CharField(db_column='artist', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    artistPreview       = models.CharField(db_column='artistPreview', max_length=256, blank=True, null=True)  # Field name made lowercase.
+
+    # 在抄表系统中管理
+    # waterinpresstag = models.CharField(db_column='WaterInPressTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # wateroutpresstag = models.CharField(db_column='WaterOutPressTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # watersetpresstag = models.CharField(db_column='WaterSetPressTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # freqtag = models.CharField(db_column='FreqTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # lowfreqtag = models.CharField(db_column='LowFreqTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # fluxtag = models.CharField(db_column='FluxTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # totalfluxtag = models.CharField(db_column='TotalFluxTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # chlorinetag = models.CharField(db_column='ChlorineTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # leveltag = models.CharField(db_column='LevelTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # phtag = models.CharField(db_column='PhTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # utag = models.CharField(db_column='UTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # i1tag = models.CharField(db_column='I1Tag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # i2tag = models.CharField(db_column='I2Tag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # i3tag = models.CharField(db_column='I3Tag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # s1tag = models.CharField(db_column='S1Tag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # s2tag = models.CharField(db_column='S2Tag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # s3tag = models.CharField(db_column='S3Tag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+    # commtag = models.CharField(db_column='CommTag', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+
+    objects = VSecondWaterManager()
+
+    class Meta:
+        managed = True
+        db_table = 'vsecondwater'
+
+    def __unicode__(self):
+        return '%s'%(self.name)   
+
+    def __str__(self):
+        return '%s'%(self.name)    
+
+
+@receiver(post_save, sender=VSecondWater)
+def ensure_secondwater_exists(sender, **kwargs):
+    district = SecondDistrict.objects.first()
+    districtid = district.id
+    print("ensure_secondwater_exists ...")
+
+    instance=kwargs.get('instance')
+    name = instance.name
+    
+    lng=instance.lng
+    lat=instance.lat
+    coortype=instance.coortype
+    address = instance.address
+
+
+    if kwargs.get('created', False):
+        
+
+        SecondWater.objects.get_or_create(name=name,lng=lng,lat=lat,districtid=districtid,coortype=coortype,address=address)   
+    else:
+        
+        sw = SecondWater.objects.filter(name=name) #
+        if sw.exists():
+            # print(instance.username,bigm.first().username)
+            b=sw.first()
+            b.name= name
+            b.lng=lng
+            b.lat=lat
+            b.address=address
+            b.coortype = coortype
+            b.address = address
+            
+            b.save()
+        else:
+            SecondWater.objects.get_or_create(name=name,lng=lng,lat=lat,districtid=districtid,coortype=coortype,address=address)  
 

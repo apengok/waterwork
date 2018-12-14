@@ -2,14 +2,14 @@ from django.core.management.base import BaseCommand, CommandError
 
 
 from legacy.models import (HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,
-    Watermeter,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Community,
+    Watermeter,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Community,SecondWater,
     HdbFlowDataMonth)
 
 import time
 import datetime
 import logging
 
-from dmam.models import VConcentrator,VWatermeter,VCommunity
+from dmam.models import VConcentrator,VWatermeter,VCommunity,VSecondWater
 from entm.models import Organizations
 
 logger_info = logging.getLogger('info_logger')
@@ -261,7 +261,13 @@ class Command(BaseCommand):
             help='import update_hdb_flow_month to new db'
         )
 
-
+        parser.add_argument(
+            '--secondwater',
+            action='store_true',
+            dest='secondwater',
+            default=False,
+            help='import secondwater to new db'
+        )
 
 
     def handle(self, *args, **options):
@@ -273,6 +279,17 @@ class Command(BaseCommand):
             test_job()
             # 
 
+        if options['secondwater']:
+            organ = Organizations.objects.get(name="歙县自来水公司")
+            zncb_sw = SecondWater.objects.values()
+            for z in zncb_sw:
+                name = z['name']
+                address = z['address']
+                lng = z['lng']
+                lat = z['lat']
+                coortype = z['coortype']
+                
+                VSecondWater.objects.create(name=name,address=address,lng=lng,lat=lat,coortype=coortype,belongto=organ)
 
         if options['update_hdb_flow_month']:
             today = datetime.date.today()

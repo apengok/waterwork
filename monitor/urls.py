@@ -25,8 +25,9 @@ urlpatterns = [
     url(r'^vehicle/?$',views.VehicleView.as_view(),name='vehicle'),
     # 实时视频
     url(r'^vedio/?$',views.VedioView.as_view(),name='vedio'),
-    # 二次供水
+    # 二次供水 
     url(r'^secondwater/?$',views.SecondwaterView.as_view(),name='secondwater'),
+    url(r'^getmapsecondwaterlist/$',views.getmapsecondwaterlist,name='getmapsecondwaterlist'),
     
     # 数据监控 --地图监控
     url(r'^mapmonitor2/?$',views.MapMonitorView.as_view(),name='mapmonitor2'),

@@ -8,7 +8,7 @@
     var table = $("#dataTable tr th:gt(1)");
     //单选
     var subChk = $("input[name='subChk']");
-    meterManagement = {
+    secondwaterM = {
         init: function(){
             menu_text += "<li><label><input type=\"checkbox\" checked=\"checked\" class=\"toggle-vis\" data-column=\"" + parseInt(2) +"\" disabled />"+ table[0].innerHTML +"</label></li>"
             for(var i = 1; i < table.length; i++){
@@ -33,7 +33,7 @@
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
 
-                            if (row.station == null || row.station == "") {
+                            if (row.station == "") {
                                 var result = '';
                                 result += '<input  type="checkbox" name="subChk"  value="' + row.id + '" />';
                                 return result;
@@ -53,22 +53,21 @@
                             var roleUrlPre = /*[[@{/c/user/roleList_{id}.gsp}]]*/'url';
                             var result = '';
                             //修改按钮
-                            result += '<button href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
+                            result += '<button  href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                             //删除按钮
-                            
-                            if(row.station != null){
+                            if(row.station != ""){
                                 result += '<button disabled type="button" onclick="myTable.deleteItem(\''
                                     + row.id
                                     + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
                                 }else{
                                 result += '<button type="button" onclick="myTable.deleteItem(\''
                                     + row.id
-                                    + '\')" class="deleteButton editBtn "><i class="fa fa-trash-o"></i>删除</button>';
+                                    + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
                                 }
                             return result;
                         }
                     }, {
-                        "data" : "serialnumber",
+                        "data" : "name",
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
                             if (data != null) {
@@ -77,120 +76,59 @@
                                 return "";
                             }
                         }
-                    }, {
-                        "data" : "simid",
-                        "class" : "text-center",
-                        render:function(data){
-                            return html2Escape(data)
-                        }
                     },{
-                        "data" : "dn",
+                        "data" : "belongto",
                         "class" : "text-center",
                         
-                    } ,
-                    // {
-                    //     "data" : "version",
-                    //     "class" : "text-center",
-                        
-                    // }, 
+                    }, 
+                    
                     {
-                        "data" : "metertype",
+                        "data" : "coortype",
                         "class" : "text-center",
-                        render : function(data, type, row, meta){
-                            if(data == "0") {
-                                return "水表";
-                            }else if(data == "1"){
-                                return "流量计";
-                            }else{
-                                return data;
-                            }
-                        }
+                        
+                    },
+                    {
+                        "data" : "lng",
+                        "class" : "text-center",
+                        
 
-                    },
-                    {
-                        "data":"belongto",
-                    },
-                     {
-                        "data" : "mtype",
+                    },{
+                        "data" : "lat",
                         "class" : "text-center",
-                        render : function(data, type, row, meta){
-                            if(data == "0"){
-                                return "电磁水表";
-                            }else if(data == "1") {
-                                return "超声水表";
-                            }else if(data == "2"){
-                                return "机械水表";
-                            }else if(data == "3"){
-                                return "插入电磁";
-                            }else{
-                                return data;
-                            }
-                        }
+                        
+                    },  
+                    {
+                        "data" : "version",
+                        "class" : "text-center",
+                        
 
                     },{
                         "data" : "manufacturer",
                         "class" : "text-center",
                         
-                    }, {
-                        "data" : "protocol",
-                        "class" : "text-center",
-                        render : function(data, type, row, meta){
-                            if(data == "0"){
-                                return "平台协议"
-                            }else if(data == "1") {
-                                return "和达协议";
-                            }else if(data == "2"){
-                                return "安信协议";
-                            }else if(data == "3"){
-                                return "手抄协议01";
-                            }else{
-                                return "";
-                            }
-                        }
-                    }, {
-                        "data" : "R",
-                        "class" : "text-center",
-                        render:function(data){
-                            return html2Escape(data)
-                        }
-                    }, {
-                        "data" : "q3",
-                        "class" : "text-center",
-                        render:function(data){
-                            return html2Escape(data)
-                        }
-                    },{
-                        "data" : "q1",
-                        "class" : "text-center",
-                        
+                    } ,
                     
-                    },{
-                        "data":"check_cycle",
+                    {
+                        "data":"serianumbrt",
+                    },
+                    {
+                        "data" : "product_data",
+                        "class" : "text-center",
+                        
+                    }, {
+                        "data" : "artist",
+                        "class" : "text-center",
+                       
+                    },
+                    {
+                        "data" : "artistPreview",
+                        "class" : "text-center",
+                        
+                    },
+                    {
+                        "data":"address",
                         "class":"text-center",
                         
-                    },{
-                        "data":"state",
-                        "class":"text-center",
-                        render : function(data, type, row, meta) {
-                            if (data == 0) {
-                                return '停用';
-                            } else if (data == 1) {
-                                return '启用';
-                            } else {
-                                return "";
-                            }
-                        }
-
-                    },{
-                        "data":"station",
-                        "class":"text-center",
-                        render : function(data, type, row, meta) {
-                            if (data != null) {
-                                return data;
-                            } else{
-                                return "";
-                            }
-                        }
 
                     }];
             //ajax参数
@@ -203,12 +141,12 @@
             //表格setting
             var setting = {
                 suffix  : '/',
-                listUrl : '/devm/meter/list/',
-                editUrl : '/devm/meter/edit/',
-                deleteUrl : '/devm/meter/delete/',
-                deletemoreUrl : '/devm/meter/deletemore/',
-                enableUrl : '/devm/meter/enable_',
-                disableUrl : '/devm/meter/disable_',
+                listUrl : '/dmam/secondwater/list/',
+                editUrl : '/dmam/secondwater/edit/',
+                deleteUrl : '/dmam/secondwater/delete/',
+                deletemoreUrl : '/dmam/secondwater/deletemore/',
+                enableUrl : '/dmam/secondwater/enable_',
+                disableUrl : '/dmam/secondwater/disable_',
                 columnDefs : columnDefs, //表格列定义
                 columns : columns, //表格列
                 dataTableDiv : 'dataTable', //表格
@@ -267,7 +205,7 @@
                     otherParam : {  // 是否可选  Organization
                         "isOrg" : "1"
                     },
-                    dataFilter: meterManagement.groupAjaxDataFilter
+                    dataFilter: secondwaterM.groupAjaxDataFilter
                 },
                 view : {
                     selectedMulti : false,
@@ -280,7 +218,7 @@
                     }
                 },
                 callback : {
-                    onClick : meterManagement.zTreeOnClick
+                    onClick : secondwaterM.zTreeOnClick
                 }
             };
             $.fn.zTree.init($("#treeDemo"), treeSetting, null);
@@ -312,8 +250,8 @@
 
     $(function(){
         $('input').inputClear();
-        meterManagement.init();
-        meterManagement.groupListTree();
+        secondwaterM.init();
+        secondwaterM.groupListTree();
         $('input').inputClear().on('onClearEvent',function(e,data){
             var id = data.id;
             if(id == 'search_condition'){
@@ -332,13 +270,13 @@
             });
         }
         //全选
-        $("#checkAll").bind("click",meterManagement.cleckAll);
+        $("#checkAll").bind("click",secondwaterM.cleckAll);
         //单选
-        subChk.bind("click",meterManagement.subChkClick);
+        subChk.bind("click",secondwaterM.subChkClick);
         //批量删除
-        $("#del_model").bind("click",meterManagement.delModel);
+        $("#del_model").bind("click",secondwaterM.delModel);
         //加载完成后执行
-        $("#refreshTable").on("click",meterManagement.refreshTable);
+        $("#refreshTable").on("click",secondwaterM.refreshTable);
         // 组织架构模糊搜索
         $("#search_condition").on("input oninput",function(){
             search_ztree('treeDemo', 'search_condition', 'assignment');

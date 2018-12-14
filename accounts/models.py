@@ -11,7 +11,7 @@ import json
 from django.db.models import Q
 
 from entm.models import Organizations
-from dmam.models import DMABaseinfo,Meter,Station,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure
+from dmam.models import DMABaseinfo,Meter,Station,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure,VSecondWater
 
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
@@ -365,6 +365,21 @@ class User(AbstractBaseUser,PermissionsMixin):
             dmalist |= g.dma.all()
             
         return dmalist
+
+    #组织及下属组织下的二供
+    def secondwater_list_queryset(self,q):
+        # userlist = []
+        if self.is_admin:
+            return VSecondWater.objects.search(q)
+
+        secondwaterlist = VSecondWater.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            secondwaterlist |= g.vsecondwater_set.search(q)
+            
+        return secondwaterlist
 
     def user_list(self):
         userlist = []

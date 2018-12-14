@@ -77,6 +77,13 @@ urlpatterns = [
 
     # 二供管理
     url(r'^secondmanager/?$', views.SecondMangerView.as_view(), name='secondmanager'),
+    url(r'^secondwater/list/$',views.secondwaterlist,name='secondwaterlist'),
+    url(r'^secondwater/add',views.SecondWaterAddView.as_view(),name='secondwateradd'),
+    url(r'^secondwater/edit/(?P<pk>\w+)/?$',views.SecondWaterEditView.as_view(),name='secondwateredit'),
+    url(r'^secondwater/delete/(?P<pk>[0-9]+)/?$',views.SecondWaterDeleteView.as_view(),name='secondwaterdelete'),
+    url(r'^secondwater/deletemore',views.secondwaterdeletemore,name='secondwaterdeletemore'),
+    url(r'^secondwater/repetition/$',views.secondwater_repetition,name='secondwater_repetition'),
+    
     # 视频管理
     url(r'^vediomanager/?$', views.VedioMangerView.as_view(), name='vediomanager'),
     # 车辆管理

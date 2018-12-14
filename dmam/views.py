@@ -33,14 +33,16 @@ from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_gen
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
 from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,Watermeter
-from . models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,VCommunity,VConcentrator,DmaGisinfo,VWatermeter
-from .forms import StationsForm,StationsEditForm
+from . models import WaterUserType,DMABaseinfo,DmaStation,Station,Meter,VCommunity,VConcentrator,DmaGisinfo,VWatermeter,VSecondWater
+from .forms import StationsForm,StationsEditForm,VSecondWaterAddForm,VSecondWaterEditForm
 from . forms import WaterUserTypeForm,DMACreateForm,DMABaseinfoForm,StationAssignForm
 import os
 from django.conf import settings
 from devm.forms import VCommunityAddForm,VWatermeterAddForm,VCommunityEditForm,VWatermeterEditForm
 from .utils import merge_values,merge_values_to_dict
 from waterwork.mixins import AjaxableResponseMixin
+from django.core.files.storage import FileSystemStorage
+
 import logging
 
 logger_info = logging.getLogger('info_logger')
@@ -328,6 +330,7 @@ def dmatree(request):
     buidlingflag = request.POST.get("isBuilding") or ''
     pressureflag = request.POST.get("isPressure") or ''
     protocolflag = request.POST.get("isProtocol") or ''
+    secondwaterflag = request.POST.get("isSecondwater") or ''
     user = request.user
     
     # if user.is_anonymous:
@@ -420,6 +423,25 @@ def dmatree(request):
                 "commaddr":p["simid__simcardNumber"],
                 # "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
                 "icon":"/static/virvo/resources/img/pressure.png",
+                "uuid":''
+            })
+
+    # pressure
+    if secondwaterflag == '1':
+        secondwaterlists = user.secondwater_list_queryset('').values('pk','name','belongto__cid')
+        for p in secondwaterlists:
+                
+            organtree.append({
+                "name":p['name'],
+                "id":p['pk'],
+                "districtid":'',
+                "pId":p["belongto__cid"],
+                "type":"secondwater",
+                "dma_no":'',
+
+                "commaddr":p["pk"],
+                # "dma_station_type":"1", # 在dma站点分配中标识该是站点还是小区
+                "icon":"/static/scada/img/bz_b.png",
                 "uuid":''
             })
     
@@ -2036,6 +2058,373 @@ class SecondMangerView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "基础管理"
         
         return context  
+
+
+    
+
+def secondwater_repetition(request):
+    name = request.POST.get("name")
+    bflag = not VSecondWater.objects.filter(name=name).exists()
+
+    # return HttpResponse(json.dumps(bflag))
+    return HttpResponse(json.dumps({"success":bflag}))
+
+
+"""
+User add, manager
+"""
+class SecondWaterAddView(AjaxableResponseMixin,UserPassesTestMixin,CreateView):
+    model = Meter
+    form_class = VSecondWaterAddForm
+    template_name = "dmam/secondwaterAdd.html"
+    success_url = reverse_lazy("dmam:secondmanager")
+    # permission_required = ('entm.rolemanager_perms_basemanager_edit', 'entm.dmamanager_perms_basemanager_edit')
+
+    # @method_decorator(permission_required("dma.change_meters"))
+    def dispatch(self, *args, **kwargs):
+        #uuid is selectTreeIdAdd namely organizations uuid
+        if self.request.method == 'GET':
+            uuid = self.request.GET.get("uuid")
+            kwargs["uuid"] = uuid
+
+        if self.request.method == 'POST':
+            uuid = self.request.POST.get("uuid")
+            kwargs["uuid"] = uuid
+        print("uuid:",kwargs.get('uuid'))
+        return super(SecondWaterAddView, self).dispatch(*args, **kwargs)
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('secondmanager_dmam'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "新增二供设备",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("secondwater  add here?:",self.request.POST)
+        print(self.kwargs,self.args)
+        # print(form)
+        # do something
+        user = self.request.user
+        user_groupid = user.belongto.cid
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+
+        imgName = ''
+        if self.request.FILES['file']:
+            myfile = self.request.FILES['file']
+            new_path =  os.path.join(settings.MEDIA_ROOT, 'resources','img','secondwater')
+            # fs = FileSystemStorage()
+            fs = FileSystemStorage(new_path)
+            filename = fs.save(myfile.name, myfile)
+            initial_path = fs.path(filename)
+            
+            # os.rename(initial_path, new_path)
+            imgName = filename
+
+        if imgName != '':
+            instance.artistPreview = imgName
+
+        return super(SecondWaterAddView,self).form_valid(form)   
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SecondWaterAddView, self).get_context_data(*args, **kwargs)
+
+        uuid = self.request.GET.get('uuid') or ''
+        
+        groupId = ''
+        groupname = ''
+        if len(uuid) > 0:
+            organ = Organizations.objects.get(uuid=uuid)
+            groupId = organ.cid
+            groupname = organ.name
+        # else:
+        #     user = self.request.user
+        #     groupId = user.belongto.cid
+        #     groupname = user.belongto.name
+        
+        context["groupId"] = groupId
+        context["groupname"] = groupname
+
+        
+
+        return context  
+
+
+"""
+User edit, manager
+"""
+class SecondWaterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
+    model = VSecondWater
+    form_class = VSecondWaterEditForm
+    template_name = "dmam/secondwateredit.html"
+    success_url = reverse_lazy("dmam:secondmanager")
+    
+    # @method_decorator(permission_required("dma.change_meters"))
+    def dispatch(self, *args, **kwargs):
+        # self.user_id = kwargs["pk"]
+        return super(SecondWaterEditView, self).dispatch(*args, **kwargs)
+
+    def get_object(self):
+        return VSecondWater.objects.get(id=self.kwargs["pk"])
+
+    def test_func(self):
+        if self.request.user.has_menu_permission_edit('secondmanager_dmam'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "mheader": "修改二供",
+                "err_msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        # return HttpResponse(json.dumps(err_data))
+        return render(self.request,"entm/permission_error.html",data)
+
+    def form_invalid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print("user edit form_invalid:::")
+        return super(SecondWaterEditView,self).form_invalid(form)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        print(form)
+        print(self.request.POST)
+
+        
+        instance = form.save(commit=False)
+        organ_name = self.request.POST.get('belongto')
+        
+        organization = Organizations.objects.get(name=organ_name)
+        instance.belongto = organization
+
+        imgName = ''
+        if self.request.FILES['file']:
+            myfile = self.request.FILES['file']
+            new_path =  os.path.join(settings.MEDIA_ROOT, 'resources','img','secondwater')
+            # fs = FileSystemStorage()
+            fs = FileSystemStorage(new_path)
+            filename = fs.save(myfile.name, myfile)
+            initial_path = fs.path(filename)
+            
+            # os.rename(initial_path, new_path)
+            imgName = filename
+
+        if imgName != '':
+            instance.artistPreview = imgName
+
+        
+        # instance.uuid=unique_uuid_generator(instance)
+        return super(SecondWaterEditView,self).form_valid(form)
+       
+
+
+def secondwaterdeletemore(request):
+    # print('userdeletemore',request,request.POST)
+
+    if not request.user.has_menu_permission_edit('metermanager_dmam'):
+        return HttpResponse(json.dumps({"success":0,"msg":"您没有权限进行操作，请联系管理员."}))
+
+    deltems = request.POST.get("deltems")
+    print('deltems:',deltems)
+    deltems_list = deltems.split(',')
+
+    for uid in deltems_list:
+        u = VSecondWater.objects.get(id=int(uid))
+        # print('delete user ',u)
+        #删除用户 并且删除用户在分组中的角色
+        commaddr = u.commaddr
+        zncb_secondwater = SecondWater.objects.filter(name=name)
+        if zncb_secondwater.exists():
+            z = zncb_secondwater.first()
+            z.delete()
+        
+        u.delete()
+
+    return HttpResponse(json.dumps({"success":1}))
+
+"""
+Assets comment deletion, manager
+"""
+class SecondWaterDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
+    model = VSecondWater
+    # template_name = "aidsbank/asset_comment_confirm_delete.html"
+
+    def test_func(self):
+        
+        if self.request.user.has_menu_permission_edit('metermanager_dmam'):
+            return True
+        return False
+
+    def handle_no_permission(self):
+        data = {
+                "success": 0,
+                "msg":"您没有权限进行操作，请联系管理员."
+                    
+            }
+        HttpResponse(json.dumps(data))
+        # return render(self.request,"entm/permission_error.html",data)
+
+    def dispatch(self, *args, **kwargs):
+        # self.comment_id = kwargs["pk"]
+
+        print("user delete:",args,kwargs)
+        
+        return super(SecondWaterDeleteView, self).dispatch(*args, **kwargs)
+
+    def get_object(self,*args, **kwargs):
+        # print("delete objects:",self.kwargs,kwargs)
+        return VSecondWater.objects.get(pk=kwargs["pk"])
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        print("delete?",args,kwargs)
+        self.object = self.get_object(*args,**kwargs)
+
+        
+        commaddr = self.object.commaddr
+        
+        result = dict()
+        # 同时删除zncb SecondWater记录
+        zncb_secondwater = SecondWater.objects.filter(name=name)
+        if zncb_secondwater.exists():
+            z = zncb_secondwater.first()
+            z.delete()
+        self.object.delete()
+        # result["success"] = 1
+        return HttpResponse(json.dumps({"success":1}))
+        
+
+def getSecondWaterSelect(request):
+    # meters = Meter.objects.all()
+    secondwaters = request.user.secondwater_list_queryset('').values()
+
+    def m_info(m):
+        
+        return {
+            "id":m["id"],
+            "name":m["name"],
+            
+        }
+    data = []
+
+    for m in secondwaters:
+        data.append(m_info(m))
+
+    operarions_list = {
+        "exceptionDetailMsg":"null",
+        "msg":None,
+        "obj":data,
+        "success":True
+    }
+   
+    # print(operarions_list)
+    return JsonResponse(operarions_list)
+
+
+# 二供设备列表
+def secondwaterlist(request):
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print(request.POST.get("draw"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    user = request.user
+    organs = user.belongto
+
+    secondwaters = user.secondwater_list_queryset(simpleQueryParam).values("id","name","belongto__name","address","lng","lat","coortype",
+        "version","serialnumber","manufacturer","product_date","artist","artistPreview")
+    # meged_secondwater = merge_values(comunities)
+    # meters = SecondWater.objects.all() #.filter(secondwaterid=105)  #文欣苑105
+
+    def m_info(m):
+        
+        return {
+            "id":m["id"],
+            "name":m["name"],
+            "belongto":m["belongto__name"],
+            "address":m["address"],
+            "lng":m["lng"],
+            "lat":m["lat"],
+            "coortype":m["coortype"],
+            "version":m["version"],
+            "serialnumber":m["serialnumber"],
+            "manufacturer":m["manufacturer"],
+            "product_date":m["product_date"],
+            "artist":m["artist"],
+            "artistPreview":m["artistPreview"],
+            # "lng":m["lng"],
+            
+        }
+    data = []
+
+    for m in secondwaters:
+        data.append(m_info(m))
+
+    recordsTotal = secondwaters.count()
+    # recordsTotal = len(meged_secondwater)
+    
+    result = dict()
+    result["records"] = data[start:start+length]
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
 
 
 

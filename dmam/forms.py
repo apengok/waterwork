@@ -8,7 +8,7 @@ from django.contrib.postgres.forms.ranges import DateRangeField, RangeWidget
 
 
 from entm.models import Organizations
-from .models import WaterUserType,DMABaseinfo,Station,Meter
+from .models import WaterUserType,DMABaseinfo,Station,Meter,VSecondWater
 import datetime
 
 class DMACreateForm(forms.ModelForm):
@@ -110,3 +110,20 @@ class StationAssignForm(forms.ModelForm):
     class Meta:
         model = DMABaseinfo
         fields = ('dma_no',)
+
+
+
+class VSecondWaterAddForm(forms.ModelForm):
+    belongto = forms.CharField()
+
+    class Meta:
+        model = VSecondWater
+        fields = ['name','serialnumber','address','version','manufacturer','lng','lat','coortype','product_date','artist','artistPreview']
+
+class VSecondWaterEditForm(forms.ModelForm):
+    belongto = forms.CharField()
+
+    class Meta:
+        model = VSecondWater
+        fields = ['name','serialnumber','address','version','manufacturer','lng','lat','coortype','product_date','artist','artistPreview']
+

@@ -591,5 +591,73 @@ class SecondwaterView(LoginRequiredMixin,TemplateView):
         return context  
 
  
+# 返回二供信息
+@login_required
+def getmapsecondwaterlist(request):
+    print('getmapsecondwaterlist:',request.POST)
+
+    groupName = request.POST.get("groupName")
+    user = request.user
+    organs = user.belongto
+    print(organs,type(organs))
+    if groupName == '':
+        selectedgroup = Organizations.objects.filter(cid=organs.cid).values().first()
+    else:
+        selectedgroup = Organizations.objects.filter(cid=groupName).values().first()
+
+    secondwaters = user.secondwater_list_queryset('') 
+    
+    if groupName != "":
+        secondwaters = secondwaters.filter(belongto__cid=groupName)
+    
+    # 一次获取全部所需数据，减少读取数据库耗时
+    stations_value_list = secondwaters.values('name','belongto__name','lng','lat','coortype')
+    
+    
+    def append_data(s):
+        return {
+                "stationname":s["name"],
+                "belongto":s["belongto__name"],
+                "coortype":s["coortype"],
+                "lng":s["lng"],
+                "lat":s["lat"],
+                "status":"在线" ,
+                "readtime":"13:14" ,
+                "flux":'3.14',
+                "press_out":"1",
+                "press_in":'',
+                
+                
+            }
+        
+
+    data = []
+    # s:station b:bigmeter
+    for s in stations_value_list:
+
+        ret=append_data(s)
+        
+        if ret is not None:
+            data.append(ret)
+
+    entminfo = {
+        "coorType":selectedgroup["coorType"],
+        "longitude":selectedgroup["longitude"],
+        "latitude":selectedgroup["latitude"],
+        "zoomIn":selectedgroup["zoomIn"],
+        "islocation":selectedgroup["islocation"],
+        "adcode":selectedgroup["adcode"],
+        "districtlevel":selectedgroup["districtlevel"],
+
+    }
+
+    result = dict()
+    result["success"] = "true"
+    result["obj"] = data
+    result["entminfo"] = entminfo
+
+    
+    
+    return HttpResponse(json.dumps(result))
 
 
