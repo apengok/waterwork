@@ -18,7 +18,7 @@
                     <label class="col-md-2 control-label"><label class="text-danger">*</label> 所属组织：</label>
                     <div class="has-feedback col-md-4">
                         <input name="belongto" class="form-control" id="zTreeOrganSel"
-                            placeholder="请选择所属企业" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"  type="text"/>
+                            value="{{ form.belongto.value|default:'' }}" readonly="readonly" style="background-color: #fafafa; cursor: pointer;"  type="text"/>
                         <span class="fa fa-chevron-down form-control-feedback" aria-hidden="true" id="zTreeCitySelSpan"></span>
                         <div class="ztreeModelBox" id="zTreeContent">
                             <ul id="ztreeDemo" class="ztree"></ul>
@@ -36,7 +36,7 @@
                     <label class="col-md-2 control-label"> 坐标类型：</label>
                     <div class="col-md-4">
                         <!-- <input type="hidden" name="coortype"> -->
-                        <select name="coortype" id="coortype" autocomplete="off"  class="form-control">
+                        <select name="coortype" id="coortype" autocomplete="off" value="{{ form.coortype.value|default:'' }}"   class="form-control">
                             <!-- <option  value="">- 请选择类型 -</option> -->
                             <option value="WGS84">地球坐标</option>
                             <option value="GCJ-02">火星坐标</option>
@@ -100,6 +100,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <input type="hidden" name="imgchange" id="imgchange" value="0">
+                            <input type="hidden" name="artistPreview" id="artistPreview" value="{{ form.artistPreview.value|default:'' }}">
                             <label class="col-md-4 control-label">预览：</label>
                             <div class="col-md-8" style="border: 1px solid ">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -113,7 +115,7 @@
                                         <tr>
                                             <td>
                                                 <div class="inpFilePhoto">
-                                                    <input type="file" accept="image/png" name="file" id="doc-ico" style="width:202px;" onchange="secondwaterAdd.setImagePreview();">
+                                                    <input type="file" accept="image/png" name="file" id="doc-ico" style="width:202px;" onchange="secondwaterEdit.setImagePreview();">
                                                     点击选择照片
                                                 </div>
                                             </td>
@@ -155,6 +157,13 @@ var deviceNumberNull = "\u7EC8\u7AEF\u53F7\u4E0D\u80FD\u4E3A\u7A7A";
     var publicSize100="\u957F\u5EA6\u4E0D\u8D85\u8FC7100\u4F4D";
     var phoneError = "\u770B\u8D77\u6765\u4E0D\u50CF\u624B\u673A\u53F7\u5462";
     var publicNull = "\u4E0D\u80FD\u4E3A\u7A7A";
+
+    var coortype = "{{ form.coortype.value|default:'' }}"
+    var artist = "{{ form.artist.value|default:'' }}"
+    var artistPreview = "{{ form.artistPreview.value|default:'' }}"
+
+    
+
 </script>
 
 <script src="{% static 'virvo/wro/secondwaterEdit.js' %}"></script>

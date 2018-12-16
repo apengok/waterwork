@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo,VCommunity,VConcentrator,VWatermeter,VPressure
+from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo,VCommunity,VConcentrator,VWatermeter,VPressure,VSecondWater
 # Register your models here.
 from legacy.models import Bigmeter,District
 
@@ -101,3 +101,8 @@ class VWatermeterAdmin(admin.ModelAdmin):
     list_display = ['name','belongto','communityid','concentrator','numbersth','buildingname','roomname','waterid','wateraddr','serialnumber','madedate']
     search_fields = ['name']
 
+
+@admin.register(VSecondWater)
+class VSecondWaterAdmin(admin.ModelAdmin):
+    list_display = ['name','belongto','coortype','lng','lat',]
+    search_fields = ['name']

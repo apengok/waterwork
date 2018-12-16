@@ -127,3 +127,7 @@ class VSecondWaterEditForm(forms.ModelForm):
         model = VSecondWater
         fields = ['name','serialnumber','address','version','manufacturer','lng','lat','coortype','product_date','artist','artistPreview']
 
+    def __init__(self, *args, **kwargs):
+        super(VSecondWaterEditForm, self).__init__(*args, **kwargs)
+
+        self.fields['belongto'].initial = self.instance.belongto.name

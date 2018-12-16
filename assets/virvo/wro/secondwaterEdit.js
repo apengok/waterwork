@@ -5,7 +5,11 @@
     var name = $("#name").val();
     var nameError = $("#name-error");
     var deviceFlag = false;
-    secondwaterAdd = {
+    var old_sw_name = $("#name").val();
+
+
+
+    secondwaterEdit = {
         init: function () {
             var setting = {
                 async: {
@@ -15,7 +19,7 @@
                     autoParam: ["id"],
                     contentType: "application/json",
                     dataType: "json",
-                    dataFilter: secondwaterAdd.ajaxDataFilter
+                    // dataFilter: secondwaterEdit.ajaxDataFilter
                 },
                 view: {
                     dblClickExpand: false
@@ -26,14 +30,26 @@
                     }
                 },
                 callback: {
-                    beforeClick: secondwaterAdd.beforeClick,
-                    onClick: secondwaterAdd.onClick
+                    beforeClick: secondwaterEdit.beforeClick,
+                    onClick: secondwaterEdit.onClick
                 }
             };
             $.fn.zTree.init($("#ztreeDemo"), setting, null);
             // laydate.render({elem: '#installDate', theme: '#6dcff6'});
             laydate.render({elem: '#product_date', theme: '#6dcff6'});
             
+            $("#coortype option").each(function (){
+                if($(this).val()==coortype){ 
+                $(this).attr("selected","selected"); 
+            }});
+
+            $("#artist option").each(function (){
+                if($(this).val()==artist){ 
+                $(this).attr("selected","selected"); 
+            }});
+
+            secondwaterEdit.artistPreviewImg();
+
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);
@@ -82,17 +98,17 @@
             } else {
                 $("#zTreeContent").hide();
             }
-            $("body").bind("mousedown", secondwaterAdd.onBodyDown);
+            $("body").bind("mousedown", secondwaterEdit.onBodyDown);
         },
         //隐藏菜单
         hideMenu: function () {
             $("#zTreeContent").fadeOut("fast");
-            $("body").unbind("mousedown", secondwaterAdd.onBodyDown);
+            $("body").unbind("mousedown", secondwaterEdit.onBodyDown);
         },
         onBodyDown: function (event) {
             if (!(event.target.id == "menuBtn" || event.target.id == "zTreeContent" || $(
                     event.target).parents("#zTreeContent").length > 0)) {
-                secondwaterAdd.hideMenu();
+                secondwaterEdit.hideMenu();
             }
         },
         //显示或隐藏输入框
@@ -121,6 +137,21 @@
         hideErrorMsg: function(){
             $("#error_label").hide();
         },
+
+        artistPreviewImg:function(){
+            var imgObjPreview=document.getElementById("preview-ico");
+            console.log("artistPreview",artistPreview)
+            if(artistPreview != '')
+            {
+                //火狐下，直接设img属性
+                imgObjPreview.style.display = 'block';
+                imgObjPreview.style.width = '240px';
+                imgObjPreview.style.height = '80px'; 
+
+                imgObjPreview.src = '/media/resources/img/secondwater/' + artistPreview;
+                
+            }
+        },
         
         //下面用于图片上传预览功能
         setImagePreview: function(avalue){
@@ -139,6 +170,7 @@
                 }else{
                     imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
                 }
+                $('#imgchange').val("1")
             }
             else
             {
@@ -150,23 +182,25 @@
                 localImagId.style.width = "240px";
                 localImagId.style.height = "80px";
                 //图片异常的捕捉，防止用户修改后缀来伪造图片
-            try{
-                localImagId.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
-                localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
-            }
-            catch(e)
-            {
-                alert("您上传的图片格式不正确，请重新选择!");
-                return false;
-            }
+                try{
+                    localImagId.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                    localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+                }
+                catch(e)
+                {
+                    alert("您上传的图片格式不正确，请重新选择!");
+                    return false;
+                }
                 imgObjPreview.style.display = 'none';
                 document.selection.empty();
             }
+            
+            
             return true;
         },
         //组织树预处理函数
         ajaxDataFilter: function (treeId, parentNode, responseData) {
-            secondwaterAdd.hideErrorMsg();//隐藏错误提示样式
+            secondwaterEdit.hideErrorMsg();//隐藏错误提示样式
             var isAdminStr = $("#isAdmin").attr("value");    // 是否是admin
             var isAdmin = isAdminStr == 'true';
             var userGroupId = $("#userGroupId").attr("value");  // 用户所属组织 id
@@ -182,7 +216,7 @@
                 }
                 return responseData;
             } else {
-                secondwaterAdd.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
+                secondwaterEdit.showErrorMsg("您需要先新增一个组织", "zTreeOrganSel");
                 return;
             }
         },
@@ -192,11 +226,11 @@
             } else {
                 name = $("#name").val();
                 console.log("doSubmit");
-                secondwaterAdd.nameValidates();
+                secondwaterEdit.nameValidates();
                 if ($("#name").val() != "" && deviceFlag) {
-                    if (secondwaterAdd.validates()) {
+                    if (secondwaterEdit.validates()) {
                         submissionFlag = true;
-                        $("#addForm").ajaxSubmit(function (data) {
+                        $("#editForm").ajaxSubmit(function (data) {
                             var json = eval("(" + data + ")");
                             if (json.success) {
                                 $("#commonWin").modal("hide");
@@ -220,12 +254,12 @@
                 deviceFlag = false;
             }else {
                 console.log("deviceAjax")
-                secondwaterAdd.deviceAjax();
+                secondwaterEdit.deviceAjax();
             }
             
         },
         validates: function () {
-            return $("#addForm").validate({
+            return $("#editForm").validate({
                 rules: {
                     
                     name: {
@@ -295,38 +329,43 @@
             $("#error_label_add").hide();
         },
         deviceAjax: function () {
-            $.ajax({
-                    type: "post",
-                    url: "/devm/concentrator/repetition/",
-                    data: {name: name},
-                    success: function (d) {
-                        var result = $.parseJSON(d);
-                        // if (!result) {
-                        if (result.success == false) {
-                            nameError.html("该名称已存在！");
-                            nameError.show();
-                            deviceFlag = false;
-                        }
-                        else {
-                            nameError.hide();
-                            deviceFlag = true;
+            var now_name = $("#name").val();
+            if(old_sw_name != now_name){
+                $.ajax({
+                        type: "post",
+                        url: "/devm/concentrator/repetition/",
+                        data: {name: name},
+                        success: function (d) {
+                            var result = $.parseJSON(d);
+                            // if (!result) {
+                            if (result.success == false) {
+                                nameError.html("该名称已存在！");
+                                nameError.show();
+                                deviceFlag = false;
+                            }
+                            else {
+                                nameError.hide();
+                                deviceFlag = true;
+                            }
                         }
                     }
-                }
-            )
+                )
+            }else{
+                deviceFlag = true;
+            }
         },
         
     }
     $(function () {
         $('input').inputClear();
         //初始化
-        secondwaterAdd.init();
+        secondwaterEdit.init();
         
         $('input').inputClear();
 
         $("#name").on("change", function () {
             name = $("#name").val();
-            secondwaterAdd.nameValidates();
+            secondwaterEdit.nameValidates();
         });
         
         $("#name").bind("input propertychange change", function (event) {
@@ -343,7 +382,7 @@
                             deviceFlag = false;
                         }
                         else {
-                            secondwaterAdd.nameValidates();
+                            secondwaterEdit.nameValidates();
                         }
                     }
                 }
@@ -351,8 +390,8 @@
         });
 
         //显示菜单
-        $("#zTreeOrganSel").bind("click", secondwaterAdd.showMenu);
+        $("#zTreeOrganSel").bind("click", secondwaterEdit.showMenu);
         //提交
-        $("#doSubmit").bind("click", secondwaterAdd.doSubmit);
+        $("#doSubmit").bind("click", secondwaterEdit.doSubmit);
     })
 })(window, $)

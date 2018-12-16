@@ -2212,12 +2212,12 @@ class SecondWaterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
         
         instance = form.save(commit=False)
         organ_name = self.request.POST.get('belongto')
-        
+        imgchange  = self.request.POST.get('imgchange')
         organization = Organizations.objects.get(name=organ_name)
         instance.belongto = organization
 
-        imgName = ''
-        if self.request.FILES['file']:
+        
+        if imgchange == '1' and self.request.FILES['file']:
             myfile = self.request.FILES['file']
             new_path =  os.path.join(settings.MEDIA_ROOT, 'resources','img','secondwater')
             # fs = FileSystemStorage()
@@ -2225,11 +2225,9 @@ class SecondWaterEditView(AjaxableResponseMixin,UserPassesTestMixin,UpdateView):
             filename = fs.save(myfile.name, myfile)
             initial_path = fs.path(filename)
             
-            # os.rename(initial_path, new_path)
-            imgName = filename
 
-        if imgName != '':
-            instance.artistPreview = imgName
+        
+            instance.artistPreview = filename
 
         
         # instance.uuid=unique_uuid_generator(instance)
