@@ -283,6 +283,13 @@
                     + treeNode.name);
             var zTree = $.fn.zTree.getZTreeObj("treeDemo");
             zTree.selectNode(treeNode);
+            // 增加组织是否存在dma分区的判断
+            if(treeNode.dma_no !== null){
+                console.log("treeNode.dma_no",treeNode.dma_no,treeNode.name)
+                layer.msg("该组织包含有DMA分区，请删除DMA分区后再试");
+                return false
+            }
+            console.log("deletable...")
             var result;
             layer.confirm(userGroupDeleteConfirm, {
             	title :'操作确认',
@@ -306,6 +313,7 @@
                             layer.msg(data.msg,{move:false})
                         }
                         if(flag==true){
+                            layer.msg("删除成功",{move:false})
                         	$('#simpleQueryParam').val("");
                         	selectTreeId = "";
                             $.ajax({
@@ -403,7 +411,7 @@
             pid = window.encodeURI(window.encodeURI(pid));
             var attribute = treeNode.attribute;
             var organlevel = treeNode.organlevel;
-            console.log("hover",attribute,organlevel);
+            // console.log("hover",attribute,organlevel);
             
             var addStr = "<span class='button add' id='addBtn_"
                     + treeNode.tId

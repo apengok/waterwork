@@ -33,7 +33,7 @@
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
 
-                            if (row.station == "") {
+                            if (row.communityid == "") {
                                 var result = '';
                                 result += '<input  type="checkbox" name="subChk"  value="' + row.id + '" />';
                                 return result;
@@ -55,7 +55,7 @@
                             //修改按钮
                             result += '<button  href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                             //删除按钮
-                            if(row.station != ""){
+                            if(row.communityid != ""){
                                 result += '<button disabled type="button" onclick="myTable.deleteItem(\''
                                     + row.id
                                     + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
@@ -115,10 +115,6 @@
                         "data" : "commaddr",
                         "class" : "text-center",
                         
-                    }, {
-                        "data" : "simid",
-                        "class" : "text-center",
-                       
                     },{
                         "data":"communityid",
                         "class":"text-center",

@@ -525,17 +525,19 @@ def choicePermissionTree(request):
 
     return HttpResponse(json.dumps(buildtree))
 
+# 组织和用户管理的组织树
 def oranizationtree(request):   
     organtree = []
 
     user = request.user
     organs = user.belongto #Organizations.objects.all()
     organ_list = organs.get_descendants(include_self=True)
-    for o in organ_list.values("id","name","cid","pId","uuid","organlevel","attribute"):
+    for o in organ_list.values("id","name","cid","pId","uuid","organlevel","attribute","dma__dma_no"):
         organtree.append({
             "name":o["name"],
             "id":o["cid"],
             "pId":o["pId"],
+            "dma_no":o["dma__dma_no"],
             "attribute":o["attribute"],
             "organlevel":o["organlevel"],
             "type":"group",
@@ -934,6 +936,14 @@ class UserGroupDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         """
         Calls the delete() method on the fetched object and then
         redirects to the success URL.
+        1、当只有站点时，删除组织时，其所属的站点自动移到上级组织，包括SIM卡，表具和站点，
+            如果该组织以下还有子组织，不论该子组织是否有站点，都不能删除，必须先删除了子组织，才可以删除该组织，
+            以此类推。如果子组织下有站点时，删除子组织时，站点自动移入到父级组织。
+            只要组织可以删除时，其下所有用户自动删除。
+        2、当有DMA分区时，该组织不可删除，要想删除，步骤为：
+            先解除DMA绑定站点，即把DMA分区内的所有站点和小区等全部移出分区，
+            然后才可以删除DMA分区，等到组织内没有任何DMA分区时，再按照第一条原则删除组织。
+
         """
         print("delete?",args,kwargs)
         self.object = self.get_object(*args,**kwargs)
@@ -943,6 +953,10 @@ class UserGroupDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         if self.object == self.request.user.belongto:
             return JsonResponse({"success":False,"msg":"不能删除自己所属的组织"})
 
+        # 删除组织前先处理该组织下相关的设备归属到上一级组织
+        bdflag = self.object.before_delete_it()
+        if not bdflag:
+            return JsonResponse({"success":False})
         #删除组织 需要删除该组织的用户 和角色
         users = self.object.users.all()
         print('delete ',self.object,'and users:',users)

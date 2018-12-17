@@ -87,6 +87,62 @@ class Organizations(MPTTModel):
     def sub_stations(self,include_self=False):
         return self.get_descendants(include_self)
 
+    def before_delete_it(self):
+        '''
+        1、当只有站点时，删除组织时，其所属的站点自动移到上级组织，包括SIM卡，表具和站点，
+            如果该组织以下还有子组织，不论该子组织是否有站点，都不能删除，必须先删除了子组织，才可以删除该组织，
+            以此类推。如果子组织下有站点时，删除子组织时，站点自动移入到父级组织。
+            只要组织可以删除时，其下所有用户自动删除。
+        2、当有DMA分区时，该组织不可删除，要想删除，步骤为：
+            先解除DMA绑定站点，即把DMA分区内的所有站点和小区等全部移出分区，
+            然后才可以删除DMA分区，等到组织内没有任何DMA分区时，再按照第一条原则删除组织。'''
+        # station
+        if self.dma.all().count() > 0:
+            print('dma exists ,cant delete.')
+            return False
+        # 站点
+        for s in self.station_set.all():
+            print("before delete station set to parant organzation")
+            s.belongto = self.parent
+            s.save()
+        # 表具
+        for m in self.meter_set.all():
+            print("before delete meter set to parant organzation")
+            m.belongto = self.parent
+            m.save()
+        # SIM卡
+        for s in self.simcard_set.all():
+            print("before delete simcart set to parant organzation")
+            s.belongto = self.parent
+            s.save()
+        # 小区
+        for c in self.vcommunity_set.all():
+            print("before delete comunity set to parant organzation")
+            c.belongto = self.parent
+            c.save()
+        # 集中器
+        for c in self.vconcentrator_set.all():
+            print("before delete concentor set to parant organzation")
+            c.belongto = self.parent
+            c.save()
+        # 二供
+        for c in self.vsecondwater_set.all():
+            print("before delete secondwater set to parant organzation")
+            c.belongto = self.parent
+            c.save()
+        # 压力
+        for c in self.vpressure_set.all():
+            print("before delete pressure set to parant organzation")
+            c.belongto = self.parent
+            c.save()
+        # 户表
+        for c in self.vwatermeter_set.all():
+            print("before delete watermeter set to parant organzation")
+            c.belongto = self.parent
+            c.save()
+
+        return True
+
 
 class PorgressBar(models.Model):
     totoal      = models.IntegerField(default=1)

@@ -73,10 +73,10 @@
                         // 修改按钮
                         result += '<button href="'+editUrlPath+'" data-target="#commonLgWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                         if(row.related){
-                            result += '<button disabled type="button" onclick="stationManage.deleteRole(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
+                            result += '<button  type="button" onclick="stationManage.deleteStation_related(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
 
                         }else{
-                            result += '<button type="button" onclick="stationManage.deleteRole(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
+                            result += '<button type="button" onclick="stationManage.deleteStation(\''+idStr+'\')" class="deleteButton editBtn disableClick"><i class="fa fa-trash-o"></i>删除</button>';
                         }
                         return result;
                     }
@@ -509,14 +509,17 @@
             d.groupName = selectTreeId;
             d.districtId = selectDistrictId;
         },
-        // 删除用户
-        deleteRole: function(id){
-            console.log('删除用户?',id);
+        // 删除站点
+        deleteStation: function(id){
             if (id == "uid=admin,ou=organization") {
                 layer.msg(userSupermanagerDeleteTip,{move:false});
             }else{
                 myTable.deleteItem(id);
             }
+        },
+        // 删除关联dma站点
+        deleteStation_related: function(id){
+            layer.msg("该站点已绑定到DMA分区，请先解除",{move:false});
         },
         // 查询全部
         refreshTable: function(){

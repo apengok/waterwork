@@ -1521,7 +1521,12 @@ def concentratorlist(request):
 
     def m_info(m):
         commaddr = m["commaddr"]
-        
+        comunity = VCommunity.objects.filter(vconcentrators__id=m["id"])
+        if comunity.exists():
+            c = comunity.first()
+            comunity_name = c.name
+        else:
+            comunity_name = ''
         return {
             "id":m["id"],
             "name":m["name"],
@@ -1538,7 +1543,7 @@ def concentratorlist(request):
             # "gpflow":m.gpflow,
             # "uplimitflow":m.uplimitflow,
             # "monthdownflow":m.monthdownflow,
-            "communityid":"",
+            "communityid":comunity_name,
             # "station":m.station_set.first().username if m.station_set.count() > 0 else ""
         }
     data = []

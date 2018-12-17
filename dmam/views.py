@@ -486,6 +486,7 @@ def dmatree(request):
 
         
     for o in organ_lists:
+
         organtree.append({
             "name":o["name"],
             "id":o["cid"],
@@ -785,7 +786,8 @@ def stationlist(request):
             "big_user":u["biguser"],
             "focus":u["focus"],
             "createdate":u["madedate"],
-            "related":False if u["dmaid__dma_no"] is None else True
+            "related":DmaStation.objects.filter(station_id=u["meter__simid__simcardNumber"]).exists()
+            # "related":False if u["dmaid__dma_no"] is None else True
         }
 
     for m in stations.values("id","username","usertype","meter__dn","biguser","focus",
@@ -1530,6 +1532,7 @@ def saveDmaStation(request):
     for s in old_assigned:
         if s.station_id not in refresh_list:
             s.delete()
+            # 修改dma相关站点信息
 
     data = {
             "success": 1,
@@ -2726,14 +2729,16 @@ class CommunityDeleteView(AjaxableResponseMixin,UserPassesTestMixin,DeleteView):
         self.object = self.get_object(*args,**kwargs)
 
         
-        commaddr = self.object.commaddr
+        name = self.object.name
         
         result = dict()
         # 同时删除zncb Community记录
-        zncb_community = Community.objects.filter(commaddr=commaddr)
+        zncb_community = Community.objects.filter(name=name)
         if zncb_community.exists():
             z = zncb_community.first()
             z.delete()
+        # 解除关联的集中器
+
         self.object.delete()
         # result["success"] = 1
         return HttpResponse(json.dumps({"success":1}))
@@ -2819,7 +2824,8 @@ def communitylist(request):
             "name":m["name"],
             "belongto":m["belongto__name"],
             "address":m["address"],
-            "concentrator":m["vconcentrators__name"]
+            "concentrator":m["vconcentrators__name"],
+            "related":DmaStation.objects.filter(station_id=m["id"]).exists()
             # "station":m.station_set.first().username if m.station_set.count() > 0 else ""
         }
     data = []

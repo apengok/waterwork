@@ -33,7 +33,7 @@
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
 
-                            if (row.station == "") {
+                            if (row.related) {
                                 var result = '';
                                 result += '<input  type="checkbox" name="subChk"  value="' + row.id + '" />';
                                 return result;
@@ -55,8 +55,9 @@
                             //修改按钮
                             result += '<button href="'+editUrlPath+'" data-target="#commonWin" data-toggle="modal"  type="button" class="editBtn editBtn-info"><i class="fa fa-pencil"></i>修改</button>&nbsp;';
                             //删除按钮
-                            if(row.station != ""){
-                                result += '<button disabled type="button" onclick="myTable.deleteItem(\''
+
+                            if(row.related){
+                                result += '<button  type="button" onclick="communityManagement.deleteComunity_related(\''
                                     + row.id
                                     + '\')" class="deleteButton editBtn disableClick"><i class="fa fa-ban"></i>删除</button>';
                                 }else{
@@ -140,6 +141,10 @@
             myTable.deleteItems({
                 'deltems' : checkedList.toString()
             });
+        },
+        // 删除关联小区提示
+        deleteComunity_related: function(id){
+            layer.msg("该小区已绑定到DMA分区，请先解除",{move:false});
         },
         //加载完成后执行
         refreshTable: function(){
