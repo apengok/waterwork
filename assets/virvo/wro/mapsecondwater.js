@@ -201,7 +201,7 @@
          // 地图初始化
         amapinit: function () {
             // 创建地图
-            map = new AMap.Map("map-container", {
+            map = new AMap.Map("MapContainer", {
                 resizeEnable: true,   //是否监控地图容器尺寸变化
                 zoom: 18,       //地图显示的缩放级别
             });
@@ -283,7 +283,7 @@
             // });
             
 
-            // map = new AMap.Map('map-container',{
+            // map = new AMap.Map('MapContainer',{
             //     zoom: 15,  //设置地图显示的缩放级别
             //     center: [118.438781,29.871515],
             //     layers:[layer], //当只想显示标准图层时layers属性可缺省
@@ -549,10 +549,67 @@
             $('#simpleQueryParam').val("");
             if(treeNode.type == "secondwater"){
                 // do something
+                // $("#fenceBindTable").show();
+                mapSecondwater.TabCarBox();
             }else{
                 mapSecondwater.requireSecondwater();
             }
             
+        },
+        TabCarBox: function () {
+            monitoringObjMapHeight = $("#MapContainer").height();
+            
+            $("#fenceBindTable").css("display", "block");
+            
+            var bingLength = $('#dataTableBind tbody tr').length;
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getSelectedNodes()
+            var stype = nodes[0].type;
+            console.log("tree selete type ",stype);
+
+            // var checkNode = treeObj.getCheckedNodes(true);
+            // if ( 0) {
+            //     $("#MapContainer").css("height", newMapHeight + 'px');
+            // } else {
+            //     if ($('#bingListClick i').hasClass('fa fa-chevron-down')) {
+            //         if (bingLength == 0) {
+            //             $("#MapContainer").css("height", newMapHeight + 'px');
+            //         } else {
+            //             $("#MapContainer").css('height', (newMapHeight - 80 - 30 * bingLength - 105) + 'px');
+            //         }
+            //         ;
+            //     } else {
+            //         $("#MapContainer").css("height", newMapHeight + 'px');
+            //     }
+            //     ;
+            // };
+            if(stype == "secondwater"){
+                $("#MapContainer").css('height', (newMapHeight - 30 * bingLength - 137) + 'px');
+                $("#fenceInfoTable").show();
+                // recent7flowpress.resize();
+                // $("#binddmaname").html(dma_bindname);
+                // findOperation.fenceBind();
+            }
+            else{
+                // $("#fenceBindTable").hide();
+                // $("#MapContainer").css("height", (winHeight - (winHeight/8)+10  ) + 'px');
+                $("#MapContainer").css("height", (winHeight - 130  ) + 'px');
+                $("#searchBtnInput").hide()
+                $("#searchInput").hide()
+                // $("#binddmaname").html("");
+
+
+                // if ($('#bingListClick i').hasClass('fa fa-chevron-down')){
+                //     $("#MapContainer").animate({'height': newMapHeight + "px"});
+                // }
+                
+            }
+            // $("#MapContainer").css('height', (newMapHeight - 80 - 44 * bingLength - 205) + 'px');
+            // 订阅电子围栏
+            // if (clickFenceCount == 0) {
+            //     webSocket.subscribe(headers, "/user/" + $("#userName").text() + '/fencestatus', fenceOperation.updataFenceData, null, null);
+            // };
+            clickFenceCount = 1;
         },
         requireSecondwater:function(){
 
