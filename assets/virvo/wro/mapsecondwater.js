@@ -18,6 +18,11 @@
     var getdmamapusedata_flag = 0;
     var markerInfoWindow = null;
     var markerList = [];
+    var pressure_gauge;
+    var timeTicket = 1;
+
+    var secondw_selected = false;
+    var sw_name = "";
 
     var $contentLeft = $("#content-left"), $contentRight = $("#content-right");
 
@@ -548,13 +553,92 @@
             selectTreeIdAdd=treeNode.uuid;
             $('#simpleQueryParam').val("");
             if(treeNode.type == "secondwater"){
+                secondw_selected = true;
+                sw_name = treeNode.name;
+                $("#bindswname").html(sw_name);
                 // do something
                 // $("#fenceBindTable").show();
-                mapSecondwater.TabCarBox();
+                mapSecondwater.pressureGauge();
             }else{
+                secondw_selected = false;
                 mapSecondwater.requireSecondwater();
             }
+            mapSecondwater.TabCarBox();
             
+        },
+        pressureGauge:function(){
+            option = {
+                tooltip : {
+                    formatter: "{a} <br/>{b} : {c}"
+                },
+                
+                series : [
+                    {
+                        name:'压力',
+                        type:'gauge',
+                        radius: '93%',
+                        min:0,//最小刻度
+                        max:1,//最大刻度
+                        splitNumber: 10, //刻度数量
+                        axisLine: {            // 坐标轴线
+                            lineStyle: {       // 属性lineStyle控制线条样式
+                                color: [[0.2, '#228b22'],[0.7, '#48b'],[1, '#ff4500']], 
+                                width: 15
+                            }
+                        },
+                        pointer : {
+                            length : '70%',
+                            width : 5,
+                            color :'auto'
+                        },
+                        startAngle: 225,
+                        endAngle: -45,
+                        title: {
+                            show: true,
+                            offsetCenter: [0, '64%'], // x, y，单位px
+                            textStyle: {
+                              color: 'fff',
+                              fontSize: 16
+                            }
+                        },
+                        detail : {
+                            show: true,
+                            offsetCenter: [0, '80%'],
+                            color: '#ffffff',
+                            formatter:'{value} Mpa',
+                            textStyle: {
+                              fontSize: 24
+                            }
+                        },
+                        data:[{value: 0.35, name: '当前压力'}]
+                    }
+                ]
+            };
+
+            pressure_gauge = echarts.init(document.getElementById('pressure_gauge'));
+            pressure_gauge.setOption(option);
+
+            clearInterval(timeTicket);
+            timeTicket = setInterval(function (){
+                option.series[0].data[0].value = (Math.random()).toFixed(2) - 0;
+                pressure_gauge.setOption(option, true);
+            },2000);
+        },
+        //收缩绑定列表
+        bingListClick: function () {
+            if(secondw_selected){
+                if ($(this).children('i').hasClass('fa-chevron-down')) {
+                    $(this).children('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                    //  $("#MapContainer").animate({'height':(winHeight - (winHeight/8)+5  )+ "px"});
+                    $("#MapContainer").animate({'height':(winHeight - 130 )+ "px"});
+                    // $("#binddmaname").html("");
+
+                } else {
+                    $(this).children('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                    var trLength = $('#dataTableBind tbody tr').length;
+                    $("#MapContainer").animate({'height': (winHeight  - trLength * 46 - 127) + "px"});
+                };
+            }
         },
         TabCarBox: function () {
             monitoringObjMapHeight = $("#MapContainer").height();
@@ -715,6 +799,8 @@
         mapSecondwater.init();
         
         mapSecondwater.requireSecondwater();
+
+        $("#bingListClick").bind("click", mapSecondwater.bingListClick);
         // map.on(['pointermove', 'singleclick'], mapSecondwater.moveonmapevent);
         
     })
