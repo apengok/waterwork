@@ -21712,7 +21712,7 @@ $(function(){
 		var userGroupId=$("#userGroupId").val();
 		var data={"uuid":userGroupId};
 		var url="/sysm/personalized/find/";
-     	json_ajax("POST", url, "json", false,data,function(data){
+     	json_ajax("GET", url, "json", false,data,function(data){
      		if(data.success==true){
      			var list =data.obj.list;
      			var topTitleMsg=list.topTitle;

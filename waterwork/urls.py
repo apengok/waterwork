@@ -27,6 +27,7 @@ from django.urls import  path  # For django versions from 2.0 and up
 
 from django.conf.urls.static import static
 from accounts.views import LoginView, RegisterView
+from shexian.views import getTreeByMonitorCount,getActiveDate,fenceTreeByVid,getHistoryData,getSensorMessage,exportKMLLineArr,monitoringaddress
 
 urlpatterns = [
     # url(r'^favicon\.ico$', RedirectView.as_view(url='/static/virvo/resources/img/favicon.ico')),
@@ -67,6 +68,14 @@ urlpatterns = [
 
     url(r'^shexian/', include('shexian.urls', namespace='shexian')),
     # url(r'^testapp/', include('testapp.urls')),
+    # zoomwell test getTreeByMonitorCount
+    url(r'^clbs/m/functionconfig/fence/bindfence/getTreeByMonitorCount', getTreeByMonitorCount),
+    url(r'^clbs/v/monitoring/getActiveDate', getActiveDate),
+    url(r'^clbs/m/functionconfig/fence/bindfence/fenceTreeByVid', fenceTreeByVid),
+    url(r'^clbs/v/monitoring/getHistoryData', getHistoryData),
+    url(r'^clbs/v/oilmassmgt/oilquantitystatistics/getSensorMessage', getSensorMessage),
+    url(r'^clbs/v/monitoring/exportKMLLineArr', exportKMLLineArr),
+    url(r'^clbs/v/monitoring/address', monitoringaddress),
     
     # url(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
     
