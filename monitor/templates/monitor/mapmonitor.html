@@ -3,12 +3,14 @@
 {% load staticfiles %}
 
 {% block stylesheet %}
+<link rel="stylesheet" href="{% static 'virvo/resources/js/fullcalendar/css/common.css' %}"/>
+
 <style type="text/css">
-        #container {
-            background-color: white !important;
+        .amap-info-sharp {
+            margin: 0 auto !important;
         }
 
-        #thetree {
+        #treeDemo {
             height: 20000px;
         }
 
@@ -16,305 +18,97 @@
             height: 20000px;
         }
 
-        #dataTableBind td {
-
-        }
-        .toolOperateClick .map-call::before{
-            content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-off.png)!important;background-size:22px 22px
-        }
-        .toolOperateClick .map-call.active::before{content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-on.png)!important;background-size:22px 22px}
-
-        #MapContainer {width:1600px; height: 850px; }  
-
-
-.overlay2 {
-    display: none;
-    position: absolute;
-    background: rgba(255,255,255,0.9);
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    width: 400px;
-    /*top: -76px;*/
-    left: -90px;
-    user-select: none;
-}
-
-.overlay2:after {
-    /*top: 100%;*/
-    border: 10px solid transparent;
-    content: "";
-    height: 0;
-    width: 0;
-    position: absolute;
-    border-top-color: rgba(255,255,255,0.9);
-}
-        table tr:nth-child(odd){
-
-            background: #F1F1F1;
-
-        }
-        table tr:nth-child(even){
-
-            background: #fffffF;
-
-
+        #mapDropSetting {
+            border: 1px solid #c4c4c4;
+            box-shadow: 2px 2px 2px #c4c4c4;
+            background-color: #fff;
+            margin: 5px 16px 0 0;
+            padding: 0 6px 2px;
+            border-radius: 3px;
+            font-size: 14px;
+            display: inline-block;
+            color: #5c5e62;
         }
 
-
-
-        table tr{
-            height: 40px;
-            text-align: center;
-            color: #0a0a0c;
+        #mapDropSetting .map-drop-sett::before {
+            content: "";
+            position: relative;
+            display: inline-block;
+            top: 4px;
+            left: 0;
+            width: 19px;
+            height: 19px;
+            background-image: url(/static/virvo/resources/img/map-drop-sett.svg) !important;
+            background-size: 19px 19px;
         }
 
-        .col-md-3{
-            width: 24%;
-        }
-        .col-md-5{
-            width: 42.555%;
-        }
-
-.overlay button + button {
-    float: right;
-}
-
-
-.span2 {
-  font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-  font-weight:700;
-  font-style:normal;
-  font-size:12px;
-  color:#0099CC;
-  margin-left: 10px;
-}
-
-.span1 {
-  
-  margin-left: 10px;
-}
-
-.span3 {
-  font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-  font-weight:700;
-  font-style:normal;
-  font-size:12px;
-  color:#008000;
-  margin-left: 10px;
-}
-
-.span4 {
-  font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-  font-weight:700;
-  font-style:normal;
-  font-size:12px;
-  color:red;
-  margin-left: 10px;
-}
-
-
-.info hr {
-  margin-right: 0;
-  margin-left: 0;
-  border-top-color: grey;
-}
-
-.info {
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
-
-  position: fixed;
-  top:30rem;
-  background-color: white;
-  width: 390px;
-  /*min-width: 35rem;*/
-  border-width: 0;
-  /*left: 310px;*/
-  height: 96px;
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-}
-
-.info-left {
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
-
-  position: fixed;
-  top:30rem;
-  background-color: white;
-  width: 390px;
-  /*min-width: 35rem;*/
-  border-width: 0;
-  /*left: 310px;*/
-  height: 96px;
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-}
-
-.info-seach-btn {
-    margin-top: 0px;
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
- /*margin-left: 310px;*/
-  position: fixed;
-  top: 30rem;
-  height: 96px;
-  background-color:#CD3299;
-  width: auto;
-
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
-
-  border-width: 0;
-
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-  color: white;
-}
-
-.info-seach-btn-left {
-    margin-top: 0px;
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
- /*margin-left: 70px;*/
-
-  position: fixed;
-  top: 30rem;
-  height: 96px;
-  background-color:#CD3299;
-  width: auto;
-    border-radius:5px;
-
-
-  border-width: 0;
-
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-  color: white;
-}
-
-
-.info-seach-btn-input {
-  margin-top: 0px;
-  display: none;
-
- /*margin-left: 310px;*/
-  position: fixed;
-  top: 30rem;
-  height: 96px;
-  background-color: #ffffff;
-  width: auto;
-  max-width: 480px;
-
-  border-top-right-radius:5px;
-  border-bottom-right-radius:5px;
-
-  border-width: 0;
-
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-  color: white;
-}
-
-
-        .info-seach-btn-input-left {
-            margin-top: 0px;
-            display: none;
-
-            /*margin-left: 310px;*/
-            position: fixed;
-            top: 30rem;
-            height: 96px;
-            background-color: #ffffff;
-            width: auto;
-            max-width: 480px;
-
-            border-top-right-radius:5px;
-            border-bottom-right-radius:5px;
-
-            border-width: 0;
-
-            box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-            color: white;
-        }
-.de123{
-    background-color:#CD3299;
-    color: #fffffF;
-    height: 96px;
-    padding-top: 10px;
-    width: 46px;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
-}
-        .de123:hover{background-color: #ab3278;}
-table {
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  /*border: 3px solid purple;*/
-    border:1px solid #CDCDCD;
-
-}
-
-th, td {
-  padding: 0px;
-  height: 20px;
-}
-
+        .monitoringSelect {
+            vertical-align: top;
+        }        
     </style>
 {% endblock %}
 
 
 {% block content_left %}
-<div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px;">
+<div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px; z-index: 9999999999999999999999999">
     <div id="operationMenu" class="panel panel-default panDefMenu">
         <div class="panel-heading" style="padding:10px;background-color:#ffffff;color:#767676;">
-            <!-- <h3 class="panel-title fwb">轨迹回放</h3> -->
-            <div  >
-                <div style="font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';font-weight: 700;font-style: normal;font-size: 16px;color: inherit;margin: 10px 10px 0 20px;">分区总数(125)
-                </div>
+            <h3 class="panel-title fwb">分区总数(123)</h3>
+            <!-- <div class="actions pull-right" style="position: absolute;right:10px;top:10px;">
+                <i id="goHidden" class="fa fa-chevron-left"></i>
+            </div> -->
+            <!-- <div id="trackBlackToReal" class="actions3 pull-right"
+                 style="top:-26px!important;left:12px!important" data-toggle="tooltip"
+                 data-placement="left" title="实时监控">
+                <a><img src="/static/virvo/resources/img/shishijiankong.svg"></a>
+            </div> -->
+            <div id="goHidden" class="actions2 pull-right"
+                 style="top:-22px!important;left:105px!important">
+                <i class="fa fa-chevron-left"></i>
             </div>
-
         </div>
         <div class="panel-body fixed-table-body  form-horizontal" style="padding-top:10px;">
-            <div id="station_status" class="form-group">
-                <div class="col-md-12 " id="disable" style="text-align: left;">
-                    <div style="background:#fff;text-align: left;">
-                        <div class="form-group">
-                            <label class="col-md-6 control-label " style="margin-top:10px;padding-left:50px;color: #070b0c;text-align: left;">一级分区(1)</label>
-                            <label class="col-md-6 control-label" style="margin-top:10px;margin-left:-20px;color: #070b0c;text-align: left;">三级分区(111)</label>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-6 control-label" style="margin-top:10px;padding-left:50px;color: #070b0c;text-align: left;">二级分区(24)</label>
-                            <label class="col-md-6 control-label" style="margin-top:10px;margin-left:-20px;color: #f20804;text-align: left;">报警分区(0)</label>
-                        </div>
-
-                    </div>
+            <div class="form-group">
+                <div class="col-md-12" id="disable" style="padding-left:5px;padding-right:5px;">
+                    <div class="calendar calendar3"></div>
                 </div>
             </div>
-        <div class="col-md-12" style="padding-right: 0px; padding-left: 0px;">
-            <div class="panel panel-default">
-
-                <div class="panel-body" style="padding: 0px;">
-                  <div class="form-group" style="margin-top: 15px;">
-                    <div class="col-md-12">
-                      <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  panelCarBg" style="padding: 0px;height:100%!important">
-                    <ul id="treeDemo" class="ztreee" style="overflow:scroll;overflow-y: auto;min-height: 606px!important"></ul>
-                  </div>
-
+            <div class="form-group">
+              <div class="form-group">
+                <div class="col-md-10">
+                    <input id="citySel" name="search" placeholder="请输入关键字" style="cursor:auto"
+                           type="text" class="form-control"/>
+                </div>
+                <div class="col-md-1">
+                  <button id="refreshTable" class="btn btn-default form-control"
+                        type="button" name="refresh" title="刷新">
+                        <i class="glyphicon glyphicon-refresh icon-refresh"></i>
+                      </button>
+                </div>
+              </div>
+              <input id="savePid" value="" type="text" style="display:none;"/>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <ul id="treeDemo" class="ztree ztreeLoadH" style="overflow: auto"></ul>
                 </div>
             </div>
-        </div>
-
+            <div class="form-group">
+                <div class="col-md-12" id="disable" style="padding-left:5px;padding-right:5px;">
+                    <div class="col-md-4">一级(1)</div>
+                    <div class="col-md-4">二级(15)</div>
+                    <div class="col-md-4">三级(163)</div>
+                </div>
+                <div class="col-md-12">漏损率(<10%): 6个</div>
+                <div class="col-md-12">漏损率(<12%): 39个</div>
+                <div class="col-md-12">漏损率(<20%): 15个</div>
+                <div class="col-md-12">漏损率(<30%): 11个</div>
+                <div class="col-md-12">漏损率(>30%): 67个</div>
+                <div class="col-md-12">报警分区: 23个</div>
+            </div>
         </div>
     </div>
 </div>
-
 
 
 {% endblock content_left %}
@@ -322,303 +116,452 @@ th, td {
 {% block main_content %}
 
 
-
 <div id="content-right" class="col-md-10 content-right" >
     <div  >
         <!-- <div id="js-map" class="map"></div> -->
         
-      <div id="MapContainer" ></div> 
-
-      <div class="info-seach-btn-input" id="searchBtnInput">
-        <div class="col-md-10 " style="display: none;margin-top: 10px;width: 380px" id="searchInput" >
-          <div >
-              <input style="cursor: pointer; background-color: #fafafa;"
-                  class="form-control layer-date laydate-icon"
-                  id="timeInterval" name="timeInterval" readonly />
-              <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
+      <div id="MapContainer" class="mapArea" style="-webkit-user-select:none;">
+          <!-- 围栏 -->
+          <div id="fenceTool" class="btn-group">
+              <button id="fenceToolBtn" style="top:-6px" type="button"
+                      class="btn btn-white dropdown-toggle" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                  <img src="/static/virvo/resources/img/FenceIco.svg"
+                       style="width:18px;height:15.3px;"/><span class="caret"></span>
+              </button>
+              <div class="dropdown-menu">
+                  <div id="vFenceMsg" class="col-md-12 text-center">请选择监控对象！</div>
+                  <div id="vSearchContent" class="col-md-12 hidden">
+                      <input type="text" class="form-control" name="search"
+                             id="vFenceSearch" placeholder="请输入关键字"/>
+                  </div>
+                  <ul id="vFenceTree" class="ztree hidden"></ul>
+              </div>
           </div>
-          <button id="queryClick" type="button" class="btn"  style=" background-color:#CD3299;color: #fffffF;float: right;margin-top: 1.67%;" name="0" >查询</button>
-        </div>
-        <div class="col-md-2 de11 de123" id="searchBtn"  >
-          <div style="margin-left: 15px; "><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
-          <div>查<br>询</div>
-        </div>
-          
+          <div id="realTimeBtn" class="trackPlay-group">
+              <!--<input id="setMap" type="button" class="mapBtn" value="卫星" />-->
+              <!--<input type="button" class="mapRC" id="realTimeRC" value="实时路况">-->
+
+              <a class="fenceA" id="mapDropSetting"><i
+                      class="map-drop-sett"></i><span>地图设置</span></a>
+              <!-- 地图设置下拉 -->
+              <div class="mapDropSettingMenu" id="mapDropSettingMenu"
+                   style="right: 20px;">
+                  <p class="m-line">
+                      <input type="checkbox" id="realTimeRC"
+                             class="monitoringSelect"/>
+                      <label for="realTimeRC" id="realTimeRCLab"
+                             class="monitoringSelect">路况</label>
+                  </p>
+                  <hr>
+                  <p>
+                      <input type="checkbox" id="setMap"
+                             class="monitoringSelect"/>
+                      <label for="setMap" id="defaultMapLab"
+                             class="monitoringSelect">卫星地图</label>
+                  </p>
+                  <hr>
+                  <p>
+                      <input type="checkbox" id="googleMap" class="monitoringSelect"/>
+                      <label for="googleMap" id="googleMapLab"
+                             class="monitoringSelect">谷歌地图</label>
+                  </p>
+              </div>
+          </div>
+          <div id="playCarListIcon">
+              <div class="" style="margin-top:7px;">
+                  <div class="" style="display:inline-block;padding-right:10px">
+                      <div id="retreatAnimation" class="resultIcon backIcon"
+                           data-toggle="tooltip" data-placement="top"
+                           title="上个点"></div>
+                  </div>
+                  <div class="" id="standyHide"
+                       style="display:inline-block;padding-right:10px">
+                      <div id="playIcon" class="resultIcon playIcon"
+                           data-toggle="tooltip" data-placement="top"
+                           title="播放"></div>
+                  </div>
+                  <div class="" style="display:inline-block;padding-right:10px">
+                      <div id="startAnimation" class="resultIcon resetIcon"
+                           data-toggle="tooltip" data-placement="top"
+                           title="重置"></div>
+                  </div>
+                  <div class="" style="display:inline-block;padding-right:10px">
+                      <div id="FFAnimation" class="resultIcon forwardIcon"
+                           data-toggle="tooltip" data-placement="top"
+                           title="下个点"></div>
+                  </div>
+              </div>
+              <div style="width:279px;;text-align:center;margin:0 auto">
+                  <span id="minBarTxt" style="float:left;">倍率   慢&nbsp;</span>
+                  <div id="Demo" class="progressTime"
+                       style="float:left;width:172px;margin-top:7px;">
+                      <div id="Main">
+                          <div id="scrollBar">
+                              <div id="scroll_Track"></div>
+                              <div id="scroll_Thumb" style="position: relative;">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <span id="scrollBarTxt" style="float:left;">&nbsp;快</span>
+              </div>
+          </div>
+          <div class="realTimeCanArea rtcaHidden" id="realTimeCanArea">
+              <div class="form-group">
+                  <div class="col-md-12 searchListSelect">
+                      <input style="cursor: pointer; background-color: #fafafa;"
+                             class="form-control layer-date laydate-icon"
+                             id="timeInterval"
+                             name="timeInterval" readonly/>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-md-12 control-label">
+                      <button type="button" class="btn btn-primary"
+                              id="specialTimePlayBack">定时定区域查询
+                      </button>
+                      <button type="button" class="btn btn-primary"
+                              id="trackPlayQuery">查询
+                      </button>
+                  </div>
+              </div>
+              <div class="areaTool"><i class="fa fa-search"></i><span>查<br/>询</span>
+              </div>
+          </div>
       </div>
+      <div id="goShow" style="top:-4px">
+          <i id="goHidden" class="fa fa-chevron-right"></i>
+      </div>
+      <div id="Demo1" class="progressTime">
+          <div id="Main1">
+              <div id="progressBar">
+                  <div id="progressBar_Track"></div>
+              </div>
+          </div>
+      </div>
+
+      <div id="dragDIV" style="height:2px;width:100%;cursor:n-resize;background-color:#ffffff;"></div>
+        <ul id="myTab" class="nav nav-tabs">
+            <li id="v-travelData" class="active"><a href="#GPSData" data-toggle="tab">行驶数据</a>
+            </li>
+            <li id="p-travelData"><a href="#peopleGPSData" data-toggle="tab">行驶数据</a>
+            </li>
+            <li id="tableStopData"><a href="#stopData" data-toggle="tab">停止数据</a></li>
+            <li id="p-tableStopData"><a href="#peopleStopData"
+                                        data-toggle="tab">停止数据</a></li>
+            <li id="tableAlarmDate"><a href="#warningData" data-toggle="tab"
+                                       id="AlarmData">报警数据</a></li>
+            <li id="showAlarmPoint">
+                <input type="checkbox" id="chooseAlarmPoint" class="monitoringSelect"/>
+                <label for="chooseAlarmPoint" id="chooseAlarmPointLab"
+                       class="monitoringSelect">显示报警点</label>
+            </li>
+            <li id="showStopPoint">
+                <input type="checkbox" id="chooseStopPoint" class="monitoringSelect"/>
+                <label for="chooseStopPoint" id="chooseStopPointLab"
+                       class="monitoringSelect">显示所有停止点</label>
+            </li>
+            <div style="float:right;margin-top:9px;">
+                <li style="display:inline-block;">行驶里程：<span id="allMileage">0km</span>
+                </li>&nbsp;&nbsp;
+                <li style="display:inline-block;">最高速度：<span id="maxSpeend">0km/h</span>
+                </li>
+                <li style="display:inline-block;margin:0px 0px 0px 20px; color: #6dcff6;vertical-align: middle;">
+                    <span id="tableDataExport" class="glyphicon glyphicon-share"></span>
+                </li>
+                <li style="display:inline-block;margin:0px 20px 0px 15px"><i
+                        id="scalingBtn" class="fa  fa-chevron-down"></i></li>
+            </div>
+        </ul>
+        <div id="myTabContent" class="tab-content" style="overflow:auto;">
+            <div class="tab-pane fade in active trackPlaybackTable tableFEStyle"
+                 id="GPSData">
+                <table id="gpsTable"
+                       class="table table-striped table-bordered table-hover"
+                       cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th class="text-center">监控对象</th>
+                        <th class="text-center">定位时间</th>
+                        <th class="text-center">间隔时间</th>
+                        <th class="text-center">所属分组</th>
+                        <th class="text-center">终端号</th>
+                        <th class="text-center">SIM卡号</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">ACC状态</th>
+                        <th class="text-center">速度</th>
+                        <th class="text-center">方向</th>
+                        <th class="text-center">总里程</th>
+                        <th class="text-center">定位方式</th>
+                        <th class="text-center">卫星颗数</th>
+                        <th class="text-center">经度</th>
+                        <th class="text-center">纬度</th>
+                        <th class="text-center">位置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade trackPlaybackTable tableFEStyle"
+                 id="peopleGPSData">
+                <table id="gpsTable4"
+                       class="table table-striped table-bordered table-hover"
+                       cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th class="text-center">监控对象</th>
+                        <th class="text-center">定位时间</th>
+                        <th class="text-center">间隔时间</th>
+                        <th class="text-center">所属分组</th>
+                        <th class="text-center">终端号</th>
+                        <th class="text-center">SIM卡号</th>
+                        <th class="text-center">电池电压</th>
+                        <th class="text-center">信号强度</th>
+                        <th class="text-center">速度</th>
+                        <th class="text-center">海拔</th>
+                        <th class="text-center">方向</th>
+                        <th class="text-center">补发</th>
+                        <th class="text-center">经度</th>
+                        <th class="text-center">纬度</th>
+                        <th class="text-center">位置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade trackPlaybackTable tableFEStyle" id="stopData">
+                <table id="gpsTable2"
+                       class="table table-striped table-bordered table-hover"
+                       cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th class="text-center">监控对象</th>
+                        <th class="text-center">定位时间</th>
+                        <th class="text-center">间隔时间</th>
+                        <th class="text-center">所属分组</th>
+                        <th class="text-center">终端号</th>
+                        <th class="text-center">SIM卡号</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">ACC状态</th>
+                        <th class="text-center">方向</th>
+                        <th class="text-center">总里程</th>
+                        <th class="text-center">定位方式</th>
+                        <th class="text-center">卫星颗数</th>
+                        <th class="text-center">经度</th>
+                        <th class="text-center">纬度</th>
+                        <th class="text-center">位置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade trackPlaybackTable tableFEStyle"
+                 id="peopleStopData">
+                <table id="gpsTable5"
+                       class="table table-striped table-bordered table-hover"
+                       cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th class="text-center">监控对象</th>
+                        <th class="text-center">定位时间</th>
+                        <th class="text-center">间隔时间</th>
+                        <th class="text-center">所属分组</th>
+                        <th class="text-center">终端号</th>
+                        <th class="text-center">SIM卡号</th>
+                        <th class="text-center">电池电压</th>
+                        <th class="text-center">信号强度</th>
+                        <th class="text-center">速度</th>
+                        <th class="text-center">海拔</th>
+                        <th class="text-center">方向</th>
+                        <th class="text-center">补发</th>
+                        <th class="text-center">经度</th>
+                        <th class="text-center">纬度</th>
+                        <th class="text-center">位置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade trackPlaybackTable tableFEStyle" id="warningData">
+                <table id="gpsTable3"
+                       class="table table-striped table-bordered table-hover"
+                       cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th class="text-center">监控对象</th>
+                        <th class="text-center">所属分组</th>
+                        <th class="text-center">报警类型</th>
+                        <th class="text-center">处理状态</th>
+                        <th class="text-center">处理人</th>
+                        <th class="text-center">报警开始时间</th>
+                        <th class="text-center">报警开始位置</th>
+                        <th class="text-center">报警结束时间</th>
+                        <th class="text-center">报警结束位置</th>
+                        <th class="text-center">围栏类型</th>
+                        <th class="text-center">围栏名称</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
        
       
-      <input type="hidden" id="current_dma_no" name="">
-      <input type="hidden" id="current_organ_id" name="">
+    <input type="hidden" id="current_dma_no" name="">
+    <input type="hidden" id="current_organ_id" name="">
 
       
         
 
     </div>
 
-    <!-- dma绑定 -->
-    <div style="cursor: default;" class="modal fade" id="fenceBind" aria-hidden="true" data-backdrop="static" role="dialog"
+    <!-- 将轨迹保存为围栏 -->
+    <div id="addFencePage" class="modal fade" tabindex="-1" aria-hidden="true" data-backdrop="static" role="dialog"
          aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-lg" role="document" style="width:80%">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">起始时间：2018-11-15 12：00:00  结束时间：2018-12-10 12：00:00</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title">轨迹</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- <div class="form-horizontal"> -->
+                    <form class="form-horizontal" id="addLineForm" role="form" action="/clbs/m/functionconfig/fence/managefence/add" method="post">{{ csrf_token }}
+                        <table id="table-lng-lat" class="table table-striped table-bordered table-hover table-lng-lat">
+                        </table>
                         <div class="row">
-                            <input id="fenceID" name="search" class="form-control" type="hidden"/>
-                            <input id="fenceName" name="search" class="form-control" type="hidden"/>
-                            <input id="fenceInfoId" name="search" class="form-control" type="hidden"/>
-                            
-                            
-                            <div class="col-md-4">
-                              <table border="1" >
-                                
-                                <tbody>
-                                  <tr>
-                                    <td width="10%" >序号</td>
-                                    <td width="50%" >内容</td>
-                                    <td width="40%">项目值</td>
-                                    
-                                  </tr>
-                                  <tr>
-                                    <td>1</td>
-                                    <td style="text-align: left;padding-left: 10px">时段最小流量(m³/h)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td style="text-align: left;padding-left: 10px" >时段最小流量出现时间</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td style="text-align: left;padding-left: 10px">夜间允许流量</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td style="text-align: left;padding-left: 10px">时段供水量(m³)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>5</td>
-                                    <td style="text-align: left;padding-left: 10px">时段漏失总量(m³/h)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>6</td>
-                                    <td style="text-align: left;padding-left: 10px">单位管长漏失水量</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>7</td>
-                                    <td style="text-align: left;padding-left: 10px">时段漏失率</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>8</td>
-                                    <td style="text-align: left;padding-left: 10px">时段售水量(m³)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>9</td>
-                                    <td style="text-align: left;padding-left: 10px">时段产销差水量(m³)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>10</td>
-                                    <td style="text-align: left;padding-left: 10px">时段产销差率</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>11</td>
-                                    <td style="text-align: left;padding-left: 10px">时段MNF/ADD最小值</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>12</td>
-                                    <td style="text-align: left;padding-left: 10px">时段最大流量(m³/h)</td>
-                                    <td></td>
-                                  </tr>
-                                  <tr>
-                                    <td>13</td>
-                                    <td style="text-align: left;padding-left: 10px">时段最大流量出现时间</td>
-                                    <td></td>
-                                  </tr>
-                                   
-                                    
-
-                                  
-                                </tbody>
-                              </table>
-                              
+                            <div class="form-group">
+                                <input type="hidden" id="addOrUpdateLineFlag" name="addOrUpdateLineFlag" value="0"/>
+                                <input type="hidden" id="lineId" name="lineId"/>
+                                <label class="col-md-3 control-label"><label class="text-danger">*</label> 路线名称：</label>
+                                <div class=" col-md-8">
+                                    <input type="text" placeholder="请输入路线名称" class="form-control" id="lineName1"
+                                           name="name"/>
+                                </div>
                             </div>
-                            <div class="col-md-8" >
-                              <div style="border:1px solid #CDCDCD;">
-                              <div id="bindflowpress" style="height:530px;width:90%;margin: 15px"></div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">路线类型：</label>
+                                <div class=" col-md-8">
+                                    <select class="form-control" id="lineType1" name="type">
+                                        <option value="国道">国道</option>
+                                        <option value="省道">省道</option>
+                                        <option value="县道">县道</option>
+                                        <option value="高速">高速</option>
+                                        <option value="高架立交">高架立交</option>
+                                        <option value="其他小路">其他小路</option>
+                                    </select>
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"><label class="text-danger">*</label>
+                                    偏移量(m)：</label>
+                                <div class=" col-md-8">
+                                    <input placeholder="请输入数字" onkeyup="value=value.replace(/[^0-9]/g,'') "
+                                           class="form-control" id="lineWidth1" name="width"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">描述：</label>
+                                <div class=" col-md-8">
+                                    <textarea class="form-control" rows="3" id="lineDescription1"
+                                              name="description"></textarea>
+                                </div>
                             </div>
                         </div>
-                    <!-- </div> -->
+                        <div class="modal-footer">
+                            <input type="hidden" id="pointSeqs" name="pointSeqs"/>
+                            <input type="hidden" id="longitudes" name="longitudes"/>
+                            <input type="hidden" id="latitudes" name="latitudes"/>
+                            <button type="button" id="addFenceBtn" class="btn btn-primary">保存</button>
+                            <button type="button" class="btn btn-default btn-off cancle" id="hideDialog"
+                                    data-dismiss="modal">取消
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 区域查车 -->
+    <div class="modal fade" id="areaSearchCar" tabindex="-2" role="dialog" style="overflow-y:hidden"
+         data-backdrop="static" data-keyboard="false" aria-labelledby="alarmSettingInfo" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">定时定区域查询</h4>
+                </div>
+                <div class="modal-body" style="padding-bottom: 10px">
+                    <div>
+                        起始时间：<span id="areaSearchCarStartTime"></span>
+                        结束时间：<span id="areaSearchCarEndTime"></span>
+                    </div>
+                    <div class="row form-horizontal" style="height: 525px">
+                        <table id="dataTable"
+                               class="table table-striped table-bordered table-hover"
+                               cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>监控对象</th>
+                                <th>所属分组</th>
+                            </tr>
+                            </thead>
+                            <tbody class="monitoringObj">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
-        
-                  <button class="btn" type="button" id="doSubmit" style="background-color:#CD3299;color: #fffffF;width: 80px;padding-top: 10px;border-radius:7px">
-                      <strong>导 出</strong>
-                  </button>
-                    &nbsp;
-                  <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal"  style="width: 80px;border-radius:7px">
-                      <strong>关 闭</strong>
-                  </button>
+                    <button id="searchCarClose" type="button" class="btn btn-default">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 应答 -->
+    <div class="modal fade" id="goTraceResponse" tabindex="-1" aria-hidden="true" data-backdrop="static" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title" id="traceParameterResponse"><span id="msgTitle"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"><span id="question"></span></label>
+                            <div class=" col-md-7">
+                                <input type="hidden" id="infoId">
+                                <input type="hidden" id="msgDataType">
+                                <input type="hidden" id="objectType">
+                                <input type="hidden" id="objectId">
+                                <input type="text" placeholder="请输入应答" class="form-control" name="interval"
+                                       id="answer"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="parametersResponse" class="btn btn-primary">确定</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row" id="fenceInfoTable">
-          <div class="col-md-12">
-              <div class="panel panel-default">
-                  <div class="panel-heading" >
-                      <h3 class="panel-title fwb" id="binddmaname"></h3>
-                      <div class="pull-right" id="bingListClick">
-                          <i class="fa fa-chevron-down"></i>
-                      </div>
-                  </div>
-                  <div class="panel-body fixed-table-body">
-                      <!--工具面板-->
-                      <div class="col-md-5">
-                        <table id="dataTableBind" border="1">
-                          
-                          <tbody>
-                            <tr>
-                              <td colspan="3" style="font-weight: bold">月供水(万m³)</td>
-                              <td colspan="5" style="font-weight: bold">日供水(万m³)</td>
-                              
-                            </tr>
-                            <tr>
-                              <td style="font-weight: bold">前月</td>
-                              <td style="font-weight: bold">上月</td>
-                              <td style="font-weight: bold">本月</td>
-                              <td style="font-weight: bold">类型</td>
-                              <td style="font-weight: bold">11月29日</td>
-                              <td style="font-weight: bold">前日</td>
-                              <td style="font-weight: bold">昨日</td>
-                              <td style="font-weight: bold">今日</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td >供水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td >进水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td >出水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                            <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
-                              <td >漏水量</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="col-md-3">
-                        <table border="1">
-                          
-                          <tbody>
-                            <tr>
-                              <td colspan="4" style="font-weight: bold">夜间最小流量MNF(万m³)</td>
-                              
-                            </tr>
-                            <tr>
-                              <td style="font-weight: bold">11月29日</td>
-                              <td style="font-weight: bold">前日</td>
-                              <td style="font-weight: bold">昨日</td>
-                              <td style="font-weight: bold">今日</td>
-                            </tr>
-                            <tr>
-                              <td>96.37</td>
-                              <td>96.34</td>
-                              <td>90.45</td>
-                              <td>85.63</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="font-weight: bold">报警设定值</td>
-
-                            </tr>
-                          </tbody>
-                        </table>
-                        <table border="1"  style="border-top:0px">
-
-                          <tbody>
-                            
-
-                            <tr>
-                              <td style="font-weight: bold">日用水基准</td>
-                              <td style="font-weight: bold">产销差基准</td>
-                              <td style="font-weight: bold">MNF基准</td>
-                              
-                            </tr>
-                            <tr>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="col-md-4" >
-                        <table  style="border-bottom: 0px" >
-                          
-                          <tbody>
-                            <tr>
-                              <td style="font-weight: bold">实时流量</td>
-                              <td style="background: #fffffF">12.45 m³/h</td>
-                              <td style="font-weight: bold">实时压力</td>
-                              <td style="background: #fffffF">0.45 MPa</td>
-                              <td>2018-12-01</td>
-                            </tr>
-                            
-                          </tbody>
-                        </table>
-                        <div id="recent7flowpress" style="height:201px;width:100%;border:1px solid #CDCDCD"></div>
-                      </div>
-                      
-                  </div>
-              </div>
-          </div>
-    </div>
-
 </div>
-
 
     
 {% endblock main_content %}
