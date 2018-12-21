@@ -453,7 +453,7 @@ def stationlist(request):
     pressures_values = pressures.values('simid__simcardNumber','username','belongto__name','serialnumber','dn')
     merged_pressure = merge_values_to_dict(pressures_values,'simid__simcardNumber')
     bgms = Bigmeter.objects.all().order_by('-fluxreadtime').values('commaddr','commstate','fluxreadtime','pickperiod','reportperiod',
-        'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen')
+        'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen','pressurereadtime')
     merged_bgms = merge_values_to_dict(bgms,'commaddr')
     alams_sets = Alarm.objects.values("commaddr").annotate(Count('id'))
     
@@ -507,7 +507,7 @@ def stationlist(request):
                 "alarm":0,
                 "status":merged_bgms[b]['commstate'],
                 "dn":merged_pressure[b]['dn'],
-                "readtime":merged_bgms[b]['fluxreadtime'] ,
+                "readtime":merged_bgms[b]['pressurereadtime'] ,
                 "collectperiod":merged_bgms[b]['pickperiod'],
                 "updataperiod":merged_bgms[b]['reportperiod'],
                 "influx":'-',
