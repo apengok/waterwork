@@ -33,585 +33,6 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     return node.type == "assignment" && node.children != undefined && node.children.length >0 && node.children[0].open==false;
 }
 
-/**
- * jquery.calendar.js 1.0
- * http://jquerywidget.com
- */
-;(function (factory) {
-    if (typeof define === "function" && (define.amd || define.cmd) && !jQuery) {
-        // AMD或CMD
-        define(["jquery"], function () {
-            factory(jQuery);
-        });
-    } else {
-        // 全局模式
-        factory(jQuery);
-    }
-}(function ($) {
-    $.fn.calendar = function (parameter, getApi) {
-        parameter = parameter || {};
-        var defaults = {
-            prefix: 'widget',            //生成日历的class前缀
-            isRange: false,              //是否选择范围
-            limitRange: [],              //有效选择区域的范围
-            highlightRange: [],          //指定日期范围高亮
-            stopHighlightRange: [],     //超待停车标记高亮
-            peopleHighlightRange: [],    //人停车标记
-            thingHighlightRange: [],    //人停车标记
-            onChange: function () {
-            },      //当前选中月份修改时触发
-            onSelect: function () {
-            }       //选择日期时触发
-        };
-        var options = $.extend({}, defaults, parameter);
-
-        var ifDoubleClick = true;
-
-        return this.each(function () {
-            var $this = $(this);
-            var $table = $('<table>').appendTo($this);
-            var $caption = $('<caption>').appendTo($table);
-            var $prevYear = $('<a class="' + options.prefix + '-prevYear" href="javascript:;">&lt;&lt;</a>').appendTo($caption);
-            var $prevMonth = $('<a class="' + options.prefix + '-prevMonth" href="javascript:;">&lt;</a>').appendTo($caption);
-            var $title = $('<span>').appendTo($caption);
-            var $nextMonth = $('<a class="' + options.prefix + '-nextMonth" href="javascript:;">&gt;</a>').appendTo($caption);
-            var $nextYear = $('<a class="' + options.prefix + '-nextYear" href="javascript:;">&gt;&gt;</a>').appendTo($caption);
-            var $back = $('<a class="' + options.prefix + '-back" href="javascript:;"></a>').appendTo($caption);
-            var _today,         //当天
-                _data,          //日期数据
-                _day,           //日历状态
-                _range = [];    //当前选择范围
-            /*****  节点修改 *****/
-            $table.append('<thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead>');
-            var $tbody = $('<tbody>').appendTo($table);
-            /***** 私有方法 *****/
-            //获取日期数据
-            if (isFlag) {
-                var getDateObj = function (year, month, day) {
-                    var date = arguments.length && nowYear ? new Date(nowYear, monthIndex - 1, day) : new Date();
-                    var obj = {
-                        'year': parseInt(nowYear),
-                        'month': parseInt(monthIndex),
-                        'day': date.getDate(),
-                        'week': date.getDay()
-                    }
-                    obj['code'] = '' + obj['year'] + (obj['month'] > 9 ? obj['month'] : '0' + obj['month']) + (obj['day'] > 9 ? obj['day'] : '0' + obj['day']);
-                    return obj;
-                };
-            } else {
-                var getDateObj = function (year, month, day) {
-                    var date = arguments.length && year ? new Date(year, month - 1, day) : new Date();
-                    var obj = {
-                        'year': date.getFullYear(),
-                        'month': date.getMonth() + 1,
-                        'day': date.getDate(),
-                        'week': date.getDay()
-                    }
-                    obj['code'] = '' + obj['year'] + (obj['month'] > 9 ? obj['month'] : '0' + obj['month']) + (obj['day'] > 9 ? obj['day'] : '0' + obj['day']);
-                    return obj;
-                };
-            }
-            //获取当月天数
-            var getMonthDays = function (obj) {
-                var day = new Date(obj.year, obj.month, 0);
-                return day.getDate();
-            };
-            //获取某天日期信息
-            var getDateInfo = function (obj) {
-                if (options.limitRange.length) {
-                    obj['status'] = 'disabled';
-                    for (var i = 0; i < options.limitRange.length; i++) {
-                        var start = options.limitRange[i][0];
-                        var end = options.limitRange[i][1];
-                        if (start == 'today') {
-                            start = _today['code'];
-                        }
-                        if (end == 'today') {
-                            end = _today['code'];
-                        }
-                        if (start > end) {
-                            start = [end, end = start][0];
-                        }
-                        if (obj['code'] >= start && obj['code'] <= end) {
-                            obj['status'] = '';
-                            break;
-                        }
-                    }
-                }
-                obj['sign'] = [];
-                obj['mileage'] = [];//存放里程
-                if (options.highlightRange.length) {
-                    for (var i = 0; i < options.highlightRange.length; i++) {
-                        var start = options.highlightRange[i][0];
-                        var end = options.highlightRange[i][1];
-                        var mileage = options.highlightRange[i][2];
-                        if (start == 'today') {
-                            start = _today['code'];
-                        }
-                        if (end == 'today') {
-                            end = _today['code'];
-                        }
-                        if (start > end) {
-                            start = [end, end = start][0];
-                        }
-                        if (obj['code'] >= start && obj['code'] <= end) {
-                            obj['sign'].push('highlight');
-                            obj['mileage'].push(mileage);
-                            break;
-                        }
-                    }
-                }
-                //超待停车时间高亮
-                if (options.stopHighlightRange.length) {
-                    for (var i = 0; i < options.stopHighlightRange.length; i++) {
-                        var start = options.stopHighlightRange[i][0];
-                        var end = options.stopHighlightRange[i][1];
-                        var mileage = options.stopHighlightRange[i][2];
-                        if (start == 'today') {
-                            start = _today['code'];
-                        }
-                        if (end == 'today') {
-                            end = _today['code'];
-                        }
-                        if (start > end) {
-                            start = [end, end = start][0];
-                        }
-                        if (obj['code'] >= start && obj['code'] <= end) {
-                            obj['sign'].push('stopHighlight');
-                            obj['mileage'].push(mileage);
-                            break;
-                        }
-                    }
-                }
-                //人停车时间高亮
-                if (options.peopleHighlightRange.length) {
-                    for (var i = 0; i < options.peopleHighlightRange.length; i++) {
-                        var start = options.peopleHighlightRange[i][0];
-                        var end = options.peopleHighlightRange[i][1];
-                        var mileage = options.peopleHighlightRange[i][2];
-                        if (start == 'today') {
-                            start = _today['code'];
-                        }
-                        if (end == 'today') {
-                            end = _today['code'];
-                        }
-                        if (start > end) {
-                            start = [end, end = start][0];
-                        }
-                        if (obj['code'] >= start && obj['code'] <= end) {
-                            obj['sign'].push('peopleHighlight');
-                            obj['mileage'].push(mileage);
-                            break;
-                        }
-                    }
-                }
-                //物停车时间高亮
-                if (options.thingHighlightRange.length) {
-                    for (var i = 0; i < options.thingHighlightRange.length; i++) {
-                        var start = options.thingHighlightRange[i][0];
-                        var end = options.thingHighlightRange[i][1];
-                        var mileage = options.thingHighlightRange[i][2];
-                        if (start == 'today') {
-                            start = _today['code'];
-                        }
-                        if (end == 'today') {
-                            end = _today['code'];
-                        }
-                        if (start > end) {
-                            start = [end, end = start][0];
-                        }
-                        if (obj['code'] >= start && obj['code'] <= end) {
-                            obj['sign'].push('thingHighlight');
-                            obj['mileage'].push(mileage);
-                            break;
-                        }
-                    }
-                }
-
-                if (obj['code'] == _today['code']) {
-                    obj['sign'].push('today');
-                }
-                return obj;
-            };
-            var getData = function (obj) {
-                if (typeof obj == 'undefined') {
-                    obj = _today;
-                }
-                _day = getDateObj(obj['year'], obj['month'], 1);      //当月第一天
-                var days = getMonthDays(_day);              //当月天数
-                var data = [];                              //日历信息
-                var obj = {};
-                //上月日期
-                for (var i = _day['week']; i > 0; i--) {
-                    obj = getDateObj(_day['year'], _day['month'], _day['day'] - i);
-                    var info = getDateInfo(obj);
-                    if (!options.limitRange.length) {
-                        info['status'] = 'disabled';
-                    }
-                    data.push(info);
-                }
-                //当月日期
-                for (var i = 0; i < days; i++) {
-                    obj = {
-                        'year': _day['year'],
-                        'month': _day['month'],
-                        'day': _day['day'] + i,
-                        'week': (_day['week'] + i) % 7
-                    };
-                    obj['code'] = '' + obj['year'] + (obj['month'] > 9 ? obj['month'] : '0' + obj['month']) + (obj['day'] > 9 ? obj['day'] : '0' + obj['day']);
-                    var info = getDateInfo(obj);
-                    data.push(info);
-                }
-                //下月日期
-                var last = obj;
-                for (var i = 1; last['week'] + i < 7; i++) {
-                    obj = getDateObj(last['year'], last['month'], last['day'] + i);
-                    var info = getDateInfo(obj);
-                    if (!options.limitRange.length) {
-                        info['status'] = 'disabled';
-                    }
-                    data.push(info);
-                }
-                return data;
-            };
-            var format = function (data) {
-                options.onChange(_day);
-                var html = '<tr>';
-                for (var i = 0, len = data.length; i < len; i++) {
-                    var day = data[i];
-                    var arr = [];
-                    for (var s = 0; s < day['sign'].length; s++) {
-                        arr.push(options.prefix + '-' + day['sign'][s]);
-                    }
-                    if (day['status']) {
-                        arr.push(options.prefix + '-' + day['status']);
-                    }
-                    var className = arr.join(' ');
-                    html += '<td' + (className ? ' class="' + className + '"' : '') + ' data-id="' + i + '" title="'+ (data[i].mileage[0] == "" || data[i].mileage[0] == undefined ? "-" : data[i].mileage[0]) +'">\
-                        ' + (day['link'] ? '<a href="' + day['link'] + '">' + day['day'] + '</a>' : '<span class="dayShow">' + day['day'] + '<br/><span class="mileageList">' + (data[i].mileage[0] == "" || data[i].mileage[0] == undefined ? "-" : data[i].mileage[0]) + '</span></span>') + '\
-                    </td>';
-                    if (i % 7 == 6 && i < len - 1) {
-                        html += '</tr><tr>';
-                    }
-                }
-                html += '</tr>';
-                $title.html(_day['year'] + '年' + _day['month'] + '月');
-                $tbody.html(html);
-            };
-            /***** 初始化 *****/
-            _today = getDateObj();
-            _day = {
-                'year': _today['year'],
-                'month': _today['month']
-            };
-            $prevMonth.click(function () {
-                var monthString = $(this).next("span").text().replace(/[\u4e00-\u9fa5]+/g, "-");
-                afterMonth = monthString.substring(0, monthString.length - 1) + "-01";
-                if (parseInt(afterMonth.substring(5, afterMonth.length)) - 1 <= 0) {
-                    nowMonth = parseInt(afterMonth.substring(0, 4)) - 1 + "-12" + "-01";
-                    nowYear = parseInt(afterMonth.substring(0, 4)) - 1;
-                    monthIndex = 12;
-                } else {
-                    nowMonth = afterMonth.substring(0, 5) + (parseInt(afterMonth.substring(5, afterMonth.length)) - 1) + "-01";
-                    nowYear = afterMonth.substring(0, 4);
-                    monthIndex = parseInt(afterMonth.substring(5, afterMonth.length)) - 1;
-                }
-                var carID = $("#savePid").attr('value');
-                var nowDateArray = nowMonth.split("-");
-                var afterDateArray = afterMonth.split("-");
-                nowMonth = nowDateArray[0] + "-" + (nowDateArray[1] < 10 ? "0" + nowDateArray[1] : nowDateArray[1]) + "-" + nowDateArray[2];
-                afterMonth = afterDateArray[0] + "-" + (afterDateArray[1] < 10 ? "0" + afterDateArray[1] : afterDateArray[1]) + "-" + afterDateArray[2];
-                if (carID != "") {
-                    isFlag = true;
-                    trackPlayback.getActiveDate(carID, nowMonth, afterMonth);
-                }
-                ;
-                var zTreeDemoHeight = $("#treeDemo").height();
-                var oldLength = $(".calendar3 tbody tr").length;
-                _day['month']--;
-                _data = getData(_day);
-                format(_data);
-
-                $('.calendar3 tbody td').each(function () {
-                    if ($(this).hasClass("widget-disabled")) {
-                        $(this).removeClass("widget-highlight").removeClass("widget-stopHighlight");
-                        $(this).children("span").children("span.mileageList").text("");
-                    }
-                })
-                var trBtnLength = $(".calendar3 tbody tr").length;
-                if (trBtnLength > oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight - 34) + "px");
-                } else if (trBtnLength < oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight + 54) + "px");
-                }
-            });
-            $nextMonth.click(function () {
-                var monthString = $(this).siblings("span").text().replace(/[\u4e00-\u9fa5]+/g, "-");
-                var nowMonthString = monthString.substring(0, monthString.length - 1);
-                nowMonth = nowMonthString.substring(0, 4) + "-" + (parseInt(nowMonthString.substring(5, nowMonthString.length)) + 1) + "-01";
-                if ((parseInt(nowMonthString.substring(5, nowMonthString.length)) + 1) - 12 == 0) {
-                    afterMonth = parseInt(nowMonthString.substring(0, 4)) + 1 + "-1" + "-01";
-                    nowYear = parseInt(nowMonthString.substring(0, 4));
-                    monthIndex = 12;
-                } else if ((parseInt(nowMonthString.substring(5, nowMonthString.length)) + 1) - 12 > 0) {
-                    afterMonth = parseInt(nowMonthString.substring(0, 4)) + 1 + "-2" + "-01";
-                    nowMonth = parseInt(nowMonthString.substring(0, 4)) + 1 + "-1" + "-01";
-                    nowYear = parseInt(nowMonthString.substring(0, 4)) + 1;
-                    monthIndex = 1;
-                } else {
-                    afterMonth = nowMonthString.substring(0, 5) + (parseInt(nowMonthString.substring(5, nowMonthString.length)) + 2) + "-01";
-                    nowYear = nowMonthString.substring(0, 4);
-                    monthIndex = parseInt(nowMonthString.substring(5, nowMonthString.length)) + 1;
-                }
-                var carID = $("#savePid").attr('value');
-                var nowDateArray = nowMonth.split("-");
-                var afterDateArray = afterMonth.split("-");
-                nowMonth = nowDateArray[0] + "-" + (nowDateArray[1] < 10 ? "0" + nowDateArray[1] : nowDateArray[1]) + "-" + nowDateArray[2];
-                afterMonth = afterDateArray[0] + "-" + (afterDateArray[1] < 10 ? "0" + afterDateArray[1] : afterDateArray[1]) + "-" + afterDateArray[2];
-                if (carID != "") {
-                    isFlag = true;
-                    trackPlayback.getActiveDate(carID, nowMonth, afterMonth);
-                }
-                ;
-                var zTreeDemoHeight = $("#treeDemo").height();
-                var oldLength = $(".calendar3 tbody tr").length;
-                _day['month']++;
-                _data = getData(_day);
-                format(_data);
-                $('.calendar3 tbody td').each(function () {
-                    if ($(this).hasClass("widget-disabled")) {
-                        $(this).removeClass("widget-highlight").removeClass("widget-stopHighlight");
-                        $(this).children("span").children("span.mileageList").text("");
-                    }
-                })
-                var trBtnLength = $(".calendar3 tbody tr").length;
-                if (trBtnLength > oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight - 34) + "px");
-                } else if (trBtnLength < oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight + 54) + "px");
-                }
-            });
-            $prevYear.click(function () {
-                var monthString = $(this).siblings("span").text().replace(/[\u4e00-\u9fa5]+/g, "-");
-                var afterMonthString = monthString.substring(0, monthString.length - 1);
-                afterMonth = (parseInt(afterMonthString.substring(0, 4)) - 1) + "-" + (parseInt(afterMonthString.substring(5, afterMonthString.length)) + 1) + "-01";
-                nowMonth = (parseInt(afterMonthString.substring(0, 4)) - 1) + "-" + parseInt(afterMonthString.substring(5, afterMonthString.length)) + "-01";
-                nowYear = parseInt(afterMonthString.substring(0, 4)) - 1;
-                monthIndex = afterMonthString.substring(5, afterMonthString.length);
-                var carID = $("#savePid").attr('value');
-                var nowDateArray = nowMonth.split("-");
-                var afterDateArray = afterMonth.split("-");
-                nowMonth = nowDateArray[0] + "-" + (nowDateArray[1] < 10 ? "0" + nowDateArray[1] : nowDateArray[1]) + "-" + nowDateArray[2];
-                afterMonth = afterDateArray[0] + "-" + (afterDateArray[1] < 10 ? "0" + afterDateArray[1] : afterDateArray[1]) + "-" + afterDateArray[2];
-                if (carID != "") {
-                    isFlag = true;
-                    trackPlayback.getActiveDate(carID, nowMonth, afterMonth);
-                }
-                ;
-
-                var zTreeDemoHeight = $("#treeDemo").height();
-                var oldLength = $(".calendar3 tbody tr").length;
-                _day['year']--;
-                _data = getData(_day);
-                format(_data);
-                var trBtnLength = $(".calendar3 tbody tr").length;
-                if (trBtnLength > oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight - 34) + "px");
-                } else if (trBtnLength < oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight + 54) + "px");
-                }
-            });
-            $nextYear.click(function () {
-                var monthString = $(this).siblings("span").text().replace(/[\u4e00-\u9fa5]+/g, "-");
-                var afterMonthString = monthString.substring(0, monthString.length - 1);
-                afterMonth = (parseInt(afterMonthString.substring(0, 4)) + 1) + "-" + (parseInt(afterMonthString.substring(5, afterMonthString.length)) + 1) + "-01";
-                nowMonth = (parseInt(afterMonthString.substring(0, 4)) + 1) + "-" + parseInt(afterMonthString.substring(5, afterMonthString.length)) + "-01";
-                nowYear = parseInt(afterMonthString.substring(0, 4)) + 1;
-                monthIndex = afterMonthString.substring(5, afterMonthString.length);
-                var carID = $("#savePid").attr('value');
-                var nowDateArray = nowMonth.split("-");
-                var afterDateArray = afterMonth.split("-");
-                nowMonth = nowDateArray[0] + "-" + (nowDateArray[1] < 10 ? "0" + nowDateArray[1] : nowDateArray[1]) + "-" + nowDateArray[2];
-                afterMonth = afterDateArray[0] + "-" + (afterDateArray[1] < 10 ? "0" + afterDateArray[1] : afterDateArray[1]) + "-" + afterDateArray[2];
-                if (carID != "") {
-                    isFlag = true;
-                    trackPlayback.getActiveDate(carID, nowMonth, afterMonth);
-                }
-                ;
-                var zTreeDemoHeight = $("#treeDemo").height();
-                var oldLength = $(".calendar3 tbody tr").length;
-                _day['year']++;
-                _data = getData(_day);
-                format(_data);
-                var trBtnLength = $(".calendar3 tbody tr").length;
-                if (trBtnLength > oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight - 34) + "px");
-                } else if (trBtnLength < oldLength) {
-                    $("#treeDemo").css("height", (zTreeDemoHeight + 54) + "px");
-                }
-            });
-            $back.click(function () {
-                _data = getData();
-                format(_data);
-            });
-            $this.unbind("click").on('click', 'td', function (e) {
-
-                if (!ifDoubleClick){ //防止点击过快wjk
-                    return;
-                } else {
-                    ifDoubleClick = false;
-                }
-
-                try {
-                    trackPlayback.stopMove();
-                    $("#playIcon").attr("class", "resultIcon playIcon");
-                    $("#playIcon").removeAttr("data-original-title data-placement data-toggle");
-                    $("#playIcon").attr({
-                        "data-toggle": "tooltip",
-                        "data-placement": "top",
-                        "data-original-title": "播放"
-                    });
-                    isSearch = true;
-                } catch (e) {
-                    $("#playIcon").attr("class", "resultIcon playIcon");
-                    $("#playIcon").removeAttr("data-original-title data-placement data-toggle");
-                    $("#playIcon").attr({
-                        "data-toggle": "tooltip",
-                        "data-placement": "top",
-                        "data-original-title": "播放"
-                    });
-                }
-                if ($("#chooseStopPoint").attr("checked")) {
-                    $("#chooseStopPoint").prop("checked", false).removeAttr("checked", "checked");
-                }
-                $("#myTab").children("li").removeClass("active");
-                $("#myTab").children("li:first-child").addClass("active");
-                $("#myTabContent").children("div").removeClass("active in");
-                $("#myTabContent").children("div:first-child").addClass("active in");
-                //重置播放进度
-                $("#progressBar_Track").removeAttr("style");
-                //点击日历天数查询时隐藏其他 显示第一个
-                $("#peopleGPSData,#stopData,#peopleStopData,#warningData").hide();
-                $("#GPSData").addClass("active in").show();
-                //日历点击取消报警点勾选
-                if ($("#chooseAlarmPoint").attr("checked")) {
-                    $("#chooseAlarmPoint").prop("checked", false).removeAttr("checked", "checked");
-                }
-                $("#gpsTable3>tbody").html('<tr class=""><td valign="top" colspan="12" class="dataTables_empty">我本将心向明月，奈何明月照沟渠，不行您再用其他方式查一下？</td></tr>');
-                //清空报警点集合(markerAlarmList)
-                trackPlayback.markerAlarmClear();
-                //加载时隐藏列表
-                if ($(this).hasClass("widget-highlight") || $(this).hasClass("widget-peopleHighlight")) {
-                    if ($("#scalingBtn").hasClass("fa-chevron-down")) {
-                        var windowHeight = $(window).height();
-                        headerHeight = $("#header").height();
-                        titleHeight = $(".panHeadHeight").height() + 30;
-                        demoHeight = $("#Demo").height();
-              console.log("3.")
-                        var oldMHeight = $("#MapContainer").height();
-                        var oldTHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
-                        var mapHeight = windowHeight - headerHeight - titleHeight - demoHeight - 20;
-                        $("#MapContainer").css({
-                            "height": mapHeight + "px"
-                        });
-                        $(".trackPlaybackTable .dataTables_scrollBody").css({
-                            "height": oldTHeight + "px"
-                        });
-                        $("#scalingBtn").attr("class", "fa  fa-chevron-down");
-                    }
-                }
-                stopDataFlag = true;
-                trackPlayback.Assemblys();
-                var $this = $(this);
-                var index = $(this).data('id');
-                var day = _data[index];
-                var flag = trackPlayback.disable();
-                if (flag == false) {
-                    return false;
-                }
-                //给开始和结束时间赋值(正常车辆)
-                if ($this.hasClass("widget-highlight")) {
-                    var value = $this.children('span').children('span.mileageList').text();
-                    var startTime = day.year + "-" + (day.month < 10 ? "0" + day.month : day.month) + "-" + (day.day < 10 ? "0" + day.day : day.day) + " " + "00:00:00";
-                    var endTime = day.year + "-" + (day.month < 10 ? "0" + day.month : day.month) + "-" + (day.day < 10 ? "0" + day.day : day.day) + " " + "23:59:59";
-                    $("#timeInterval").val(startTime + "--" + endTime);
-                    trackPlayback.clears();
-                    playState = true;
-                    map.clearMap();
-                    $("#allMileage").text(0 + "km");
-                    $("#allTime").text(0);
-                    $("#maxSpeend").text(0 + "km/h");
-                    trackPlayback.getHistory(value);
-                }
-                ;
-                //超待设备
-                if ($this.hasClass("widget-stopHighlight")) {
-                    var value = $this.children('span').children('span.mileageList').text();
-                    var startTime = day.year + "-" + (day.month < 10 ? "0" + day.month : day.month) + "-" + (day.day < 10 ? "0" + day.day : day.day) + " " + "00:00:00";
-                    var endTime = day.year + "-" + (day.month < 10 ? "0" + day.month : day.month) + "-" + (day.day < 10 ? "0" + day.day : day.day) + " " + "23:59:59";
-                    $("#timeInterval").val(startTime + "--" + endTime);
-                    trackPlayback.clears();
-                    playState = true;
-                    map.clearMap();
-                    $("#allMileage").text(0 + "km");
-                    $("#allTime").text(0);
-                    $("#maxSpeend").text(0 + "km/h");
-                    trackPlayback.getHistory(value);
-                }
-                ;
-                //人
-                if ($this.hasClass("widget-peopleHighlight")) {
-                    var value = $this.children('span').children('span.mileageList').text();
-                    $(".mileageList").parent().parent().attr("title",value);
-                    var startTime = day.year + "-" + (day.month < 10 ? "0" + day.month : day.month) + "-" + (day.day < 10 ? "0" + day.day : day.day) + " " + "00:00:00";
-                    var endTime = day.year + "-" + (day.month < 10 ? "0" + day.month : day.month) + "-" + (day.day < 10 ? "0" + day.day : day.day) + " " + "23:59:59";
-                    $("#timeInterval").val(startTime + "--" + endTime);
-                    trackPlayback.clears();
-                    playState = true;
-                    map.clearMap();
-                    $("#allMileage").text(0 + "km");
-                    $("#allTime").text(0);
-                    $("#maxSpeend").text(0 + "km/h");
-                    trackPlayback.getHistory(value);
-                }
-                ;
-                /*end*/
-                if (day['status'] != 'disabled') {
-                    if (options.isRange) {
-                        if (_range.length != 1) {
-                            _range = [day];
-                            format(_data);
-                        } else {
-                            _range.push(day);
-                            _range.sort(function (a, b) {
-                                return a['code'] > b['code'];
-                            });
-                            format(_data);
-                            options.onSelect(_range);
-                        }
-                    } else {
-                        _range = [day];
-                        format(_data);
-                        options.onSelect(_range);
-                    }
-                }
-                $('.calendar3 tbody td').each(function () {
-                    if ($(this).hasClass("widget-disabled")) {
-                        $(this).removeClass("widget-highlight").removeClass("widget-stopHighlight");
-                        $(this).children("span").children("span.mileageList").text("-");
-                    }
-                })
-
-                setTimeout(function () {
-                    ifDoubleClick=true;
-                },300)
-            });
-            _data = getData();
-            format(_data);
-        });
-    };
-}));
-
 (function ($, window) {
   var nowDate = new Date();
   var travelLineList, AdministrativeRegionsList, fenceIdList, stopDataFlag = true, cdWorldType,
@@ -671,40 +92,21 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
   var isSearchPlayBackData = false; // 是否对日历数据进行了点击查询
   var isLastAddressDataBack = true; // 最后一条位置信息是否返回
   var treeClickedType = "";
+
+  var getdmamapusedata_flag = 0;
+    var bindflowpressChart;
+    var recent7flowpress;
+    var dma_level = '2';
+    var dma_selected = false;
+    var dma_bindname = "";
+    var dma_level2_clicked = "";
+    var show_dma_level = "2";
+    var dma_list = [];
+
   trackPlayback = {
     //初始化
     init: function () {
-      //获取url参数
-      var vptype = trackPlayback.GetAddressUrl("type");
-      //判断参数不为空 防止发生错误
-      if (vptype != null && vptype.toString().length > 1) {
-        worldType = vptype;
-        //执行监控对象(人车)数据列表筛选
-        trackPlayback.showHidePeopleOrVehicle();
-      } else {
-        trackPlayback.hidePeopleRelatedInfo();
-      }
-      //获取车id  查询当前绑定围栏信息
-      var vid = trackPlayback.GetAddressUrl("vid");
-      if (vid != null && vid.toString().length > 1) {
-        //订阅后查询当前对象绑定围栏信息
-        trackPlayback.getCurrentVehicleAllFence(vid);
-        //显示围栏树及搜索 隐藏消息提示
-        $("#vFenceTree").removeClass("hidden");
-        $("#vSearchContent").removeClass("hidden");
-        $("#vFenceMsg").addClass("hidden");
-
-        //默认执行一遍树结构模糊搜索
-        inputChange = setTimeout(function () {
-          var param = $("#citySel").val();
-          if (param != '') {
-            trackPlayback.searchVehicleTree(param);
-          }
-        }, 2000);
-      } else {
-        $("#vFenceTree").html("").addClass("hidden");
-        $("#vSearchContent").addClass("hidden");
-      }
+      
       //监听窗口变化
       $(window).resize(function () {
         var resizeWidth = $(window).width();
@@ -776,15 +178,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       panelHead = $(".panel-heading").height() + 20;//标题栏高度
       citySelHght = $("#citySel").parent().height() + 10;//输入框高度
       //日历高亮
-      $('.calendar3').calendar();
-      trLength = $(".calendar3 tbody tr").length;
-      if (trLength == 5) {
-        calHeight = 295;
-      } else if (trLength == 4) {
-        calHeight = 350;
-      } else if (trLength == 6) {
-        calHeight = 340
-      }
+      
       calHeight = 340
       zTreeHeight = windowHeight - headerHeight - panelHead - calHeight - citySelHght - 26;
       $("#treeDemo").css("height", zTreeHeight + "px");
@@ -859,213 +253,8 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       map.on("click", function () {
         $("#fenceTool>.dropdown-menu").hide();
       });
-      //移动marker，会从当前位置开始向前移动
-      MarkerMovingControl.prototype.move = function () {
-        if (!this._listenToStepend) {
-          this._listenToStepend = AMap.event.addListener(this, 'stepend', function () {
-            this.step();
-          }, this);
-        }
-        this.step();
-      };
-      //停止移动marker，由于控件会记录当前位置，所以相当于暂停
-      MarkerMovingControl.prototype.stop = function () {
-        this._marker.stopMove();
-      };
-      //重新开始，会把marker移动到路径的起点然后开始移动
-      MarkerMovingControl.prototype.restart = function () {
-        this._marker.setPosition(this._path[0]);
-        this._currentIndex = 0;
-        this.stop();
-      };
-      MarkerMovingControl.prototype.retreat = function () {
-        if (nextIndexs < 2) {
-          this._marker.setPosition(this._path[nextIndexs - 1]);
-          this._currentIndex = nextIndexs - 1;
-          this.move();
-        } else {
-          this._marker.setPosition(this._path[nextIndexs - 2]);
-          this._currentIndex = nextIndexs - 2;
-          if (open == 0) {
-            this.move();
-          } else if (open == 1) {
-            this.move();
-            this.stop();
-          }
-        }
-      };
-      MarkerMovingControl.prototype.FF = function () {
-        var allLengths = this._path.length;
-        if (nextIndexs < allLengths) {
-          this._marker.setPosition(this._path[nextIndexs]);
-          this._currentIndex = nextIndexs;
-          if (nextIndexs === 1 && !($('#gpsTable tbody tr:first-child').hasClass('tableSelected') || $('#gpsTable4 tbody tr:first-child').hasClass('tableSelected'))) {
-            selIndex++;
-          }
-          if (open == 0) {
-            this.move();
-          } else if (open == 1) {
-            this.move();
-            this.stop();
-          }
-        } else {
-          layer.msg(trackLastPost)
-        }
-      };
-      MarkerMovingControl.prototype.skip = function () {//***********************
-        this._marker.setPosition(this._path[listIndex]);
-        var anglepeople = Number(angleList[listIndex]) + 270;
-        this._marker.setAngle(anglepeople);
-        this._currentIndex = listIndex;
-        if (open == 0) {
-          this.move();
-        } else if (open == 1) {
-          this.move();
-          this.stop();
-          map.setCenter(this._path[listIndex]);
-        }
-        nextIndexs = listIndex + 1; //axh 2017/7/3 edit
-      };
-      //向前移动一步
-      MarkerMovingControl.prototype.step = function () {
-        //列表高亮 end
-        var allLengths = this._path.length;
-        //平均走一步多少份
-        var averageNum = (100 / allLengths) * selIndex;
-        ProgressBar.SetValue(averageNum);
-        var nextIndex = this._currentIndex + 1;
-        if (nextIndex <= this._path.length) {
-          nextIndexs = nextIndex;
-          if (nextIndex == this._path.length) {
-            trackPlayback.continueAnimation();
-          }
-          if (!this._listenToMoveend) {
-            this._listenToMoveend = AMap.event.addListener(this._marker, 'moveend', function () {
-              this._currentIndex++;
-              AMap.event.trigger(this, 'stepend');
-            }, this);
-          }
-          if (goDamoIndex != nextIndex) {
-            goDamoIndex = nextIndex;
-            if (worldType == "5") {
-              $("#gpsTable4 tbody tr").removeClass("tableSelected");
-            } else {
-              $("#gpsTable tbody tr").removeClass("tableSelected");
-            }
-            if (btnFlag) {
-              trIndex = trIndex - 1;
-              btnFlag = false;
-            }
-            ;
-            if (flagBack) {
-              trIndex--;
-              selIndex--;
-              if (trIndex < 1) {
-                trIndex = 0;
-              }
-              ;
-              if (selIndex < 1) {
-                selIndex = 1;
-              }
-              ;
-              var tableTrHeight;
-              if (worldType == "5") {
-                tableTrHeight = 41 * trIndex;
-                $("#gpsTable4 tbody tr:nth-child(" + selIndex + ")").addClass("tableSelected");
-                $("#peopleGPSData .dataTables_scrollBody").scrollTop(tableTrHeight);
-              } else {
-                tableTrHeight = 41 * trIndex;
-                $("#gpsTable tbody tr:nth-child(" + selIndex + ")").addClass("tableSelected");
-                $("#GPSData .dataTables_scrollBody").scrollTop(tableTrHeight);
-              }
-              flagBack = false;
-            } else {
-              selIndex++;
-              if (worldType == "5") {
-                $("#gpsTable4 tbody tr:nth-child(" + selIndex + ")").addClass("tableSelected");
-              } else {
-                $("#gpsTable tbody tr:nth-child(" + selIndex + ")").addClass("tableSelected");
-              }
-              if (selIndex >= 5) {
-                trIndex++;
-                var tableTrHeight;
-                if (worldType == "5") {
-                  tableTrHeight = 41 * trIndex;
-                  $("#peopleGPSData .dataTables_scrollBody").scrollTop(tableTrHeight);
-                } else {
-                  tableTrHeight = 41 * trIndex;
-                  $("#GPSData .dataTables_scrollBody").scrollTop(tableTrHeight);
-                }
-              }
-              ;
-            }
-          }
-          if (this._path[nextIndex] != undefined) {
-            if (!$('#playIcon').hasClass('playIcon')) {
-              this._marker.moveTo(this._path[nextIndex], speed);
-              AMap.event.addListener(marker, "moving", function () {
-                var msg = marker.getPosition();
-                if (paths.contains(msg) != true) {
-                  if (nextIndex != 1) {
-                    map.panTo(msg);
-                  }
-                  var southwest = map.getBounds().getSouthWest();//获取西南角坐标
-                  var northeast = map.getBounds().getNorthEast();//获取东北角坐标
-                  var possa = southwest.lat;//纬度（小）
-                  var possn = southwest.lng;
-                  var posna = northeast.lat;
-                  var posnn = northeast.lng;
-                  paths = new AMap.Bounds(
-                      [possn, possa], //西南角坐标
-                      [posnn, posna]//东北角坐标
-                  );
-                }
-                ;
-              });
-            }
-          }
-        }
-        //行驶时长
-        if (mileageM[nextIndexs - 1] > 0) {
-          mileageMax = (mileageM[nextIndexs - 1] - mileageM[0]).toFixed(1);
-          mileageMax = trackPlayback.fiterNumber(mileageMax);
-          $("#allMileage").text(mileageMax + "km");
-        }
-        //行驶时间
-        var sta_str = timeM[0];
-        var end_str = timeM[nextIndexs - 1];
-        var end_date = (new Date(end_str.replace(/-/g, "/"))).getTime();
-        var sra_date = (new Date(sta_str.replace(/-/g, "/"))).getTime();
-        var num = (end_date - sra_date);
-        var theTime = parseInt(num / 1000);// 秒
-        var theTime1 = 0;// 分
-        var theTime2 = 0;// 小时
-        if (theTime > 60) {
-          theTime1 = parseInt(theTime / 60);
-          theTime = parseInt(theTime % 60);
-          if (theTime1 > 60) {
-            theTime2 = parseInt(theTime1 / 60);
-            theTime1 = parseInt(theTime1 % 60);
-          }
-        }
-        ;
-        var result = "" + parseInt(theTime) + "秒";
-        if (theTime1 > 0) {
-          result = "" + parseInt(theTime1) + "分" + result;
-        }
-        ;
-        if (theTime2 > 0) {
-          result = "" + parseInt(theTime2) + "小时" + result;
-        }
-        ;
-        timeMax = result;
-        $("#allTime").text(timeMax);
-        //最大速度
-        var newary = speedM.slice(0, nextIndexs);
-        speedMax = Math.max.apply(null, newary);
-        speedMax = trackPlayback.fiterNumber(speedMax);
-        $("#maxSpeend").text(speedMax + "km/h");
-      };
+      
+      
       //监听地图缩放
       clickEventListenerZoomend = map.on('zoomend', function () {
         var southwest = map.getBounds().getSouthWest();//获取西南角坐标
@@ -1620,24 +809,6 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         markerMovingControl.restart();
       }
     },
-    //前进
-    FFAnimation: function () {
-      flagBack = false;
-      advance_retreat = true;
-      map.clearInfoWindow();
-      markerMovingControl.FF();
-    },
-    //后退
-    retreatAnimation: function () {
-      flagBack = true;
-      advance_retreat = true;
-      map.clearInfoWindow();
-      if (nextIndexs <= 1) {
-        layer.msg(trackFirstPost);
-      } else {
-        markerMovingControl.retreat();
-      }
-    },
     //播放和停止
     clears: function () {
       marker, lineArr = [], paths;
@@ -1777,76 +948,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         return arr;
       };
     },
-    stopMove: function () {
-      markerMovingControl.stop();
-    },
-    //轨迹播放相关
-    continueAnimation: function () {
-      if ($("#playIcon").hasClass("playIcon")) {
-        if (playState) {
-          isSearch = false;
-          $("#playIcon").attr("class", "resultIcon suspendedIcon");
-          markerMovingControl.move();
-          open = 0;
-          map.clearInfoWindow();
-          $("#playIcon").removeAttr("data-original-title data-placement data-toggle");
-          $("#playIcon").attr({
-            "data-toggle": "tooltip",
-            "data-placement": "top",
-            "data-original-title": "暂停"
-          });
-        } else {
-          layer.msg(trackDataNull, {move: false});
-        }
-        ;
-      } else {
-        isSearch = true;
-        trackPlayback.againSearchLocation();
-        $("#playIcon").attr("class", "resultIcon playIcon");
-        $("#playIcon").removeAttr("data-original-title data-placement data-toggle");
-        $("#playIcon").attr({"data-toggle": "tooltip", "data-placement": "top", "data-original-title": "播放"});
-        markerMovingControl.stop();
-        open = 1;
-        var arr = [];
-        if (worldType == "5") {
-          var speed = trackPlayback.fiterNumber(tableSet[nextIndexs - 1][8]);
-          arr.push("定位时间：" + tableSet[nextIndexs - 1][2]);
-          arr.push("监控对象：" + tableSet[nextIndexs - 1][1]);
-          arr.push("所属分组：" + tableSet[nextIndexs - 1][3]);
-          arr.push("终端号：" + tableSet[nextIndexs - 1][4]);
-          arr.push("SIM卡号：" + tableSet[nextIndexs - 1][5]);
-          arr.push("电池电压：" + tableSet[nextIndexs - 1][6]);
-          arr.push("信号强度：" + tableSet[nextIndexs - 1][7]);
-          arr.push("速度(km/h)：" + speed);
-          arr.push("海拔：" + tableSet[nextIndexs - 1][9]);
-          arr.push("方向：" + tableSet[nextIndexs - 1][10]);
-          arr.push("经度：" + tableSet[nextIndexs - 1][12]);
-          arr.push("纬度：" + tableSet[nextIndexs - 1][13]);
-          arr.push('<a href="/clbs/v/monitoring/exportKML"   >导出谷歌轨迹</a>');
-        } else {
-          var speed = trackPlayback.fiterNumber(contentTrackPlayback[nextIndexs - 1][8]);
-          arr.push("定位时间：" + contentTrackPlayback[nextIndexs - 1][9]);
-          arr.push("监控对象：" + contentTrackPlayback[nextIndexs - 1][0]);
-          arr.push("车牌颜色：" + contentTrackPlayback[nextIndexs - 1][1]);
-          arr.push("终端号：" + contentTrackPlayback[nextIndexs - 1][2]);
-          arr.push("SIM卡号：" + contentTrackPlayback[nextIndexs - 1][3]);
-          arr.push("所属分组：" + contentTrackPlayback[nextIndexs - 1][4]);
-          arr.push("经度：" + contentTrackPlayback[nextIndexs - 1][5]);
-          arr.push("纬度：" + contentTrackPlayback[nextIndexs - 1][6]);
-          arr.push("高程：" + contentTrackPlayback[nextIndexs - 1][7]);
-          arr.push("速度(km/h)：" + speed);
-          arr.push('<a href="/clbs/v/monitoring/exportKML"   >导出谷歌轨迹</a>');
-          arr.push('<a type="button" id="addFence" onclick="trackPlayback.showAddFencePage()" style="cursor:pointer;display:inline-block;margin: 8px 0px 0px 0px;">轨迹生成路线</a>');
-        }
-        content = arr;
-        infoWindow = new AMap.InfoWindow({
-          content: content.join("<br/>"),
-          offset: new AMap.Pixel(-20, -13),
-          closeWhenClickMap: true
-        });
-        infoWindow.open(map, marker.getPosition());
-      }
-    },
+    
     //日期转换
     UnixToDate: function (unixTime, isFull, timeZone) {
       if (typeof (timeZone) == 'number') {
@@ -2596,7 +1698,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                 btnFlag = true;
                 markerMovingControl.skip();
               });
-              $("#playCarListIcon").show();
+              // $("#playCarListIcon").show();
               //伸缩
               console.log("2.")
 
@@ -2626,7 +1728,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
               trackPlayback.addressBindClick();
               trackPlayback.trackMap();
               trackPlayback.disable(false);
-              // trackPlayback.alarmData();
+              trackPlayback.alarmData();
               // wjk
               if ($('#chooseAlarmPoint').checked) {
                 trackPlayback.alarmData();
@@ -2678,85 +1780,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       var dateSss = (dateSo[1].split(":"))[2] < 10 ? "0" + (dateSo[1].split(":"))[2] : (dateSo[1].split(":"))[2];
       return (dateSo[0].split("-"))[0] + "-" + dateSMM + "-" + dateSdd + " " + dateSHH + ":" + dateSmm + ":" + dateSss
     },
-    //轨迹数据添加到日历
-    getActiveDate: function (vehicleId, nowMonth, afterMonth) {
-      var dataTime = nowMonth.split("-")[0] + nowMonth.split("-")[1];
-      $.ajax({
-        type: "POST",
-        url: "/clbs/v/monitoring/getActiveDate",
-        data: {
-          "vehicleId": vehicleId,
-          "nowMonth": nowMonth,
-          "nextMonth": afterMonth,
-          "type": worldType
-        },
-        dataType: "json",
-        async: true,
-        // beforeSend: function () {
-        //   layer.load(2);
-        // },
-        success: function (data) {
-          layer.closeAll('loading');
-          timeArray = [];
-          stopArray = [];
-          peopleArray = [];
-          thingArray = [];
-          if (data.success) {
-            //车的详细信息
-            var msg = $.parseJSON(data.msg);
-            var activeDate = msg.date;
-            var mileage = msg.dailyMile;
-            for (var i = 0; i < activeDate.length; i++) {
-              var time = dataTime + (parseInt(activeDate[i] + 1) < 10 ? "0" + parseInt(activeDate[i] + 1) : parseInt(activeDate[i] + 1));
-              var mileagei = trackPlayback.fiterNumber(mileage[i]);
-              switch (msg.type) {
-                case "0" : // 808 2011扩展
-                case "1" : // 808 2013
-                case "2" : // 移为
-                case "3" : // 天禾
-                case "6" : // KKS
-                case "8" : // BSJ-A5
-                  timeArray.push([time, time, mileagei]);
-                  break;
-                case "5" : // BDTD-SM
-                  peopleArray.push([time, time, ""]);
-                  break;
-                case "9" : // ASO
-                case "10" : // F3超长待机
-                  cdWorldType = msg.type;
-                  stopArray.push([time, time, mileagei]);
-                  break;
-              }
-            }
-          }
-          if (objType == 'thing') {
-            thingArray = timeArray.concat(peopleArray);
-          }
-          var zTreeDemoHeight = $("#treeDemo").height();
-          var oldLength = $(".calendar3 tbody tr").length;
-          $('.calendar3').html("");
-          $('.calendar3').calendar({
-            highlightRange: timeArray,
-            stopHighlightRange: stopArray,
-            peopleHighlightRange: peopleArray,
-            thingHighlightRange: thingArray
-          });
-          var trBtnLength = $(".calendar3 tbody tr").length;
-          if (trBtnLength > oldLength) {
-            $("#treeDemo").css("height", (zTreeDemoHeight - 34) + "px");
-          } else if (trBtnLength < oldLength) {
-            $("#treeDemo").css("height", (zTreeDemoHeight + 54) + "px");
-          }
-          $('.calendar3 tbody td').each(function () {
-            if ($(this).hasClass("widget-disabled")) {
-              $(this).removeClass("widget-highlight").removeClass("widget-stopHighlight");
-              $(this).children("span").children("span.mileageList").text("-");
-            }
-          })
-          isFlag = false;
-        }
-      });
-    },
+    
     //查询
     trackDataQuery: function () {
       if (isSearch == false) {
@@ -2765,11 +1789,11 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       stopDataFlag = true;
       Assembly = true;
       var carID = $("#citySel").val();
-      if (carID == "" || carID == undefined) {
-        layer.msg(vehicleNumberChoose, {move: false});
-        return false;
-      }
-      ;
+      // if (carID == "" || carID == undefined) {
+      //   layer.msg(vehicleNumberChoose, {move: false});
+      //   return false;
+      // }
+      // ;
       var chooseDate = $("#timeInterval").val().split("--");
       var ssdate = chooseDate[0];
       var sstimestamp = new Date(ssdate).getTime();
@@ -2814,11 +1838,15 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       // standbyType = "";
 
       // }
-      playState = true;
-      trackPlayback.clears();
-      layer.load(2);
-      map.clearMap();
-      trackPlayback.getHistory();
+
+      $("#fenceBind").modal('show');
+        trackPlayback.bindflowpress();
+
+      // playState = true;
+      // trackPlayback.clears();
+      // layer.load(2);
+      // map.clearMap();
+      // trackPlayback.getHistory();
       setTimeout(function () {
         $("#realTimeCanArea").addClass("rtcaHidden");
       }, 500);
@@ -2944,32 +1972,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     zTreeBeforeClick: function () {
       return true;
     },
-    //对象树勾选
-    onCheck: function (e, treeId, treeNode) {
-      var type = treeNode.deviceType;
-      worldType = type;
-      objType = treeNode.type;
-      var objType = treeNode.type; // 监控对象类型
-      objectType = objType;
-      nowMonth = nowDate.getFullYear() + "-" + (parseInt(nowDate.getMonth() + 1) < 10 ? "0" + parseInt(nowDate.getMonth() + 1) : parseInt(nowDate.getMonth() + 1)) + "-01";
-      afterMonth = nowDate.getFullYear() + "-" + (parseInt(nowDate.getMonth() + 2) < 10 ? "0" + parseInt(nowDate.getMonth() + 2) : parseInt(nowDate.getMonth() + 2)) + "-01";
-      var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree
-          .getCheckedNodes(true), v = "";
-      var carPid = nodes[0].id;
-      zTree.selectNode(treeNode, false, true);
-      $("#savePid").attr("value", carPid);
-      v = nodes[0].name;
-      var cityObj = $("#citySel");
-      cityObj.val(v);
-      $("#menuContent").hide();
-      trackPlayback.getActiveDate(carPid, nowMonth, afterMonth);
-      trackPlayback.showHidePeopleOrVehicle();
-      //单击时判断节点是否勾选订阅
-      trackPlayback.vehicleTreeClickGetFenceInfo(treeNode.checked, treeNode.id);
-      // 勾选的车辆
-      crrentSubV = [];
-      crrentSubV.push(treeNode.id);
-    },
+    
     //对象树点击
     zTreeOnClick: function (event, treeId, treeNode) {
       nowMonth = nowDate.getFullYear() + "-" + (parseInt(nowDate.getMonth() + 1) < 10 ? "0" + parseInt(nowDate.getMonth() + 1) : parseInt(nowDate.getMonth() + 1)) + "-01";
@@ -2994,23 +1997,23 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       treeObj.selectNode(treeNode, false, true);
       treeObj.checkNode(treeNode, true, true);
       map.clearMap();
-      trackPlayback.getTable('#gpsTable', []);
-      trackPlayback.getTable('#gpsTable2', []);
+      // trackPlayback.getTable('#gpsTable', []);
       trackPlayback.getTable('#gpsTable3', []);
-      trackPlayback.getTable('#gpsTable4', []);
-      trackPlayback.getTable('#gpsTable5', []);
+      
       // 查询行驶数据
-      trackPlayback.getActiveDate(id, nowMonth, afterMonth);
+      trackPlayback.getHistory("");
       // wjk 点击时隐藏播放按钮
       $("#playCarListIcon").hide();
-      trackPlayback.clears();
-      $("#allMileage").text(0 + "km");
+      
+      $("#allMileage").text(treeNode.name);
       $("#allTime").text(0);
       $("#maxSpeend").text(0 + "km/h");
       //wjk end
       trackPlayback.showHidePeopleOrVehicle();
       //单击时判断节点是否勾选订阅
-      trackPlayback.vehicleTreeClickGetFenceInfo(treeNode.checked, treeNode.id);
+      // trackPlayback.vehicleTreeClickGetFenceInfo(treeNode.checked, treeNode.id);
+
+      trackPlayback.hydropressflowChart();
     },
     //根据车id查询当前车辆绑定围栏信息
     getCurrentVehicleAllFence: function (vId) {
@@ -3524,56 +2527,72 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     },
     //车辆树点击对象不同显示及隐藏方法
     showHidePeopleOrVehicle: function () {
-      //显示报警点开关
-      $("#showAlarmPoint,#showStopPoint").show();
       //判断点击的监控对象的协议类型
       // if (worldType == "5") {
       if (treeClickedType == "dma") {
         //隐藏车
-        $("#p-travelData,#peopleGPSData").css("display", "block");
-        $("#v-travelData,#GPSData").css("display", "none");
-        $("#p-travelData").addClass("active");
-        $("#peopleGPSData").addClass("active in");
-        $("#tableStopData,#tableAlarmDate").removeClass("active");
-        $("#stopData,#warningData").removeClass("active in");
-        $("#v-travelData").removeClass("active");
-        $("#GPSData").removeClass("in active");
-        $("#v-travelData,#GPSData").css("display", "none");
-        //隐藏停止  车
-        $("#tableStopData").removeClass("active");
-        $("#stopData").removeClass("active in");
-        $("#tableStopData,#stopData").css("display", "none");
-        $("#peopleStopData,#p-tableStopData").css("display", "block");
-        if ($("#p-travelData").hasClass("active")) {
-          $("#p-tableStopData").removeClass("active")
-          $("#peopleStopData").css("display", "none");
-        }
-
-        // show dragdiv
-        $("#myTab").children("li").removeClass("active");
-        $("#myTab").children("li:first-child").addClass("active");
-        $("#myTabContent").children("div").removeClass("active in");
-        $("#myTabContent").children("div:first-child").addClass("active in");
-        //点击日历天数查询时隐藏其他 显示第一个
-        $("#peopleGPSData,#stopData,#peopleStopData,#warningData").hide();
+        
         $("#GPSData").addClass("active in").show();
 
-        // if ($("#scalingBtn").hasClass("fa-chevron-down")) {
-        //     var windowHeight = $(window).height();
-        //     headerHeight = $("#header").height();
-        //     titleHeight = $(".panHeadHeight").height() + 30;
-        //     demoHeight = $("#Demo").height();
-        //     var oldMHeight = $("#MapContainer").height();
-        //     var oldTHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
-        //     var mapHeight = windowHeight - headerHeight - titleHeight - demoHeight - 20;
-        //     $("#MapContainer").css({
-        //         "height": mapHeight + "px"
-        //     });
-        //     $(".trackPlaybackTable .dataTables_scrollBody").css({
-        //         "height": oldTHeight + "px"
-        //     });
-        //     $("#scalingBtn").attr("class", "fa  fa-chevron-down");
-        // }
+        //计算高度赋值
+              console.log("1.")
+              $("#MapContainer").css({
+                "height": (lmapHeight - 241) + "px"
+              });
+              //表头宽度设置
+              var tabWidth = $("#myTab").width();
+              var tabPercent = ((tabWidth - 17) / tabWidth) * 100;
+              $(".dataTables_scrollHead").css("width", tabPercent + "%");
+              //列表拖动
+              $("#dragDIV").mousedown(function (e) {
+                tableHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
+                mapHeight = $("#MapContainer").height();
+                els = e.clientY;
+                $(document).bind("mousemove", trackPlayback.mouseMove).bind("mouseup", trackPlayback.mouseUp);
+                e.stopPropagation();
+              })
+              //表点击操作得到经纬度
+              $("#gpsTable tbody tr").bind("click", function () {
+                carLng = $(this).children("td:nth-child(11)").text();
+                carLat = $(this).children("td:nth-child(12)").text();
+                var nowIndex = parseInt($(this).children("td:nth-child(1)").text());
+                selIndex = nowIndex - 1;
+                listIndex = nowIndex - 1;
+                if (nowIndex >= 4) {
+                  trIndex = nowIndex - 4;
+                } else {
+                  trIndex = 0;
+                }
+                btnFlag = true;
+                markerMovingControl.skip();
+              });
+              
+              // $("#playCarListIcon").show();
+              //伸缩
+              console.log("2.")
+
+              $("#scalingBtn").unbind().bind("click", function () {
+                if ($(this).hasClass("fa-chevron-down")) {
+                  oldMHeight = $("#MapContainer").height();
+                  oldTHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
+                  $(this).attr("class", "fa  fa-chevron-up")
+                  var mapHeight = windowHeight - headerHeight - titleHeight - demoHeight - 20;
+                  $("#MapContainer").css({
+                    "height": mapHeight + "px"
+                  });
+                  $(".trackPlaybackTable .dataTables_scrollBody").css({
+                    "height": "0px"
+                  });
+                } else {
+                  $(this).attr("class", "fa  fa-chevron-down");
+                  $("#MapContainer").css({
+                    "height": oldMHeight + "px"
+                  });
+                  $(".trackPlaybackTable .dataTables_scrollBody").css({
+                    "height": oldTHeight + "px"
+                  });
+                }
+              });
       } else {
         trackPlayback.hidePeopleRelatedInfo();
       }
@@ -3694,7 +2713,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             worldType = type;
             objType = node[0].type;
           }
-          trackPlayback.getActiveDate(vUuid, nowMonth, afterMonth);
+          // trackPlayback.getActiveDate(vUuid, nowMonth, afterMonth);
         }
       }
       bflag = false;
@@ -4166,6 +3185,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     },
     //根据时间查询报警数据
     alarmData: function () {
+        console.log("alarmData..............")
       var vehicleId = $("#savePid").val();
       var chooseDate = $("#timeInterval").val().split("--");
       startTime = chooseDate[0];
@@ -4202,6 +3222,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       var alarmDescriptionText = "";
       var inext = 0;
       var history = null;
+      console.log("alarmDatatable....")
       for (var i = 0; i < tableList.length; i++) {
         var alarm = tableList[i];
         var plateNumber = alarm.plateNumber;
@@ -5042,7 +4063,382 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     },
     mapSetting:function () {
 
-    }
+    },
+    // add pwl
+    loadGeodata:function(dflag){
+            dma_no = $("#current_dma_no").val();
+            current_organ = $("#current_organ_id").val()
+            map.clearMap();
+            map.remove(dma_list)
+            dma_list=[]
+            $.ajax({
+                type: 'POST',
+                url: '/gis/fence/bindfence/getDMAFenceDetails/',
+                data: {"dma_no" : dma_no,"current_organ":current_organ,"dma_level":dma_level,"dflag":dflag},
+                async:false,
+                dataType: 'json',
+                success: function (data) {
+                    var dataList = data.obj;
+                    if (dataList != null && dataList.length > 0) {
+                        
+                        for(var j = 0;j < dataList.length;j++){
+                            polygon = data.obj[j].fenceData;
+                            dmaMapStatistic = data.obj[j].dmaMapStatistic
+                            fillColor_seted = fillColor = data.obj[j].fillColor
+                            strokeColor_seted = strokeColor = data.obj[j].strokeColor
+                            if(fillColor === null){
+                                fillColor_seted = fillColor = "#1791fc"
+                            }
+                            if(strokeColor === null){
+                                strokeColor_seted = strokeColor = "#FF33FF"
+                            }
+                            var dataArr = new Array();
+                            if (polygon != null && polygon.length > 0) {
+                                for (var i = 0; i < polygon.length; i++) {
+                                    dataArr.push([polygon[i].longitude, polygon[i].latitude]);
+                                }
+                            };
+                            if(data.obj !== null){
+                                polyFence = new AMap.Polygon({
+                                    path: dataArr,//设置多边形边界路径
+                                    strokeColor:strokeColor,// "#FF33FF", //线颜色
+                                    strokeOpacity: 0.9, //线透明度
+                                    strokeWeight: 3, //线宽
+                                    fillColor:fillColor,// "#1791fc", //填充色
+                                    fillOpacity: 0.35,
+                                    strokeStyle:"dashed",
+                                    extData:{
+                                        'dma_name':dmaMapStatistic.dma_name,
+                                        'dma_level':dmaMapStatistic.dma_level,
+                                        'belongto_cid':dmaMapStatistic.belongto_cid,
+                                    },
+                                    //填充透明度
+                                });
+
+
+                                
+
+                                // // var position = new AMap.LngLat(polygon[0].longitude,polygon[0].latitude);
+                                // polyFence.on("mouseover",function(e){
+                    
+                                //     var position = e.lnglat;
+                                //     // console.log(position);
+                                //     conts = mapMonitor.createStationInfo(dmaMapStatistic.dma_name, dmaMapStatistic)
+
+                                //     infoWindow.setContent(conts);
+                                //     // markerInfoWindow.setSize(AMap.Size(400,300));
+                                //     infoWindow.open(map,position);
+                                // });
+
+                                // polyFence.on("mouseout",function(){
+                                //     infoWindow.close();
+                                // })
+
+                                dma_list.push(polyFence)
+                                // polyFence.setMap(map);
+                                // map.setFitView(polyFence);
+                                
+                            }
+                        }
+
+                        map.add(dma_list)
+                        map.setFitView(dma_list);
+                        trackPlayback.refreshMap();
+                    }
+                },      
+            });
+            
+        },
+    refreshMap:function(){
+            var mapBounds = map.getBounds();
+            var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
+            var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
+
+            var bounds = new AMap.Bounds(southWest, northEast)
+            var rectangle = new AMap.Rectangle({
+                  map: map,
+                  bounds: bounds,
+                  strokeColor:'#FFFFFF',
+                  strokeWeight:1,
+                  strokeOpacity:0,
+                  fillOpacity:0,
+                  zIndex:0,
+                  bubble:true
+
+                });
+            // console.log(mapBounds)
+            // console.log(bounds)
+            
+            var polygon1_path = rectangle.getPath();
+            // var polygon2_path = polygon2.getPath();
+            // 小圈是否在大圈内
+            // var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+            // 两圈是否交叉
+            // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
+            map.clearMap();
+            var tmp_dma_fresh = []
+            var count_dma_2_in = 0;
+            for(var i=0;i<dma_list.length;i++){
+                var tdma = dma_list[i];
+                var polygon2_path = tdma.getPath();
+                
+                // in
+                var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+                if(isRingInRing ){
+                    var tdma_name = tdma.getExtData().dma_name; 
+                    var tdma_level = tdma.getExtData().dma_level;
+                    if(tdma_level == "2"){
+                        count_dma_2_in += 1;
+                    }
+
+                    
+                    // 创建纯文本标记 
+                    var text = new AMap.Text({
+                        text:tdma_name,
+                        textAlign:'center', // 'left' 'right', 'center',
+                        verticalAlign:'middle', //middle 、bottom
+                        draggable:true,
+                        clickable:true,
+                        cursor:'pointer',
+                        // angle:10,
+                        style:{
+                            'padding': '.75rem 1.25rem',
+                            'margin-bottom': '1rem',
+                            'border-radius': '.25rem',
+                            'background-color': '#169bd5',
+                            'width': '15rem',
+                            'border-width': 0,
+                            'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
+                            'text-align': 'center',
+                            'font-size': '20px',
+                            'color': 'white'
+                        },
+                        extData:{
+                            'dma_name':tdma_name,
+                            'dma_level':tdma_level,
+                            // 'belongto_cid':dmaMapStatistic.belongto_cid,
+                        },
+                        position: trackPlayback.calculateCenter(polygon2_path) //[116.396923,39.918203]
+                    });
+
+                    text.on("click",function(e){
+                        // console.log(e,e.target.getExtData().belongto_cid);
+                        // var belongto_cid = e.target.getExtData().belongto_cid;
+                        // mapMonitor.textClicked(belongto_cid);
+                        dma_level2_clicked = e.target.getExtData().dma_name;
+                        show_dma_level = "3";
+                        trackPlayback.refreshMap();
+                    })
+                    if(show_dma_level == "3"){
+                        // if(tdma_level == "2"){
+                        //     count_dma_2_in += 1;
+                        // }
+                        // if(count_dma_2_in >=2){
+                        //     show_dma_level = "2";
+                        // }
+                        if(tdma_level == show_dma_level || dma_level2_clicked == tdma_name){
+                            tmp_dma_fresh.push(tdma)
+                            text.setMap(map);
+                        }
+                    }else{
+                        if(tdma_level == show_dma_level){
+                            tmp_dma_fresh.push(tdma)
+                            text.setMap(map);
+                        }
+                    }
+                    // tmp_dma_fresh.push(tdma)
+                    // text.setMap(map);
+                }
+                // intersect
+                // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
+                // if(doesRingRingIntersect){
+                //     map.remove(dma_list[i]);
+                // }
+            }
+
+            console.log("count_dma_2_in:",count_dma_2_in,show_dma_level,"zoom ",map.getZoom())
+
+            if(count_dma_2_in >= 2){
+                show_dma_level = "2";
+                dma_level2_clicked = "";
+            }
+            
+            // map.remove(dma_list)
+            map.add(tmp_dma_fresh)
+            map.setFitView(tmp_dma_fresh);
+
+
+        },
+
+        calculateCenter: function(lnglatarr){
+          var total = lnglatarr.length;
+          var X=0,Y=0,Z=0;
+          $.each(lnglatarr, function(index, lnglat) {
+            var lng = lnglat.lng * Math.PI / 180;
+            var lat = lnglat.lat * Math.PI / 180;
+            var x,y,z;
+            x = Math.cos(lat) * Math.cos(lng);
+            y = Math.cos(lat) * Math.sin(lng);
+            z = Math.sin(lat);
+            X += x;
+            Y += y;
+            Z += z;
+          });
+
+          X = X/total;
+          Y = Y/total;
+          Z = Z/total;
+
+          var Lng = Math.atan2(Y,X);
+          var Hyp = Math.sqrt(X*X + Y*Y);
+          var Lat = Math.atan2(Z,Hyp);
+
+          return new AMap.LngLat(Lng*180/Math.PI,Lat*180/Math.PI);
+        },
+    // 水力分布流量和压力图标
+        hydropressflowChart:function(){
+
+            options = {
+                backgroundColor: '#FFFFFF',
+                
+                title: {
+                    text: '近7日流量压力曲线图',
+                    left:'left',
+                    textStyle:{
+                        fontSize:12,
+                        fontWeight:'100'
+                    },
+                },
+                // tooltip: {
+                //     trigger: 'axis',
+                //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                //         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                //     }
+                // },
+                
+                legend: {
+                    data: ['流量'],
+                    
+                },
+                    grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    containLabel: true
+                    },
+                
+                xAxis: [{
+                    type: 'category',
+                     boundaryGap: false,
+                    //show:false,
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40'],
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:10
+                        }
+                    }
+                }],
+                yAxis: {
+                    type: 'value',
+                    //show:false,
+                  //  name: '流量',
+                    // min: 0,
+                     max: 10,
+                    interval: 10,
+                    splitLine:{
+                        show:false,
+                    }
+                },
+                series: [{
+                    name: 'flow',
+                    type: 'line',
+                    itemStyle: {
+                        normal: {
+                            color: '#7acf88',
+                            // areaStyle:{type:'default'}
+                        },
+                    },
+                    
+                    data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
+                }]
+            };
+
+            recent7flowpress = echarts.init(document.getElementById('recent7flowpress'));
+            recent7flowpress.setOption(options);
+            
+        },
+        // 水力分布流量和压力图标
+        bindflowpress:function(){
+
+            option = {
+                // title : {
+                //     text: '未来一周气温变化',
+                //     subtext: '纯属虚构'
+                // },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['MNF','流量','压力','背景漏损']
+                },
+                
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : ['2018-11-15','2018-11-16','2018-11-17','2018-11-18','2018-11-19','2018-11-20','2018-11-21']
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        name : '时用水量(m³/h)',
+                        nameLocation : 'middle',
+                        nameGap : 80,
+                        axisLabel : {
+                            formatter: '{value} '
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'MNF',
+                        type:'line',
+                        data:[11, 11, 15, 13, 12, 13, 10],
+                        
+                    },
+                    {
+                        name:'流量',
+                        type:'line',
+                        data:[10, 12, 7, 5, 9, 2, 6],
+                        
+                    },
+                    {
+                        name:'压力',
+                        type:'line',
+                        data:[2, 5, 8, 7, 9, 3, 10],
+                        
+                    },
+                    {
+                        name:'背景漏损',
+                        type:'line',
+                        data:[1, -2, 2, 5, 3, 2, 0],
+                        
+                    }
+                ]
+            };
+                                
+
+            bindflowpressChart = echarts.init(document.getElementById('bindflowpress'));
+            bindflowpressChart.setOption(option);
+
+            $('#fenceBind').on('shown.bs.modal',function(){
+                bindflowpressChart.resize()
+            })
+            
+        },
+        
   }
   $(function () {
     $('input').inputClear().on('onClearEvent', function (e, data) {
@@ -5070,6 +4466,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     ScrollBar.Initialize();
     //设置最大值
     ProgressBar.maxValue = 100;
+    trackPlayback.loadGeodata(0);
     $("#toggle-left").on("click", trackPlayback.toggleBtn);
     $("#realTimeBtn .mapBtn").on("click", trackPlayback.mapBtnActive);
     $("#realTimeRC").on("click", trackPlayback.realTimeRC);

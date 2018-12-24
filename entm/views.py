@@ -532,12 +532,12 @@ def oranizationtree(request):
     user = request.user
     organs = user.belongto #Organizations.objects.all()
     organ_list = organs.get_descendants(include_self=True)
-    for o in organ_list.values("id","name","cid","pId","uuid","organlevel","attribute","dma__dma_no"):
+    for o in organ_list.values("id","name","cid","pId","uuid","organlevel","attribute"):
         organtree.append({
             "name":o["name"],
             "id":o["cid"],
             "pId":o["pId"],
-            "dma_no":o["dma__dma_no"],
+            "dma_no":"",
             "attribute":o["attribute"],
             "organlevel":o["organlevel"],
             "type":"group",

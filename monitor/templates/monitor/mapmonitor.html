@@ -45,6 +45,48 @@
         .monitoringSelect {
             vertical-align: top;
         }        
+
+        table tr:nth-child(odd){
+
+            background: #F1F1F1;
+
+        }
+        table tr:nth-child(even){
+
+            background: #fffffF;
+
+
+        }
+
+
+
+        table tr{
+            height: 40px;
+            text-align: center;
+            color: #0a0a0c;
+        }
+
+        .col-md-3{
+            width: 24%;
+        }
+        .col-md-5{
+            width: 42.555%;
+        }
+
+        table {
+          table-layout: fixed;
+          width: 100%;
+          border-collapse: collapse;
+          text-align: center;
+          /*border: 3px solid purple;*/
+            border:1px solid #CDCDCD;
+
+        }
+
+        th, td {
+          padding: 0px;
+          height: 20px;
+        }
     </style>
 {% endblock %}
 
@@ -68,11 +110,11 @@
             </div>
         </div>
         <div class="panel-body fixed-table-body  form-horizontal" style="padding-top:10px;">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class="col-md-12" id="disable" style="padding-left:5px;padding-right:5px;">
                     <div class="calendar calendar3"></div>
                 </div>
-            </div>
+            </div> -->
             <div class="form-group">
               <div class="form-group">
                 <div class="col-md-10">
@@ -215,8 +257,11 @@
                              id="timeInterval"
                              name="timeInterval" readonly/>
                   </div>
+                  <button type="button" class="btn btn-primary" 
+                              id="trackPlayQuery">查询
+                      </button>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                   <div class="col-md-12 control-label">
                       <button type="button" class="btn btn-primary"
                               id="specialTimePlayBack">定时定区域查询
@@ -225,7 +270,7 @@
                               id="trackPlayQuery">查询
                       </button>
                   </div>
-              </div>
+              </div> -->
               <div class="areaTool"><i class="fa fa-search"></i><span>查<br/>询</span>
               </div>
           </div>
@@ -243,16 +288,16 @@
 
       <div id="dragDIV" style="height:2px;width:100%;cursor:n-resize;background-color:#ffffff;"></div>
         <ul id="myTab" class="nav nav-tabs">
-            <li id="v-travelData" class="active"><a href="#GPSData" data-toggle="tab">行驶数据</a>
+            <li id="v-travelData" class="active"><a href="#GPSData" data-toggle="tab">实时数据</a>
             </li>
-            <li id="p-travelData"><a href="#peopleGPSData" data-toggle="tab">行驶数据</a>
+            <!-- <li id="p-travelData"><a href="#peopleGPSData" data-toggle="tab">行驶数据</a>
             </li>
             <li id="tableStopData"><a href="#stopData" data-toggle="tab">停止数据</a></li>
             <li id="p-tableStopData"><a href="#peopleStopData"
-                                        data-toggle="tab">停止数据</a></li>
+                                        data-toggle="tab">停止数据</a></li> -->
             <li id="tableAlarmDate"><a href="#warningData" data-toggle="tab"
-                                       id="AlarmData">报警数据</a></li>
-            <li id="showAlarmPoint">
+                                       id="AlarmData">报警记录</a></li>
+            <!-- <li id="showAlarmPoint">
                 <input type="checkbox" id="chooseAlarmPoint" class="monitoringSelect"/>
                 <label for="chooseAlarmPoint" id="chooseAlarmPointLab"
                        class="monitoringSelect">显示报警点</label>
@@ -261,11 +306,15 @@
                 <input type="checkbox" id="chooseStopPoint" class="monitoringSelect"/>
                 <label for="chooseStopPoint" id="chooseStopPointLab"
                        class="monitoringSelect">显示所有停止点</label>
-            </li>
+            </li> -->
             <div style="float:right;margin-top:9px;">
-                <li style="display:inline-block;">行驶里程：<span id="allMileage">0km</span>
+                <li style="display:inline-block;">分区名称：<span id="allMileage">城西主城区片区</span>
                 </li>&nbsp;&nbsp;
-                <li style="display:inline-block;">最高速度：<span id="maxSpeend">0km/h</span>
+                <li style="display:inline-block;">本月供水量：<span id="maxSpeend">1613.65m³</span>
+                </li>
+                <li style="display:inline-block;">本月售水量：<span id="maxSpeend">1613.65m³</span>
+                </li>
+                <li style="display:inline-block;">本月漏损率：<span id="maxSpeend">1.68%</span>
                 </li>
                 <li style="display:inline-block;margin:0px 0px 0px 20px; color: #6dcff6;vertical-align: middle;">
                     <span id="tableDataExport" class="glyphicon glyphicon-share"></span>
@@ -277,7 +326,7 @@
         <div id="myTabContent" class="tab-content" style="overflow:auto;">
             <div class="tab-pane fade in active trackPlaybackTable tableFEStyle"
                  id="GPSData">
-                <table id="gpsTable"
+                <!-- <table id="gpsTable"
                        class="table table-striped table-bordered table-hover"
                        cellspacing="0" width="100%">
                     <thead>
@@ -303,94 +352,135 @@
                     </thead>
                     <tbody>
                     </tbody>
-                </table>
+                </table> -->
+                <div class="col-md-5">
+                        <table id="dataTableBind" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="3" style="font-weight: bold">月供水(万m³)</td>
+                              <td colspan="5" style="font-weight: bold">日供水(万m³)</td>
+                              
+                            </tr>
+                            <tr>
+                              <td style="font-weight: bold">前月</td>
+                              <td style="font-weight: bold">上月</td>
+                              <td style="font-weight: bold">本月</td>
+                              <td style="font-weight: bold">类型</td>
+                              <td style="font-weight: bold">11月29日</td>
+                              <td style="font-weight: bold">前日</td>
+                              <td style="font-weight: bold">昨日</td>
+                              <td style="font-weight: bold">今日</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >供水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >进水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >出水</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                            <tr>
+                              <td>32.45</td>
+                              <td>35.32</td>
+                              <td>16.23</td>
+                              <td >漏水量</td>
+                              <td>11256</td>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-3">
+                        <table border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="4" style="font-weight: bold">夜间最小流量MNF(万m³)</td>
+                              
+                            </tr>
+                            <tr>
+                              <td style="font-weight: bold">11月29日</td>
+                              <td style="font-weight: bold">前日</td>
+                              <td style="font-weight: bold">昨日</td>
+                              <td style="font-weight: bold">今日</td>
+                            </tr>
+                            <tr>
+                              <td>96.37</td>
+                              <td>96.34</td>
+                              <td>90.45</td>
+                              <td>85.63</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="font-weight: bold">报警设定值</td>
+
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table border="1"  style="border-top:0px">
+
+                          <tbody>
+                            
+
+                            <tr>
+                              <td style="font-weight: bold">日用水基准</td>
+                              <td style="font-weight: bold">产销差基准</td>
+                              <td style="font-weight: bold">MNF基准</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>11563</td>
+                              <td>11043</td>
+                              <td>584</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-4" >
+                        <table  style="border-bottom: 0px" >
+                          
+                          <tbody>
+                            <tr>
+                              <td style="font-weight: bold">实时流量</td>
+                              <td style="background: #fffffF">12.45 m³/h</td>
+                              <td style="font-weight: bold">实时压力</td>
+                              <td style="background: #fffffF">0.45 MPa</td>
+                              <td>2018-12-01</td>
+                            </tr>
+                            
+                          </tbody>
+                        </table>
+                        <div id="recent7flowpress" style="height:201px;width:100%;border:1px solid #CDCDCD"></div>
+                      </div>
+                      
             </div>
-            <div class="tab-pane fade trackPlaybackTable tableFEStyle"
-                 id="peopleGPSData">
-                <table id="gpsTable4"
-                       class="table table-striped table-bordered table-hover"
-                       cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="text-center">序号</th>
-                        <th class="text-center">监控对象</th>
-                        <th class="text-center">定位时间</th>
-                        <th class="text-center">间隔时间</th>
-                        <th class="text-center">所属分组</th>
-                        <th class="text-center">终端号</th>
-                        <th class="text-center">SIM卡号</th>
-                        <th class="text-center">电池电压</th>
-                        <th class="text-center">信号强度</th>
-                        <th class="text-center">速度</th>
-                        <th class="text-center">海拔</th>
-                        <th class="text-center">方向</th>
-                        <th class="text-center">补发</th>
-                        <th class="text-center">经度</th>
-                        <th class="text-center">纬度</th>
-                        <th class="text-center">位置</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade trackPlaybackTable tableFEStyle" id="stopData">
-                <table id="gpsTable2"
-                       class="table table-striped table-bordered table-hover"
-                       cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="text-center">序号</th>
-                        <th class="text-center">监控对象</th>
-                        <th class="text-center">定位时间</th>
-                        <th class="text-center">间隔时间</th>
-                        <th class="text-center">所属分组</th>
-                        <th class="text-center">终端号</th>
-                        <th class="text-center">SIM卡号</th>
-                        <th class="text-center">状态</th>
-                        <th class="text-center">ACC状态</th>
-                        <th class="text-center">方向</th>
-                        <th class="text-center">总里程</th>
-                        <th class="text-center">定位方式</th>
-                        <th class="text-center">卫星颗数</th>
-                        <th class="text-center">经度</th>
-                        <th class="text-center">纬度</th>
-                        <th class="text-center">位置</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade trackPlaybackTable tableFEStyle"
-                 id="peopleStopData">
-                <table id="gpsTable5"
-                       class="table table-striped table-bordered table-hover"
-                       cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="text-center">序号</th>
-                        <th class="text-center">监控对象</th>
-                        <th class="text-center">定位时间</th>
-                        <th class="text-center">间隔时间</th>
-                        <th class="text-center">所属分组</th>
-                        <th class="text-center">终端号</th>
-                        <th class="text-center">SIM卡号</th>
-                        <th class="text-center">电池电压</th>
-                        <th class="text-center">信号强度</th>
-                        <th class="text-center">速度</th>
-                        <th class="text-center">海拔</th>
-                        <th class="text-center">方向</th>
-                        <th class="text-center">补发</th>
-                        <th class="text-center">经度</th>
-                        <th class="text-center">纬度</th>
-                        <th class="text-center">位置</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
+            
+            
+           
             <div class="tab-pane fade trackPlaybackTable tableFEStyle" id="warningData">
                 <table id="gpsTable3"
                        class="table table-striped table-bordered table-hover"
@@ -398,22 +488,19 @@
                     <thead>
                     <tr>
                         <th class="text-center">序号</th>
-                        <th class="text-center">监控对象</th>
-                        <th class="text-center">所属分组</th>
-                        <th class="text-center">报警类型</th>
+                        <th class="text-center">报警时间</th>
                         <th class="text-center">处理状态</th>
+                        <th class="text-center">报警类型</th>
                         <th class="text-center">处理人</th>
-                        <th class="text-center">报警开始时间</th>
-                        <th class="text-center">报警开始位置</th>
-                        <th class="text-center">报警结束时间</th>
-                        <th class="text-center">报警结束位置</th>
-                        <th class="text-center">围栏类型</th>
-                        <th class="text-center">围栏名称</th>
+                        <th class="text-center">处理时间</th>
+                        <th class="text-center">处理方法</th>
+                        
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
+                                      
             </div>
         </div>
     </div>
@@ -560,6 +647,130 @@
             </div>
         </div>
     </div>
+
+
+    <!-- dma绑定 -->
+    <div style="cursor: default;" class="modal fade" id="fenceBind" aria-hidden="true" data-backdrop="static" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document" style="width:80%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">起始时间：2018-11-15 12：00:00  结束时间：2018-12-10 12：00:00</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="form-horizontal"> -->
+                        <div class="row">
+                            <input id="fenceID" name="search" class="form-control" type="hidden"/>
+                            <input id="fenceName" name="search" class="form-control" type="hidden"/>
+                            <input id="fenceInfoId" name="search" class="form-control" type="hidden"/>
+                            
+                            
+                            <div class="col-md-4">
+                              <table border="1" >
+                                
+                                <tbody>
+                                  <tr>
+                                    <td width="10%" >序号</td>
+                                    <td width="50%" >内容</td>
+                                    <td width="40%">项目值</td>
+                                    
+                                  </tr>
+                                  <tr>
+                                    <td>1</td>
+                                    <td style="text-align: left;padding-left: 10px">时段最小流量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>2</td>
+                                    <td style="text-align: left;padding-left: 10px" >时段最小流量出现时间</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>3</td>
+                                    <td style="text-align: left;padding-left: 10px">夜间允许流量</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>4</td>
+                                    <td style="text-align: left;padding-left: 10px">时段供水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>5</td>
+                                    <td style="text-align: left;padding-left: 10px">时段漏失总量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>6</td>
+                                    <td style="text-align: left;padding-left: 10px">单位管长漏失水量</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>7</td>
+                                    <td style="text-align: left;padding-left: 10px">时段漏失率</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>8</td>
+                                    <td style="text-align: left;padding-left: 10px">时段售水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>9</td>
+                                    <td style="text-align: left;padding-left: 10px">时段产销差水量(m³)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>10</td>
+                                    <td style="text-align: left;padding-left: 10px">时段产销差率</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>11</td>
+                                    <td style="text-align: left;padding-left: 10px">时段MNF/ADD最小值</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>12</td>
+                                    <td style="text-align: left;padding-left: 10px">时段最大流量(m³/h)</td>
+                                    <td></td>
+                                  </tr>
+                                  <tr>
+                                    <td>13</td>
+                                    <td style="text-align: left;padding-left: 10px">时段最大流量出现时间</td>
+                                    <td></td>
+                                  </tr>
+                                   
+                                    
+
+                                  
+                                </tbody>
+                              </table>
+                              
+                            </div>
+                            <div class="col-md-8" >
+                              <div style="border:1px solid #CDCDCD;">
+                              <div id="bindflowpress" style="height:530px;width:90%;margin: 15px"></div>
+                            </div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                </div>
+                <div class="modal-footer">
+        
+                  <button class="btn" type="button" id="doSubmit" style="background-color:#CD3299;color: #fffffF;width: 80px;padding-top: 10px;border-radius:7px">
+                      <strong>导 出</strong>
+                  </button>
+                    &nbsp;
+                  <button id="doCloseAdd" type="button" class="btn btn-default" data-dismiss="modal"  style="width: 80px;border-radius:7px">
+                      <strong>关 闭</strong>
+                  </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 

@@ -340,7 +340,7 @@ def dmatree(request):
         organs = user.belongto #Organizations.objects.all()
     print("dmatree",organs)
     # 组织
-    organ_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","organlevel","attribute","dma__dma_no")
+    organ_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","organlevel","attribute")
     
     # mergeds = merge_values(o_lists)
     #dma
@@ -486,7 +486,7 @@ def dmatree(request):
 
         
     for o in organ_lists:
-
+        print(o["name"])
         organtree.append({
             "name":o["name"],
             "id":o["cid"],
@@ -495,7 +495,7 @@ def dmatree(request):
             "organlevel":o["organlevel"],
             "districtid":'',
             "type":"group",
-            "dma_no":o["dma__dma_no"] if o["dma__dma_no"] else '',  #如果存在dma分区，分配第一个dma分区的dma_no，点击数条目的时候使用
+            # "dma_no":o["dma__dma_no"] if o["dma__dma_no"] else '',  #如果存在dma分区，分配第一个dma分区的dma_no，点击数条目的时候使用
             "icon":"/static/virvo/resources/img/wenjianjia.png",
             "uuid":o["uuid"]
         })   
@@ -505,6 +505,7 @@ def dmatree(request):
     result["data"] = organtree
     
     # print(json.dumps(result))
+
     
     return HttpResponse(json.dumps(organtree))
 

@@ -43,14 +43,14 @@
         init:function(){
             var setting = {
                 async : {
-                    url : "/entm/user/oranizationtree/",
+                    url : "/dmam/district/dmatree/",
                     tyoe : "post",
                     enable : true,
                     autoParam : [ "id" ],
                     contentType : "application/json",
                     dataType : "json",
                     otherParam : {  // 是否可选 Organization
-                        "isDma" : "1",
+                        // "isDma" : "1",
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                 },
