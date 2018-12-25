@@ -338,7 +338,7 @@ def dmatree(request):
         organs = Organizations.objects.first()
     else:
         organs = user.belongto #Organizations.objects.all()
-    print("dmatree",organs)
+    
     # 组织
     organ_lists = organs.get_descendants(include_self=True).values("id","name","cid","pId","uuid","organlevel","attribute")
     
@@ -486,7 +486,6 @@ def dmatree(request):
 
         
     for o in organ_lists:
-        print(o["name"])
         organtree.append({
             "name":o["name"],
             "id":o["cid"],

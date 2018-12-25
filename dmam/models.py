@@ -131,6 +131,7 @@ class DMABaseinfo(models.Model):
             
         return stationlist
 
+    # obsolete
     def dma_statistic(self,month_list1):
         """
             month_list1 是一整年的月份列表
@@ -372,7 +373,8 @@ class DMABaseinfo(models.Model):
             "water_in":round(float(water_in),2),
             "month_sale":round(float(monthly_sale[month_str]),2) ,
             "last_month_sale":round(float(monthly_sale[lastmonth_str]),2) ,
-            "last_add_ratio":"34%"
+            "last_add_ratio":"34%",
+            "dma_leakerate":9
         }
 
 '''
