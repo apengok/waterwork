@@ -121,7 +121,7 @@
 <div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px; z-index: 9999999999999999999999999">
     <div id="operationMenu" class="panel panel-default panDefMenu">
         <div class="panel-heading" style="padding:10px;background-color:#ffffff;color:#767676;">
-            <h3 class="panel-title fwb">分区总数(123)</h3>
+            <h3 class="panel-title fwb">分区总数(<span id="all_dma_num"></span>)</h3>
             <!-- <div class="actions pull-right" style="position: absolute;right:10px;top:10px;">
                 <i id="goHidden" class="fa fa-chevron-left"></i>
             </div> -->
@@ -163,16 +163,16 @@
             </div>
             <div class="form-group">
                 <div class="col-md-12" id="disable" style="padding-left:5px;padding-right:5px;">
-                    <div class="col-md-4">一级(1)</div>
-                    <div class="col-md-4">二级(15)</div>
-                    <div class="col-md-4">三级(163)</div>
+                    <div class="col-md-4">一级(<span id="dma_level1_num"></span>)</div>
+                    <div class="col-md-4">二级(<span id="dma_level2_num"></span>)</div>
+                    <div class="col-md-4">三级(<span id="dma_level3_num"></span>)</div>
                 </div>
-                <div class="col-md-12 leakcolor10" style="margin-left: 30px;margin-top: 10px;">漏损率(<10%): 6个</div>
-                <div class="col-md-12 leakcolor12" style="margin-left: 30px;margin-top: 10px;">漏损率(<12%): 39个</div>
-                <div class="col-md-12 leakcolor20" style="margin-left: 30px;margin-top: 10px;">漏损率(<20%): 15个</div>
-                <div class="col-md-12 leakcolor30" style="margin-left: 30px;margin-top: 10px;">漏损率(<30%): 11个</div>
-                <div class="col-md-12 leakcolor30b" style="margin-left: 30px;margin-top: 10px;">漏损率(>30%): 67个</div>
-                <div class="col-md-12 leakcolorwarning" style="margin-left: 30px;margin-top: 10px;">报警分区: 23个</div>
+                <div class="col-md-12 leakcolor10" style="margin-left: 30px;margin-top: 10px;">漏损率(<10%): <span id="dma_leak10"></span>个</div>
+                <div class="col-md-12 leakcolor12" style="margin-left: 30px;margin-top: 10px;">漏损率(<12%): <span id="dma_leak12"></span>个</div>
+                <div class="col-md-12 leakcolor20" style="margin-left: 30px;margin-top: 10px;">漏损率(<20%): <span id="dma_leak20"></span>个</div>
+                <div class="col-md-12 leakcolor30" style="margin-left: 30px;margin-top: 10px;">漏损率(<30%): <span id="dma_leak30"></span>个</div>
+                <div class="col-md-12 leakcolor30b" style="margin-left: 30px;margin-top: 10px;">漏损率(>30%): <span id="dma_leak30b"></span>个</div>
+                <div class="col-md-12 leakcolorwarning" style="margin-left: 30px;margin-top: 10px;">报警分区: <span id="dma_warning_num"></span>个</div>
             </div>
         </div>
     </div>
@@ -282,8 +282,8 @@
             <li id="tableAlarmDate"><a href="#warningData" data-toggle="tab"
                                        id="AlarmData">报警记录</a></li>
             
-            <div id="dmapredetail" class="leakcolor10" style="float:right;margin-top:9px;" >
-                <li style="display:inline-block;">(分区名称：<span id="dma_selected">城西主城区片区</span>
+            <div id="dmapredetail" style="float:right;margin-top:9px;" >
+                <li style="display:inline-block;">(分区名称：<span id="dma_selected"></span>
                 </li>&nbsp;&nbsp;
                 <li style="display:inline-block;">本月供水量：<span id="month_water_out">1613.65m³</span>
                 </li>

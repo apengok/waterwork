@@ -102,6 +102,8 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     var dma_level2_clicked = "";
     var show_dma_level = "2";
     var dma_list = [];
+    var dma_color_list = ["#329e07","#ce6016","#880f8c","#60462c","#ba6b1a","#ea1526"];
+    var dma_details = [];
 
     var old_r7fp =  $("#recent7flowpress").width();
 
@@ -1760,18 +1762,11 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       treeObj.checkNode(treeNode, true, true);
       map.clearMap();
       // trackPlayback.getTable('#gpsTable', []);
-      trackPlayback.getTable('#gpsTable3', [[0,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [1,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [2,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [3,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [4,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [5,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [6,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [7,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [8,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [9,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [10,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],
-        [11,'2018-12-25','porcessing','festival','me','2018-12-25','merry christmas'],]);
+      trackPlayback.getTable('#gpsTable3', [[0,'2018-12-25 12:34','未处理','分区内表具报警','','',''],
+        [1,'2018-12-25','未处理','产销差过高','','',''],
+        [2,'2018-12-25','未处理','夜间小流异常','','',''],
+        [3,'2018-12-25','已处理','夜间小流异常','张三','2018-12-26 ','分区内有夜间施工，导致夜间正常用水量大'],
+        
       
       // 查询行驶数据
       // trackPlayback.getHistory("");
@@ -1779,6 +1774,28 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       $("#playCarListIcon").hide();
       if(treeNode.type == "dma"){
         $("#dma_selected").text(treeNode.name);
+        var tmp_d_t = parseFloat(treeNode.leakrate);
+        var colorstr;
+        if(tmp_d_t < 10){
+            $("#dmapredetail").removeClass()
+            $("#dmapredetail").addClass("leakcolor10");
+            
+        }else if(tmp_d_t < 12){
+            $("#dmapredetail").removeClass()
+            $("#dmapredetail").addClass("leakcolor12");
+        }else if(tmp_d_t < 20){
+            $("#dmapredetail").removeClass()
+            $("#dmapredetail").addClass("leakcolor20");
+        }else if(tmp_d_t < 30){
+            $("#dmapredetail").removeClass()
+            $("#dmapredetail").addClass("leakcolor30");
+        }else {
+            $("#dmapredetail").removeClass()
+            $("#dmapredetail").addClass("leakcolor30b");
+        }
+        
+        $("#month_leaky").text(tmp_d_t);
+
         dma_selected = true
         dma_bindname = treeNode.name;
         var pNode = treeNode.getParentNode();
@@ -1787,12 +1804,15 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         organ = pNode.id;
         station = treeNode.id;
 
+        $(".realTimeCanArea").show()
+
         trackPlayback.loadGeodata(2)
+
       }
       else{
         show_dma_level = "2";
         dma_level2_clicked = "";
-
+        $(".realTimeCanArea").hide()
         trackPlayback.loadGeodata(1)
       }
       $("#allMileage").text(treeNode.name);
@@ -2289,33 +2309,11 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         treeObj.checkNode(nodes[i], false, true);
       }
     },
+    
     //对象树加载成功
     zTreeOnAsyncSuccess: function (event, treeId, treeNode, msg) {
 
-        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        var nodes = treeObj.getCheckedNodes(true);
-        allNodes = treeObj.getNodes();
-        var childNodes = treeObj.transformToArray(allNodes[0]);
-
-        for ( var j = 0; j < childNodes.length; j++) {
-            
-            if (childNodes[j].type == "dma") {
-                //set color 
-                var  color = [0, 0, 0];
-                var r1 = Math.round(Math.random()*3 - 0.5);
-                color[r1] = 15;
-                var r2 = Math.round(Math.random()*3 - 0.5);
-                while (r2 === r1) {
-                r2 = Math.round(Math.random()*3 - 0.5);
-                }
-                color[r2] = Math.round(Math.random()*16-0.5);
-                var colorstr = "#"+color[0].toString(16)+color[1].toString(16)+color[2].toString(16);
-                treeObj.setting.view.fontCss["color"] = colorstr;
-                console.log(childNodes[j].name,colorstr)
-                //调用updateNode(node)接口进行更新
-                treeObj.updateNode(childNodes[j]);
-            }
-        }
+        trackPlayback.updateTreeNodeColor(dma_details);
 
 
       var vUuid = $('#vid').val();
@@ -3214,6 +3212,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                                         'dma_name':dmaMapStatistic.dma_name,
                                         'dma_level':dmaMapStatistic.dma_level,
                                         'belongto_cid':dmaMapStatistic.belongto_cid,
+                                        'leakerate':dmaMapStatistic.leakerate,
                                     },
                                     //填充透明度
                                 });
@@ -3238,6 +3237,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                                 // })
 
                                 dma_list.push(polyFence)
+                                dma_details.push([dmaMapStatistic.dma_no,dmaMapStatistic.leakerate,dmaMapStatistic.dma_name])
                                 // polyFence.setMap(map);
                                 // map.setFitView(polyFence);
                                 
@@ -3247,11 +3247,82 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                         map.add(dma_list)
                         map.setFitView(dma_list);
                         trackPlayback.refreshMap();
+                        // 并不是每个dma分区都画了围栏，此路不通
+                        // trackPlayback.updateTreeNodeColor(dma_details);
+                        // console.log(dma_details)
                     }
                 },      
             });
             
         },
+    updateTreeNodeColor:function(data){
+        //
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        var nodes = treeObj.getCheckedNodes(true);
+        allNodes = treeObj.getNodes();
+        var childNodes = treeObj.transformToArray(allNodes[0]);
+        var all_dma_num = 0;
+        var dma_leak10=0,dma_leak12=0,dma_leak20=0,dma_leak30=0,dma_leak30b=0,dma_warning_num=0;
+        var dma_level1_num=0,dma_level2_num=0,dma_level3_num=0;
+        for ( var j = 0; j < childNodes.length; j++) {
+
+            if (childNodes[j].type == "group") {
+                if(childNodes[j].organlevel =="1"){
+                    dma_level1_num += 1;
+                }
+            }
+            
+            if (childNodes[j].type == "dma") {
+
+                var tmp_d_t = parseFloat(childNodes[j].leakrate);
+
+                // statstic dma level
+                if(childNodes[j].dmalevel == "2"){
+                    dma_level2_num += 1;
+                }else if(childNodes[j].dmalevel == "3"){
+                    dma_level3_num += 1;
+                }
+            
+                //set color 
+                var colorstr;
+                if(tmp_d_t < 10){
+                    colorstr = dma_color_list[0];
+                    dma_leak10 += 1;
+                }else if(tmp_d_t < 12){
+                    colorstr = dma_color_list[1];
+                    dma_leak12 += 1;
+                }else if(tmp_d_t < 20){
+                    colorstr = dma_color_list[2];
+                    dma_leak20 += 1;
+                }else if(tmp_d_t < 30){
+                    colorstr = dma_color_list[3];
+                    dma_leak30 += 1;
+                }else {
+                    colorstr = dma_color_list[4];
+                    dma_leak30b += 1;
+                }
+                treeObj.setting.view.fontCss["color"] = colorstr;
+                
+                //调用updateNode(node)接口进行更新
+                treeObj.updateNode(childNodes[j]);
+                
+                
+            }
+        }
+
+        all_dma_num = dma_leak10 + dma_leak12 + dma_leak20 + dma_leak30 + dma_leak30b;
+        $("#all_dma_num").text(all_dma_num);
+        $("#dma_leak10").text(dma_leak10);
+        $("#dma_leak12").text(dma_leak12);
+        $("#dma_leak20").text(dma_leak20);
+        $("#dma_leak30").text(dma_leak30);
+        $("#dma_leak30b").text(dma_leak30b);
+        $("#dma_warning_num").text(dma_warning_num);
+
+        $("#dma_level1_num").text(dma_level1_num);
+        $("#dma_level2_num").text(dma_level2_num);
+        $("#dma_level3_num").text(dma_level3_num);
+    },
     refreshMap:function(){
             var mapBounds = map.getBounds();
             var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
@@ -3574,6 +3645,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     $("#toggle-left").on("click", trackPlayback.toggleBtn);
     $("#realTimeBtn .mapBtn").on("click", trackPlayback.mapBtnActive);
     $("#realTimeRC").on("click", trackPlayback.realTimeRC);
+    $("#trackPlayQuery").on("click", trackPlayback.trackDataQuery);
     
     $("#warningData").on("click", trackPlayback.warningData);
     // 树结构模糊搜索

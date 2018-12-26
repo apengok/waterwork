@@ -344,7 +344,7 @@ def dmatree(request):
     
     # mergeds = merge_values(o_lists)
     #dma
-    dma_lists = user.dma_list_queryset().values("pk","dma_name","dma_no","belongto__cid")
+    dma_lists = user.dma_list_queryset().values("pk","dma_name","dma_no","belongto__cid","belongto__organlevel")
     # merged_dma = merge_values_to_dict(dma_lists,"belongto__cid")
     #station
     station_lists = user.station_list_queryset('').values("pk","username","meter__simid__simcardNumber","meter__protocol","belongto__cid")
@@ -367,6 +367,8 @@ def dmatree(request):
                 "pId":d["belongto__cid"],
                 "type":"dma",
                 "dma_no":d["dma_no"],
+                "leakrate":random.choice([9.65,13.46,11.34,24.56,32.38,7.86,10.45,17.89,23.45,36,78]),
+                "dmalevel":d["belongto__organlevel"],
                 "icon":"/static/virvo/resources/img/dma.png",
                 "uuid":''
             })

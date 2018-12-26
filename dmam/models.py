@@ -20,6 +20,7 @@ from legacy.utils import (HdbFlow_day_use,HdbFlow_day_hourly,HdbFlow_month_use,H
 from mptt.models import MPTTModel, TreeForeignKey
 
 from .utils import merge_values
+import random
 
 # Create your models here.
 
@@ -366,6 +367,7 @@ class DMABaseinfo(models.Model):
 
         return {
             "dma_name":self.dma_name,
+            "dma_no":self.dma_no,
             "belongto":self.belongto.name,
             "belongto_cid":self.belongto.cid,
             "dma_level":self.belongto.organlevel, #"二级",
@@ -374,7 +376,7 @@ class DMABaseinfo(models.Model):
             "month_sale":round(float(monthly_sale[month_str]),2) ,
             "last_month_sale":round(float(monthly_sale[lastmonth_str]),2) ,
             "last_add_ratio":"34%",
-            "dma_leakerate":9
+            "leakerate":random.choice([9.65,13.46,11.34,24.56,32.38,7.86,10.45,17.89,23.45,36,78])
         }
 
 '''
