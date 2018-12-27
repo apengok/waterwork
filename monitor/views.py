@@ -513,7 +513,7 @@ def stationlist(request):
                 "influx":'-',
                 "plusflux":'-',
                 "revertflux":'-',
-                "press":round(float(merged_bgms[b]['pressure']),2) if merged_bgms[b]['pressure'] else '',
+                "press":round(float(merged_bgms[b]['pressure']),3) if merged_bgms[b]['pressure'] else '',
                 "baseelectricity":round(float(merged_bgms[b]['meterv']),2) if merged_bgms[b]['meterv'] else '',
                 "remoteelectricity":round(float(merged_bgms[b]['gprsv']),2) if merged_bgms[b]['gprsv'] else '',
                 "signal":round(float(merged_bgms[b]['signlen']),2) if merged_bgms[b]['signlen'] else '',
