@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
-from . models import Bigmeter,HdbFlowData,MeterParameter
+from . models import Bigmeter,HdbFlowData,MeterParameter,Watermeter,Community
 # Register your models here.
 
 
@@ -50,3 +50,19 @@ class HdbFlowDataAdmin(admin.ModelAdmin):
     list_display = ["commaddr","serialnumber","commandstate","commandtype","sendparametertime","readparametertime"]
 
     # list_filter = ("commaddr","readtime")
+
+
+
+@admin.register(Watermeter)
+class WatermeterAdmin(admin.ModelAdmin):
+    list_display = ["id","nodeaddr","wateraddr","communityid","serialnumber","pntno"]
+    list_filter = ("communityid",)
+    search_fields = ("id","nodeaddr","wateraddr" )
+
+
+
+@admin.register(Community)
+class CommunityAdmin(admin.ModelAdmin):
+    list_display = ["id","name","districtid"]
+
+    search_fields = ("id","name","districtid" )

@@ -140,6 +140,82 @@ def test_job():
     logger_info.info("added total {}".format(count))
 
 
+def update_pwl():
+    waterid = 36545
+    communityid = 105
+    count = 0
+    # hdb_watermeter_day
+    # 威尔沃数据库最后一条数据记录
+    zncb_last = HdbWatermeterDay.objects.using("shexian").filter(waterid=waterid).order_by("hdate").values()
+    print("zncb all count:",zncb_last.count())
+    virvo_last = HdbWatermeterDay.objects.using("zncb").filter(waterid=waterid).order_by("hdate").values()
+    print("virvo all count:",virvo_last.count())
+    for z in zncb_last:
+        waid = z["waterid"]
+        hdate = z["hdate"]
+        coid = z["communityid"]
+
+        vs = HdbWatermeterDay.objects.using("zncb").filter(waterid=waid,hdate=hdate,communityid=coid).update(
+            rvalue = z["rvalue"],
+            fvalue = z["fvalue"],
+            meterstate = z["meterstate"],
+            commstate = z["commstate"],
+            rtime = z["rtime"],
+            dosage = z["dosage"])
+        print(vs)
+        # if vs.exists():
+        #     v = vs.first()
+        #     v.rvalue = z["rvalue"]
+        #     v.fvalue = z["fvalue"]
+        #     v.meterstate = z["meterstate"]
+        #     v.commstate = z["commstate"]
+        #     v.rtime = z["rtime"]
+        #     v.dosage = z["dosage"]
+
+        #     # v.save(using="zncb")
+        # else:
+        #     print(vs,"exists ?")
+            # HdbWatermeterDay.objects.using("zncb").create(z)
+
+    
+
+def test_pwl():
+    waterid = 36544
+    communityid = 105
+    count = 0
+    # hdb_watermeter_day
+    # 威尔沃数据库最后一条数据记录
+    zncb_last = HdbWatermeterDay.objects.using("zncb").filter(waterid=waterid).order_by("hdate").last()
+    # print("zncb count",zncb_last.count())
+    print('zncb_last',zncb_last.waterid,zncb_last.hdate,zncb_last.communityid)
+    if zncb_last:
+        last_readtime = zncb_last.rtime
+        print("last_readtime:",last_readtime)
+        if last_readtime is None:
+            print("lastreadtime none/")
+        # 取歙县服务器该条数据记录对比
+        sx_last = HdbWatermeterDay.objects.using("shexian").filter(waterid=waterid).filter(rtime=last_readtime).first()
+        # 取出上次最后一条数据记录之后增加的记录
+        print('sx_last',sx_last.waterid,sx_last.hdate,sx_last.communityid)
+        if sx_last:
+            # print('last_readtime',last_readtime,zncb_last)
+            # print('sx_last',sx_last)
+            added = HdbWatermeterDay.objects.using("shexian").filter(waterid=waterid).filter(rtime__gt=datetime.datetime.strptime(last_readtime.strip(),"%Y-%m-%d %H:%M:%S")).all()
+            if added.exists():
+                print("added count:",added.count())
+                count += added.count()
+                added_list = []
+                for d in added:
+                    print(d)
+                    added_list.append(HdbWatermeterDay(waterid=d.waterid,rvalue=d.rvalue,fvalue=d.fvalue,rtime=d.rtime,hdate=d.hdate,
+                            meterstate=d.meterstate,commstate=d.commstate,dosage=d.dosage,communityid=d.communityid) )
+                try:
+                    # HdbWatermeterDay.objects.bulk_create(added_list)
+                    print("added list count:",len(added_list))
+                except Exception as e:
+                    print("1.",e)
+
+
 class Command(BaseCommand):
     help = 'import data from A to B'
 
@@ -276,7 +352,9 @@ class Command(BaseCommand):
         count = 0
         if options['test']:
             
-            test_job()
+            # test_job()
+            test_pwl()
+            # update_pwl()
             # 
 
         if options['secondwater']:
