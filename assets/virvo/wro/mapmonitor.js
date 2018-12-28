@@ -106,6 +106,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     var dma_details = [];
 
     var old_r7fp =  $("#recent7flowpress").width();
+    var dma_in_group = [];
 
   trackPlayback = {
     //初始化
@@ -1806,15 +1807,31 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
         $(".realTimeCanArea").show()
 
-        trackPlayback.loadGeodata(2)
+        if(treeNode.dmalevel == "3"){
+            show_dma_level = "3";
+        }
+
+        // trackPlayback.loadGeodata(2)
 
       }
       else{
+
+        
         show_dma_level = "2";
         dma_level2_clicked = "";
         $(".realTimeCanArea").hide()
-        trackPlayback.loadGeodata(1)
+        // trackPlayback.loadGeodata(1)
       }
+      dma_in_group = [];
+      var childNodes = treeObj.transformToArray(treeNode);
+        console.log(childNodes)
+        for(var i = 0;i<childNodes.length;i++){
+            if(childNodes[i].type == "dma"){
+                dma_in_group.push(childNodes[i].dma_no);
+            }
+        }
+        console.log("dma_in_group",dma_in_group)
+      trackPlayback.refreshMap_local();
       $("#allMileage").text(treeNode.name);
       $("#allTime").text(0);
       $("#maxSpeend").text(0 + "km/h");
@@ -3161,11 +3178,26 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     },
     // add pwl
     textClicked:function(belongto_cid){
-            dma_level = 3;
-            // current_organ = belongto_cid;
-            $("#current_organ_id").attr("value",belongto_cid);
-            trackPlayback.loadGeodata(0)
-        },
+        dma_level = 3;
+        show_dma_level = "3"
+        // current_organ = belongto_cid;
+        $("#current_organ_id").attr("value",belongto_cid);
+        // trackPlayback.loadGeodata(0)
+        dma_in_group =[]
+
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        var nodes = treeObj.getNodesByParam("id", belongto_cid, null);
+        console.log(nodes);
+        var childNodes = treeObj.transformToArray(nodes);
+        console.log(childNodes)
+        for(var i = 0;i<childNodes.length;i++){
+            if(childNodes[i].type == "dma"){
+                dma_in_group.push(childNodes[i].dma_no);
+            }
+        }
+        console.log("dma_in_group",dma_in_group)
+        trackPlayback.refreshMap_local();
+    },
     loadGeodata:function(dflag){
             dma_no = $("#current_dma_no").val();
             current_organ = $("#current_organ_id").val()
@@ -3211,6 +3243,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                                     extData:{
                                         'dma_name':dmaMapStatistic.dma_name,
                                         'dma_level':dmaMapStatistic.dma_level,
+                                        'dma_no':dmaMapStatistic.dma_no,
                                         'belongto_cid':dmaMapStatistic.belongto_cid,
                                         'leakerate':dmaMapStatistic.leakerate,
                                     },
@@ -3324,6 +3357,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         $("#dma_level3_num").text(dma_level3_num);
     },
     refreshMap:function(){
+        return trackPlayback.refreshMap_local();
             var mapBounds = map.getBounds();
             var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
             var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
@@ -3339,7 +3373,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                   zIndex:0,
                   bubble:true
 
-                });
+            });
             // console.log(mapBounds)
             // console.log(bounds)
             
@@ -3356,10 +3390,12 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                 var tdma = dma_list[i];
                 var polygon2_path = tdma.getPath();
                 
+
                 // in
                 var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
                 if(isRingInRing ){
                     var tdma_name = tdma.getExtData().dma_name; 
+
                     var tdma_level = tdma.getExtData().dma_level;
                     if(tdma_level == "2"){
                         count_dma_2_in += 1;
@@ -3390,16 +3426,18 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                         extData:{
                             'dma_name':tdma_name,
                             'dma_level':tdma_level,
-                            // 'belongto_cid':dmaMapStatistic.belongto_cid,
+                            'belongto_cid':dmaMapStatistic.belongto_cid,
                         },
                         position: trackPlayback.calculateCenter(polygon2_path) //[116.396923,39.918203]
                     });
 
                     text.on("click",function(e){
                         // console.log(e,e.target.getExtData().belongto_cid);
-                        // var belongto_cid = e.target.getExtData().belongto_cid;
-                        // mapMonitor.textClicked(belongto_cid);
+                        var belongto_cid = e.target.getExtData().belongto_cid;
+                        trackPlayback.textClicked(belongto_cid);
                         dma_level2_clicked = e.target.getExtData().dma_name;
+        console.log(belongto_cid,dma_level2_clicked)
+
                         show_dma_level = "3";
                         trackPlayback.refreshMap();
                     })
@@ -3443,7 +3481,132 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
 
         },
+        refreshMap_local:function(){
+            var mapBounds = map.getBounds();
+            var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
+            var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
 
+            var bounds = new AMap.Bounds(southWest, northEast)
+            var rectangle = new AMap.Rectangle({
+                  map: map,
+                  bounds: bounds,
+                  strokeColor:'#FFFFFF',
+                  strokeWeight:1,
+                  strokeOpacity:0,
+                  fillOpacity:0,
+                  zIndex:0,
+                  bubble:true
+
+            });
+            // console.log(mapBounds)
+            // console.log(bounds)
+            
+            var polygon1_path = rectangle.getPath();
+            // var polygon2_path = polygon2.getPath();
+            // 小圈是否在大圈内
+            // var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+            // 两圈是否交叉
+            // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
+            map.clearMap();
+            var tmp_dma_fresh = []
+            var count_dma_2_in = 0;
+            for(var i=0;i<dma_list.length;i++){
+                var tdma = dma_list[i];
+                var polygon2_path = tdma.getPath();
+                var tdma_no = tdma.getExtData().dma_no;
+                if($.inArray(tdma_no,dma_in_group) < 0){
+                    console.log(tdma_no,'not in selected group')
+                    continue;
+                }
+                // in
+                var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+                if(isRingInRing ){
+                    var tdma_name = tdma.getExtData().dma_name; 
+                    var tdma_level = tdma.getExtData().dma_level;
+                    if(tdma_level == "2"){
+                        count_dma_2_in += 1;
+                    }
+
+                    
+                    // 创建纯文本标记 
+                    var text = new AMap.Text({
+                        text:tdma_name,
+                        textAlign:'center', // 'left' 'right', 'center',
+                        verticalAlign:'middle', //middle 、bottom
+                        draggable:true,
+                        clickable:true,
+                        cursor:'pointer',
+                        // angle:10,
+                        style:{
+                            'padding': '.75rem 1.25rem',
+                            'margin-bottom': '1rem',
+                            'border-radius': '.25rem',
+                            'background-color': '#169bd5',
+                            'width': '15rem',
+                            'border-width': 0,
+                            'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
+                            'text-align': 'center',
+                            'font-size': '20px',
+                            'color': 'white'
+                        },
+                        extData:{
+                            'dma_name':tdma_name,
+                            'dma_level':tdma_level,
+                            'belongto_cid':dmaMapStatistic.belongto_cid,
+                        },
+                        position: trackPlayback.calculateCenter(polygon2_path) //[116.396923,39.918203]
+                    });
+
+                    text.on("click",function(e){
+                        // console.log(e,e.target.getExtData().belongto_cid);
+                        var belongto_cid = e.target.getExtData().belongto_cid;
+                        trackPlayback.textClicked(belongto_cid);
+                        dma_level2_clicked = e.target.getExtData().dma_name;
+        console.log(belongto_cid,dma_level2_clicked)
+                        show_dma_level = "3";
+                        // dma_in_group.push()
+                        trackPlayback.refreshMap_local();
+                    })
+                    if(show_dma_level == "3"){
+                        // if(tdma_level == "2"){
+                        //     count_dma_2_in += 1;
+                        // }
+                        // if(count_dma_2_in >=2){
+                        //     show_dma_level = "2";
+                        // }
+                        if(tdma_level == show_dma_level || dma_level2_clicked == tdma_name){
+                            tmp_dma_fresh.push(tdma)
+                            text.setMap(map);
+                        }
+                    }else{
+                        if(tdma_level == show_dma_level){
+                            tmp_dma_fresh.push(tdma)
+                            text.setMap(map);
+                        }
+                    }
+                    // tmp_dma_fresh.push(tdma)
+                    // text.setMap(map);
+                }
+                // intersect
+                // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
+                // if(doesRingRingIntersect){
+                //     map.remove(dma_list[i]);
+                // }
+            }
+
+            console.log("count_dma_2_in:",count_dma_2_in,show_dma_level,"zoom ",map.getZoom())
+
+            if(count_dma_2_in >= 2){
+                show_dma_level = "2";
+                dma_level2_clicked = "";
+            }
+            
+            // map.remove(dma_list)
+            map.add(tmp_dma_fresh)
+            map.setFitView(tmp_dma_fresh);
+
+
+        },
         calculateCenter: function(lnglatarr){
           var total = lnglatarr.length;
           var X=0,Y=0,Z=0;

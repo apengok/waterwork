@@ -39,6 +39,7 @@ from django.conf import settings
 from waterwork.mixins import AjaxableResponseMixin
 
 from .models import FenceDistrict,Polygon,FenceShape
+# from django.contrib.gis.geos import Polygon
 
 # Create your views here.
 
@@ -726,10 +727,71 @@ def alterstrokeColor(request):
 
     return HttpResponse(json.dumps({"success":1}))
 
+# 一次获取所有基本信息，供js实现逻辑效果
+def getDMAFenceOnce(request):
+    print("getDMAFenceOnce request",request.POST)
+    dma_level = request.POST.get("dma_level") or '2'
+
+    user = request.user
+    # dma_no_list = user.dma_list_queryset().values_list("dma_no")
+    dma_lists = user.dma_list_queryset().values("pk","dma_name","dma_no","belongto__cid","belongto__organlevel")
+
+    dma_no_list = [d["dma_no"] for d in dma_lists]
+    allfence = FenceShape.objects.filter(dma_no__in=dma_no_list).values()
+
+    details_obj = []
+    for pgo in allfence:
+        dma_no = pgo["dma_no"]
+        shapeId = pgo["shapeId"]
+        if dma_no == '' or dma_no == None:
+            continue
+
+        dma = DMABaseinfo.objects.get(dma_no=dma_no)
+        # if dflag == '1':
+        #     if dma.belongto not in organ.sub_organizations(include_self=True):
+        #         continue
+
+        
+        fenceData = []
+        pointSeqs = pgo["pointSeqs"].split(",")
+        longitudes = pgo["longitudes"].split(",")
+        latitudes = pgo["latitudes"].split(",")
+        
+        for p in pointSeqs:
+            idx = int(p)
+            fenceData.append({
+                
+                "flag":1,
+                "id":"null",
+                "latitude":latitudes[idx],
+                "longitude":longitudes[idx],
+                "name":"null",
+                "polygonId":pgo["shapeId"],
+                "sortOrder":idx,
+                "type":pgo["zonetype"],
+                
+                })
+
+        details_obj.append({"fenceType":"zw_m_polygon",
+            "fillColor":pgo["fillColor"],
+            "strokeColor":pgo["strokeColor"],
+            "dmaMapStatistic":dma.dmaMapStatistic(),
+            "fenceData":fenceData
+        })
+    details = {
+        "exceptionDetailMsg":"null",
+        "msg":"null",
+        "obj":details_obj,
+        "success":1
+    }
+
+    return JsonResponse(details)
+
 
 # DMA在线监视dma group dmaMapStatistic
 # 一般水司只有一个DMA一级分区，用户登录后显示所属组织所有二级分区，当选择二级分区时再显示该二级分区的所有三级分区
 def getDMAFenceDetails(request):
+    return getDMAFenceOnce(request)
     print("getDMAFenceDetails",request.POST)
     dma_no = request.POST.get("dma_no") or ''
     dflag = request.POST.get("dflag") #0:all 1:organization 2:dma
