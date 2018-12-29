@@ -373,6 +373,7 @@ class DMABaseinfo(models.Model):
             "dma_level":self.belongto.organlevel, #"二级",
             "state":"在线",
             "water_in":round(float(water_in),2),
+            "readtime":'2018-12-29',
             "month_sale":round(float(monthly_sale[month_str]),2) ,
             "last_month_sale":round(float(monthly_sale[lastmonth_str]),2) ,
             "last_add_ratio":"34%",

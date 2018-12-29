@@ -8665,7 +8665,7 @@
             var cityObj = $("#zTreeOrganSel");
             cityObj.val(n);
             $("#groupId").val(v);
-            $("#zTreeContent").hide();
+            // $("#zTreeContent").hide();
         },
         showMenu: function (e) {
             if ($("#zTreeContent").is(":hidden")) {
@@ -8691,6 +8691,7 @@
                 console.log("zTreeContent show")
             } else {
                 $("#zTreeContent").hide();
+                console.log("zTreeContent hide")
             }
             // $("body").bind("mousedown", customFucn.onBodyDown);
         },
@@ -8769,7 +8770,7 @@
     pageLayout.responseSocket();
     fenceOperation.init();
     fenceOperation.fenceBindList();
-    // customFucn.userTree();
+    customFucn.userTree();
     fenceOperation.initDMAList();
     // fenceOperation.fenceEnterprise();
     amapOperation.init();
@@ -8813,7 +8814,7 @@
     $("#minuteSelect tr td").bind("click", fenceOperation.minuteSelectClick);
     $("#secondSelect tr td").bind("click", fenceOperation.secondSelectClick);
     //切换电子围栏
-    $("#TabCarBox").bind("click", fenceOperation.TabCarBox);
+    // $("#TabCarBox").bind("click", fenceOperation.TabCarBox);
     //切换监控对象
     $("#TabFenceBox").bind("click", fenceOperation.TabFenceBox);
     $("#rectangleEditClose").bind("click", fenceOperation.rectangleEditClose);
@@ -8838,7 +8839,7 @@
         $("input[name='subChk']").prop("checked", this.checked);
     });
     // $("#fenceBindTable").modal('show');
-    fenceOperation.TabCarBox();
+    // fenceOperation.TabCarBox();
     $("#zTreeOrganSel").bind("click", customFucn.showMenu);
         
     })

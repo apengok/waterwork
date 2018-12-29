@@ -101,12 +101,14 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     var dma_bindname = "";
     var dma_level2_clicked = "";
     var show_dma_level = "2";
-    var dma_list = [];
+    var dma_list = []; // dma框图和统计信息的全局列表
+    var dma_no_global = []; //记录初始的全部dma_no
     var dma_color_list = ["#329e07","#ce6016","#880f8c","#60462c","#ba6b1a","#ea1526"];
     var dma_details = [];
 
     var old_r7fp =  $("#recent7flowpress").width();
-    var dma_in_group = [];
+    var dma_in_group = [];  //点击组织时记录该组织下的全部二级分区
+    var dma3_and_dma2 = []; //点击二级dma蓝色统计信息，记录该二级分区及下属的三级分区
 
   trackPlayback = {
     //初始化
@@ -133,7 +135,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         } else if (trLength == 6) {
           calHeight = 340
         }
-        calHeight = 340
+        calHeight = 240
         zTreeHeight = windowHeight - headerHeight - panelHead - calHeight - citySelHght - 26;
         $("#treeDemo").css("height", zTreeHeight + "px");
         if (windowHeight <= 667) {
@@ -184,7 +186,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       citySelHght = $("#citySel").parent().height() + 10;//输入框高度
       //日历高亮
       
-      calHeight = 340
+      calHeight = 240
       zTreeHeight = windowHeight - headerHeight - panelHead - calHeight - citySelHght - 26;
       $("#treeDemo").css("height", zTreeHeight + "px");
       if (windowHeight <= 667) {
@@ -265,7 +267,15 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             [possn, possa], //西南角坐标
             [posnn, posna]//东北角坐标
         );
-        trackPlayback.refreshMap();
+            console.log("??????1",show_dma_level)
+        if(show_dma_level == "3"){
+            show_dma_level = ""
+            console.log("??????2",show_dma_level)
+        }
+        else{
+            dma_in_group = dma_no_global;
+            trackPlayback.refreshMap_local();
+        }
       });
       lmapHeight = $("#MapContainer").height();
       Math.formatFloat = function (f, digit) {
@@ -3176,32 +3186,53 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     mapSetting:function () {
 
     },
-    // add pwl
-    textClicked:function(belongto_cid){
+    dmagroupdiv:function(level){
+        // alert("hide dma level "+ level)
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        var nodes = treeObj.getCheckedNodes(true);
+        allNodes = treeObj.getNodes();
+        var childNodes = treeObj.transformToArray(allNodes[0]);
+        for(var i = 0;i<childNodes.length;i++){
+            // if(level=="0"){
+                if(childNodes[i].isHidden){
+                    treeObj.showNode(childNodes[i]);
+                }
+            // }
+            if(childNodes[i].type == "dma" && childNodes[i].dmalevel == level){
+                treeObj.hideNode(childNodes[i]);
+            }
+        }
+    },
+    // 点击二级dma分区蓝色流量方框，则该二级分区居中全图显示，然后再该分区内的三级分区都要显示
+    textClicked:function(belongto_cid,clicked_dma_no){
         dma_level = 3;
         show_dma_level = "3"
         // current_organ = belongto_cid;
         $("#current_organ_id").attr("value",belongto_cid);
         // trackPlayback.loadGeodata(0)
-        dma_in_group =[]
-
+        dma3_and_dma2 =[]
+        dma3_and_dma2.push(clicked_dma_no);
         var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
         var nodes = treeObj.getNodesByParam("id", belongto_cid, null);
-        console.log(nodes);
+        
         var childNodes = treeObj.transformToArray(nodes);
-        console.log(childNodes)
+        
+        var str_d = nodes[0].name;
         for(var i = 0;i<childNodes.length;i++){
-            if(childNodes[i].type == "dma"){
-                dma_in_group.push(childNodes[i].dma_no);
+            if(childNodes[i].type == "dma" && childNodes[i].dmalevel == "3"){
+                dma3_and_dma2.push(childNodes[i].dma_no);
+                
             }
         }
-        console.log("dma_in_group",dma_in_group)
-        trackPlayback.refreshMap_local();
+        
+        trackPlayback.refreshMap_dma3();
+        // show_dma_level = "2"
     },
     loadGeodata:function(dflag){
             dma_no = $("#current_dma_no").val();
             current_organ = $("#current_organ_id").val()
             map.clearMap();
+            dma_in_group = [];
             map.remove(dma_list)
             dma_list=[]
             $.ajax({
@@ -3246,6 +3277,8 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                                         'dma_no':dmaMapStatistic.dma_no,
                                         'belongto_cid':dmaMapStatistic.belongto_cid,
                                         'leakerate':dmaMapStatistic.leakerate,
+                                        'water_in':dmaMapStatistic.water_in,
+                                        'readtime':dmaMapStatistic.readtime,
                                     },
                                     //填充透明度
                                 });
@@ -3271,15 +3304,22 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
                                 dma_list.push(polyFence)
                                 dma_details.push([dmaMapStatistic.dma_no,dmaMapStatistic.leakerate,dmaMapStatistic.dma_name])
+                                dma_in_group.push(dmaMapStatistic.dma_no)
+                                // dma_no_global.push(dmaMapStatistic.dma_no)
+                                
                                 // polyFence.setMap(map);
                                 // map.setFitView(polyFence);
                                 
                             }
                         }
+                        dma_no_global = dma_in_group;
 
                         map.add(dma_list)
                         map.setFitView(dma_list);
-                        trackPlayback.refreshMap();
+                        console.log(dma_no_global)
+                        console.log(dma_in_group)
+
+                        trackPlayback.refreshMap_local();
                         // 并不是每个dma分区都画了围栏，此路不通
                         // trackPlayback.updateTreeNodeColor(dma_details);
                         // console.log(dma_details)
@@ -3356,132 +3396,8 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         $("#dma_level2_num").text(dma_level2_num);
         $("#dma_level3_num").text(dma_level3_num);
     },
-    refreshMap:function(){
-        return trackPlayback.refreshMap_local();
-            var mapBounds = map.getBounds();
-            var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
-            var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
-
-            var bounds = new AMap.Bounds(southWest, northEast)
-            var rectangle = new AMap.Rectangle({
-                  map: map,
-                  bounds: bounds,
-                  strokeColor:'#FFFFFF',
-                  strokeWeight:1,
-                  strokeOpacity:0,
-                  fillOpacity:0,
-                  zIndex:0,
-                  bubble:true
-
-            });
-            // console.log(mapBounds)
-            // console.log(bounds)
-            
-            var polygon1_path = rectangle.getPath();
-            // var polygon2_path = polygon2.getPath();
-            // 小圈是否在大圈内
-            // var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
-            // 两圈是否交叉
-            // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
-            map.clearMap();
-            var tmp_dma_fresh = []
-            var count_dma_2_in = 0;
-            for(var i=0;i<dma_list.length;i++){
-                var tdma = dma_list[i];
-                var polygon2_path = tdma.getPath();
-                
-
-                // in
-                var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
-                if(isRingInRing ){
-                    var tdma_name = tdma.getExtData().dma_name; 
-
-                    var tdma_level = tdma.getExtData().dma_level;
-                    if(tdma_level == "2"){
-                        count_dma_2_in += 1;
-                    }
-
-                    
-                    // 创建纯文本标记 
-                    var text = new AMap.Text({
-                        text:tdma_name,
-                        textAlign:'center', // 'left' 'right', 'center',
-                        verticalAlign:'middle', //middle 、bottom
-                        draggable:true,
-                        clickable:true,
-                        cursor:'pointer',
-                        // angle:10,
-                        style:{
-                            'padding': '.75rem 1.25rem',
-                            'margin-bottom': '1rem',
-                            'border-radius': '.25rem',
-                            'background-color': '#169bd5',
-                            'width': '15rem',
-                            'border-width': 0,
-                            'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
-                            'text-align': 'center',
-                            'font-size': '20px',
-                            'color': 'white'
-                        },
-                        extData:{
-                            'dma_name':tdma_name,
-                            'dma_level':tdma_level,
-                            'belongto_cid':dmaMapStatistic.belongto_cid,
-                        },
-                        position: trackPlayback.calculateCenter(polygon2_path) //[116.396923,39.918203]
-                    });
-
-                    text.on("click",function(e){
-                        // console.log(e,e.target.getExtData().belongto_cid);
-                        var belongto_cid = e.target.getExtData().belongto_cid;
-                        trackPlayback.textClicked(belongto_cid);
-                        dma_level2_clicked = e.target.getExtData().dma_name;
-        console.log(belongto_cid,dma_level2_clicked)
-
-                        show_dma_level = "3";
-                        trackPlayback.refreshMap();
-                    })
-                    if(show_dma_level == "3"){
-                        // if(tdma_level == "2"){
-                        //     count_dma_2_in += 1;
-                        // }
-                        // if(count_dma_2_in >=2){
-                        //     show_dma_level = "2";
-                        // }
-                        if(tdma_level == show_dma_level || dma_level2_clicked == tdma_name){
-                            tmp_dma_fresh.push(tdma)
-                            text.setMap(map);
-                        }
-                    }else{
-                        if(tdma_level == show_dma_level){
-                            tmp_dma_fresh.push(tdma)
-                            text.setMap(map);
-                        }
-                    }
-                    // tmp_dma_fresh.push(tdma)
-                    // text.setMap(map);
-                }
-                // intersect
-                // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
-                // if(doesRingRingIntersect){
-                //     map.remove(dma_list[i]);
-                // }
-            }
-
-            console.log("count_dma_2_in:",count_dma_2_in,show_dma_level,"zoom ",map.getZoom())
-
-            if(count_dma_2_in >= 2){
-                show_dma_level = "2";
-                dma_level2_clicked = "";
-            }
-            
-            // map.remove(dma_list)
-            map.add(tmp_dma_fresh)
-            map.setFitView(tmp_dma_fresh);
-
-
-        },
-        refreshMap_local:function(){
+    refreshMap_dma3:function(){
+        
             var mapBounds = map.getBounds();
             var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
             var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
@@ -3514,8 +3430,89 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                 var tdma = dma_list[i];
                 var polygon2_path = tdma.getPath();
                 var tdma_no = tdma.getExtData().dma_no;
+                if($.inArray(tdma_no,dma3_and_dma2) < 0){
+                    // console.log(tdma_no,'not in selected group')
+                    continue;
+                }
+                var water_in = tdma.getExtData().water_in;
+                var readtime = tdma.getExtData().readtime;
+                var show_text = water_in + "m³/h<br/>" + readtime;
+                var tdma_name = tdma.getExtData().dma_name; 
+
+                
+                // 创建纯文本标记 
+                var text = new AMap.Text({
+                    text:show_text,
+                    textAlign:'center', // 'left' 'right', 'center',
+                    verticalAlign:'middle', //middle 、bottom
+                    draggable:true,
+                    clickable:true,
+                    cursor:'pointer',
+                    // angle:10,
+                    style:{
+                        'padding': '.75rem 1.25rem',
+                        'margin-bottom': '1rem',
+                        'border-radius': '.25rem',
+                        'background-color': '#169bd5',
+                        'width': '10rem',
+                        'border-width': 0,
+                        'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
+                        'text-align': 'center',
+                        'font-size': '12px',
+                        'color': 'white'
+                    },
+                    
+                    position: trackPlayback.calculateCenter(polygon2_path) //[116.396923,39.918203]
+                });
+
+                tmp_dma_fresh.push(tdma)
+                text.setMap(map)
+            }
+
+
+            
+            // map.remove(dma_list)
+            map.add(tmp_dma_fresh)
+            map.setFitView(tmp_dma_fresh);
+
+
+        },
+        // 只显示二级分区，三级分区另外函数实现
+        refreshMap_local:function(){
+            var mapBounds = map.getBounds();
+            var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
+            var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
+
+            var bounds = new AMap.Bounds(southWest, northEast)
+            var rectangle = new AMap.Rectangle({
+                  map: map,
+                  bounds: bounds,
+                  strokeColor:'#FFFFFF',
+                  strokeWeight:1,
+                  strokeOpacity:0,
+                  fillOpacity:0,
+                  zIndex:0,
+                  bubble:true
+
+            });
+            // console.log(mapBounds)
+            // console.log(bounds)
+            console.log('dma_in_group:',dma_in_group)
+            var polygon1_path = rectangle.getPath();
+            // var polygon2_path = polygon2.getPath();
+            // 小圈是否在大圈内
+            // var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+            // 两圈是否交叉
+            // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
+            map.clearMap();
+            var tmp_dma_fresh = []
+            var count_dma_2_in = 0;
+            for(var i=0;i<dma_list.length;i++){
+                var tdma = dma_list[i];
+                var polygon2_path = tdma.getPath();
+                var tdma_no = tdma.getExtData().dma_no;
                 if($.inArray(tdma_no,dma_in_group) < 0){
-                    console.log(tdma_no,'not in selected group')
+                    // console.log(tdma_no,'not in selected group')
                     continue;
                 }
                 // in
@@ -3523,14 +3520,20 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                 if(isRingInRing ){
                     var tdma_name = tdma.getExtData().dma_name; 
                     var tdma_level = tdma.getExtData().dma_level;
+                    var tdma_belongto_cid = tdma.getExtData().belongto_cid;
                     if(tdma_level == "2"){
                         count_dma_2_in += 1;
                     }
-
+                    else{
+                        continue;
+                    }
                     
+                    var water_in = tdma.getExtData().water_in;
+                    var readtime = tdma.getExtData().readtime;
+                    var show_text = water_in + "m³/h<br/>" + readtime;
                     // 创建纯文本标记 
                     var text = new AMap.Text({
-                        text:tdma_name,
+                        text:show_text,
                         textAlign:'center', // 'left' 'right', 'center',
                         verticalAlign:'middle', //middle 、bottom
                         draggable:true,
@@ -3542,17 +3545,18 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                             'margin-bottom': '1rem',
                             'border-radius': '.25rem',
                             'background-color': '#169bd5',
-                            'width': '15rem',
+                            'width': '10rem',
                             'border-width': 0,
                             'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
                             'text-align': 'center',
-                            'font-size': '20px',
+                            'font-size': '12px',
                             'color': 'white'
                         },
                         extData:{
                             'dma_name':tdma_name,
                             'dma_level':tdma_level,
-                            'belongto_cid':dmaMapStatistic.belongto_cid,
+                            'dma_no':tdma_no,
+                            'belongto_cid':tdma_belongto_cid,
                         },
                         position: trackPlayback.calculateCenter(polygon2_path) //[116.396923,39.918203]
                     });
@@ -3560,46 +3564,23 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                     text.on("click",function(e){
                         // console.log(e,e.target.getExtData().belongto_cid);
                         var belongto_cid = e.target.getExtData().belongto_cid;
-                        trackPlayback.textClicked(belongto_cid);
+                        var clicked_dma_no = e.target.getExtData().dma_no;
+                        trackPlayback.textClicked(belongto_cid,clicked_dma_no);
                         dma_level2_clicked = e.target.getExtData().dma_name;
-        console.log(belongto_cid,dma_level2_clicked)
-                        show_dma_level = "3";
-                        // dma_in_group.push()
-                        trackPlayback.refreshMap_local();
+        
+                        
                     })
-                    if(show_dma_level == "3"){
-                        // if(tdma_level == "2"){
-                        //     count_dma_2_in += 1;
-                        // }
-                        // if(count_dma_2_in >=2){
-                        //     show_dma_level = "2";
-                        // }
-                        if(tdma_level == show_dma_level || dma_level2_clicked == tdma_name){
-                            tmp_dma_fresh.push(tdma)
-                            text.setMap(map);
-                        }
-                    }else{
-                        if(tdma_level == show_dma_level){
-                            tmp_dma_fresh.push(tdma)
-                            text.setMap(map);
-                        }
-                    }
-                    // tmp_dma_fresh.push(tdma)
-                    // text.setMap(map);
+
+                    tmp_dma_fresh.push(tdma)
+                    text.setMap(map);
+                    
                 }
-                // intersect
-                // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
-                // if(doesRingRingIntersect){
-                //     map.remove(dma_list[i]);
-                // }
+                
             }
 
-            console.log("count_dma_2_in:",count_dma_2_in,show_dma_level,"zoom ",map.getZoom())
-
-            if(count_dma_2_in >= 2){
-                show_dma_level = "2";
-                dma_level2_clicked = "";
-            }
+            // if(count_dma_2_in > 2){
+            //             break;
+            //         }
             
             // map.remove(dma_list)
             map.add(tmp_dma_fresh)
@@ -3870,6 +3851,16 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     $("#mapDropSetting").on("click", trackPlayback.showMapView);
     //谷歌地图
     $("#googleMap").on('click',trackPlayback.showGoogleMapLayers);
+
+    $("#dma_level2_div").on('click',function(){
+        trackPlayback.dmagroupdiv("3");
+    });
+    $("#dma_level3_div").on('click',function(){
+        trackPlayback.dmagroupdiv("2");
+    });
+    $("#refreshTable").on('click',function(){
+        trackPlayback.dmagroupdiv("0");
+    });
 
   });
 }($, window))
