@@ -2348,6 +2348,7 @@
             ;
         },
         addCluster: function (id) {
+            console.log("addCluster",id)
             fixedPoint = null;
             if (id != null) {
                 var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
@@ -4171,11 +4172,19 @@
                 $("#pointSeqsPolygons").val(pointSeqs);
                 $("#longitudesPolygons").val(longitudes);
                 $("#latitudesPolygons").val(latitudes);
-                pageLayout.closeVideo();
+                // pwl add belongto
+                $("#zTreeOrganSel").val(data.belongto)
+                // pageLayout.closeVideo();
                 setTimeout(function () {
                     console.log("timeout show?")
                     $("#myModal").modal("show");
-                    
+                    $("#myModal").modal('show');
+                    // pwl add edit belongto
+                    customFucn.userTree();
+                    $("#zTreeContent").hide();
+                    console.log("data.dma_no",data.dma_no)
+                    $("#dma_no_Val").val(data.dma_no)
+                    fenceOperation.initDMAList();
                 }, 200);
             }
         },
@@ -5120,8 +5129,12 @@
                             $('#province').val('--请选择--');
                             document.getElementById('city').innerHTML = '';
                             document.getElementById('district').innerHTML = '';
-                            pageLayout.closeVideo();
+                            // pageLayout.closeVideo();
+                            console.log("show administration modal ")
                             $('#administrativeArea').modal('show');
+                            // customFucn.userTree();
+                            fenceOperation.initOrganList();
+
                         }
                         ;
                         return false;
@@ -5607,8 +5620,8 @@
                         pageLayout.closeVideo();
                         
                         $("#myModal").modal('show');
-                        // customFucn.userTree();
-                        console.log("timeout show2?")
+                        customFucn.userTree();
+                        $("#zTreeContent").hide();
                     }
                 }
                 ;
@@ -6115,19 +6128,35 @@
 
         initDMAListBack: function(data){
             console.log("dmalist",data);
+            var dma_no_Val = $("#dma_no_Val").val();
             var html = '<option value="">未选择</option>'
-            
+                    console.log("data.dma_no",dma_no_Val)
+            $("#dma_no").val(dma_no_Val)
             // //DMAlist
             var dmalist = data.obj;
             // 初始化dma数据
             
             if (dmalist.length > 0) {
                 for (var i=0; i< dmalist.length; i++) {
-                    
+                    // if(dmalist[i].dma_no == dma_no_Val){
+                    //     html+= '<option value="'+dmalist[i].dma_no+' selected="selected">'+dmalist[i].dma_name+'</option>'
+
+                    // }else{
+                        
+                    //     html+= '<option value="'+dmalist[i].dma_no+'">'+dmalist[i].dma_name+'</option>'
+                    // }
                     html+= '<option value="'+dmalist[i].dma_no+'">'+dmalist[i].dma_name+'</option>'
+
+
                 }
                 $("#dma_no").html(html);
             }
+
+            $("#dma_no option").each(function (){
+                if($(this).val()==dma_no_Val){ 
+                $(this).attr("selected","selected"); 
+            }});
+
             //DMAlist
             // var dmalist = data.obj;
             // // 初始化车辆数据
@@ -6156,6 +6185,86 @@
                 
             // }).on('onUnsetSelectValue', function () {
             // });
+        
+        },
+        initOrganList:function(){
+            var url="/entm/user/oranizationSelectlist/";
+            
+            var parameter={};
+            json_ajax("POST",url,"json",true,parameter, fenceOperation.initOrganListBack);
+        },
+
+        initOrganListBack: function(data){
+            // console.log("dmalist",data);
+            // var dma_no_Val = $("#dma_no_Val").val();
+            // var html = '<option value="">未选择</option>'
+            //         console.log("data.dma_no",dma_no_Val)
+            // $("#dma_no").val(dma_no_Val)
+            // // //DMAlist
+            // var dmalist = data.obj;
+            // // 初始化dma数据
+            
+            // if (dmalist.length > 0) {
+            //     for (var i=0; i< dmalist.length; i++) {
+            //         // if(dmalist[i].dma_no == dma_no_Val){
+            //         //     html+= '<option value="'+dmalist[i].dma_no+' selected="selected">'+dmalist[i].dma_name+'</option>'
+
+            //         // }else{
+                        
+            //         //     html+= '<option value="'+dmalist[i].dma_no+'">'+dmalist[i].dma_name+'</option>'
+            //         // }
+            //         html+= '<option value="'+dmalist[i].dma_no+'">'+dmalist[i].dma_name+'</option>'
+
+
+            //     }
+            //     $("#dma_no").html(html);
+            // }
+
+            // $("#dma_no option").each(function (){
+            //     if($(this).val()==dma_no_Val){ 
+            //     $(this).attr("selected","selected"); 
+            // }});
+
+            // DMAlist
+            var organlist = data.obj;
+            // 初始化车辆数据
+            var dataList = {value: []};
+            if (organlist !== null && organlist.length > 0) {
+                for (var i=0; i< organlist.length; i++) {
+                    var obj = {};
+                    obj.id = organlist[i].id;
+                    obj.name = organlist[i].name;
+                    dataList.value.push(obj);
+                }
+                
+            }
+            $("#organSel").bsSuggest({
+                indexId: 1,  //data.value 的第几个数据，作为input输入框的内容
+                indexKey: 0, //data.value 的第几个数据，作为input输入框的内容
+                idField: "id",
+                keyField: "name",
+                effectiveFields: ["name"],
+                searchFields:["id"],
+                data: dataList,
+                listStyle: {
+                    'padding-top': 0,
+                    'max-height': '375px',
+                    'max-width': '800px',
+                    'overflow': 'auto',
+                    'width': 'auto',
+                    'transition': '0.3s',
+                    '-webkit-transition': '0.3s',
+                    '-moz-transition': '0.3s',
+                    '-o-transition': '0.3s'
+                },                              //列表的样式控制
+                listAlign: 'left',              //提示列表对齐位置，left/right/auto
+            }).on('onDataRequestSuccess', function (e, result) {
+            }).on('onSetSelectValue', function (e, keyword, data) {
+                // 当选择参考车牌
+                var dma_no_selected = keyword.id;
+                
+            }).on('onUnsetSelectValue', function () {
+            });
         
         },
         //圆保存
@@ -7042,12 +7151,11 @@
         bodyClickEvent: function (event) {
             if ($(event.target).parents("#hmsTime").length == 0 && event.target.id != "hmsTime" && event.target.id.indexOf('TimeHMS') == -1) {
                 $("#hmsTime").hide();
-            }
-            ;
-            if ($(event.target).className != 'ztreeModelBox' && $(event.target).parents(".ztreeModelBox").length == 0 && event.target.id.indexOf('FenceEnterprise') == -1) {
-                $('.ztreeModelBox').hide();
-            }
-            ;
+            };
+            // if ($(event.target).className != 'ztreeModelBox' && $(event.target).parents(".ztreeModelBox").length == 0 && event.target.id.indexOf('FenceEnterprise') == -1) {
+            //     console.log("ztreeModelBox hide...?")
+            //     $('.ztreeModelBox').hide();
+            // };
         },
         hourseSelectClick: function () {
             hourseSelect = $(this).text();
@@ -7590,6 +7698,7 @@
             var detailsFenceType;
             var detailsFenceCreateName;
             var detailsFenceCreateTime;
+            var detailsFenceBelongtoName;
             if (fenceType == 'zw_m_line') {
                 detailsFenceType = data[0].line.type;
                 detailsFenceDescribe = data[0].line.description;
@@ -7601,8 +7710,12 @@
             } else if (fenceType == 'zw_m_polygon') {
                 detailsFenceType = data[0].polygon.type;
                 detailsFenceDescribe = data[0].polygon.description;
+                detailsFenceBelongtoName = data[0].polygon.belongto;
                 if (detailsFenceDescribe == "" || detailsFenceDescribe == null) {
                     detailsFenceDescribe = "无任何描述"
+                }
+                if (detailsFenceBelongtoName == "" || detailsFenceBelongtoName == null) {
+                    detailsFenceBelongtoName = "未设置"
                 }
                 detailsFenceCreateName = data[0].polygon.createDataUsername;
                 detailsFenceCreateTime = data[0].polygon.createDataTime;
@@ -7629,6 +7742,7 @@
             $("#detailsFenceCreateName").text(detailsFenceCreateName);
             $("#detailsFenceCreateTime").text(detailsFenceCreateTime);
             $("#detailsFenceDescribe").text(detailsFenceDescribe);
+            $("#detailsFenceBelongtoName").text(detailsFenceBelongtoName);
         },
         //清空围栏绑定
         clearFenceBind: function () {
@@ -8643,7 +8757,8 @@
                 }
             };
             $.fn.zTree.init($("#ztreeDemo"), setting, null);
-            
+            $('.ztreeModelBox').hide();
+            $("#zTreeContent").hide();
         },
         beforeClick: function (treeId, treeNode) {
             var check = (treeNode);
@@ -8665,7 +8780,9 @@
             var cityObj = $("#zTreeOrganSel");
             cityObj.val(n);
             $("#groupId").val(v);
-            // $("#zTreeContent").hide();
+            
+            $("#zTreeContent").hide();
+            // $('.ztreeModelBox').hide();
         },
         showMenu: function (e) {
             if ($("#zTreeContent").is(":hidden")) {
@@ -8693,7 +8810,7 @@
                 $("#zTreeContent").hide();
                 console.log("zTreeContent hide")
             }
-            // $("body").bind("mousedown", customFucn.onBodyDown);
+            $("body").bind("mousedown", customFucn.onBodyDown);
         },
         hideMenu: function () {
             console.log("zTreeContent hide")
@@ -8703,7 +8820,7 @@
         onBodyDown: function (event) {
             if (!(event.target.id == "zTreeOrganSel"||event.target.id == "menuBtn" || event.target.id == "zTreeContent" || $(
                     event.target).parents("#zTreeContent").length > 0)) {
-                // customFucn.hideMenu();
+                customFucn.hideMenu();
             }
         },
         //组织树预处理函数
@@ -8713,11 +8830,12 @@
             var isAdmin = isAdminStr == 'true';
             var userGroupId = $("#userGroupId").attr("value");  // 用户所属组织 id
             var userGroupName = $("#userGroupName").attr("value");  // 用户所属组织 name
+            var fenceBelongto = $("#zTreeOrganSel").val();
             //如果根企业下没有节点,就显示错误提示(根企业下不能创建Sim卡)
             if(responseData != null && responseData != "" && responseData != undefined && responseData.length >= 1){
-                if (!isAdmin) { // 不是admin，默认组织为当前组织
+                if (fenceBelongto != "") { // 不是admin，默认组织为当前组织
                     // $("#groupId").val(userGroupId);
-                    $("#zTreeOrganSel").val(userGroupName);
+                    $("#zTreeOrganSel").val(fenceBelongto);
                 } else { // admin，默认组织为树结构第一个组织
                     // $("#groupId").val(responseData[0].uuid);
                     $("#zTreeOrganSel").attr("value", responseData[0].name);
@@ -8770,8 +8888,8 @@
     pageLayout.responseSocket();
     fenceOperation.init();
     fenceOperation.fenceBindList();
-    customFucn.userTree();
-    fenceOperation.initDMAList();
+    // customFucn.userTree();
+    // fenceOperation.initDMAList();
     // fenceOperation.fenceEnterprise();
     amapOperation.init();
     // treeMonitoring.init();

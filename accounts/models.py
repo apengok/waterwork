@@ -12,6 +12,7 @@ from django.db.models import Q
 
 from entm.models import Organizations
 from dmam.models import DMABaseinfo,Meter,Station,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure,VSecondWater
+from gis.models import FenceDistrict
 
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 
@@ -365,6 +366,20 @@ class User(AbstractBaseUser,PermissionsMixin):
             dmalist |= g.dma.all()
             
         return dmalist
+
+    # 组织下dma分区围栏列表
+    def fence_list_queryset(self):
+        # if self.is_admin:
+        #     return DMABaseinfo.objects.search(cid,level,dma_no)
+
+        fencelist = FenceDistrict.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            fencelist |= g.fencedistrict_set.all()
+            
+        return fencelist
 
     #组织及下属组织下的二供
     def secondwater_list_queryset(self,q):

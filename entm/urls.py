@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^role/choicePermissionTree',views.choicePermissionTree,name='choicePermissionTree'),
     url(r'^role/personlizedFrontTree',views.personlizedFrontTree,name='personlizedFrontTree'), #preview 预览
     url(r'^user/oranizationtree/',views.oranizationtree,name='oranizationtree'),
+    url(r'^user/oranizationSelectlist/',views.oranizationSelectlist,name='oranizationSelectlist'),
 
     # 企业管理 --角色管理
     #组织

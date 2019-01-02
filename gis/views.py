@@ -86,8 +86,36 @@ class PipelineImexportView(LoginRequiredMixin,TemplateView):
         
         return context  
 
-def fenceTree(request):
+def fenceTree_organ(request):
+    user = request.user
+    fences = user.fence_list_queryset().values()
 
+    fentree = [{"name":"圆形","pId":"-","id":"zw_m_circle","type":"fenceParent","open":"true"},
+                {"name":"矩形","pId":"-","id":"zw_m_rectangle","type":"fenceParent","open":"true"},
+                {"name":"多边形","pId":"-","id":"zw_m_polygon","type":"fenceParent","open":"true"},
+                {"name":"行政区划","pId":"-","id":"zw_m_administration","type":"fenceParent","open":"true"},]
+    for fs in fences:
+        polygon = {
+            "name":fs["name"],
+            "pId":fs["pId"],
+            "id":fs["cid"],
+            "type":fs["ftype"],
+            "open":"true"
+            }
+        if fs["pId"] == "zw_m_polygon":
+            polygon["iconSkin"]="zw_m_polygon_skin",
+        if fs["pId"] == "zw_m_rectangle":
+            polygon["iconSkin"]="zw_m_rectangle_skin",
+        if fs["pId"] == "zw_m_circle":
+            polygon["iconSkin"]="zw_m_circle_skin",
+        if fs["pId"] == "zw_m_administration":
+            polygon["iconSkin"]="zw_m_administration_skin",
+        fentree.append(polygon)
+
+    return HttpResponse(json.dumps(fentree))
+
+def fenceTree(request):
+    return fenceTree_organ(request)
     fences = FenceDistrict.objects.values()
 
     fentree = []
@@ -203,6 +231,7 @@ def savePolygons(request):
     polygonId = request.POST.get("polygonId")
     name = request.POST.get("name")
     ftype = request.POST.get("type")
+    belongto = request.POST.get("belongto")
     dma_no = request.POST.get("dma_no")
     shape = request.POST.get("shape")
     description = request.POST.get("description")
@@ -211,11 +240,14 @@ def savePolygons(request):
     latitudes = request.POST.get("latitudes")
 
     createDataUsername = request.user.user_name
+    organ = Organizations.objects.get(name=belongto)
 
     if addOrUpdatePolygonFlag == "1":
         f = FenceDistrict.objects.get(cid=polygonId)
         p = FenceShape.objects.get(shapeId=polygonId)
         f.name = name
+        f.belongto = organ
+        f.dma_no = dma_no
         f.description = description
         f.save()
         p.name = name
@@ -223,6 +255,7 @@ def savePolygons(request):
         p.pointSeqs = pointSeqs
         p.longitudes = longitudes
         p.latitudes = latitudes
+        p.dma_no = dma_no
         p.save()
         
     else:
@@ -443,14 +476,14 @@ def getFenceDetails(request):
     return JsonResponse(details)
 
 
-
+# 编辑dma分区围栏预览
 def previewFence(request):
     print("previewFence",request.POST)
     fenceIdShape = request.POST.get("fenceIdShape") 
     
     fenceId,shape = fenceIdShape.split("#")
 
-    fd = FenceDistrict.objects.filter(cid=fenceId).values().first()
+    fd = FenceDistrict.objects.filter(cid=fenceId).values("createDataTime","createDataUsername","description","name","updateDataTime","updateDataUsername","belongto__name").first()
     pgo = FenceShape.objects.filter(shapeId=fenceId).values().first()
 
     details_obj = []
@@ -537,6 +570,8 @@ def previewFence(request):
                 "description":fd["description"],
                 "flag":1,
                 "id":pgo["shapeId"],
+                "belongto":fd["belongto__name"],
+                "dma_no":pgo["dma_no"],
                 "latitude":"null",
                 "longitude":"null",
                 "name":fd["name"],
