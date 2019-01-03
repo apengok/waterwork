@@ -32,6 +32,7 @@
     var checkFlag = false; //判断组织节点是否是勾选操作
     var size;//当前权限监控对象数量
     var online_length;
+    
 
     var commaddr = $("#commaddr").val();
     console.log("commaddr",commaddr)
@@ -139,7 +140,8 @@
                     data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
                     otherParam : {  // 是否可选 Organization
                         "isOrg" : "1",
-                        "isStation" : "1"
+                        "isStation" : "1",
+                        "isPressure" : "1",
                         // "csrfmiddlewaretoken": "{{ csrf_token }}"
                     },
                     dataFilter: reportFlows.ajaxDataFilter
@@ -216,7 +218,7 @@
             $('#simpleQueryParam').val("");
             $("#organ_name").attr("value",treeNode.name);
             $("#station_name").attr("value","");
-            if(treeNode.type == "station"){
+            if(treeNode.type == "station" || treeNode.type == "pressure"){
                 var pNode = treeNode.getParentNode();
                 $("#organ_name").attr("value",pNode.name);
                 $("#station_name").attr("value",treeNode.name);

@@ -301,7 +301,7 @@
 
                                     </div>
                                 </div>
-                                <!-- <div class="form-group">
+                                <div class="form-group">
                                     <label class="col-md-3 control-label"><label class="text-danger">*</label> 所属组织：</label>
                                     <div class="has-feedback col-md-8">
                                         <input name="belongto" class="form-control" id="zTreeOrganSel"
@@ -315,7 +315,7 @@
                                         
                                     </div>
 
-                                </div> -->
+                                </div>
                                 
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">DMA分区：</label>
@@ -481,30 +481,30 @@
                     <div class="modal-body">
                         <!-- 新增围栏表单 -->
                         <form class="form-horizontal" id="administration" role="form" action="/gis/fence/managefence/addAdministration" method="post">
-                            <table class="table table-striped table-bordered table-hover table-lng-lat">
-                            </table>
+                            <!-- <table class="table table-striped table-bordered table-hover table-lng-lat">
+                            </table> -->
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">所属组织：</label>
-                                    <div class="col-md-8 form-group" style="padding-top:10px; margin:0px;">
-                        <div style="position:relative;">
-                            <span style="overflow:hidden;">
-                                <input type="hidden" id="simID" name="simID" value=""/>
-                                </span>
-                                <div class="input-group">
-                                    <input value=""  type="text" placeholder="" class="form-control" maxlength="20" id="organSel" name="organSel">
-                                    
-                                    <div class="input-group-btn">
-                                        <!-- <input type="hidden" class="hidenSubmitControl"/> -->
-                                      <button type="button" id="button" class="btn btn-white dropdown-toggle " data-toggle="dropdown">
-                                          <span class="caret"></span>
-                                      </button>
-                                      <ul class="dropdown-menu dropdown-menu-right" role="menu"  style="width:100%">
-                                      </ul>
+                                    <label class="col-md-4 control-label Administrative-label">所属组织：</label>
+                                    <div class="col-md-7 form-group" style="padding-top:10px; margin:0px;">
+                                    <!-- <div style="position:relative;"> -->
+                                        <span style="overflow:hidden;">
+                                            <input type="hidden" id="simID" name="simID" value=""/>
+                                            </span>
+                                            <div class="input-group">
+                                                <input value=""  type="text" placeholder="" class="form-control" maxlength="20" id="organSel" name="organSel">
+                                                
+                                                <div class="input-group-btn">
+                                                    <!-- <input type="hidden" class="hidenSubmitControl"/> -->
+                                                  <button type="button" id="button" class="btn btn-white dropdown-toggle " data-toggle="dropdown">
+                                                      <span class="caret"></span>
+                                                  </button>
+                                                  <ul class="dropdown-menu dropdown-menu-right" role="menu"  style="width:100%;text-align: left;">
+                                                  </ul>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
                                     </div>
-                                </div>
-                        </div>
-                    </div>
                                     <!-- <div class="col-md-8">
                                         
                                         <div class="input-group">
@@ -522,9 +522,9 @@
                                     </div> -->
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label Administrative-label"><label
+                                    <label class="col-md-4 control-label Administrative-label"><label
                                             class="text-danger">*</label> 省：</label>
-                                    <div class=" col-md-8">
+                                    <div class=" col-md-7">
                                         <input type="hidden" id="provinceVal" name="province"/>
                                         <select class="form-control" id="province"></select>
                                         <label id="provinceError"
@@ -532,32 +532,32 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label Administrative-label">市：</label>
-                                    <div class=" col-md-8">
+                                    <label class="col-md-4 control-label Administrative-label">市：</label>
+                                    <div class=" col-md-7">
                                         <input type="hidden" id="cityVal" name="city"/>
                                         <select class="form-control" id="city">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label Administrative-label">区：</label>
-                                    <div class=" col-md-8">
+                                    <label class="col-md-4 control-label Administrative-label">区：</label>
+                                    <div class=" col-md-7">
                                         <input type="hidden" id="districtVal" name="district"/>
                                         <select class="form-control" id="district">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label Administrative-label"><label
+                                    <label class="col-md-4 control-label Administrative-label"><label
                                             class="text-danger">*</label> 名称：</label>
-                                    <div class=" col-md-8">
+                                    <div class=" col-md-7">
                                         <input type="text" placeholder="请输入行政区划名称" class="form-control" id="administrationName"
                                                name="name"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label Administrative-label">描述：</label>
-                                    <div class=" col-md-8">
+                                    <label class="col-md-4 control-label Administrative-label">描述：</label>
+                                    <div class=" col-md-7">
                                         <textarea class="form-control" rows="3" id="administrationDistrict"
                                                   name="description"></textarea>
                                     </div>

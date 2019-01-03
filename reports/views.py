@@ -461,6 +461,7 @@ def stationhistorylist(request):
         order_column = int(request.POST.get("order[0][column]", None))
         order = request.POST.get("order[0][dir]", None)
         groupName = request.POST.get("groupName")
+        groupType = request.POST.get("groupType")
         districtId = request.POST.get("districtId")
         simpleQueryParam = request.POST.get("simpleQueryParam")
         sTime = request.POST.get("startTime") #or '2018-10-31 00:00:00'
@@ -478,10 +479,9 @@ def stationhistorylist(request):
     flows = HdbFlowData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values()
     press = HdbPressureData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values_list("readtime","pressure")
     press_dict = dict(press)
-
+    
     # bgm = Bigmeter.objects.filter(commaddr=commaddr).values_list("commaddr","signlen")
     # bgm_dict = dict(bgm)
-    
     
     def flows_data(b):
         readtime = b["readtime"]
@@ -503,19 +503,38 @@ def stationhistorylist(request):
             "signal":signlen, #signlen
             
         }
-        
+
     data = []
+    if groupType == "pressure":
+        # add pressure
+        for k,v in press_dict.items():
+            data.append({
+                'readtime':k,
+                'press':v,
+                'influx':'-',
+                'plusflux':'-',
+                'revertflux':'-',
+                'baseelectricity':'-',
+                'remoteelectricity':'-',
+                'signal':'-',
+                })
+        recordsTotal = press.count()
+
+    else:
+        for b in flows:  #[start:start+length]
+            
+            ret=flows_data(b)
+            
+            if ret is not None:
+                data.append(ret)
+
     
-    
-    for b in flows:  #[start:start+length]
         
-        ret=flows_data(b)
-        
-        if ret is not None:
-            data.append(ret)
     
     
-    recordsTotal = flows.count()
+    
+    
+        recordsTotal = flows.count()
     # recordsTotal = bgms.count()
     
     result = dict()
