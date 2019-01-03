@@ -507,18 +507,19 @@ def stationhistorylist(request):
     data = []
     if groupType == "pressure":
         # add pressure
-        for k,v in press_dict.items():
+        pressures = HdbPressureData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values()
+        for p in pressures:
             data.append({
-                'readtime':k,
-                'press':v,
+                'readtime':p["readtime"],
+                'press':p["pressure"],
                 'influx':'-',
                 'plusflux':'-',
                 'revertflux':'-',
-                'baseelectricity':'-',
-                'remoteelectricity':'-',
+                'baseelectricity':p["gprsv"],
+                'remoteelectricity':p["meterv"],
                 'signal':'-',
                 })
-        recordsTotal = press.count()
+        recordsTotal = pressures.count()
 
     else:
         for b in flows:  #[start:start+length]
