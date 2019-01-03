@@ -507,7 +507,7 @@ def stationhistorylist(request):
     data = []
     if groupType == "pressure":
         # add pressure
-        pressures = HdbPressureData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values()
+        pressures = HdbPressureData.objects.filter(commaddr=commaddr,readtime__range=[sTime,eTime]).values().order_by('-readtime')
         for p in pressures:
             data.append({
                 'readtime':p["readtime"],
@@ -1077,9 +1077,10 @@ def meterlist(request):
 
     month_str = today.strftime("%Y-%m")
     month_flow = HdbFlowDataMonth.objects.filter(hdate=month_str)
-    yesmonth = datetime.datetime(year=today.year,month=today.month-1,day=today.day)
+    
+    yesmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
     yesmonth_str = yesmonth.strftime("%Y-%m")
-    lastmonth = datetime.datetime(year=today.year,month=today.month-2,day=today.day)
+    lastmonth = datetime.date.today().replace(day=41) - datetime.timedelta(days=1)
     lastmonth_str = lastmonth.strftime("%Y-%m")
     
 
@@ -1246,9 +1247,9 @@ def bigusermeterlist(request):
 
     month_str = today.strftime("%Y-%m")
     month_flow = HdbFlowDataMonth.objects.filter(hdate=month_str)
-    yesmonth = datetime.datetime(year=today.year,month=today.month-1,day=today.day)
+    yesmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
     yesmonth_str = yesmonth.strftime("%Y-%m")
-    lastmonth = datetime.datetime(year=today.year,month=today.month-2,day=today.day)
+    lastmonth = datetime.date.today().replace(day=41) - datetime.timedelta(days=1)
     lastmonth_str = lastmonth.strftime("%Y-%m")
     
 

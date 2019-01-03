@@ -362,7 +362,8 @@ class DMABaseinfo(models.Model):
         # print('monthly_sale',monthly_sale)
         today = datetime.date.today()
         month_str = today.strftime("%Y-%m")
-        lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=1)
+        
+        lastmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
         lastmonth_str = lastmonth.strftime("%Y-%m")
 
         return {

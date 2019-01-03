@@ -1080,7 +1080,7 @@ def getdmamapusedata(request):
     if month_flow.exists():
         month_sale = month_flow.first().dosage
 
-    lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=today.day)
+    lastmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
     lastmonth_str = lastmonth.strftime("%Y-%m")
     lastmonth_flow = HdbFlowDataMonth.objects.filter(hdate=lastmonth_str)
     if lastmonth_flow.exists():

@@ -8,6 +8,7 @@ from django.contrib import messages
 import json
 import random
 import datetime
+# from datetime import date, timedelta
 import time
 from django.template.loader import render_to_string
 from django.shortcuts import render,HttpResponse
@@ -66,7 +67,11 @@ def dmastasticinfo():
         if month_flow.exists():
             month_sale = month_flow.first().dosage
 
-        lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=1)
+        # lastmonth = datetime.datetime(year=today.year,month=today.month-1,day=1)
+        
+        # now = datetime.datetime.now()
+        # lastmonth = now + dateutil.relativedelta.relativedelta(months=-1)
+        lastmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
         lastmonth_str = lastmonth.strftime("%Y-%m")
         lastmonth_flow = HdbFlowDataMonth.objects.filter(commaddr=commaddr).filter(hdate=lastmonth_str)
         if lastmonth_flow.exists():
