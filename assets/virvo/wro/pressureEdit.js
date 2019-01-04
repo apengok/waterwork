@@ -340,8 +340,13 @@
                         keyField: "name",
                         effectiveFields: ["name"]
                     }).on('onDataRequestSuccess', function (e, result) {
+                    }).on("focus", function() {
+                        
+                        dataInput.siblings('i.delIcon').remove();
                     }).on("click",function(){
+                        // dataInput.siblings('i.delIcon').remove();
                     }).on('onSetSelectValue', function (e, keyword, data) {
+                        console.log("onSetSelectValue")
                         if(callback){
                             dataInput.closest('.form-group').find('.dropdown-menu').hide()
                             callback(keyword)
@@ -351,6 +356,8 @@
                         editpressureManagement.hideErrorMsg();
                     }).on('onUnsetSelectValue', function () {
                         //放开输入
+                        console.log("onUnsetSelectValue")
+
                         editpressureManagement.showHideValueCase(1,dataInput);
                     });
                     
