@@ -9,6 +9,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.db.models import Q
+import datetime
 
 # from dmam.models import Station
 
@@ -444,6 +445,38 @@ class HdbFlowData(models.Model):
 
 
 
+class HdbFlowDataDayQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query) |
+                Q(hdate__icontains=query)
+                
+                ).distinct()
+        return self
+
+    def history(self, query,day): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query) &
+                Q(hdate__gt=datetime.datetime.today()-datetime.timedelta(days=day))
+                
+                ).distinct()
+        return self
+
+
+class HdbFlowDataDayManager(models.Manager):
+    def get_queryset(self):
+        return HdbFlowDataDayQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query,day)
+
+    def history(self, query,day): #RestaurantLocation.objects.search()
+        return self.get_queryset().history(query,day)
+
 
 class HdbFlowDataDay(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -451,13 +484,15 @@ class HdbFlowDataDay(models.Model):
     hdate = models.CharField(db_column='HDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
     dosage = models.CharField(db_column='Dosage', max_length=64, blank=True, null=True)  # Field name made lowercase.
 
+    objects = HdbFlowDataDayManager()
+
     class Meta:
         managed = False
         db_table = 'hdb_flow_data_day'
         unique_together = (('commaddr', 'hdate'),)
 
-    def __unicode__(self):
-        return '%s%s'%(self.commaddr)
+    def __str__(self):
+        return '{},{},{}'.format(self.commaddr,self.hdate,self.dosage)
 
 
 class HdbFlowDataHour(models.Model):

@@ -59,6 +59,7 @@ class DMABaseinfoQuerySet(models.query.QuerySet):
         return self
 
 
+
 class DMABaseinfoManager(models.Manager):
     def get_queryset(self):
         return DMABaseinfoQuerySet(self.model, using=self._db)

@@ -177,9 +177,19 @@ def update_pwl():
         #     print(vs,"exists ?")
             # HdbWatermeterDay.objects.using("zncb").create(z)
 
-    
+def test_manager():
+    hdd = HdbFlowDataDay.objects.history('064893483800',4).values()
+    print (hdd.count())
+    for h in hdd:
+        print(h)
+    else:
+        tc=HdbFlowDataDay.objects.filter(commaddr='064893483800').filter(hdate='2019-01-11')
+        print('count:',tc.count())
+        for t in tc:
+            print(t)
 
 def test_pwl():
+    return test_manager()
     waterid = 36544
     communityid = 105
     count = 0
