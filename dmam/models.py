@@ -1030,7 +1030,11 @@ class VCommunityManager(models.Manager):
     def search(self, query): #RestaurantLocation.objects.search()
         return self.get_queryset().search(query)
 
+'''
+从歙县导入过来的id，在威尔沃的服务器抄表系统中，可能不是同一个
 
+歙县导入的Community数据的id保存到commutid，通过查找amrs_commutid获得真正的id(pk)
+'''
 class VCommunity(MPTTModel):
     name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
     parent  = TreeForeignKey('self', null=True, blank=True,on_delete=models.CASCADE, related_name='children', db_index=True)
@@ -1039,7 +1043,9 @@ class VCommunity(MPTTModel):
 
     belongto = models.ForeignKey(Organizations,on_delete=models.CASCADE)
     
-    commutid = models.IntegerField( blank=True, null=True) #对应抄表系统Community表的id
+    outter = models.CharField(max_length=30, blank=True, null=True) #从歙县导入的数据标识
+    commutid = models.IntegerField( blank=True, null=True) #从歙县导入的Community表的id
+    amrs_commutid = models.IntegerField( blank=True, null=True) #在抄表系统中对应的Community id
     
     vconcentrators = models.ManyToManyField( VConcentrator )
 
@@ -1065,28 +1071,34 @@ def ensure_vcommunity_exists(sender, **kwargs):
         instance=kwargs.get('instance')
         name= instance.name
         address = instance.address
+        outter = instance.outter
         
-
+        print("1.created")
         zncb_community = Community.objects.create(name=name,address=address,districtid=districtid)  
-        instance.commutid = zncb_community.id
+        instance.amrs_commutid = zncb_community.id
         instance.save() 
     else:
         instance=kwargs.get('instance')
         name= instance.name
         address = instance.address
         commutid = instance.commutid
-
-        contor = Community.objects.filter(id=commutid)
+        print("2.update?")
+        contor = Community.objects.filter(name=name)
         if contor.exists():
             # print(instance.username,bigm.first().username)
             b=contor.first()
             b.name= name
             b.address = address
-            
+            print("3..",name,b.pk,b.id)
+            # instance.update(amrs_commutid=b.id)
             b.save()
+            if instance.amrs_commutid != b.id:
+                instance.amrs_commutid = b.id
+                instance.save()
         else:
             zncb_community = Community.objects.create(name=name,address=address,districtid=districtid)  
-            instance.commutid = zncb_community.id
+            # community
+            instance.amrs_commutid = zncb_community.id
             instance.save()   
 
 
@@ -1118,11 +1130,15 @@ class VWatermeterManager(models.Manager):
 
 class VWatermeter(models.Model):
     name = models.CharField(db_column='Name', max_length=64, blank=True, null=True)  # Field name made lowercase.
-    # 适应歙县小表watermeterid
+
+    outter = models.CharField(max_length=30, blank=True, null=True) #从歙县导入的数据标识
+    # 适应歙县小表watermeterid,通过歙县的waterid查找实际映射到virvo数据库的实际id(pk)
     waterid = models.IntegerField(db_column='WaterId', blank=True, null=True)  # Field name made lowercase.
+    amrs_waterid = models.IntegerField(db_column='Amrs WaterId', blank=True, null=True)  # Field name made lowercase.
     wateraddr = models.CharField(db_column='WaterAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
     belongto = models.ForeignKey(Organizations,on_delete=models.CASCADE)
 
+    outter_communityid = models.IntegerField(db_column='sx_wm_communityid', blank=True, null=True)  # Field name made lowercase.
     communityid = models.ForeignKey( VCommunity ,on_delete=models.CASCADE,related_name='watermeter')    #所属小区
     concentrator = models.ForeignKey( VConcentrator ,on_delete=models.CASCADE,null=True, blank=True,)    #所属集中器
 
@@ -1152,51 +1168,47 @@ class VWatermeter(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def communityidnew(self):
+        return self.communityid.pk
+
 
 # Watermeter : unique_together = (('communityid', 'nodeaddr', 'wateraddr'),)
-@receiver(post_save, sender=VWatermeter)
+# @receiver(post_save, sender=VWatermeter)
 def ensure_vmatermeter_exists(sender, **kwargs):
+
+    instance=kwargs.get('instance')
+    if instance.outter == "歙县":
+        return
+    numbersth= instance.numbersth
+    buildingname = instance.buildingname
+    roomname = instance.roomname
+    manufacturer = instance.manufacturer
+    serialnumber = instance.serialnumber
+    madedate = instance.madedate
+    username = instance.username
+    usertel = instance.usertel 
+    dn = instance.dn 
+    metercontrol = instance.ValveMeter
+    installationsite = instance.installationsite
+    communityid = instance.amrs_waterid
+    nodeaddr = instance.serialnumber
+    wateraddr = instance.serialnumber
+
     district = District.objects.first()
     districtid = district.id
     community = Community.objects.first()
     commutid = community.id
     if kwargs.get('created', False):
-        instance=kwargs.get('instance')
-        numbersth= instance.numbersth
-        buildingname = instance.buildingname
-        roomname = instance.roomname
-        manufacturer = instance.manufacturer
-        serialnumber = instance.serialnumber
-        madedate = instance.madedate
-        username = instance.username
-        usertel = instance.usertel 
-        dn = instance.dn 
-        metercontrol = instance.ValveMeter
-        installationsite = instance.installationsite
-        communityid = instance.communityid.commutid
-        nodeaddr = instance.serialnumber
-        wateraddr = instance.serialnumber
-
+        
+        print("1.create")
         zncb_watermeter = Watermeter.objects.create(numbersth=numbersth,buildingname=buildingname,roomname=roomname,username=username,usertel=usertel,
             communityid=communityid,installationsite=installationsite,manufacturer=manufacturer,metercontrol=metercontrol,serialnumber=serialnumber,
             madedate=madedate,dn=dn,nodeaddr=nodeaddr,wateraddr=wateraddr)  
-        instance.waterid = zncb_watermeter.id
+        instance.amrs_waterid = zncb_watermeter.id
         instance.save() 
     else:
-        instance=kwargs.get('instance')
-        numbersth= instance.numbersth
-        buildingname = instance.buildingname
-        roomname = instance.roomname
-        manufacturer = instance.manufacturer
-        serialnumber = instance.serialnumber
-        madedate = instance.madedate
-        username = instance.username
-        usertel = instance.usertel 
-        dn = instance.dn 
-        metercontrol = instance.ValveMeter
-        installationsite = instance.installationsite
-        communityid = instance.communityid.commutid
-        waterid = instance.waterid
+        
 
         contor = Watermeter.objects.filter(id=waterid)
         if contor.exists():
@@ -1212,15 +1224,20 @@ def ensure_vmatermeter_exists(sender, **kwargs):
             b.usertel=usertel
             b.dn=dn
             b.metercontrol=metercontrol
-            
+            print("2.update?",nodeaddr,wateraddr,b.id)
             
             b.save()
+            if instance.amrs_waterid != b.id:
+                instance.amrs_waterid = b.id
+                instance.save() 
         else:
+
             zncb_watermeter = Watermeter.objects.create(numbersth=numbersth,buildingname=buildingname,roomname=roomname,username=username,usertel=usertel,
                     communityid=communityid,installationsite=installationsite,manufacturer=manufacturer,metercontrol=metercontrol,serialnumber=serialnumber,
                     madedate=madedate,dn=dn,nodeaddr=nodeaddr,wateraddr=wateraddr)  
-            instance.waterid = zncb_watermeter.id
-            instance.save()  
+            instance.amrs_waterid = zncb_watermeter.id
+            # instance.save()  
+            print("3.",nodeaddr,wateraddr,zncb_watermeter.id)
 
 
 

@@ -93,14 +93,14 @@ class VCommunityAdmin(admin.ModelAdmin):
     inlines = [
         MembershipInline,
     ]
-    list_display = ['name','belongto','commutid','address','parent']
+    list_display = ['id','name','belongto','commutid','amrs_commutid','address','parent','outter']
 
     search_fields = ['name']
 
 @admin.register(VWatermeter)
 class VWatermeterAdmin(admin.ModelAdmin):
-    list_display = ['name','belongto','communityid','concentrator','numbersth','buildingname','roomname','waterid','wateraddr','serialnumber','madedate']
-    search_fields = ['name']
+    list_display = ['name','belongto','communityid','communityidnew','waterid','amrs_waterid','outter_communityid','concentrator','numbersth','buildingname','roomname','wateraddr','serialnumber','madedate']
+    search_fields = ['name','communityid__name','id','wateraddr',]
 
 
 @admin.register(VSecondWater)

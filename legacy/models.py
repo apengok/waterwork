@@ -10,8 +10,9 @@
 from django.db import models
 from django.db.models import Q
 import datetime
-
+import monthdelta
 # from dmam.models import Station
+from django.db.models import Avg, Max, Min, Sum
 
 class District(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -509,11 +510,48 @@ class HdbFlowDataHour(models.Model):
     def __unicode__(self):
         return '%s%s'%(self.commaddr)
 
+
+
+class HdbFlowDataMonthQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query) |
+                Q(hdate__icontains=query)
+                
+                ).distinct()
+        return self
+
+    def history(self, query,mon): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query) &
+                Q(hdate__gt=datetime.datetime.today()-monthdelta.monthdelta(mon))
+                
+                ).distinct()
+        return self
+
+
+class HdbFlowDataMonthManager(models.Manager):
+    def get_queryset(self):
+        return HdbFlowDataMonthQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query,day)
+
+    def history(self, query,mon): #RestaurantLocation.objects.search()
+        return self.get_queryset().history(query,mon)
+
+
 class HdbFlowDataMonth(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     commaddr = models.CharField(db_column='CommAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
     hdate = models.CharField(db_column='HDate', max_length=30, blank=True, null=True)  # Field name made lowercase.
     dosage = models.CharField(db_column='Dosage', max_length=64, blank=True, null=True)  # Field name made lowercase.
+
+    objects = HdbFlowDataMonthManager()
 
     class Meta:
         managed = False
@@ -557,6 +595,41 @@ class HdbSimflow(models.Model):
         return '%s%s'%(self.commaddr)
 
 
+
+class HdbWatermeterDayQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query) |
+                Q(hdate__icontains=query)
+                
+                ).distinct()
+        return self
+
+    def history(self, query,mon): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(commaddr__iexact=query) &
+                Q(hdate__gt=datetime.datetime.today()-monthdelta.monthdelta(mon))
+                
+                ).distinct()
+        return self
+
+
+class HdbWatermeterDayManager(models.Manager):
+    def get_queryset(self):
+        return HdbWatermeterDayQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query,day)
+
+    def history(self, query,mon): #RestaurantLocation.objects.search()
+        return self.get_queryset().history(query,mon)
+
+
+
 class HdbWatermeterDay(models.Model):
     waterid = models.IntegerField(db_column='WaterId', primary_key=True)  # Field name made lowercase.
     rvalue = models.CharField(db_column='RValue', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -575,6 +648,55 @@ class HdbWatermeterDay(models.Model):
 
     
 
+class HdbWatermeterMonthQuerySet(models.query.QuerySet):
+    def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(communityid__iexact=query) |
+                Q(hdate__icontains=query)
+                
+                ).distinct()
+        return self
+
+    def history(self, query,mon): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(communityid__iexact=query) &
+                Q(hdate__gt=datetime.datetime.today()-monthdelta.monthdelta(mon))
+                
+                ).distinct()
+        return self
+
+    def community_use(self,query,hdate):
+        '''
+        按小区统计hdate月的小区流量
+        '''
+        if query:
+            query = query.strip()
+            return self.filter(communityid=query,hdate=hdate)   #.aggregate(Sum('dosage'))
+        return self
+
+class HdbWatermeterMonthManager(models.Manager):
+    def get_queryset(self):
+        return HdbWatermeterMonthQuerySet(self.model, using=self._db)
+
+    def search(self, query): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query,day)
+
+    def community_use(self, query,mon): #RestaurantLocation.objects.search()
+        '''
+        前mon个月的用水量
+        '''
+        if query:
+            query = query.strip()
+            return self.filter(communityid=query,hdate=mon).aggregate(Sum('dosage'))
+        return self
+
+
+
+
 
 class HdbWatermeterMonth(models.Model):
     waterid = models.IntegerField(db_column='WaterId', primary_key=True)  # Field name made lowercase.
@@ -582,10 +704,28 @@ class HdbWatermeterMonth(models.Model):
     dosage = models.CharField(db_column='Dosage', max_length=30, blank=True, null=True)  # Field name made lowercase.
     communityid = models.IntegerField(db_column='CommunityId')  # Field name made lowercase.
 
+    objects = HdbWatermeterMonthManager()
+
     class Meta:
         managed = False
         db_table = 'hdb_watermeter_month'
         unique_together = (('waterid', 'hdate', 'communityid'),)
+
+    @classmethod
+    def community_use(self, query,mon): #RestaurantLocation.objects.search()
+        '''
+        前mon个月的用水量
+        '''
+        print(query,mon)
+        community_history = {}
+        for i in range(int(mon)):
+            m = datetime.datetime.today()-monthdelta.monthdelta(i)
+            m = m.strftime("%Y-%m")
+            u = self.objects.community_use(query,m)
+            community_history[m] =  u
+            print(m,u)
+
+        return community_history
 
 
 class Imexport(models.Model):
