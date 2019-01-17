@@ -1237,6 +1237,7 @@ def ensure_vmatermeter_exists(sender, **kwargs):
                     madedate=madedate,dn=dn,nodeaddr=nodeaddr,wateraddr=wateraddr)  
             instance.amrs_waterid = zncb_watermeter.id
             # instance.save()  
+            # if instance.outter == "歙县":
             print("3.",nodeaddr,wateraddr,zncb_watermeter.id)
 
 

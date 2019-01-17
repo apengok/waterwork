@@ -101,100 +101,88 @@ def test_hdb_watermeter_month():
 
 def test_community():
     count = 0
+    # VCommunity.objects.all().delete()
+
     sx_community = Community.objects.using("shexian").values()
+    s_list = [(x["name"],x["id"]) for x in sx_community]
     print("shexian:commuinity count:",sx_community.count())
-    v_community = VCommunity.objects.values()
-    print("virvo vcommunity count:",v_community.count())
+    a_community = Community.objects.values()
+    a_list = [(x["name"],x["id"]) for x in a_community]
+
+    s_dict = dict(s_list)
+    a_dict = dict(a_list)
+    addr_dict = dict([(x["name"],x["address"]) for x in sx_community])
+
+
+    
     organ = Organizations.objects.get(name="歙县自来水公司")
-    for d in sx_community:
-        name = d["name"]
-        address = d["address"]
-        commutid = d["id"]
+    comuterewlist = []
+    for k,v in s_dict.items():
+        # k=name,v=id
+        address = addr_dict.get(k)
+        commutid = v
+        amrs_commutid = a_dict.get(k)
+    #     t=VCommunity(belongto=organ,name=k,address=address,commutid=commutid,amrs_commutid=amrs_commutid)
+    #     comuterewlist.append(t)
+    # VCommunity.objects.bulk_create(comuterewlist)
         
-        d2=VCommunity.objects.filter(commutid=commutid)
         
-        if not d2.exists():
-            count += 1
-            instance = VCommunity.objects.create(name=name,address=address,belongto=organ,commutid=commutid,outter="歙县")
-        else:
-            d2i = d2.first()
-            if d2i.name != name:
-                print(d2i.name,name)
-            d2i.name = name
-            # d2.update(name=name,outter="歙县")
-            d2i.outter = "歙县"
-            d2i.save()
 
-
-    print("{} added".format(count))
+    print("{} added".format(len(s_dict)))
 
 def test_watermeter():
     count = 0
+    # VWatermeter.objects.all().delete()
+
+    HdbWatermeterDay.objects.filter(waterid=0).update(waterid=60423)
+    HdbWatermeterMonth.objects.filter(waterid=0).update(waterid=60423)
+    return
+
     sx_watermeter = Watermeter.objects.using("shexian").values()
     print("shexian watermeter counter:",sx_watermeter.count())
-    v_watermeter =VWatermeter.objects.values()
-    print("Virvo watermeter counter:",v_watermeter.count())
-
+    vamrs_watermeter =Watermeter.objects.values()
+    wwork_watermeter = VWatermeter.objects.values()
+    
+    print("Virvo watermeter counter:",vamrs_watermeter.count())
+    sx_waterids = [x["id"] for x in sx_watermeter]
+    v_waterids = [x["id"] for x in vamrs_watermeter]
+    sx_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["id"] ) for x in sx_watermeter]
+    ns_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["numbersth"] ) for x in sx_watermeter]
+    bn_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["buildingname"] ) for x in sx_watermeter]
+    rm_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["roomname"] ) for x in sx_watermeter]
+    c_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["communityid"] ) for x in sx_watermeter]
+    v_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["id"] ) for x in vamrs_watermeter]
+    w_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["waterid"] ) for x in wwork_watermeter]
+    
+    sx_dicts = dict(sx_tmpkeys)
+    v_dicts = dict(v_tmpkeys)
+    n_dicts = dict(ns_tmpkeys)
+    b_dicts = dict(bn_tmpkeys)
+    r_dicts = dict(rm_tmpkeys)
+    c_dicts = dict(c_tmpkeys)
+    w_dicts = dict(w_tmpkeys)
+    v_workmeterlist=[]
     organ = Organizations.objects.get(name="歙县自来水公司")
-    for d in sx_watermeter:
-        name = d["roomname"]
-        waterid = d["id"]
-        wateraddr = d["wateraddr"]
-        commutid = d["communityid"]
-
-        numbersth = d["numbersth"]
-        buildingname = d["buildingname"]
-        roomname = d["roomname"]
-        nodeaddr = d["nodeaddr"]
-        username = d["username"]
-        usertel = d["usertel"]
-        dn = d['dn']
-        serialnumber = d["serialnumber"]
-        manufacturer = d["manufacturer"]
-        madedate = d["madedate"]
-        installationsite=d["installationsite"]
-
-        rvalue = d["rvalue"],
-        fvalue = d["fvalue"],
-        meterstate = d["meterstate"],
-        commstate = d["commstate"],
-        rtime = d["rtime"],
-        lastrvalue = d["lastrvalue"],
-        lastrtime = d["lastrtime"],
-        dosage = d["dosage"],
-        valvestate = d["valvestate"],
-        lastwritedate = d["lastwritedate"],
-        lastwritevalue = d["lastwritevalue"],
-        meterv = d["meterv"]
-
-        Vcomut = VCommunity.objects.get(commutid=commutid) #所属小区
-        
-        d2=VWatermeter.objects.filter(wateraddr=wateraddr)
-        
-        if not d2.exists():
-            print("{} VWatermeter not exists".format(waterid))
-            count += 1
-        else:
-            amrs_d = Watermeter.objects.filter(id=waterid)
-            if amrs_d.exists():
-                if amrs_d.count()>1:
-                    for a in amrs_d:
-                        print("\t&*^&%&--{} {}".format(a.id,a.wateraddr))
-                else:
-                    d2.update(amrs_waterid=amrs_d[0].id)
-
-        if d2.count() > 1:
-            for x in d2:
-                print("\t\t {} {} {} repeat?".format(x.waterid,x.wateraddr,x.nodeaddr))
-                if x.waterid != waterid:
-                    x.delete()
-        # 
-        # if not amrs_d.exists():
-        #     print("{} Watermeter not exists".format(waterid))
-
-    print("not exists,",count)
-        
-
+    for k,v in sx_dicts.items():
+        vv = v_dicts.get(k)
+        ww = w_dicts.get(k)
+        if v != vv:
+            print(k,v,'<->',k,vv)
+        naddr,waddr = k.split("_")
+        numbersth = n_dicts.get(k)
+        buildingname = b_dicts.get(k)
+        roomname = r_dicts.get(k)
+        c_commutid = c_dicts.get(k)
+        communityid = VCommunity.objects.get(commutid=c_commutid)
+        # t = VWatermeter(belongto=organ,nodeaddr=naddr,wateraddr=waddr,waterid=v,amrs_waterid=vv,
+        #     numbersth=numbersth,buildingname=buildingname,roomname=roomname,communityid=communityid)
+        # v_workmeterlist.append(t)
+        if v != ww:
+            print(k,v,'<(-)>',k,ww)
+    # VWatermeter.objects.bulk_create(v_workmeterlist)
+    return
+    
+    
 
 
     print("{} watermeter added".format(count))
