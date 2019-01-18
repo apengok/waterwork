@@ -10,7 +10,9 @@
 from django.db import models
 from django.db.models import Q
 import datetime
+import time
 import monthdelta
+from django.db import models, connections
 # from dmam.models import Station
 from django.db.models import Avg, Max, Min, Sum
 
@@ -597,11 +599,40 @@ class HdbSimflow(models.Model):
 
 
 class HdbWatermeterDayQuerySet(models.query.QuerySet):
+    def count(self):
+        '''
+        Override entire table count queries only. Any WHERE or other altering
+        statements will default back to an actual COUNT query.
+        '''
+        if self._result_cache is not None and not self._iter:
+            return len(self._result_cache)
+
+        is_mysql = 'mysql' in connections[self.db].client.executable_name.lower()
+
+        query = self.query
+        if (is_mysql and not query.where and
+                query.high_mark is None and
+                query.low_mark == 0 and
+                not query.select and
+                not query.group_by and
+                not query.having and
+                not query.distinct):
+            # If query has no constraints, we would be simply doing
+            # "SELECT COUNT(*) FROM foo". Monkey patch so the we
+            # get an approximation instead.
+            cursor = connections[self.db].cursor()
+            cursor.execute("SHOW TABLE STATUS LIKE %s",
+                    (self.model._meta.db_table,))
+            return cursor.fetchall()[0][4]
+        else:
+            return self.query.get_count(using=self.db)
+
+
     def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
         if query:
             query = query.strip()
             return self.filter(
-                Q(commaddr__iexact=query) |
+                Q(communityid=query) |
                 Q(hdate__icontains=query)
                 
                 ).distinct()
@@ -611,11 +642,13 @@ class HdbWatermeterDayQuerySet(models.query.QuerySet):
         if query:
             query = query.strip()
             return self.filter(
-                Q(commaddr__iexact=query) &
-                Q(hdate__gt=datetime.datetime.today()-monthdelta.monthdelta(mon))
+                Q(communityid=query) &
+                Q(hdate__startswith=mon)
                 
                 ).distinct()
         return self
+
+
 
 
 class HdbWatermeterDayManager(models.Manager):
@@ -628,7 +661,14 @@ class HdbWatermeterDayManager(models.Manager):
     def history(self, query,mon): #RestaurantLocation.objects.search()
         return self.get_queryset().history(query,mon)
 
-
+    def community_use(self, query,mon): #RestaurantLocation.objects.search()
+        '''
+        前mon个月的用水量
+        '''
+        if query:
+            query = query.strip()
+            return self.filter(communityid=query,hdate__startswith=mon)
+        return self
 
 class HdbWatermeterDay(models.Model):
     waterid = models.IntegerField(db_column='WaterId', primary_key=True)  # Field name made lowercase.
@@ -641,10 +681,41 @@ class HdbWatermeterDay(models.Model):
     dosage = models.CharField(db_column='Dosage', max_length=30, blank=True, null=True)  # Field name made lowercase.
     communityid = models.IntegerField(db_column='CommunityId')  # Field name made lowercase.
 
+    objects = HdbWatermeterDayManager()
+
     class Meta:
         managed = False
         db_table = 'hdb_watermeter_day'
         # unique_together = (('waterid', 'hdate', 'communityid'),)
+
+    def __repr__(self):
+        return "{},{},{},{}".format(self.waterid,self.hdate,self.dosage,self.communityid)
+
+    def __str__(self):
+        return "{},{},{},{}".format(self.waterid,self.hdate,self.dosage,self.communityid)
+
+    @classmethod
+    def communityDailydetail(self,communityid,mon):
+        today = datetime.datetime.today()
+        monstr = today.strftime("%Y-%m")
+        dailydata = {}
+        t1=time.time()
+        datalists = self.objects.community_use(communityid,monstr).values("hdate","dosage")
+        print("1.",time.time()-t1)
+        print(len(datalists))
+        # datalists=list(datalists)
+        # tmp=[d["hdate"] for d in datalists]
+        print("2.",time.time()-t1)
+
+        for d in datalists:
+            day = d["hdate"]
+            if day not in dailydata.keys():
+                dailydata[day] = float(d["dosage"])
+            else:
+                dailydata[day] += float(d["dosage"])
+        print("3.",time.time()-t1)
+
+        return dailydata
 
     
 

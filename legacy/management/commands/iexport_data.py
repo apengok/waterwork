@@ -134,14 +134,14 @@ def test_watermeter():
     count = 0
     # VWatermeter.objects.all().delete()
 
-    HdbWatermeterDay.objects.filter(waterid=0).update(waterid=60423)
-    HdbWatermeterMonth.objects.filter(waterid=0).update(waterid=60423)
-    return
+    # HdbWatermeterDay.objects.filter(waterid=0).update(waterid=60423)
+    # HdbWatermeterMonth.objects.filter(waterid=0).update(waterid=60423)
+    # return
 
     sx_watermeter = Watermeter.objects.using("shexian").values()
     print("shexian watermeter counter:",sx_watermeter.count())
     vamrs_watermeter =Watermeter.objects.values()
-    wwork_watermeter = VWatermeter.objects.values()
+    # wwork_watermeter = VWatermeter.objects.values()
     
     print("Virvo watermeter counter:",vamrs_watermeter.count())
     sx_waterids = [x["id"] for x in sx_watermeter]
@@ -152,7 +152,7 @@ def test_watermeter():
     rm_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["roomname"] ) for x in sx_watermeter]
     c_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["communityid"] ) for x in sx_watermeter]
     v_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["id"] ) for x in vamrs_watermeter]
-    w_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["waterid"] ) for x in wwork_watermeter]
+    # w_tmpkeys = [("{}_{}".format(x["nodeaddr"],x["wateraddr"]),x["waterid"] ) for x in wwork_watermeter]
     
     sx_dicts = dict(sx_tmpkeys)
     v_dicts = dict(v_tmpkeys)
@@ -160,12 +160,12 @@ def test_watermeter():
     b_dicts = dict(bn_tmpkeys)
     r_dicts = dict(rm_tmpkeys)
     c_dicts = dict(c_tmpkeys)
-    w_dicts = dict(w_tmpkeys)
+    # w_dicts = dict(w_tmpkeys)
     v_workmeterlist=[]
     organ = Organizations.objects.get(name="歙县自来水公司")
     for k,v in sx_dicts.items():
         vv = v_dicts.get(k)
-        ww = w_dicts.get(k)
+        # ww = w_dicts.get(k)
         if v != vv:
             print(k,v,'<->',k,vv)
         naddr,waddr = k.split("_")
@@ -173,12 +173,12 @@ def test_watermeter():
         buildingname = b_dicts.get(k)
         roomname = r_dicts.get(k)
         c_commutid = c_dicts.get(k)
+        
         communityid = VCommunity.objects.get(commutid=c_commutid)
-        # t = VWatermeter(belongto=organ,nodeaddr=naddr,wateraddr=waddr,waterid=v,amrs_waterid=vv,
-        #     numbersth=numbersth,buildingname=buildingname,roomname=roomname,communityid=communityid)
-        # v_workmeterlist.append(t)
-        if v != ww:
-            print(k,v,'<(-)>',k,ww)
+        t = VWatermeter.objects.create(belongto=organ,nodeaddr=naddr,wateraddr=waddr,waterid=v,amrs_waterid=vv,
+            numbersth=numbersth,buildingname=buildingname,roomname=roomname,communityid=communityid)
+        v_workmeterlist.append(t)
+        
     # VWatermeter.objects.bulk_create(v_workmeterlist)
     return
     

@@ -31,7 +31,7 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
-from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
+from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay
 import os
 from django.conf import settings
 
@@ -447,3 +447,10 @@ def watermeterlist(request):
     
     return HttpResponse(json.dumps(result))
 
+
+def neiborhooddailydata(request):
+    print(request.GET)
+    communityid = request.GET.get("communityid")
+    monthdata = HdbWatermeterDay.communityDailydetail(communityid,"")
+
+    return HttpResponse(json.dumps({"success":1,"monthdata":json.dumps(monthdata),"monthdata2":monthdata}))

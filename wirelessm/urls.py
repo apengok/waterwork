@@ -19,14 +19,15 @@ urlpatterns = [
     url(r'^wlquerydata/?$',views.WlquerydataView.as_view(),name='wlquerydata'),
     
     # 小区日用水
-    url(r'^neighborhoodusedayly/?$', views.NeighborhoodusedaylyView.as_view(), name='neighborhoodusedayly'),#组织和用户管理
+    url(r'^neighborhoodusedayly/?$', views.NeighborhoodusedaylyView.as_view(), name='neighborhoodusedayly'),#
+    url(r'^neiborhooddailydata/?$', views.neiborhooddailydata, name='neiborhooddailydata'),#
     
     # 小区月用水
     url(r'^neighborhoodusemonthly/$',views.NeighborhoodusemonthlyView.as_view(),name='neighborhoodusemonthly'),
     
     # 户表管理
     url(r'^neighborhoodmetermanager/?$',views.NeighborhoodmeterMangerView.as_view(),name='neighborhoodmetermanager'),
-   url(r'^watermeter/list/$',views.watermeterlist,name='watermeterlist'),
+    url(r'^watermeter/list/$',views.watermeterlist,name='watermeterlist'),
     url(r'^watermeter/add',views.WatermeterAddView.as_view(),name='watermeteradd'),
     url(r'^watermeter/edit/(?P<pk>\w+)/?$',views.WatermeterEditView.as_view(),name='watermeteredit'),
     url(r'^watermeter/delete/(?P<pk>[0-9]+)/?$',views.WatermeterDeleteView.as_view(),name='watermeterdelete'),
