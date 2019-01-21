@@ -450,7 +450,8 @@ def watermeterlist(request):
 
 def neiborhooddailydata(request):
     print(request.GET)
-    communityid = request.GET.get("communityid")
-    monthdata = HdbWatermeterDay.communityDailydetail(communityid,"")
+    communityid = request.GET.get("communityid") #communityid is VCommunity's id
+    realcommutid = VCommunity.objects.get(id=communityid).amrs_commutid #get real id
+    monthdata = HdbWatermeterDay.communityDailydetail(realcommutid,"")
 
     return HttpResponse(json.dumps({"success":1,"monthdata":json.dumps(monthdata),"monthdata2":monthdata}))

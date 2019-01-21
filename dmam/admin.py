@@ -80,7 +80,7 @@ class DmaGisInfoAdmin(admin.ModelAdmin):
 
 @admin.register(VConcentrator)
 class VConcentratorAdmin(admin.ModelAdmin):
-    list_display = ['name','belongto','commaddr','address','lng','lat','coortype','model','serialnumber','manufacturer','madedate']
+    list_display = ['id','name','belongto','commaddr','address','lng','lat','coortype','model','serialnumber','manufacturer','madedate']
     search_fields = ['name']
 
 

@@ -253,8 +253,8 @@ class DMABaseinfo(models.Model):
             commaddr = m.station_id
             
             if m.station_type == "2": #小区-- commaddr=VCommunity id
-                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
-                community_id = community["commutid"]
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","amrs_commutid")[0]
+                community_id = community["amrs_commutid"]
                 monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
 
             else:
@@ -275,8 +275,8 @@ class DMABaseinfo(models.Model):
         for m in meter_out:
             commaddr = m.station_id
             if m.station_type == "2": #小区-- commaddr=VCommunity id
-                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
-                community_id = community["commutid"]
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","amrs_commutid")[0]
+                community_id = community["amrs_commutid"]
                 monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
 
             else:
@@ -300,8 +300,8 @@ class DMABaseinfo(models.Model):
             # if m.username == "文欣苑户表总表":
             # if commaddr == '4022':
             if m.station_type == "2": #小区-- commaddr=VCommunity id
-                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
-                community_id = community["commutid"]
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","amrs_commutid")[0]
+                community_id = community["amrs_commutid"]
                 monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
 
             else:
@@ -322,8 +322,8 @@ class DMABaseinfo(models.Model):
         for m in meter_uncount:
             commaddr = m.station_id
             if m.station_type == "2": #小区-- commaddr=VCommunity id
-                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","commutid")[0]
-                community_id = community["commutid"]
+                community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","amrs_commutid")[0]
+                community_id = community["amrs_commutid"]
                 monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
 
             else:

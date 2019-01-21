@@ -1472,7 +1472,8 @@ class DistrictAssignStationView(LoginRequiredMixin,AjaxableResponseMixin,UserPas
                 username = s.username
                 
             elif station_type == '2':
-                d = VConcentrator.objects.get(id=commaddr)
+                # d = VConcentrator.objects.get(id=commaddr)
+                d = VCommunity.objects.get(id=commaddr)
                 edit_id = d.pk
                 username = d.name
 

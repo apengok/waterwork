@@ -666,7 +666,7 @@ class HdbWatermeterDayManager(models.Manager):
         前mon个月的用水量
         '''
         if query:
-            query = query.strip()
+            # query = query.strip()
             return self.filter(communityid=query,hdate__startswith=mon)
         return self
 

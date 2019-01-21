@@ -272,10 +272,274 @@ def test_hdb_watermeter_data_day():
 
     print("added {} , updated {}".format(count,updated))
 
+def test_sync_watermeter():
+    nocnt = 0
+    today = datetime.datetime.today()
+    t1=time.time()
+
+    logger_info.info("sync Watermeter data and flow data from shexian")
+
+    sx_wms = Watermeter.objects.using("shexian").values("id","communityid","rvalue","fvalue","meterstate","commstate",
+                "rtime","lastrvalue","lastrtime","dosage","valvestate","lastwritedate","lastwritevalue","meterv","wateraddr")
+    bool(sx_wms)
+    v_community = VCommunity.objects.values_list("commutid","amrs_commutid")
+    v_community_dict = dict(v_community)
+    v_watermeter = VWatermeter.objects.values_list("waterid","amrs_waterid")
+    v_watermeter_dict = dict(v_watermeter)
+
+    for w in sx_wms:
+        waterid = w["id"] #歙县watermeter id
+        communityid = w["communityid"]
+        rvalue = w["rvalue"],
+        fvalue = w["fvalue"],
+        meterstate = w["meterstate"],
+        commstate = w["commstate"],
+        rtime = w["rtime"],
+        lastrvalue = w["lastrvalue"],
+        lastrtime = w["lastrtime"],
+        dosage = w["dosage"],
+        valvestate = w["valvestate"],
+        lastwritedate = w["lastwritedate"],
+        lastwritevalue = w["lastwritevalue"],
+        meterv = w["meterv"]
+        v_ww_waterid = v_watermeter_dict.get(waterid) or None
+
+        
+
+
+        if v_ww_waterid is not None:
+            v_ww_commutid = v_community_dict.get(communityid)
+            if v_ww_commutid is None:
+                logger_info("community id {} is None ".format(v_ww_commutid))
+                continue
+
+            Watermeter.objects.filter(id=v_ww_waterid).update(
+                rvalue = w["rvalue"],
+                fvalue = w["fvalue"],
+                meterstate = w["meterstate"],
+                commstate = w["commstate"],
+                rtime = w["rtime"],
+                lastrvalue = w["lastrvalue"],
+                lastrtime = w["lastrtime"],
+                dosage = w["dosage"],
+                valvestate = w["valvestate"],
+                lastwritedate = w["lastwritedate"],
+                lastwritevalue = w["lastwritevalue"],
+                meterv = w["meterv"])
+
+            # update flow data day and month
+            for i in range(5):
+                day = today - datetime.timedelta(days=i)
+                day_str = day.strftime("%Y-%m-%d")
+                test_sync_wm_day(waterid,day_str,v_ww_commutid)
+            test_sync_wm_month(waterid,day.strftime("%Y-%m"),v_ww_commutid)
+
+        else:
+            nocnt += 1
+            logger_info.info("{} not in virvo DB".format(waterid))
+
+    if nocnt > 0:
+        logger_info.info("total {} not in virvo DB".format(nocnt))
+    
+    t2 = time.time() - t1
+    logger_info.info("time last{}:".format(t2))  
+
+
+def test_sync_wm_day(waterid,day,communityid):
+    wm_flow_day = HdbWatermeterDay.objects.using("shexian").filter(waterid=waterid,hdate=day).values()
+    added_list = []
+    for wd in wm_flow_day:
+        rvalue = wd["rvalue"]
+        fvalue = wd["fvalue"]
+        meterstate = wd["meterstate"]
+        commstate = wd["commstate"]
+        rtime = wd["rtime"]
+        dosage = wd["dosage"]
+        communityid= wd["communityid"]
+
+        vd = HdbWatermeterDay.objects.filter(waterid=waterid,hdate=day)
+        if vd.exists():
+            vd.update(rvalue=rvalue,fvalue=fvalue,meterstate=meterstate,commstate=commstate,rtime=rtime,dosage=dosage)
+        else:
+            t=HdbWatermeterDay(waterid=waterid,hdate=day,rvalue=rvalue,fvalue=fvalue,meterstate=meterstate,
+                commstate=commstate,rtime=rtime,communityid=communityid)
+            added_list.append(t)
+
+    if len(added_list) > 0:
+        HdbWatermeterDay.objects.bulk_create(added_list)
+
+
+def test_sync_wm_month(waterid,ymon,communityid):
+    wm_flow_day = HdbWatermeterMonth.objects.using("shexian").filter(waterid=waterid,hdate=ymon).values()
+    added_list = []
+    for wd in wm_flow_day:
+        dosage = wd["dosage"]
+        communityid= wd["communityid"]
+
+        vd = HdbWatermeterMonth.objects.filter(waterid=waterid,hdate=ymon)
+        if vd.exists():
+            vd.update(dosage=dosage)
+        else:
+            t=HdbWatermeterMonth(waterid=waterid,hdate=ymon,dosage=dosage,communityid=communityid)
+            added_list.append(t)
+
+    if len(added_list) > 0:
+        HdbWatermeterMonth.objects.bulk_create(added_list)
+
+
+def test_sync_bigmeter():
+    nocnt = 0
+    today = datetime.datetime.today()
+    # day = today.strftime("%Y-%m-%d")
+    logger_info.info("sync Bigmeter data and flow data:")
+    sx_bms = Bigmeter.objects.using("shexian").values('commaddr','commstate','meterstate','gprsv','meterv',
+                'signlen','lastonlinetime','pressure','plustotalflux','reversetotalflux','flux','totalflux','pressurereadtime',
+                'fluxreadtime','username')
+    for sb in sx_bms:
+        commaddr = sb["commaddr"]
+        name = sb["username"]
+
+        fluxreadtime = sb["fluxreadtime"]
+        flux = sb["flux"]
+        totalflux = sb["totalflux"]
+        plustotalflux = sb["plustotalflux"]
+        reversetotalflux = sb["reversetotalflux"]
+        pressurereadtime = sb["pressurereadtime"]
+        pressure = sb["pressure"]
+        gprsv = sb["gprsv"]
+        meterv = sb["meterv"]
+        signlen = sb["signlen"]
+        lastonlinetime = sb["lastonlinetime"]
+        commstate = sb["commstate"]
+        meterstate = sb["meterstate"]
+        vb = Bigmeter.objects.filter(commaddr=commaddr)
+        if vb.exists():
+            vb.update(fluxreadtime=fluxreadtime,flux=flux,totalflux=totalflux,plustotalflux=plustotalflux,reversetotalflux=reversetotalflux,
+                pressurereadtime=pressurereadtime,pressure=pressure,gprsv=gprsv,meterv=meterv,signlen=signlen,lastonlinetime=lastonlinetime,
+                commstate=commstate,meterstate=meterstate,)
+            logger_info.info("{}({}):".format(name,commaddr))
+            # sync flow history data
+            for i in range(60):
+                day = today - datetime.timedelta(days=i)
+                day_str = day.strftime("%Y-%m-%d")
+                logger_info.info("\t\t{}".format(day_str))
+                test_sync_bgm_flows(commaddr,day_str)
+                test_sync_bgm_flow_hour(commaddr,day_str)
+                test_sync_bgm_flow_daily(commaddr,day_str)
+        else:
+            nocnt+=1
+            logger_info.info("{}({}) not in Virvo DB".format(name,commaddr))
+
+    logger_info.info("all cnt is {} ,{} not exists".format(sx_bms.count(),nocnt))
+
+def test_sync_bgm_flows(commaddr,day):
+    
+    flow_day = HdbFlowData.objects.using("shexian").filter(commaddr=commaddr,readtime__startswith=day).values()
+    
+    added_list = []
+    for fd in flow_day:
+        readtime=fd["readtime"]
+        flux = fd["flux"]
+        plustotalflux = fd["plustotalflux"]
+        reversetotalflux = fd["reversetotalflux"]
+        totalflux = fd["totalflux"]
+        gprsv = fd["gprsv"]
+        meterv = fd["meterv"]
+        meterstate = fd["meterstate"]
+        
+        vd = HdbFlowData.objects.filter(commaddr=commaddr,readtime=readtime)
+        if vd.exists():
+            vd.update(flux=flux,plustotalflux=plustotalflux,reversetotalflux=reversetotalflux,
+                totalflux=totalflux,gprsv=gprsv,meterv=meterv,meterstate=meterstate)
+        else:
+            d = HdbFlowData(commaddr=commaddr,readtime=readtime,flux=flux,plustotalflux=plustotalflux,reversetotalflux=reversetotalflux,
+                totalflux=totalflux,gprsv=gprsv,meterv=meterv,meterstate=meterstate)
+            added_list.append(d)
+
+    if len(added_list)>0:
+        try:
+            added=HdbFlowData.objects.bulk_create(added_list)
+            
+        except Exception as e:
+            logger_info.info("sync flow  error,reason :",e)
+        
+
+def test_sync_bgm_flow_hour(commaddr,day):
+    
+    flow_day = HdbFlowDataHour.objects.using("shexian").filter(commaddr=commaddr,hdate__startswith=day).values()
+    
+    added_list = []
+    for fd in flow_day:
+        hdate=fd["hdate"]
+        dosage = fd["dosage"]
+        vd = HdbFlowDataHour.objects.filter(commaddr=commaddr,hdate=hdate)
+        if vd.exists():
+            vd.update(dosage=dosage)
+        else:
+            d = HdbFlowDataHour(commaddr=commaddr,hdate=hdate,dosage=dosage)
+            added_list.append(d)
+
+    if len(added_list)>0:
+        try:
+            added=HdbFlowDataHour.objects.bulk_create(added_list)
+            
+        except Exception as e:
+            logger_info.info("sync flow hour error,reason :",e)
+
+def test_sync_bgm_flow_daily(commaddr,day):
+    
+    flow_day = HdbFlowDataDay.objects.using("shexian").filter(commaddr=commaddr,hdate=day).values()
+    
+    added_list = []
+    for fd in flow_day:
+        dosage = fd["dosage"]
+        vd = HdbFlowDataDay.objects.filter(commaddr=commaddr,hdate=day)
+        if vd.exists():
+            vd.update(dosage=dosage)
+        else:
+            d = HdbFlowDataDay(commaddr=commaddr,hdate=day,dosage=dosage)
+            added_list.append(d)
+
+    if len(added_list)>0:
+        try:
+            added=HdbFlowDataDay.objects.bulk_create(added_list)
+            
+        except Exception as e:
+            logger_info.info("sync flow day error,reason :",e)
+
+def test_sync_bgm_flow_month(commaddr,ymon):
+    
+    flow_day = HdbFlowDataMonth.objects.using("shexian").filter(commaddr=commaddr,hdate=ymon).values()
+    # print("{} count:",flow_day.count())
+    added_list = []
+    for fd in flow_day:
+        dosage = fd["dosage"]
+        vd = HdbFlowDataMonth.objects.filter(commaddr=commaddr,hdate=ymon)
+        if vd.exists():
+            vd.update(dosage=dosage)
+        else:
+            d = HdbFlowDataMonth(commaddr=commaddr,hdate=ymon,dosage=dosage)
+            added_list.append(d)
+
+    if len(added_list)>0:
+        try:
+            added=HdbFlowDataMonth.objects.bulk_create(added_list)
+            
+        except Exception as e:
+            logger_info.info("sync flow month error,reason :",e)
+
+
+# WaterMeter
 
 def test_pwl():
     # return test_hdb_watermeter_data_day()
     # return test_hdb_watermeter_data_month()
+    # return test_sync_bgm_flows("15755950621")
+    # return test_sync_bgm_flow_hour("15755950621")
+    # return test_sync_bgm_flow_daily("15755950621")
+    # return test_sync_bgm_flow_month("15755950621","2019-01")
+    return test_sync_watermeter()
+    return test_sync_bigmeter()
     return test_watermeter()
     return test_community()
     return test_hdb_watermeter_month()
