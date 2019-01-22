@@ -599,33 +599,33 @@ class HdbSimflow(models.Model):
 
 
 class HdbWatermeterDayQuerySet(models.query.QuerySet):
-    def count(self):
-        '''
-        Override entire table count queries only. Any WHERE or other altering
-        statements will default back to an actual COUNT query.
-        '''
-        if self._result_cache is not None and not self._iter:
-            return len(self._result_cache)
+    # def count(self):
+    #     '''
+    #     Override entire table count queries only. Any WHERE or other altering
+    #     statements will default back to an actual COUNT query.
+    #     '''
+    #     if self._result_cache is not None and not self._iter:
+    #         return len(self._result_cache)
 
-        is_mysql = 'mysql' in connections[self.db].client.executable_name.lower()
+    #     is_mysql = 'mysql' in connections[self.db].client.executable_name.lower()
 
-        query = self.query
-        if (is_mysql and not query.where and
-                query.high_mark is None and
-                query.low_mark == 0 and
-                not query.select and
-                not query.group_by and
-                not query.having and
-                not query.distinct):
-            # If query has no constraints, we would be simply doing
-            # "SELECT COUNT(*) FROM foo". Monkey patch so the we
-            # get an approximation instead.
-            cursor = connections[self.db].cursor()
-            cursor.execute("SHOW TABLE STATUS LIKE %s",
-                    (self.model._meta.db_table,))
-            return cursor.fetchall()[0][4]
-        else:
-            return self.query.get_count(using=self.db)
+    #     query = self.query
+    #     if (is_mysql and not query.where and
+    #             query.high_mark is None and
+    #             query.low_mark == 0 and
+    #             not query.select and
+    #             not query.group_by and
+    #             not query.having and
+    #             not query.distinct):
+    #         # If query has no constraints, we would be simply doing
+    #         # "SELECT COUNT(*) FROM foo". Monkey patch so the we
+    #         # get an approximation instead.
+    #         cursor = connections[self.db].cursor()
+    #         cursor.execute("SHOW TABLE STATUS LIKE %s",
+    #                 (self.model._meta.db_table,))
+    #         return cursor.fetchall()[0][4]
+    #     else:
+    #         return self.query.get_count(using=self.db)
 
 
     def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
@@ -684,8 +684,13 @@ class HdbWatermeterDay(models.Model):
     objects = HdbWatermeterDayManager()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'hdb_watermeter_day'
+        indexes = [
+           models.Index(fields=['waterid', 'communityid',]),
+           models.Index(fields=['-hdate',]),
+        ]
+        # index_together = [["waterid","communityid"],]
         # unique_together = (('waterid', 'hdate', 'communityid'),)
 
     def __repr__(self):
@@ -701,18 +706,21 @@ class HdbWatermeterDay(models.Model):
         dailydata = {}
         t1=time.time()
         datalists = self.objects.community_use(communityid,monstr).values("hdate","dosage")
+        # datalists = HdbWatermeterDay.objects.raw("select * from hdb_watermeter_day where communityid=%s and hdate like '%s' "%(communityid,monstr))
         print("1.",time.time()-t1)
-        print(len(datalists))
-        # datalists=list(datalists)
-        # tmp=[d["hdate"] for d in datalists]
+        bool(datalists)
         print("2.",time.time()-t1)
 
         for d in datalists:
             day = d["hdate"]
-            if day not in dailydata.keys():
-                dailydata[day] = float(d["dosage"])
+            if d["dosage"] is None:
+                dosage = 0
             else:
-                dailydata[day] += float(d["dosage"])
+                dosage = d["dosage"]
+            if day not in dailydata.keys():
+                dailydata[day] = float(dosage)
+            else:
+                dailydata[day] += float(dosage)
         print("3.",time.time()-t1)
 
         return dailydata

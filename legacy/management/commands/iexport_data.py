@@ -328,7 +328,7 @@ def test_sync_watermeter():
                 meterv = w["meterv"])
 
             # update flow data day and month
-            for i in range(5):
+            for i in range(2):
                 day = today - datetime.timedelta(days=i)
                 day_str = day.strftime("%Y-%m-%d")
                 test_sync_wm_day(waterid,day_str,v_ww_commutid)
@@ -419,7 +419,7 @@ def test_sync_bigmeter():
                 commstate=commstate,meterstate=meterstate,)
             logger_info.info("{}({}):".format(name,commaddr))
             # sync flow history data
-            for i in range(60):
+            for i in range(2):
                 day = today - datetime.timedelta(days=i)
                 day_str = day.strftime("%Y-%m-%d")
                 logger_info.info("\t\t{}".format(day_str))
@@ -538,7 +538,7 @@ def test_pwl():
     # return test_sync_bgm_flow_hour("15755950621")
     # return test_sync_bgm_flow_daily("15755950621")
     # return test_sync_bgm_flow_month("15755950621","2019-01")
-    return test_sync_watermeter()
+    test_sync_watermeter()
     return test_sync_bigmeter()
     return test_watermeter()
     return test_community()
