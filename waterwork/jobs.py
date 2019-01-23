@@ -6,8 +6,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
 
-from legacy.models import HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter
-
+from legacy.models import (HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,
+    Watermeter,HdbWatermeterDay,HdbWatermeterMonth)
+from dmam.models import VCommunity,VWatermeter
 import logging
 
 logger_info = logging.getLogger('info_logger')
@@ -18,8 +19,8 @@ scheduler.add_jobstore(DjangoJobStore(), "default")
 
 # ('scheduler',"interval", seconds=1)  #用interval方式循环，每一秒执行一次  
 # @register_job(scheduler, 'cron', day_of_week='mon-fri', hour='9', minute='30', second='10',id='task_time')  
-        
-
+#         
+# 
 # 大表数据 从歙县服务器数据库同步到威尔沃服务器数据库
 # 舍弃 test_sync_bigmeter取代
 # @register_job(scheduler, "interval", seconds=3600, replace_existing=True)
@@ -335,7 +336,7 @@ def test_sync_bigmeter():
 
 
 # 小表数据 从歙县服务器数据库同步到威尔沃服务器数据库
-@register_job(scheduler, "cron", hour=6,minute=23, replace_existing=True)
+@register_job(scheduler, "cron", hour=10,minute=00, replace_existing=True)
 def test_sync_watermeter():
     nocnt = 0
     today = datetime.datetime.today()
@@ -415,3 +416,5 @@ register_events(scheduler)
 
 scheduler.start()
 print("Scheduler started!")
+# test_sync_bigmeter()
+# test_sync_watermeter()

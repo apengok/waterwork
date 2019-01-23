@@ -705,7 +705,7 @@ class HdbWatermeterDay(models.Model):
         monstr = today.strftime("%Y-%m")
         dailydata = {}
         t1=time.time()
-        datalists = self.objects.community_use(communityid,monstr).values("hdate","dosage")
+        datalists = self.objects.community_use(communityid,monstr).values("hdate","dosage").iterator()
         # datalists = HdbWatermeterDay.objects.raw("select * from hdb_watermeter_day where communityid=%s and hdate like '%s' "%(communityid,monstr))
         print("1.",time.time()-t1)
         bool(datalists)

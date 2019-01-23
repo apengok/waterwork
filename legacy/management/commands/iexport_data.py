@@ -538,7 +538,7 @@ def test_pwl():
     # return test_sync_bgm_flow_hour("15755950621")
     # return test_sync_bgm_flow_daily("15755950621")
     # return test_sync_bgm_flow_month("15755950621","2019-01")
-    test_sync_watermeter()
+    # test_sync_watermeter()
     return test_sync_bigmeter()
     return test_watermeter()
     return test_community()
