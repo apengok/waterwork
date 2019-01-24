@@ -58,6 +58,108 @@ class WlquerydataView(LoginRequiredMixin,TemplateView):
         return context  
 
 
+def comunitiquery(request):
+    draw = 1
+    length = 0
+    start=0
+    print('userlist:',request.user)
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        # order_column = request.POST.get("order[0][column]", None)[0]
+        # order = request.POST.get("order[0][dir]", None)[0]
+        groupName = request.POST.get("groupName")
+        districtId = request.POST.get("districtId")
+        selectCommunity = request.POST.get("selectCommunity")
+        selectBuilding = request.POST.get("selectBuilding")
+        selectTreeType = request.POST.get("selectTreeType")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        print(request.POST.get("selectBuilding"))
+        print("groupName",groupName)
+        print("districtId:",districtId)
+        # print("post simpleQueryParam",simpleQueryParam)
+
+    print("get userlist:",draw,length,start,search_value)
+
+    if selectCommunity == "" and selectBuilding == "":
+        return HttpResponse(json.dumps({"success":"true","records":[]}))
+
+    user = request.user
+    organs = user.belongto
+    today = datetime.datetime.today()
+    ymon = today.strftime("%Y-%m")
+
+    # v_community = VCommunity.objects.values_list("commutid","amrs_commutid")
+    # v_community_dict = dict(v_community)
+
+    watermeters = user.watermeter_list_queryset(simpleQueryParam).values("amrs_waterid","numbersth","buildingname","roomname","belongto__name","nodeaddr","wateraddr",
+        "communityid__amrs_commutid","communityid__name")
+    # meters = Watermeter.objects.all() #.filter(watermeterid=105)  #文欣苑105
+
+    if selectCommunity != "":
+        watermeters = [w for w in watermeters if selectCommunity == w["communityid__name"]]
+
+    if selectBuilding != "":
+        watermeters = [w for w in watermeters if selectBuilding == w["buildingname"]]
+
+    def m_info(m):
+        waterid = m["amrs_waterid"]
+        communityid = m["communityid__amrs_commutid"]
+        tmp =  {
+            
+            "numbersth":m["numbersth"],
+            "buildingname":m["buildingname"],
+            "roomname":m["roomname"],
+            "belongto":m["belongto__name"],#current_user.belongto.name,
+            "nodeaddr":m["nodeaddr"],
+            "wateraddr":m["wateraddr"],
+            "community":m["communityid__name"],
+            
+        }
+        dailydata = HdbWatermeterDay.waterid_daily_use(waterid,communityid,ymon)
+        
+        for k,v in dailydata.items():
+            d = "d"+k[-2:]
+            tmp[d] = v
+
+        return tmp
+    data = []
+
+    for m in watermeters:
+        data.append(m_info(m))
+
+    # recordsTotal = watermeters.count()
+    recordsTotal = len(watermeters)
+    
+    result = dict()
+    result["records"] = data[start:start+length]
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+
 class NeighborhoodusedaylyView(LoginRequiredMixin,TemplateView):
     template_name = "wirelessm/neighborhoodusedayly.html"
 

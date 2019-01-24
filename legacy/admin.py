@@ -55,9 +55,9 @@ class HdbFlowDataAdmin(admin.ModelAdmin):
 
 @admin.register(Watermeter)
 class WatermeterAdmin(admin.ModelAdmin):
-    list_display = ["id","nodeaddr","wateraddr","communityid","serialnumber","buildingname"]
+    list_display = ["id","nodeaddr","wateraddr","communityid","numbersth","buildingname"]
     list_filter = ("communityid",)
-    search_fields = ("id","nodeaddr","wateraddr" )
+    search_fields = ("id","nodeaddr","wateraddr","numbersth" )
 
 
 

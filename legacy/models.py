@@ -670,6 +670,21 @@ class HdbWatermeterDayManager(models.Manager):
             return self.filter(communityid=query,hdate__startswith=mon)
         return self
 
+
+    def waterid_daily_use(self, waterid,communityid,mon): #RestaurantLocation.objects.search()
+        '''
+        前mon个月的用水量
+        '''
+        if waterid:
+            # query = query.strip()
+            return self.filter(
+                Q(communityid=communityid) &
+                Q(waterid=waterid) &
+                Q(hdate__startswith=mon)
+                
+                ).distinct()
+        return self
+
 class HdbWatermeterDay(models.Model):
     waterid = models.IntegerField(db_column='WaterId', primary_key=True)  # Field name made lowercase.
     rvalue = models.CharField(db_column='RValue', max_length=30, blank=True, null=True)  # Field name made lowercase.
@@ -722,6 +737,26 @@ class HdbWatermeterDay(models.Model):
             else:
                 dailydata[day] += float(dosage)
         print("3.",time.time()-t1)
+
+        return dailydata
+
+
+    @classmethod
+    def waterid_daily_use(self,waterid,communityid,ymon):
+        datalists = self.objects.waterid_daily_use(waterid,communityid,ymon).values("hdate","rvalue").iterator()
+        
+        dailydata = {}
+        for d in datalists:
+            day = d["hdate"]
+            if d["rvalue"] is None:
+                dosage = 0
+            else:
+                dosage = d["rvalue"]
+            if day not in dailydata.keys():
+                dailydata[day] = float(dosage)
+            else:
+                dailydata[day] += float(dosage)
+        
 
         return dailydata
 

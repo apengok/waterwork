@@ -17,6 +17,7 @@ urlpatterns = [
     #无线抄表
     # 数据查询
     url(r'^wlquerydata/?$',views.WlquerydataView.as_view(),name='wlquerydata'),
+    url(r'^watermeter/comunitiquery/',views.comunitiquery,name='comunitiquery'),
     
     # 小区日用水
     url(r'^neighborhoodusedayly/?$', views.NeighborhoodusedaylyView.as_view(), name='neighborhoodusedayly'),#

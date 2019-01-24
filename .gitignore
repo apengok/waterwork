@@ -11,6 +11,8 @@ publishfiles
 # C extensions
 *.so
 
+logs/
+
 # Distribution / packaging
 .Python
 env/
