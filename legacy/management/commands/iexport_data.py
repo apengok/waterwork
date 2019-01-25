@@ -328,11 +328,12 @@ def test_sync_watermeter():
                 meterv = w["meterv"])
 
             # update flow data day and month
-            for i in range(2):
-                day = today - datetime.timedelta(days=i)
-                day_str = day.strftime("%Y-%m-%d")
-                test_sync_wm_day(waterid,day_str,v_ww_commutid)
-            test_sync_wm_month(waterid,day.strftime("%Y-%m"),v_ww_commutid)
+            # for i in range(2):
+            #     day = today - datetime.timedelta(days=i)
+            #     day_str = day.strftime("%Y-%m-%d")
+            #     test_sync_wm_day(waterid,day_str,v_ww_commutid)
+            test_sync_wm_day(waterid,"2019-01-23",v_ww_commutid)
+            # test_sync_wm_month(waterid,day.strftime("%Y-%m"),v_ww_commutid)
 
         else:
             nocnt += 1
@@ -538,8 +539,8 @@ def test_pwl():
     # return test_sync_bgm_flow_hour("15755950621")
     # return test_sync_bgm_flow_daily("15755950621")
     # return test_sync_bgm_flow_month("15755950621","2019-01")
-    # test_sync_watermeter()
-    return test_sync_bigmeter()
+    return test_sync_watermeter()
+    # return test_sync_bigmeter()
     return test_watermeter()
     return test_community()
     return test_hdb_watermeter_month()

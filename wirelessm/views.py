@@ -31,7 +31,7 @@ from accounts.forms import RoleCreateForm,MyRolesForm,RegisterForm,UserDetailCha
 from entm.utils import unique_cid_generator,unique_uuid_generator,unique_rid_generator
 from entm.forms import OrganizationsAddForm,OrganizationsEditForm
 from entm.models import Organizations
-from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay
+from legacy.models import Bigmeter,District,Community,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,HdbWatermeterMonth
 import os
 from django.conf import settings
 
@@ -553,7 +553,31 @@ def watermeterlist(request):
 def neiborhooddailydata(request):
     print(request.GET)
     communityid = request.GET.get("communityid") #communityid is VCommunity's id
+    sTime = request.GET.get("startTime")
+    eTIme = request.GET.get("endTime")
+    flag = request.GET.get("flag")
+    today = datetime.datetime.today()
+    if flag == "-1":    #上月
+        last_month = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
+        mon_str = last_month.strftime("%Y-%m")
+    else:
+        mon_str = today.strftime("%Y-%m")
     realcommutid = VCommunity.objects.get(id=communityid).amrs_commutid #get real id
-    monthdata = HdbWatermeterDay.communityDailydetail(realcommutid,"")
+    monthdata = HdbWatermeterDay.communityDailydetail(realcommutid,mon_str)
 
-    return HttpResponse(json.dumps({"success":1,"monthdata":json.dumps(monthdata),"monthdata2":monthdata}))
+    return HttpResponse(json.dumps({"success":1,"monthdata":monthdata}))
+
+
+
+def neiborhoodmonthdata(request):
+    # print(request.GET)
+    communityid = request.GET.get("communityid") #communityid is VCommunity's id
+    sMonth = request.GET.get("sMonth")
+    eMonth = request.GET.get("eMonth")
+    realcommutid = VCommunity.objects.get(id=communityid).amrs_commutid #get real id
+    monthdata = HdbWatermeterMonth.community_range_use(realcommutid,sMonth,eMonth)
+
+    return HttpResponse(json.dumps({"success":1,"monthdata":monthdata}))
+
+
+    

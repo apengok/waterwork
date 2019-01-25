@@ -1080,7 +1080,7 @@ def meterlist(request):
     
     yesmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
     yesmonth_str = yesmonth.strftime("%Y-%m")
-    lastmonth = datetime.date.today().replace(day=41) - datetime.timedelta(days=1)
+    lastmonth = yesmonth.replace(day=1) - datetime.timedelta(days=1)
     lastmonth_str = lastmonth.strftime("%Y-%m")
     
 

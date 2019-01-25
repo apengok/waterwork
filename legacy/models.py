@@ -716,11 +716,14 @@ class HdbWatermeterDay(models.Model):
 
     @classmethod
     def communityDailydetail(self,communityid,mon):
-        today = datetime.datetime.today()
-        monstr = today.strftime("%Y-%m")
-        dailydata = {}
         t1=time.time()
-        datalists = self.objects.community_use(communityid,monstr).values("hdate","dosage").iterator()
+        monstr = mon
+        if monstr is None:
+            today = datetime.datetime.today()
+            monstr = today.strftime("%Y-%m")
+        
+        dailydata = {}
+        datalists = self.objects.community_use(communityid,monstr).values("hdate","dosage")
         # datalists = HdbWatermeterDay.objects.raw("select * from hdb_watermeter_day where communityid=%s and hdate like '%s' "%(communityid,monstr))
         print("1.",time.time()-t1)
         bool(datalists)
@@ -792,6 +795,14 @@ class HdbWatermeterMonthQuerySet(models.query.QuerySet):
             return self.filter(communityid=query,hdate=hdate)   #.aggregate(Sum('dosage'))
         return self
 
+    def community_rangeuse(self,communityid,sMonth,eMonth):
+        '''
+        按小区统计hdate月的小区流量
+        '''
+        if communityid:
+            return self.filter(communityid=communityid,hdate__in=[sMonth,eMonth])   #.aggregate(Sum('dosage'))
+        return self
+
 class HdbWatermeterMonthManager(models.Manager):
     def get_queryset(self):
         return HdbWatermeterMonthQuerySet(self.model, using=self._db)
@@ -808,7 +819,13 @@ class HdbWatermeterMonthManager(models.Manager):
             return self.filter(communityid=query,hdate=mon).aggregate(Sum('dosage'))
         return self
 
-
+    def community_rangeuse(self,communityid,sMonth,eMonth):
+        '''
+        按小区统计hdate月的小区流量
+        '''
+        if communityid:
+            return self.filter(communityid=communityid,hdate__range=[sMonth,eMonth])  #.aggregate(Sum('dosage'))
+        return self
 
 
 
@@ -830,16 +847,33 @@ class HdbWatermeterMonth(models.Model):
         '''
         前mon个月的用水量
         '''
-        print(query,mon)
         community_history = {}
         for i in range(int(mon)):
             m = datetime.datetime.today()-monthdelta.monthdelta(i)
             m = m.strftime("%Y-%m")
             u = self.objects.community_use(query,m)
             community_history[m] =  u
-            print(m,u)
 
         return community_history
+
+    @classmethod
+    def community_range_use(self,communityid,sMonth,eMonth):
+        datalists = self.objects.community_rangeuse(communityid,sMonth,eMonth).values()
+        
+        dailydata = {}
+        for d in datalists:
+            day = d["hdate"]
+            if d["dosage"] is None:
+                dosage = 0
+            else:
+                dosage = d["dosage"]
+            if day not in dailydata.keys():
+                dailydata[day] = float(dosage)
+            else:
+                dailydata[day] += float(dosage)
+        
+
+        return dailydata
 
 
 class Imexport(models.Model):

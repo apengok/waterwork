@@ -86,7 +86,7 @@
                         <div class="col-md-12 alarmSearchToolPanel" style="padding: 0px;">
                             <form id="hourslist" class="form-horizontal" action="#"  method="post" role="form" >{% csrf_token %}
                                 <div class="form-group" >
-                                    <label class="col-md-1  control-label searchListSelect" style="margin-left: 0px;">小区名称：</label>
+                                    <label class="col-md-1  control-label searchListSelect" style="margin-left: 0px;"><span style="margin-left: -10px;">小区名称：</span></label>
                                     <div class="col-md-3">
                                       <input id="station_name" class="form-control" value="{{ station }}" readonly="" type="text">
                                       <input id="commaddr" class="form-control" value="{{ commaddr }}" readonly="" type="hidden">
@@ -100,10 +100,10 @@
                                     </div>
                                     <div class="col-md-3 control-label " id="dateSearchData">
                                         
-                                        <button id="yesterdayClick" type="button"class="btn btn-primary" name="-2" onclick="communityDaily.requeryComunityData(0)">本月  </button>
-                                        <button id="nearlyThreeDays" type="button"class="btn btn-primary" name="-3" onclick="communityDaily.requeryComunityData(-1)">上月  </button>
+                                        <button id="thismonthClick" type="button"class="btn btn-primary" name="-2" >本月  </button>
+                                        <button id="lastmonthClick" type="button"class="btn btn-primary" name="-3" >上月  </button>
                                         
-                                        <button id="inquireClick" type="button" class="btn btn-primary search-btn" name="1" onclick="communityDaily.requeryComunityData(1)"><i class="glyphicon glyphicon-search"></i>  查询</button>
+                                        <button id="inquireClick" type="button" class="btn btn-primary search-btn" name="1" ><i class="glyphicon glyphicon-search"></i>  查询</button>
                                         
                                         
                                         
@@ -222,7 +222,7 @@
                               <td id="d30"></td>
                               
                             </tr>
-                            <tr id="tr31" style="display: none;">
+                            <tr id="tr31" >
                               <td>31</td>
                               <td id="d31"></td>
                               <td></td>

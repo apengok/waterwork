@@ -25,6 +25,7 @@ urlpatterns = [
     
     # 小区月用水
     url(r'^neighborhoodusemonthly/$',views.NeighborhoodusemonthlyView.as_view(),name='neighborhoodusemonthly'),
+    url(r'^neiborhoodmonthdata/?$', views.neiborhoodmonthdata, name='neiborhoodmonthdata'),#
     
     # 户表管理
     url(r'^neighborhoodmetermanager/?$',views.NeighborhoodmeterMangerView.as_view(),name='neighborhoodmetermanager'),
