@@ -274,7 +274,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         }
         else{
             dma_in_group = dma_no_global;
-            trackPlayback.refreshMap_local();
+            trackPlayback.refreshMap_local('');
         }
       });
       lmapHeight = $("#MapContainer").height();
@@ -1826,7 +1826,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       }
       else{
 
-        
+        //map.setCenter([106.198625,37.997648])
         show_dma_level = "2";
         dma_level2_clicked = "";
         $(".realTimeCanArea").hide()
@@ -1841,7 +1841,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             }
         }
         console.log("dma_in_group",dma_in_group)
-      trackPlayback.refreshMap_local();
+      trackPlayback.refreshMap_local(treeNode.name);
       $("#allMileage").text(treeNode.name);
       $("#allTime").text(0);
       $("#maxSpeend").text(0 + "km/h");
@@ -3319,7 +3319,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                         console.log(dma_no_global)
                         console.log(dma_in_group)
 
-                        trackPlayback.refreshMap_local();
+                        trackPlayback.refreshMap_local('');
                         // 并不是每个dma分区都画了围栏，此路不通
                         // trackPlayback.updateTreeNodeColor(dma_details);
                         // console.log(dma_details)
@@ -3478,7 +3478,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
         },
         // 只显示二级分区，三级分区另外函数实现
-        refreshMap_local:function(){
+        refreshMap_local:function(dname){
             var mapBounds = map.getBounds();
             var southWest = new AMap.LngLat(mapBounds.southwest.lng, mapBounds.southwest.lat);
             var northEast = new AMap.LngLat(mapBounds.northeast.lng, mapBounds.northeast.lat);
@@ -3496,7 +3496,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
             });
             // console.log(mapBounds)
-            // console.log(bounds)
+            console.log(dname)
             console.log('dma_in_group:',dma_in_group)
             var polygon1_path = rectangle.getPath();
             // var polygon2_path = polygon2.getPath();
@@ -3517,6 +3517,9 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                 }
                 // in
                 var isRingInRing = AMap.GeometryUtil.isRingInRing(polygon2_path,polygon1_path);
+                if(dname != ''){
+                  isRingInRing = true;
+                }
                 if(isRingInRing ){
                     var tdma_name = tdma.getExtData().dma_name; 
                     var tdma_level = tdma.getExtData().dma_level;
@@ -3533,7 +3536,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                     var show_text = water_in + "m³/h<br/>" + readtime;
                     // 创建纯文本标记 
                     var text = new AMap.Text({
-                        text:show_text,
+                        text:tdma_name,//show_text,
                         textAlign:'center', // 'left' 'right', 'center',
                         verticalAlign:'middle', //middle 、bottom
                         draggable:true,
