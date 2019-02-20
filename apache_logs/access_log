@@ -980,3 +980,5 @@
 127.0.0.1 - - [25/Aug/2018:23:00:15 +0800] "POST /entm/role/choicePermissionTree/ HTTP/1.1" 200 10203
 127.0.0.1 - - [25/Aug/2018:23:00:16 +0800] "GET /favicon.ico HTTP/1.1" 302 -
 127.0.0.1 - - [25/Aug/2018:23:00:16 +0800] "GET /static/virvo/resources/img/favicon.ico HTTP/1.1" 200 894
+127.0.0.1 - - [28/Dec/2018:21:15:37 +0800] "GET /PV?peerid=0&uri=http://thunderqtypv.union.xunlei.com&src=www.wo99.net HTTP/1.1" 404 5925
+127.0.0.1 - - [29/Dec/2018:12:58:33 +0800] "GET /PV?peerid=0&uri=http://thunderqtypv.union.xunlei.com&src=www.wo99.net HTTP/1.1" 404 5925

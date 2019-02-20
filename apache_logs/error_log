@@ -1409,3 +1409,5 @@
 [Sat Aug 25 21:36:31.765745 2018] [wsgi:error] [pid 175920:tid 1448] [client 127.0.0.1:14560] \r, referer: http://www.bsc200.com/
 [Sat Aug 25 21:36:36.473081 2018] [wsgi:error] [pid 175920:tid 1452] [client 127.0.0.1:14567]  get choicePermissionTree \r, referer: http://www.bsc200.com/sysm/personalized/list
 [Sat Aug 25 23:00:15.904503 2018] [wsgi:error] [pid 175920:tid 1452] [client 127.0.0.1:15382]  get choicePermissionTree \r, referer: http://www.bsc200.com/sysm/personalized/list
+[Fri Dec 28 21:15:42.026865 2018] [wsgi:error] [pid 7560:tid 1488] [client 127.0.0.1:3192] Not Found: /PV\r, referer: http://www.wo99.net/bplay-34818.html
+[Sat Dec 29 12:58:33.908329 2018] [wsgi:error] [pid 7560:tid 1488] [client 127.0.0.1:5666] Not Found: /PV\r, referer: http://www.wo99.net/bplay-34818.html

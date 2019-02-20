@@ -12,6 +12,21 @@ import logging
 from dmam.models import VConcentrator,VWatermeter,VCommunity,VSecondWater
 from entm.models import Organizations
 
+
+from functools import wraps
+from django.db import connection
+
+def db_auto_reconnect(func):
+    """Auto reconnect db when mysql has gone away."""
+    @wraps(func)
+    def wrapper(*args, **kwagrs):
+        try:
+            connection.connection.ping()
+        except Exception:
+            connection.close()
+        return func(*args, **kwagrs)
+    return wrapper
+
 logger_info = logging.getLogger('info_logger')
 
 def update_watermeterday():
@@ -272,6 +287,7 @@ def test_hdb_watermeter_data_day():
 
     print("added {} , updated {}".format(count,updated))
 
+@db_auto_reconnect
 def test_sync_watermeter():
     nocnt = 0
     today = datetime.datetime.today()
@@ -281,12 +297,16 @@ def test_sync_watermeter():
 
     sx_wms = Watermeter.objects.using("shexian").values("id","communityid","rvalue","fvalue","meterstate","commstate",
                 "rtime","lastrvalue","lastrtime","dosage","valvestate","lastwritedate","lastwritevalue","meterv","wateraddr")
+    print("1.",time.time()-t1)
     bool(sx_wms)
+    print("2.",time.time()-t1,len(sx_wms))
     v_community = VCommunity.objects.values_list("commutid","amrs_commutid")
+    print("3.",time.time()-t1)
     v_community_dict = dict(v_community)
     v_watermeter = VWatermeter.objects.values_list("waterid","amrs_waterid")
     v_watermeter_dict = dict(v_watermeter)
-
+    print("4.",time.time()-t1)
+    return
     for w in sx_wms:
         waterid = w["id"] #歙县watermeter id
         communityid = w["communityid"]
@@ -328,11 +348,12 @@ def test_sync_watermeter():
                 meterv = w["meterv"])
 
             # update flow data day and month
-            # for i in range(2):
+            # for i in range(7):
             #     day = today - datetime.timedelta(days=i)
             #     day_str = day.strftime("%Y-%m-%d")
             #     test_sync_wm_day(waterid,day_str,v_ww_commutid)
-            test_sync_wm_day(waterid,"2019-01-23",v_ww_commutid)
+            # # test_sync_wm_day(waterid,"2019-01-23",v_ww_commutid)
+            # test_sync_wm_month(waterid,"2019-01",v_ww_commutid)
             # test_sync_wm_month(waterid,day.strftime("%Y-%m"),v_ww_commutid)
 
         else:

@@ -17,6 +17,22 @@ logger_info = logging.getLogger('info_logger')
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), "default")
 
+
+
+from functools import wraps
+from django.db import connection
+
+def db_auto_reconnect(func):
+    """Auto reconnect db when mysql has gone away."""
+    @wraps(func)
+    def wrapper(*args, **kwagrs):
+        try:
+            connection.connection.ping()
+        except Exception:
+            connection.close()
+        return func(*args, **kwagrs)
+    return wrapper
+    
 # ('scheduler',"interval", seconds=1)  #用interval方式循环，每一秒执行一次  
 # @register_job(scheduler, 'cron', day_of_week='mon-fri', hour='9', minute='30', second='10',id='task_time')  
 #         
