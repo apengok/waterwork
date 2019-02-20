@@ -786,7 +786,7 @@ def getDMAFenceOnce(request):
         #     if dma.belongto not in organ.sub_organizations(include_self=True):
         #         continue
 
-        
+        # print(shapeId,dma_no,pgo["name"])
         fenceData = []
         pointSeqs = pgo["pointSeqs"].split(",")
         longitudes = pgo["longitudes"].split(",")

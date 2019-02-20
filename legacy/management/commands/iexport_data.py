@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-
+from django.db import connections
 
 from legacy.models import (HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,
     Watermeter,HdbWatermeterDay,HdbWatermeterMonth,Concentrator,Community,SecondWater,
@@ -28,6 +28,11 @@ def db_auto_reconnect(func):
     return wrapper
 
 logger_info = logging.getLogger('info_logger')
+
+
+def close_old_connections():
+    for conn in connections.all():
+        conn.close_if_unusable_or_obsolete()
 
 def update_watermeterday():
     waterid = 36545
@@ -287,9 +292,10 @@ def test_hdb_watermeter_data_day():
 
     print("added {} , updated {}".format(count,updated))
 
-@db_auto_reconnect
-def test_sync_watermeter():
+
+def test_sync_watermeter(day):
     nocnt = 0
+    
     today = datetime.datetime.today()
     t1=time.time()
 
@@ -297,9 +303,6 @@ def test_sync_watermeter():
 
     sx_wms = Watermeter.objects.using("shexian").values("id","communityid","rvalue","fvalue","meterstate","commstate",
                 "rtime","lastrvalue","lastrtime","dosage","valvestate","lastwritedate","lastwritevalue","meterv","wateraddr")
-    print("1.",time.time()-t1)
-    bool(sx_wms)
-    print("2.",time.time()-t1,len(sx_wms))
     v_community = VCommunity.objects.values_list("commutid","amrs_commutid")
     print("3.",time.time()-t1)
     v_community_dict = dict(v_community)
@@ -355,6 +358,8 @@ def test_sync_watermeter():
             # # test_sync_wm_day(waterid,"2019-01-23",v_ww_commutid)
             # test_sync_wm_month(waterid,"2019-01",v_ww_commutid)
             # test_sync_wm_month(waterid,day.strftime("%Y-%m"),v_ww_commutid)
+            test_sync_wm_day(waterid,day,v_ww_commutid)
+            test_sync_wm_month(waterid,day[:7],v_ww_commutid)
 
         else:
             nocnt += 1
@@ -441,7 +446,7 @@ def test_sync_bigmeter():
                 commstate=commstate,meterstate=meterstate,)
             logger_info.info("{}({}):".format(name,commaddr))
             # sync flow history data
-            for i in range(2):
+            for i in range(3):
                 day = today - datetime.timedelta(days=i)
                 day_str = day.strftime("%Y-%m-%d")
                 logger_info.info("\t\t{}".format(day_str))
@@ -553,15 +558,23 @@ def test_sync_bgm_flow_month(commaddr,ymon):
 
 # WaterMeter
 
-def test_pwl():
+def test_pwl(**options):
+    if options["d"]:
+        day = options["d"][0]
+    else:
+        today = datetime.datetime.today()
+        day = today.strftime("%Y-%m-%d")
+
+    close_old_connections()
+    return
     # return test_hdb_watermeter_data_day()
     # return test_hdb_watermeter_data_month()
     # return test_sync_bgm_flows("15755950621")
     # return test_sync_bgm_flow_hour("15755950621")
     # return test_sync_bgm_flow_daily("15755950621")
     # return test_sync_bgm_flow_month("15755950621","2019-01")
-    return test_sync_watermeter()
-    # return test_sync_bigmeter()
+    return test_sync_watermeter(day)
+    return test_sync_bigmeter()
     return test_watermeter()
     return test_community()
     return test_hdb_watermeter_month()
@@ -733,6 +746,14 @@ class Command(BaseCommand):
             help='import secondwater to new db'
         )
 
+        parser.add_argument(
+            '-d',
+            action='append',
+            dest='d',
+            default=None,
+            help='update certain day'
+        )
+
 
     def handle(self, *args, **options):
         # sTime = options['sTime']
@@ -741,7 +762,10 @@ class Command(BaseCommand):
         if options['test']:
             
             # test_job()
-            test_pwl()
+            print(args)
+            print(options["d"])
+            # return
+            test_pwl(**options)
             # update_pwl()
             # 
 

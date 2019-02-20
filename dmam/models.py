@@ -367,12 +367,17 @@ class DMABaseinfo(models.Model):
         lastmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
         lastmonth_str = lastmonth.strftime("%Y-%m")
 
+        if self.belongto.organlevel == '1':
+            dma_level = '2'
+        else:
+            dma_level = self.belongto.organlevel
+
         return {
             "dma_name":self.dma_name,
             "dma_no":self.dma_no,
             "belongto":self.belongto.name,
             "belongto_cid":self.belongto.cid,
-            "dma_level":self.belongto.organlevel, #"二级",
+            "dma_level":dma_level, #"二级",
             "state":"在线",
             "water_in":round(float(water_in),2),
             "readtime":'2018-12-29',

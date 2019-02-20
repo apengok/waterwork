@@ -5,6 +5,7 @@ import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
+from django.db import connections
 
 from legacy.models import (HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDataMonth,HdbPressureData,Bigmeter,
     Watermeter,HdbWatermeterDay,HdbWatermeterMonth)
@@ -16,6 +17,7 @@ logger_info = logging.getLogger('info_logger')
 
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), "default")
+
 
 
 
@@ -33,6 +35,13 @@ def db_auto_reconnect(func):
         return func(*args, **kwagrs)
     return wrapper
     
+
+def close_old_connections():
+    for conn in connections.all():
+        conn.close_if_unusable_or_obsolete()
+
+
+
 # ('scheduler',"interval", seconds=1)  #用interval方式循环，每一秒执行一次  
 # @register_job(scheduler, 'cron', day_of_week='mon-fri', hour='9', minute='30', second='10',id='task_time')  
 #         
@@ -308,6 +317,7 @@ def test_sync_bgm_flow_month(commaddr,ymon):
 @register_job(scheduler, "interval", seconds=3600, replace_existing=True)
 def test_sync_bigmeter():
     nocnt = 0
+    close_old_connections()
     today = datetime.datetime.today()
     # day = today.strftime("%Y-%m-%d")
     logger_info.info("sync Bigmeter data and flow data:")
@@ -352,9 +362,10 @@ def test_sync_bigmeter():
 
 
 # 小表数据 从歙县服务器数据库同步到威尔沃服务器数据库
-@register_job(scheduler, "cron", hour=10,minute=00, replace_existing=True)
+@register_job(scheduler, "cron", hour=05,minute=10, replace_existing=True)
 def test_sync_watermeter():
     nocnt = 0
+    close_old_connections()
     today = datetime.datetime.today()
     t1=time.time()
 
