@@ -103,7 +103,7 @@ class LoginForm(forms.Form):
         captchaCode = data.get('captchaCode') or ''
         if len(captchaCode) == 0:
             print( '请把滑块滑到右边')
-            raise forms.ValidationError("请把滑块滑到右边")
+            # raise forms.ValidationError("请把滑块滑到右边")
 
         qs = User.objects.filter(user_name=user_name)
         if qs.exists():

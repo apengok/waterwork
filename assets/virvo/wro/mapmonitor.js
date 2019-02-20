@@ -3434,9 +3434,10 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                     // console.log(tdma_no,'not in selected group')
                     continue;
                 }
+                var tdma_name = tdma.getExtData().dma_name; 
                 var water_in = tdma.getExtData().water_in;
                 var readtime = tdma.getExtData().readtime;
-                var show_text = water_in + "m³/h<br/>" + readtime;
+                var show_text = tdma_name + "<br/>" + water_in + "m³/h<br/>" + readtime;
                 var tdma_name = tdma.getExtData().dma_name; 
 
                 
@@ -3533,10 +3534,10 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                     
                     var water_in = tdma.getExtData().water_in;
                     var readtime = tdma.getExtData().readtime;
-                    var show_text = water_in + "m³/h<br/>" + readtime;
+                    var show_text = tdma_name + "<br/>" + water_in + "m³/h<br/>" + readtime;
                     // 创建纯文本标记 
                     var text = new AMap.Text({
-                        text:tdma_name,//show_text,
+                        text:show_text,
                         textAlign:'center', // 'left' 'right', 'center',
                         verticalAlign:'middle', //middle 、bottom
                         draggable:true,
