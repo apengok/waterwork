@@ -99,7 +99,7 @@ if settings.DEBUG:
 handler404 = error_404
 handler500 = error_500
 
-if not settings.DEBUG:
-    import waterwork.jobs
+# if not settings.DEBUG:
+#     import waterwork.jobs
 
 # import waterwork.jobs

@@ -309,7 +309,7 @@ def test_sync_watermeter(day):
     v_watermeter = VWatermeter.objects.values_list("waterid","amrs_waterid")
     v_watermeter_dict = dict(v_watermeter)
     print("4.",time.time()-t1)
-    return
+    
     for w in sx_wms:
         waterid = w["id"] #歙县watermeter id
         communityid = w["communityid"]
@@ -363,7 +363,7 @@ def test_sync_watermeter(day):
 
         else:
             nocnt += 1
-            logger_info.info("{} not in virvo DB".format(waterid))
+            # logger_info.info("{} not in virvo DB".format(waterid))
 
     if nocnt > 0:
         logger_info.info("total {} not in virvo DB".format(nocnt))
@@ -394,6 +394,7 @@ def test_sync_wm_day(waterid,day,communityid):
 
     if len(added_list) > 0:
         HdbWatermeterDay.objects.bulk_create(added_list)
+        logger_info.info("total {} added to virvo HdbWatermeterDay".format(len(added_list)))
 
 
 def test_sync_wm_month(waterid,ymon,communityid):
@@ -412,6 +413,7 @@ def test_sync_wm_month(waterid,ymon,communityid):
 
     if len(added_list) > 0:
         HdbWatermeterMonth.objects.bulk_create(added_list)
+        logger_info.info("total {} added to virvo HdbWatermeterMonth".format(len(added_list)))
 
 
 def test_sync_bigmeter():
@@ -565,8 +567,8 @@ def test_pwl(**options):
         today = datetime.datetime.today()
         day = today.strftime("%Y-%m-%d")
 
-    close_old_connections()
-    return
+    # close_old_connections()
+    # return
     # return test_hdb_watermeter_data_day()
     # return test_hdb_watermeter_data_month()
     # return test_sync_bgm_flows("15755950621")

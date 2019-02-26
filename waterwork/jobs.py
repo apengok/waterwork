@@ -362,7 +362,7 @@ def test_sync_bigmeter():
 
 
 # 小表数据 从歙县服务器数据库同步到威尔沃服务器数据库
-@register_job(scheduler, "cron", hour=05,minute=10, replace_existing=True)
+@register_job(scheduler, "cron", hour='05',minute='10', replace_existing=True)
 def test_sync_watermeter():
     nocnt = 0
     close_old_connections()
