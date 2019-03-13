@@ -243,9 +243,10 @@ def test_sync_bgm_flows(commaddr,day):
     if len(added_list)>0:
         try:
             added=HdbFlowData.objects.bulk_create(added_list)
+            logger_info.info("HdbFlowData:added_list count {} added :{}".format(len(added_list),len(added)))
             
         except Exception as e:
-            logger_info.info("sync flow  error,reason :",e)
+            logger_info.info("sync flow  error,reason :{}".format(e))
         
 
 def test_sync_bgm_flow_hour(commaddr,day):
@@ -266,6 +267,7 @@ def test_sync_bgm_flow_hour(commaddr,day):
     if len(added_list)>0:
         try:
             added=HdbFlowDataHour.objects.bulk_create(added_list)
+            logger_info.info("HdbFlowDataHour:added_list count {} added :{}".format(len(added_list),len(added)))
             
         except Exception as e:
             logger_info.info("sync flow hour error,reason :",e)
@@ -287,9 +289,10 @@ def test_sync_bgm_flow_daily(commaddr,day):
     if len(added_list)>0:
         try:
             added=HdbFlowDataDay.objects.bulk_create(added_list)
+            logger_info.info("HdbFlowDataDay:added_list count {} added :{}".format(len(added_list),len(added)))
             
         except Exception as e:
-            logger_info.info("sync flow day error,reason :",e)
+            logger_info.info("sync flow day error,reason :{}".format(e))
 
 def test_sync_bgm_flow_month(commaddr,ymon):
     
@@ -308,9 +311,10 @@ def test_sync_bgm_flow_month(commaddr,ymon):
     if len(added_list)>0:
         try:
             added=HdbFlowDataMonth.objects.bulk_create(added_list)
+            logger_info.info("HdbFlowDataMonth:added_list count {} added :{}".format(len(added_list),len(added)))
             
         except Exception as e:
-            logger_info.info("sync flow month error,reason :",e)
+            logger_info.info("sync flow month error,reason :{}".format(e))
 
 
 # 大表数据 从歙县服务器数据库同步到威尔沃服务器数据库
@@ -350,7 +354,7 @@ def test_sync_bigmeter():
             # sync flow history data
             
             day_str = today.strftime("%Y-%m-%d")
-            logger_info.info("\t\t{}".format(day_str))
+            
             test_sync_bgm_flows(commaddr,day_str)
             test_sync_bgm_flow_hour(commaddr,day_str)
             test_sync_bgm_flow_daily(commaddr,day_str)
