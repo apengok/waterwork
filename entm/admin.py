@@ -2,16 +2,17 @@
 
 from django.contrib import admin
 from . import models
+from waterwork.mixins import ExportCsvMixin
 
 # Register your models here.
 
 @admin.register(models.Organizations)
-class OrganizationsAdmin(admin.ModelAdmin):
+class OrganizationsAdmin(admin.ModelAdmin,ExportCsvMixin):
     list_display = ['name','parent','attribute','organlevel','register_date','owner_name','phone_number','firm_address','cid','pId','is_org','uuid']
     list_filter = ('organlevel','attribute')
     search_fields = ['name']
 
-    actions = ['set_sublevel']
+    actions = ['set_sublevel','export_as_csv']
 
     def set_sublevel(self,request,queryset):
         # rows_updated = queryset.update(meterstate='正常')

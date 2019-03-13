@@ -1,6 +1,7 @@
 from django.utils.http import is_safe_url
 from django.shortcuts import render,HttpResponse
 import json
+import unicodecsv
 
 class RequestFormAttachMixin(object):
     def get_form_kwargs(self):
@@ -64,3 +65,22 @@ class AjaxableResponseMixin(object):
         else:
             return response
         
+
+
+class ExportCsvMixin:
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = unicodecsv.writer(response,encoding='utf-8')
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Export Selected"

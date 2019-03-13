@@ -241,6 +241,7 @@ def savePolygons(request):
 
     createDataUsername = request.user.user_name
     organ = Organizations.objects.get(name=belongto)
+    print("belongto organ is ",organ)
 
     if addOrUpdatePolygonFlag == "1":
         f = FenceDistrict.objects.get(cid=polygonId)
@@ -259,7 +260,7 @@ def savePolygons(request):
         p.save()
         
     else:
-        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_polygon")
+        instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_polygon",belongto=organ)
         FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
 
     return HttpResponse(json.dumps({"success":1}))

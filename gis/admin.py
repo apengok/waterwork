@@ -2,12 +2,14 @@
 
 from django.contrib import admin
 from . import models
+from waterwork.mixins import ExportCsvMixin
 
 # Register your models here.
 
 @admin.register(models.FenceDistrict)
-class FenceDistrictAdmin(admin.ModelAdmin):
+class FenceDistrictAdmin(admin.ModelAdmin,ExportCsvMixin):
     list_display = ['name','parent','belongto','ftype','createDataTime','createDataUsername','cid','pId','updateDataTime','updateDataUsername']
+    actions = ['export_as_csv']
 
 
 
@@ -18,8 +20,9 @@ class PolygonAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.FenceShape)
-class FenceShapeAdmin(admin.ModelAdmin):
+class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
     list_display = ['shapeId','name','zonetype','shape','dma_no','pointSeqs','longitudes','latitudes','lnglatQuery_LU','lnglatQuery_RD']
+    actions = ['export_as_csv']
 
     fieldsets = (
         (None, {'fields': ('shapeId', 'name','zonetype','shape','dma_no')}),

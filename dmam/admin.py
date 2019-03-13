@@ -4,6 +4,7 @@ from django.contrib import admin
 from . models import WaterUserType,DMABaseinfo,DmaStation,Meter,Station,SimCard,DmaGisinfo,VCommunity,VConcentrator,VWatermeter,VPressure,VSecondWater
 # Register your models here.
 from legacy.models import Bigmeter,District
+from waterwork.mixins import ExportCsvMixin
 
 @admin.register(WaterUserType)
 class WaterUserTypeAdmin(admin.ModelAdmin):
@@ -11,14 +12,18 @@ class WaterUserTypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(DmaStation)
-class DmaStationAdmin(admin.ModelAdmin):
+class DmaStationAdmin(admin.ModelAdmin,ExportCsvMixin):
     list_display = ['dmaid','station_id','meter_type','station_type']
+    actions = ['export_as_csv']
+
 
 
 @admin.register(DMABaseinfo)
-class DMABaseinfoAdmin(admin.ModelAdmin):
+class DMABaseinfoAdmin(admin.ModelAdmin,ExportCsvMixin):
     list_display = ['dma_no','dma_level','dma_name','creator','create_date','belongto']
     search_fields = ("dma_no","dma_name" )
+    actions = ['export_as_csv']
+    
 
 
 @admin.register(Meter)

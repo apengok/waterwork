@@ -1063,6 +1063,7 @@ def flowdata_dailyuse(request):
     #staticstic data
     #当天用水量
     today_use = flow_day_dosage(commaddr,today_str)
+    print('today_us:',today_use)
     #昨日用水量
     yestoday_use = flow_day_dosage(commaddr,yestoday_str)
     #前日用水量
@@ -1084,7 +1085,7 @@ def flowdata_dailyuse(request):
         day = today - datetime.timedelta(days=i)
         day_str = day.strftime("%Y-%m-%d")
         flowdata_hour,x = HdbFlow_day_hourly(commaddr,day_str)
-        # print(flowdata_hour)
+        print("day use hourly:",flowdata_hour)
         flowdata_daylist[day_str] = flowdata_hour
 
         # x = flow_hour_xishu(commaddr,day_str)
