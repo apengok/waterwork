@@ -89,9 +89,9 @@ footer .defaultFootBg-left{width:100%}
 .amap-menu .amap-menu-outer .menu-icon{background:url(/static/virvo/resources/img/icon_dir.png) no-repeat;background-size:281px 219px;display:inline-block;width:22px;height:22px;vertical-align:middle;margin-top:-4px}
 .icon-clearmap{background:url(/static/virvo/resources/img/clear.svg) no-repeat;width:22px;height:22px;background-size:19px 19px;display:inline-block;vertical-align:middle}
 .amap-menu-outer li:last-child{border-top:1px solid #ccc;margin-top:5px}
-.realTimeCanArea{border-bottom-right-radius: 8px;box-shadow: 1px 1px 3px #ccc;display:none;background-color:#fff;width:355px;z-index: 1;position: relative;top:338px;padding: 20px 20px 5px 20px;border:1px solid #169bd5;-webkit-transition: all .3s ease-in-out;-moz-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out;}
+.realTimeCanArea{box-shadow: 1px 1px 3px #ccc;display:none;background-color:#fff;width:355px;z-index: 1;position: relative;top:338px;padding: 20px 20px 5px 20px;border:1px solid #169bd5;-webkit-transition: all .3s ease-in-out;-moz-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out;}
 .rtcaHidden{margin-left: -357px;}
-.areaTool{box-shadow: 1px 1px 3px #ccc;position: absolute;right: -44px;top: -1px;background-color: #CD3299;color:#fff;padding:20px 15px 20px 15px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;}
+.areaTool{box-shadow: 1px 1px 3px #ccc;position: absolute;right: -44px;top: -1px;background-color: #CD3299;color:#fff;padding:30px 15px 30px 15px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;}
 .areaTool .fa-search{position: relative;top: -25px;left: -3px;}
 .areaTool .fa-search::before{content:"";position:absolute;display:inline-block;background-image:url(/static/virvo/resources/img/tcSearch.svg) !important;width:20px;height:20px;background-size: 20px 20px;}
 .areaTool span{position: relative;top: 10px;}

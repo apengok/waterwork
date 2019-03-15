@@ -27,7 +27,7 @@ from accounts.models import User,MyRoles
 from legacy.models import HdbFlowDataDay,HdbFlowDataMonth,Bigmeter,Alarm
 
 from entm.models import Organizations
-
+from dmam.models import DMABaseinfo
 from dmam.utils import merge_values, merge_values_with,merge_values_to_dict
 
 # from django.core.urlresolvers import reverse_lazy
@@ -95,6 +95,26 @@ def dmastasticinfo():
 
     return data
 
+
+
+def maprealdata(request):
+    dma_no = request.POST.get("dma_no") or None
+
+    result = {}
+
+    if dma_no:
+        dma = DMABaseinfo.objects.get(dma_no=dma_no)
+        dmartdata = dma.dma_map_realdata()
+        result["success"] = True
+        result["dmartdata"] = dmartdata
+
+
+    else:
+        result["success"] = False
+        return HttpResponse(json.dumps(result))
+
+
+    return HttpResponse(json.dumps(result))
         
 class MapMonitorView(LoginRequiredMixin,TemplateView):
     template_name = "monitor/mapmonitor.html"

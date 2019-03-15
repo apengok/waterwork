@@ -32,6 +32,7 @@ urlpatterns = [
     # 数据监控 --地图监控
     url(r'^mapmonitor2/?$',views.MapMonitorView.as_view(),name='mapmonitor2'),
     url(r'^mapmonitor/?$',views.MapMonitorView2.as_view(),name='mapmonitor'),
+    url(r'^maprealdata/?$',views.maprealdata,name='maprealdata'),
     
     
     url(r'^station/list/?$',views.stationlist,name='stationlist'),

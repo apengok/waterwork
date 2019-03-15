@@ -118,7 +118,7 @@
 
 
 {% block content_left %}
-<div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px; z-index: 9999999999999999999999999">
+<div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px; ">
     <div id="operationMenu" class="panel panel-default panDefMenu">
         <div class="panel-heading" style="padding:10px;background-color:#ffffff;color:#767676;">
             <h3 class="panel-title fwb">分区总数(<span id="all_dma_num"></span>)</h3>
@@ -255,16 +255,17 @@
           </div>
           <!-- playcard here delete -->
           <div class="realTimeCanArea rtcaHidden" id="realTimeCanArea">
-              <div class="form-group">
-                  <div class="col-md-12 searchListSelect">
+              <div class="form-group" style="height: 57px;border-bottom:10px">
+                <!--  <div class="col-md-12 searchListSelect">-->
+                  <div class=" col-md-12 searchListSelect" style="margin-left: -20px;margin-top: -10px;width: 360px" id="searchInput" >
+
                       <input style="cursor: pointer; background-color: #fafafa;"
                              class="form-control layer-date laydate-icon"
-                             id="timeInterval"
-                             name="timeInterval" readonly/>
+                             id="timeInterval" name="timeInterval" readonly />
                   </div>
-                  <button type="button" class="btn btn-primary" 
-                              id="trackPlayQuery">查询
-                      </button>
+                  <button id="trackPlayQuery" type="button" class="btn "  style="margin-top: 5px;margin-right: -10px; background-color:#CD3299;color: #fffffF;float: right;" name="0" >查询</button> &nbsp;
+                  <!--<button type="button" class="btn btn-primary"  id="trackPlayQuery">查询-->
+                      <!--</button>-->
               </div>
               <!-- <div class="form-group">
                   <div class="col-md-12 control-label">
@@ -302,9 +303,9 @@
             <div id="dmapredetail" style="float:right;margin-top:9px;" >
                 <li style="display:inline-block;">(分区名称：<span id="dma_selected"></span>
                 </li>&nbsp;&nbsp;
-                <li style="display:inline-block;">本月供水量：<span id="month_water_out">1613.65m³</span>
+                <li style="display:inline-block;">本月供水量：<span id="month_water_out"></span>
                 </li>
-                <li style="display:inline-block;">本月售水量：<span id="month_water_sale">1613.65m³</span>
+                <li style="display:inline-block;">本月售水量：<span id="current_month_sale"></span>m³
                 </li>
                 <li style="display:inline-block;">本月漏损率：<span id="month_leaky">1.68% </span>)
                 </li>
@@ -333,50 +334,50 @@
                               <td style="font-weight: bold">上月</td>
                               <td style="font-weight: bold">本月</td>
                               <td style="font-weight: bold">类型</td>
-                              <td style="font-weight: bold">11月29日</td>
+                              <td style="font-weight: bold" id="bbbday_str">11月29日</td>
                               <td style="font-weight: bold">前日</td>
                               <td style="font-weight: bold">昨日</td>
                               <td style="font-weight: bold">今日</td>
                             </tr>
                             <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
+                              <td id="bbcurrent_mon_p"></td>
+                              <td id="bcurrent_mon_p"></td>
+                              <td id="current_mon_p"></td>
                               <td >供水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
+                              <td id="bbbcurrent_day_p"></td>
+                              <td id="bbcurrent_day_p"></td>
+                              <td id="bcurrent_day_p"></td>
+                              <td id="current_day_p"></td>
                             </tr>
                             <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
+                              <td id="bbcurrent_mon_in"></td>
+                              <td id="bcurrent_mon_in"></td>
+                              <td id="current_mon_in"></td>
                               <td >进水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
+                              <td id="bbbcurrent_day_in"></td>
+                              <td id="bbcurrent_day_in"></td>
+                              <td id="bcurrent_day_in"></td>
+                              <td id="current_day_in"></td>
                             </tr>
                             <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
+                              <td id="bbcurrent_mon_out"></td>
+                              <td id="bcurrent_mon_out"></td>
+                              <td id="current_mon_out"></td>
                               <td >出水</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
+                              <td id="bbbcurrent_day_out"></td>
+                              <td id="bbcurrent_day_out"></td>
+                              <td id="bcurrent_day_out"></td>
+                              <td id="current_day_out"></td>
                             </tr>
                             <tr>
-                              <td>32.45</td>
-                              <td>35.32</td>
-                              <td>16.23</td>
+                              <td id="bbcurrent_mon_leak"></td>
+                              <td id="bcurrent_mon_leak"></td>
+                              <td id="current_mon_leak"></td>
                               <td >漏水量</td>
-                              <td>11256</td>
-                              <td>11563</td>
-                              <td>11043</td>
-                              <td>584</td>
+                              <td id="bbbcurrent_day_leak"></td>
+                              <td id="bbcurrent_day_leak"></td>
+                              <td id="bcurrent_day_leak"></td>
+                              <td id="current_day_leak"></td>
                             </tr>
                           </tbody>
                         </table>

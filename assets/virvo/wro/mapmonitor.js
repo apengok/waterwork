@@ -1822,7 +1822,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         }
 
         // trackPlayback.loadGeodata(2)
-
+        trackPlayback.getDMADetailInfo();
       }
       else{
 
@@ -1852,7 +1852,176 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
       trackPlayback.hydropressflowChart();
     },
-    
+    //当点击或dma时，访问后台返回dma详情
+    getDMADetailInfo: function () {
+      // ajax访问后端查询
+      dma_no = $("#current_dma_no").val()
+      layer.load(2);
+      $.ajax({
+        type: "POST",
+        url: "/monitor/maprealdata/",
+        data: {
+          "dma_no": dma_no
+        },
+        dataType: "json",
+        success: function (data) {
+          console.log(data)
+          layer.closeAll('loading');
+          if (data.success) {
+            var dataList = data.dmartdata;
+            var current_mon_p;
+            var current_mon_in;
+            var current_mon_out;
+            var current_mon_leak;
+
+            var bbbday_str = dataList.bbbday_str;
+            var current_month = dataList.current_month;
+            var bcurrent_month = dataList.bcurrent_month;
+            var bbcurrent_month = dataList.bbcurrent_month;
+            var current_day = dataList.current_day;
+            var bcurrent_day = dataList.bcurrent_day;
+            var bbcurrent_day = dataList.bbcurrent_day;
+            var bbbcurrent_day = dataList.bbbcurrent_day;
+            var current_month_sale = dataList.current_month_sale;
+
+            console.log(current_month)
+            // 本月
+            for (var i = current_month.length - 1; i >= 0; i--) {
+              if(i == 0){
+                current_mon_p = current_month[i];
+              }else if(i==1){
+                current_mon_in = current_month[i];
+              }else if(i==2){
+                current_mon_out = current_month[i];
+              }else{
+                current_mon_leak = current_month[i];
+              }
+
+            }
+            // 上月
+            for (var i = bcurrent_month.length - 1; i >= 0; i--) {
+              if(i == 0){
+                bcurrent_mon_p = bcurrent_month[i];
+              }else if(i==1){
+                bcurrent_mon_in = bcurrent_month[i];
+              }else if(i==2){
+                bcurrent_mon_out = bcurrent_month[i];
+              }else{
+                bcurrent_mon_leak = bcurrent_month[i];
+              }
+
+            }
+            // 前月
+            for (var i = bbcurrent_month.length - 1; i >= 0; i--) {
+              if(i == 0){
+                bbcurrent_mon_p = bbcurrent_month[i];
+              }else if(i==1){
+                bbcurrent_mon_in = bbcurrent_month[i];
+              }else if(i==2){
+                bbcurrent_mon_out = bbcurrent_month[i];
+              }else{
+                bbcurrent_mon_leak = bbcurrent_month[i];
+              }
+
+            }
+
+            // 今日
+            for (var i = current_day.length - 1; i >= 0; i--) {
+              if(i == 0){
+                current_day_p = current_day[i];
+              }else if(i==1){
+                current_day_in = current_day[i];
+              }else if(i==2){
+                current_day_out = current_day[i];
+              }else{
+                current_day_leak = current_day[i];
+              }
+
+            }
+            // 昨日
+            for (var i = bcurrent_day.length - 1; i >= 0; i--) {
+              if(i == 0){
+                bcurrent_day_p = bcurrent_day[i];
+              }else if(i==1){
+                bcurrent_day_in = bcurrent_day[i];
+              }else if(i==2){
+                bcurrent_day_out = bcurrent_day[i];
+              }else{
+                bcurrent_day_leak = bcurrent_day[i];
+              }
+
+            }
+            // 前日
+            for (var i = bbcurrent_day.length - 1; i >= 0; i--) {
+              if(i == 0){
+                bbcurrent_day_p = bbcurrent_day[i];
+              }else if(i==1){
+                bbcurrent_day_in = bbcurrent_day[i];
+              }else if(i==2){
+                bbcurrent_day_out = bbcurrent_day[i];
+              }else{
+                bbcurrent_day_leak = bbcurrent_day[i];
+              }
+
+            }
+            // 前前日
+            for (var i = bbbcurrent_day.length - 1; i >= 0; i--) {
+              if(i == 0){
+                bbbcurrent_day_p = bbbcurrent_day[i];
+              }else if(i==1){
+                bbbcurrent_day_in = bbbcurrent_day[i];
+              }else if(i==2){
+                bbbcurrent_day_out = bbbcurrent_day[i];
+              }else{
+                bbbcurrent_day_leak = bbbcurrent_day[i];
+              }
+
+            }
+
+            $("#bbbday_str").text(bbbday_str)
+            $("#month_water_out").text(bcurrent_mon_p)
+            $("#current_month_sale").text(current_month_sale)
+            // 本月
+            $("#current_mon_p").text(current_mon_p);
+            $("#current_mon_in").text(current_mon_in);
+            $("#current_mon_out").text(current_mon_out);
+            $("#current_mon_leak").text(current_mon_leak);
+            // 上月
+            $("#bcurrent_mon_p").text(bcurrent_mon_p);
+            $("#bcurrent_mon_in").text(bcurrent_mon_in);
+            $("#bcurrent_mon_out").text(bcurrent_mon_out);
+            $("#bcurrent_mon_leak").text(bcurrent_mon_leak);
+            // 前月
+            $("#bbcurrent_mon_p").text(bbcurrent_mon_p);
+            $("#bbcurrent_mon_in").text(bbcurrent_mon_in);
+            $("#bbcurrent_mon_out").text(bbcurrent_mon_out);
+            $("#bbcurrent_mon_leak").text(bbcurrent_mon_leak);
+
+            // 今日
+            $("#current_day_p").text(current_day_p);
+            $("#current_day_in").text(current_day_in);
+            $("#current_day_out").text(current_day_out);
+            $("#current_day_leak").text(current_day_leak);
+            // 昨日
+            $("#bcurrent_day_p").text(bcurrent_day_p);
+            $("#bcurrent_day_in").text(bcurrent_day_in);
+            $("#bcurrent_day_out").text(bcurrent_day_out);
+            $("#bcurrent_day_leak").text(bcurrent_day_leak);
+
+            // 前日
+            $("#bbcurrent_day_p").text(bbcurrent_day_p);
+            $("#bbcurrent_day_in").text(bbcurrent_day_in);
+            $("#bbcurrent_day_out").text(bbcurrent_day_out);
+            $("#bbcurrent_day_leak").text(bbcurrent_day_leak);
+            // 前前日
+            $("#bbbcurrent_day_p").text(bbbcurrent_day_p);
+            $("#bbbcurrent_day_in").text(bbbcurrent_day_in);
+            $("#bbbcurrent_day_out").text(bbbcurrent_day_out);
+            $("#bbbcurrent_day_leak").text(bbbcurrent_day_leak);
+          }
+        }
+      });
+    },
     //当点击或选择围栏时，访问后台返回围栏详情
     getFenceDetailInfo: function (fenceNode, showMap) {
       // ajax访问后端查询

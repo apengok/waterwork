@@ -416,73 +416,60 @@ def test_sync_wm_month(waterid,ymon,communityid):
         logger_info.info("total {} added to virvo HdbWatermeterMonth".format(len(added_list)))
 
 
-def test_sync_bigmeter():
+def test_sync_bigmeter(day=None):
     nocnt = 0
-    today = datetime.datetime.today()
+    if day is None:
+        today = datetime.datetime.today()
+        day_str = today.strftime("%Y-%m-%d")
+    else:
+        day_str = day
     # day = today.strftime("%Y-%m-%d")
     logger_info.info("sync Bigmeter data and flow data:")
-    sx_bms = Bigmeter.objects.using("shexian").values('commaddr','commstate','meterstate','gprsv','meterv',
-                'signlen','lastonlinetime','pressure','plustotalflux','reversetotalflux','flux','totalflux','pressurereadtime',
-                'fluxreadtime','username')
+    sx_bms = Bigmeter.objects.using("shexian").all().values()
     for sb in sx_bms:
+        if "id" in sb:
+            del sb["id"]
+        if "pk" in sb:
+            del sb["pk"]
         commaddr = sb["commaddr"]
-        name = sb["username"]
-
-        fluxreadtime = sb["fluxreadtime"]
-        flux = sb["flux"]
-        totalflux = sb["totalflux"]
-        plustotalflux = sb["plustotalflux"]
-        reversetotalflux = sb["reversetotalflux"]
-        pressurereadtime = sb["pressurereadtime"]
-        pressure = sb["pressure"]
-        gprsv = sb["gprsv"]
-        meterv = sb["meterv"]
-        signlen = sb["signlen"]
-        lastonlinetime = sb["lastonlinetime"]
-        commstate = sb["commstate"]
-        meterstate = sb["meterstate"]
+        
         vb = Bigmeter.objects.filter(commaddr=commaddr)
         if vb.exists():
-            vb.update(fluxreadtime=fluxreadtime,flux=flux,totalflux=totalflux,plustotalflux=plustotalflux,reversetotalflux=reversetotalflux,
-                pressurereadtime=pressurereadtime,pressure=pressure,gprsv=gprsv,meterv=meterv,signlen=signlen,lastonlinetime=lastonlinetime,
-                commstate=commstate,meterstate=meterstate,)
-            logger_info.info("{}({}):".format(name,commaddr))
+            vb.update(**sb)
             # sync flow history data
-            for i in range(3):
-                day = today - datetime.timedelta(days=i)
-                day_str = day.strftime("%Y-%m-%d")
-                logger_info.info("\t\t{}".format(day_str))
-                test_sync_bgm_flows(commaddr,day_str)
-                test_sync_bgm_flow_hour(commaddr,day_str)
-                test_sync_bgm_flow_daily(commaddr,day_str)
+            
+            
+            update_flow,added_flow = test_sync_bgm_flows(commaddr,day_str)
+            update_flow_h,added_flow_h = test_sync_bgm_flow_hour(commaddr,day_str)
+            update_flow_d,added_flow_d = test_sync_bgm_flow_daily(commaddr,day_str)
+            update_flow_m,added_flow_m = test_sync_bgm_flow_month(commaddr,day_str[:7])
+            info = "update {}({}) flows({},{}) hour(update-{},added-{}) daily(update-{},added-{}) month(update-{},added-{}):".format(sb["username"],commaddr,
+                update_flow,added_flow,update_flow_h,added_flow_h,update_flow_d,added_flow_d,update_flow_m,added_flow_m)
+            # print(info)
+            # logger_info.info(info)
+
         else:
             nocnt+=1
-            logger_info.info("{}({}) not in Virvo DB".format(name,commaddr))
+            logger_info.info("{}({}) not in Virvo DB".format(sb["username"],commaddr))
 
     logger_info.info("all cnt is {} ,{} not exists".format(sx_bms.count(),nocnt))
 
 def test_sync_bgm_flows(commaddr,day):
     
     flow_day = HdbFlowData.objects.using("shexian").filter(commaddr=commaddr,readtime__startswith=day).values()
-    
+    update_cnt = 0
     added_list = []
     for fd in flow_day:
-        readtime=fd["readtime"]
-        flux = fd["flux"]
-        plustotalflux = fd["plustotalflux"]
-        reversetotalflux = fd["reversetotalflux"]
-        totalflux = fd["totalflux"]
-        gprsv = fd["gprsv"]
-        meterv = fd["meterv"]
-        meterstate = fd["meterstate"]
+        if "id" in fd:
+            del fd["id"]
+        readtime = fd["readtime"]
         
         vd = HdbFlowData.objects.filter(commaddr=commaddr,readtime=readtime)
         if vd.exists():
-            vd.update(flux=flux,plustotalflux=plustotalflux,reversetotalflux=reversetotalflux,
-                totalflux=totalflux,gprsv=gprsv,meterv=meterv,meterstate=meterstate)
+            vd.update(**fd)
+            update_cnt += 1
         else:
-            d = HdbFlowData(commaddr=commaddr,readtime=readtime,flux=flux,plustotalflux=plustotalflux,reversetotalflux=reversetotalflux,
-                totalflux=totalflux,gprsv=gprsv,meterv=meterv,meterstate=meterstate)
+            d = HdbFlowData(**fd)
             added_list.append(d)
 
     if len(added_list)>0:
@@ -490,22 +477,27 @@ def test_sync_bgm_flows(commaddr,day):
             added=HdbFlowData.objects.bulk_create(added_list)
             
         except Exception as e:
-            logger_info.info("sync flow  error,reason :",e)
+            logger_info.info("sync flow  error,reason :{}".format(e))
+
+    return update_cnt,len(added_list)
         
 
 def test_sync_bgm_flow_hour(commaddr,day):
     
     flow_day = HdbFlowDataHour.objects.using("shexian").filter(commaddr=commaddr,hdate__startswith=day).values()
-    
+    update_cnt = 0
     added_list = []
     for fd in flow_day:
+        if "id" in fd:
+            del fd["id"]
         hdate=fd["hdate"]
         dosage = fd["dosage"]
         vd = HdbFlowDataHour.objects.filter(commaddr=commaddr,hdate=hdate)
         if vd.exists():
             vd.update(dosage=dosage)
+            update_cnt += 1
         else:
-            d = HdbFlowDataHour(commaddr=commaddr,hdate=hdate,dosage=dosage)
+            d = HdbFlowDataHour(**fd)
             added_list.append(d)
 
     if len(added_list)>0:
@@ -513,20 +505,25 @@ def test_sync_bgm_flow_hour(commaddr,day):
             added=HdbFlowDataHour.objects.bulk_create(added_list)
             
         except Exception as e:
-            logger_info.info("sync flow hour error,reason :",e)
+            logger_info.info("sync flow hour error,reason :{}".format(e))
+
+    return update_cnt,len(added_list)
 
 def test_sync_bgm_flow_daily(commaddr,day):
     
     flow_day = HdbFlowDataDay.objects.using("shexian").filter(commaddr=commaddr,hdate=day).values()
-    
+    update_cnt = 0
     added_list = []
     for fd in flow_day:
+        if "id" in fd:
+            del fd["id"]
         dosage = fd["dosage"]
         vd = HdbFlowDataDay.objects.filter(commaddr=commaddr,hdate=day)
         if vd.exists():
             vd.update(dosage=dosage)
+            update_cnt += 1
         else:
-            d = HdbFlowDataDay(commaddr=commaddr,hdate=day,dosage=dosage)
+            d = HdbFlowDataDay(**fd)
             added_list.append(d)
 
     if len(added_list)>0:
@@ -534,20 +531,25 @@ def test_sync_bgm_flow_daily(commaddr,day):
             added=HdbFlowDataDay.objects.bulk_create(added_list)
             
         except Exception as e:
-            logger_info.info("sync flow day error,reason :",e)
+            logger_info.info("sync flow day error,reason :{}".format(e))
+
+    return update_cnt,len(added_list)
 
 def test_sync_bgm_flow_month(commaddr,ymon):
-    
+    update_cnt = 0
     flow_day = HdbFlowDataMonth.objects.using("shexian").filter(commaddr=commaddr,hdate=ymon).values()
     # print("{} count:",flow_day.count())
     added_list = []
     for fd in flow_day:
+        if "id" in fd:
+            del fd["id"]
         dosage = fd["dosage"]
         vd = HdbFlowDataMonth.objects.filter(commaddr=commaddr,hdate=ymon)
         if vd.exists():
             vd.update(dosage=dosage)
+            update_cnt += 1
         else:
-            d = HdbFlowDataMonth(commaddr=commaddr,hdate=ymon,dosage=dosage)
+            d = HdbFlowDataMonth(**fd)
             added_list.append(d)
 
     if len(added_list)>0:
@@ -555,7 +557,9 @@ def test_sync_bgm_flow_month(commaddr,ymon):
             added=HdbFlowDataMonth.objects.bulk_create(added_list)
             
         except Exception as e:
-            logger_info.info("sync flow month error,reason :",e)
+            logger_info.info("sync flow month error,reason :".format(e))
+
+    return update_cnt,len(added_list)
 
 
 # WaterMeter
@@ -575,9 +579,9 @@ def test_pwl(**options):
     # return test_sync_bgm_flow_hour("15755950621")
     # return test_sync_bgm_flow_daily("15755950621")
     # return test_sync_bgm_flow_month("15755950621","2019-01")
-    return test_sync_bgm_flows(15755924061,'2019-03-12')
-    return test_sync_watermeter(day)
-    return test_sync_bigmeter()
+    # return test_sync_bgm_flows(15755924061,'2019-03-08')
+    # return test_sync_watermeter(day)
+    return test_sync_bigmeter(day)
     return test_watermeter()
     return test_community()
     return test_hdb_watermeter_month()
