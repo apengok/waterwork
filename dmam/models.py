@@ -595,7 +595,7 @@ class DMABaseinfo(models.Model):
             "bcurrent_day":bcurrent_day,
             "bbcurrent_day":bbcurrent_day,
             "bbbcurrent_day":bbbcurrent_day,
-            "bbbday_str":bbyestoday.strftime("%m月%d日"),
+            "bbbday_str":bbyestoday.strftime("%m-%d"),
         }
 
 
