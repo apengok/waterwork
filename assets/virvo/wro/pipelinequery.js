@@ -948,11 +948,11 @@
                 for (var j = 0; j < nodes.length; j++) {
                     var vObj = {};
                     vObj.id = nodes[j].id;
-                    vObj.pid = nodes[j].pId;
+                    vObj.pid = nodes[j].pType;
                     uuids.push(vObj);
                     if (nodes[j].id == vehicle[12]) {
                         type = nodes[j].type;
-                        pid = nodes[j].pId;
+                        pid = nodes[j].pType;
                     }
                 }
                 /******************************************/
@@ -1312,11 +1312,11 @@
                 for (var j = 0; j < nodes.length; j++) {
                     var vObj = {};
                     vObj.id = nodes[j].id;
-                    vObj.pid = nodes[j].pId;
+                    vObj.pid = nodes[j].pType;
                     uuids.push(vObj);
                     if (nodes[j].id == vehicleId) {
                         type = nodes[j].type;
-                        pid = nodes[j].pId;
+                        pid = nodes[j].pType;
                     }
                 }
                 /******************************************/
@@ -5153,7 +5153,7 @@
                     + treeNode.tId
                     + "' title='绑定'></span>";
                 var editStr = '';
-                if (treeNode.pId != "zw_m_administration") {
+                if (treeNode.pType != "zw_m_administration") {
                     editStr = "<span class='button edit' id='editBtn_"
                         + treeNode.tId
                         + "' title='修改' ></span>";
@@ -5187,7 +5187,7 @@
                         isEdit = false;
                         isAddFlag = false;
                         isAreaSearchFlag = false;
-                        var value = treeNode.id + "#" + treeNode.pId;
+                        var value = treeNode.id + "#" + treeNode.pType;
                         zTree.checkNode(treeNode, true, true);
                         treeNode.checkedOld = true;
                         fenceOperation.updateFence(value);
@@ -5201,7 +5201,7 @@
                         isAddDragRoute = false;
                         $('#drivenRoute').hide();
                         trid = [];
-                        fenceOperation.fenceBind(treeNode.pId, treeNode.name, treeNode.fenceInfoId,treeNode.id);
+                        fenceOperation.fenceBind(treeNode.pType, treeNode.name, treeNode.fenceInfoId,treeNode.id);
                         return false;
                     });
                 }
@@ -5226,7 +5226,7 @@
                         isAddDragRoute = false;
                         $('#drivenRoute').hide();
                         $("#detailsFenceName").text(treeNode.name);
-                        var value = treeNode.id + "#" + treeNode.pId + "#" + true;
+                        var value = treeNode.id + "#" + treeNode.pType + "#" + true;
                         fenceOperation.updateFence(value);
                         pageLayout.closeVideo();
                         $("#detailsModel").modal('show');

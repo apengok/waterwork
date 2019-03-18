@@ -88,20 +88,42 @@ class PipelineImexportView(LoginRequiredMixin,TemplateView):
 
 def fenceTree_organ(request):
     user = request.user
-    fences = user.fence_list_queryset().values()
+    fences = user.fence_list_queryset().values("name","cid","pId","ftype","belongto__name","belongto__cid")
+    # print(fences)
 
     fentree = [{"name":"圆形","pId":"-","id":"zw_m_circle","type":"fenceParent","open":"true"},
                 {"name":"矩形","pId":"-","id":"zw_m_rectangle","type":"fenceParent","open":"true"},
                 {"name":"多边形","pId":"-","id":"zw_m_polygon","type":"fenceParent","open":"true"},
                 {"name":"行政区划","pId":"-","id":"zw_m_administration","type":"fenceParent","open":"true"},]
+
+    organ = {}
     for fs in fences:
+        tmp_key = "{}_{}".format(fs["belongto__cid"],fs["pId"])
+        if tmp_key not in organ:
+            organ[tmp_key] = fs["belongto__name"]
+            fens_organ = {
+            "name":fs["belongto__name"],
+            "pId":fs["pId"],
+            "id":tmp_key, #fs["belongto__cid"]
+            }
+            fentree.append(fens_organ)
         polygon = {
             "name":fs["name"],
-            "pId":fs["pId"],
+            "pId":tmp_key,#fs["belongto__cid"],
+            "pType":fs["pId"],
             "id":fs["cid"],
             "type":fs["ftype"],
             "open":"true"
             }
+        
+        # else:
+        #     polygon = {
+        #     "name":fs["name"],
+        #     "pId":fs["pId"],
+        #     "id":fs["cid"],
+        #     "type":fs["ftype"],
+        #     "open":"true"
+        #     }
         if fs["pId"] == "zw_m_polygon":
             polygon["iconSkin"]="zw_m_polygon_skin",
         if fs["pId"] == "zw_m_rectangle":
@@ -336,12 +358,12 @@ def getFenceDetails(request):
         return JsonResponse(details)
     
     fenceNodes_json = json.loads(fenceNodes)
-    # print("json ?",fenceNodes_json,type(fenceNodes_json[0]),len(fenceNodes_json))
+    print("json ?",fenceNodes_json,type(fenceNodes_json[0]),len(fenceNodes_json))
     details_obj = []
     for i in range(len(fenceNodes_json)):
         
         name=fenceNodes_json[i]["name"]
-        pId = fenceNodes_json[i]["pId"]
+        pId = fenceNodes_json[i]["pType"] #pId
 
         fd = FenceDistrict.objects.filter(name=name).values().first()
         pgo = FenceShape.objects.filter(name=name).values().first()
