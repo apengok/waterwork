@@ -8,7 +8,8 @@ from legacy.models import (HdbFlowData,HdbFlowDataDay,HdbFlowDataHour,HdbFlowDat
 import time
 import datetime
 import logging
-
+import threading
+# import Queue
 from dmam.models import VConcentrator,VWatermeter,VCommunity,VSecondWater
 from entm.models import Organizations
 
@@ -570,7 +571,14 @@ def test_pwl(**options):
     else:
         today = datetime.datetime.today()
         day = today.strftime("%Y-%m-%d")
+    day_list = ["2019-02-16","2019-02-17","2019-02-18","2019-02-19","2019-02-20","2019-02-21","2019-02-22","2019-02-23","2019-02-24",]
 
+    # day_update = Queue.Queue()
+    for d in day_list:
+        # day_update.put(d)
+        t = threading.Thread(target=test_sync_watermeter,args=(d,))
+        t.start()
+    return
     # close_old_connections()
     # return
     # return test_hdb_watermeter_data_day()
@@ -580,7 +588,7 @@ def test_pwl(**options):
     # return test_sync_bgm_flow_daily("15755950621")
     # return test_sync_bgm_flow_month("15755950621","2019-01")
     # return test_sync_bgm_flows(15755924061,'2019-03-08')
-    # return test_sync_watermeter(day)
+    return test_sync_watermeter(day)
     return test_sync_bigmeter(day)
     return test_watermeter()
     return test_community()

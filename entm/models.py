@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
+# from dmam.models import DMABaseinfo
+
 # Create your models here.
 
 class OrganizationQuerySet(models.query.QuerySet):
@@ -86,6 +88,19 @@ class Organizations(MPTTModel):
 
     def sub_stations(self,include_self=False):
         return self.get_descendants(include_self)
+
+    def dma_list_queryset(self):
+        # if self.is_admin:
+        #     return DMABaseinfo.objects.search(cid,level,dma_no)
+
+        dmalist = Organizations.objects.none()
+        #下级组织的用户
+        sub_organs = self.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            dmalist |= g.dma.all()
+            
+        return dmalist
 
     def before_delete_it(self):
         '''

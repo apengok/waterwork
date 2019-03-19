@@ -647,8 +647,18 @@ def dmatree_preserver(request):
 
 
 def getDmaSelect(request):
-    print("getDmaSelect.....")
-    dmas = DMABaseinfo.objects.values("dma_no","dma_name")
+    organ = request.POST.get("organ") or None
+
+
+    print("getDmaSelect organ",organ)
+    
+    if organ is None or organ == '':
+        dma_lists = request.user.dma_list_queryset()
+    else:
+        organ_select = Organizations.objects.get(uuid=organ)
+        dma_lists = organ_select.dma_list_queryset()
+
+    dmas = dma_lists.values("dma_no","dma_name")
 
     def m_info(m):
         

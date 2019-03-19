@@ -19,6 +19,8 @@
     var markerInfoWindow = null;
     var markerList = [];
 
+    var organSelected = "";
+
     var $contentLeft = $("#content-left"), $contentRight = $("#content-right");
 
     var travelLineList,AdministrativeRegionsList,fenceIdList,
@@ -4184,7 +4186,7 @@
                     $("#zTreeContent").hide();
                     console.log("data.dma_no",data.dma_no)
                     $("#dma_no_Val").val(data.dma_no)
-                    fenceOperation.initDMAList();
+                    // fenceOperation.initDMAList();
                 }, 200);
             }
         },
@@ -5615,7 +5617,7 @@
                         $("#rectangleAllPointShow").html(html);
                         $("#zTreeContent").show();
                         $("#addOrUpdatePolygonFlag").val("0");
-                        fenceOperation.initDMAList();
+                        // fenceOperation.initDMAList();
                         
                         pageLayout.closeVideo();
                         
@@ -6122,7 +6124,7 @@
         initDMAList:function(){
             var url="/dmam/getDmaSelect/";
             
-            var parameter={};
+            var parameter={"organ":organSelected};
             json_ajax("POST",url,"json",true,parameter, fenceOperation.initDMAListBack);
         },
 
@@ -6132,6 +6134,13 @@
             var html = '<option value="">未选择</option>'
                     console.log("data.dma_no",dma_no_Val)
             $("#dma_no").val(dma_no_Val)
+            $('#dma_no')
+                .find('option')
+                .remove()
+                .end()
+                .append('<option value="">没有分区</option>')
+                .val('whatever');
+            
             // //DMAlist
             var dmalist = data.obj;
             // 初始化dma数据
@@ -8780,6 +8789,8 @@
             var cityObj = $("#zTreeOrganSel");
             cityObj.val(n);
             $("#groupId").val(v);
+            organSelected = v;
+            fenceOperation.initDMAList();
             
             $("#zTreeContent").hide();
             // $('.ztreeModelBox').hide();
@@ -8839,6 +8850,7 @@
                 } else { // admin，默认组织为树结构第一个组织
                     // $("#groupId").val(responseData[0].uuid);
                     $("#zTreeOrganSel").attr("value", responseData[0].name);
+                    fenceOperation.initDMAList();
                 }
                 return responseData;
             }else{
