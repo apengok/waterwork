@@ -20,13 +20,13 @@
     var markerList = [];
     var pressure_gauge;
     var timeTicket = 1;
-
+    var treeClickedType = "";
     var secondw_selected = false;
     var sw_name = "";
 
     var $contentLeft = $("#content-left"), $contentRight = $("#content-right");
 
-    var travelLineList,AdministrativeRegionsList,fenceIdList,
+    var travelLineList,AdministrativeRegionsList,fenceIdList,titleHeight,demoHeight,
   administrativeAreaFence = [],district,googleMapLayer, buildings, satellLayer, realTimeTraffic, map, logoWidth, btnIconWidth, windowWidth,
     newwidth, els, oldMapHeight, myTabHeight, wHeight, tableHeight, mapHeight, newMapHeight, winHeight, headerHeight, dbclickCheckedId, oldDbclickCheckedId,
     onClickVId, oldOnClickVId, zTree, clickStateChar,logTime,operationLogLength, licensePlateInformation, groupIconSkin, markerListT = [], markerRealTimeT,
@@ -65,8 +65,10 @@
             var tabContHeight = $("#myTabContent").height();//table表头高度
             var fenceTreeHeight = winHeight - 380;//围栏树高度
             $("#treeDemo").css('height',fenceTreeHeight + "px");//电子围栏树高度
+            titleHeight = $(".panHeadHeight").height() + 30;
+            demoHeight = $("#Demo").height();
             //地图高度
-            newMapHeight = winHeight - headerHeight - tabHeight - 10 - panhead;
+            newMapHeight = winHeight - headerHeight - tabHeight - 5;// - panhead;
             $MapContainer.css({
                 "height": newMapHeight + 'px'
             });
@@ -553,6 +555,130 @@
             selectTreeIdAdd=treeNode.uuid;
             $('#simpleQueryParam').val("");
             if(treeNode.type == "secondwater"){
+
+                var columns1 = [
+                    {
+                        //第一列，用来显示序号
+                        "data" : "seq",
+                        "width":"80px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第2列，报警时间
+                        "data" : "happentime",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第3列，处理状态
+                        "data" : "procesState",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第4列，报警类型
+                        "data" : "alarmtype",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第5列，报警等级
+                        "data" : "alarmlevel",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第6列，处理人
+                        "data" : "processor",
+                        "width":"100px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第7列，处理时间
+                        "data" : "processtime",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第8列，处理方法
+                        "data" : "why",
+                        "width":"300px",
+                        "class" : "text-center"
+                    },
+                ];
+
+                var data1 = [
+                    {"seq":1,"happentime":"2018-12-25 09:29:08","procesState":"未处理","alarmtype":"变频器接地故障","alarmlevel":"全局","processor":"张三","processtime":"2019-01-19","why":"鸿基商贸城表具未实时上传，去现场看正常"},
+                    {"seq":2,"happentime":"2018-12-25","procesState":"已处理","alarmtype":"水泵故障","alarmlevel":"全局","processor":"张三","processtime":"2019-01-19 09:29:08","why":"鸿基商贸城表具未实时上传，去现场看正常"},
+                    {"seq":3,"happentime":"2018-12-25","procesState":"未处理","alarmtype":"溢流报警","alarmlevel":"局部","processor":"张三","processtime":"2019-01-19","why":"鸿基商贸城表具未实时上传，去现场看正常"},
+                    {"seq":4,"happentime":"2018-12-25","procesState":"已处理","alarmtype":"月度常规巡检","alarmlevel":"全局","processor":"张三","processtime":"2019-01-19","why":"鸿基商贸城表具未实时上传，去现场看正常"},
+                    {"seq":5,"happentime":"2018-12-25","procesState":"已处理","alarmtype":"月度常规巡检","alarmlevel":"全局","processor":"张三","processtime":"2019-01-19","why":"鸿基商贸城表具未实时上传，去现场看正常"},
+                ];
+
+                var columns2 = [
+                    {
+                        //第一列，用来显示序号
+                        "data" : "seq",
+                        "width":"80px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第2列，维修时间
+                        "data" : "happentime",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第3列，维修类型
+                        "data" : "procesState",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第4列，处理人
+                        "data" : "processor",
+                        "width":"100px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第5列，处理时间
+                        "data" : "processtime",
+                        "width":"150px",
+                        "class" : "text-center"
+                    },
+                    {
+                        //第6列，处理方法
+                        "data" : "why",
+                        "width":"350px",
+                        "class" : "text-center"
+                    },
+                ];
+
+                var data2 = [
+                    {"seq":1,"happentime":"2018-12-25 09:29:08","procesState":"变频器接地故障","processor":"","processtime":"","why":""},
+                    {"seq":2,"happentime":"2018-12-25 09:29:08","procesState":"水泵故障","processor":"","processtime":"","why":""},
+                    {"seq":3,"happentime":"2018-12-25 09:29:08","procesState":"溢流报警","processor":"张三","processtime":"","why":""},
+                    {"seq":4,"happentime":"2018-12-25 09:29:08","procesState":"月度常规巡检","processor":"张三","processtime":"2019-01-19 08:00:00","why":"分区内有夜间施工，导致夜间正常用水量大"},
+                    {"seq":5,"happentime":"2018-12-25 09:29:08","procesState":"月度常规巡检","processor":"李四","processtime":"2019-01-19 08:00:00","why":"鸿基商贸城表具未实时上传，去现场看正常"},
+                ];
+
+                // mapSecondwater.getTable('#gpsTable3', [[0,'2018-12-25 12:34','未处理','分区内表具报警','','',''],
+                // [1,'2018-12-25','未处理','产销差过高','','',''],
+                // [2,'2018-12-25','未处理','夜间小流异常','','',''],
+                // [3,'2018-12-25','已处理','夜间小流异常','张三','2018-12-26 ','分区内有夜间施工，导致夜间正常用水量大'],
+                // ]);
+
+                // mapSecondwater.getTable('#maintaininfoTable', [
+                //     [0,'2018-12-25 12:34','分区内表具报警','','',''],
+                //     [1,'2018-12-25','产销差过高','','',''],
+                //     [2,'2018-12-25','夜间小流异常','','',''],
+                //     [3,'2018-12-25','夜间小流异常','张三','2018-12-26 ','分区内有夜间施工，导致夜间正常用水量大'],
+                //     [4,'2018-12-25','变频器接地故障','张三','2018-12-26 ','分区内有夜间施工，导致夜间正常用水量大'],
+                //     [5,'2018-12-25','月度常规巡检','张三','2018-12-26 ','鸿基商贸城表具未实时上传，去现场看正常'],
+                // ]);
+                
+                mapSecondwater.getTable('#gpsTable3',data1,columns1);
+                mapSecondwater.getTable('#maintaininfoTable',data2,columns2);
                 secondw_selected = true;
                 sw_name = treeNode.name;
                 $("#bindswname").html(sw_name);
@@ -563,7 +689,9 @@
                 secondw_selected = false;
                 mapSecondwater.requireSecondwater();
             }
-            mapSecondwater.TabCarBox();
+            treeClickedType = treeNode.type;
+            // mapSecondwater.TabCarBox();
+            mapSecondwater.showHidePeopleOrVehicle();
             
         },
         pressureGauge:function(){
@@ -624,6 +752,74 @@
                 pressure_gauge.setOption(option, true);
             },2000);
         },
+        getTable: function (table, data,columns, sy) {
+          var dataHeight;
+          if (sy !== undefined) {
+            dataHeight = sy;
+          } else {
+            dataHeight = 221;
+          }
+
+          //表格列定义
+            var columnDefs = [ {
+                //第一列，用来显示序号
+                "searchable" : false,
+                "orderable" : false,
+                "targets" : 0
+            } ];
+          
+          table = $(table).DataTable({
+            "destroy": true,
+            "dom": 'itprl',// 自定义显示项
+            "scrollX": false,
+            "scrollY": false,
+            "columnDefs":columnDefs,
+            "columns":columns,
+            "data": data,
+            "lengthChange": false,// 是否允许用户自定义显示数量
+            "bPaginate": false, // 翻页功能
+            "bFilter": false, // 列筛序功能
+            "searching": false,// 本地搜索
+            "ordering": false, // 排序功能
+            "info": false,// 页脚信息
+            "autoWidth": false,// 自动宽度
+            "stripeClasses": [],
+            "oLanguage": {// 国际语言转化
+              "oAria": {
+                "sSortAscending": " - click/return to sort ascending",
+                "sSortDescending": " - click/return to sort descending"
+              },
+              "sLengthMenu": "显示 _MENU_ 记录",
+              "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录。",
+              "sZeroRecords": "我本将心向明月，奈何明月照沟渠，不行您再用其他方式查一下？",
+              "sEmptyTable": "我本将心向明月，奈何明月照沟渠，不行您再用其他方式查一下？",
+              "sLoadingRecords": "正在加载数据-请等待...",
+              "sInfoEmpty": "当前显示0到0条，共0条记录",
+              "sInfoFiltered": "（数据库中共为 _MAX_ 条记录）",
+              "sProcessing": "<img src='../resources/user_share/row_details/select2-spinner.gif'/> 正在加载数据...",
+              "sSearch": "模糊查询：",
+              "sUrl": "",
+              "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": " 上一页 ",
+                "sNext": " 下一页 ",
+                "sLast": " 尾页 "
+              }
+            },
+            "order": [
+              [0, null]
+            ],// 第一列排序图标改为默认
+
+          });
+          table.on('order.dt search.dt', function () {
+            table.column(0, {
+              search: 'applied',
+              order: 'applied'
+            }).nodes().each(function (cell, i) {
+              cell.innerHTML = i + 1;
+            });
+          }).draw();
+        },
         //收缩绑定列表
         bingListClick: function () {
             if(secondw_selected){
@@ -639,6 +835,136 @@
                     $("#MapContainer").animate({'height': (winHeight  - trLength * 46 - 127) + "px"});
                 };
             }
+        },
+        showHidePeopleOrVehicle: function () {
+          //判断点击的监控对象的协议类型
+          // if (worldType == "5") {
+          if (treeClickedType == "secondwater") {
+            //隐藏车
+            
+            $("#warningData,#tableAlarmDate").removeClass("active");
+            $("#baseinfo,#tableBaseinfoDate").removeClass("active");
+            $("#artprocess,#tableArtisanDate").removeClass("active");
+            $("#maintaininfo,#tableMaintainDate").removeClass("active");
+            $("#v-travelData,#GPSData").addClass("active in").show();
+            
+            //计算高度赋值
+                  console.log("1.mapHeight=",newMapHeight)
+                  $("#MapContainer").css({
+                    "height": (newMapHeight - 241) + "px"
+                  });
+                  //表头宽度设置
+                  var tabWidth = $("#myTab").width();
+                  var tabPercent = ((tabWidth - 17) / tabWidth) * 100;
+                  $(".dataTables_scrollHead").css("width", tabPercent + "%");
+                  //列表拖动
+                  $("#dragDIV").mousedown(function (e) {
+                    tableHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
+                    mapHeight = $("#MapContainer").height();
+                    els = e.clientY;
+                    $(document).bind("mousemove", mapSecondwater.mouseMove).bind("mouseup", mapSecondwater.mouseUp);
+                    e.stopPropagation();
+                  })
+                  //表点击操作得到经纬度
+                  $("#gpsTable tbody tr").bind("click", function () {
+                    carLng = $(this).children("td:nth-child(11)").text();
+                    carLat = $(this).children("td:nth-child(12)").text();
+                    var nowIndex = parseInt($(this).children("td:nth-child(1)").text());
+                    selIndex = nowIndex - 1;
+                    listIndex = nowIndex - 1;
+                    if (nowIndex >= 4) {
+                      trIndex = nowIndex - 4;
+                    } else {
+                      trIndex = 0;
+                    }
+                    btnFlag = true;
+                    markerMovingControl.skip();
+                  });
+                  
+                  // $("#playCarListIcon").show();
+                  //伸缩
+                  console.log("2.")
+
+                  $("#scalingBtn").unbind().bind("click", function () {
+                    if ($(this).hasClass("fa-chevron-down")) {
+                      oldMHeight = $("#MapContainer").height();
+                      oldTHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
+                      $(this).attr("class", "fa  fa-chevron-up")
+                      var mapHeight = winHeight - headerHeight - titleHeight - demoHeight - 10;
+                      $("#MapContainer").css({
+                        "height": mapHeight + "px"
+                      });
+                      $(".trackPlaybackTable .dataTables_scrollBody").css({
+                        "height": "0px"
+                      });
+                    } else {
+                      $(this).attr("class", "fa  fa-chevron-down");
+                      $("#MapContainer").css({
+                        "height": oldMHeight + "px"
+                      });
+                      $(".trackPlaybackTable .dataTables_scrollBody").css({
+                        "height": oldTHeight + "px"
+                      });
+                    }
+                  });
+          } else {
+            $("#scalingBtn").attr("class", "fa  fa-chevron-down");
+            var mapHeight = winHeight - headerHeight - titleHeight - demoHeight - 10;
+              $("#MapContainer").css({
+                "height": mapHeight + "px"
+              });
+              $(".trackPlaybackTable .dataTables_scrollBody").css({
+                "height": "0px"
+              });
+          }
+        },
+        //数据列表及地图之间拖动
+        mouseMove: function (e) {
+          if (els - e.clientY > 0) {
+            var y = els - e.clientY;
+            var newHeight = mapHeight - y;
+            if (newHeight <= 0) {
+              newHeight = 0;
+            }
+            $("#MapContainer").css({
+              "height": newHeight + "px"
+            });
+            if (newHeight == 0) {
+              return false;
+            }
+            ;
+            $(".trackPlaybackTable .dataTables_scrollBody").css({
+              "height": (tableHeight + y) + "px"
+            });
+            var searchTop = 338 - y;
+            if (searchTop <= 175) {
+              $("#realTimeCanArea").css("top", "175px");
+            } else {
+              $("#realTimeCanArea").css("top", searchTop + "px");
+            }
+          } else {
+            var dy = e.clientY - els;
+            var newoffsetTop = $("#myTab").offset().top;
+            var scrollBodyHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
+            if (scrollBodyHeight == 0) {
+              return false;
+            }
+            if (newoffsetTop <= (wHeight - myTabHeight)) {
+              var newHeight = mapHeight + dy;
+              $("#MapContainer").css({
+                "height": newHeight + "px"
+              });
+              $(".trackPlaybackTable .dataTables_scrollBody").css({
+                "height": (tableHeight - dy) + "px"
+              });
+            }
+
+          }
+          e.stopPropagation();
+        },
+        mouseUp: function () {
+          dragTableHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
+          $(document).unbind("mousemove", trackPlayback.mouseMove).unbind("mouseup", trackPlayback.mouseUp);
         },
         TabCarBox: function () {
             monitoringObjMapHeight = $("#MapContainer").height();

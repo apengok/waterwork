@@ -24,6 +24,7 @@ from legacy.utils import generat_year_month_from,generat_year_month,ZERO_monthly
 from django.db.models import Avg, Max, Min, Sum,Count
 from django.utils.encoding import escape_uri_path
 from . resources import HdbFlowDataResource
+import monthdelta
 
 # Create your views here.
 
@@ -1247,9 +1248,9 @@ def bigusermeterlist(request):
 
     month_str = today.strftime("%Y-%m")
     month_flow = HdbFlowDataMonth.objects.filter(hdate=month_str)
-    yesmonth = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
+    yesmonth = datetime.datetime.today()-monthdelta.monthdelta(1) #datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
     yesmonth_str = yesmonth.strftime("%Y-%m")
-    lastmonth = datetime.date.today().replace(day=41) - datetime.timedelta(days=1)
+    lastmonth = datetime.datetime.today()-monthdelta.monthdelta(2)
     lastmonth_str = lastmonth.strftime("%Y-%m")
     
 

@@ -4,11 +4,11 @@
 
 {% block stylesheet %}
 <style type="text/css">
-        #container {
-            background-color: white !important;
+        .amap-info-sharp {
+            margin: 0 auto !important;
         }
 
-        #thetree {
+        #treeDemo {
             height: 20000px;
         }
 
@@ -16,40 +16,34 @@
             height: 20000px;
         }
 
-        #dataTableBind td {
-
+        #mapDropSetting {
+            border: 1px solid #c4c4c4;
+            box-shadow: 2px 2px 2px #c4c4c4;
+            background-color: #fff;
+            margin: 5px 16px 0 0;
+            padding: 0 6px 2px;
+            border-radius: 3px;
+            font-size: 14px;
+            display: inline-block;
+            color: #5c5e62;
         }
-        .toolOperateClick .map-call::before{
-            content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-off.png)!important;background-size:22px 22px
+
+        #mapDropSetting .map-drop-sett::before {
+            content: "";
+            position: relative;
+            display: inline-block;
+            top: 4px;
+            left: 0;
+            width: 19px;
+            height: 19px;
+            background-image: url(/static/virvo/resources/img/map-drop-sett.svg) !important;
+            background-size: 19px 19px;
         }
-        .toolOperateClick .map-call.active::before{content:"";position:relative;display:inline-block;top:6px;left:0;width:22px;height:22px;background-image:url(/clbs/resources/img/call-on.png)!important;background-size:22px 22px}
 
-        #MapContainer {width:1600px; height: 850px; }  
+        .monitoringSelect {
+            vertical-align: top;
+        }        
 
-
-.overlay2 {
-    display: none;
-    position: absolute;
-    background: rgba(255,255,255,0.9);
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    width: 400px;
-    /*top: -76px;*/
-    left: -90px;
-    user-select: none;
-}
-
-.overlay2:after {
-    /*top: 100%;*/
-    border: 10px solid transparent;
-    content: "";
-    height: 0;
-    width: 0;
-    position: absolute;
-    border-top-color: rgba(255,255,255,0.9);
-}
         table tr:nth-child(odd){
 
             background: #F1F1F1;
@@ -77,193 +71,46 @@
             width: 42.555%;
         }
 
-.overlay button + button {
-    float: right;
-}
+        table {
+          table-layout: fixed;
+          width: 100%;
+          border-collapse: collapse;
+          text-align: center;
+          /*border: 3px solid purple;*/
+            border:1px solid #CDCDCD;
 
-
-.span2 {
-  font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-  font-weight:700;
-  font-style:normal;
-  font-size:12px;
-  color:#0099CC;
-  margin-left: 10px;
-}
-
-.span1 {
-  
-  margin-left: 10px;
-}
-
-.span3 {
-  font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-  font-weight:700;
-  font-style:normal;
-  font-size:12px;
-  color:#008000;
-  margin-left: 10px;
-}
-
-.span4 {
-  font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
-  font-weight:700;
-  font-style:normal;
-  font-size:12px;
-  color:red;
-  margin-left: 10px;
-}
-
-
-.info hr {
-  margin-right: 0;
-  margin-left: 0;
-  border-top-color: grey;
-}
-
-.info {
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
-
-  position: fixed;
-  top:30rem;
-  background-color: white;
-  width: 390px;
-  /*min-width: 35rem;*/
-  border-width: 0;
-  /*left: 310px;*/
-  height: 96px;
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-}
-
-.info-left {
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
-
-  position: fixed;
-  top:30rem;
-  background-color: white;
-  width: 390px;
-  /*min-width: 35rem;*/
-  border-width: 0;
-  /*left: 310px;*/
-  height: 96px;
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-}
-
-.info-seach-btn {
-    margin-top: 0px;
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
- /*margin-left: 310px;*/
-  position: fixed;
-  top: 30rem;
-  height: 96px;
-  background-color:#CD3299;
-  width: auto;
-
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
-
-  border-width: 0;
-
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-  color: white;
-}
-
-.info-seach-btn-left {
-    margin-top: 0px;
-  display: none;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
- /*margin-left: 70px;*/
-
-  position: fixed;
-  top: 30rem;
-  height: 96px;
-  background-color:#CD3299;
-  width: auto;
-    border-radius:5px;
-
-
-  border-width: 0;
-
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-  color: white;
-}
-
-
-.info-seach-btn-input {
-  margin-top: 0px;
-  display: none;
-
- /*margin-left: 310px;*/
-  position: fixed;
-  top: 30rem;
-  height: 96px;
-  background-color: #ffffff;
-  width: auto;
-  max-width: 480px;
-
-  border-top-right-radius:5px;
-  border-bottom-right-radius:5px;
-
-  border-width: 0;
-
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-  color: white;
-}
-
-
-        .info-seach-btn-input-left {
-            margin-top: 0px;
-            display: none;
-
-            /*margin-left: 310px;*/
-            position: fixed;
-            top: 30rem;
-            height: 96px;
-            background-color: #ffffff;
-            width: auto;
-            max-width: 480px;
-
-            border-top-right-radius:5px;
-            border-bottom-right-radius:5px;
-
-            border-width: 0;
-
-            box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-            color: white;
         }
-.de123{
-    background-color:#CD3299;
-    color: #fffffF;
-    height: 96px;
-    padding-top: 10px;
-    width: 46px;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
-}
-        .de123:hover{background-color: #ab3278;}
-table {
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  /*border: 3px solid purple;*/
-    border:1px solid #CDCDCD;
 
-}
+        th, td {
+          padding: 0px;
+          height: 20px;
+        }
 
-th, td {
-  padding: 0px;
-  height: 20px;
-}
+        .leakcolor10{
+          color:#329e07;
+        }
 
-    </style>
+        .leakcolor12{
+          color:#ce6016;
+        }
+
+        .leakcolor20{
+          color:#880f8c;
+        }
+
+        .leakcolor30{
+          color:#60462c;
+        }
+
+        .leakcolor30b{
+          color:#ba6b1a;
+        }
+
+        .leakcolorwarning{
+          color:#ea1526;
+        }
+
+</style>
 {% endblock %}
 
 
@@ -316,17 +163,26 @@ th, td {
 
     </div>
     
-    <div class="row" id="fenceInfoTable">
-          <div class="col-md-12">
-              <div class="panel panel-default">
-                  <div class="panel-heading" >
-                      <h3 class="panel-title fwb" id="bindswname"></h3>
-                      <div class="pull-right" id="bingListClick">
-                          <i class="fa fa-chevron-down"></i>
-                      </div>
-                  </div>
-                  <div class="panel-body fixed-table-body">
-                      <!--工具面板-->
+    <div id="dragDIV" style="height:2px;width:100%;cursor:n-resize;background-color:#ffffff;"></div>
+        <ul id="myTab" class="nav nav-tabs">
+            <li id="v-travelData" class="active"><a href="#GPSData" data-toggle="tab">实时数据</a></li>
+            
+            <li id="tableAlarmDate"><a href="#warningData" data-toggle="tab" id="AlarmData">报警信息</a></li>
+            <li id="tableBaseinfoDate"><a href="#baseinfo" data-toggle="tab" id="baseinfoData">基本信息</a></li>
+            <li id="tableArtisanDate"><a href="#artprocess" data-toggle="tab" id="artisanData">工艺流程</a></li>
+            <li id="tableMaintainDate"><a href="#maintaininfo" data-toggle="tab" id="maintainData">维保信息</a></li>
+            
+            <div id="dmapredetail" style="float:right;margin-top:9px;" >
+                <li style="display:inline-block;"><span id="bindswname"></span></li>&nbsp;&nbsp;
+                
+                <li style="display:inline-block;margin:0px 20px 0px 15px"><i
+                        id="scalingBtn" class="fa  fa-chevron-down"></i></li>
+            </div>
+        </ul>
+        <div id="myTabContent" class="tab-content" style="overflow:auto;">
+            <div class="tab-pane fade in active trackPlaybackTable tableFEStyle" id="GPSData">
+                
+                <!--工具面板-->
                       <div class="col-md-2">
                         <table id="dataTableBind" border="1">
                           
@@ -415,10 +271,300 @@ th, td {
                         <div id="artist_img" style="height:241px;width:100%;border:1px solid #CDCDCD"><img src="/media/resources/img/secondwater/lct.png"></div>
                       </div>
                       
-                  </div>
-              </div>
-          </div>
-    </div>
+            </div>
+            
+            
+           <!-- 报警信息 -->
+            <div class="tab-pane fade trackPlaybackTable tableFEStyle" id="warningData">
+                <table id="gpsTable3"
+                       class="table table-striped table-bordered table-hover"
+                       cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th class="text-center">报警时间</th>
+                        <th class="text-center">处理状态</th>
+                        <th class="text-center">报警类型</th>
+                        <th class="text-center">报警等级</th>
+                        <th class="text-center">处理人</th>
+                        <th class="text-center">处理时间</th>
+                        <th class="text-center">处理方法</th>
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                                      
+            </div>
+
+            <!-- 基本信息 -->
+            <div class="tab-pane fade in active trackPlaybackTable tableFEStyle" id="baseinfo">
+                
+                <!--工具面板-->
+                      <div class="col-md-2">
+                        <table id="bstable1" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td style="font-weight: bold">设备编号</td>
+                              <td style="font-weight: bold">170256486</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>设备型号</td>
+                              <td>HILL14502-875</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>水泵型号</td>
+                              <td>WDL32-150AAA</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>水泵台数</td>
+                              <td>4</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定功率</td>
+                              <td>15</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定扬程</td>
+                              <td>25</td>
+                              
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      
+                      <!-- 供水 -->
+                      <div class="col-md-2">
+                        <table id="bstable2" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td style="font-weight: bold">供水流量</td>
+                              <td style="font-weight: bold">25</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>出水管径</td>
+                              <td>DN40</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>水箱规格</td>
+                              <td>无</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>生产厂家</td>
+                              <td>青岛三利</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>生产日期</td>
+                              <td>2015年12月</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>安装日期</td>
+                              <td>2016年4月</td>
+                              
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <!-- 机组1 -->
+                      <div class="col-md-2">
+                        <table id="bstable3" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="2" style="font-weight: bold">机组1#</td>
+                            </tr>
+                            <tr>
+                              <td>对应楼层</td>
+                              <td>6-12</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>对应户数</td>
+                              <td>32</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>减压的户楼层</td>
+                              <td>14</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定功率</td>
+                              <td>7.5</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定扬程</td>
+                              <td>10</td>
+                              
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <!-- 机组2 -->
+                      <div class="col-md-2">
+                        <table id="bstable4" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="2" style="font-weight: bold">机组2#</td>
+                            </tr>
+                            <tr>
+                              <td>对应楼层</td>
+                              <td>6-12</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>对应户数</td>
+                              <td>32</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>减压的户楼层</td>
+                              <td>14</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定功率</td>
+                              <td>7.5</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定扬程</td>
+                              <td>10</td>
+                              
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <!-- 机组3 -->
+                      <div class="col-md-2">
+                        <table id="bstable5" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td colspan="2" style="font-weight: bold">机组3#</td>
+                            </tr>
+                            <tr>
+                              <td>对应楼层</td>
+                              <td>6-12</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>对应户数</td>
+                              <td>32</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>减压的户楼层</td>
+                              <td>14</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定功率</td>
+                              <td>7.5</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>额定扬程</td>
+                              <td>10</td>
+                              
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <!-- 产权 -->
+                      <div class="col-md-2">
+                        <table id="bstable6" border="1">
+                          
+                          <tbody>
+                            <tr>
+                              <td >产权单位</td>
+                              <td >万科物业</td>
+                            </tr>
+                            <tr>
+                              <td>联系电话</td>
+                              <td></td>
+                              
+                            </tr>
+                            <tr>
+                              <td>管理单位</td>
+                              <td>万科物业</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>联系电话</td>
+                              <td>13987654321</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>管理人员</td>
+                              <td>张先生</td>
+                              
+                            </tr>
+                            <tr>
+                              <td>联系电话</td>
+                              <td>10123456789</td>
+                              
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      
+            </div>
+
+            <!-- 工艺流程 -->
+            <div class="tab-pane fade trackPlaybackTable tableFEStyle" id="artprocess">
+                <div class="col-md-12" >
+                        
+                  <div id="artist_img" style="height:241px;width:100%;border:1px solid #CDCDCD"><img src="/media/resources/img/secondwater/artisan.png"></div>
+                </div>
+                                      
+            </div>
+
+            <!-- 维保信息 -->
+            <div class="tab-pane fade trackPlaybackTable tableFEStyle" id="maintaininfo">
+                <table id="maintaininfoTable"
+                       class="table table-striped table-bordered table-hover"
+                       cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th class="text-center">维修时间</th>
+                        <th class="text-center">维修类型</th>
+                        <th class="text-center">处理人</th>
+                        <th class="text-center">处理时间</th>
+                        <th class="text-center">处理方法</th>
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                                      
+            </div>
+
+
+        </div>
+    
+    
 
 </div>
 
