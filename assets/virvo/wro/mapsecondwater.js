@@ -24,6 +24,8 @@
     var secondw_selected = false;
     var sw_name = "";
 
+    var infow;
+
     var $contentLeft = $("#content-left"), $contentRight = $("#content-right");
 
     var travelLineList,AdministrativeRegionsList,fenceIdList,titleHeight,demoHeight,
@@ -273,7 +275,9 @@
                 $("#mapDropSettingMenu").slideUp();
                 $("#fenceTool>.dropdown-menu").hide();
             });
-            infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -10), closeWhenClickMap: true});
+            // infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -10), closeWhenClickMap: true});
+            infow = mapSecondwater.infoWindow();
+            // infow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
         },
         init: function(){
 
@@ -305,22 +309,22 @@
         //构建自定义信息窗体
         createInfoWindow:function (title, content) {
             var info = document.createElement("div");
-            info.className = "info";
-     
+            // info.className = "info";
+            info.className = "custom-info input-card content-window-card";
             //可以通过下面的方式修改自定义窗体的宽高
             //info.style.width = "400px";
             // 定义顶部标题
-            var top = document.createElement("div");
-            var titleD = document.createElement("div");
-            var closeX = document.createElement("img");
-            top.className = "info-top";
-            titleD.innerHTML = title;
-            closeX.src = "http://webapi.amap.com/images/close2.gif";
-            closeX.onclick = mapSecondwater.closeInfoWindow();
+            // var top = document.createElement("div");
+            // var titleD = document.createElement("div");
+            // var closeX = document.createElement("img");
+            // top.className = "info-top";
+            // titleD.innerHTML = title;
+            // closeX.src = "http://webapi.amap.com/images/close2.gif";
+            // closeX.onclick = mapSecondwater.closeInfoWindow();
      
-            top.appendChild(titleD);
-            top.appendChild(closeX);
-            info.appendChild(top);
+            // top.appendChild(titleD);
+            // top.appendChild(closeX);
+            // info.appendChild(top);
      
             // 定义中部内容
             var middle = document.createElement("div");
@@ -345,10 +349,10 @@
             // overlay = document.getElementById('js-overlay');
             markerInfoWindow = new AMap.InfoWindow({
                 isCustom: true,  //使用自定义窗体
-                // content: mapSecondwater.createInfoWindow("title", overlay.innerHTML),
+                // content: mapSecondwater.createInfoWindow(title, content.join("<br/>")),
                 // size:new AMap.Size(400,300),
                 offset: new AMap.Pixel(16, -45),
-                autoMove: true
+                // autoMove: true
             });
             return markerInfoWindow;
         },
@@ -359,16 +363,28 @@
                 title: station.stationname,
                 icon:'/static/scada/img/bz_s.png'
             });
-            infow = mapSecondwater.infoWindow();
+
+ 
+            
+            conts = mapSecondwater.markerContent( station);
+            marker.content = mapSecondwater.createInfoWindow("title", conts);
+            // marker点击事件
+            // marker.on("click",function(e){
+            //     // conts = mapSecondwater.createSecondwaterInfo(station.stationname, station)
+            //     // console.log(conts)
+            //     infow.setContent(e.target.content);
+            //     infow.open(map, e.target.getPosition());
+            // });
+            // marker.emit('click', {target: marker});
+
             marker.on("mouseover",function(e){
                 
-                // var position = e.lnglat;
-                // console.log(position);
-                conts = mapSecondwater.createSecondwaterInfo(station.stationname, station)
-
-                infow.setContent(conts);
-                // markerInfoWindow.setSize(AMap.Size(400,300));
-                infow.open(map,position);
+                infow.setContent(e.target.content);
+                infow.open(map,e.target.getPosition());
+                // console.log("info window is Open?"+infow.getIsOpen())
+                // console.log("info window content:"+infow.getContent())
+                // console.log("info window position:"+infow.getPosition())
+                // console.log("info window size:"+infow.getSize())
             });
 
             marker.on("mouseout",function(){
@@ -377,6 +393,22 @@
 
             return marker;
         },
+        markerContent:function(station){
+            content = [];
+            content.push('二供名称:<span style="color:#0099CC;">'+station.stationname+"</span>");
+            if(station.status == "在线"){
+                content.push('通讯状态:<span style="color:#008000;">'+station.status+"</span>");
+            }else{
+                content.push('通讯状态:<span style="color:#008000;">'+station.status+"</span>");
+            }
+            content.push('进水压力:<span >'+station.press_in+"</span>");
+            content.push('出水压力:<span >'+station.press_out+"</span>");
+            content.push('瞬时流量:<span >'+station.flux+"</span>");
+            
+            
+            return content.join("<br/>");
+        },
+        // 样式调不好，弃用
         createSecondwaterInfo:function (title, content) {
             var info = document.createElement("div");
             info.className = "info";
@@ -442,15 +474,15 @@
             
             
             // 定义底部内容
-            var bottom = document.createElement("div");
-            bottom.className = "info-bottom";
-            bottom.style.position = 'relative';
-            bottom.style.top = '10px';
-            bottom.style.margin = '0 auto';
-            var sharp = document.createElement("img");
-            sharp.src = "http://webapi.amap.com/images/sharp.png";
-            bottom.appendChild(sharp);
-            info.appendChild(bottom);
+            // var bottom = document.createElement("div");
+            // bottom.className = "info-bottom";
+            // bottom.style.position = 'relative';
+            // bottom.style.top = '10px';
+            // bottom.style.margin = '0 auto';
+            // var sharp = document.createElement("img");
+            // sharp.src = "http://webapi.amap.com/images/sharp.png";
+            // bottom.appendChild(sharp);
+            // info.appendChild(bottom);
             return info;
         },
         // 从实时库获取数据
@@ -1028,7 +1060,7 @@
             json_ajax("POST", url, "json", true,data,mapSecondwater.buildstationinfo);
         },
         buildstationinfo:function(data){
-            console.log(data);
+            // console.log(data);
             var stationinfo ;
             // for(var i = 0;i<markerList.length;i++){
             //     marker = markerList[i];
@@ -1060,6 +1092,7 @@
 
                 
                 map.add(markerList);
+                map.setFitView();
 
             }
 
