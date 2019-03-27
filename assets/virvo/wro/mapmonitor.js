@@ -98,6 +98,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     var recent7flowpress;
     var dma_level = '2';
     var dma_selected = false;
+    var dma_current_node = '';
     var dma_bindname = "";
     var dma_level2_clicked = "";
     var show_dma_level = "2";
@@ -109,6 +110,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     var old_r7fp =  $("#recent7flowpress").width();
     var dma_in_group = [];  //点击组织时记录该组织下的全部二级分区
     var dma3_and_dma2 = []; //点击二级dma蓝色统计信息，记录该二级分区及下属的三级分区
+    var infow;
 
   trackPlayback = {
     //初始化
@@ -214,7 +216,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       map = new AMap.Map("MapContainer", {
         resizeEnable: true,
         scrollWheel: true,
-        zoom: 18
+        zoom: 14
       });
       //获取地址栏车辆id
       var vgasId = trackPlayback.GetAddressUrl("vid");
@@ -244,9 +246,9 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       satellLayer.setMap(map);
       satellLayer.hide();
       //实时路况
-      realTimeTraffic = new AMap.TileLayer.Traffic();
-      realTimeTraffic.setMap(map);
-      realTimeTraffic.hide();
+      // realTimeTraffic = new AMap.TileLayer.Traffic();
+      // realTimeTraffic.setMap(map);
+      // realTimeTraffic.hide();
       //页面区域定位
       $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
       
@@ -274,7 +276,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         }
         else{
             dma_in_group = dma_no_global;
-            trackPlayback.refreshMap_local('');
+            trackPlayback.refreshMap_local(dma_bindname);
         }
       });
       lmapHeight = $("#MapContainer").height();
@@ -414,6 +416,8 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       // setTimeout(function () {
       //   $(".realTimeCanArea").show()
       // }, 200);
+
+      infow = trackPlayback.infoWindow();
     },
     clickEventListenerDragend: function () {
       var southwest = map.getBounds().getSouthWest();//获取西南角坐标
@@ -530,6 +534,27 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       $("#realTimeBtn .mapBtn").removeClass("map-active");
       $(this).addClass("map-active");
     },
+    showDmaStation:function(){
+      alert("station")
+    },
+    showStation:function () {
+      if (isTrafficDisplay) {
+        // realTimeTraffic.show();
+        // $("#realTimeRC").addClass("map-active");
+        $("#realTimeRCLab").addClass('preBlue');
+        isTrafficDisplay = false;
+        console.log(dma_bindname)
+        trackPlayback.refreshMap_local(dma_bindname);
+        
+      } else {
+        // realTimeTraffic.hide();
+        // $("#realTimeRC").removeClass("map-active");
+        $("#realTimeRCLab").removeClass('preBlue');
+        console.log(dma_bindname)
+        isTrafficDisplay = true;
+        trackPlayback.refreshMap_local(dma_bindname);
+      }
+    },
     //实时路况切换
     realTimeRC: function () {
       if (isTrafficDisplay) {
@@ -586,9 +611,9 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         $("#googleMapLab").addClass("preBlue");
 
         //取消路况与卫星选中状态
-        $("#realTimeRC").attr("checked", false);
+        $("#showStation").attr("checked", false);
         $("#realTimeRCLab").removeClass("preBlue");
-        realTimeTraffic.hide();
+        // realTimeTraffic.hide();
         isTrafficDisplay=true;
         isMapThreeDFlag=true;
         $("#setMap").attr("checked", false);
@@ -3404,6 +3429,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             dma_in_group = [];
             map.remove(dma_list)
             dma_list=[]
+            station_list = []
             $.ajax({
                 type: 'POST',
                 url: '/gis/fence/bindfence/getDMAFenceDetails/',
@@ -3416,13 +3442,16 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                         
                         for(var j = 0;j < dataList.length;j++){
                             polygon = data.obj[j].fenceData;
-                            dmaMapStatistic = data.obj[j].dmaMapStatistic
+                            dmaMapStatistic = data.obj[j].dmaMapStatistic;
+                            // dma 分配的站点信息
+                            dmastationinfo = data.obj[j].dmastationinfo;
                             fillColor_seted = fillColor = data.obj[j].fillColor
+                            console.log(fillColor_seted)
                             strokeColor_seted = strokeColor = data.obj[j].strokeColor
-                            if(fillColor === null){
+                            if(fillColor === null || fillColor == ""){
                                 fillColor_seted = fillColor = "#1791fc"
                             }
-                            if(strokeColor === null){
+                            if(strokeColor === null || strokeColor == ""){
                                 strokeColor_seted = strokeColor = "#FF33FF"
                             }
                             var dataArr = new Array();
@@ -3448,6 +3477,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                                         'leakerate':dmaMapStatistic.leakerate,
                                         'water_in':dmaMapStatistic.water_in,
                                         'readtime':dmaMapStatistic.readtime,
+                                        'dmastationinfo':dmastationinfo,
                                     },
                                     //填充透明度
                                 });
@@ -3594,6 +3624,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
             map.clearMap();
             var tmp_dma_fresh = []
+      var marklist = [];
             var count_dma_2_in = 0;
             for(var i=0;i<dma_list.length;i++){
                 var tdma = dma_list[i];
@@ -3635,15 +3666,31 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                     position: trackPlayback.calculateCenter(polygon2_path) //[116.396923,39.918203]
                 });
 
-                tmp_dma_fresh.push(tdma)
-                text.setMap(map)
-            }
-
-
+          // 创建dma内站点信息
+          if(isTrafficDisplay){
             
-            // map.remove(dma_list)
-            map.add(tmp_dma_fresh)
-            map.setFitView(tmp_dma_fresh);
+            var dmastationinfo = tdma.getExtData().dmastationinfo;
+            // console.log(dmastationinfo)
+            for(var j =0;j < dmastationinfo.length;j++){
+              station = dmastationinfo[j];
+              mark = trackPlayback.createMarker(station);
+              marklist.push(mark);
+            }
+            
+
+          }
+
+          tmp_dma_fresh.push(tdma)
+          text.setMap(map)
+      }
+
+
+      if(marklist.length > 0){
+              map.add(marklist);
+            }
+      // map.remove(dma_list)
+      map.add(tmp_dma_fresh)
+      map.setFitView(tmp_dma_fresh);
 
 
         },
@@ -3676,6 +3723,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             // var doesRingRingIntersect = AMap.GeometryUtil.doesRingRingIntersect(polygon2_path,polygon1_path);
             map.clearMap();
             var tmp_dma_fresh = []
+            var marklist = [];
             var count_dma_2_in = 0;
             for(var i=0;i<dma_list.length;i++){
                 var tdma = dma_list[i];
@@ -3698,7 +3746,18 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                         count_dma_2_in += 1;
                     }
                     else{
-                        continue;
+                      console.log("show_dma_level",show_dma_level)
+                      console.log("dname=",dname)
+                      if(show_dma_level == ""){
+                        if(dname == '')
+                          continue;
+
+                      }
+                      else{
+                        if(show_dma_level !== "3")
+                          continue;
+                      }
+
                     }
                     
                     var water_in = tdma.getExtData().water_in;
@@ -3744,6 +3803,20 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                         
                     })
 
+                    // 创建dma内站点信息
+                    if(isTrafficDisplay){
+                      
+                      var dmastationinfo = tdma.getExtData().dmastationinfo;
+                      console.log(dmastationinfo)
+                      for(var j =0;j < dmastationinfo.length;j++){
+                        station = dmastationinfo[j];
+                        mark = trackPlayback.createMarker(station);
+                        marklist.push(mark);
+                      }
+                      
+
+                    }
+
                     tmp_dma_fresh.push(tdma)
                     text.setMap(map);
                     
@@ -3756,10 +3829,109 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             //         }
             
             // map.remove(dma_list)
+            if(marklist.length > 0){
+              map.add(marklist);
+            }
             map.add(tmp_dma_fresh)
             map.setFitView(tmp_dma_fresh);
 
 
+        },
+        createMarker:function(station){
+            var position = new AMap.LngLat(station.lng,station.lat);
+            var marker = new AMap.Marker({
+                position: position,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                title: station.stationname,
+                // icon:'/static/scada/img/bz_s.png'
+            });
+
+ 
+            
+            conts = trackPlayback.markerContent( station);
+            marker.content = trackPlayback.createInfoWindow("title", conts);
+            // marker点击事件
+            // marker.on("click",function(e){
+            //     // conts = mapSecondwater.createSecondwaterInfo(station.stationname, station)
+            //     // console.log(conts)
+            //     infow.setContent(e.target.content);
+            //     infow.open(map, e.target.getPosition());
+            // });
+            // marker.emit('click', {target: marker});
+
+            marker.on("mouseover",function(e){
+                
+                infow.setContent(e.target.content);
+                infow.open(map,e.target.getPosition());
+                // console.log("info window is Open?"+infow.getIsOpen())
+                // console.log("info window content:"+infow.getContent())
+                // console.log("info window position:"+infow.getPosition())
+                // console.log("info window size:"+infow.getSize())
+            });
+
+            marker.on("mouseout",function(){
+                infow.close();
+            })
+
+            return marker;
+        },
+        infoWindow:function(){
+            // overlay = document.getElementById('js-overlay');
+            markerInfoWindow = new AMap.InfoWindow({
+                isCustom: true,  //使用自定义窗体
+                // content: mapSecondwater.createInfoWindow(title, content.join("<br/>")),
+                // size:new AMap.Size(400,300),
+                offset: new AMap.Pixel(16, -45),
+                // autoMove: true
+            });
+            return markerInfoWindow;
+        },
+        markerContent:function(station){
+            content = [];
+            content.push('名称:<span style="color:#0099CC;">'+station.name+"</span>");
+            content.push('表类型:<span >'+station.station_type+"</span>");
+            
+            
+            
+            return content.join("<br/>");
+        },
+        //构建自定义信息窗体
+        createInfoWindow:function (title, content) {
+            var info = document.createElement("div");
+            // info.className = "info";
+            info.className = "custom-info input-card content-window-card";
+            //可以通过下面的方式修改自定义窗体的宽高
+            //info.style.width = "400px";
+            // 定义顶部标题
+            // var top = document.createElement("div");
+            // var titleD = document.createElement("div");
+            // var closeX = document.createElement("img");
+            // top.className = "info-top";
+            // titleD.innerHTML = title;
+            // closeX.src = "http://webapi.amap.com/images/close2.gif";
+            // closeX.onclick = mapSecondwater.closeInfoWindow();
+     
+            // top.appendChild(titleD);
+            // top.appendChild(closeX);
+            // info.appendChild(top);
+     
+            // 定义中部内容
+            var middle = document.createElement("div");
+            middle.className = "info-middle";
+            middle.style.backgroundColor = 'white';
+            middle.innerHTML = content;
+            info.appendChild(middle);
+     
+            // 定义底部内容
+            var bottom = document.createElement("div");
+            bottom.className = "info-bottom";
+            bottom.style.position = 'relative';
+            bottom.style.top = '0px';
+            bottom.style.margin = '0 auto';
+            var sharp = document.createElement("img");
+            sharp.src = "http://webapi.amap.com/images/sharp.png";
+            bottom.appendChild(sharp);
+            info.appendChild(bottom);
+            return info;
         },
         calculateCenter: function(lnglatarr){
           var total = lnglatarr.length;
@@ -3961,7 +4133,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     var old_r7fp =  $("#recent7flowpress").width();
     $("#toggle-left").on("click", trackPlayback.toggleBtn);
     $("#realTimeBtn .mapBtn").on("click", trackPlayback.mapBtnActive);
-    $("#realTimeRC").on("click", trackPlayback.realTimeRC);
+    $("#showStation").on("click", trackPlayback.showStation);
     $("#trackPlayQuery").on("click", trackPlayback.trackDataQuery);
     
     $("#warningData").on("click", trackPlayback.warningData);
@@ -4021,6 +4193,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     
 
     //地图设置
+    $("#showStation").attr("checked", isTrafficDisplay);
     $("#mapDropSetting").on("click", trackPlayback.showMapView);
     //谷歌地图
     $("#googleMap").on('click',trackPlayback.showGoogleMapLayers);

@@ -41,6 +41,7 @@
             background-image: url(/static/virvo/resources/img/map-drop-sett.svg) !important;
             background-size: 19px 19px;
         }
+        .realtimebtn-group,.trackPlay-group{position:absolute;right:0;font-size:18px;padding:4px 5px 0 0;top:0;z-index:3;opacity:.9}
 
         .monitoringSelect {
             vertical-align: top;
@@ -112,6 +113,84 @@
           color:#ea1526;
         }
 
+.content-window-card {
+            position: relative;
+            box-shadow: none;
+            bottom: 0;
+            left: 0;
+            width: 240px;
+            padding: 0;
+
+            
+        }
+
+        .content-window-card p {
+            height: 2rem;
+        }
+
+        .custom-info {
+            border: solid 1px silver;
+        }
+
+          div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+        }
+
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+
+        div.info-middle {
+            font-family:'微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
+            font-weight:700;
+            font-style:normal;
+            font-size:12px;
+            /*color:#0099CC;*/
+            margin-left: 0px;
+            padding: 10px 6px;
+            line-height: 20px;
+        }
+
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
         
     </style>
 {% endblock %}
@@ -230,13 +309,12 @@
               <a class="fenceA" id="mapDropSetting"><i
                       class="map-drop-sett"></i><span>地图设置</span></a>
               <!-- 地图设置下拉 -->
-              <div class="mapDropSettingMenu" id="mapDropSettingMenu"
-                   style="right: 20px;">
+              <div class="mapDropSettingMenu" id="mapDropSettingMenu" style="right: 20px;">
                   <p class="m-line">
-                      <input type="checkbox" id="realTimeRC"
+                      <input type="checkbox" id="showStation"
                              class="monitoringSelect"/>
-                      <label for="realTimeRC" id="realTimeRCLab"
-                             class="monitoringSelect">路况</label>
+                      <label for="showStation" id="realTimeRCLab"
+                             class="monitoringSelect">显示站点</label>
                   </p>
                   <hr>
                   <p>

@@ -834,6 +834,7 @@ def getDMAFenceOnce(request):
             "fillColor":pgo["fillColor"],
             "strokeColor":pgo["strokeColor"],
             "dmaMapStatistic":dma.dmaMapStatistic(),
+            "dmastationinfo":dma.dmaStationinfo(),
             "fenceData":fenceData
         })
     details = {
@@ -911,6 +912,7 @@ def getDMAFenceDetails(request):
             "fillColor":pgo["fillColor"],
             "strokeColor":pgo["strokeColor"],
             "dmaMapStatistic":dma.dmaMapStatistic(),
+            "dmastationinfo":dma.dmaStationinfo(),
             "fenceData":fenceData
         })
 

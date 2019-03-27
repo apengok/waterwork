@@ -21,6 +21,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from .utils import merge_values
 import random
+from gis.GGaussCoordConvert import GGaussCoordConvert
 
 # Create your models here.
 
@@ -380,12 +381,45 @@ class DMABaseinfo(models.Model):
             "dma_level":dma_level, #"二级",
             "state":"在线",
             "water_in":round(float(water_in),2),
-            "readtime":'2018-12-29',
+            "readtime":today.strftime("%Y-%m-%d"),
             "month_sale":round(float(monthly_sale[month_str]),2) ,
             "last_month_sale":round(float(monthly_sale[lastmonth_str]),2) ,
             "last_add_ratio":"34%",
             "leakerate":random.choice([9.65,13.46,11.34,24.56,32.38,7.86,10.45,17.89,23.45,36,78])
         }
+
+    def dmaStationinfo(self):
+        dmastations = self.station_assigned()
+
+        data = []
+        for d in dmastations:
+            commaddr = d.station_id
+            meter_type = d.meter_type
+            if d.station_type == '2':
+                continue
+            # b = Bigmeter.objects.get(commaddr=commaddr)
+            b = Station.objects.get(meter__simid__simcardNumber=commaddr)
+            print(self.dma_name,commaddr,meter_type,b.coortype)
+            lng = b.lng
+            lat = b.lat
+            if lng is None or lat is None:
+                continue
+            if lng == '' or lat == '':
+                continue
+            if b.coortype == "CGCS2000":
+                
+                coordConvert = GGaussCoordConvert(3, 3, False, 117, 0, 8533.542534226170, -187931.67959519500, 0.746937, 0.9997622102729840)
+                lng,lat = coordConvert.convToGlobal(float(lat),float(lng))
+            data.append(
+                {
+                    "name":b.username,
+                    "lng":lng,
+                    "lat":lat,
+                    "station_type":meter_type,
+                }
+            )
+
+        return data
 
 
     def dma_statistic_daily(self,day_list):
