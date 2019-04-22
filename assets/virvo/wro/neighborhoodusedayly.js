@@ -144,6 +144,8 @@
                     d = k.substring(8,10)
                     $("#d"+d).text(v)
                 })
+
+            communityDaily.comunityDailyUseChart();
             }
         },
         //开始时间
@@ -279,6 +281,77 @@
             key = true;
             startTime=sTime;
             endTime=eTime;
+        },
+        comunityDailyUseChart:function(){
+
+            options = {
+                backgroundColor: '#FFFFFF',
+                
+                title: {
+                    text: '近7日流量压力曲线图',
+                    left:'left',
+                    textStyle:{
+                        fontSize:12,
+                        fontWeight:'100'
+                    },
+                },
+                // tooltip: {
+                //     trigger: 'axis',
+                //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                //         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                //     }
+                // },
+                
+                legend: {
+                    data: ['流量'],
+                    
+                },
+                    grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    containLabel: true
+                    },
+                
+                xAxis: [{
+                    type: 'category',
+                     boundaryGap: false,
+                    //show:false,
+                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40'],
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:10
+                        }
+                    }
+                }],
+                yAxis: {
+                    type: 'value',
+                    //show:false,
+                  //  name: '流量',
+                    // min: 0,
+                     max: 10,
+                    interval: 10,
+                    splitLine:{
+                        show:false,
+                    }
+                },
+                series: [{
+                    name: 'flow',
+                    type: 'line',
+                    itemStyle: {
+                        normal: {
+                            color: '#7acf88',
+                            // areaStyle:{type:'default'}
+                        },
+                    },
+                    
+                    data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
+                }]
+            };
+
+            recent7flowpress = echarts.init(document.getElementById('comunity_daily_chart'));
+            recent7flowpress.setOption(options);
+            
         },
 
     }

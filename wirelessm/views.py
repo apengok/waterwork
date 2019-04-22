@@ -529,6 +529,7 @@ def watermeterlist(request):
     data = []
 
     for m in watermeters:
+        print(m)
         data.append(m_info(m))
 
     # recordsTotal = watermeters.count()

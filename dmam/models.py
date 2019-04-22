@@ -1414,10 +1414,10 @@ class VWatermeter(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return str(self.waterid)
 
     def __unicode__(self):
-        return self.name
+        return str(self.waterid)
 
     @property
     def communityidnew(self):

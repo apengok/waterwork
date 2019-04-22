@@ -234,7 +234,9 @@
                           </tbody>
                         </table>
                   </div>
-                  <div class="col-md-6"></div>
+                  <div class="col-md-6">
+                    <div id="comunity_daily_chart" style="height:600px;width:100%;"></div>
+                  </div>
               </div>
               </div>
             </div>
@@ -258,5 +260,6 @@
 
 {% block javascript %}
 <script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
+<script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
 <script src="{% static 'virvo/wro/neighborhoodusedayly.js' %}"></script>
 {% endblock %}
