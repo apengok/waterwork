@@ -190,7 +190,25 @@
                           </tbody>
                         </table> -->
                   </div>
-                  <div class="col-md-6"></div>
+                  <div class="col-md-6">
+                    <div id="comunity_monthly_chart" style="height:400px;width:100%;"></div>
+                  </div>
+
+                  <!-- stastic -->
+                  <!-- <div style="background: rgba(22, 155, 213, 1);margin-top: 600px;height: 60px;color: white;">
+                      <div style="margin-top: 5px;">
+                      <label id="today_use" class="col-md-3 control-label" style="margin-top: 5px;">当天用水量:<span>-</span></label>
+                      <label id="yestoday_use" class="col-md-3 control-label" style="margin-top: 5px;">昨日用水量:<span>- </span></label>
+                      <label id="before_yestoday_use" class="col-md-3 control-label" style="margin-top: 5px;">前日用水量：<span>-</span></label>
+                      
+                      <label id="max_flow" class="col-md-3 control-label" style="margin-top: 5px;">最大值: <span>-</span></label>
+                      <label id="min_flow" class="col-md-3 control-label" style="margin-top: 5px;">最小值: <span>-</span></label>
+                      <label id="average" class="col-md-3 control-label" style="margin-top: 5px;">平均值:<span>-</span></label>
+                    </div>
+                      
+                  </div> -->
+
+                  
               </div>
               </div>
             </div>
@@ -214,5 +232,6 @@
 
 {% block javascript %}
 <script src="{% static 'virvo/resources/js/zTree/js/ztreeSearch.js' %}"></script>
+<script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
 <script src="{% static 'virvo/wro/neighborhoodusemonth.js' %}"></script>
 {% endblock %}

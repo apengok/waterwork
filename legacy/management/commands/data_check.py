@@ -128,3 +128,21 @@ def bigmeter_check(**options):
 
     print("sx_bigmeters count:",len(sx_bigmeters))
     print("amrs_bigmeters count:",len(amrs_bigmeters))
+    # 黄山市苏扬置业有限公司(文欣苑)监控表 18255954864
+    # sx_flow = HdbFlowDataMonth.objects.using("shexian").filter(commaddr='18255954864',hdate__range=['2018-10','2019-04']).values('hdate','dosage')
+    # for s in sx_flow:
+    #     hdate=s['hdate']
+    #     dosage = s['dosage']
+        
+    #     v = HdbFlowDataMonth.objects.filter(commaddr='18255954864',hdate=hdate)
+    #     # print(hdate,dosage,v)
+    #     if v :
+    #         v = v.first()
+    #         if v.dosage != dosage:
+    #             print (v.hdate,v.dosage,"(",dosage,")")
+    #             v.dosage = dosage
+    #             v.save()
+
+    #     else:
+    #         HdbFlowDataMonth.objects.create(commaddr='18255954864',hdate=hdate,dosage=dosage)
+    

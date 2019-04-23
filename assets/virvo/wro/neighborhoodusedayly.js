@@ -138,14 +138,29 @@
         requestDataCallback:function(data){
             console.log(data)
             if(data.success){
+                var data_flow = [];
+                var data_seris = [];
+
+                for (var i = 31; i >= 0; i--) {
+                    if(i<10){
+                        $("#d0"+i).text("")
+                    }
+                    $("#d"+i).text("")
+                }
+
                 dm = data.monthdata;
                 $.each(dm,function(k,v){
-                    // console.log(k,":",v)
+                    console.log(k,":",v)
                     d = k.substring(8,10)
                     $("#d"+d).text(v)
+                    if(v<0){
+                        v = "";
+                    }
+                    data_flow.push(v);
+                    data_seris.push(d);
                 })
 
-            communityDaily.comunityDailyUseChart();
+                communityDaily.comunityDailyUseChart(data_flow,data_seris);
             }
         },
         //开始时间
@@ -166,7 +181,7 @@
                 tMonth = communityDaily.doHandleMonth(tMonth + 1);
                 tDate = communityDaily.doHandleMonth(tDate);
                 var num = -(day + 1);
-                startTime = tYear + "-" + tMonth + "-" + tDate;
+                startTime = tYear + "-" + tMonth + "-" + tDate + " "+ "00:00:00";
                 var end_milliseconds = today.getTime() + 1000 * 60 * 60 * 24
                     * parseInt(num);
                 today.setTime(end_milliseconds); //注意，这行是关键代码
@@ -175,7 +190,7 @@
                 var endDate = today.getDate();
                 endMonth = communityDaily.doHandleMonth(endMonth + 1);
                 endDate = communityDaily.doHandleMonth(endDate);
-                endTime = endYear + "-" + endMonth + "-" + endDate;
+                endTime = endYear + "-" + endMonth + "-" + endDate + " " + "23:59:59";
             } else {
                 var startTimeIndex = startValue.slice(0, 10).replace("-", "/").replace("-", "/");
                 var vtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * day;
@@ -186,9 +201,9 @@
                 var vDate = dateList.getDate();
                 vMonth = communityDaily.doHandleMonth(vMonth + 1);
                 vDate = communityDaily.doHandleMonth(vDate);
-                startTime = vYear + "-" + vMonth + "-" + vDate;
+                startTime = vYear + "-" + vMonth + "-" + vDate + " "+ "00:00:00";
                 if (day == 1) {
-                    endTime = vYear + "-" + vMonth + "-" + vDate;
+                    endTime = vYear + "-" + vMonth + "-" + vDate + " " + "23:59:59";
                 } else {
                     var endNum = -1;
                     var vendtoday_milliseconds = Date.parse(startTimeIndex) + 1000 * 60 * 60 * 24 * parseInt(endNum);
@@ -199,7 +214,7 @@
                     var vendDate = dateEnd.getDate();
                     vendMonth = communityDaily.doHandleMonth(vendMonth + 1);
                     vendDate = communityDaily.doHandleMonth(vendDate);
-                    endTime = vendYear + "-" + vendMonth + "-" + vendDate;
+                    endTime = vendYear + "-" + vendMonth + "-" + vendDate + " " + "23:59:59";
                 }
             }
         },
@@ -220,7 +235,7 @@
                     : parseInt(nowDate.getMonth() + 1))
                 + "-"
                 + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
-                    : nowDate.getDate());
+                    : nowDate.getDate()) + " " + "00:00:00";
             endTime = nowDate.getFullYear()
                 + "-"
                 + (parseInt(nowDate.getMonth() + 1) < 10 ? "0"
@@ -228,7 +243,13 @@
                     : parseInt(nowDate.getMonth() + 1))
                 + "-"
                 + (nowDate.getDate() < 10 ? "0" + nowDate.getDate()
-                    : nowDate.getDate());
+                    : nowDate.getDate())
+                + " "
+                + ("23")
+                + ":"
+                + ("59")
+                + ":"
+                + ("59");
             var atime = $("#atime").val();
             if (atime != undefined && atime != "") {
                 startTime = atime;
@@ -282,76 +303,199 @@
             startTime=sTime;
             endTime=eTime;
         },
-        comunityDailyUseChart:function(){
+        comunityDailyUseChart:function(data_flow,data_seris){
 
-            options = {
-                backgroundColor: '#FFFFFF',
-                
-                title: {
-                    text: '近7日流量压力曲线图',
-                    left:'left',
-                    textStyle:{
-                        fontSize:12,
-                        fontWeight:'100'
+            var myChart = echarts.init(document.getElementById('comunity_daily_chart'));
+
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {
+                        fontSize: 20
                     },
-                },
-                // tooltip: {
-                //     trigger: 'axis',
-                //     axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                //         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                //     }
-                // },
-                
-                legend: {
-                    data: ['流量'],
                     
                 },
-                    grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '15%',
-                    containLabel: true
-                    },
-                
-                xAxis: [{
+                legend: {
+                    data: ['用水量','用水量bar'],
+                    left: 'auto',
+                },
+                toolbox: {
+                    show: false
+                },
+                grid: {
+                    left: '80',
+                    bottom:'50',
+                    right:'80'
+                },
+                xAxis: {
                     type: 'category',
-                     boundaryGap: false,
-                    //show:false,
-                    data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','20','31','32','33','34','35','36','37','38','39','40'],
-                    axisLabel:{
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
+                    name: "",
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        rotate: 0
+                    },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:300,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    splitLine: {
+                        show: false,
+                        offset:5,
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    data: data_seris //communityDaily.platenumbersplitYear(data_seris)
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '月用水总量 （m³/月）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:60,
+                        scale: false,
+                        position: 'left',
+
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'grey',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+
+                        },
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    
+                ],
+                // dataZoom: [{
+                //     type: 'inside',
+                //     start: start,
+                //     end: end
+                // }, {
+
+                //     show: true,
+                //     height: 20,
+                //     type: 'slider',
+                //     top: 'top',
+                //     xAxisIndex: [0],
+                //     start: 0,
+                //     end: 10,
+                //     showDetail: false,
+                // }],
+                series: [
+                    {
+                        name: '用水量',
+                        yAxisIndex: 0,
+                        type: 'line',
+                        // stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#7cb4ed'
+                            }
+                        },
+                        data: data_flow,
+                        // markLine : {
+                        //   symbol : 'none',
+                        //   itemStyle : {
+                        //     normal : {
+                        //       color:'#1e90ff',
+                        //       label : {
+                        //         show:true
+                        //       }
+                        //     }
+                        //   },
+                        //   data : [{type : 'average', name: '平均值'}]
+                        // }
+                    },
+                    {
+                        name: '用水量bar',
+                        yAxisIndex: 0,
+                        type: 'bar',
+                        // stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#474249'
+                            }
+                        },
+                        data: data_flow
+                    },
+                    
+                ]
+            };
+            myChart.setOption(option);
+
+            
+            
+        },
+
+        platenumbersplitYear:function(arr){
+            // var newArr = [ '08','09','10','11',
+            //     {
+            //         value:'12',
+            //         textStyle: {
+            //             color: 'red',
+                        
+            //         }
+            //     },
+            //     '01','02','03','04','05','06','07'];
+            console.log(arr)
+            var newArr = [];
+            this_month = parseInt(arr[arr.length - 1],10);
+            arr.forEach(function(item){
+                if (parseInt(item,10) > this_month) {
+                    item = {
+                        value:item,
                         textStyle:{
-                            fontSize:10
+                            color:'red',
                         }
                     }
-                }],
-                yAxis: {
-                    type: 'value',
-                    //show:false,
-                  //  name: '流量',
-                    // min: 0,
-                     max: 10,
-                    interval: 10,
-                    splitLine:{
-                        show:false,
-                    }
-                },
-                series: [{
-                    name: 'flow',
-                    type: 'line',
-                    itemStyle: {
-                        normal: {
-                            color: '#7acf88',
-                            // areaStyle:{type:'default'}
-                        },
-                    },
-                    
-                    data: [4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0,4,6,3,7,2,4,4,4,1,2,3,2,6,3,2,0,1,2,4,0]
-                }]
-            };
-
-            recent7flowpress = echarts.init(document.getElementById('comunity_daily_chart'));
-            recent7flowpress.setOption(options);
-            
+                }
+                newArr.push(item)
+            })
+            return newArr
         },
 
     }

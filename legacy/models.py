@@ -670,6 +670,15 @@ class HdbWatermeterDayManager(models.Manager):
             return self.filter(communityid=query,hdate__startswith=mon)
         return self
 
+    def community_daily_range(self, query,stime,etime): #RestaurantLocation.objects.search()
+        '''
+        stime-etime的用水量
+        '''
+        if query:
+            # query = query.strip()
+            return self.filter(communityid=query,hdate__range=[stime,etime])
+        return self
+
 
     def waterid_daily_use(self, waterid,communityid,mon): #RestaurantLocation.objects.search()
         '''
@@ -740,6 +749,27 @@ class HdbWatermeterDay(models.Model):
             else:
                 dailydata[day] += float(dosage)
         print("3.",time.time()-t1)
+
+        return dailydata
+
+    @classmethod
+    def communityDailyRange(self,communityid,stime,etime):
+        
+        dailydata = {}
+        datalists = self.objects.community_daily_range(communityid,stime,etime).values("hdate","dosage")
+        
+        # print(datalists)
+        for d in datalists:
+            day = d["hdate"]
+            if d["dosage"] is None:
+                dosage = 0
+            else:
+                dosage = d["dosage"]
+            if day not in dailydata.keys():
+                dailydata[day] = float(dosage)
+            else:
+                dailydata[day] += float(dosage)
+        
 
         return dailydata
 

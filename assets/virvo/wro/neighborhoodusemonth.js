@@ -189,6 +189,8 @@
 
             if(data.success){
                 dm = data.monthdata;
+                var data_flow = [];
+                var data_date = [];
                 $.each(dm,function(k,v){
                     console.log(k,":",v)
                     var row = $('<tr>')
@@ -197,8 +199,15 @@
                     row.append(td1);
                     row.append(td2);
                     table.append(row);
+                    d = k.substring(5,8);
+                    if (v < 0){
+                        v = "";
+                    }
+                    data_flow.push(v);
+                    data_date.push(d);
                 })
                 $('#montable').html(table);
+                communityMonth.comunityMonthlyUseChart(data_flow,data_date);
             }
         },
         //开始时间
@@ -420,7 +429,201 @@
             iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
             // return iDays
             return (iDays+1) //加一才是正常天数
-        }
+        },
+        comunityMonthlyUseChart:function(data_flow,data_seris){
+
+            var myChart = echarts.init(document.getElementById('comunity_monthly_chart'));
+
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    textStyle: {
+                        fontSize: 20
+                    },
+                    
+                },
+                legend: {
+                    data: ['用水量','用水量bar'],
+                    left: 'auto',
+                },
+                toolbox: {
+                    show: false
+                },
+                grid: {
+                    left: '80',
+                    bottom:'50',
+                    right:'80'
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: true,  // 让折线图从X轴0刻度开始
+                    name: "",
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        rotate: 0
+                    },
+                    axisTick:{
+                        show:true,
+                        inside:true,
+                        length:300,
+                        alignWithLabel:true ,    //让柱状图在坐标刻度中间
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    splitLine: {
+                        show: false,
+                        offset:5,
+                        lineStyle: {
+                            color: 'grey',
+                            type: 'dashed',
+                            width: 0.5
+                        }
+                    },
+                    data: communityMonth.platenumbersplitYear(data_seris)
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '月用水总量 （m³/月）',
+                        nameTextStyle:{
+                            color: 'black',
+                            fontFamily: '微软雅黑 Bold',
+                            fontSize: 14,
+                            fontStyle: 'normal',
+                            fontWeight: 700
+                        },
+                        nameLocation:'middle',
+                        nameGap:60,
+                        scale: false,
+                        position: 'left',
+
+                        axisTick : {    // 轴标记
+                            show:false,
+                            length: 10,
+                            lineStyle: {
+                                color: 'green',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        axisLabel : {
+                            show:true,
+                            interval: 'auto',    // {number}
+                            rotate: 0,
+                            margin: 18,
+                            formatter: '{value}',    // Template formatter!
+                            textStyle: {
+                                color: 'grey',
+                                fontFamily: 'verdana',
+                                fontSize: 10,
+                                fontStyle: 'normal',
+                                fontWeight: 'bold'
+                            }
+
+                        },
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    
+                ],
+                // dataZoom: [{
+                //     type: 'inside',
+                //     start: start,
+                //     end: end
+                // }, {
+
+                //     show: true,
+                //     height: 20,
+                //     type: 'slider',
+                //     top: 'top',
+                //     xAxisIndex: [0],
+                //     start: 0,
+                //     end: 10,
+                //     showDetail: false,
+                // }],
+                series: [
+                    {
+                        name: '用水量',
+                        yAxisIndex: 0,
+                        type: 'line',
+                        // stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#7cb4ed'
+                            }
+                        },
+                        data: data_flow,
+                        // markLine : {
+                        //   symbol : 'none',
+                        //   itemStyle : {
+                        //     normal : {
+                        //       color:'#1e90ff',
+                        //       label : {
+                        //         show:true
+                        //       }
+                        //     }
+                        //   },
+                        //   data : [{type : 'average', name: '平均值'}]
+                        // }
+                    },
+                    {
+                        name: '用水量bar',
+                        yAxisIndex: 0,
+                        type: 'bar',
+                        // stack:'dma',
+                        smooth: true,
+                        symbol: 'none',
+                        sampling: 'average',
+                        itemStyle: {
+                            normal: {
+                                color: '#474249'
+                            }
+                        },
+                        data: data_flow
+                    },
+                    
+                ]
+            };
+            myChart.setOption(option);
+
+            
+            
+        },
+
+        platenumbersplitYear:function(arr){
+            // var newArr = [ '08','09','10','11',
+            //     {
+            //         value:'12',
+            //         textStyle: {
+            //             color: 'red',
+                        
+            //         }
+            //     },
+            //     '01','02','03','04','05','06','07'];
+            console.log(arr)
+            var newArr = [];
+            this_month = parseInt(arr[arr.length - 1],10);
+            arr.forEach(function(item){
+                if (parseInt(item,10) > this_month) {
+                    item = {
+                        value:item,
+                        textStyle:{
+                            color:'red',
+                        }
+                    }
+                }
+                newArr.push(item)
+            })
+            return newArr
+        },
 
     }
 
@@ -431,6 +634,7 @@
         
         communityMonth.renderSelect('#select2')
         communityMonth.renderSelect('#select3')
+        $("#select2 option:last").prop('selected', true);
 
         $('input').inputClear().on('onClearEvent',function(e,data){
             var id = data.id;

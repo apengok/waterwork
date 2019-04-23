@@ -554,17 +554,28 @@ def watermeterlist(request):
 def neiborhooddailydata(request):
     print(request.GET)
     communityid = request.GET.get("communityid") #communityid is VCommunity's id
-    sTime = request.GET.get("startTime")
-    eTIme = request.GET.get("endTime")
+    sTime = request.GET.get("sTime")[:10]
+    eTIme = request.GET.get("eTime")[:10]
     flag = request.GET.get("flag")
+    # print(sTime,eTIme)
+    realcommutid = VCommunity.objects.get(id=communityid).amrs_commutid #get real id
+
     today = datetime.datetime.today()
     if flag == "-1":    #上月
         last_month = datetime.date.today().replace(day=1) - datetime.timedelta(days=1)
         mon_str = last_month.strftime("%Y-%m")
-    else:
+    elif flag == "0":
         mon_str = today.strftime("%Y-%m")
-    realcommutid = VCommunity.objects.get(id=communityid).amrs_commutid #get real id
-    monthdata = HdbWatermeterDay.communityDailydetail(realcommutid,mon_str)
+    else:
+        dailydata = HdbWatermeterDay.communityDailyRange(realcommutid,sTime,eTIme)
+    
+    if flag == "1":
+        monthdata = dailydata
+    else:
+        monthdata = HdbWatermeterDay.communityDailydetail(realcommutid,mon_str)
+    # dailydata = HdbWatermeterDay.communityDailyRange(realcommutid,sTime,eTIme)
+    # print (monthdata)
+    # print (dailydata)
 
     return HttpResponse(json.dumps({"success":1,"monthdata":monthdata}))
 
@@ -576,6 +587,7 @@ def neiborhoodmonthdata(request):
     sMonth = request.GET.get("sMonth")
     eMonth = request.GET.get("eMonth")
     realcommutid = VCommunity.objects.get(id=communityid).amrs_commutid #get real id
+    print(communityid,realcommutid)
     monthdata = HdbWatermeterMonth.community_range_use(realcommutid,sMonth,eMonth)
 
     return HttpResponse(json.dumps({"success":1,"monthdata":monthdata}))

@@ -261,7 +261,7 @@ class DMABaseinfo(models.Model):
             else:
                 monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
             
-            # print(m.username,commaddr,monthly_use)
+            # print(commaddr,monthly_use)
             for k in monthly_in.keys():
                 if k in monthly_use.keys():
                     monthly_in[k] += monthly_use[k]
@@ -304,10 +304,10 @@ class DMABaseinfo(models.Model):
                 community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","amrs_commutid")[0]
                 community_id = community["amrs_commutid"]
                 monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
-
+                # print(community['name'],commaddr,community_id,monthly_use)
             else:
                 monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)
-            # print(m.username,commaddr,monthly_use)
+                # print(commaddr,monthly_use)
             for k in monthly_sale.keys():
                 if k in monthly_use.keys():
                     monthly_sale[k] += monthly_use[k]
@@ -326,6 +326,7 @@ class DMABaseinfo(models.Model):
                 community = VCommunity.objects.filter(id=commaddr).values("name","vconcentrators__commaddr","amrs_commutid")[0]
                 community_id = community["amrs_commutid"]
                 monthly_use = hdb_watermeter_flow_monthly(community_id,month_list)
+                # print(community['name'],commaddr,community_id,monthly_use)
 
             else:
                 monthly_use = Hdbflow_from_hdbflowmonth(commaddr,month_list) #HdbFlow_monthly(commaddr)

@@ -339,7 +339,7 @@ def Hdbflow_from_hdbflowday(commaddr,day_list):
     return daily_data
     
 # 计算小区日用水量：日统计表里面属于这个小区的表数据加起来
-def hdb_watermeter_month(communityid,hdate):
+def hdb_watermeter_daily(communityid,hdate):
     flows=HdbWatermeterDay.objects.filter(communityid=communityid,hdate=hdate).aggregate(Sum('dosage'))
     flow=flows['dosage__sum']
     if flow is None:
@@ -351,7 +351,7 @@ def hdb_watermeter_flow_daily(communityid,day):
     
     
     for m in day:
-        f = hdb_watermeter_month(communityid,m)
+        f = hdb_watermeter_daily(communityid,m)
         daily_data[m] = f
 
     return daily_data
