@@ -321,7 +321,7 @@ def Hdbflow_from_hdbflowday(commaddr,day_list):
     
     daily_data = {}
     
-    flows = HdbFlowDataDay.objects.filter(commaddr=commaddr).filter(hdate__range=[day_list[0],day_list[-1]]).values_list('hdate','dosage')
+    flows = HdbFlowDataDay.objects.filter(commaddr=commaddr).filter(hdate__range=[day_list[-1],day_list[0]]).values_list('hdate','dosage')
     # 一次获取整年的数据再按月统计，减少查询数据库次数，查询数据库比较耗时
     # print(list(day_list))
     dict_month = dict(flows)

@@ -68,6 +68,30 @@ class Command(BaseCommand):
             help='delete repeted data'
         )        
 
+        parser.add_argument(
+            '-d',
+            '--day',
+            type=str,
+            
+            help='query by day'
+        )
+
+        parser.add_argument(
+            '-h',
+            '--hour',
+            type=str,
+            
+            help='query by hour'
+        )
+
+        parser.add_argument(
+            '-m',
+            '--month',
+            type=str,
+            
+            help='query by month'
+        )
+
     def handle(self, *args, **options):
         
         t1=time.time()
@@ -128,6 +152,9 @@ def bigmeter_check(**options):
 
     print("sx_bigmeters count:",len(sx_bigmeters))
     print("amrs_bigmeters count:",len(amrs_bigmeters))
+
+    if options['month']:
+        print( options['month'])
     # 黄山市苏扬置业有限公司(文欣苑)监控表 18255954864
     # sx_flow = HdbFlowDataMonth.objects.using("shexian").filter(commaddr='18255954864',hdate__range=['2018-10','2019-04']).values('hdate','dosage')
     # for s in sx_flow:
