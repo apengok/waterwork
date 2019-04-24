@@ -253,6 +253,7 @@ def dmareport(request):
         leak = sum(monthly_leak_flow)   #漏损量
         leak /=10000
         
+        
         cxc = total - sale  #产销差 = 供水量-售水量
         #产销差率 = （供水量-售水量）/月供水量*100%
         if total != 0:
@@ -294,6 +295,8 @@ def dmareport(request):
                 m_uncount = monthly_uncount[m]/10000
                 m_total = m_in - m_out #供水量=进水总量-出水总量
                 m_leak= m_total - m_sale - m_uncount # 漏损量 = 供水量-售水量-未计费水量
+                if m_leak < 0:
+                    m_leak = 0
                 m_cxc = m_total - m_sale    #产销差 = 供水量-售水量
                 if m_total == 0:
                     m_cxc_percent = 0
@@ -360,6 +363,8 @@ def dmareport(request):
         cp = 0
         if monthly_water[i] != 0:
             cp = (total_monthly_water[i] - total_monthly_sale_flow[i])/total_monthly_water[i] *100
+            if cp < 0:
+                cp = 0
         data.append({
             "hdate":hdates[i],
             "dosage":total_monthly_sale_flow[i]/10000,

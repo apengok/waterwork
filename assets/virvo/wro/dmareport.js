@@ -682,7 +682,11 @@
                 for (var j = 0; j < dataListArray.length; j++) {// 排序后组装到图表
                     hdates.push(dataListArray[j][1]);
                     dosages.push(dataListArray[j][3]);
-                    leakages.push(dataListArray[j][6]);
+                    a = dataListArray[j][6];
+                    if(a<0){
+                        a = 0;
+                    }
+                    leakages.push(a);
                     uncharged.push(dataListArray[j][7]);
                     cp_month.push(dataListArray[j][8]);
                 }
