@@ -749,7 +749,7 @@ class HdbWatermeterDay(models.Model):
             else:
                 dailydata[day] += float(dosage)
         print("3.",time.time()-t1)
-
+        print(dailydata)
         return dailydata
 
     @classmethod

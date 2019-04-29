@@ -552,12 +552,19 @@ def watermeterlist(request):
 
 
 def neiborhooddailydata(request):
+    '''
+        无线抄表 日用水查询，查询小区某月每日用水量
+    '''
     print(request.GET)
     communityid = request.GET.get("communityid") #communityid is VCommunity's id
-    sTime = request.GET.get("sTime")[:10]
-    eTIme = request.GET.get("eTime")[:10]
+    # sTime = request.GET.get("sTime")[:10]
+    # eTIme = request.GET.get("eTime")[:10]
+    month = request.GET.get("month")
     flag = request.GET.get("flag")
     # print(sTime,eTIme)
+
+    if month is None or month == '':
+        month = today.strftime("%Y-%m")
     realcommutid = VCommunity.objects.get(id=communityid).amrs_commutid #get real id
 
     today = datetime.datetime.today()
@@ -567,12 +574,13 @@ def neiborhooddailydata(request):
     elif flag == "0":
         mon_str = today.strftime("%Y-%m")
     else:
-        dailydata = HdbWatermeterDay.communityDailyRange(realcommutid,sTime,eTIme)
+        mon_str = month
+        # dailydata = HdbWatermeterDay.communityDailyRange(realcommutid,sTime,eTIme)
     
-    if flag == "1":
-        monthdata = dailydata
-    else:
-        monthdata = HdbWatermeterDay.communityDailydetail(realcommutid,mon_str)
+    # if flag == "1":
+    #     monthdata = dailydata
+    # else:
+    monthdata = HdbWatermeterDay.communityDailydetail(realcommutid,mon_str)
     # dailydata = HdbWatermeterDay.communityDailyRange(realcommutid,sTime,eTIme)
     # print (monthdata)
     # print (dailydata)

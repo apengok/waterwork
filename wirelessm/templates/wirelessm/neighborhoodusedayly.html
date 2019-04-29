@@ -92,12 +92,17 @@
                                       <input id="commaddr" class="form-control" value="{{ commaddr }}" readonly="" type="hidden">
                                     </div>
                                     <label class="col-md-1 col-sm-3 control-label searchListSelect">时间：</label>
-                                    <div class="col-md-3 col-sm-8 searchListSelect">
+                                    <!-- <div class="col-md-3 col-sm-8 searchListSelect">
                                         <input style="cursor: pointer; background-color: #fafafa;"
                                             class="form-control layer-date laydate-icon"
                                             id="timeInterval" name="timeInterval" readonly />
                                         <label id="timeInterval-error" class="error" for="timeInterval" style="display: none;">开始时间请不要超过上个月一号</label>
-                                    </div>
+                                    </div> -->
+                                    <!-- 改为月选择器 -->
+                                    <div class="col-md-2 col-sm-3 searchListSelect">
+                                        <select class="form-control valid" id="select2" aria-invalid="false">
+                                        </select> 
+                                    </div> 
                                     <div class="col-md-3 control-label " id="dateSearchData">
                                         
                                         <button id="thismonthClick" type="button"class="btn btn-primary" name="-2" >本月  </button>

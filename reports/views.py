@@ -915,7 +915,10 @@ def biaowudata(request):
     cname = dict(commaddr_name)
     # 故障排行 alarmtype=13
     fault_count = 0
+    print('biaowudata:')
+    t1 = time.time()
     alams_sets = Alarm.objects.filter(alarmtype=13,commaddr__in=cname.keys()).exclude(commaddr="").values('commaddr').annotate(num_alrms=Count('id')).order_by('-num_alrms')[:5]
+    print('1.:',time.time() - t1)
     alarm_data = []
     for ad in alams_sets:
         name = cname[ad['commaddr']]
@@ -930,6 +933,7 @@ def biaowudata(request):
     # 口径统计
     dn_count = 0
     dn_sets = user_stations.values('meter__dn').annotate(num_dn=Count('id')).order_by('-num_dn')[:5]
+    print('2.:',time.time() - t1)
     dn_data = []
     for dd in dn_sets:
         name = dd['meter__dn']
@@ -942,6 +946,7 @@ def biaowudata(request):
     # 厂家统计 manufacturer
     manufacturer_count = 0
     manufacturer_sets = user_stations.values('meter__manufacturer').annotate(num_manufacturer=Count('id')).order_by('-meter__manufacturer')
+    print('3.:',time.time() - t1)
     manufacturer_data = []
     for md in manufacturer_sets:
         name = md['meter__manufacturer']
@@ -955,6 +960,7 @@ def biaowudata(request):
     # 类型统计
     metertype_count = 0
     metertype_sets = user_stations.values('meter__mtype').annotate(num_type=Count('id')).order_by('-meter__mtype')
+    print('4.:',time.time() - t1)
     metertype_data = []
     for ud in metertype_sets:
         name = ud['meter__mtype']
@@ -978,6 +984,7 @@ def biaowudata(request):
     # 用水性质
     usertype_count = 0
     usertype_sets = user_stations.values('usertype').annotate(num_type=Count('id')).order_by('-usertype')
+    print('5.:',time.time() - t1)
     usertype_data = []
     for ud in usertype_sets:
         name = ud['usertype']
@@ -993,13 +1000,17 @@ def biaowudata(request):
 
     # 最大流量
     max_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Max('dosage'))
+    print('6.:',time.time() - t1)
     mon_max_flow = max_flows["dosage__max"]
     max_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_max_flow).values("commaddr")[0]["commaddr"]
+    print('7.:',time.time() - t1)
     max_flow_station = cname[max_commaddr]
     # 最小流量
     min_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Min('dosage'))
+    print('8.:',time.time() - t1)
     mon_min_flow = min_flows["dosage__min"]
     min_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_min_flow).values("commaddr")[0]["commaddr"]
+    print('9.:',time.time() - t1)
     min_flow_station = cname[min_commaddr]
 
 

@@ -12,10 +12,11 @@ import threading
 # import Queue
 from dmam.models import VConcentrator,VWatermeter,VCommunity,VSecondWater
 from entm.models import Organizations
-
+import MySQLdb
 
 from functools import wraps
 from django.db import connection
+from django.db.utils import IntegrityError
 
 def db_auto_reconnect(func):
     """Auto reconnect db when mysql has gone away."""
@@ -66,6 +67,14 @@ class Command(BaseCommand):
             dest='delete',
             default=False,
             help='delete repeted data'
+        )    
+
+        parser.add_argument(
+            '--realtime',
+            action='store_true',
+            dest='realtime',
+            default=False,
+            help='realtime repeted data'
         )        
 
         parser.add_argument(
@@ -77,7 +86,6 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            '-h',
             '--hour',
             type=str,
             
@@ -92,6 +100,14 @@ class Command(BaseCommand):
             help='query by month'
         )
 
+        parser.add_argument(
+            '--syncbigmeter',
+            action='store_true',
+            dest='syncbigmeter',
+            default=False,
+            help='syncbigmeter  data'
+        )  
+
     def handle(self, *args, **options):
         
         t1=time.time()
@@ -101,6 +117,24 @@ class Command(BaseCommand):
 
         if options['bigmeter']:
             bigmeter_check(**options)
+
+        if options['syncbigmeter']:
+            syncbigmeter(**options)
+
+# 按月同步数据
+def syncbigmeter(**options):
+    month = options['month']
+    if not month:
+        print("should month")
+        return
+
+    sx_bigmeters = Bigmeter.objects.using("shexian").values_list('commaddr','username')
+    sx_dict = dict(sx_bigmeters)
+
+    for commaddr,name in sx_dict.items():
+        check_bigmeter_flowdata_month(commaddr,name,month)
+        # t = threading.Thread(target=check_bigmeter_flowdata_month,args=(commaddr,name,month))
+        # t.start()
              
 
 # unique_together = (('communityid', 'nodeaddr', 'wateraddr'),)
@@ -144,32 +178,158 @@ def watermeter_check(**options):
 
 def bigmeter_check(**options):
 
-    sx_bigmeters = Bigmeter.objects.using("shexian").values('commaddr','username')
+    month = options['month']
+    day = options['day']
+    hour = options['hour']
+    realtime = options['realtime']
+
+    sx_bigmeters = Bigmeter.objects.using("shexian").values_list('commaddr','username')
     sx_commaddr = []
     for s in sx_bigmeters:
-        sx_commaddr.append(s["commaddr"])
-    amrs_bigmeters = Bigmeter.objects.using("zncb").filter(commaddr__in=sx_commaddr).values('commaddr','username')
+        sx_commaddr.append(s[0])
+    amrs_bigmeters = Bigmeter.objects.using("zncb").filter(commaddr__in=sx_commaddr).values_list('commaddr','username')
+
+    sx_dict = dict(sx_bigmeters)
+    amrs_dict = dict(amrs_bigmeters)
 
     print("sx_bigmeters count:",len(sx_bigmeters))
     print("amrs_bigmeters count:",len(amrs_bigmeters))
 
-    if options['month']:
-        print( options['month'])
-    # 黄山市苏扬置业有限公司(文欣苑)监控表 18255954864
-    # sx_flow = HdbFlowDataMonth.objects.using("shexian").filter(commaddr='18255954864',hdate__range=['2018-10','2019-04']).values('hdate','dosage')
-    # for s in sx_flow:
-    #     hdate=s['hdate']
-    #     dosage = s['dosage']
-        
-    #     v = HdbFlowDataMonth.objects.filter(commaddr='18255954864',hdate=hdate)
-    #     # print(hdate,dosage,v)
-    #     if v :
-    #         v = v.first()
-    #         if v.dosage != dosage:
-    #             print (v.hdate,v.dosage,"(",dosage,")")
-    #             v.dosage = dosage
-    #             v.save()
+    # 检查和同步歙县数据库bigmeter是否一致
+    for commaddr,name in sx_dict.items():
+        amrs_name = amrs_dict.get(commaddr,None)
+        if amrs_name is None:
+            sb = Bigmeter.objects.using("shexian").filter(commaddr=commaddr).values()[0]
+            if "id" in sb:
+                del sb["id"]
+            am = Bigmeter.objects.create(**sb)
+            if hasattr(am,'username'):
+                amrs_name = am.username
+        # fmt = '{}:{}\t\t\t|{}'.format(commaddr,name,amrs_name)
+        # print(fmt)
 
-    #     else:
-    #         HdbFlowDataMonth.objects.create(commaddr='18255954864',hdate=hdate,dosage=dosage)
+
+
+        if month:
+            
+            check_bigmeter_flowdata_month(name,commaddr,month)
+
+        if day:
+            
+            check_bigmeter_flowdata_day(name,commaddr,day)
+            
+
+            if hour:
+                check_bigmeter_flowdata_hour(name,commaddr,day)
+
+            if realtime:
+                check_bigmeter_realtimedata(name,commaddr,day)
+
+
+def check_bigmeter_flowdata_month(name,commaddr,month):
+    sx_flow = HdbFlowDataMonth.objects.using("shexian").filter(commaddr=commaddr,hdate=month).values()
+    for s in sx_flow:
+        if "id" in s:
+            del s["id"]
+        hdate=s['hdate']
+        dosage = s['dosage']
+        
+        v = HdbFlowDataMonth.objects.filter(commaddr=commaddr,hdate=hdate)
+        # print(hdate,dosage,v)
+        if v :
+            v0 = v.first()
+            fmt = '{}({})\t:{}\t{}'.format(name,commaddr,dosage,v0.dosage)
+            if v0.dosage != dosage:
+                fmt = '{}({})\t:{}\t{}'.format(name,commaddr,dosage,v0.dosage)
+                v.update(**s)
+                
+
+        else:
+            
+            HdbFlowDataMonth.objects.create(**s)
+            fmt = '{}({})\t:{}\t{}'.format(name,commaddr,dosage,'None')
+
+        print(fmt)
+
+    # day
+    check_bigmeter_flowdata_day(name,commaddr,month)
+
+
+
+def check_bigmeter_flowdata_day(name,commaddr,day):
+    sx_flow = HdbFlowDataDay.objects.using("shexian").filter(commaddr=commaddr,hdate__startswith=day).values()
+    for s in sx_flow:
+        if "id" in s:
+            del s["id"]
+        hdate=s['hdate']
+        dosage = s['dosage']
+        
+        v = HdbFlowDataDay.objects.filter(commaddr=commaddr,hdate=hdate)
+        # print(hdate,dosage,v)
+        if v :
+            v0 = v.first()
+            fmt = '{}({})\t:{}\t{}'.format(name,commaddr,dosage,v0.dosage)
+            if v0.dosage != dosage:
+                fmt = '{}({})\t:{}\t{} noequal ,update'.format(name,commaddr,dosage,v0.dosage)
+                v.update(**s)
+                
+
+        else:
+            fmt = '{}({})\t:{}\t{}'.format(name,commaddr,dosage,'None')
+            try:
+                HdbFlowDataDay.objects.create(**s)
+            except IntegrityError as e: # django.db.utils.IntegrityError: (1062, "Duplicate entry '7865124' for key 'PRIMARY'")
+                
+                if e.args[0] == 1062:
+                    HdbFlowDataDay.objects.filter(commaddr=commaddr,hdate=hdate).update(**s)
+                    # print("\t{}".format(e))
+                    print("{}--{}".format(v,e,e.args[0]))
+            except Exception as e:
+                print("=---==qwer30q0er9",type(e),type(e.args),e.args)
+
+        check_bigmeter_flowdata_hour(name,commaddr,hdate)
+
+
+def check_bigmeter_flowdata_hour(name,commaddr,day):
+    sx_flow_hours = HdbFlowDataHour.objects.using("shexian").filter(commaddr=commaddr,hdate__startswith=day).values()
+    for s in sx_flow_hours:
+        if "id" in s:
+            del s["id"]
+        hdate = s['hdate']
+        dosage = s['dosage']
+
+        v = HdbFlowDataHour.objects.filter(commaddr=commaddr,hdate=hdate)
+        if v:
+            v0 = v.first()
+
+            if v0.dosage != dosage:
+                fmt = '{}({})-{}\t:{}\t|{} noequal ,update'.format(name,commaddr,hdate,dosage,v0.dosage)
+                print(fmt)
+                v.update(**s)
+        else:
+            HdbFlowDataHour.objects.create(**s)
+            fmt = '{}({})-{}\t:{}\t created'.format(name,commaddr,hdate,dosage)
+            print(fmt)
     
+
+def check_bigmeter_realtimedata(name,commaddr,day):
+
+    sx_flow_rt = HdbFlowData.objects.using("shexian").filter(commaddr=commaddr,readtime__startswith=day).values()
+    for s in sx_flow_rt:
+        if "id" in s:
+            del s["id"]
+        readtime = s['readtime']
+        flux = s['flux']
+
+        v = HdbFlowData.objects.filter(commaddr=commaddr,readtime=readtime)
+        if v:
+            v0 = v.first()
+
+            if v0.flux != flux:
+                fmt = '{}({})-{}\t:{}\t|{} noequal ,update'.format(name,commaddr,readtime,flux,v0.flux)
+                print(fmt)
+                v.update(**s)
+        else:
+            HdbFlowData.objects.create(**s)
+            fmt = '{}({})-{}\t:{}\t created'.format(name,commaddr,readtime,flux)
+            print(fmt)

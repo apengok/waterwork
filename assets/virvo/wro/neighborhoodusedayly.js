@@ -124,14 +124,17 @@
                 layer.msg("请选择小区")
                 return
             }
-            communityDaily.estimate();
+            //communityDaily.estimate();
             if(flag==1){
                 
             }
-            console.log(startTime,endTime)
+            
+            var month1 = $('#select2').val();
+            
 
             url = '/wirelessm/neiborhooddailydata/';
-            data = {"communityid":communityid,"flag":flag,"sTime":startTime,"eTime":endTime};
+            //data = {"communityid":communityid,"flag":flag,"sTime":startTime,"eTime":endTime};
+            data = {"communityid":communityid,"flag":flag,"month":month1};
             json_ajax("GET",url,"json",true,data,communityDaily.requestDataCallback);
 
         },
@@ -150,7 +153,7 @@
 
                 dm = data.monthdata;
                 $.each(dm,function(k,v){
-                    console.log(k,":",v)
+                    // console.log(k,":",v)
                     d = k.substring(8,10)
                     $("#d"+d).text(v)
                     if(v<0){
@@ -498,17 +501,40 @@
             return newArr
         },
 
+        renderSelect: function(id){ //时间下拉框函数
+            var select = $(id);
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var tmpl = '<option value="$name">$name</option>';
+            var add0 = function(n){
+                if(n<10){
+                    return '0' + n.toString();
+                }
+                return n.toString()
+            };
+            for(var i=0;i<12;i++){
+                if(i<month){
+                    select.append($(tmpl.replace(/\$name/g, year + '-' + add0(month - i))));
+                }else{
+                    select.append($(tmpl.replace(/\$name/g, (year -1)  + '-' + add0(12 - i + month))));
+                }
+            }
+        },
+
     }
 
     $(function(){
         $('input').inputClear();
         communityTree.init();
         communityDaily.init();
+
+        communityDaily.renderSelect('#select2');
         
-        $('#timeInterval').dateRangePicker({dateLimit:30});
-        communityDaily.getsTheCurrentTime();  
-        communityDaily.startDay(-30);  
-        $('#timeInterval').val(startTime + '--' + endTime);
+        // $('#timeInterval').dateRangePicker({dateLimit:30});
+        // communityDaily.getsTheCurrentTime();  
+        // communityDaily.startDay(-30);  
+        // $('#timeInterval').val(startTime + '--' + endTime);
 
         $('input').inputClear().on('onClearEvent',function(e,data){
             var id = data.id;
