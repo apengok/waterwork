@@ -555,7 +555,7 @@ def neiborhooddailydata(request):
     '''
         无线抄表 日用水查询，查询小区某月每日用水量
     '''
-    print(request.GET)
+    
     communityid = request.GET.get("communityid") #communityid is VCommunity's id
     # sTime = request.GET.get("sTime")[:10]
     # eTIme = request.GET.get("eTime")[:10]

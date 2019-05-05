@@ -15,6 +15,7 @@ urlpatterns = [
 
     # 统计报表 --日志查询
     url(r'^querylog/?$',views.QuerylogView.as_view(),name='querylog'),
+    url(r'^querylogdata/?$',views.querylogdata,name='querylogdata'),
     
     # 报警报表
     url(r'^alarm/?$',views.AlarmView.as_view(),name='alarm'),

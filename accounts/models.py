@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser,PermissionsMixin,Group,_user_has_perm
 )
-
+from django.contrib.auth.signals import user_logged_in
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
@@ -381,6 +381,17 @@ class User(AbstractBaseUser,PermissionsMixin):
             
         return fencelist
 
+    # 组织下用户Login 记录
+    def logrecord_list_queryset(self,q,stime,etime):
+        loglist = LoginRecord.objects.none()
+        #下级组织的用户
+        sub_organs = self.belongto.sub_organizations(include_self=True)
+        # user | merge two QuerySet
+        for g in sub_organs:
+            loglist |= g.loginrecord_set.search(q,stime,etime)
+            
+        return loglist
+
     #组织及下属组织下的二供
     def secondwater_list_queryset(self,q):
         # userlist = []
@@ -464,4 +475,73 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
 
 pre_save.connect(pre_save_post_receiver, sender=User)
 
-       
+
+
+
+
+class LoginRecordQuerySet(models.query.QuerySet):
+    def search(self, query,stime,etime):
+        if query:
+            query = query.strip()
+            return self.filter(
+                Q(user__user_name__icontains=query) |
+                Q(signin_time__range=[stime,etime])
+                # Q(meter__simid__simcardNumber__iexact=query)
+                ).distinct()
+        return self
+
+
+class LoginRecordManager(models.Manager):
+    def get_queryset(self):
+        return LoginRecordQuerySet(self.model, using=self._db)
+
+    def search(self, query,stime,etime): #RestaurantLocation.objects.search()
+        return self.get_queryset().search(query,stime,etime)
+
+class LoginRecord(models.Model):
+    user        = models.ForeignKey(User,on_delete=models.CASCADE)       
+    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE)     
+    # create_date         = models.DateTimeField(db_column='create_date', auto_now_add=True)  # Field name made lowercase.
+    signin_time = models.DateTimeField(db_column='signin time', auto_now=True)  # Field name made lowercase.
+    ip          = models.CharField(max_length=32,blank=True,null=True)
+    user_agent  = models.CharField(max_length=256,blank=True,null=True)
+    log_from    = models.CharField(max_length=256,blank=True,null=True)
+    description = models.TextField(blank=True)
+    
+    objects     = LoginRecordManager()
+
+    class Meta:
+        managed = True
+        db_table = 'loginrecord'
+
+
+
+
+
+def user_login_record(sender, user, request, **kwargs):
+    print('sender',sender)
+    print('user',user,type(user),user.belongto,type(user.belongto))
+    # print('request',request.META)
+    print('**kwargs',kwargs)
+    
+    user_agent = request.META['HTTP_USER_AGENT']
+
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        ip =  request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.META['REMOTE_ADDR']
+    
+    print("user:{} ip:{} \nuser_agent:{}".format(user,ip,user_agent))
+
+    record = {
+        "user":user,
+        "belongto":user.belongto,
+        "ip":ip,
+        "user_agent" : user_agent,
+        "description":"用户 {} 登录".format(user.user_name),
+        "log_from":"平台操作"
+    }
+
+    LoginRecord.objects.create(**record)
+
+user_logged_in.connect(user_login_record)    

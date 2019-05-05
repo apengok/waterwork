@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from .models import User,MyRoles
+from .models import User,MyRoles,LoginRecord
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -44,10 +44,16 @@ class UserAdmin(BaseUserAdmin):
 class MyRoleAdmin(admin.ModelAdmin):
     list_display=  ('name','rid','notes','uid','belongto','permissionTree')
 
+
+class LoginRecordAdmin(admin.ModelAdmin):
+    list_display = ("signin_time","ip","user","description","log_from")
+
+
 admin.site.register(User, UserAdmin)
 
 admin.site.register(MyRoles,MyRoleAdmin)
 
 admin.site.register(Permission)
+admin.site.register(LoginRecord,LoginRecordAdmin)
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)

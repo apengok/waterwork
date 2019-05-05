@@ -53,6 +53,7 @@ class UserAdminCreationForm(forms.ModelForm):
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super(UserAdminCreationForm, self).save(commit=False)
+        print("admin crate user password:",self.cleaned_data["password1"])
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
@@ -99,7 +100,7 @@ class LoginForm(forms.Form):
         data = self.cleaned_data
         user_name  = data.get("user_name")
         password  = data.get("password")
-        
+        print('request:',user_name,password)
         captchaCode = data.get('captchaCode') or ''
         if len(captchaCode) == 0:
             print( '请把滑块滑到右边')

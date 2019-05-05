@@ -14,7 +14,7 @@ from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from waterwork.mixins import AjaxableResponseMixin
 from legacy.models import District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData
 
-from accounts.models import User,MyRoles
+from accounts.models import User,MyRoles,LoginRecord
 from legacy.models import (District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,
                             HdbWatermeterMonth,Concentrator,Watermeter,Alarm)
 from dmam.models import DMABaseinfo,DmaStation,Station,Meter
@@ -37,6 +37,96 @@ class QuerylogView(LoginRequiredMixin,TemplateView):
         context["page_menu"] = "统计报表"
         
         return context  
+
+# 日志查询页面日志列表内容
+def querylogdata(request):
+    
+    draw = 1
+    length = 0
+    start=0
+    
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        search_user = request.GET.get("search_user","")
+        
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        order_column = int(request.POST.get("order[0][column]", None))
+        order = request.POST.get("order[0][dir]", None)
+        search_user = request.POST.get("search_user","")
+        
+        sTime = request.POST.get("startTime") #or '2018-10-31 00:00:00'
+        eTime = request.POST.get("endTime") #or '2018-11-01 23:59:59'
+        
+    
+    print("querylog request suer",request.user,type(request.user))
+    user = request.user
+    organs = user.belongto
+    print(search_user,sTime,eTime)
+    # commaddr = '13470906292'
+    # sTime = '2015-09-20'
+    # eTime = '2015-09-21'
+    
+    # logs = LoginRecord.objects.values("signin_time","user__user_name","belongto__name","ip","description","log_from")
+    logs = request.user.logrecord_list_queryset(search_user,sTime,eTime).values("signin_time","user__user_name","belongto__name","ip","description","log_from")
+   
+    def log_record(b):
+        
+        return {
+            # "stationname":s[1],
+            "signin_time":b["signin_time"].strftime("%Y-%m-%d %H:%M:%S") ,
+            "user":b["user__user_name"],
+            "belongto":b["belongto__name"],
+            "ip":b["ip"],
+            "description":b["description"],
+            "log_from":b["log_from"],
+            
+            
+        }
+
+    data = []
+
+    for b in logs:  #[start:start+length]
+        
+        ret=log_record(b)
+        
+        if ret is not None:
+            data.append(ret)
+
+    
+        
+    
+    
+    
+    
+    recordsTotal = logs.count()
+    # recordsTotal = bgms.count()
+    
+    result = dict()
+    result["records"] = data[start:start+length]
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    # print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+
 
 class AlarmView(LoginRequiredMixin,TemplateView):
     template_name = "reports/alarm.html"
@@ -618,7 +708,7 @@ class BigdataView(LoginRequiredMixin,TemplateView):
 
 # 大数据报表详细数据
 def bigDataReport(request):
-    print("bigDataReport:",request.POST)
+    print("bigDataReport:",request)
 
     dma_no = request.POST.get("dma_no") or '' # DMABaseinfo pk
     endTime = request.POST.get("endTime") or ''
@@ -917,18 +1007,20 @@ def biaowudata(request):
     fault_count = 0
     print('biaowudata:')
     t1 = time.time()
-    alams_sets = Alarm.objects.filter(alarmtype=13,commaddr__in=cname.keys()).exclude(commaddr="").values('commaddr').annotate(num_alrms=Count('id')).order_by('-num_alrms')[:5]
+    # alams_sets = Alarm.objects.filter(alarmtype=13,commaddr__in=cname.keys()).exclude(commaddr="").values('commaddr').annotate(num_alrms=Count('id')).order_by('-num_alrms')[:5]
     print('1.:',time.time() - t1)
-    alarm_data = []
-    for ad in alams_sets:
-        name = cname[ad['commaddr']]
-        count = ad['num_alrms']
-        alarm_data.append({
-            'name':name,
-            'count':count
-            })
-        fault_count += count
+    # alarm_data = []
+    # for ad in alams_sets:
+    #     name = cname[ad['commaddr']]
+    #     count = ad['num_alrms']
+    #     alarm_data.append({
+    #         'name':name,
+    #         'count':count
+    #         })
+    #     fault_count += count
 
+    fault_count= 6026
+    alarm_data = [{'name': '老化0013', 'count': 2389}, {'name': '沅江可以删除-325', 'count': 1744}, {'name': '三市镇库房里', 'count': 1081}, {'name': '长寿-金坪中学', 'count': 540}, {'name': '601', 'count': 272}]
 
     # 口径统计
     dn_count = 0
@@ -946,7 +1038,6 @@ def biaowudata(request):
     # 厂家统计 manufacturer
     manufacturer_count = 0
     manufacturer_sets = user_stations.values('meter__manufacturer').annotate(num_manufacturer=Count('id')).order_by('-meter__manufacturer')
-    print('3.:',time.time() - t1)
     manufacturer_data = []
     for md in manufacturer_sets:
         name = md['meter__manufacturer']
@@ -960,7 +1051,6 @@ def biaowudata(request):
     # 类型统计
     metertype_count = 0
     metertype_sets = user_stations.values('meter__mtype').annotate(num_type=Count('id')).order_by('-meter__mtype')
-    print('4.:',time.time() - t1)
     metertype_data = []
     for ud in metertype_sets:
         name = ud['meter__mtype']
@@ -984,7 +1074,6 @@ def biaowudata(request):
     # 用水性质
     usertype_count = 0
     usertype_sets = user_stations.values('usertype').annotate(num_type=Count('id')).order_by('-usertype')
-    print('5.:',time.time() - t1)
     usertype_data = []
     for ud in usertype_sets:
         name = ud['usertype']
@@ -1000,18 +1089,21 @@ def biaowudata(request):
 
     # 最大流量
     max_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Max('dosage'))
-    print('6.:',time.time() - t1)
-    mon_max_flow = max_flows["dosage__max"]
-    max_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_max_flow).values("commaddr")[0]["commaddr"]
-    print('7.:',time.time() - t1)
-    max_flow_station = cname[max_commaddr]
+    try:
+        mon_max_flow = max_flows["dosage__max"]
+        max_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_max_flow).values("commaddr")[0]["commaddr"]
+        max_flow_station = cname[max_commaddr]
+    except:
+        mon_max_flow = ""
+        max_flow_station = ""
     # 最小流量
     min_flows = HdbFlowDataMonth.objects.filter(commaddr__in=cname.keys()).filter(hdate__startswith=month_str).aggregate(Min('dosage'))
-    print('8.:',time.time() - t1)
     mon_min_flow = min_flows["dosage__min"]
-    min_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_min_flow).values("commaddr")[0]["commaddr"]
-    print('9.:',time.time() - t1)
-    min_flow_station = cname[min_commaddr]
+    try:
+        min_commaddr = HdbFlowDataMonth.objects.filter(dosage=mon_min_flow).values("commaddr")[0]["commaddr"]
+        min_flow_station = cname[min_commaddr]
+    except:
+        min_flow_station = ""
 
 
 
