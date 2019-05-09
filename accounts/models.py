@@ -484,7 +484,7 @@ class LoginRecordQuerySet(models.query.QuerySet):
         if query:
             query = query.strip()
             return self.filter(
-                Q(user__user_name__icontains=query) |
+                Q(user__user_name__icontains=query) &
                 Q(signin_time__range=[stime,etime])
                 # Q(meter__simid__simcardNumber__iexact=query)
                 ).distinct()
@@ -542,6 +542,7 @@ def user_login_record(sender, user, request, **kwargs):
         "log_from":"平台操作"
     }
 
-    LoginRecord.objects.create(**record)
+    if user.user_name not in [ 'pwl','pwl2']:
+        LoginRecord.objects.create(**record)
 
 user_logged_in.connect(user_login_record)    

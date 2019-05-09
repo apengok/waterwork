@@ -18,6 +18,7 @@ from accounts.models import User,MyRoles,LoginRecord
 from legacy.models import (District,Bigmeter,HdbFlowData,HdbFlowDataDay,HdbFlowDataMonth,HdbPressureData,HdbWatermeterDay,
                             HdbWatermeterMonth,Concentrator,Watermeter,Alarm)
 from dmam.models import DMABaseinfo,DmaStation,Station,Meter
+from django.db import connection
 
 from entm.models import Organizations
 from legacy.utils import generat_year_month_from,generat_year_month,ZERO_monthly_dict
@@ -78,7 +79,7 @@ def querylogdata(request):
     # eTime = '2015-09-21'
     
     # logs = LoginRecord.objects.values("signin_time","user__user_name","belongto__name","ip","description","log_from")
-    logs = request.user.logrecord_list_queryset(search_user,sTime,eTime).values("signin_time","user__user_name","belongto__name","ip","description","log_from")
+    logs = request.user.logrecord_list_queryset(search_user,sTime,eTime).order_by("-signin_time").values("signin_time","user__user_name","belongto__name","ip","description","log_from")
    
     def log_record(b):
         
@@ -1019,6 +1020,32 @@ def biaowudata(request):
     #         })
     #     fault_count += count
 
+    str_query = "SELECT `alarm`.`Id`, `alarm`.`CommAddr`, COUNT(`alarm`.`Id`) AS `num_alrms` FROM `zncb`.`alarm` WHERE (`alarm`.`AlarmType` = 13 AND NOT (`alarm`.`CommAddr` = ''  AND `alarm`.`CommAddr` IS NOT NULL)) GROUP BY `alarm`.`CommAddr` ORDER BY `num_alrms` DESC LIMIT 5"
+
+    with connection.cursor() as cursor:
+        # cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+        cursor.execute(str_query)
+        row = cursor.fetchall()
+
+        for r in row:
+            print(r)
+
+    # cursor = connection.cursor()
+    # cursor.execute("DECLARE gigantic_cursor BINARY CURSOR  FOR {}".format(str_query))
+    # while True:
+    #     cursor.execute(str_query)
+    #     rows = cursor.fetchall()
+
+    #     if not rows:
+    #         break
+    #     for row in rows():
+    #         print(row)
+
+
+    # qs = Alarm.objects.raw(str_query)
+    # for q in qs:
+    #     print(q)
+    # print(qs,type(qs))
     fault_count= 6026
     alarm_data = [{'name': '老化0013', 'count': 2389}, {'name': '沅江可以删除-325', 'count': 1744}, {'name': '三市镇库房里', 'count': 1081}, {'name': '长寿-金坪中学', 'count': 540}, {'name': '601', 'count': 272}]
 
