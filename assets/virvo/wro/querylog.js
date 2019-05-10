@@ -258,9 +258,10 @@
             number = num;
             querylog.getsTheCurrentTime();
             
-            querylog.startDay(num)
-            $('#timeInterval').val(startTime + '--' + endTime);
-            
+            if(num != 1){
+                querylog.startDay(num)
+                $('#timeInterval').val(startTime + '--' + endTime);
+            }
             querylog.estimate();
 
             myTable.requestData();

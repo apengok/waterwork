@@ -481,14 +481,12 @@ pre_save.connect(pre_save_post_receiver, sender=User)
 
 class LoginRecordQuerySet(models.query.QuerySet):
     def search(self, query,stime,etime):
-        if query:
-            query = query.strip()
-            return self.filter(
+        return self.filter(
                 Q(user__user_name__icontains=query) &
                 Q(signin_time__range=[stime,etime])
                 # Q(meter__simid__simcardNumber__iexact=query)
                 ).distinct()
-        return self
+        
 
 
 class LoginRecordManager(models.Manager):
