@@ -10,6 +10,7 @@ app_name = 'gis'
 urlpatterns = [
     
     url(r'^$', TemplateView.as_view(template_name='gis/pipelinequery.html')),
+    url(r'^pipeline/$', TemplateView.as_view(template_name='gis/pipeline_home.html')),
 
     
 
