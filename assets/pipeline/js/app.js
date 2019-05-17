@@ -1,6 +1,10 @@
 
 var plotDraw, plotEdit, drawOverlay, drawStyle;
 
+// var WEBSITE_ROOT='http://192.168.1.145:8000/gis/';
+var WEBSITE_ROOT='http://192.168.1.111:8080/pipeLine/';
+
+
 /*============================设备管线部分================================*/
 
 var pipe_line_style = new ol.style.Style({
@@ -50,17 +54,17 @@ var sat_background = new appLayer({
 	fromProject: "EPSG:102100",
 	toProject: "EPSG:3857"
 })
-			
+
 //卫星路网数据
 var sat_data = new appLayer({
-	urls : ['http://t0.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
-	         'http://t1.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
-			 'http://t2.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
-			 'http://t3.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
-			 'http://t4.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
-			 'http://t5.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
-			 'http://t6.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
-			 'http://t7.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'],
+	urls : ['http://t0.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+	         'http://t2.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+			 'http://t3.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+			 'http://t4.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+			 'http://t5.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+			 'http://t6.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+			 'http://t7.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+			 'http://t1.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5'],
 	mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
 	tilePixelRatio: 1,
 	fromProject: "EPSG:900913",
@@ -76,6 +80,7 @@ var sat_group = new ol.layer.Group({
 	mapType: ol.control.MapType.SATELLITE_MAP,
 	layers : arrSat
 });
+
 
 /*============================地形图层================================*/
 var normal_background = new appLayer({
@@ -181,15 +186,14 @@ var layerswitch = new ol.control.LayerSwitch({
 
 
 
-var center = [118.41047,29.86299];   //歙县中心点
+var center = [118.39469563,29.888188578];
 //var center = [118.47150,29.91398];
-// var center = [114.18681539,29.014543304];  //临时演示用
 var map = new ol.Map({
 	view: new ol.View({
 		center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
 		maxZoom : 26,
 		minZoom : 13,
-		zoom: 13
+		zoom: 16
 		//zoom: 18
 	}),
 	controls: ol.control.defaults({ attribution: false }).extend([attribution]),
@@ -303,11 +307,12 @@ select.on('select', function(e) {
 	}
 	
 	$.ajax({
-		url: 'getRropData',
-		data: "id="+feature.values_.id+"&className=" + feature.values_.className ,
+		url: WEBSITE_ROOT + 'getTopoByNode',
+		data: "id="+feature.values_.id ,//+"&className=" + feature.values_.className ,
 		type: 'GET',
 		success: function(res){
 			var data = Ext.util.JSON.decode(res);
+			console.log(data);
 			var html = '<table>';
 			if(feature.values_.className == 'ws_pipe') {
 				html += "<tr>";
@@ -317,7 +322,7 @@ select.on('select', function(e) {
 				
 				html += "<tr>";
 				html += "<td width='60px' align='left'>编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].industry_code + "</td>";
+				html += "<td width='120px' align='left'>"+ data[0].industryCode + "</td>";
 						
 				html += "</tr>";
 
@@ -398,7 +403,38 @@ select.on('select', function(e) {
 				html += "<td width='120px' align='left'>"+ data[0].road + "</td>";
 						
 				html += "</tr>";
-			}else{
+			}else if(feature.values_.className == 'ws_flow_meter'){
+				html +="<tr>";
+				html +="<td width='60px' align='left'>节点类型:</td>";
+				html +="<td width='120px' align='left'>"+ language[feature.values_.className]  + "</td>";
+						
+				html +="</tr>";
+				
+				html += "<tr>";
+				html += "<td width='60px' align='left'>编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</td>";
+				html += "<td width='120px' align='left'>"+ data.features[0].properties.industryCode + "</td>";
+						
+				html += "</tr>";
+
+				html +="<tr>";
+				html +="<td width='60px' align='left'>口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;径:</td>";
+				html +="<td width='120px' align='left'>"+ feature.values_.caliber + "</td>";
+						
+				html +="</tr>";
+
+				html +="<tr>";
+				html +="<td width='60px' align='left'>管&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材:</td>";
+				html +="<td width='120px' align='left'>"+ feature.values_.length + "</td>";
+						
+				html +="</tr>";
+
+				html +="<tr>";
+				html +="<td width='60px' align='left'>埋&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;深:</td>";
+				html +="<td width='120px' align='left'>"+ feature.values_.endDepth + "</td>";
+						
+				html +="</tr>";
+			}
+			else{
 				
 				html +="<tr>";
 				html +="<td width='60px' align='left'>节点类型:</td>";
@@ -478,6 +514,7 @@ select.on('select', function(e) {
 	});
 });
 
+console.log('fuck')
 
 var attrSelect = new ol.control.Toggle({	
     html: '<i class="fa fa-hand-pointer-o fa-2x" ></i>',
@@ -499,7 +536,7 @@ var burstingselect = new ol.interaction.Select({
 });
 
 var burstingAnalysis = new ol.control.Toggle({	
-    html: '<i class="fa fa-podcast fa-2x" ></i>',
+    html: '<i class="fa fa-podcast fa-2x" >alkdsjfeioeuqwr</i>',
 	title: '爆管分析',
     interaction: burstingselect
 });
@@ -744,10 +781,18 @@ var water_well_style = new ol.style.Style({
 	}))
 });
 
+//流量计
+var flow_meter_img_src = $ctx + '/img/ws_flow_meter.png';
+var flow_meter_style = new ol.style.Style({
+    image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+		src: flow_meter_img_src
+	}))
+});
+
 var pipe_layer_32 = new pipeLineAppLayer({
 	type : 'ws_pipe',
 	name : '管线层',
-	isLabel: true,
+	isLabel: false,
 	style : pipe_line_style
 });
 /*
@@ -927,14 +972,22 @@ var water_well_layer = new pipeLineAppLayer({
 	style : water_well_style
 });
 
+var flow_meter_layer = new pipeLineAppLayer({
+	type : 'ws_flow_meter',
+	name : '流量计层',
+	minZoom : 16,
+	style : flow_meter_style
+});
+
 var layers = new ol.Collection();
 //layers.push(pipe_line_group2);
 
 layers.push(pipe_layer_32);
-layers.push(valve_layer);
-layers.push(fire_hydrant_layer);
-layers.push(valve_well_layer);
-layers.push(water_well_layer);
+// layers.push(valve_layer);
+// layers.push(fire_hydrant_layer);
+// layers.push(valve_well_layer);
+// layers.push(water_well_layer);
+layers.push(flow_meter_layer);
 
 
 
@@ -1028,19 +1081,19 @@ var sxzxc_layer = new ol.layer.SXZDT({
 
 var layers1 = new ol.Collection();
 
-layers1.push(dmxc_layer);
-layers1.push(fzxc_layer);
-layers1.push(jtxc_layer);
-layers1.push(sxxc_layer);
-layers1.push(zbxc_layer);
-layers1.push(dlzxc_layer);
-layers1.push(jmdxc_layer);
-layers1.push(sxzxc_layer);
-layers1.push(mczjc_layer);
-layers1.push(jtmc_layer);
-layers1.push(jmdmc_layer);
-layers1.push(sxmc_layer);
-layers1.push(sxzxc_layer);
+// layers1.push(dmxc_layer);
+// layers1.push(fzxc_layer);
+// layers1.push(jtxc_layer);
+// layers1.push(sxxc_layer);
+// layers1.push(zbxc_layer);
+// layers1.push(dlzxc_layer);
+// layers1.push(jmdxc_layer);
+// layers1.push(sxzxc_layer);
+// layers1.push(mczjc_layer);
+// layers1.push(jtmc_layer);
+// layers1.push(jmdmc_layer);
+// layers1.push(sxmc_layer);
+// layers1.push(sxzxc_layer);
 
 
 var temp = new ol.Collection();
@@ -1048,7 +1101,7 @@ var layercontrol = new ol.control.layerControl({
 	tipLabel: 'Légende',
 	layerSwitch : layerswitch,
 	layers : layers,
-	layers1 : layers1
+	layers1 :  layers1
 });
 
 /*

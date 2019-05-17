@@ -34,6 +34,7 @@ var language = {
 		ws_watermeter_basin : "水表井",
 		ws_vent_valve :  "排气阀",
 		ws_pipe : "管线",
+		ws_flow_meter:"流量计",
 		other : "其他"
 }
 

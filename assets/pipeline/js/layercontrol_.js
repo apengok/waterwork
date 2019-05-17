@@ -83,13 +83,14 @@ var pipeLineAppLayer = function(opt_options) {
 			var topRight = ol.proj.transform(ol.extent.getTopRight(myExtent),'EPSG:3857', 'EPSG:4326');
 			var this_ = this;
 			$.ajax({
-				url: 'http://192.168.1.145:8000/gis/getGeom',
+				url: WEBSITE_ROOT + 'getFeatureEx',
 				// url: 'http://220.179.118.150:8082/pipeLine/getPipeFeature',
-				data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&className="+this.type_ +"&condition="+this.condition_,
+				data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this.type_ ,//+"&condition="+this.condition_,
 				type: 'GET',
 				success: function(res){
-					console.log(res)
-					var geojsonObject = Ext.util.JSON.decode(res);
+					// console.log(res)
+					var geojsonObject = JSON.parse(res) ;//Ext.util.JSON.decode(res);
+					// console.log(geojsonObject)
 					var features = (new ol.format.GeoJSON()).readFeatures(geojsonObject);
 					if(this_.isRotate) {
 						for(var i=0; i<features.length; i++) {

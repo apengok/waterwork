@@ -67,8 +67,8 @@ ol.control.LayerSwitch = function(opt_options) {
       ol.control.LayerSwitch.prototype.changMapType.bind(this, div));
   vector.appendChild(div);
   
- // element.appendChild(normal);
- // element.appendChild(satellite);
+  element.appendChild(normal);
+  element.appendChild(satellite);
   element.appendChild(vector);
 
   ol.control.Control.call(this, {

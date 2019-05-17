@@ -115,12 +115,14 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
 				var topRight = ol.proj.transform(ol.extent.getTopRight(myExtent),'EPSG:3857', 'EPSG:4326');
 
 				$.ajax({
-					url: 'getGeom',
+					url: WEBSITE_ROOT+'getFeatureEx',
 					data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
-					type: 'POST',
+					type: 'GET',
 					success: function(res){
+						// console.log(res)
 						var geojsonObject = Ext.util.JSON.decode(res);
-						var features = (new ol.format.GeoJSON()).readFeatures(geojsonObject.featureCollection);
+						// var features = (new ol.format.GeoJSON()).readFeatures(geojsonObject.featureCollection);
+						var features = (new ol.format.GeoJSON()).readFeatures(geojsonObject);
 						this_.source_.clear(true);
 						this_.source_.addFeatures(features);
 						//this_.dimTexts = geojsonObject.dimTexts;
