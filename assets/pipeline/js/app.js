@@ -1,18 +1,26 @@
 
 var plotDraw, plotEdit, drawOverlay, drawStyle;
 
-// var WEBSITE_ROOT='http://192.168.1.145:8000/gis/';
-var WEBSITE_ROOT='http://192.168.1.111:8080/pipeLine/';
+var WEBSITE_ROOT='http://192.168.1.145:8000/gis/';
+// var WEBSITE_ROOT='http://192.168.1.111:8080/pipeLine/';
 
-
+var click_selected = [];
 /*============================设备管线部分================================*/
 
-var pipe_line_style = new ol.style.Style({
-	stroke: new ol.style.Stroke({
-		color: '#0080FF',
-		width: 2
+var pipe_line_style =function(feature) { 
+
+	var color='#0080FF';
+	var item = feature.getProperties().id;
+	if(click_selected.includes(item)){
+		color = 'red';
+	}
+	return new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color: color,
+			width: 2
+		})
 	})
-});
+};
 
 /*
 var mark_img_src = $ctx + '/img/flag_mark.png';
@@ -294,6 +302,37 @@ var select = new ol.interaction.Select({
       }
 });
 
+function modifyFeatures(features) {
+    features.forEach(function(feature) {
+        var geometry = feature.getGeometry();
+        geometry.transform('EPSG:4326', 'EPSG:3857');
+
+        if (geometry.getType() === 'Point') {
+            feature.setStyle(
+                new ol.style.Style({
+                    image: new ol.style.RegularShape({
+                        fill: new ol.style.Fill({
+                            color: [255, 0, 0, 0.6]
+                        }),
+                        stroke: new ol.style.Stroke({
+                            width: 2,
+                            color: 'blue'
+                        }),
+                        points: 5,
+                        radius1: 25,
+                        radius2: 12.5
+                    })
+                })
+            );
+        }
+
+        if (geometry.getType() === 'LineString') {
+            click_selected.push(feature.values_.id);
+        }
+    });
+    return features;
+}
+
 select.on('select', function(e) {
 	var feature = e.selected[0];
 	var coordinate = e.mapBrowserEvent.coordinate;
@@ -305,6 +344,8 @@ select.on('select', function(e) {
 	}else{
 		return;
 	}
+
+	click_selected = [];
 	
 	$.ajax({
 		url: WEBSITE_ROOT + 'getTopoByNode',
@@ -312,7 +353,12 @@ select.on('select', function(e) {
 		type: 'GET',
 		success: function(res){
 			var data = Ext.util.JSON.decode(res);
+			var format = new ol.format.GeoJSON();
+			var features = format.readFeatures(data);
+			console.log(features);
+			modifyFeatures(features);
 			console.log(data);
+			pipe_layer_32.layer.changed();
 			var html = '<table>';
 			if(feature.values_.className == 'ws_pipe') {
 				html += "<tr>";
@@ -320,89 +366,89 @@ select.on('select', function(e) {
 				html += "<td width='120px' align='left'>管线</td>";
 				html += "</tr>";
 				
-				html += "<tr>";
-				html += "<td width='60px' align='left'>编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].industryCode + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].industryCode + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>长&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].length + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>长&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].length + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>管&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;径:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].caliber + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>管&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;径:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].caliber + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>管&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].material + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>管&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;材:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].material + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>起点埋深:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].start_depth + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>起点埋深:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].start_depth + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>终点埋深:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].end_depth + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>终点埋深:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].end_depth + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>起点高程:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].start_altitude + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>起点高程:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].start_altitude + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>终点高程:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].end_altitude + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>终点高程:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].end_altitude + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>录入时间:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].input_time + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>录入时间:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].input_time + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>录入人员:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].input_staff + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>录入人员:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].input_staff + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>修改时间:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].modify_time + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>修改时间:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].modify_time + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>修改人员:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].modify_staff + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>修改人员:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].modify_staff + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>埋设方式:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].burying + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>埋设方式:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].burying + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 
-				html += "<tr>";
-				html += "<td width='60px' align='left'>所在道路:</td>";
-				html += "<td width='120px' align='left'>"+ data[0].road + "</td>";
+				// html += "<tr>";
+				// html += "<td width='60px' align='left'>所在道路:</td>";
+				// html += "<td width='120px' align='left'>"+ data[0].road + "</td>";
 						
-				html += "</tr>";
+				// html += "</tr>";
 			}else if(feature.values_.className == 'ws_flow_meter'){
 				html +="<tr>";
 				html +="<td width='60px' align='left'>节点类型:</td>";
