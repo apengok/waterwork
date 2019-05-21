@@ -3,6 +3,12 @@
 {% load staticfiles %}
 
 {% block stylesheet %}
+<link rel="stylesheet" href="{% static '/pipeline/css/ol.css' %}"/>
+    <link rel="stylesheet" href="{% static '/pipeline/css/ol_extend.css' %}">
+    <link rel="stylesheet" href="{% static '/pipeline/css/jquery.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static '/pipeline/css/ext-theme-crisp-all.css' %}"/>
+    <link rel="stylesheet" href="{% static '/pipeline/css/ol3-layerControl.css' %}"/>
+    <link rel="stylesheet" href="{% static '/pipeline/css/p-ol3.min.css' %}"/>
 <style type="text/css">
         #container {
             background-color: white !important;
@@ -859,7 +865,10 @@
 {% block javascript %}
   
      
-    
+<script type="text/javascript" src="{% static '/pipeline/js/ol-debug_1.7.js' %}"></script>
+<script type="text/javascript" src="{% static '/pipeline/js/p-ol3.debug.js' %}"></script>    
+
+<script type="text/javascript" src="{% static '/pipeline/js/layerswitch.js' %}"></script>
 
 <script src="{% static 'virvo/wro/pipeline_ol.js' %}"></script>
 <script src="{% static 'virvo/resources/js/distpicker.data.js' %}"></script>

@@ -44,7 +44,7 @@ from .models import FenceDistrict,Polygon,FenceShape
 # Create your views here.
 
 class PipelineQueryView(LoginRequiredMixin,TemplateView):
-    template_name = "gis/pipelinequery.html"
+    template_name = "gis/pipeline_ol.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(PipelineQueryView, self).get_context_data(*args, **kwargs)

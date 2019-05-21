@@ -122,7 +122,11 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
     default_next = '/entm/'
 
     def form_valid(self, form):
-        
+
+        next_path = self.get_next_url()
+        if next_path is not None:
+            return redirect(to=next_path)
+            
         user = self.request.user
         p = Personalized.objects.filter(belongto=user.belongto) #.filter(ptype="custom")
 
