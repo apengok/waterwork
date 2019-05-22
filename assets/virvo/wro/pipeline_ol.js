@@ -31,7 +31,7 @@
     lineAs = [], lineAa = [], lineAm = [], lineOs = [], changeMiss = [], diyueall = [], params = [], lineV = [], lineHb = [], cluster, fixedPoint = null, fixedPointPosition = null,
     flog = true, mapVehicleTimeW, mapVehicleTimeQ, markerMap, mapflog, mapVehicleNum, infoWindow, paths = null, uptFlag = true, flagState = true,
     videoHeight, addaskQuestionsIndex = 2, dbClickHeighlight = false, checkedVehicles = [], runVidArray = [], stopVidArray = [], msStartTime, msEndTime,
-    videoTimeIndex,voiceTimeIndex,charFlag = true, fanceID = "", newCount = 1, mouseTool, mouseToolEdit, clickRectangleFlag = false, isAddFlag = false, isAreaSearchFlag = false, isDistanceCount = false, fenceIDMap, PolyEditorMap,
+    videoTimeIndex,voiceTimeIndex,charFlag = true, fanceID = "", newCount = 1, mouseTool, mouseToolEdit, clickRectangleFlag = false, isAddFlag = false, isAreaSearchFlag = false, isDistanceCount = false, fenceIDMap=[], PolyEditorMap=[],
     sectionPointMarkerMap, fenceSectionPointMap, travelLineMap, fenceCheckLength = 0, amendCircle, amendPolygon, amendLine, polyFence, changeArray, trid = [], parametersID, brand, clickFenceCount = 0,
     clickLogCount = 0, fenceIdArray = [], fenceOpenArray = [], save, moveMarkerBackData, moveMarkerFenceId, monitoringObjMapHeight, carNameMarkerContentMap, carNameMarkerMap, carNameContentLUMap,
     lineSpotMap, isEdit = true, sectionMarkerPointArray, stateName = [], stateIndex = 1, alarmName = [], alarmIndex = 1, activeIndex = 1, queryFenceId = [], crrentSubV=[], crrentSubName=[],
@@ -45,6 +45,10 @@
     rMenu = $("#rMenu"), alarmNum = 0, carAddress, msgSNAck, setting, ztreeStyleDbclick, $tableCarAll = $("#table-car-all"), $tableCarOnline = $("#table-car-online"), $tableCarOffline = $("#table-car-offline"),
     $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"), $tableCarOnlinePercent = $("#table-car-online-percent"),longDeviceType,tapingTime,loadInitNowDate = new Date(),loadInitTime,
     checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
+
+    var vectorLayer1;
+    var drawControl;
+
 
 
     var pageLayout = {
@@ -485,10 +489,15 @@
                 toProject: "EPSG:3857"
             })
 
+            vectorLayer1 = new ol.layer.Vector({
+                source: new ol.source.Vector()
+            });
+
 
             var arrNormal = new ol.Collection();
             arrNormal.push(normal_background);
             arrNormal.push(normal_data);
+            arrNormal.push(vectorLayer1);
 
             var normal_group = new ol.layer.Group({
                 mapType: ol.control.MapType.NORMAL_MAP,
@@ -558,9 +567,11 @@
 
 
 
+
+
             var center = [118.39469563,29.888188578];
             //var center = [118.47150,29.91398];
-            var map = new ol.Map({
+            map = new ol.Map({
                 view: new ol.View({
                     center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
                     maxZoom : 26,
@@ -594,7 +605,28 @@
                 })
            });
            return layer;
-        }
+        },
+        updateDrawControl : function(geometryType) {
+            
+
+            map.removeInteraction(drawControl);
+
+            if (geometryType === 'None') return;
+
+            drawControl = new ol.interaction.Draw({
+                type: geometryType,
+                source: vectorLayer1.getSource()
+            });
+
+            map.addInteraction(drawControl);
+
+            drawControl.on('drawend',fenceOperation.createSuccess);
+        },
+
+
+
+
+
     };
 
     var amapOperation = {
@@ -3337,6 +3369,7 @@
         },
         // 围栏隐藏
         fenceHidden: function (nodesId) {
+            return;
             if (lineSpotMap.containsKey(nodesId)) {
                 var thisStopArray = lineSpotMap.get(nodesId);
                 for (var i = 0; i < thisStopArray.length; i++) {
@@ -3423,6 +3456,7 @@
         },
         // 电子围栏点击事件
         onClickFenceChar: function (e, treeId, treeNode) {
+            return;
             isAddDragRoute = false;
             isEdit = true;
             var zTree = $.fn.zTree.getZTreeObj("fenceDemo");
@@ -3473,8 +3507,8 @@
             }
             // 通过所选择的围栏节点筛选绑定列表
             fenceOperation.getcheckFenceNode(zTree);
-            myTable.filter();
-            myTable.requestData();
+            // myTable.filter();
+            // myTable.requestData();
         },
         getcheckFenceNode: function (zTree) {
             var checkFences = zTree.getCheckedNodes(true);
@@ -3549,6 +3583,11 @@
                             ;
                             for (var i = 0; i < dataList.length; i++) {
                                 var fenceData;
+                                var pgeojson = dataList[i].pgeojson;
+                                var features = (new ol.format.GeoJSON()).readFeatures(pgeojson);
+                                vectorLayer1.getSource().clear()
+                                vectorLayer1.getSource().addFeatures(features);
+                                vectorLayer1.setVisible(true);
                                 var fenceType = dataList[i].fenceType;
                                 var wayPointArray;
                                 if (fenceType == 'zw_m_travel_line') {
@@ -4753,18 +4792,18 @@
         //多边形
         drawPolygon: function (polygon, thisMap,fillColor,strokeColor) {
             var polygonId = polygon[0].polygonId;
-            if (fenceIDMap.containsKey(polygonId)) {
-                var thisFence = fenceIDMap.get(polygonId);
-                thisFence.hide();
-                fenceIDMap.remove(polygonId);
-            }
-            ;
-            if (PolyEditorMap.containsKey(polygonId)) {
-                var mapEditFence = PolyEditorMap.get(polygonId);
-                mapEditFence.close();
-            }
-            ;
-            map.off("rightclick", amendPolygon);
+            // if (fenceIDMap.containsKey(polygonId)) {
+            //     var thisFence = fenceIDMap.get(polygonId);
+            //     thisFence.hide();
+            //     fenceIDMap.remove(polygonId);
+            // }
+            // ;
+            // if (PolyEditorMap.containsKey(polygonId)) {
+            //     var mapEditFence = PolyEditorMap.get(polygonId);
+            //     mapEditFence.close();
+            // }
+            // ;
+            // map.off("rightclick", amendPolygon);
             var dataArr = new Array();
             if (polygon != null && polygon.length > 0) {
                 for (var i = 0; i < polygon.length; i++) {
@@ -4783,18 +4822,19 @@
             }
             ;
             $("#rectangleAllPointShow").html(html);
-            polyFence = new AMap.Polygon({
-                path: dataArr,//设置多边形边界路径
-                strokeColor: strokeColor, // "#FF33FF", //线颜色
-                strokeOpacity: 0.2, //线透明度
-                strokeWeight: 3, //线宽
-                fillColor: fillColor, // "#1791fc", //填充色
-                fillOpacity: 0.35
-                //填充透明度
-            });
-            polyFence.setMap(thisMap);
-            thisMap.setFitView(polyFence);
-            fenceIDMap.put(polygonId, polyFence);
+            // polyFence = new AMap.Polygon({
+            //     path: dataArr,//设置多边形边界路径
+            //     strokeColor: strokeColor, // "#FF33FF", //线颜色
+            //     strokeOpacity: 0.2, //线透明度
+            //     strokeWeight: 3, //线宽
+            //     fillColor: fillColor, // "#1791fc", //填充色
+            //     fillOpacity: 0.35
+            //     //填充透明度
+            // });
+            // polyFence.setMap(thisMap);
+            // thisMap.setFitView(polyFence);
+            
+            // fenceIDMap.put(polygonId, polyFence);
         },
         //圆形
         drawCircle: function (circle, thisMap) {
@@ -4856,8 +4896,8 @@
                 var btn = $("#addBtn_" + treeNode.tId);
                 if (btn)
                     btn.bind("click", function () {
-                        mouseToolEdit.close(true);
-                        amapOperation.clearLabel();
+                        // mouseToolEdit.close(true);
+                        // amapOperation.clearLabel();
                         isAddDragRoute = false;
                         $('#drivenRoute').hide();
                         $('.lngLat_show').children('span').attr('class', 'fa fa-chevron-up');
@@ -4887,7 +4927,8 @@
                         } else if (treeNode.name == "多边形") {
                             layer.msg('请在地图上画出多边形', {time: 1000});
                             fenceOperation.clearPolygon();
-                            mouseTool.polygon();
+                            // mouseTool.polygon();
+                            ol3ops.updateDrawControl('Polygon');
                             clickRectangleFlag = false;
                         } else if (treeNode.name == '导航路线') {
                             $('#drivenRoute').show();
@@ -4947,19 +4988,53 @@
                     editBtn.bind("click", function () {
                         amapOperation.clearLabel();
                         //关闭其它围栏修改功能
-                        fenceOperation.closeFenceEdit();
+                        // fenceOperation.closeFenceEdit();
                         isAddDragRoute = false;
                         $('#drivenRoute').hide();
                         $('.lngLat_show').children('span').attr('class', 'fa fa-chevron-up');
                         $('.pointList').hide();
-                        mouseToolEdit.close(true);
+                        // mouseToolEdit.close(true);
+
+                        var select = new ol.interaction.Select({
+                            filter: function(feature, layer) {
+                                return /Polygon|LineString/.test(
+                                        feature.getGeometry().getType()
+                                    );
+                            },
+                            condition: ol.events.condition.click
+                        });
+                        map.addInteraction(select);
+
+                        var modify = new ol.interaction.Modify({
+                            features: select.getFeatures(),
+                            // the SHIFT key must be pressed to delete vertices, so
+                            // that new vertices can be drawn at the same position
+                            // of existing vertices
+                            deleteCondition: function(event) {
+                              return ol.events.condition.shiftKeyOnly(event) &&
+                                  ol.events.condition.singleClick(event);
+                            }
+                          });
+
+                        modify.on('modifyend',function(e){
+                            console.log("feature id is",e.features.getArray()[0].getId());
+                        });
+
+                        map.addInteraction(modify);
+
+                        map.addInteraction(new ol.interaction.Translate({
+                            features: select.getFeatures()
+                        }));
+
+
+
                         isEdit = false;
                         isAddFlag = false;
                         isAreaSearchFlag = false;
                         var value = treeNode.id + "#" + treeNode.pType;
                         zTree.checkNode(treeNode, true, true);
                         treeNode.checkedOld = true;
-                        fenceOperation.updateFence(value);
+                        // fenceOperation.updateFence(value);
                         return false;
                     });
                 }
@@ -5264,6 +5339,9 @@
         },
         //图形画完回调事件
         createSuccess: function (data) {
+            console.log(data);
+            map.removeInteraction(drawControl);
+            var f = data.feature;
             //区域查车成功后
             if ($("#queryClick i").hasClass("active")) {
                 changeArray = data.obj.getBounds();
@@ -5272,7 +5350,7 @@
             }
             ;
             //标注
-            if (data.obj.CLASS_NAME == "AMap.Marker") {
+            if (f.values_.geometry.getType() == "Marker") {
                 $("#addOrUpdateMarkerFlag").val("0");
                 var marker = data.obj.getPosition();
                 $("#mark-lng").attr("value", marker.lng);
@@ -5282,7 +5360,7 @@
             }
             ;
             //圆
-            if (data.obj.CLASS_NAME == "AMap.Circle") {
+            if (f.values_.geometry.getType() == "Circle") {
                 $("#addOrUpdateCircleFlag").val("0");
                 var center = data.obj.getCenter();
                 var radius = data.obj.getRadius();
@@ -5296,16 +5374,15 @@
                 $("#circleArea").modal('show');
             }
             ;
-            if (data.obj.CLASS_NAME == "AMap.Polyline" || data.obj.CLASS_NAME == "AMap.Polygon") {
+            if (f.values_.geometry.getType() == "Polyline" || f.values_.geometry.getType() == "Polygon") {
                 var pointSeqs = ""; // 点序号
                 var longitudes = ""; // 所有的经度
                 var latitudes = ""; // 所有的纬度
                 var array = new Array();
-                var path = data.obj.getPath();
+                var path = f.getGeometry().getCoordinates()[0];
                 for (var i = 0; i < path.length; i++) {
-                    array.push([path[i].lng, path[i].lat]);
-                }
-                ;
+                    array.push([path[i][0], path[i][1]]);
+                };
                 // 去除array中相邻的重复点
                 array = fenceOperation.removeAdjoinRepeatPoint(array);
                 var fileinfo = "";
@@ -5345,15 +5422,22 @@
                 $("#pointSeqsPolygons").val(pointSeqs);
                 $("#longitudesPolygons").val(longitudes);
                 $("#latitudesPolygons").val(latitudes);
+
+                var format = new ol.format.GeoJSON();
+                var features = vectorLayer1.getSource().getFeatures();
+                var geoJson = format.writeFeatures(features);
+                console.log(geoJson);
+                $("#pgeojson").val(JSON.stringify(geoJson));
+
                 //线
-                if (data.obj.CLASS_NAME == "AMap.Polyline" && !isDistanceCount) {
+                if (f.values_.geometry.getType() == "Polyline" && !isDistanceCount) {
                     $("#addOrUpdateLineFlag").val("0");
-                    pageLayout.closeVideo();
+                    
                     $("#addLine").modal('show');
                 }
                 ;
                 //矩形
-                if (data.obj.CLASS_NAME == "AMap.Polygon" && clickRectangleFlag && isAddFlag) {
+                if (f.values_.geometry.getType() == "Polygon" && clickRectangleFlag && isAddFlag) {
                     if (!isAreaSearchFlag) {
                         if (array.length < 4) {
                             return false;
@@ -5361,7 +5445,7 @@
                             $("#LUPointLngLat").val(array[0][0] + "," + array[0][1]);
                             $("#RDPointLngLat").val(array[2][0] + "," + array[2][1]);
                             $("#addOrUpdateRectangleFlag").val("0");
-                            pageLayout.closeVideo();
+                            
                             $("#rectangle-form").modal('show');
                         }
                     }
@@ -5369,7 +5453,7 @@
                 }
                 ;
                 //多边形
-                if (data.obj.CLASS_NAME == "AMap.Polygon" && !clickRectangleFlag && isAddFlag) {
+                if (f.values_.geometry.getType() == "Polygon" && !clickRectangleFlag && isAddFlag) {
                     if (!$("#queryClick i").hasClass("active")) {
                         var html = '';
                         for (var i = 0; i < array.length; i++) {
@@ -5386,7 +5470,7 @@
                         $("#addOrUpdatePolygonFlag").val("0");
                         // fenceOperation.initDMAList();
                         
-                        pageLayout.closeVideo();
+                        
                         
                         $("#myModal").modal('show');
                         customFucn.userTree();
@@ -5771,6 +5855,9 @@
         },
         //多边形保存
         polygonSave: function (thisBtn) {
+
+
+
             var polygonId = $("#polygonId").val();
             var rectanglePointMag = [];
             var allPointArray = [];
@@ -5834,14 +5921,13 @@
                         saveFenceName = $('#polygonName').val();
                         saveFenceType = 'zw_m_polygon';
                         $(".fenceA").removeClass("fenceA-active");
-                        mouseTool.close(true);
-                        map.off("rightclick", amendPolygon);
+                        // mouseTool.close(true);
+                        // map.off("rightclick", amendPolygon);
                         var polygonId = $("#polygonId").val();
-                        if (PolyEditorMap.containsKey(polygonId)) {
-                            var mapEditFence = PolyEditorMap.get(polygonId);
-                            mapEditFence.close();
-                        }
-                        ;
+                        // if (PolyEditorMap.containsKey(polygonId)) {
+                        //     var mapEditFence = PolyEditorMap.get(polygonId);
+                        //     mapEditFence.close();
+                        // };
                         fenceOperation.addNodes();
                     } else {
                         if (datas.msg == null) {
@@ -7371,7 +7457,8 @@
         },
         //多边形取消
         polygonFenceClose: function () {
-            mouseTool.close(true);
+            // mouseTool.close(true);
+            map.removeInteraction(drawControl);
             var polygonFenceID = $("#polygonId").val();
             var zTree = $.fn.zTree.getZTreeObj("fenceDemo");
             var nodes = zTree.getNodesByParam("id", polygonFenceID, null);
@@ -8667,8 +8754,8 @@
     // pageLayout.responseSocket();
     fenceOperation.init();
     // fenceOperation.fenceBindList();
-    // customFucn.userTree();
-    // fenceOperation.initDMAList();
+    customFucn.userTree();
+    fenceOperation.initDMAList();
     // fenceOperation.fenceEnterprise();
     // amapOperation.init();
     ol3ops.init();

@@ -357,6 +357,13 @@ def getFenceDetails(request):
 
         return JsonResponse(details)
     
+    pgeojson = {
+        "type":"FeatureCollection",
+        "features":[
+            {"type":"Feature",
+            "geometry":{"type":"Polygon","coordinates":[[[13179077.948762884,3489274.9823769773],[13179760.043045392,3489455.4586978112],[13179858.243329434,3488972.4191643135],[13179409.706762945,3488762.748092529],[13178974.440335678,3488969.765092732],[13178924.013048522,3489171.473876876],[13179077.948762884,3489274.9823769773]]]},
+            "properties":"null"}]
+    }
     fenceNodes_json = json.loads(fenceNodes)
     print("json ?",fenceNodes_json,type(fenceNodes_json[0]),len(fenceNodes_json))
     details_obj = []
@@ -393,12 +400,14 @@ def getFenceDetails(request):
                     "sortOrder":idx,
                     "type":pgo["zonetype"],
                     "updateDataTime":fd["updateDataTime"],
-                    "updateDataUsername":fd["updateDataUsername"]
+                    "updateDataUsername":fd["updateDataUsername"],
+                    
                     })
 
             details_obj.append({"fenceType":pId,
                 "fillColor":pgo["fillColor"],
                 "strokeColor":pgo["strokeColor"],
+                "pgeojson":pgeojson,
                 "fenceData":fenceData
             })
 
