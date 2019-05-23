@@ -620,8 +620,21 @@
 
             map.addInteraction(drawControl);
 
-            drawControl.on('drawend',fenceOperation.createSuccess);
+            // drawControl.on('drawend',fenceOperation.createSuccess);
+            drawControl.on('drawend',ol3ops.exportgeojson);
         },
+        exportgeojson:function(event){
+            console.log(event)
+            var format = new ol.format.GeoJSON();
+            var features = vectorLayer1.getSource().getFeatures();
+            console.log(features)
+            var geoJson = format.writeFeatures(features);
+            console.log(geoJson)
+            console.log(JSON.stringify(geoJson))
+
+            var geojson2 = format.writeFeature(event.feature);
+            console.log(geojson2)
+        }
 
 
 
@@ -3411,6 +3424,7 @@
         },
         // 围栏显示
         fenceShow: function (nodesId, node) {
+            return;
             if (fenceIDMap.containsKey(nodesId)) {
                 var thisFence = fenceIDMap.get(nodesId);
                 if (thisFence != undefined) {
@@ -3456,7 +3470,7 @@
         },
         // 电子围栏点击事件
         onClickFenceChar: function (e, treeId, treeNode) {
-            return;
+            
             isAddDragRoute = false;
             isEdit = true;
             var zTree = $.fn.zTree.getZTreeObj("fenceDemo");
@@ -3483,7 +3497,7 @@
                         zTree.cancelSelectedNode(nodes[0]);
                         var checkNodes = zTree.getCheckedNodes(true);
                         fenceCheckLength = checkNodes.length;
-                        fenceOperation.fenceHidden(nodesId);
+                        // fenceOperation.fenceHidden(nodesId);
                         fenceOperation.sectionPointState(nodesId, false);
                         charFlag = false;
                     } else {
@@ -3491,18 +3505,18 @@
                         clickStateChar = nodesId;
                         zTree.checkNode(nodes[0], true, true);
                         nodes[0].checkedOld = true;
-                        fenceOperation.fenceHidden(nodesId);
+                        // fenceOperation.fenceHidden(nodesId);
                         fenceOperation.getFenceDetail(nodes, map);
-                        fenceOperation.sectionPointState(nodesId, true);
+                        // fenceOperation.sectionPointState(nodesId, true);
                     }
                 } else {
                     charFlag = true;
                     clickStateChar = nodesId;
                     zTree.checkNode(nodes[0], true, true);
                     nodes[0].checkedOld = true;
-                    fenceOperation.fenceHidden(nodesId);
+                    // fenceOperation.fenceHidden(nodesId);
                     fenceOperation.getFenceDetail(nodes, map);
-                    fenceOperation.sectionPointState(nodesId, true);
+                    // fenceOperation.sectionPointState(nodesId, true);
                 }
             }
             // 通过所选择的围栏节点筛选绑定列表
@@ -3561,8 +3575,28 @@
             }
             ;
         },
+
+        getFenceGeoJson:function(fenceNode){
+
+            $.ajax({
+                type:"GET",
+                url:"/gis/getgeojson/",
+                // context:this
+            }).done(function(data){
+                var format = new ol.format.GeoJSON();//{dataProjection: 'EPSG:3857'}
+                var features = format.readFeatures(data,)
+                console.log(features)
+                vectorLayer1.getSource().addFeatures(features); //vectorLayer1==map.getLayerGroup().getLayersArray()[2]
+                console.log(map.getLayers())
+                // var feature = vectorLayer.getSource().getFeatures()[28];
+                var polygon = features[0].getGeometry();
+                console.log(polygon)
+                map.getView().fit(polygon, map.getSize()); 
+            })
+        },
         //当点击或选择围栏时，访问后台返回围栏详情
         getFenceDetail: function (fenceNode, showMap) {
+            return fenceOperation.getFenceGeoJson(fenceNode);
             // ajax访问后端查询
             layer.load(2);
             $.ajax({
@@ -3584,9 +3618,14 @@
                             for (var i = 0; i < dataList.length; i++) {
                                 var fenceData;
                                 var pgeojson = dataList[i].pgeojson;
+                                console.log(pgeojson)
                                 var features = (new ol.format.GeoJSON()).readFeatures(pgeojson);
+                                console.log(features)
                                 vectorLayer1.getSource().clear()
                                 vectorLayer1.getSource().addFeatures(features);
+                                var polygon = features[0].getGeometry();
+                                console.log(polygon)
+                                map.getView().fit(polygon, map.getSize()); 
                                 vectorLayer1.setVisible(true);
                                 var fenceType = dataList[i].fenceType;
                                 var wayPointArray;
