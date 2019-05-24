@@ -48,7 +48,8 @@
 
     var vectorLayer1;
     var drawControl;
-
+    var normal_background;
+    var normal_data;
 
 
     var pageLayout = {
@@ -420,6 +421,95 @@
 
     var ol3ops = {
         init:function(){
+            vectorLayer1 = new ol.layer.Vector({
+                // projection: 'EPSG:4326',
+                source: new ol.source.Vector()
+            });
+
+            var vectorLayer2 = new ol.layer.Vector({
+                source: new ol.source.Vector()
+            });
+
+            var controls = [
+                new ol.control.Attribution({collapsed: false}),
+                new ol.control.FullScreen(),
+                new ol.control.MousePosition({projection: 'EPSG:3857',}),
+                // new ol.control.OverviewMap({collapsed: false, collapsible: false}),
+                new ol.control.Rotate({autoHide: false}),
+                new ol.control.ScaleLine(),
+                new ol.control.Zoom(),
+                new ol.control.ZoomSlider(),
+                new ol.control.ZoomToExtent()
+            ];
+
+            normal_background = new ol.layer.Tile({ 
+                        // source: new ol.source.OSM()
+                        // extent: ol.proj.transformExtent([-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7], "EPSG:900913", "EPSG:3857"),
+                        source: new ol.source.XYZ({
+                            urls : ['http://t0.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+                         'http://t2.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+                         'http://t3.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+                         'http://t4.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+                         'http://t5.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+                         'http://t6.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+                         'http://t7.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
+                         'http://t1.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5'],
+                
+                            
+                        })
+                    });
+
+            normal_data =  new ol.layer.Tile({ 
+                        // source: new ol.source.OSM()
+                        // extent: ol.proj.transformExtent([-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7], "EPSG:102100", "EPSG:3857"),
+
+                        source: new ol.source.XYZ({
+                            urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                                'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                                'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                                'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                                'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                                'http://t5.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                                'http://t6.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                                'http://t7.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5'],
+                            
+                        })
+                    });
+
+            // http://t0.tianditu.gov.cn/vec_c/wmts?tk=af218d8a9536478231c24fa299fc48f5
+            // 
+
+            var arrNormal = new ol.Collection();
+            arrNormal.push(normal_background);
+            // arrNormal.push(normal_data);
+
+            var normal_group = new ol.layer.Group({
+                // mapType: ol.control.MapType.NORMAL_MAP,
+                layers : arrNormal
+            });
+
+            var center = [118.39469563,29.888188578];
+            map = new ol.Map({
+                view: new ol.View({
+                    maxZoom : 26,
+                    minZoom : 13,
+                    zoom: 14,
+                    // center: [-11863791, 3898899]
+                    center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
+                }),
+                target: 'MapContainer',
+                layers: [
+                    // new ol.layer.Tile({
+                    //     source: new ol.source.OSM()
+                    // }),
+                    normal_background,
+                    vectorLayer1,
+                ],
+                // layerGroup:arrNormal,
+                controls: controls
+            });
+        },
+        init12312:function(){
             /*============================卫星图层================================*/
 
             //卫星底图
@@ -459,7 +549,7 @@
 
 
             /*============================地形图层================================*/
-            var normal_background = new ol3ops.appLayer({
+            normal_background = new ol3ops.appLayer({
                 urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
                         'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
                         'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
@@ -474,7 +564,7 @@
                 toProject: "EPSG:3857"
             })
 
-            var normal_data = new ol3ops.appLayer({
+            normal_data = new ol3ops.appLayer({
                 urls: ['http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
                         'http://t1.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
                         'http://t2.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
@@ -489,10 +579,14 @@
                 toProject: "EPSG:3857"
             })
 
-            vectorLayer1 = new ol.layer.Vector({
+            // vectorLayer1 = new ol.layer.Vector({
+            //     source: new ol.source.Vector(),
+            //     visible:true
+            // });
+             vectorLayer1 = new ol.layer.Vector({
+                projection: 'EPSG:4326',
                 source: new ol.source.Vector()
             });
-
 
             var arrNormal = new ol.Collection();
             arrNormal.push(normal_background);
@@ -566,21 +660,52 @@
             });
 
 
+            var controls = [
+    new ol.control.Attribution({collapsed: false}),
+    new ol.control.FullScreen(),
+    new ol.control.MousePosition({projection: 'EPSG:4326',}),
+    // new ol.control.OverviewMap({collapsed: false, collapsible: false}),
+    new ol.control.Rotate({autoHide: false}),
+    new ol.control.ScaleLine(),
+    new ol.control.Zoom(),
+    new ol.control.ZoomSlider(),
+    new ol.control.ZoomToExtent()
+];
 
 
 
             var center = [118.39469563,29.888188578];
             //var center = [118.47150,29.91398];
+            // map = new ol.Map({
+            //     view: new ol.View({
+            //         center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
+            //         // maxZoom : 26,
+            //         // minZoom : 13,
+            //         zoom: 16
+            //         //zoom: 18
+            //     }),
+            //     controls: ol.control.defaults({ attribution: false }).extend([attribution]),
+            //     target:"MapContainer"
+            // });
+
             map = new ol.Map({
                 view: new ol.View({
-                    center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
                     maxZoom : 26,
                     minZoom : 13,
-                    zoom: 16
-                    //zoom: 18
+                    zoom: 14,
+                    // center: [-11863791, 3898899]
+                    center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
                 }),
-                controls: ol.control.defaults({ attribution: false }).extend([attribution]),
-                target:"MapContainer"
+                target: 'MapContainer',
+                layers: [
+                    // new ol.layer.Tile({
+                    //     source: new ol.source.OSM()
+                    // }),
+                    normal_background,
+                    vectorLayer1
+                ],
+                // layerGroup:arrNormal,
+                controls: controls
             });
 
             map.addControl(layerswitch);
@@ -620,10 +745,11 @@
 
             map.addInteraction(drawControl);
 
-            // drawControl.on('drawend',fenceOperation.createSuccess);
-            drawControl.on('drawend',ol3ops.exportgeojson);
+            drawControl.on('drawend',fenceOperation.createSuccess);
+            // drawControl.on('drawend',ol3ops.exportgeojson);
         },
         exportgeojson:function(event){
+            map.removeInteraction(drawControl);
             console.log(event)
             var format = new ol.format.GeoJSON();
             var features = vectorLayer1.getSource().getFeatures();
@@ -3557,7 +3683,7 @@
                 for (var j = 0; j < changeNodes.length; j++) {
                     var nodesId = changeNodes[j].id;
                     fenceOperation.fenceShow(nodesId, changeNodes[j]);
-                    fenceOperation.sectionPointState(nodesId, true);
+                    // fenceOperation.sectionPointState(nodesId, true);
                 }
                 ;
             } else {
@@ -3569,7 +3695,7 @@
                     var nodesId = changeNodes[i].id;
                     fenceOperation.hideFence(nodesId);
                     fenceOperation.fenceHidden(nodesId);
-                    fenceOperation.sectionPointState(nodesId, false);
+                    // fenceOperation.sectionPointState(nodesId, false);
                 }
                 ;
             }
@@ -3581,17 +3707,25 @@
             $.ajax({
                 type:"GET",
                 url:"/gis/getgeojson/",
+                data: {
+                    "fenceNodes": JSON.stringify(fenceNode)
+                },
                 // context:this
             }).done(function(data){
-                var format = new ol.format.GeoJSON();//{dataProjection: 'EPSG:3857'}
-                var features = format.readFeatures(data,)
+                console.log(data)
+                var format = new ol.format.GeoJSON({defaultDataProjection:'EPSG:3857'});//{dataProjection: 'EPSG:3857'}
+                var features = format.readFeatures(data,{dataProjection: 'EPSG:3857',featureProjection:'EPSG:3857'})
+                // var features = format.readFeatures(JSON.parse(data),)
                 console.log(features)
                 vectorLayer1.getSource().addFeatures(features); //vectorLayer1==map.getLayerGroup().getLayersArray()[2]
-                console.log(map.getLayers())
+                // console.log(map.getLayers())
+                // vectorLayer1.setMap(map)
                 // var feature = vectorLayer.getSource().getFeatures()[28];
                 var polygon = features[0].getGeometry();
                 console.log(polygon)
-                map.getView().fit(polygon, map.getSize()); 
+                // vectorLayer1.changed();
+                console.log(map)
+                map.getView().fit(polygon, map.getSize(),); 
             })
         },
         //当点击或选择围栏时，访问后台返回围栏详情

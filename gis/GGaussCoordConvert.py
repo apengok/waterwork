@@ -139,6 +139,22 @@ def transformlng(lng, lat):
             math.sin(lng / 30.0 * pi)) * 2.0 / 3.0
     return ret
 
+def lonLat2Mercator(x,y):
+    x = x * 20037508.34 / 180
+    y = math.log(math.tan((90 + y) * pi / 360)) / (pi / 180)
+    y = y * 20037508.34 / 180
+
+    return x,y
+
+
+def Mercator2lonLat(x,y):
+    x = x / 20037508.34 * 180
+    y = y / 20037508.34 * 180
+
+    y = 180 / pi * (2 * math.atan(math.exp(y * pi / 180)) - pi / 2)
+
+    return x,y
+
 
 def out_of_china(lng, lat):
     """
@@ -295,12 +311,15 @@ class GGaussCoordConvert:
 
 if __name__ == '__main__':
     coordConvert = GGaussCoordConvert(CGCS2000, ThreeProj, False, 117, 0, 8533.542534226170, -187931.67959519500, 0.746937, 0.9997622102729840)
-    x0,y0 = 492501.9332,3305753.016
+    x0,y0 = 13180999.586067896, 3488227.747001781 #492501.9332,3305753.016
     left = 118.34781646728516
     top = 29.914992371771078
     right = 118.47673416137695
     bottom = 29.82404002986084
     x,y = coordConvert.convToGlobal(y0,x0)
+    x1,y1=118.40693389786115, 29.88072810006837
     print(x,y)
     print(gcj02towgs84(x,y))
+    print(Mercator2lonLat(x0,y0))
+    print(lonLat2Mercator(x1,y1))
 

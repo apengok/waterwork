@@ -287,10 +287,73 @@ def savePolygons(request):
 
     return HttpResponse(json.dumps({"success":1}))
 
+def return_feature_collection(cur):
+    """
+    Execute a JSON-returning SQL and return HTTP response
+    :type sql: SQL statement that returns a a GeoJSON Feature
+    """
+    
+
+    def generate():
+        yield '{ "type": "FeatureCollection", "features": ['
+        for idx, row in enumerate(cur):
+            
+            if idx > 0:
+                yield ','
+            yield '{ "type":"Feature","geometry":'
+            # print(idx,json.dumps(row),type(row),'--dfasdfe')
+            yield json.dumps(row) 
+            yield '}'
+        yield ']}'
+        
+    return generate()
+    return HttpResponse(generate())
+
+def build_feature_collection(cur):
+    """
+    Execute a JSON-returning SQL and return HTTP response
+    :type sql: SQL statement that returns a a GeoJSON Feature
+    """
+    features = []
+    for idx,row in enumerate(cur):
+        feature = {
+                "type":"Feature",
+                "geometry":row,#json.dumps(row),
+                "properties":"null"
+            }
+        features.append(feature)
+    
+    FeatureCollection = {
+        "type":"FeatureCollection",
+        "features":features
+    }
+        
+    return FeatureCollection
+    
 
 def getgeojson(request):
+    print(request.GET)
+    print(request.POST)
+    # fenceNode = request.GET.get('fenceNode','resere')
+    fenceNodes = request.GET.get("fenceNodes")
+    
+    fenceNodes_json = json.loads(fenceNodes)
+    # print("json ?",fenceNodes_json,type(fenceNodes_json[0]),len(fenceNodes_json))
+    data = []
+    
+    for i in range(len(fenceNodes_json)):
+        name=fenceNodes_json[i]["name"]
+        fence = FenceShape.objects.get(name=name)
+        geodata = fence.geojsondata()
+        # print(geodata)
+        data.append(geodata)
+    # print(data)
     pgeojson = {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[13179003.634904388,3489350.6231983663],[13179553.026190981,3489478.018251583],[13179635.302045533,3489191.3793772897],[13179542.409904653,3488955.1677354802],[13178958.515906189,3488883.5080214627],[13178759.461047834,3489127.6818780173],[13179067.332476556,3489122.3737348537],[13179003.634904388,3489350.6231983663]]]},"properties":"null"}
-    return JsonResponse(pgeojson)
+
+    ret =  build_feature_collection(data)
+    print('ere&*^*&^*&:::::',ret)
+    # print(json.loads(ret))
+    return JsonResponse(ret)
     
 
 def getFenceDetails(request):

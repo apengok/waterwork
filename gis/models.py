@@ -15,6 +15,9 @@ import time
 
 from mptt.models import MPTTModel, TreeForeignKey
 
+from gis.GGaussCoordConvert import Mercator2lonLat
+
+
 '''
 {"name":"标注","pId":"","id":"zw_m_marker","type":"fenceParent","open":"true"},
 {"name":"矩形","pId":"","id":"zw_m_rectangle","type":"fenceParent","open":"true"},
@@ -122,6 +125,42 @@ class FenceShape(models.Model):
 
     def __str__(self):
         return self.name 
+
+
+    def geojsondata(self):
+        pointSeqs = self.pointSeqs.split(',')
+        longitudes = self.longitudes.split(',')
+        latitudes = self.latitudes.split(',')
+
+        coords = [list(p) for p in zip(longitudes,latitudes)]
+        coords.append([longitudes[0],latitudes[0]])
+
+        coords_trans = [Mercator2lonLat(float(p[0]),float(p[1])) for p in coords]
+
+        coordinates = []
+        coordinates.append(coords_trans)
+
+        # FeatureCollection = {
+        #     "type":"FeatureCollection",
+        #     "features":[
+        #         {
+        #             "type":"Feature",
+        #             "geometry":{
+        #                 "type":"Polygon",
+        #                 "coordinates":coordinates
+        #             },
+        #             "properties":"null"
+        #         }]
+        # }
+
+        geodata = {
+            "type":"Polygon",
+            "coordinates":coordinates,
+            "properties":"null"
+        }
+
+        return geodata
+
     
 
 from entm.utils import unique_shapeid_generator,unique_cid_generator
