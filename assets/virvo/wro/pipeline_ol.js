@@ -8922,16 +8922,16 @@
     //初始化页面
     //初始化页面
     pageLayout.init();
-    // pageLayout.arrayExpand();
+    pageLayout.arrayExpand();
     // pageLayout.createMap();
     // pageLayout.responseSocket();
     fenceOperation.init();
-    // fenceOperation.fenceBindList();
-    customFucn.userTree();
-    fenceOperation.initDMAList();
+    fenceOperation.fenceBindList();
+    // customFucn.userTree();
+    // fenceOperation.initDMAList();
     // fenceOperation.fenceEnterprise();
-    // amapOperation.init();
-    ol3ops.init();
+    amapOperation.init();
+    // ol3ops.init();
     // treeMonitoring.init();
     // pageLayout.getNowFormatDate();
     $("[data-toggle='tooltip']").tooltip();
