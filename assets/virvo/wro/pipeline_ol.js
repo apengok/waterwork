@@ -435,11 +435,11 @@
                 new ol.control.FullScreen(),
                 new ol.control.MousePosition({projection: 'EPSG:3857',}),
                 // new ol.control.OverviewMap({collapsed: false, collapsible: false}),
-                new ol.control.Rotate({autoHide: false}),
-                new ol.control.ScaleLine(),
-                new ol.control.Zoom(),
-                new ol.control.ZoomSlider(),
-                new ol.control.ZoomToExtent()
+                // new ol.control.Rotate({autoHide: false}),
+                // new ol.control.ScaleLine(),
+                // new ol.control.Zoom(),
+                // new ol.control.ZoomSlider(),
+                // new ol.control.ZoomToExtent()
             ];
 
             normal_background = new ol.layer.Tile({ 
@@ -492,7 +492,7 @@
             map = new ol.Map({
                 view: new ol.View({
                     maxZoom : 26,
-                    minZoom : 13,
+                    minZoom : 2,
                     zoom: 14,
                     // center: [-11863791, 3898899]
                     center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
@@ -508,6 +508,21 @@
                 // layerGroup:arrNormal,
                 controls: controls
             });
+
+            // 行政区划查询
+            var opts = {
+                subdistrict: 1,   //返回下一级行政区
+                level: 'city',
+                showbiz: false  //查询行政级别为 市
+            };
+            district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
+            district.search('中国', function (status, result) {
+                if (status == 'complete') {
+                    fenceOperation.getData(result.districtList[0]);
+                }
+            });
+
+
         },
         init12312:function(){
             /*============================卫星图层================================*/
@@ -665,11 +680,11 @@
     new ol.control.FullScreen(),
     new ol.control.MousePosition({projection: 'EPSG:4326',}),
     // new ol.control.OverviewMap({collapsed: false, collapsible: false}),
-    new ol.control.Rotate({autoHide: false}),
-    new ol.control.ScaleLine(),
-    new ol.control.Zoom(),
-    new ol.control.ZoomSlider(),
-    new ol.control.ZoomToExtent()
+    // new ol.control.Rotate({autoHide: false}),
+    // new ol.control.ScaleLine(),
+    // new ol.control.Zoom(),
+    // new ol.control.ZoomSlider(),
+    // new ol.control.ZoomToExtent()
 ];
 
 
@@ -690,9 +705,9 @@
 
             map = new ol.Map({
                 view: new ol.View({
-                    maxZoom : 26,
-                    minZoom : 13,
-                    zoom: 14,
+                    // maxZoom : 26,
+                    // minZoom : 13,
+                    // zoom: 14,
                     // center: [-11863791, 3898899]
                     center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
                 }),
@@ -772,10 +787,10 @@
         // 地图初始化
         init: function () {
             // 创建地图
-            map = new AMap.Map("MapContainer", {
-                resizeEnable: true,   //是否监控地图容器尺寸变化
-                zoom: 18,       //地图显示的缩放级别
-            });
+            // map = new AMap.Map("MapContainer", {
+            //     resizeEnable: true,   //是否监控地图容器尺寸变化
+            //     zoom: 18,       //地图显示的缩放级别
+            // });
             // 输入提示
             var startPoint = new AMap.Autocomplete({
                 input: "startPoint"
@@ -3713,8 +3728,8 @@
                 // context:this
             }).done(function(data){
                 console.log(data)
-                var format = new ol.format.GeoJSON({defaultDataProjection:'EPSG:3857'});//{dataProjection: 'EPSG:3857'}
-                var features = format.readFeatures(data,{dataProjection: 'EPSG:3857',featureProjection:'EPSG:3857'})
+                var format = new ol.format.GeoJSON({defaultDataProjection:'EPSG:4326'});//{dataProjection: 'EPSG:3857'}
+                var features = format.readFeatures(data) //{dataProjection: 'EPSG:3857',featureProjection:'EPSG:3857'}
                 // var features = format.readFeatures(JSON.parse(data),)
                 console.log(features)
                 vectorLayer1.getSource().addFeatures(features); //vectorLayer1==map.getLayerGroup().getLayersArray()[2]
@@ -7834,9 +7849,9 @@
             else if (provin == "--请选择--") {
                 $("#provinceError").css("display", "block");
             }
-            for (var i = 0, l = administrativeAreaFence.length; i < l; i++) {
-                administrativeAreaFence[i].setMap(null);
-            }
+            // for (var i = 0, l = administrativeAreaFence.length; i < l; i++) {
+            //     administrativeAreaFence[i].setMap(null);
+            // }
             var option = obj[obj.options.selectedIndex];
             var keyword = option.text; //关键字
             var adcode = option.adcode;
@@ -7852,22 +7867,70 @@
         },
         //行政区域选择后数据处理
         getData: function (data) {
+            console.log(data)
             var bounds = data.boundaries;
             if (bounds) {
+                console.log(bounds)
                 $('#administrativeLngLat').val(bounds.join('-'));
+                // var polygon = new ol.geom.Polygon({
+                //     coordinates:bounds
+                // })
+                // console.log(polygon)
+                var featurescollect = [];
                 for (var i = 0, l = bounds.length; i < l; i++) {
-                    var polygon = new AMap.Polygon({
-                        map: map,
-                        strokeWeight: 1,
-                        strokeColor: '#CC66CC',
-                        fillColor: '#CCF3FF',
-                        fillOpacity: 0.5,
-                        path: bounds[i]
-                    });
-                    administrativeAreaFence.push(polygon);
-                    map.setFitView(polygon);//地图自适应
-                }
-                ;
+                    var vectoriets = [];
+                    $.each(bounds[i],function(index,value){
+                        vectoriets.push([value.lng,value.lat])
+                    })
+                    var feature = {
+                      'type': 'Feature',
+                      'geometry': {
+                        'type': 'Polygon',
+                        'coordinates': [vectoriets]
+                      }
+                    };
+                    featurescollect.push(feature);
+                    // var polygon = new ol.geom.Polygon({
+                    //     // map: map,
+                    //     // strokeWeight: 1,
+                    //     // strokeColor: '#CC66CC',
+                    //     // fillColor: '#CCF3FF',
+                    //     // fillOpacity: 0.5,
+                    //     coordinates: ol.Coordinate(bounds[i])
+                    // });
+                    
+                    // var polygon = new ol.geom.Polygon([vectoriets])
+                    
+                    // administrativeAreaFence.push(polygon);
+                    // // map.setFitView(polygon);//地图自适应
+                    // map.getView().fit(polygon,map.getSize())
+                };
+
+                var geojsonObject = {
+                    'type': 'FeatureCollection',
+                    'crs': {
+                      'type': 'name',
+                      'properties': {
+                        'name': 'EPSG:3857'
+                      }
+                    },
+                    'features': featurescollect
+                  };
+                  var featressdafe = (new ol.format.GeoJSON()).readFeatures(geojsonObject);
+                  vectorLayer1.getSource().clear();
+                  vectorLayer1.getSource().addFeatures(featressdafe)
+                  var polygon = featressdafe[0].getGeometry();
+                    console.log(polygon)
+                    // vectorLayer1.changed();
+                    
+                    map.getView().fit(polygon, map.getSize(),); 
+                // $.each(bounds[0],function(index,value){
+                //         vectoriets.push([value.lng,value.lat])
+                //     })
+                // console.log(vectoriets)
+                // var polygon = new ol.geom.Polygon([vectoriets])
+                // administrativeAreaFence.push(polygon);
+                // map.getView().fit(administrativeAreaFence[0],map.getSize())
             }
             ;
             var subList = data.districtList;
@@ -8930,8 +8993,8 @@
     // customFucn.userTree();
     // fenceOperation.initDMAList();
     // fenceOperation.fenceEnterprise();
-    amapOperation.init();
-    // ol3ops.init();
+    // amapOperation.init();
+    ol3ops.init();
     // treeMonitoring.init();
     // pageLayout.getNowFormatDate();
     $("[data-toggle='tooltip']").tooltip();

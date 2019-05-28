@@ -344,11 +344,11 @@ def getgeojson(request):
     for i in range(len(fenceNodes_json)):
         name=fenceNodes_json[i]["name"]
         fence = FenceShape.objects.get(name=name)
-        geodata = fence.geojsondata()
-        # print(geodata)
-        data.append(geodata)
+        geodata = fence.geomjson # fence.geojsondata()
+        print(geodata,type(geodata))
+        data.append(json.loads(geodata))
     # print(data)
-    pgeojson = {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[13179003.634904388,3489350.6231983663],[13179553.026190981,3489478.018251583],[13179635.302045533,3489191.3793772897],[13179542.409904653,3488955.1677354802],[13178958.515906189,3488883.5080214627],[13178759.461047834,3489127.6818780173],[13179067.332476556,3489122.3737348537],[13179003.634904388,3489350.6231983663]]]},"properties":"null"}
+    # pgeojson = {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[13179003.634904388,3489350.6231983663],[13179553.026190981,3489478.018251583],[13179635.302045533,3489191.3793772897],[13179542.409904653,3488955.1677354802],[13178958.515906189,3488883.5080214627],[13178759.461047834,3489127.6818780173],[13179067.332476556,3489122.3737348537],[13179003.634904388,3489350.6231983663]]]},"properties":"null"}
 
     ret =  build_feature_collection(data)
     print('ere&*^*&^*&:::::',ret)

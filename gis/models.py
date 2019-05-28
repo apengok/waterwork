@@ -16,7 +16,7 @@ import time
 from mptt.models import MPTTModel, TreeForeignKey
 
 from gis.GGaussCoordConvert import Mercator2lonLat
-
+from django.contrib.gis.geos import GEOSGeometry
 
 '''
 {"name":"标注","pId":"","id":"zw_m_marker","type":"fenceParent","open":"true"},
@@ -87,6 +87,11 @@ class FenceShape(models.Model):
     zonetype   = models.CharField('区域类型',max_length=30,null=True,blank=True)
     shape   = models.CharField('形状',max_length=30,null=True,blank=True)
     
+    # 增加geometry 数据类型直接保存geom
+    # bounds_geom = models.PolygonField(srid=0)
+    geomdata = models.GeometryField(srid=0, blank=True, null=True)
+    geomjson = models.TextField(blank=True, null=True)
+
     # 多边形 各点经纬度 也应用于矩形等
     pointSeqs   = models.TextField()
     longitudes   = models.TextField()
@@ -128,6 +133,40 @@ class FenceShape(models.Model):
 
 
     def geojsondata(self):
+        pointSeqs = self.pointSeqs.split(',')
+        longitudes = self.longitudes.split(',')
+        latitudes = self.latitudes.split(',')
+
+        coords = [list(p) for p in zip(longitudes,latitudes)]
+        coords.append([longitudes[0],latitudes[0]])
+
+        # coords_trans = [float(p[0]),float(p[1]) for p in coords]
+
+        coordinates = []
+        coordinates.append(coords)
+
+        # FeatureCollection = {
+        #     "type":"FeatureCollection",
+        #     "features":[
+        #         {
+        #             "type":"Feature",
+        #             "geometry":{
+        #                 "type":"Polygon",
+        #                 "coordinates":coordinates
+        #             },
+        #             "properties":"null"
+        #         }]
+        # }
+
+        geodata = {
+            "type":"Polygon",
+            "coordinates":coordinates,
+            "properties":"null"
+        }
+
+        return geodata
+
+    def geojsondata_mercator(self):
         pointSeqs = self.pointSeqs.split(',')
         longitudes = self.longitudes.split(',')
         latitudes = self.latitudes.split(',')
