@@ -21,7 +21,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from .utils import merge_values
 import random
-from gis.GGaussCoordConvert import GGaussCoordConvert
+from ggis.GGaussCoordConvert import GGaussCoordConvert
 
 # Create your models here.
 

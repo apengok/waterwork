@@ -12,7 +12,7 @@ from django.db.models import Q
 
 from entm.models import Organizations
 from dmam.models import DMABaseinfo,Meter,Station,SimCard,VConcentrator,VCommunity,VWatermeter,VPressure,VSecondWater
-from gis.models import FenceDistrict
+from ggis.models import FenceDistrict
 
 # python manage.py dumpdata dma --format json --indent 4 > dma/dmadd.json
 # python manage.py loaddata dma/dmadd.json 

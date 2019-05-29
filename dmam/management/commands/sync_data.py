@@ -14,7 +14,7 @@ import itertools
 from dmam.models import VConcentrator,VWatermeter,VCommunity,Station,Meter,SimCard,DMABaseinfo,DmaStation
 from entm.models import Organizations
 
-from gis.models import FenceDistrict,Polygon,FenceShape
+from ggis.models import FenceDistrict,Polygon,FenceShape
 
 logger_info = logging.getLogger('info_logger')
 
