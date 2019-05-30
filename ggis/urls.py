@@ -16,6 +16,7 @@ urlpatterns = [
 
     # GIS系统 --管网查询
     url(r'^getgeojson',views.getgeojson,name='getgeojson'),
+    url(r'^getdmageojson',views.getdmageojson,name='getdmageojson'),
     url(r'^pipelinequery/?$',views.PipelineQueryView.as_view(),name='pipelinequery'),
     url(r'^bindfence/fenceTree/?$',views.fenceTree,name='fenceTree'),
     url(r'^bindfence/list/?$',views.fencelist,name='fencelist'),

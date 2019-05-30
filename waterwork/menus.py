@@ -57,10 +57,10 @@ choicetreedict["baseanalys"] = {
 choicetreedict["gis"] = {
         "name":"GIS系统",
         "submenu":[{
-            "pipelinequery":{"name":"管网查询","url":"/gis/pipelinequery/","sub":{"name":"可写"}},
-            "pipelinestastic":{"name":"管网统计","url":"/gis/pipelinestastic/","sub":{"name":"可写"}},
-            "pipelineanalys":{"name":"管网分析","url":"/gis/pipelineanalys/","sub":{"name":"可写"}},
-            "pipelineimexport":{"name":"导入导出","url":"/gis/pipelineimexport/","sub":{"name":"可写"}},
+            "pipelinequery":{"name":"管网查询","url":"/ggis/pipelinequery/","sub":{"name":"可写"}},
+            "pipelinestastic":{"name":"管网统计","url":"/ggis/pipelinestastic/","sub":{"name":"可写"}},
+            "pipelineanalys":{"name":"管网分析","url":"/ggis/pipelineanalys/","sub":{"name":"可写"}},
+            "pipelineimexport":{"name":"导入导出","url":"/ggis/pipelineimexport/","sub":{"name":"可写"}},
             
         }],
     }

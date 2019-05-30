@@ -89,10 +89,12 @@ class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
                 # wkt = "GeomFromText('POLYGON((-13.12890625 58.768200159239576, 1.1865234375 58.49369382056807, 5.537109375 50.2612538275847, -12.9638671875 49.18170338770662, -13.12890625 58.768200159239576))')"
                 # q.geomdata = wkt #GEOSGeometry(json.dumps(polyg))
                 print(q.geomdata)
+                if q.geomjson is None:
+                    continue
                 jd = json.loads(q.geomjson)
                 print(jd['coordinates'],type(jd))
                 d = jd['coordinates'][0]
-                coordstr = ','.join('%s %s'%(a[1],a[0]) for a in d)
+                coordstr = ','.join('%s %s'%(a[0],a[1]) for a in d)
                 wkt = "GeomFromText('POLYGON(({}))')".format(coordstr)
                 name = q.name
                 print('name=',name)

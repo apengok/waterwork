@@ -283,7 +283,8 @@
 <div id="content-right" class="col-md-10 content-right" >
     <div  >
         <!-- <div id="js-map" class="map"></div> -->
-        
+        <!-- <div id="map" class="map"></div> -->
+      
       <div id="MapContainer" class="mapArea" style="-webkit-user-select:none;">
           <!-- 围栏 -->
           <div id="fenceTool" class="btn-group">
@@ -305,7 +306,7 @@
           <div id="realTimeBtn" class="trackPlay-group">
               <!--<input id="setMap" type="button" class="mapBtn" value="卫星" />-->
               <!--<input type="button" class="mapRC" id="realTimeRC" value="实时路况">-->
-
+              <div id="myposition"></div>
               <a class="fenceA" id="mapDropSetting"><i
                       class="map-drop-sett"></i><span>地图设置</span></a>
               <!-- 地图设置下拉 -->
@@ -699,9 +700,15 @@
     
  </script>
     <!-- <script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch"></script> -->
-    <script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch,AMap.MouseTool,AMap.Driving,AMap.Autocomplete,AMap.Geocoder,AMap.PlaceSearch,AMap.PolyEditor,AMap.CircleEditor,AMap.MarkerClusterer"></script>
+    <!-- <script src="http://webapi.amap.com/maps?v=1.4.6&key=f034871b532a7bfb2d93f18e915b322c&plugin=AMap.DistrictSearch,AMap.MouseTool,AMap.Driving,AMap.Autocomplete,AMap.Geocoder,AMap.PlaceSearch,AMap.PolyEditor,AMap.CircleEditor,AMap.MarkerClusterer"></script>
+ -->
+
 <script type="text/javascript" src="{% static 'virvo/wro/bd-echatrs.js' %}"></script>
 
-<script src="{% static 'virvo/wro/mapmonitor.js' %}"></script>
+<!-- <script src="{% static 'virvo/wro/mapmonitor.js' %}"></script> -->
+
+<script type="text/javascript" src="{% static '/pipeline/js/ol-debug_1.7.js' %}"></script>
+<script type="text/javascript" src="{% static '/pipeline/js/p-ol3.debug.js' %}"></script>   
+<script src="{% static 'virvo/wro/mapmonitor_ol.js' %}"></script>
  
 {% endblock %}

@@ -33,6 +33,8 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     return node.type == "assignment" && node.children != undefined && node.children.length >0 && node.children[0].open==false;
 }
 
+
+
 (function ($, window) {
   var nowDate = new Date();
   var travelLineList, AdministrativeRegionsList, fenceIdList, stopDataFlag = true, cdWorldType,
@@ -56,9 +58,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       flagBackGo = false, flagBack = false, speed = 20000, selIndex = 0, trIndex = 0,
       mileageMax = 0, speedMax = 0, timeMax = 0, goDamoIndex = 0, markerAlarmIndex = 0, stopIndexs = 0,
       angleList = [], dragTableHeight, objectType;
-  var stopPointInfoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -10), closeWhenClickMap: true});
-  var areaCheckCarInfoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -10), closeWhenClickMap: true});
-  var alarmPointInfoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -10), closeWhenClickMap: true});
+  
   var runTable = 0;
   var runTableTime = [];
   var disableFlag = true;
@@ -111,6 +111,8 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     var dma_in_group = [];  //点击组织时记录该组织下的全部二级分区
     var dma3_and_dma2 = []; //点击二级dma蓝色统计信息，记录该二级分区及下属的三级分区
     var infow;
+
+    var map;
 
   trackPlayback = {
     //初始化
@@ -213,38 +215,13 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       oldMapHeight = $("#MapContainer").height();
       myTabHeight = $("#myTab").height();
       wHeight = $(window).height();
-      map = new AMap.Map("MapContainer", {
-        resizeEnable: true,
-        scrollWheel: true,
-        zoom: 14
-      });
-      //获取地址栏车辆id
-      var vgasId = trackPlayback.GetAddressUrl("vid");
-      if (vgasId != "") {
-        $("#container").css("position", "fixed");
-      }
-      //监听地图拖拽
-      var clickEventListenerDragend = map.on('dragend', trackPlayback.clickEventListenerDragend);
-      mouseTool = new AMap.MouseTool(map);
-      mouseTool.on("draw", trackPlayback.createSuccess);
-      //实例化3D楼块图层
-      buildings = new AMap.Buildings();
-      // 在map中添加3D楼块图层
-      buildings.setMap(map);
-      // map.getCity(function (result) {
-      //   var html = '' + result.province + '<span class="caret"></span>';
-      //   $("#placeChoose").html(html);
-      // });
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function () {
-        map.addControl(new AMap.ToolBar({
-          "direction": false,
-        }));
-        map.addControl(new AMap.Scale());
-      });
-      //卫星地图
-      satellLayer = new AMap.TileLayer.Satellite();
-      satellLayer.setMap(map);
-      satellLayer.hide();
+
+      // ol3
+
+    
+
+
+    
       //实时路况
       // realTimeTraffic = new AMap.TileLayer.Traffic();
       // realTimeTraffic.setMap(map);
@@ -252,39 +229,10 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       //页面区域定位
       $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
       
-      map.on("click", function () {
-        $("#fenceTool>.dropdown-menu").hide();
-      });
       
       
-      //监听地图缩放
-      clickEventListenerZoomend = map.on('zoomend', function () {
-        var southwest = map.getBounds().getSouthWest();//获取西南角坐标
-        var northeast = map.getBounds().getNorthEast();//获取东北角坐标
-        var possa = southwest.lat;//纬度（小）
-        var possn = southwest.lng;
-        var posna = northeast.lat;
-        var posnn = northeast.lng;
-        paths = new AMap.Bounds(
-            [possn, possa], //西南角坐标
-            [posnn, posna]//东北角坐标
-        );
-            console.log("??????1",show_dma_level)
-        if(show_dma_level == "3"){
-            show_dma_level = ""
-            console.log("??????2",show_dma_level)
-        }
-        else{
-            dma_in_group = dma_no_global;
-            console.log("on zoomend")
-            trackPlayback.refreshMap_local(dma_current_node);
-        }
-      });
-      lmapHeight = $("#MapContainer").height();
-      Math.formatFloat = function (f, digit) {
-        var m = Math.pow(10, digit);
-        return parseInt(f * m, 10) / m;
-      };
+      
+    
       setting = {
         async: {
           url: "/dmam/district/dmatree/", //trackPlayback.getTreeUrl,
@@ -418,7 +366,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       //   $(".realTimeCanArea").show()
       // }, 200);
 
-      infow = trackPlayback.infoWindow();
+      // infow = trackPlayback.infoWindow();
     },
     clickEventListenerDragend: function () {
       var southwest = map.getBounds().getSouthWest();//获取西南角坐标
@@ -2776,149 +2724,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       value = Y + M + D + h + m + s;
       return value;
     },
-    //根据时间查询报警数据
-    alarmData: function () {
-        
-      var vehicleId = $("#savePid").val();
-      var chooseDate = $("#timeInterval").val().split("--");
-      startTime = chooseDate[0];
-      endTime = chooseDate[1];
-      var alarmDataStm = new Date(Date.parse(startTime.replace(/-/g, "/"))) / 1000;
-      var alarmDataEtm = new Date(Date.parse(endTime.replace(/-/g, "/"))) / 1000;
-      trackPlayback.getTable('#gpsTable3', []);
-      $.ajax({
-        type: "POST",
-        url: "/clbs/v/monitoring/getAlarmData",
-        data: {
-          "vehicleId": vehicleId,
-          "startTime": alarmDataStm,
-          "endTime": alarmDataEtm,
-        },
-        dataType: "json",
-        async: false,
-        success: function (data) {
-          trackPlayback.alarmDatatable(data);
-          trackPlayback.addressBindClick();
-          trackPlayback.runDataSearch(runTable);
-          trackPlayback.warningAddressGet();
-        }
-      })
-    },
-    //报警数据组装
-    alarmDatatable: function (data) {
-      markerAlarmList = [];
-      var tableList = data.obj;
-      var setstop;
-      var stopIndexa = 1;
-      var tableSetstop = [];
-      var alarmtimeText = null;
-      var alarmDescriptionText = "";
-      var inext = 0;
-      var history = null;
-      // console.log("alarmDatatable....")
-      for (var i = 0; i < tableList.length; i++) {
-        var alarm = tableList[i];
-        var plateNumber = alarm.plateNumber;
-        var assignmentName = alarm.assignmentName;
-        var alarmDescription = alarm.description;
-        var alarmStatus = alarm.status;
-        var alarmPersonName = alarm.personName;
-        var alarmStartTime = alarm.startTime;
-        var alarmStartLocation = alarm.startLocation;
-        var alarmEndTime = alarm.endTime;
-        var alarmEndLocation = alarm.endLocation;
-        var height = alarm.height;
-        var alarmFenceName = alarm.fenceName;
-        var alarmFenceType = alarm.fenceType;
-        if (alarmFenceType == 'zw_m_rectangle') {
-          alarmFenceType = "矩形";
-        } else if (alarmFenceType == 'zw_m_circle') {
-          alarmFenceType = "圆形";
-        } else if (alarmFenceType == 'zw_m_line') {
-          alarmFenceType = "线";
-        } else if (alarmFenceType == 'zw_m_polygon') {
-          alarmFenceType = "多边形";
-        }
-        var recorderSpeed = alarm.recorderSpeed;
-        if (alarm.alarmStartLocation != null) {
-          var StartLocation = alarm.alarmStartLocation.split(',');//开始经纬度
-        }
-        if (alarm.alarmEndLocation != null) {
-          var EndLocation = alarm.alarmEndLocation.split(',');//结束经纬度
-        }
-        warningTableTime.push([[StartLocation === undefined ? "" : StartLocation[1], StartLocation === undefined ? "" : StartLocation[0], alarm.alarmStartTime, alarm.id, 'warning'], [EndLocation === undefined ? "" : EndLocation[1], EndLocation === undefined ? "" : EndLocation[0], alarm.alarmEndTime, alarm.id, 'warning']]);
-        setstop = [0, plateNumber, assignmentName == undefined ? '未分组' : assignmentName, alarmDescription, alarmStatus, alarmPersonName,
-          alarmStartTime, (alarmStartLocation === null || alarmStartLocation == '[]') ? '点击获取位置信息' : alarmStartLocation, alarmEndTime, (alarmEndLocation === null || alarmEndLocation == '[]') ? '点击获取位置信息' : alarmEndLocation, alarmFenceType === undefined ? "" : alarmFenceType, alarmFenceName === undefined ? "" : alarmFenceName];
-        setstop[0] = stopIndexa;
-        stopIndexa++;
-        tableSetstop.push(setstop);
-        alarmtimeText = alarmStartTime;
-        alarmDescriptionText = "";
-        alarmDescriptionText = alarmDescription;
-        if (alarm.alarmStartLocation != null) {
-          var sLocation = alarm.alarmStartLocation.split(",");
-        }
-        var arrstop = [];
-        if (worldType != "5") {
-          arrstop.push("监控对象:" + plateNumber);
-          arrstop.push("车牌颜色:" + vcolour);
-          arrstop.push("所属分组:" + assignmentName);
-          arrstop.push("高程:" + (height === null ? "" : height));
-          arrstop.push("SIM卡号:" + alarmSIM);
-          arrstop.push("终端号:" + alarmTopic);
-          arrstop.push("记录仪速度:" + (recorderSpeed === null ? "" : recorderSpeed));
-          arrstop.push("报警信息:" + alarmDescriptionText);
-          arrstop.push("处理状态:" + alarmStatus);
-          arrstop.push("处理人:" + (alarmPersonName === null ? "无" : alarmPersonName));
-          arrstop.push("报警开始时间:" + (alarmStartTime === null ? "" : alarmStartTime));
-          arrstop.push("报警开始坐标:" + (StartLocation === undefined ? "位置描述获取失败" : StartLocation));
-          arrstop.push("报警结束时间:" + (alarmEndTime === null ? "" : alarmEndTime));
-          arrstop.push("报警结束坐标:" + (EndLocation === undefined ? "位置描述获取失败" : EndLocation));
-        } else {
-          arrstop.push("监控对象:" + plateNumber);
-          arrstop.push("所属分组:" + assignmentName);
-          arrstop.push("报警信息:" + alarmDescriptionText);
-          arrstop.push("处理状态:" + alarmStatus);
-          arrstop.push("处理人:" + (alarmPersonName === null ? "无" : alarmPersonName));
-          arrstop.push("报警开始时间:" + (alarmStartTime === null ? "" : alarmStartTime));
-          arrstop.push("报警开始坐标:" + (StartLocation === undefined ? "位置描述获取失败" : StartLocation));
-          arrstop.push("报警结束时间:" + (alarmEndTime === null ? "" : alarmEndTime));
-          arrstop.push("报警结束坐标:" + (EndLocation === undefined ? "位置描述获取失败" : EndLocation));
-        }
-        if (alarmFenceName != undefined && alarmFenceName != null && alarmFenceType != undefined && alarmFenceType != null) {
-          arrstop.push("围栏名称:" + alarmFenceName);
-          arrstop.push("围栏类型:" + alarmFenceType);
-        }
-        if (sLocation != undefined) {
-          var markerAlarm = new AMap.Marker({
-            map: map,
-            position: [sLocation[0], sLocation[1]],//基点位置
-            icon: "/static/virvo/resources/img/al.svg", //marker图标，直接传递地址url
-            zIndex: 9999,
-            autoRotation: true
-          });
-          markerAlarm.content = arrstop.join("<br/>");
-          markerAlarm.on('click', trackPlayback.markeralarmDatatable);
-          markerAlarmList.push(markerAlarm);
-        }
-      }
-      trackPlayback.getTable('#gpsTable3', tableSetstop);
-
-      // 如果显示报警点未勾选  则隐藏地图报警点标识
-      if (!($("#chooseAlarmPoint").is(":checked"))) {
-        if (markerAlarmList.length > 0) {
-          for (var i = 0; i < markerAlarmList.length; i++) {
-            var markerAlarmChecked = markerAlarmList[i];
-            markerAlarmChecked.hide();
-          }
-        }
-      }
-    },
-    //报警点信息窗体
-    markeralarmDatatable: function (e) {
-      alarmPointInfoWindow.setContent(e.target.content);
-      alarmPointInfoWindow.open(map, e.target.getPosition());
-    },
+    
     //获取地址栏参数
     GetAddressUrl: function (name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -2942,93 +2748,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         map.setCenter(markerAlarmList[alarmIndex - 1].getPosition());
       });
     },
-    //日历点击报警点集合清空
-    markerAlarmClear: function () {
-      markerAlarmList = [];
-    },
-    //报警点显示隐藏执行方法
-    hideAlarmPointFn: function () {
-      if ($("#chooseAlarmPoint").attr("checked")) {
-        $("#chooseAlarmPoint").attr("checked", false);
-        layer.msg("隐藏报警点");
-        if (markerAlarmList.length > 0) {
-          for (var i = 0; i < markerAlarmList.length; i++) {
-            var markerAlarmChecked = markerAlarmList[i];
-            markerAlarmChecked.hide();
-          }
-        }
-        alarmPointInfoWindow.close();
-      } else {
-        $("#chooseAlarmPoint").attr("checked", true);
-        layer.msg("显示报警点");
-        if (markerAlarmList.length <= 0 || markerAlarmList == null) {
-          trackPlayback.alarmData();
-        }
-        if (markerAlarmList.length > 0) {
-          for (var i = 0; i < markerAlarmList.length; i++) {
-            var markerAlarmChecked = markerAlarmList[i];
-            markerAlarmChecked.show();
-          }
-        }
-      }
-    },
-    //停车数据点击获取数据
-    showHidestopDataTrClickFn: function () {
-      $("#gpsTable2 tbody tr").bind("click", function () {
-        $("#gpsTable2 tbody tr").removeClass("tableSelected");
-        $(this).addClass("tableSelected");
-        var stopIndex = parseInt($(this).children("td:nth-child(1)").text());
-        if (markerStopAnimationFlog == 1) {
-          trackPlayback.markerStop(stopIndex);
-        } else {
-          markerStopAnimation[stopIndexs].setAnimation('AMAP_ANIMATION_NONE');
-          stopIndexs = stopIndex % 2 == 0 ? stopIndex / 2 - 1 : (stopIndex + 1) / 2 - 1;
-          markerStopAnimation[stopIndexs].setAnimation('AMAP_ANIMATION_BOUNCE');
-          map.setCenter(markerStopAnimation[stopIndexs].getPosition());
-        }
-      });
-    },
-    //停止点显示隐藏
-    hideStopPointFn: function () {
-      isSearch = false;
-      if (!($("#chooseStopPoint").attr("checked"))) {
-        isAllStopPoint = true;
-        markerStopAnimationFlog = 1;
-        if (markerStopAnimation.length != 0) {
-          markerStopAnimation[stopIndexs].setAnimation('AMAP_ANIMATION_NONE');
-        }
-        $("#chooseStopPoint").attr("checked", "checked");
-        layer.msg("显示所有停止点");
-        if (worldType == "5") {
-          trackPlayback.getTable('#gpsTable5', tableSetstops, dragTableHeight);
-        } else {
-          trackPlayback.getTable('#gpsTable2', tableSetstops, dragTableHeight);
-        }
-        trackPlayback.showHidestopDataTrClickFn();
-      } else {
-        isAllStopPoint = false;
-        markerStopAnimationFlog = 2;
-        if (markerAlarmIndex != 0) {
-          markerAlarmList[markerAlarmIndex - 1].setAnimation('AMAP_ANIMATION_NONE');
-        }
-        $("#chooseStopPoint").removeAttr("checked", "checked");
-        layer.msg("隐藏所有停止点");
-        if (worldType == "5") {
-          trackPlayback.getTable('#gpsTable5', tableSetStopGroup, dragTableHeight);
-        } else {
-          trackPlayback.getTable('#gpsTable2', tableSetStopGroup, dragTableHeight);
-        }
-        trackPlayback.showHidestopDataTrClickFn();
-      }
-      if (marking !== 'run') {
-        marking = 'stop';
-        stopTable = 0;
-        warningTable = 0;
-      }
-      trackPlayback.addressBindClick();
-      isSearch = true;
-      trackPlayback.againSearchLocation();
-    },
+    
     //查询模块
     showAreaTool: function () {
       if ($("#realTimeCanArea").hasClass("rtcaHidden")) {
@@ -3038,176 +2758,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       }
     },
     
-    // 点击获取报警数据结束address
-    getWarningEndAddress: function () {
-      $thisWarningTd = $(this);
-      var index = $(this).parent('tr').find('td:nth-child(1)').text();
-      var url = '/clbs/v/monitoring/address';
-      var value = warningTableTime[index - 1][1];
-      var data = {addressReverse: value};
-      ajax_submit("POST", url, "json", true, data, true, trackPlayback.warningClickDataCallBack);
-      event.stopPropagation();
-    },
-    warningClickDataCallBack: function (data) {
-      $thisWarningTd.text(data).css('color', '#5D5F63');
-    },
-    // 表格数据导出
-    exportTableData: function () {
-      // 人  报警数据
-      if ($("#tableAlarmDate").hasClass("active")) {
-        if (worldType == "5") {
-          if ($("#gpsTable3 tbody tr td").hasClass("dataTables_empty")) {
-            layer.msg("列表无任何数据，无法导出");
-            return;
-          }
-        } else {
-
-          if ($("#warningData tbody tr td").hasClass("dataTables_empty")) {
-            layer.msg("列表无任何数据，无法导出");
-            return;
-          }
-        }
-      }
-      // 北斗协议的监控对象的停止数据
-      if ($("#p-tableStopData").hasClass("active")) {
-        if ($("#gpsTable5 tbody tr td").hasClass("dataTables_empty")) {
-          layer.msg("列表无任何数据，无法导出");
-          return;
-        }
-      }
-      // 北斗协议的监控对象的行驶数据
-      if ($("#p-travelData").hasClass("active")) {
-        if ($("#gpsTable4 tbody tr td").hasClass("dataTables_empty")) {
-          layer.msg("列表无任何数据，无法导出");
-          return;
-        }
-      }
-      //  其他协议监控对象的行驶数据
-      if ($("#v-travelData").hasClass("active")) {
-        if ($("#gpsTable tbody tr td").hasClass("dataTables_empty")) {
-          layer.msg("列表无任何数据，无法导出");
-          return;
-        }
-      }
-      // 其他协议监控对象的停止数据
-      if ($("#tableStopData").hasClass("active")) {
-        if ($("#gpsTable2 tbody tr td").hasClass("dataTables_empty")) {
-          layer.msg("列表无任何数据，无法导出");
-          return;
-        }
-      }
-      var id
-          , monitoringObjectType
-          , load = false;
-      $('#myTab li').each(function () {
-        if ($(this).hasClass('active')) {
-          id = $(this).attr('id');
-          if (id === 'v-travelData') {
-            monitoringObjectType = '1';
-          } else if (id === 'p-travelData') {
-            monitoringObjectType = '2';
-          } else if (id === 'tableStopData') {
-            monitoringObjectType = '3';
-          } else if (id === 'p-tableStopData') {
-            monitoringObjectType = '4';
-          } else if (id === 'tableAlarmDate') {
-            monitoringObjectType = '5';
-          }
-        }
-      });
-      if (monitoringObjectType === '1' || monitoringObjectType === '2') {
-        if (isRunAddressLoad) {
-          load = true;
-        }
-      } else if (monitoringObjectType === '3' || monitoringObjectType === '4') {
-        if (isStopAddressLoad) {
-          load = true;
-        }
-      } else if (monitoringObjectType === '5') {
-        if (isWarnAddressLoad) {
-          load = true;
-        }
-      }
-      var carID = $("#citySel").val();
-      if (carID == "" || carID == undefined) {
-        layer.msg(vehicleNumberChoose, {move: false});
-        return false;
-      }
-      if (!Assembly) {
-        layer.msg(trackDateNull, {move: false});
-        return false;
-      }
-      if (load) {
-        var tableID = $('#' + id).find('a').attr('href');
-        trackPlayback.tableDataAssembly(tableID, monitoringObjectType);
-      } else {
-        layer.msg(trackDataLoading);
-      }
-
-
-    },
-    Assemblys: function () {
-      Assembly = true;
-      stopDataFlag = true;
-    },
-    // table导出数据组装
-    tableDataAssembly: function (id, monitoringObjectType) {
-      var trackPlayBackValue = []
-          , url = '/clbs/v/monitoring/exportTrackPlayback'
-          , data;
-      $(id).find('tbody tr').each(function () {
-        var tdData = "";
-        $(this).find('td').each(function () {
-          var text = $(this).text();
-          tdData += (text + ";");
-        })
-        trackPlayBackValue.push(tdData);
-      })
-      trackPlayBackValue.push(" ");
-      var str = trackPlayBackValue.join("_");
-      var compress = unzip(str);
-      data = {
-        'trackPlayBackValue': compress,
-        'tableType': monitoringObjectType,
-      }
-      ajax_submit('POST', url, 'json', true, data, true, trackPlayback.exportDataCallback);
-    },
-    // 导出回调函数
-    exportDataCallback: function (data) {
-      if (data != "") {
-        var url = "/clbs/v/monitoring/exportTrackPlaybackGet?tableType=" + data + "";
-        window.location.href = url;
-      } else {
-        layer.msg("亲，没有数据，不能导出哦！");
-        /*layer.msg(publicExportError);*/
-      }
-    },
-    //将时间戳变成小时分秒
-    changdatainfo: function (data) {
-      var day = parseInt(data / (24 * 60 * 60));//计算整数天数
-      var afterDay = data - day * 24 * 60 * 60;//取得算出天数后剩余的秒数
-      var hour = parseInt(afterDay / (60 * 60));//计算整数小时数
-      var afterHour = data - day * 24 * 60 * 60 - hour * 60 * 60;//取得算出小时数后剩余的秒数
-      var min = parseInt(afterHour / 60);//计算整数分
-      var afterMin = data - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60;//取得算出分后剩余的秒数
-      if (day != 0 && hour != 0 && min != 0) {
-        var time = day + "天" + hour + "小时" + min + "分" + afterMin + "秒";
-        return time;
-      }
-      var time = day + "天" + hour + "小时" + min + "分" + afterMin + "秒";
-      if (day == 0) {
-        var time = time.replace(/0天/, "");
-      }
-      if (hour == 0) {
-        var time = time.replace(/0小时/, "");
-      }
-      if (min == 0) {
-        var time = time.replace(/0分/, "");
-      }
-      return time;
-
-
-    },
+    
     //将小时分秒变成时间戳
     changedataunix: function (date) {
       var date = date.replace(/-/g, "/");
@@ -3215,55 +2766,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       timestamp = timestamp / 1000;
       return timestamp;
     },
-    ajaxQueryDataFilter: function (treeId, parentNode, responseData) {
-      responseData = JSON.parse(ungzip(responseData));
-      return filterQueryResult(responseData, crrentSubV);
-    },
-    searchVehicleTree: function (param) {
-      if (param == null || param == undefined || param == '') {
-        bflag = true;
-        // 清空搜索条件的车辆
-        $('#vid').val("");
-        $('#pid').val("");
-        $.fn.zTree.init($("#treeDemo"), setting, null);
-      } else {
-        bflag = true;
-        var querySetting = {
-          async: {
-            url: "/clbs/m/functionconfig/fence/bindfence/monitorTreeFuzzy",
-            type: "post",
-            enable: true,
-            autoParam: ["id"],
-            dataType: "json",
-            otherParam: {"type": "single", "queryParam": param, "queryType": "name"},
-            dataFilter: trackPlayback.ajaxQueryDataFilter
-          },
-          check: {
-            enable: true,
-            chkStyle: "radio"
-          },
-          view: {
-            dblClickExpand: false
-          },
-          data: {
-            simpleData: {
-              enable: true
-            }
-          },
-          callback: {
-            beforeCheck: trackPlayback.zTreeBeforeCheck,
-            onCheck: trackPlayback.onCheck,
-            beforeClick: trackPlayback.zTreeBeforeClick,
-            onAsyncSuccess: trackPlayback.zTreeOnAsyncSuccess,
-            onClick: trackPlayback.zTreeOnClick,
-            onExpand: trackPlayback.zTreeOnExpand,
-            beforeAsync: trackPlayback.zTreeBeforeAsync,
-            onNodeCreated: trackPlayback.zTreeOnNodeCreated,
-          }
-        };
-        $.fn.zTree.init($("#treeDemo"), querySetting, null);
-      }
-    },
+    
     /**
      * 选中已选的节点
      */
@@ -4218,11 +3721,245 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       }
       ;
     });
-    var map;
+    
     var playState = false;
     isFlag = false;
     trackPlayback.init();
-    trackPlayback.responseSocket();
+    // trackPlayback.responseSocket();
+
+    // ol3
+// var WEBSITE_ROOT='http://192.168.1.145:8000/gis/';
+var WEBSITE_ROOT='/ggis/';
+
+
+/***********************µ×Í¼Ó¦ÓÃ²ã²¿·Ö***********************/
+var appLayer = function (options) {
+   var layer = new ol.layer.Tile({
+   extent: ol.proj.transformExtent(options.mapExtent, options.fromProject, options.toProject),
+   source: new ol.source.XYZ({
+        urls: options.urls,
+        tilePixelRatio: options.tilePixelRatio,
+        minZoom: options.mapMinZoom,
+        maxZoom: options.mapMaxZoom
+        })
+   });
+   return layer;
+}
+
+var latitude = 114.3524087439;//22.6942072709,114.3524087439  af218d8a9536478231c24fa299fc48f5
+var longitude = 22.6942072709;
+var center = [118.41047,29.86299];
+// var center = [latitude,longitude];
+
+/*============================µØÐÎÍ¼²ã================================*/
+var normal_background = new appLayer({
+    urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t5.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t6.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t7.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5'],
+    mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+    tilePixelRatio: 1,
+    fromProject: "EPSG:102100",
+    toProject: "EPSG:3857"
+})
+
+var normal_data = new appLayer({
+    urls: ['http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t1.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t2.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t4.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t5.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t6.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+            'http://t7.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5'],
+    mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+    tilePixelRatio: 1,
+    fromProject: "EPSG:102100",
+    toProject: "EPSG:3857"
+})
+
+
+var arrNormal = new ol.Collection();
+arrNormal.push(normal_background);
+arrNormal.push(normal_data);
+
+var normal_group = new ol.layer.Group({
+    //mapType: ol.control.MapType.NORMAL_MAP,
+    layers : arrNormal
+});
+
+var attribution = new ol.control.Attribution({
+    className : 'none'
+});
+
+/*============================Ê¸Á¿Í¼²ã================================*/
+var vector_background = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: function(extent, resolution, projection){
+        var topRight = ol.proj.transform(ol.extent.getTopRight(extent),'EPSG:3857', 'EPSG:4326');
+        var bottomLeft = ol.proj.transform(ol.extent.getBottomLeft(extent),'EPSG:3857', 'EPSG:4326');
+        var tUrl = WEBSITE_ROOT + "getdmageojson?left=" + bottomLeft[0] + '&top=' + bottomLeft[1] +
+                            '&right=' + topRight[0] + "&bottom=" + topRight[1]+"&layerName=dlzxc"; 
+        //var tUrl = "china.json";                                
+        return tUrl;
+    },
+    //strategy : ¼ÓÔØ²ßÂÔ
+    //Ä¿±êÊÇ´ÓÊý¾ÝÔ´ÇëÇóÊ¸Á¿µÄ·½Ê½£¬°üÀ¨µ¥´ÎÇëÇóÈ«²¿ÔªËØ ol.loadingstrategy.all,Ä¬ÈÏ
+    //µ±Ç°ÊÓÍ¼·¶Î§ ol.loadingstrategy.bbox
+    //ÇÐÆ¬·¶Î§ ol.loadingststrategy.tile
+    strategy: ol.loadingstrategy.bbox,
+    //strategy: ol.loadingstrategy.all,
+    format: new ol.format.GeoJSON({
+        extractStyles: false
+    })
+  })
+});
+
+map = new ol.Map({
+    view: new ol.View({
+        center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
+        maxZoom : 23,
+        minZoom : 13,
+        zoom: 13
+    }),
+    controls: ol.control.defaults({ attribution: false }).extend([attribution]),
+    target:"MapContainer"
+});
+
+
+map.addLayer(normal_group);
+map.addLayer(vector_background);
+
+var mousePosition = new ol.control.MousePosition({
+    coordinateFormat: ol.coordinate.createStringXY(5),
+    projection: 'EPSG:4326',
+    target: document.getElementById('myposition'),
+    undefinedHTML: '&nbsp;'
+    });
+
+map.addControl(mousePosition);
+
+
+
+ol.layer.SXZDT = function(opt_options) {
+    
+    var options = opt_options || {};
+    this.source_ = new ol.source.Vector();
+    this.layerName_ = options.layerName ? options.layerName : '';
+    this.name_ = options.name ? options.name : '';
+  
+    this.maxZoom = options.maxZoom ? options.maxZoom : -1;
+    this.minZoom = options.minZoom ? options.minZoom : -1;
+    
+    this.visible = true;
+    
+    var this_ = this;
+    ol.layer.Vector.call(this, {
+        source : this_.source_,
+        style : new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#7F7F7F',
+                width: 1
+            })
+        })
+    });
+    
+    var myExtent = map.getView().calculateExtent(map.getSize());
+    var bottomLeft = ol.proj.transform(ol.extent.getBottomLeft(myExtent),'EPSG:3857', 'EPSG:4326');
+    var topRight = ol.proj.transform(ol.extent.getTopRight(myExtent),'EPSG:3857', 'EPSG:4326');
+    
+    $.ajax({
+        url: WEBSITE_ROOT+'getdmageojson',
+        data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
+        type: 'GET',
+        success: function(res){
+            //var geojsonObject = Ext.util.JSON.decode(res);
+            var features = (new ol.format.GeoJSON()).readFeatures(res);
+            this_.source_.clear(true);
+            this_.source_.addFeatures(features);
+            //this_.dimTexts = geojsonObject.dimTexts;
+        }
+    });
+    
+}
+ol.inherits(ol.layer.SXZDT, ol.layer.Vector);
+
+ol.layer.SXZDT.prototype.setMap = function(map) {
+        ol.layer.Vector.prototype.setMap.call(this, map);
+        var this_ = this;
+        map.on('moveend',function(e){
+              this_.refreshSource_(e);
+        });
+        
+};
+
+ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
+            var current_zoom = map.getView().getZoom();
+            var visible = true;
+            if(this.maxZoom != -1 && this.minZoom != -1) {
+                if(current_zoom >= this.minZoom && current_zoom <= this.maxZoom)
+                    visible = true;
+                else
+                    visible = false;
+            }
+            else if(this.maxZoom != -1 && this.minZoom == -1) {
+                   if(current_zoom <= this.maxZoom)
+                     visible = false;
+                else
+                    visible = true;
+            }
+            else if(this.minZoom != -1 && this.maxZoom == -1) {
+                    if(current_zoom >= this.minZoom)
+                      visible = true;
+                else
+                      visible = false;
+            }
+            var this_ = this;
+            if(this.visible & visible) {
+                var myExtent = map.getView().calculateExtent(map.getSize());
+                var bottomLeft = ol.proj.transform(ol.extent.getBottomLeft(myExtent),'EPSG:3857', 'EPSG:4326');
+                var topRight = ol.proj.transform(ol.extent.getTopRight(myExtent),'EPSG:3857', 'EPSG:4326');
+                
+                $.ajax({
+                    url: WEBSITE_ROOT+'getdmageojson',
+                    data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
+                    type: 'POST',
+                    success: function(res){
+                        //var geojsonObject = Ext.util.JSON.decode(res);
+                        var features = (new ol.format.GeoJSON()).readFeatures(res);
+                        this_.source_.clear(true);
+                        this_.source_.addFeatures(features);
+                        //this_.dimTexts = geojsonObject.dimTexts;
+                    }
+                });
+                this.setVisible(true);
+            }
+            else{
+                this.dimTexts = null;
+                this.setVisible(false);
+                this.source_.clear(true);
+            }
+}
+
+//dlzxc
+var dlzxc_layer = new ol.layer.SXZDT({
+    layerName : 'dlzxc',
+    name:'µÀÂ·ÖÐÏß²ã',
+    minZoom : 13
+});
+
+var layers1 = new ol.Collection();
+layers1.push(dlzxc_layer);
+
+var layer_group = new ol.layer.Group({
+    layers:layers1
+});
+map.addLayer(layer_group);
+    // ----------------------------------------------------------
     //设置最大值
     ScrollBar.maxValue = 40000;
     //初始化
@@ -4310,3 +4047,5 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
   });
 }($, window))
+
+

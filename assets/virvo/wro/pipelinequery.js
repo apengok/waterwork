@@ -3157,7 +3157,7 @@
         // 围栏树
             var fenceAll = {
                 async: {
-                    url: "/gis/bindfence/fenceTree/",
+                    url: "/ggis/bindfence/fenceTree/",
                     type: "post",
                     enable: true,
                     autoParam: ["id"],
@@ -3539,7 +3539,7 @@
             };
             // 表格setting
             var bindSetting = {
-                listUrl: "/gis/bindfence/list/",
+                listUrl: "/ggis/bindfence/list/",
                 editUrl: "/clbs/m/functionconfig/fence/bindfence/editById",
                 deleteUrl: "/clbs/m/functionconfig/fence/bindfence/delete_",
                 deletemoreUrl: "/clbs/m/functionconfig/fence/bindfence/deletemore",
@@ -3766,7 +3766,7 @@
             layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/gis/fence/bindfence/getFenceDetails",
+                url: "/ggis/fence/bindfence/getFenceDetails",
                 data: {
                     "fenceNodes": JSON.stringify(fenceNode)
                 },
@@ -3833,7 +3833,7 @@
             $.ajax({
                 type: "POST",
                 async: false,
-                url: "/gis/fence/managefence/previewFence",
+                url: "/ggis/fence/managefence/previewFence",
                 data: {"fenceIdShape": fenceId_shape_value},
                 dataType: "json",
                 success: function (data) {
@@ -4192,7 +4192,7 @@
         },
         // 删除围栏
         deleteFence: function (treeNode) {
-            var url = "/gis/fence/managefence/delete_/";// + treeNode.id + "/";
+            var url = "/ggis/fence/managefence/delete_/";// + treeNode.id + "/";
             layer.confirm(fenceOperationFenceDeleteConfirm, {
                 btn: ['确定', '取消'],
                 icon: 3,
@@ -4911,7 +4911,7 @@
             layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/gis/fence/bindfence/getFenceDetails",
+                url: "/ggis/fence/bindfence/getFenceDetails",
                 async: false,
                 data: {
                     "fenceNodes": JSON.stringify(nodes)
@@ -5374,7 +5374,7 @@
             $("#addOrUpdateLineFlag").val("1");
             var thisData = thisId + "#" + "zw_m_line";
             var thisParams = {"fenceIdShape": thisData};
-            var url = "/gis/fence/managefence/previewFence";
+            var url = "/ggis/fence/managefence/previewFence";
             ajax_submit("POST", url, "json", true, thisParams, true, fenceOperation.editCallBack);
         },
         editCallBack: function (data) {
@@ -6406,7 +6406,7 @@
             ;
             var fenceAll = {
                 async: {
-                    url: "/gis/bindfence/fenceTree/",
+                    url: "/ggis/bindfence/fenceTree/",
                     type: "post",
                     enable: true,
                     autoParam: ["id"],

@@ -326,7 +326,7 @@
             map.clearMap();
             $.ajax({
                 type: 'POST',
-                url: '/gis/fence/bindfence/getFenceDetails/',
+                url: '/ggis/fence/bindfence/getFenceDetails/',
                 data: {"dma_no" : $("#current_dma_no").val()},
                 async:false,
                 dataType: 'json',
@@ -386,7 +386,7 @@
             map.clearMap();
             $.ajax({
                 type: 'POST',
-                url: '/gis/fence/bindfence/alterFillColor/',
+                url: '/ggis/fence/bindfence/alterFillColor/',
                 data: {"dma_no" : dma_no,"fillColor":fillColor},
                 async:false,
                 dataType: 'json',
@@ -406,7 +406,7 @@
             map.clearMap();
             $.ajax({
                 type: 'POST',
-                url: '/gis/fence/bindfence/getFenceDetails/',
+                url: '/ggis/fence/bindfence/getFenceDetails/',
                 data: {"dma_no" : $("#current_dma_no").val()},
                 async:false,
                 dataType: 'json',
@@ -452,7 +452,7 @@
             map.clearMap();
             $.ajax({
                 type: 'POST',
-                url: '/gis/fence/bindfence/alterstrokeColor/',
+                url: '/ggis/fence/bindfence/alterstrokeColor/',
                 data: {"dma_no" : dma_no,"strokeColor":strokeColor},
                 async:false,
                 dataType: 'json',
@@ -472,7 +472,7 @@
             map.clearMap();
             $.ajax({
                 type: 'POST',
-                url: '/gis/fence/bindfence/getFenceDetails/',
+                url: '/ggis/fence/bindfence/getFenceDetails/',
                 data: {"dma_no" : $("#current_dma_no").val()},
                 async:false,
                 dataType: 'json',

@@ -350,16 +350,17 @@ def getgeojson(request):
     bbox = (float(left),float(top),float(right),float(bottom))
     print(bbox)
     geom = Polygon.from_bbox(bbox)
+    print('geom:',geom)
 
     # geodata=FenceShape.objects.filter(geomdata__intersects=geom)
     rsql = '''
         SELECT id,AsText(geomdata) FROM  `fenceshape` 
         WHERE 
-            within(`geomdata`,
-                GEOMFROMTEXT('POLYGON(({}))', 0 )
+            within(geomdata,
+                GEOMFROMTEXT('{}', 0 )
             )
     ;
-    '''.format(bbox)
+    '''.format(geom)
     geodata = FenceShape.objects.raw(rsql)
     print('asdfe------',geodata)
     for q in geodata:
@@ -386,6 +387,46 @@ def getgeojson(request):
     # print(json.loads(ret))
     return JsonResponse(ret)
     
+
+def getdmageojson(request):
+    print(request.GET)
+    print(request.POST)
+    left = request.GET.get('left')
+    top = request.GET.get('top')
+    right = request.GET.get('right')
+    bottom = request.GET.get('bottom')
+    # fenceNode = request.GET.get('fenceNode','resere')
+    fenceNodes = request.GET.get("fenceNodes")
+
+    # (u'118.28575800964357', u'29.8010417315232', u'118.53518199035648', u'29.924899835516314')
+    # left = 118.28575800964357
+    # top = 29.8010417315232
+    # right = 118.53518199035648
+    # bottom = 29.924899835516314
+    bbox = (float(left),float(top),float(right),float(bottom))
+    print(bbox)
+    geom = Polygon.from_bbox(bbox)
+    print('geom:',geom)
+
+    # geodata=FenceShape.objects.filter(geomdata__intersects=geom)
+    rsql = '''
+        SELECT id,geomjson FROM  `fenceshape` 
+        WHERE 
+            within(geomdata,
+                GEOMFROMTEXT('{}', 0 )
+            )
+    ;
+    '''.format(geom)
+    geodata = FenceShape.objects.raw(rsql)
+    data = []
+    for q in geodata:
+        print(' \t\n:',q.id,'#########',q.geomjson)
+        data.append(json.loads(q.geomjson))
+    
+    ret =  build_feature_collection(data)
+    # print('ere&*^*&^*&:::::',ret)
+    # print(json.loads(ret))
+    return JsonResponse(ret)
 
 def getFenceDetails(request):
     print("getFenceDetails",request.POST)
