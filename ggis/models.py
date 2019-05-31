@@ -163,7 +163,7 @@ class FenceShape(models.Model):
         geodata = {
             "type":"Polygon",
             "coordinates":coordinates,
-            "properties":"null"
+            # "properties":{"name":self.name}
         }
 
         return geodata
@@ -197,6 +197,7 @@ class FenceShape(models.Model):
         geodata = {
             "type":"Polygon",
             "coordinates":coordinates,
+            # "properties":{"name":self.name}
             
         }
 

@@ -3844,6 +3844,26 @@ var mousePosition = new ol.control.MousePosition({
 map.addControl(mousePosition);
 
 
+var dma_style =function(feature) { 
+
+    var color='#0080FF';
+    var item = feature.getProperties().id;
+    var opacity = 0.3;
+    var style =  new ol.style.Style({
+        
+        // stroke: new ol.style.Stroke({
+        //     color: 'rgba(255, 154, 31, 0.9)',
+        //     width: 3,
+        //     lineDash: [8, 6]
+        // }),
+        fill: new ol.style.Fill({
+            color: 'red'
+        }),
+        
+    })
+    feature.setStyle(style);
+};
+
 
 ol.layer.SXZDT = function(opt_options) {
     
@@ -3860,12 +3880,7 @@ ol.layer.SXZDT = function(opt_options) {
     var this_ = this;
     ol.layer.Vector.call(this, {
         source : this_.source_,
-        style : new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: '#7F7F7F',
-                width: 1
-            })
-        })
+        style : dma_style,
     });
     
     var myExtent = map.getView().calculateExtent(map.getSize());
@@ -3880,7 +3895,10 @@ ol.layer.SXZDT = function(opt_options) {
             //var geojsonObject = Ext.util.JSON.decode(res);
             var features = (new ol.format.GeoJSON()).readFeatures(res);
             this_.source_.clear(true);
+            var new_feateres = [];
+            
             this_.source_.addFeatures(features);
+            
             //this_.dimTexts = geojsonObject.dimTexts;
         }
     });
@@ -3927,12 +3945,33 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
                 $.ajax({
                     url: WEBSITE_ROOT+'getdmageojson',
                     data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
-                    type: 'POST',
+                    type: 'GET',
                     success: function(res){
                         //var geojsonObject = Ext.util.JSON.decode(res);
-                        var features = (new ol.format.GeoJSON()).readFeatures(res);
+                        var features = (new ol.format.GeoJSON({defaultDataProjection:'EPSG:4326'})).readFeatures(res);
+                        var features2 = (new ol.format.GeoJSON({defaultDataProjection:'EPSG:3857'})).readFeatures(res);
                         this_.source_.clear(true);
-                        this_.source_.addFeatures(features);
+                        this_.source_.addFeatures(features2);
+                        console.log(this_.source_)
+                        this_.source_.forEachFeature(function(feature){
+
+                            console.log(feature.getProperties());
+
+                            style = new ol.style.Style({
+                                //I don't know how to get the color of your kml to fill each room
+                                fill: new ol.style.Fill({ color: 'red' }),
+                                stroke: new ol.style.Stroke({ color: '#000' }),
+                                text: new ol.style.Text({
+                                    text: feature.get('name'),
+                                    font: '12px Calibri,sans-serif',
+                                    fill: new ol.style.Fill({ color: 'red' }),
+                                    stroke: new ol.style.Stroke({
+                                        color: '#fff', width: 2
+                                    })
+                                })
+                            });
+                            feature.setStyle(style);
+                        });
                         //this_.dimTexts = geojsonObject.dimTexts;
                     }
                 });
@@ -3951,7 +3990,7 @@ var dlzxc_layer = new ol.layer.SXZDT({
     name:'µÀÂ·ÖÐÏß²ã',
     minZoom : 13
 });
-
+dlzxc_layer.setMap(map)
 var layers1 = new ol.Collection();
 layers1.push(dlzxc_layer);
 
@@ -3959,6 +3998,8 @@ var layer_group = new ol.layer.Group({
     layers:layers1
 });
 map.addLayer(layer_group);
+
+
     // ----------------------------------------------------------
     //设置最大值
     ScrollBar.maxValue = 40000;
