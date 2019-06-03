@@ -298,7 +298,9 @@ def return_feature_collection(cur):
     def generate():
         yield '{ "type": "FeatureCollection", "features": ['
         for idx, row in enumerate(cur):
-            
+            # coords = row["coordinates"][0]
+            # coords_trans = [[float(p[0]),float(p[1])] for p in coords]
+            # row["coordinates"] = [coords_trans]
             if idx > 0:
                 yield ','
             yield '{ "type":"Feature","geometry":'
@@ -307,7 +309,6 @@ def return_feature_collection(cur):
             yield '}'
         yield ']}'
         
-    return generate()
     return HttpResponse(generate())
 
 def build_feature_collection(cur):
@@ -317,9 +318,13 @@ def build_feature_collection(cur):
     """
     features = []
     for idx,row in enumerate(cur):
+        print('row data',row)
+        coords = row["coordinates"][0]
+        coords_trans = [[float(p[0]),float(p[1])] for p in coords]
+        row["coordinates"] = [coords_trans]
         feature = {
-                "type":"Feature",
                 "geometry":row,#json.dumps(row),
+                "type":"Feature",
                 "properties":{"name":"fuck"}
             }
         features.append(feature)
@@ -331,8 +336,22 @@ def build_feature_collection(cur):
         
     return FeatureCollection
     
+def test_for_145(request):
+    f=FenceShape.objects.get(name='shaxi')
+    print(' \t\n:',f.id,'#########',f.geomdata.geojson,'-----',f.geomjson)
+    # tmp = q.geojsondata()
+    # print('tmp:',tmp)
+    print('\r\n')
+    # data.append(json.dumps(tmp))
+    data = []
+    data.append(json.loads(f.geomjson))
+        # data.append(json.loads(f.geomdata.geojson))
+        
+    
+    return return_feature_collection(data)
 
 def getgeojson(request):
+    return test_for_145(request)
     print(request.GET)
     print(request.POST)
     left = request.GET.get('left')
@@ -409,6 +428,9 @@ def getdmageojson(request):
     geom = Polygon.from_bbox(bbox)
     print('geom:',geom)
 
+    # pgeojson = {"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[13178892.355395831,3489944.851357296],[13181281.012238158,3490454.4314972665],[13181822.4413829,3488777.063506157],[13180803.280811375,3487460.647792236],[13178648.181393484,3487938.3792190184],[13178202.298825681,3489021.2372169197],[13178892.355395831,3489944.851357296]]]},"properties":"null"}]}
+    # return JsonResponse(pgeojson)
+
     # geodata=FenceShape.objects.filter(geomdata__intersects=geom)
     rsql = '''
         SELECT id,geomdata,geomjson FROM  `fenceshape` 
@@ -421,18 +443,24 @@ def getdmageojson(request):
     geodata = FenceShape.objects.raw(rsql)
     data = []
     for q in geodata:
-        f=FenceShape.objects.get(pk=17)
+        f=FenceShape.objects.get(name='shaxi')
         print(' \t\n:',q.id,'#########',f.geomdata.geojson,'-----',q.geomjson)
-        data.append(json.loads(f.geomdata.geojson))
+        # tmp = q.geojsondata()
+        # print('tmp:',tmp)
+        print('\r\n')
+        # data.append(json.dumps(tmp))
+        data.append(json.loads(f.geomjson))
+        # data.append(json.loads(f.geomdata.geojson))
         break
-    print('data:',data)
+    
+    return return_feature_collection(data)
     ret =  build_feature_collection(data)
-    print('ret',ret)
+    print('\r\n')
     # print('ere&*^*&^*&:::::',ret)
     # print(json.loads(ret))
-    tmp=JsonResponse(ret)
+    tmp=JsonResponse(ret,safe=False)
     print('jsontmp:',tmp.content)
-    return JsonResponse(ret)
+    return HttpResponse(ret)
 
 def getFenceDetails(request):
     print("getFenceDetails",request.POST)

@@ -140,12 +140,12 @@ class FenceShape(models.Model):
         latitudes = self.latitudes.split(',')
 
         coords = [list(p) for p in zip(longitudes,latitudes)]
-        coords.append([longitudes[0],latitudes[0]])
+        # coords.append([float(longitudes[0]),float(latitudes[0])])
 
-        # coords_trans = [float(p[0]),float(p[1]) for p in coords]
+        coords_trans = [[float(p[0]),float(p[1])] for p in coords]
 
         coordinates = []
-        coordinates.append(coords)
+        coordinates.append(coords_trans)
 
         # FeatureCollection = {
         #     "type":"FeatureCollection",
@@ -165,6 +165,8 @@ class FenceShape(models.Model):
             "coordinates":coordinates,
             # "properties":{"name":self.name}
         }
+
+        print('\r\n\r\n',geodata,type(geodata))
 
         return geodata
 

@@ -3798,25 +3798,26 @@ var attribution = new ol.control.Attribution({
 
 /*============================Ê¸Á¿Í¼²ã================================*/
 var vector_background = new ol.layer.Vector({
-  source: new ol.source.Vector({
-    url: function(extent, resolution, projection){
-        var topRight = ol.proj.transform(ol.extent.getTopRight(extent),'EPSG:3857', 'EPSG:4326');
-        var bottomLeft = ol.proj.transform(ol.extent.getBottomLeft(extent),'EPSG:3857', 'EPSG:4326');
-        var tUrl = WEBSITE_ROOT + "getdmageojson?left=" + bottomLeft[0] + '&top=' + bottomLeft[1] +
-                            '&right=' + topRight[0] + "&bottom=" + topRight[1]+"&layerName=dlzxc"; 
-        //var tUrl = "china.json";                                
-        return tUrl;
-    },
-    //strategy : ¼ÓÔØ²ßÂÔ
-    //Ä¿±êÊÇ´ÓÊý¾ÝÔ´ÇëÇóÊ¸Á¿µÄ·½Ê½£¬°üÀ¨µ¥´ÎÇëÇóÈ«²¿ÔªËØ ol.loadingstrategy.all,Ä¬ÈÏ
-    //µ±Ç°ÊÓÍ¼·¶Î§ ol.loadingstrategy.bbox
-    //ÇÐÆ¬·¶Î§ ol.loadingststrategy.tile
-    strategy: ol.loadingstrategy.bbox,
-    //strategy: ol.loadingstrategy.all,
-    format: new ol.format.GeoJSON({
-        extractStyles: false
+    projection: 'EPSG:4326',
+    source: new ol.source.Vector({
+        url: function(extent, resolution, projection){
+            var topRight = ol.proj.transform(ol.extent.getTopRight(extent),'EPSG:3857', 'EPSG:4326');
+            var bottomLeft = ol.proj.transform(ol.extent.getBottomLeft(extent),'EPSG:3857', 'EPSG:4326');
+            var tUrl = WEBSITE_ROOT + "getdmageojson?left=" + bottomLeft[0] + '&top=' + bottomLeft[1] +
+                                '&right=' + topRight[0] + "&bottom=" + topRight[1]+"&layerName=dlzxc"; 
+            //var tUrl = "china.json";                                
+            return tUrl;
+        },
+        //strategy : ¼ÓÔØ²ßÂÔ
+        //Ä¿±êÊÇ´ÓÊý¾ÝÔ´ÇëÇóÊ¸Á¿µÄ·½Ê½£¬°üÀ¨µ¥´ÎÇëÇóÈ«²¿ÔªËØ ol.loadingstrategy.all,Ä¬ÈÏ
+        //µ±Ç°ÊÓÍ¼·¶Î§ ol.loadingstrategy.bbox
+        //ÇÐÆ¬·¶Î§ ol.loadingststrategy.tile
+        strategy: ol.loadingstrategy.bbox,
+        //strategy: ol.loadingstrategy.all,
+        format: new ol.format.GeoJSON({
+            extractStyles: false
+        })
     })
-  })
 });
 
 map = new ol.Map({
@@ -3832,7 +3833,7 @@ map = new ol.Map({
 
 
 map.addLayer(normal_group);
-map.addLayer(vector_background);
+// map.addLayer(vector_background);
 
 var mousePosition = new ol.control.MousePosition({
     coordinateFormat: ol.coordinate.createStringXY(5),
@@ -3879,6 +3880,7 @@ ol.layer.SXZDT = function(opt_options) {
     
     var this_ = this;
     ol.layer.Vector.call(this, {
+        projection: 'EPSG:4326',
         source : this_.source_,
         style : dma_style,
     });
@@ -3891,9 +3893,17 @@ ol.layer.SXZDT = function(opt_options) {
         url: WEBSITE_ROOT+'getdmageojson',
         data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
         type: 'GET',
-        success: function(res){
+        // dataType: 'json',
+        success: function(data){
+            console.log(data)
+            var res = JSON.parse(data,function(k,v){
+                console.log(k,v,typeof(v));
+                return v
+            });
+            console.log(res)
             //var geojsonObject = Ext.util.JSON.decode(res);
             var features = (new ol.format.GeoJSON()).readFeatures(res);
+            console.log(features)
             this_.source_.clear(true);
             var new_feateres = [];
             
@@ -3946,33 +3956,37 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
                     url: WEBSITE_ROOT+'getdmageojson',
                     data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
                     type: 'GET',
-                    success: function(res){
+                    success: function(data){
+                        var res = eval(data);
                         //var geojsonObject = Ext.util.JSON.decode(res);
-                        var features = (new ol.format.GeoJSON({defaultDataProjection:'EPSG:4326'})).readFeatures(res);
-                        var features2 = (new ol.format.GeoJSON({defaultDataProjection:'EPSG:3857'})).readFeatures(res);
+                        console.log(res)
+                        var features = (new ol.format.GeoJSON()).readFeatures(eval(data));
+                        var features2 = (new ol.format.GeoJSON({defaultDataProjection:'EPSG:3857'})).readFeatures(eval(data));
                         this_.source_.clear(true);
-                        this_.source_.addFeatures(features2);
-                        console.log(this_.source_)
-                        this_.source_.forEachFeature(function(feature){
+                        this_.source_.addFeatures(features);
+                        console.log(features)
+                        console.log(features2)
+                        // console.log(this_.source_)
+                        // this_.source_.forEachFeature(function(feature){
 
-                            console.log(feature.getProperties());
+                        //     console.log(feature.getProperties());
 
-                            style = new ol.style.Style({
-                                //I don't know how to get the color of your kml to fill each room
-                                fill: new ol.style.Fill({ color: 'red' }),
-                                stroke: new ol.style.Stroke({ color: '#000' }),
-                                text: new ol.style.Text({
-                                    text: feature.get('name'),
-                                    font: '12px Calibri,sans-serif',
-                                    fill: new ol.style.Fill({ color: 'red' }),
-                                    stroke: new ol.style.Stroke({
-                                        color: '#fff', width: 2
-                                    })
-                                })
-                            });
-                            feature.setStyle(style);
-                        });
-                        //this_.dimTexts = geojsonObject.dimTexts;
+                        //     style = new ol.style.Style({
+                        //         //I don't know how to get the color of your kml to fill each room
+                        //         fill: new ol.style.Fill({ color: 'red' }),
+                        //         stroke: new ol.style.Stroke({ color: '#000' }),
+                        //         text: new ol.style.Text({
+                        //             text: feature.get('name'),
+                        //             font: '12px Calibri,sans-serif',
+                        //             fill: new ol.style.Fill({ color: 'red' }),
+                        //             stroke: new ol.style.Stroke({
+                        //                 color: '#fff', width: 2
+                        //             })
+                        //         })
+                        //     });
+                        //     feature.setStyle(style);
+                        // });
+                        // //this_.dimTexts = geojsonObject.dimTexts;
                     }
                 });
                 this.setVisible(true);
@@ -3990,7 +4004,7 @@ var dlzxc_layer = new ol.layer.SXZDT({
     name:'µÀÂ·ÖÐÏß²ã',
     minZoom : 13
 });
-dlzxc_layer.setMap(map)
+// dlzxc_layer.setMap(map)
 var layers1 = new ol.Collection();
 layers1.push(dlzxc_layer);
 

@@ -43,9 +43,13 @@ class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
         
         for q in queryset:
             try:
-                # q.geomjson = json.dumps(q.geojsondata())
-                q.name = q.name +'_test'
-                q.save()
+                jsondata = json.dumps(q.geojsondata())
+                # q.save()
+                wkt = "'{}'".format(jsondata)
+                name = q.name
+                with connection.cursor() as cursor:
+                    #cursor.execute("""UPDATE fenceshape SET geomdata = %(coord)s  """, {'coord':wkt})
+                    print(cursor.execute("""update fenceshape set geomjson=%s where name='%s'  """%(wkt,name)))
             except Exception as e:
                 print('error appear:',e)
                 pass
