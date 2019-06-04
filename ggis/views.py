@@ -443,7 +443,7 @@ def getdmageojson(request):
     geodata = FenceShape.objects.raw(rsql)
     data = []
     for q in geodata:
-        f=FenceShape.objects.get(name='shaxi')
+        f=FenceShape.objects.get(name=q.name)
         print(' \t\n:',q.id,'#########',f.geomdata.geojson,'-----',q.geomjson)
         # tmp = q.geojsondata()
         # print('tmp:',tmp)
@@ -451,16 +451,16 @@ def getdmageojson(request):
         # data.append(json.dumps(tmp))
         data.append(json.loads(f.geomjson))
         # data.append(json.loads(f.geomdata.geojson))
-        break
+        
     
-    return return_feature_collection(data)
+    # return return_feature_collection(data)
     ret =  build_feature_collection(data)
     print('\r\n')
     # print('ere&*^*&^*&:::::',ret)
     # print(json.loads(ret))
     tmp=JsonResponse(ret,safe=False)
     print('jsontmp:',tmp.content)
-    return HttpResponse(ret)
+    return JsonResponse(ret)
 
 def getFenceDetails(request):
     print("getFenceDetails",request.POST)
