@@ -12,7 +12,6 @@
 
         #treeDemo {
             height: 20000px;
-            z-index: 5;
         }
 
         #MapContainer {
@@ -198,7 +197,7 @@
 
 
 {% block content_left %}
-<div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px; ">
+<div id="content-left" class="col-md-2" style="padding-right: 0px; padding-left: 0px; z-index: 99">
     <div id="operationMenu" class="panel panel-default panDefMenu">
         <div class="panel-heading" style="padding:10px;background-color:#ffffff;color:#767676;">
             <h3 class="panel-title fwb">分区总数(<span id="all_dma_num"></span>)</h3>
@@ -287,54 +286,13 @@
         <!-- <div id="map" class="map"></div> -->
       
       <div id="MapContainer" class="mapArea" style="-webkit-user-select:none;">
-          <!-- 围栏 -->
-          <div id="fenceTool" class="btn-group">
-              <!-- <button id="fenceToolBtn" style="top:-6px" type="button"
-                      class="btn btn-white dropdown-toggle" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">
-                  <img src="/static/virvo/resources/img/FenceIco.svg"
-                       style="width:18px;height:15.3px;"/><span class="caret"></span>
-              </button> -->
-              <!-- <div class="dropdown-menu">
-                  <div id="vFenceMsg" class="col-md-12 text-center">请选择监控对象！</div>
-                  <div id="vSearchContent" class="col-md-12 hidden">
-                      <input type="text" class="form-control" name="search"
-                             id="vFenceSearch" placeholder="请输入关键字"/>
-                  </div>
-                  <ul id="vFenceTree" class="ztree hidden"></ul>
-              </div> -->
-          </div>
-          <div id="realTimeBtn" class="trackPlay-group">
-              <!--<input id="setMap" type="button" class="mapBtn" value="卫星" />-->
-              <!--<input type="button" class="mapRC" id="realTimeRC" value="实时路况">-->
-              <div id="myposition"></div>
-              <a class="fenceA" id="mapDropSetting"><i
-                      class="map-drop-sett"></i><span>地图设置</span></a>
-              <!-- 地图设置下拉 -->
-              <div class="mapDropSettingMenu" id="mapDropSettingMenu" style="right: 20px;">
-                  <p class="m-line">
-                      <input type="checkbox" id="showStation"
-                             class="monitoringSelect"/>
-                      <label for="showStation" id="realTimeRCLab"
-                             class="monitoringSelect">显示站点</label>
-                  </p>
-                  <hr>
-                  <p>
-                      <input type="checkbox" id="setMap"
-                             class="monitoringSelect"/>
-                      <label for="setMap" id="defaultMapLab"
-                             class="monitoringSelect">卫星地图</label>
-                  </p>
-                  <hr>
-                  <p>
-                      <input type="checkbox" id="googleMap" class="monitoringSelect"/>
-                      <label for="googleMap" id="googleMapLab"
-                             class="monitoringSelect">谷歌地图</label>
-                  </p>
-              </div>
-          </div>
+          
+          
           <!-- playcard here delete -->
-          <div class="realTimeCanArea rtcaHidden" id="realTimeCanArea">
+          
+      </div>
+
+      <div class="realTimeCanArea rtcaHidden" id="realTimeCanArea" style="position: absolute;">
               <div class="form-group" style="height: 57px;border-bottom:10px">
                 <!--  <div class="col-md-12 searchListSelect">-->
                   <div class=" col-md-12 searchListSelect" style="margin-left: -20px;margin-top: -10px;width: 360px" id="searchInput" >
@@ -360,7 +318,7 @@
               <div class="areaTool"><i class="fa fa-search"></i><span>查<br/>询</span>
               </div>
           </div>
-      </div>
+
       <div id="goShow" style="top:-4px">
           <i id="goHidden" class="fa fa-chevron-right"></i>
       </div>
@@ -710,6 +668,6 @@
 
 <script type="text/javascript" src="{% static '/pipeline/js/ol-debug321.js' %}"></script>
 <script type="text/javascript" src="{% static '/pipeline/js/p-ol3.debug.js' %}"></script>   
-<script src="{% static 'virvo/wro/mapmonitor_ol.js' %}"></script>
+<script src="{% static 'virvo/wro/mapmonitor_ol3.js' %}"></script>
  
 {% endblock %}

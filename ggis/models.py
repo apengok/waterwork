@@ -92,7 +92,7 @@ class FenceShape(models.Model):
     # bounds_geom = models.PolygonField(srid=0)
     geomdata = models.GeometryField(srid=0, blank=True, null=True)
     geomjson = models.TextField(blank=True, null=True)
-    polygon = models.PolygonField(blank=True)
+    
 
     # 多边形 各点经纬度 也应用于矩形等
     pointSeqs   = models.TextField()
@@ -140,7 +140,7 @@ class FenceShape(models.Model):
         latitudes = self.latitudes.split(',')
 
         coords = [list(p) for p in zip(longitudes,latitudes)]
-        # coords.append([float(longitudes[0]),float(latitudes[0])])
+        coords.append([float(longitudes[0]),float(latitudes[0])])
 
         coords_trans = [[float(p[0]),float(p[1])] for p in coords]
 

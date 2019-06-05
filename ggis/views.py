@@ -311,7 +311,7 @@ def return_feature_collection(cur):
         
     return HttpResponse(generate())
 
-def build_feature_collection(cur):
+def build_feature_collection(cur,prop):
     """
     Execute a JSON-returning SQL and return HTTP response
     :type sql: SQL statement that returns a a GeoJSON Feature
@@ -325,7 +325,7 @@ def build_feature_collection(cur):
         feature = {
                 "geometry":row,#json.dumps(row),
                 "type":"Feature",
-                "properties":{"name":"fuck"}
+                "properties":prop[idx]
             }
         features.append(feature)
     
@@ -442,6 +442,7 @@ def getdmageojson(request):
     '''.format(geom)
     geodata = FenceShape.objects.raw(rsql)
     data = []
+    data_property = []
     for q in geodata:
         f=FenceShape.objects.get(name=q.name)
         print(' \t\n:',q.id,'#########',f.geomdata.geojson,'-----',q.geomjson)
@@ -449,12 +450,15 @@ def getdmageojson(request):
         # print('tmp:',tmp)
         print('\r\n')
         # data.append(json.dumps(tmp))
-        data.append(json.loads(f.geomjson))
-        # data.append(json.loads(f.geomdata.geojson))
+        # data.append(json.loads(f.geomjson))
+        properties = {"strokeColor":q.strokeColor,"fillColor":q.fillColor,"name":q.name}
+        data.append(json.loads(f.geomdata.geojson))
+        data_property.append(properties)
+
         
     
     # return return_feature_collection(data)
-    ret =  build_feature_collection(data)
+    ret =  build_feature_collection(data,data_property)
     print('\r\n')
     # print('ere&*^*&^*&:::::',ret)
     # print(json.loads(ret))

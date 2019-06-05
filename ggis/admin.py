@@ -107,13 +107,17 @@ class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
                 d = jd['coordinates'][0]
                 coordstr = ','.join('%s %s'%(a[0],a[1]) for a in d)
                 wkt = "GeomFromText('POLYGON(({}))')".format(coordstr)
+                print("wkt:",wkt)
                 name = q.name
                 print('name=',name)
+                strqerer="""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name)
+                print("sdfe:",strqerer)
                 # q.save()
                 # models.FenceShape.objects.raw("update fenceshape set geomdata = 'POLYGON(( 10 10, 10 20, 20 20, 20 15, 10 10))'")
                 with connection.cursor() as cursor:
-                    #cursor.execute("""UPDATE fenceshape SET geomdata = %(coord)s  """, {'coord':wkt})
-                    print(cursor.execute("""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name)))
+                    # cursor.execute("""UPDATE fenceshape SET geomdata = %(coord)s  """, {'coord':wkt})
+                    cursor.execute("""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name))
+                    # print(cursor.execute("""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name)))
             except Exception as e:
                 print('error appear:',e)
                 
