@@ -2510,9 +2510,20 @@ var dma_style =function(feature) {
             color: color
             
         }),
+        text: new ol.style.Text({
+          font: '18px Calibri,sans-serif',
+          fill: new ol.style.Fill({ color: 'white' }),
+          stroke: new ol.style.Stroke({
+            color: '#169bd5', width: 12
+          }),
+          // get the text from the feature - `this` is ol.Feature
+          // and show only under certain resolution
+          text: name + '\n' +'123 m3/h' //map.getView().getZoom() > 12 ? feature.get('description') : 'text--'
+        })
         
     })
     feature.setStyle(style);
+    
 };
 
 
@@ -2621,22 +2632,14 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
                         // console.log(this_.source_)
                         // this_.source_.forEachFeature(function(feature){
 
-                        //     console.log(feature.getProperties());
-
-                        //     style = new ol.style.Style({
-                        //         //I don't know how to get the color of your kml to fill each room
-                        //         fill: new ol.style.Fill({ color: 'red' }),
-                        //         stroke: new ol.style.Stroke({ color: '#000' }),
-                        //         text: new ol.style.Text({
-                        //             text: feature.get('name'),
-                        //             font: '12px Calibri,sans-serif',
-                        //             fill: new ol.style.Fill({ color: 'red' }),
-                        //             stroke: new ol.style.Stroke({
-                        //                 color: '#fff', width: 2
-                        //             })
-                        //         })
+                        //     var coords = feature.getGeometry().getInteriorPoint();
+                        //     dmades = document.getElementById('overlay');
+                        //      var vienna = new ol.Overlay({
+                        //       position: coords.getFlatCoordinates(),
+                        //       element: dmades
                         //     });
-                        //     feature.setStyle(style);
+                        //      dmades.innerHTML = feature.getProperties().name
+                        //     map.addOverlay(vienna);
                         // });
                         // //this_.dimTexts = geojsonObject.dimTexts;
                     }
@@ -2671,7 +2674,17 @@ map.on('singleclick', function(evt) {
         return feature;
         });
     if (feature) {
-      alert('asdf')
+        var polygon = feature.getGeometry();
+          console.log(polygon)
+          map.getView().fit(polygon, map.getSize()); 
+
+          // dmades = document.getElementById('overlay');
+          //  var vienna = new ol.Overlay({
+          //   position: evt.coordinate,
+          //   element: dmades
+          // });
+          //  dmades.innerHTML = feature.getProperties().name
+          // map.addOverlay(vienna);
         //here you can add you code to display the coordinates or whatever you want to do
     }
 });
