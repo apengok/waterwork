@@ -13,7 +13,7 @@ from django.db.models.signals import pre_save
 from django.db.models import Avg, Max, Min, Sum
 from django.utils.functional import cached_property
 import time
-
+import json
 from mptt.models import MPTTModel, TreeForeignKey
 
 from ggis.GGaussCoordConvert import Mercator2lonLat
@@ -81,6 +81,31 @@ class Polygon(models.Model):
 
     def __str__(self):
         return self.name 
+
+def build_feature_collection(cur,prop):
+    """
+    Execute a JSON-returning SQL and return HTTP response
+    :type sql: SQL statement that returns a a GeoJSON Feature
+    """
+    features = []
+    for idx,row in enumerate(cur):
+        print('row data',row)
+        coords = row["coordinates"][0]
+        coords_trans = [[float(p[0]),float(p[1])] for p in coords]
+        row["coordinates"] = [coords_trans]
+        feature = {
+                "geometry":row,#json.dumps(row),
+                "type":"Feature",
+                "properties":prop[idx]
+            }
+        features.append(feature)
+    
+    FeatureCollection = {
+        "type":"FeatureCollection",
+        "features":features
+    }
+        
+    return FeatureCollection
 
 class FenceShape(models.Model):
     shapeId   = models.CharField(max_length=255,null=True,blank=True)   #形状公用，由shape区分
@@ -205,6 +230,15 @@ class FenceShape(models.Model):
 
         return geodata
 
+    def featureCollection(self):
+        data = []
+        data_property = []
+        properties = {"strokeColor":self.strokeColor,"fillColor":self.fillColor,"name":self.name}
+        data.append(json.loads(self.geomdata.geojson))
+        data_property.append(properties)
+
+        return build_feature_collection(data,data_property)
+
     
 
 from entm.utils import unique_shapeid_generator,unique_cid_generator
@@ -214,11 +248,16 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
         # instance.slug = create_slug(instance)
         instance.cid = unique_cid_generator(instance)
         
-# def polygon_pre_save_post_receiver(sender, instance, *args, **kwargs):
-#     if not instance.polygonId:
-#         # instance.slug = create_slug(instance)
-#         instance.polygonId = unique_shapeid_generator(instance)
+def polygon_pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.geomjson:
+        # instance.slug = create_slug(instance)
+        instance.geomjson = json.dumps(instance.geojsondata_mercator())
+        print('instance.geomjson---',instance.geomjson)
+        try:
+            instance.save()
+        except Exception as e:
+            print('Error shows :',e)
         
 pre_save.connect(pre_save_post_receiver, sender=FenceDistrict)        
-# pre_save.connect(polygon_pre_save_post_receiver, sender=Polygon)
+post_save.connect(polygon_pre_save_post_receiver, sender=FenceShape)
 

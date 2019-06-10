@@ -105,7 +105,11 @@ class DMABaseinfo(models.Model):
 
     @property
     def dma_level(self):
-        return self.belongto.organlevel
+        if self.belongto.organlevel == '1':
+            dma_level = '2'
+        else:
+            dma_level = self.belongto.organlevel
+        return dma_level
 
         
 
@@ -632,6 +636,9 @@ class DMABaseinfo(models.Model):
             "bbbcurrent_day":bbbcurrent_day,
             "bbbday_str":bbyestoday.strftime("%m-%d"),
         }
+
+    def dmaShape(self):
+        pass
 
 
 '''

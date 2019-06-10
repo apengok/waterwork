@@ -58,6 +58,10 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       flagBackGo = false, flagBack = false, speed = 20000, selIndex = 0, trIndex = 0,
       mileageMax = 0, speedMax = 0, timeMax = 0, goDamoIndex = 0, markerAlarmIndex = 0, stopIndexs = 0,
       angleList = [], dragTableHeight, objectType;
+
+
+      var dma_layer;
+      var moveendFn;
   
   var runTable = 0;
   var runTableTime = [];
@@ -964,6 +968,15 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
             var bbcurrent_day = dataList.bbcurrent_day;
             var bbbcurrent_day = dataList.bbbcurrent_day;
             var current_month_sale = dataList.current_month_sale;
+
+            var feature = data.feature;
+            console.log(feature)
+            if(feature){
+              var features = (new ol.format.GeoJSON()).readFeatures(feature,{featureProjection: 'EPSG:4326'});
+              
+              dma_layer.getSource().clear(true);
+              dma_layer.getSource().addFeatures(features);
+            }
 
             // console.log(current_month)
             // 本月
@@ -2380,9 +2393,18 @@ var appLayer = function (options) {
    return layer;
 }
 
-var latitude = 114.3524087439;//22.6942072709,114.3524087439  af218d8a9536478231c24fa299fc48f5
-var longitude = 22.6942072709;
-var center = [118.41047,29.86299];
+// var latitude = 114.3524087439;//22.6942072709,114.3524087439  af218d8a9536478231c24fa299fc48f5
+// var longitude = 22.6942072709;
+var longitude = $("#entlongitude").val();
+var latitude = $("#entlatitude").val();
+var zoomIn = $("#entzoomIn").val();
+if(longitude == "" || latitude == "" || zoomIn == ""){
+    longitude = 118.41047
+    latitude = 29.86299
+    zoomIn = 14
+}
+
+var center = [longitude,latitude];
 // var center = [latitude,longitude];
 
 /*============================µØÐÎÍ¼²ã================================*/
@@ -2461,7 +2483,7 @@ map = new ol.Map({
         center: center,// new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
         maxZoom : 23,
         minZoom : 13,
-        zoom: 13
+        zoom: zoomIn
     }),
     controls: ol.control.defaults({ attribution: false }).extend([attribution]),
     target:"MapContainer",
@@ -2570,7 +2592,13 @@ ol.layer.SXZDT = function(opt_options) {
             this_.source_.clear(true);
             // var new_feateres = [];
             
-            this_.source_.addFeatures(features);
+            // this_.source_.addFeatures(features);
+            $.each(features,function(idx,feature){
+              var dma_level = feature.getProperties().dma_level;
+              if(dma_level == '3'){
+                this_.source_.addFeature(feature)
+              }
+            });
             
             //this_.dimTexts = geojsonObject.dimTexts;
         }
@@ -2582,7 +2610,17 @@ ol.inherits(ol.layer.SXZDT, ol.layer.Vector);
 ol.layer.SXZDT.prototype.setMap = function(map) {
         ol.layer.Vector.prototype.setMap.call(this, map);
         var this_ = this;
-        map.on('moveend',function(e){
+        this_.setMoveEnd(map);
+        // moveendFn = map.on('moveend',function(e){
+        //       this_.refreshSource_(e);
+        // });
+        
+};
+
+ol.layer.SXZDT.prototype.setMoveEnd = function(map) {
+        // ol.layer.Vector.prototype.setMap.call(this, map);
+        var this_ = this;
+        moveendFn = map.on('moveend',function(e){
               this_.refreshSource_(e);
         });
         
@@ -2609,6 +2647,10 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
                 else
                       visible = false;
             }
+            if (this.halt_till_next){
+              this.halt_till_next = false;
+              return
+            }
             var this_ = this;
             if(this.visible & visible) {
                 var myExtent = map.getView().calculateExtent(map.getSize());
@@ -2624,11 +2666,16 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
                         // //var geojsonObject = Ext.util.JSON.decode(res);
                         // console.log(res)
                         var features = (new ol.format.GeoJSON()).readFeatures(data,{featureProjection: 'EPSG:4326'});
-                        var features2 = (new ol.format.GeoJSON({defaultDataProjection:'EPSG:3857'})).readFeatures(data,{featureProjection: 'EPSG:4326'});
+                        
                         this_.source_.clear(true);
-                        this_.source_.addFeatures(features);
-                        console.log(features)
-                        console.log(features2)
+                        // this_.source_.addFeatures(features);
+                        $.each(features,function(idx,feature){
+                          var dma_level = feature.getProperties().dma_level;
+                          if(dma_level == '2'){
+                            this_.source_.addFeature(feature)
+                          }
+                        });
+                        // dma_layer.setMoveEnd(map);
                         // console.log(this_.source_)
                         // this_.source_.forEachFeature(function(feature){
 
@@ -2654,14 +2701,14 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
 }
 
 //dlzxc
-var dlzxc_layer = new ol.layer.SXZDT({
+dma_layer = new ol.layer.SXZDT({
     layerName : 'dlzxc',
-    name:'µÀÂ·ÖÐÏß²ã',
+    name:'dma分区',
     minZoom : 13
 });
-dlzxc_layer.setMap(map)
+dma_layer.setMap(map)
 var layers1 = new ol.Collection();
-layers1.push(dlzxc_layer);
+layers1.push(dma_layer);
 
 var layer_group = new ol.layer.Group({
     layers:layers1
@@ -2674,10 +2721,22 @@ map.on('singleclick', function(evt) {
         return feature;
         });
     if (feature) {
+      // map.unByKey(moveendFn);
+      fname = feature.getProperties().name;
+      var features = dma_layer.getSource().getFeatures();
+      for (var i = 0; i < features.length; i++) {
+          var tf = features[i];
+          tname = tf.getProperties().name;
+          if (fname != tname) {
+              dma_layer.getSource().removeFeature(tf)
+          }
+      }
+      
         var polygon = feature.getGeometry();
           console.log(polygon)
           map.getView().fit(polygon, map.getSize()); 
-
+          dma_layer.halt_till_next = true;
+          // dma_layer.setMoveEnd(map)
           // dmades = document.getElementById('overlay');
           //  var vienna = new ol.Overlay({
           //   position: evt.coordinate,

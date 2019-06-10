@@ -261,6 +261,10 @@ def savePolygons(request):
     pointSeqs = request.POST.get("pointSeqs")
     longitudes = request.POST.get("longitudes")
     latitudes = request.POST.get("latitudes")
+    pgeojson = request.POST.get("pgeojson")
+
+    # print('pgeojson',pgeojson)
+
 
     createDataUsername = request.user.user_name
     organ = Organizations.objects.get(name=belongto)
@@ -280,11 +284,12 @@ def savePolygons(request):
         p.longitudes = longitudes
         p.latitudes = latitudes
         p.dma_no = dma_no
+        p.geomjson = pgeojson
         p.save()
         
     else:
         instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_polygon",belongto=organ)
-        FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)
+        FenceShape.objects.create(shapeId=instance.cid,name=name,zonetype=ftype,shape=shape,pointSeqs=pointSeqs,longitudes=longitudes,latitudes=latitudes,dma_no=dma_no)#,geomjson=pgeojson)
 
     return HttpResponse(json.dumps({"success":1}))
 
@@ -351,7 +356,7 @@ def test_for_145(request):
     return return_feature_collection(data)
 
 def getgeojson(request):
-    return test_for_145(request)
+    # return test_for_145(request)
     print(request.GET)
     print(request.POST)
     left = request.GET.get('left')
@@ -445,6 +450,60 @@ def getdmageojson(request):
     data_property = []
     for q in geodata:
         f=FenceShape.objects.get(name=q.name)
+        dma_no = f.dma_no
+        dma = DMABaseinfo.objects.get(dma_no=dma_no)
+        # 地图初始只显示2级分区
+        dma_level = dma.dma_level
+        # if dma_level != '2':
+        #     continue
+        
+        properties = {"strokeColor":q.strokeColor,"fillColor":q.fillColor,"name":q.name,"dma_level":dma_level}
+        data.append(json.loads(f.geomdata.geojson))
+        data_property.append(properties)
+
+        
+    
+    # return return_feature_collection(data)
+    ret =  build_feature_collection(data,data_property)
+    
+    return JsonResponse(ret)
+
+
+def getdmadetail(request):
+
+    print(request.GET)
+    print(request.POST)
+    
+    dma_no = request.GET.get("dma_no")
+
+    # (u'118.28575800964357', u'29.8010417315232', u'118.53518199035648', u'29.924899835516314')
+    # left = 118.28575800964357
+    # top = 29.8010417315232
+    # right = 118.53518199035648
+    # bottom = 29.924899835516314
+    print('1.12...',left,top,right,bottom)
+    bbox = (float(left),float(top),float(right),float(bottom))
+    print(bbox)
+    geom = Polygon.from_bbox(bbox)
+    print('geom:',geom)
+
+    # pgeojson = {"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[13178892.355395831,3489944.851357296],[13181281.012238158,3490454.4314972665],[13181822.4413829,3488777.063506157],[13180803.280811375,3487460.647792236],[13178648.181393484,3487938.3792190184],[13178202.298825681,3489021.2372169197],[13178892.355395831,3489944.851357296]]]},"properties":"null"}]}
+    # return JsonResponse(pgeojson)
+
+    # geodata=FenceShape.objects.filter(geomdata__intersects=geom)
+    rsql = '''
+        SELECT id,geomdata,geomjson FROM  `fenceshape` 
+        WHERE 
+            within(geomdata,
+                GEOMFROMTEXT('{}', 0 )
+            )
+    ;
+    '''.format(geom)
+    geodata = FenceShape.objects.raw(rsql)
+    data = []
+    data_property = []
+    for q in geodata:
+        f=FenceShape.objects.get(name=q.name)
         print(' \t\n:',q.id,'#########',f.geomdata.geojson,'-----',q.geomjson)
         # tmp = q.geojsondata()
         # print('tmp:',tmp)
@@ -465,6 +524,7 @@ def getdmageojson(request):
     tmp=JsonResponse(ret,safe=False)
     print('jsontmp:',tmp.content)
     return JsonResponse(ret)
+
 
 def getFenceDetails(request):
     print("getFenceDetails",request.POST)

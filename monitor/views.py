@@ -25,7 +25,7 @@ from django.db.models import Count
 from accounts.models import User,MyRoles
 
 from legacy.models import HdbFlowDataDay,HdbFlowDataMonth,Bigmeter,Alarm
-
+from ggis.models import FenceShape
 from entm.models import Organizations
 from dmam.models import DMABaseinfo
 from dmam.utils import merge_values, merge_values_with,merge_values_to_dict
@@ -107,6 +107,11 @@ def maprealdata(request):
         dmartdata = dma.dma_map_realdata()
         result["success"] = True
         result["dmartdata"] = dmartdata
+
+        f=FenceShape.objects.filter(dma_no=dma_no)
+        if f.exists():
+            feature = f[0].featureCollection()
+            result["feature"] = feature
 
 
     else:
