@@ -485,14 +485,18 @@ def stationlist(request):
     bgms = Bigmeter.objects.all().order_by('-fluxreadtime').values('commaddr','commstate','fluxreadtime','pickperiod','reportperiod',
         'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen','pressurereadtime')
     merged_bgms = merge_values_to_dict(bgms,'commaddr')
+    t1=time.time()
     alams_sets = Alarm.objects.values("commaddr").annotate(Count('id'))
     
-    alarm_dict = {}
+    # 报警信息数据库记录超过800万条，数据查询比较耗时，暂时不取，
+    # print("1.t",time.time()-t1)
+    # alarm_dict = {}
     
 
-    for alm in alams_sets:
-        alarm_dict[alm['commaddr']] = alm['id__count']
+    # for alm in alams_sets:
+    #     alarm_dict[alm['commaddr']] = alm['id__count']
         
+    # print("2.t",time.time()-t1)
     
     
     
@@ -504,7 +508,7 @@ def stationlist(request):
     for b in merged_bgms.keys():  #[start:start+length]
         
         if b in merged_station.keys():
-            alarm_count = alarm_dict.get(b,0)
+            alarm_count = 0 #alarm_dict.get(b,0)
             # alarm_count = [a['alm_count'] for a in alams_sets if a['commaddr'] == b ]
             # alarm_item = list(filter(lambda alarm: alarm[0] == b, alarm_all))[0]
             
@@ -549,7 +553,6 @@ def stationlist(request):
                 "signal":round(float(merged_bgms[b]['signlen']),2) if merged_bgms[b]['signlen'] else '',
                 
             })
-        
         
     
     recordsTotal = stations.count() + pressures.count()

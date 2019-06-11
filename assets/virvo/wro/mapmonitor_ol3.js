@@ -2610,21 +2610,13 @@ ol.inherits(ol.layer.SXZDT, ol.layer.Vector);
 ol.layer.SXZDT.prototype.setMap = function(map) {
         ol.layer.Vector.prototype.setMap.call(this, map);
         var this_ = this;
-        this_.setMoveEnd(map);
-        // moveendFn = map.on('moveend',function(e){
-        //       this_.refreshSource_(e);
-        // });
         
-};
-
-ol.layer.SXZDT.prototype.setMoveEnd = function(map) {
-        // ol.layer.Vector.prototype.setMap.call(this, map);
-        var this_ = this;
         moveendFn = map.on('moveend',function(e){
               this_.refreshSource_(e);
         });
         
 };
+
 
 ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
             var current_zoom = map.getView().getZoom();

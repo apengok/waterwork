@@ -18,6 +18,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from ggis.GGaussCoordConvert import Mercator2lonLat
 from django.contrib.gis.geos import GEOSGeometry
+from django.db import connection
 
 '''
 {"name":"标注","pId":"","id":"zw_m_marker","type":"fenceParent","open":"true"},
@@ -108,7 +109,7 @@ def build_feature_collection(cur,prop):
     return FeatureCollection
 
 class FenceShape(models.Model):
-    shapeId   = models.CharField(max_length=255,null=True,blank=True)   #形状公用，由shape区分
+    shapeId   = models.CharField(max_length=255,null=True,blank=True)   # =FenceDistrict.cid 形状公用，由shape区分
     name   = models.CharField('区域名称',max_length=100,unique=True)
     zonetype   = models.CharField('区域类型',max_length=30,null=True,blank=True)
     shape   = models.CharField('形状',max_length=30,null=True,blank=True)
@@ -251,10 +252,22 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
 def polygon_pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.geomjson:
         # instance.slug = create_slug(instance)
-        instance.geomjson = json.dumps(instance.geojsondata_mercator())
+        instance.geomjson = json.dumps(instance.geojsondata())
+        # instance.geomjson = json.dumps(instance.geojsondata_mercator())
         print('instance.geomjson---',instance.geomjson)
         try:
             instance.save()
+
+            # geomdata
+            jd = json.loads(instance.geomjson)
+            d = jd['coordinates'][0]
+            coordstr = ','.join('%s %s'%(a[0],a[1]) for a in d)
+            wkt = "GeomFromText('POLYGON(({}))')".format(coordstr)
+            name = instance.name
+            strqerer="""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name)
+            with connection.cursor() as cursor:
+                cursor.execute("""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name))
+
         except Exception as e:
             print('Error shows :',e)
         

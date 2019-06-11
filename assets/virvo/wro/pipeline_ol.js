@@ -46,10 +46,13 @@
     $tableCarRun = $("#table-car-run"), $tableCarStop = $("#table-car-stop"), $tableCarOnlinePercent = $("#table-car-online-percent"),longDeviceType,tapingTime,loadInitNowDate = new Date(),loadInitTime,
     checkFlag = false,fenceZTreeIdJson = {},fenceSize,bindFenceSetChar,fenceInputChange,scorllDefaultTreeTop,stompClientOriginal = null, stompClientSocket = null, hostUrl, DblclickName, objAddressIsTrue = [];
 
-    var vectorLayer1;
+    var dma_layer;
     var drawControl;
     var normal_background;
     var normal_data;
+    var dma_layer;
+    var dbClickFn;
+    var map;
 
 
     var pageLayout = {
@@ -421,19 +424,13 @@
 
     var ol3ops = {
         init:function(){
-            vectorLayer1 = new ol.layer.Vector({
-                // projection: 'EPSG:4326',
-                source: new ol.source.Vector()
-            });
 
-            var vectorLayer2 = new ol.layer.Vector({
-                source: new ol.source.Vector()
-            });
 
+            
             var controls = [
                 new ol.control.Attribution({collapsed: false}),
                 new ol.control.FullScreen(),
-                new ol.control.MousePosition({projection: 'EPSG:3857',}),
+                new ol.control.MousePosition({projection: 'EPSG:4326',}),
                 // new ol.control.OverviewMap({collapsed: false, collapsible: false}),
                 // new ol.control.Rotate({autoHide: false}),
                 // new ol.control.ScaleLine(),
@@ -442,72 +439,265 @@
                 // new ol.control.ZoomToExtent()
             ];
 
-            normal_background = new ol.layer.Tile({ 
-                        // source: new ol.source.OSM()
-                        // extent: ol.proj.transformExtent([-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7], "EPSG:900913", "EPSG:3857"),
-                        source: new ol.source.XYZ({
-                            urls : ['http://t0.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
-                         'http://t2.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
-                         'http://t3.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
-                         'http://t4.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
-                         'http://t5.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
-                         'http://t6.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
-                         'http://t7.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5',
-                         'http://t1.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5&tk=af218d8a9536478231c24fa299fc48f5'],
-                
-                            
-                        })
-                    });
+            var normal_background = new ol3ops.appLayer({
+                urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t5.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t6.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t7.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5'],
+                mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+                tilePixelRatio: 1,
+                fromProject: "EPSG:102100",
+                toProject: "EPSG:3857"
+            })
 
-            normal_data =  new ol.layer.Tile({ 
-                        // source: new ol.source.OSM()
-                        // extent: ol.proj.transformExtent([-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7], "EPSG:102100", "EPSG:3857"),
-
-                        source: new ol.source.XYZ({
-                            urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
-                                'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
-                                'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
-                                'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
-                                'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
-                                'http://t5.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
-                                'http://t6.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
-                                'http://t7.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5'],
-                            
-                        })
-                    });
+            var normal_data = new ol3ops.appLayer({
+                urls: ['http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t1.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t2.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t4.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t5.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t6.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
+                        'http://t7.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5'],
+                mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+                tilePixelRatio: 1,
+                fromProject: "EPSG:102100",
+                toProject: "EPSG:3857"
+            })
 
             // http://t0.tianditu.gov.cn/vec_c/wmts?tk=af218d8a9536478231c24fa299fc48f5
             // 
 
             var arrNormal = new ol.Collection();
             arrNormal.push(normal_background);
-            // arrNormal.push(normal_data);
+            arrNormal.push(normal_data);
 
             var normal_group = new ol.layer.Group({
                 // mapType: ol.control.MapType.NORMAL_MAP,
                 layers : arrNormal
             });
 
-            var center = [118.39469563,29.888188578];
+            var longitude = $("#entlongitude").val();
+            var latitude = $("#entlatitude").val();
+            var zoomIn = $("#entzoomIn").val();
+            if(longitude == "" || latitude == "" || zoomIn == ""){
+                longitude = 118.41047
+                latitude = 29.86299
+                zoomIn = 14
+            }
+
+            var center = [longitude,latitude];
+            // var center = [118.39469563,29.888188578];
             map = new ol.Map({
                 view: new ol.View({
+                    projection: 'EPSG:4326',
                     maxZoom : 26,
                     minZoom : 2,
-                    zoom: 14,
+                    zoom: zoomIn,
                     // center: [-11863791, 3898899]
-                    center:  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
+                    center:center, //  new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
                 }),
+                // controls: ol.control.defaults({ attribution: false }).extend([attribution]),
                 target: 'MapContainer',
-                layers: [
-                    // new ol.layer.Tile({
-                    //     source: new ol.source.OSM()
-                    // }),
-                    normal_background,
-                    vectorLayer1,
-                ],
+                
                 // layerGroup:arrNormal,
-                controls: controls
+                // controls: controls
             });
+            map.addLayer(normal_group);
+
+            var mousePosition = new ol.control.MousePosition({
+                coordinateFormat: ol.coordinate.createStringXY(5),
+                projection: 'EPSG:4326',
+                target: document.getElementById('myposition'),
+                undefinedHTML: '&nbsp;'
+                });
+
+            map.addControl(mousePosition);
+            
+
+var dma_style =function(feature) { 
+
+    
+    var strokeColor = feature.getProperties().strokeColor;
+    var fillColor = feature.getProperties().fillColor;
+    var name = feature.getProperties().name;
+    
+    var color = ol.color.asArray(fillColor);
+    color = color.slice();
+    color[3] = 0.2; //opacity
+
+    var style =  new ol.style.Style({
+        
+        stroke: new ol.style.Stroke({
+            color: strokeColor,
+            width: 3,
+            lineDash: [8, 6]
+        }),
+        fill: new ol.style.Fill({
+            color: color
+            
+        }),
+        text: new ol.style.Text({
+          font: '18px Calibri,sans-serif',
+          fill: new ol.style.Fill({ color: 'white' }),
+          stroke: new ol.style.Stroke({
+            color: '#169bd5', width: 12
+          }),
+          // get the text from the feature - `this` is ol.Feature
+          // and show only under certain resolution
+          text: name //map.getView().getZoom() > 12 ? feature.get('description') : 'text--'
+        })
+        
+    })
+    feature.setStyle(style);
+    
+};
+
+
+
+ol.layer.SXZDT = function(opt_options) {
+    
+    var options = opt_options || {};
+    this.source_ = new ol.source.Vector();
+    this.layerName_ = options.layerName ? options.layerName : '';
+    this.name_ = options.name ? options.name : '';
+  
+    this.maxZoom = options.maxZoom ? options.maxZoom : -1;
+    this.minZoom = options.minZoom ? options.minZoom : -1;
+    
+    this.visible = true;
+    
+    var this_ = this;
+    ol.layer.Vector.call(this, {
+        projection: 'EPSG:4326',
+        source : this_.source_,
+        style : dma_style,
+    });
+    
+    var myExtent = map.getView().calculateExtent(map.getSize());
+    var bottomLeft = ol.extent.getBottomLeft(myExtent) //ol.proj.transform(ol.extent.getBottomLeft(myExtent),'EPSG:3857', 'EPSG:4326');
+    var topRight = ol.extent.getTopRight(myExtent) //ol.proj.transform(ol.extent.getTopRight(myExtent),'EPSG:3857', 'EPSG:4326');
+    
+    $.ajax({
+        url: '/ggis/getdmageojson',
+        data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
+        type: 'GET',
+        // dataType: 'json',
+        success: function(res){
+            // console.log(data)
+            // var res = JSON.parse(data,function(k,v){
+            //     console.log(k,v,typeof(v));
+            //     return v
+            // });
+            // console.log(res)
+            //var geojsonObject = Ext.util.JSON.decode(res);
+            var features = (new ol.format.GeoJSON()).readFeatures(res,{featureProjection: 'EPSG:4326'});
+            
+            console.log(features)
+            this_.source_.clear(true);
+            // var new_feateres = [];
+            
+            this_.source_.addFeatures(features);
+            
+            
+            //this_.dimTexts = geojsonObject.dimTexts;
+        }
+    });
+    
+}
+ol.inherits(ol.layer.SXZDT, ol.layer.Vector);
+
+ol.layer.SXZDT.prototype.setMap = function(map) {
+        ol.layer.Vector.prototype.setMap.call(this, map);
+        var this_ = this;
+        
+        moveendFn = map.on('moveend',function(e){
+              this_.refreshSource_(e);
+        });
+        
+};
+
+
+ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
+            var current_zoom = map.getView().getZoom();
+            var visible = true;
+            if(this.maxZoom != -1 && this.minZoom != -1) {
+                if(current_zoom >= this.minZoom && current_zoom <= this.maxZoom)
+                    visible = true;
+                else
+                    visible = false;
+            }
+            else if(this.maxZoom != -1 && this.minZoom == -1) {
+                   if(current_zoom <= this.maxZoom)
+                     visible = false;
+                else
+                    visible = true;
+            }
+            else if(this.minZoom != -1 && this.maxZoom == -1) {
+                    if(current_zoom >= this.minZoom)
+                      visible = true;
+                else
+                      visible = false;
+            }
+            if (this.halt_till_next){
+              this.halt_till_next = false;
+              return
+            }
+            var this_ = this;
+            if(this.visible & visible) {
+                var myExtent = map.getView().calculateExtent(map.getSize());
+                var bottomLeft = ol.extent.getBottomLeft(myExtent) //ol.proj.transform(ol.extent.getBottomLeft(myExtent),'EPSG:3857', 'EPSG:4326');
+                var topRight = ol.extent.getTopRight(myExtent) //ol.proj.transform(ol.extent.getTopRight(myExtent),'EPSG:3857', 'EPSG:4326');
+    
+                $.ajax({
+                    url: '/ggis/getdmageojson',
+                    data: "left=" + bottomLeft[0] + "&top=" + bottomLeft[1] + "&right=" + topRight[0] + "&bottom=" + topRight[1] + "&layerName="+this_.layerName_,
+                    type: 'GET',
+                    success: function(data){
+                        // var res = eval(data);
+                        // //var geojsonObject = Ext.util.JSON.decode(res);
+                        // console.log(res)
+                        var features = (new ol.format.GeoJSON()).readFeatures(data,{featureProjection: 'EPSG:4326'});
+                        
+                        this_.source_.clear(true);
+                        this_.source_.addFeatures(features);
+                        
+                    }
+                });
+                this.setVisible(true);
+            }
+            else{
+                this.dimTexts = null;
+                this.setVisible(false);
+                this.source_.clear(true);
+            }
+}
+
+dma_layer = new ol.layer.Vector({
+    projection: 'EPSG:4326',
+    source: new ol.source.Vector(),
+    style : dma_style,
+});
+
+// dma_layer = new ol.layer.SXZDT({
+//     layerName : 'dlzxc',
+//     name:'dma分区',
+//     minZoom : 13
+// });
+// dma_layer.setMap(map)
+var layers1 = new ol.Collection();
+layers1.push(dma_layer);
+
+var layer_group = new ol.layer.Group({
+    layers:layers1
+});
+map.addLayer(layer_group);
+
+            // map.addLayer(dma_layer);
 
             // 行政区划查询
             var opts = {
@@ -546,7 +736,7 @@
 
             drawControl = new ol.interaction.Draw({
                 type: geometryType,
-                source: vectorLayer1.getSource()
+                source: dma_layer.getSource()
             });
 
             map.addInteraction(drawControl);
@@ -558,7 +748,7 @@
             map.removeInteraction(drawControl);
             console.log(event)
             var format = new ol.format.GeoJSON();
-            var features = vectorLayer1.getSource().getFeatures();
+            var features = dma_layer.getSource().getFeatures();
             console.log(features)
             var geoJson = format.writeFeatures(features);
             console.log(geoJson)
@@ -3430,7 +3620,7 @@
                         var checkNodes = zTree.getCheckedNodes(true);
                         fenceCheckLength = checkNodes.length;
                         // fenceOperation.fenceHidden(nodesId);
-                        fenceOperation.sectionPointState(nodesId, false);
+                        // fenceOperation.sectionPointState(nodesId, false);
                         charFlag = false;
                     } else {
                         charFlag = true;
@@ -3527,19 +3717,19 @@
                 // context:this
             }).done(function(data){
                 console.log(data)
-                var format = new ol.format.GeoJSON({defaultDataProjection:'EPSG:4326'});//{dataProjection: 'EPSG:3857'}
-                var features = format.readFeatures(data) //{dataProjection: 'EPSG:3857',featureProjection:'EPSG:3857'}
+                var format = new ol.format.GeoJSON();//{dataProjection: 'EPSG:3857'}
+                var features = format.readFeatures(data,{defaultDataProjection:'EPSG:4326'}) //{dataProjection: 'EPSG:3857',featureProjection:'EPSG:3857'}
                 // var features = format.readFeatures(JSON.parse(data),)
                 console.log(features)
-                vectorLayer1.getSource().addFeatures(features); //vectorLayer1==map.getLayerGroup().getLayersArray()[2]
+                dma_layer.getSource().addFeatures(features); //dma_layer==map.getLayerGroup().getLayersArray()[2]
                 // console.log(map.getLayers())
-                // vectorLayer1.setMap(map)
+                // dma_layer.setMap(map)
                 // var feature = vectorLayer.getSource().getFeatures()[28];
-                var polygon = features[0].getGeometry();
-                console.log(polygon)
-                // vectorLayer1.changed();
-                console.log(map)
-                map.getView().fit(polygon, map.getSize(),); 
+                // var polygon = features[0].getGeometry();
+                // console.log(polygon)
+                // // dma_layer.changed();
+                // console.log(map)
+                // map.getView().fit(polygon, map.getSize(),); 
             })
         },
         //当点击或选择围栏时，访问后台返回围栏详情
@@ -3569,12 +3759,12 @@
                                 console.log(pgeojson)
                                 var features = (new ol.format.GeoJSON()).readFeatures(pgeojson);
                                 console.log(features)
-                                vectorLayer1.getSource().clear()
-                                vectorLayer1.getSource().addFeatures(features);
+                                dma_layer.getSource().clear()
+                                dma_layer.getSource().addFeatures(features);
                                 var polygon = features[0].getGeometry();
                                 console.log(polygon)
                                 map.getView().fit(polygon, map.getSize()); 
-                                vectorLayer1.setVisible(true);
+                                dma_layer.setVisible(true);
                                 var fenceType = dataList[i].fenceType;
                                 var wayPointArray;
                                 if (fenceType == 'zw_m_travel_line') {
@@ -3979,7 +4169,7 @@
                     $("#zTreeContent").hide();
                     console.log("data.dma_no",data.dma_no)
                     $("#dma_no_Val").val(data.dma_no)
-                    // fenceOperation.initDMAList();
+                    fenceOperation.initDMAList();
                 }, 200);
             }
         },
@@ -3996,7 +4186,7 @@
                     if (data.success) {
                         fenceOperation.fenceHidden(treeNode.id);
                         fenceIDMap.remove(treeNode.id);
-                        fenceOperation.sectionPointState(treeNode.id, false);
+                        // fenceOperation.sectionPointState(treeNode.id, false);
                         if (lineSpotMap.containsKey(treeNode.id)) {
                             var thisStopArray = lineSpotMap.get(treeNode.id);
                             map.remove(thisStopArray);
@@ -4983,11 +5173,11 @@
                         // mouseToolEdit.close(true);
 
                         var select = new ol.interaction.Select({
-                            filter: function(feature, layer) {
-                                return /Polygon|LineString/.test(
-                                        feature.getGeometry().getType()
-                                    );
-                            },
+                            // filter: function(feature, layer) {
+                            //     return /Polygon|LineString/.test(
+                            //             feature.getGeometry().getType()
+                            //         );
+                            // },
                             condition: ol.events.condition.click
                         });
                         map.addInteraction(select);
@@ -5002,17 +5192,16 @@
                                   ol.events.condition.singleClick(event);
                             }
                           });
+                        dbClickFn = map.on('dblclick',fenceOperation.modifyFinish);
+                        // modify.on('modifyend',fenceOperation.modifyFinish);
 
-                        modify.on('modifyend',function(e){
-                            console.log("feature id is",e.features.getArray()[0].getId());
-                        });
+                        // modify.on('modifyend',function(e){
+                        //     console.log("feature id is",e.features.getArray()[0].getId());
+                        // });
 
                         map.addInteraction(modify);
 
-                        map.addInteraction(new ol.interaction.Translate({
-                            features: select.getFeatures()
-                        }));
-
+                        
 
 
                         isEdit = false;
@@ -5324,6 +5513,183 @@
                 }
             }).form();
         },
+        modifyFinish: function (data) {
+            data.preventDefault();
+            console.log(data);
+            var feature = map.forEachFeatureAtPixel(data.pixel, function(feature, layer) {
+            //you can add a condition on layer to restrict the listener
+            return feature;
+            });
+            console.log(feature)
+            if(feature == undefined){
+                layer.msg("双击围栏结束编辑")
+                return;
+            }
+            // map.removeInteraction(drawControl);
+            // var f = data.features.getArray()[0];
+            var f = feature;
+            
+            //标注
+            if (f.values_.geometry.getType() == "Marker") {
+                $("#addOrUpdateMarkerFlag").val("0");
+                var marker = data.obj.getPosition();
+                $("#mark-lng").attr("value", marker.lng);
+                $("#mark-lat").attr("value", marker.lat);
+                pageLayout.closeVideo();
+                $("#mark").modal('show');
+            }
+            ;
+            //圆
+            if (f.values_.geometry.getType() == "Circle") {
+                $("#addOrUpdateCircleFlag").val("0");
+                var center = data.obj.getCenter();
+                var radius = data.obj.getRadius();
+                $("#circle-lng").attr("value", center.lng);
+                $("#circle-lat").attr("value", center.lat);
+                $("#circle-radius").attr("value", radius);
+                $("#editCircleLng").val(center.lng);
+                $("#editCircleLat").val(center.lat);
+                $("#editCircleRadius").val(radius);
+                pageLayout.closeVideo();
+                $("#circleArea").modal('show');
+            }
+            ;
+            if (f.values_.geometry.getType() == "Polyline" || f.values_.geometry.getType() == "Polygon") {
+                var pointSeqs = ""; // 点序号
+                var longitudes = ""; // 所有的经度
+                var latitudes = ""; // 所有的纬度
+                var array = new Array();
+                var path = f.getGeometry().getCoordinates()[0];
+                for (var i = 0; i < path.length; i++) {
+                    array.push([path[i][0], path[i][1]]);
+                };
+                // 去除array中相邻的重复点
+                array = fenceOperation.removeAdjoinRepeatPoint(array);
+                var fileinfo = "";
+                for (var i = 0; i < array.length; i++) {
+                    fileinfo += '<tr>';
+                    fileinfo += '<td>' + i + '</td>';
+                    fileinfo += '<td>' + 'aa' + '</td>';
+                    fileinfo += '<td>' + 'bb' + '</td>';
+                    fileinfo += '</tr>';
+                }
+                ;
+                $('#tal').html(fileinfo);
+                //矩形判断
+                for (var i = 0; i < array.length; i++) {
+                    $("#table-lng-lat tbody tr:nth-child(" + parseInt(i + 1) + ")").children("td:nth-child(2)").text(array[i][0]);
+                    $("#table-lng-lat tbody tr:nth-child(" + parseInt(i + 1) + ")").children("td:nth-child(3)").text(array[i][1]);
+                    pointSeqs += i + ","; // 点序号
+                    longitudes += array[i][0] + ","; // 把所有的经度组合到一起
+                    latitudes += array[i][1] + ","; // 把所有的纬度组合到一起
+                }
+                // 去掉点序号、经度、纬度最后的一个逗号
+                if (pointSeqs.length > 0) {
+                    pointSeqs = pointSeqs.substr(0, pointSeqs.length - 1);
+                }
+                if (longitudes.length > 0) {
+                    longitudes = longitudes.substr(0, longitudes.length - 1);
+                }
+                if (latitudes.length > 0) {
+                    latitudes = latitudes.substr(0, latitudes.length - 1);
+                }
+                $("#pointSeqs").val(pointSeqs);
+                $("#longitudes").val(longitudes);
+                $("#latitudes").val(latitudes);
+                $("#pointSeqsRectangles").val(pointSeqs);
+                $("#longitudesRectangles").val(longitudes);
+                $("#latitudesRectangles").val(latitudes);
+                $("#pointSeqsPolygons").val(pointSeqs);
+                $("#longitudesPolygons").val(longitudes);
+                $("#latitudesPolygons").val(latitudes);
+
+                var format = new ol.format.GeoJSON();
+                var features = dma_layer.getSource().getFeatures();
+                var geoJson = format.writeFeatures(features);
+                console.log(geoJson);
+                $("#pgeojson").val(JSON.stringify(geoJson));
+
+                //线
+                if (f.values_.geometry.getType() == "Polyline" && !isDistanceCount) {
+                    $("#addOrUpdateLineFlag").val("0");
+                    
+                    $("#addLine").modal('show');
+                }
+                ;
+                //矩形
+                if (f.values_.geometry.getType() == "Polygon" && clickRectangleFlag && isAddFlag) {
+                    if (!isAreaSearchFlag) {
+                        if (array.length < 4) {
+                            return false;
+                        } else {
+                            $("#LUPointLngLat").val(array[0][0] + "," + array[0][1]);
+                            $("#RDPointLngLat").val(array[2][0] + "," + array[2][1]);
+                            $("#addOrUpdateRectangleFlag").val("0");
+                            
+                            $("#rectangle-form").modal('show');
+                        }
+                    }
+                    ;
+                }
+                ;
+                //多边形
+                if (f.values_.geometry.getType() == "Polygon"){// && !clickRectangleFlag && isAddFlag) {
+                    if (!$("#queryClick i").hasClass("active")) {
+                        var html = '';
+                        for (var i = 0; i < array.length; i++) {
+                            html += '<div class="form-group">'
+                                + '<label class="col-md-3 control-label">顶点' + (i + 1) + '经纬度：</label>'
+                                + '<div class=" col-md-8">'
+                                + '<input type="text" placeholder="请输入顶点经纬度" value="' + array[i][0] + "," + array[i][1] + '" class="form-control rectangleAllPointLngLat"/>'
+                                + '</div>'
+                                + '</div>'
+                        }
+                        ;
+                        $("#rectangleAllPointShow").html(html);
+                        $("#zTreeContent").show();
+                        $("#rectangleAllPointShow").html(html);
+                        $("#addOrUpdatePolygonFlag").val("1"); // 修改多边形，给此文本框赋值为1
+                        $("#polygonId").val(f.getProperties().shapeId); // 多边形区域id
+                        // 多边形修改框弹出时给文本框赋值
+                        $("#polygonName").val(f.getProperties().name);
+                        $("#polygonType").val(f.getProperties().zonetype);
+                        $("#polygonDescription").val(f.getProperties().description);
+                        // $("#pointSeqsPolygons").val(pointSeqs);
+                        // $("#longitudesPolygons").val(longitudes);
+                        // $("#latitudesPolygons").val(latitudes);
+                        // pwl add belongto
+                        $("#zTreeOrganSel").val(f.getProperties().belongto)
+                        
+                        
+                        
+                        setTimeout(function () {
+                            console.log("timeout show?")
+                            $("#myModal").modal("show");
+                            $("#myModal").modal('show');
+                            // pwl add edit belongto
+                            customFucn.userTree();
+                            $("#zTreeContent").hide();
+                            
+                            $("#dma_no_Val").val(f.getProperties().dma_no)
+                            fenceOperation.initDMAList();
+                        }, 200);
+
+                        // var dblClickInteraction;
+                        // // find DoubleClickZoom interaction
+                        // map.getInteractions().getArray().forEach(function(interaction) {
+                        //   if (interaction instanceof ol.interaction.DoubleClickZoom) {
+                        //     dblClickInteraction = interaction;
+                        //   }
+                        // });
+                        // // remove from map
+                        // map.removeInteraction(dblClickInteraction);
+                        map.unByKey(dbClickFn);
+                    }
+                }
+                ;
+            }
+            ;
+        },
         //图形画完回调事件
         createSuccess: function (data) {
             console.log(data);
@@ -5411,7 +5777,7 @@
                 $("#latitudesPolygons").val(latitudes);
 
                 var format = new ol.format.GeoJSON();
-                var features = vectorLayer1.getSource().getFeatures();
+                var features = dma_layer.getSource().getFeatures();
                 var geoJson = format.writeFeatures(features);
                 console.log(geoJson);
                 $("#pgeojson").val(JSON.stringify(geoJson));
@@ -7716,11 +8082,11 @@
                     'features': featurescollect
                   };
                   var featressdafe = (new ol.format.GeoJSON()).readFeatures(geojsonObject);
-                  vectorLayer1.getSource().clear();
-                  vectorLayer1.getSource().addFeatures(featressdafe)
+                  dma_layer.getSource().clear();
+                  dma_layer.getSource().addFeatures(featressdafe)
                   var polygon = featressdafe[0].getGeometry();
                     console.log(polygon)
-                    // vectorLayer1.changed();
+                    // dma_layer.changed();
                     
                     map.getView().fit(polygon, map.getSize(),); 
                 // $.each(bounds[0],function(index,value){
@@ -7901,19 +8267,16 @@
         },
         //隐藏区域划分
         hideFence: function (id) {
-            if (administrationMap.containsKey(id)) {
-                var this_fence = administrationMap.get(id);
-                map.remove(this_fence);
-                administrationMap.remove(id);
+            
+            var features = dma_layer.getSource().getFeatures();
+            for (var i = 0; i < features.length; i++) {
+                  var tf = features[i];
+                  tid = tf.getProperties().shapeId;
+                  if (id == tid) {
+                      dma_layer.getSource().removeFeature(tf)
+                }
             }
-            ;
-            //行驶路线travelLineMap
-            if (travelLineMap.containsKey(id)) {
-                var this_fence = travelLineMap.get(id);
-                map.remove(this_fence);
-                travelLineMap.remove(id);
-            }
-            ;
+            
         },
         //路径规划
         dragRoute: function (data) {
@@ -8759,7 +9122,7 @@
                 search_ztree('treeDemo',id,'group');
             };
         });
-        var map;
+        
         //地图
     var lineVid = [];//在线车辆id
     var allCid = [];

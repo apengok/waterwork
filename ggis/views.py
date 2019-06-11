@@ -37,6 +37,7 @@ import os
 from django.conf import settings
 
 from waterwork.mixins import AjaxableResponseMixin
+from django.db import connection
 
 from .models import FenceDistrict,FenceShape
 from django.contrib.gis.geos import Polygon
@@ -278,14 +279,33 @@ def savePolygons(request):
         f.dma_no = dma_no
         f.description = description
         f.save()
-        p.name = name
-        p.zonetype = ftype
-        p.pointSeqs = pointSeqs
-        p.longitudes = longitudes
-        p.latitudes = latitudes
-        p.dma_no = dma_no
-        p.geomjson = pgeojson
-        p.save()
+        # p.name = name
+        # p.zonetype = ftype
+        # p.pointSeqs = pointSeqs
+        # p.longitudes = longitudes
+        # p.latitudes = latitudes
+        # p.dma_no = dma_no
+        # p.geomjson = pgeojson
+        # p.save()
+        longitudesl = longitudes.split(',')
+        latitudesl = latitudes.split(',')
+        print(longitudes)
+        print(latitudes)
+        coords = [list(p) for p in zip(longitudesl,latitudesl)]
+        coords.append([float(longitudesl[0]),float(latitudesl[0])])
+
+        coords_trans = [[float(p[0]),float(p[1])] for p in coords]
+
+        
+        coordstr = ','.join('%s %s'%(a[0],a[1]) for a in coords_trans)
+        wkt = "GeomFromText('POLYGON(({}))')".format(coordstr)
+        print(wkt)
+        updated_dict = {"wkt":wkt,"name":name,"zonetype":ftype,"pointSeqs":pointSeqs,"longitudes":longitudes,"latitudes":latitudes,
+        "dma_no":dma_no,"geomjson":pgeojson,"polygonId":polygonId}
+        strqerer="""update fenceshape set geomdata={wkt},name='{name}',zonetype='{zonetype}',pointSeqs='{pointSeqs}',longitudes='{longitudes}',latitudes='{latitudes}',dma_no='{dma_no}' where shapeId='{polygonId}' """.format(**updated_dict)
+        print(strqerer)
+        with connection.cursor() as cursor:
+            cursor.execute(strqerer)
         
     else:
         instance = FenceDistrict.objects.create(name=name,ftype="fence",createDataUsername=createDataUsername,description=description,pId="zw_m_polygon",belongto=organ)
@@ -323,7 +343,7 @@ def build_feature_collection(cur,prop):
     """
     features = []
     for idx,row in enumerate(cur):
-        print('row data',row)
+        # print('row data',row)
         coords = row["coordinates"][0]
         coords_trans = [[float(p[0]),float(p[1])] for p in coords]
         row["coordinates"] = [coords_trans]
@@ -357,56 +377,29 @@ def test_for_145(request):
 
 def getgeojson(request):
     # return test_for_145(request)
-    print(request.GET)
-    print(request.POST)
-    left = request.GET.get('left')
-    top = request.GET.get('top')
-    right = request.GET.get('right')
-    bottom = request.GET.get('bottom')
+    
     # fenceNode = request.GET.get('fenceNode','resere')
     fenceNodes = request.GET.get("fenceNodes")
 
-    # (u'118.28575800964357', u'29.8010417315232', u'118.53518199035648', u'29.924899835516314')
-    # left = 118.28575800964357
-    # top = 29.8010417315232
-    # right = 118.53518199035648
-    # bottom = 29.924899835516314
-    bbox = (float(left),float(top),float(right),float(bottom))
-    print(bbox)
-    geom = Polygon.from_bbox(bbox)
-    print('geom:',geom)
-
-    # geodata=FenceShape.objects.filter(geomdata__intersects=geom)
-    rsql = '''
-        SELECT id,AsText(geomdata) FROM  `fenceshape` 
-        WHERE 
-            within(geomdata,
-                GEOMFROMTEXT('{}', 0 )
-            )
-    ;
-    '''.format(geom)
-    geodata = FenceShape.objects.raw(rsql)
-    print('asdfe------',geodata)
-    for q in geodata:
-        print(' \t\n:',q.id,'#########',q.geomdata)
-    print('\t\n')
-    print(geodata.query)
-    print('\t\n')
     
     fenceNodes_json = json.loads(fenceNodes)
-    # print("json ?",fenceNodes_json,type(fenceNodes_json[0]),len(fenceNodes_json))
+    print("json ?",fenceNodes_json,type(fenceNodes_json[0]),len(fenceNodes_json))
     data = []
-    
+    data_property = []
     for i in range(len(fenceNodes_json)):
         name=fenceNodes_json[i]["name"]
         fence = FenceShape.objects.get(name=name)
-        geodata = fence.geomjson # fence.geojsondata()
+        fd = FenceDistrict.objects.get(cid=fence.shapeId)
+        # geodata = fence.geomjson # fence.geojsondata()
         # print(geodata,type(geodata))
-        data.append(json.loads(geodata))
+        properties = {"strokeColor":fence.strokeColor,"fillColor":fence.fillColor,"name":fence.name,"shapeId":fence.shapeId,"description":fd.description,"belongto":fd.belongto.name,"dma_no":fence.dma_no,"type":fence.zonetype}
+        data.append(json.loads(fence.geomdata.geojson))
+        data_property.append(properties)
+        # data.append(json.loads(geodata))
     # print(data)
     # pgeojson = {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[13179003.634904388,3489350.6231983663],[13179553.026190981,3489478.018251583],[13179635.302045533,3489191.3793772897],[13179542.409904653,3488955.1677354802],[13178958.515906189,3488883.5080214627],[13178759.461047834,3489127.6818780173],[13179067.332476556,3489122.3737348537],[13179003.634904388,3489350.6231983663]]]},"properties":"null"}
 
-    ret =  build_feature_collection(data)
+    ret =  build_feature_collection(data,data_property)
     # print('ere&*^*&^*&:::::',ret)
     # print(json.loads(ret))
     return JsonResponse(ret)
@@ -451,11 +444,14 @@ def getdmageojson(request):
     for q in geodata:
         f=FenceShape.objects.get(name=q.name)
         dma_no = f.dma_no
-        dma = DMABaseinfo.objects.get(dma_no=dma_no)
-        # 地图初始只显示2级分区
-        dma_level = dma.dma_level
-        # if dma_level != '2':
-        #     continue
+        try:
+            dma = DMABaseinfo.objects.get(dma_no=dma_no)
+            # 地图初始只显示2级分区
+            dma_level = dma.dma_level
+            # if dma_level != '2':
+            #     continue
+        except:
+            dma_level = '2'
         
         properties = {"strokeColor":q.strokeColor,"fillColor":q.fillColor,"name":q.name,"dma_level":dma_level}
         data.append(json.loads(f.geomdata.geojson))
