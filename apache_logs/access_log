@@ -982,3 +982,8 @@
 127.0.0.1 - - [25/Aug/2018:23:00:16 +0800] "GET /static/virvo/resources/img/favicon.ico HTTP/1.1" 200 894
 127.0.0.1 - - [28/Dec/2018:21:15:37 +0800] "GET /PV?peerid=0&uri=http://thunderqtypv.union.xunlei.com&src=www.wo99.net HTTP/1.1" 404 5925
 127.0.0.1 - - [29/Dec/2018:12:58:33 +0800] "GET /PV?peerid=0&uri=http://thunderqtypv.union.xunlei.com&src=www.wo99.net HTTP/1.1" 404 5925
+127.0.0.1 - - [17/Apr/2019:18:07:08 +0800] "POST /cgi-bin/micromsg-bin/newsync HTTP/1.0" 403 -
+127.0.0.1 - - [17/Apr/2019:18:07:08 +0800] "POST /cgi-bin/micromsg-bin/getcdndns HTTP/1.0" 403 -
+127.0.0.1 - - [25/Apr/2019:22:34:32 +0800] "POST / HTTP/1.1" 403 2868
+127.0.0.1 - - [12/May/2019:10:05:20 +0800] "GET /allimg/copyright/wenzi/zi4679.jpg?x-oss-process=style/qr.duanmeiwen HTTP/1.1" 404 5965
+127.0.0.1 - - [12/Jun/2019:19:41:44 +0800] "POST / HTTP/1.1" 403 -

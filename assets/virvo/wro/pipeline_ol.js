@@ -3725,11 +3725,11 @@ map.addLayer(layer_group);
                 // console.log(map.getLayers())
                 // dma_layer.setMap(map)
                 // var feature = vectorLayer.getSource().getFeatures()[28];
-                // var polygon = features[0].getGeometry();
+                var polygon = features[0].getGeometry();
                 // console.log(polygon)
                 // // dma_layer.changed();
                 // console.log(map)
-                // map.getView().fit(polygon, map.getSize(),); 
+                map.getView().fit(polygon, map.getSize(),); 
             })
         },
         //当点击或选择围栏时，访问后台返回围栏详情
