@@ -131,7 +131,7 @@ DATABASES = {
     #     'NAME': os.path.join(BASE_DIR, 'virvo_dev2.db'),
     # },
     'default': { 
-        'ENGINE': 'django.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',#postgresql_psycopg2  or django.contrib.gis.db.backends.postgis or django.db.backends.postgresql_psycopg2
         'NAME': 'waterwork',
         'USER': 'scada',
         'PASSWORD': 'scada',

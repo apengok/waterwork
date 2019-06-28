@@ -980,7 +980,9 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
               dma_layer.getSource().addFeatures(features);
 			  var polygon = features[0].getGeometry();
                 
+
                 map.getView().fit(polygon, map.getSize()); 
+
             }
 
             // console.log(current_month)

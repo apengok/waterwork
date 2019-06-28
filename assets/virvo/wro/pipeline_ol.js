@@ -3787,7 +3787,9 @@ map.addControl(layercontrol);
                 // console.log(polygon)
                 // // dma_layer.changed();
                 // console.log(map)
+
                 map.getView().fit(polygon, map.getSize()); 
+
             })
         },
         //当点击或选择围栏时，访问后台返回围栏详情
