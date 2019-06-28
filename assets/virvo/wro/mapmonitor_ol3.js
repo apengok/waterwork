@@ -158,7 +158,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         mapHeight = initialMapH = windowHeight - headerHeight - titleHeight - tabContentHeight - demoHeight - 20;
         $("#operationMenu").css("height", windowHeight - headerHeight + "px");
         $(".sidebar").css('height', windowHeight - headerHeight + "px");
-        $("#MapContainer").css({
+        $("#map").css({
           "height": mapHeight + "px"
         });
         operMenuHeight = $("#operationMenu").height();
@@ -208,7 +208,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       mapHeight = initialMapH = windowHeight - headerHeight - titleHeight - demoHeight - 20;
       $("#operationMenu").css("height", windowHeight - headerHeight + "px");
       $(".sidebar").css('height', windowHeight - headerHeight + "px");
-      $("#MapContainer").css({
+      $("#map").css({
         "height": mapHeight + "px"
       });
       operMenuHeight = $("#operationMenu").height();
@@ -216,7 +216,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       $("#operationMenu").css({
         "height": newOperHeight + "px"
       });
-      oldMapHeight = $("#MapContainer").height();
+      oldMapHeight = $("#map").height();
       myTabHeight = $("#myTab").height();
       wHeight = $(window).height();
 
@@ -233,7 +233,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       //页面区域定位
       $(".amap-logo").attr("href", "javascript:void(0)").attr("target", "");
       
-      lmapHeight = $("#MapContainer").height();
+      lmapHeight = $("#map").height();
       Math.formatFloat = function (f, digit) {
         var m = Math.pow(10, digit);
         return parseInt(f * m, 10) / m;
@@ -244,7 +244,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       setting = {
         async: {
           url: "/dmam/district/dmatree/", //trackPlayback.getTreeUrl,
-          type: "post",
+          type: "get",
           enable: true,
           autoParam: ["id"],
           dataType: "json",
@@ -396,7 +396,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         if (newHeight <= 0) {
           newHeight = 0;
         }
-        $("#MapContainer").css({
+        $("#map").css({
           "height": newHeight + "px"
         });
         if (newHeight == 0) {
@@ -421,7 +421,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         }
         if (newoffsetTop <= (wHeight - myTabHeight)) {
           var newHeight = mapHeight + dy;
-          $("#MapContainer").css({
+          $("#map").css({
             "height": newHeight + "px"
           });
           $(".trackPlaybackTable .dataTables_scrollBody").css({
@@ -867,6 +867,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       // trackPlayback.getHistory("");
       // wjk 点击时隐藏播放按钮
       $("#playCarListIcon").hide();
+
       if(treeNode.type == "dma"){
         $("#dma_selected").text(treeNode.name);
         var tmp_d_t = parseFloat(treeNode.leakrate);
@@ -907,6 +908,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         }
 
         // trackPlayback.loadGeodata(2)
+        trackPlayback.showHidePeopleOrVehicle();
         trackPlayback.getDMADetailInfo();
       }
       else{
@@ -931,7 +933,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       $("#allTime").text(0);
       $("#maxSpeend").text(0 + "km/h");
       //wjk end
-      trackPlayback.showHidePeopleOrVehicle();
+      // trackPlayback.showHidePeopleOrVehicle();
       //单击时判断节点是否勾选订阅
       // trackPlayback.vehicleTreeClickGetFenceInfo(treeNode.checked, treeNode.id);
 
@@ -976,6 +978,9 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
               
               dma_layer.getSource().clear(true);
               dma_layer.getSource().addFeatures(features);
+			  var polygon = features[0].getGeometry();
+                
+                map.getView().fit(polygon, map.getSize()); 
             }
 
             // console.log(current_month)
@@ -1130,7 +1135,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
         
         //计算高度赋值
               // console.log("1.")
-              $("#MapContainer").css({
+              $("#map").css({
                 "height": (lmapHeight - 241) + "px"
               });
               //表头宽度设置
@@ -1140,7 +1145,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
               //列表拖动
               $("#dragDIV").mousedown(function (e) {
                 tableHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
-                mapHeight = $("#MapContainer").height();
+                mapHeight = $("#map").height();
                 els = e.clientY;
                 $(document).bind("mousemove", trackPlayback.mouseMove).bind("mouseup", trackPlayback.mouseUp);
                 e.stopPropagation();
@@ -1167,11 +1172,11 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 
               $("#scalingBtn").unbind().bind("click", function () {
                 if ($(this).hasClass("fa-chevron-down")) {
-                  oldMHeight = $("#MapContainer").height();
+                  oldMHeight = $("#map").height();
                   oldTHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
                   $(this).attr("class", "fa  fa-chevron-up")
                   var mapHeight = windowHeight - headerHeight - titleHeight - demoHeight - 20;
-                  $("#MapContainer").css({
+                  $("#map").css({
                     "height": mapHeight + "px"
                   });
                   $(".trackPlaybackTable .dataTables_scrollBody").css({
@@ -1179,7 +1184,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
                   });
                 } else {
                   $(this).attr("class", "fa  fa-chevron-down");
-                  $("#MapContainer").css({
+                  $("#map").css({
                     "height": oldMHeight + "px"
                   });
                   $(".trackPlaybackTable .dataTables_scrollBody").css({
@@ -1190,7 +1195,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       } else {
         $("#scalingBtn").attr("class", "fa  fa-chevron-down");
         var mapHeight = windowHeight - headerHeight - titleHeight - demoHeight - 20;
-          $("#MapContainer").css({
+          $("#map").css({
             "height": mapHeight + "px"
           });
           $(".trackPlaybackTable .dataTables_scrollBody").css({
@@ -1314,7 +1319,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     //左侧数据日历及对象树隐藏方法
     leftToolBarHideFn: function () {
       if ($('#scalingBtn').hasClass('fa-chevron-down')) {
-        oldMHeight = $("#MapContainer").height();
+        oldMHeight = $("#map").height();
         oldTHeight = $(".trackPlaybackTable .dataTables_scrollBody").height();
         $('#scalingBtn').attr('class', 'fa fa-chevron-up');
       }
@@ -1324,7 +1329,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
       $("#content-right").css("width", "100%");
       $("#goShow").show();
       //点击隐藏轨迹回放查询
-      $("#MapContainer").css({
+      $("#map").css({
         "height": (initialMapH - 5) + "px"
       });
       $(".trackPlaybackTable .dataTables_scrollBody").css({
@@ -1335,14 +1340,14 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
     leftToolBarShowFn: function () {
       $('#scalingBtn').attr('class', 'fa fa-chevron-down');
       if ($(".dataTables_scrollBody").length == 0) {
-        $("#MapContainer").css({
+        $("#map").css({
           "height": initialMapH + "px"
         });
         $(".trackPlaybackTable .dataTables_scrollBody").css({
           "height": 0 + "px"
         });
       } else {
-        $("#MapContainer").css({
+        $("#map").css({
           "height": oldMHeight + "px"
         });
         $(".trackPlaybackTable .dataTables_scrollBody").css({
@@ -2378,7 +2383,7 @@ function assignmentNotExpandFilter(node){ // 搜索type等于人或者车
 // var WEBSITE_ROOT='http://192.168.1.145:8000/gis/';
 var WEBSITE_ROOT='/ggis';
 
-
+console.log(navigator.appName,'version:',navigator.appVersion);
 /***********************µ×Í¼Ó¦ÓÃ²ã²¿·Ö***********************/
 var appLayer = function (options) {
    var layer = new ol.layer.Tile({
@@ -2398,16 +2403,64 @@ var appLayer = function (options) {
 var longitude = $("#entlongitude").val();
 var latitude = $("#entlatitude").val();
 var zoomIn = $("#entzoomIn").val();
+var maxZoom = 23;
+
 if(longitude == "" || latitude == "" || zoomIn == ""){
     longitude = 118.41047
     latitude = 29.86299
-    zoomIn = 14
+    zoomIn = 16
+}
+if(navigator.appName == "Microsoft Internet Explorer")
+{
+  if(zoomIn > 9)
+    zoomIn = 9;
+  maxZoom = 13;
 }
 
 var center = [longitude,latitude];
 // var center = [latitude,longitude];
 
-/*============================µØÐÎÍ¼²ã================================*/
+
+
+/*============================卫星图层================================*/
+
+//卫星底图
+var sat_background = new appLayer({
+  urls: ['http://www.google.cn/maps/vt?lyrs=s@692&gl=en&x={x}&y={y}&z={z}'],
+  mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+  tilePixelRatio: 1,
+  fromProject: "EPSG:102100",
+  toProject: "EPSG:3857"
+})
+
+//卫星路网数据
+var sat_data = new appLayer({
+  urls : ['http://t0.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+           'http://t1.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+       'http://t2.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+       'http://t3.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+       'http://t4.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+       'http://t5.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+       'http://t6.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+       'http://t7.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'],
+  mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+  tilePixelRatio: 1,
+  fromProject: "EPSG:900913",
+  toProject: "EPSG:3857"
+})
+
+
+var arrSat = new ol.Collection();
+arrSat.push(sat_background);
+arrSat.push(sat_data);
+
+var sat_group = new ol.layer.Group({
+  mapType: ol.control.MapType.SATELLITE_MAP,
+  layers : arrSat
+});
+
+
+/*============================地形图层================================*/
 var normal_background = new appLayer({
     urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
             'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
@@ -2444,12 +2497,21 @@ arrNormal.push(normal_background);
 arrNormal.push(normal_data);
 
 var normal_group = new ol.layer.Group({
-    //mapType: ol.control.MapType.NORMAL_MAP,
+    mapType: ol.control.MapType.NORMAL_MAP,
     layers : arrNormal
 });
 
 var attribution = new ol.control.Attribution({
     className : 'none'
+});
+
+var slider = new ol.control.ZoomSlider({
+});
+
+var layerswitch = new ol.control.LayerSwitch({
+  active: ol.control.MapType.NORMAL_MAP,
+  // layerGroup : [sat_group, normal_group, vector_group]
+  layerGroup : [sat_group, normal_group]
 });
 
 
@@ -2481,12 +2543,12 @@ map = new ol.Map({
     view: new ol.View({
         projection: 'EPSG:4326',
         center: center,// new ol.proj.transform(center,"EPSG:4326","EPSG:3857"),
-        maxZoom : 23,
-        minZoom : 13,
+        maxZoom : maxZoom,
+        minZoom : 6,
         zoom: zoomIn
     }),
-    controls: ol.control.defaults({ attribution: false }).extend([attribution]),
-    target:"MapContainer",
+    controls: ol.control.defaults({ attribution: false,rotate:false }),//.extend([attribution]),
+    target:"map",
     // layers: [
     //     // new ol.layer.Tile({
     //     //     source: new ol.source.OSM()
@@ -2497,17 +2559,20 @@ map = new ol.Map({
 });
 
 
-map.addLayer(normal_group);
+// map.addLayer(normal_group);
 
 
-var mousePosition = new ol.control.MousePosition({
-    coordinateFormat: ol.coordinate.createStringXY(5),
-    projection: 'EPSG:4326',
-    target: document.getElementById('myposition'),
-    undefinedHTML: '&nbsp;'
-    });
+//初始化
+var mousePositionControl = new ol.control.MousePosition({
+  coordinateFormat: ol.coordinate.createStringXY(5),
+  projection: 'EPSG:4326',
+  className: 'my-mouse-position',
+  undefinedHTML: ''
+});
 
-map.addControl(mousePosition);
+map.addControl(layerswitch);
+map.addControl(slider);
+// map.addControl(mousePositionControl);
 
 
 var dma_style =function(feature) { 
@@ -2621,24 +2686,24 @@ ol.layer.SXZDT.prototype.setMap = function(map) {
 ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
             var current_zoom = map.getView().getZoom();
             var visible = true;
-            if(this.maxZoom != -1 && this.minZoom != -1) {
-                if(current_zoom >= this.minZoom && current_zoom <= this.maxZoom)
-                    visible = true;
-                else
-                    visible = false;
-            }
-            else if(this.maxZoom != -1 && this.minZoom == -1) {
-                   if(current_zoom <= this.maxZoom)
-                     visible = false;
-                else
-                    visible = true;
-            }
-            else if(this.minZoom != -1 && this.maxZoom == -1) {
-                    if(current_zoom >= this.minZoom)
-                      visible = true;
-                else
-                      visible = false;
-            }
+            // if(this.maxZoom != -1 && this.minZoom != -1) {
+            //     if(current_zoom >= this.minZoom && current_zoom <= this.maxZoom)
+            //         visible = true;
+            //     else
+            //         visible = false;
+            // }
+            // else if(this.maxZoom != -1 && this.minZoom == -1) {
+            //        if(current_zoom <= this.maxZoom)
+            //          visible = false;
+            //     else
+            //         visible = true;
+            // }
+            // else if(this.minZoom != -1 && this.maxZoom == -1) {
+            //         if(current_zoom >= this.minZoom)
+            //           visible = true;
+            //     else
+            //           visible = false;
+            // }
             if (this.halt_till_next){
               this.halt_till_next = false;
               return
@@ -2696,16 +2761,27 @@ ol.layer.SXZDT.prototype.refreshSource_ = function(e) {
 dma_layer = new ol.layer.SXZDT({
     layerName : 'dlzxc',
     name:'dma分区',
-    minZoom : 13
+    minZoom : 4
 });
 dma_layer.setMap(map)
+var layers = new ol.Collection();
 var layers1 = new ol.Collection();
 layers1.push(dma_layer);
 
 var layer_group = new ol.layer.Group({
     layers:layers1
 });
-map.addLayer(layer_group);
+// map.addLayer(layer_group);
+
+var layercontrol = new ol.control.layerControl({
+  tipLabel: 'Légende',
+  layerSwitch : layerswitch,
+  layers : layers,
+  layers1 : layers1
+});
+
+map.addControl(layercontrol);
+
 
 map.on('singleclick', function(evt) {
     var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
@@ -2779,6 +2855,7 @@ map.on('singleclick', function(evt) {
           'dateLimit': 7
         });
     //IE9
+    console.log(navigator.appName,'version:',navigator.appVersion);
     if (navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE9.0") {
       var search;
       $("#citySel").bind("focus", function () {

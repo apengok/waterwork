@@ -439,6 +439,46 @@
                 // new ol.control.ZoomToExtent()
             ];
 
+
+
+/*============================卫星图层================================*/
+
+//卫星底图
+var sat_background = new ol3ops.appLayer({
+    urls: ['http://www.google.cn/maps/vt?lyrs=s@692&gl=en&x={x}&y={y}&z={z}'],
+    mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+    tilePixelRatio: 1,
+    fromProject: "EPSG:102100",
+    toProject: "EPSG:3857"
+})
+
+//卫星路网数据
+var sat_data = new ol3ops.appLayer({
+    urls : ['http://t0.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+             'http://t1.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+             'http://t2.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+             'http://t3.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+             'http://t4.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+             'http://t5.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+             'http://t6.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles',
+             'http://t7.tianditu.cn/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'],
+    mapExtent: [-2.0037508342787E7, -2.0037508342787E7, 2.0037508342787E7, 2.0037508342787E7],
+    tilePixelRatio: 1,
+    fromProject: "EPSG:900913",
+    toProject: "EPSG:3857"
+})
+
+
+var arrSat = new ol.Collection();
+arrSat.push(sat_background);
+arrSat.push(sat_data);
+
+var sat_group = new ol.layer.Group({
+    mapType: ol.control.MapType.SATELLITE_MAP,
+    layers : arrSat
+});
+
+
             var normal_background = new ol3ops.appLayer({
                 urls: ['http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
                         'http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=af218d8a9536478231c24fa299fc48f5',
@@ -477,7 +517,7 @@
             arrNormal.push(normal_data);
 
             var normal_group = new ol.layer.Group({
-                // mapType: ol.control.MapType.NORMAL_MAP,
+                mapType: ol.control.MapType.NORMAL_MAP,
                 layers : arrNormal
             });
 
@@ -507,7 +547,15 @@
                 // layerGroup:arrNormal,
                 // controls: controls
             });
-            map.addLayer(normal_group);
+
+            var layerswitch = new ol.control.LayerSwitch({
+    active: ol.control.MapType.NORMAL_MAP,
+    // layerGroup : [sat_group, normal_group, vector_group]
+    layerGroup : [sat_group, normal_group]
+});
+
+            map.addControl(layerswitch);
+            // map.addLayer(normal_group);
 
             var mousePosition = new ol.control.MousePosition({
                 coordinateFormat: ol.coordinate.createStringXY(5),
@@ -516,7 +564,7 @@
                 undefinedHTML: '&nbsp;'
                 });
 
-            map.addControl(mousePosition);
+            // map.addControl(mousePosition);
             
 
 var dma_style =function(feature) { 
@@ -689,13 +737,23 @@ dma_layer = new ol.layer.Vector({
 //     minZoom : 13
 // });
 // dma_layer.setMap(map)
+var layers = new ol.Collection();
 var layers1 = new ol.Collection();
 layers1.push(dma_layer);
 
 var layer_group = new ol.layer.Group({
     layers:layers1
 });
-map.addLayer(layer_group);
+// map.addLayer(layer_group);
+
+var layercontrol = new ol.control.layerControl({
+    tipLabel: 'Légende',
+    layerSwitch : layerswitch,
+    layers : layers,
+    layers1 : layers1
+});
+
+map.addControl(layercontrol);
 
             // map.addLayer(dma_layer);
 
@@ -3725,11 +3783,11 @@ map.addLayer(layer_group);
                 // console.log(map.getLayers())
                 // dma_layer.setMap(map)
                 // var feature = vectorLayer.getSource().getFeatures()[28];
-                // var polygon = features[0].getGeometry();
+                var polygon = features[0].getGeometry();
                 // console.log(polygon)
                 // // dma_layer.changed();
                 // console.log(map)
-                // map.getView().fit(polygon, map.getSize(),); 
+                map.getView().fit(polygon, map.getSize()); 
             })
         },
         //当点击或选择围栏时，访问后台返回围栏详情
@@ -8088,7 +8146,7 @@ map.addLayer(layer_group);
                     console.log(polygon)
                     // dma_layer.changed();
                     
-                    map.getView().fit(polygon, map.getSize(),); 
+                    map.getView().fit(polygon, map.getSize()); 
                 // $.each(bounds[0],function(index,value){
                 //         vectoriets.push([value.lng,value.lat])
                 //     })

@@ -3,6 +3,8 @@
 {% load staticfiles %}
 
 {% block stylesheet %}
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+
 <link rel="stylesheet" href="{% static 'virvo/resources/js/fullcalendar/css/common.css' %}"/>
 
 <style type="text/css">
@@ -14,7 +16,7 @@
             height: 20000px;
         }
 
-        #MapContainer {
+        #map {
             height: 20000px;
         }
 
@@ -238,12 +240,12 @@
             <!--  -->
             
             <!--  -->
-            <div class="form-group">
+            <!-- <div class="form-group"> -->
               <div class="form-group" style="margin-bottom:0;">
                 <div class="col-md-10 col-sm-8 col-xs-4" style="padding: 0px 5px 0px 0px;">
                     <input id="citySel" name="search" class="form-control"
                            style="margin-bottom:10px;" type="text"
-                           placeholder="请输入关键字"/>
+                           placeholder="请输入关键字"/>{% csrf_token %}
                 </div>
                 <div class="col-md-1 col-sm-8 col-xs-4"
                      style="padding: 0px 5px 0px 0px;">
@@ -256,7 +258,7 @@
                 <div class="col-md-12">
                     <ul id="treeDemo" class="ztree ztreeLoadH" style="overflow: auto"></ul>
                 </div>
-            </div>
+            <!-- </div> -->
             <div class="form-group">
                 <div class="col-md-12" id="disable" style="padding-left:5px;padding-right:5px;">
                     <div class="col-md-4" style="margin-top: 5px;">一级(<span id="dma_level1_num"></span>)</div>
@@ -285,12 +287,15 @@
         <!-- <div id="js-map" class="map"></div> -->
         <!-- <div id="map" class="map"></div> -->
       
-      <div id="MapContainer" class="mapArea" style="-webkit-user-select:none;">
+      <div id="map" style="-webkit-user-select:none;">
           
           
           <!-- playcard here delete -->
           
       </div>
+      <!-- <div id="layerControl">
+
+      </div> -->
 
       <div class="realTimeCanArea rtcaHidden" id="realTimeCanArea" style="position: absolute;">
               <div class="form-group" style="height: 57px;border-bottom:10px">
@@ -657,7 +662,30 @@
 {% block javascript %}
   <script type="text/javascript">
      
-    var  statsinfo = {{ dmastasticinfo|safe }};
+    (function() {
+      var lastTime = 0;
+      var vendors = ['webkit', 'moz'];
+      for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+          window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+          window.cancelAnimationFrame =
+            window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+      }
+
+      if (!window.requestAnimationFrame)
+          window.requestAnimationFrame = function(callback, element) {
+              var currTime = new Date().getTime();
+              var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+              var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                timeToCall);
+              lastTime = currTime + timeToCall;
+              return id;
+          };
+
+      if (!window.cancelAnimationFrame)
+          window.cancelAnimationFrame = function(id) {
+              clearTimeout(id);
+          };
+  }());
 
     
  </script>
@@ -670,7 +698,9 @@
 <!-- <script src="{% static 'virvo/wro/mapmonitor.js' %}"></script> -->
 
 <script type="text/javascript" src="{% static '/pipeline/js/ol-debug321.js' %}"></script>
-<script type="text/javascript" src="{% static '/pipeline/js/p-ol3.debug.js' %}"></script>   
+<!-- <script type="text/javascript" src="{% static '/pipeline/js/p-ol3.debug.js' %}"></script>    -->
+<script type="text/javascript" src="{% static '/pipeline/js/layerswitch.js' %}"></script>   
+<script type="text/javascript" src="{% static '/pipeline/js/layercontrol_.js' %}"></script>   
 <script src="{% static 'virvo/wro/mapmonitor_ol3.js' %}"></script>
  
 {% endblock %}

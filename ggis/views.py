@@ -298,7 +298,7 @@ def savePolygons(request):
 
         
         coordstr = ','.join('%s %s'%(a[0],a[1]) for a in coords_trans)
-        wkt = "GeomFromText('POLYGON(({}))')".format(coordstr)
+        wkt = "ST_GEOMFROMTEXT('POLYGON(({}))')".format(coordstr)
         print(wkt)
         updated_dict = {"wkt":wkt,"name":name,"zonetype":ftype,"pointSeqs":pointSeqs,"longitudes":longitudes,"latitudes":latitudes,
         "dma_no":dma_no,"geomjson":pgeojson,"polygonId":polygonId}
@@ -433,8 +433,8 @@ def getdmageojson(request):
     rsql = '''
         SELECT id,geomdata,geomjson FROM  `fenceshape` 
         WHERE 
-            within(geomdata,
-                GEOMFROMTEXT('{}', 0 )
+            MBRWITHIN(geomdata,
+                ST_GEOMFROMTEXT('{}', 0 )
             )
     ;
     '''.format(geom)
@@ -490,8 +490,8 @@ def getdmadetail(request):
     rsql = '''
         SELECT id,geomdata,geomjson FROM  `fenceshape` 
         WHERE 
-            within(geomdata,
-                GEOMFROMTEXT('{}', 0 )
+            MBRWITHIN(geomdata,
+                ST_GEOMFROMTEXT('{}', 0 )
             )
     ;
     '''.format(geom)

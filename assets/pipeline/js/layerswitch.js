@@ -69,7 +69,7 @@ ol.control.LayerSwitch = function(opt_options) {
   
   element.appendChild(normal);
   element.appendChild(satellite);
-  element.appendChild(vector);
+  // element.appendChild(vector);
 
   ol.control.Control.call(this, {
     element: element
@@ -89,7 +89,7 @@ ol.control.LayerSwitch.prototype.changMapType = function(target)
 		   this.active_ = mapType_;
 		   for(var i=0; i<this.layerGroup_.length; i++){
 			  if(this.layerGroup_[i].values_.mapType == mapType_) {
-				  map.setLayerGroup(this.layerGroup_[i]);
+				  this.map_.setLayerGroup(this.layerGroup_[i]);
 				  this.dispatchEvent(new ol.control.LayerSwitch.ChangMapEvent(ol.control.LayerSwitchEventType.CHANGE_TYPE,
                        old_layerGroup_, this.layerGroup_[i]));
 			  }

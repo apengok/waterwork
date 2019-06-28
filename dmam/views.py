@@ -42,7 +42,7 @@ from devm.forms import VCommunityAddForm,VWatermeterAddForm,VCommunityEditForm,V
 from .utils import merge_values,merge_values_to_dict
 from waterwork.mixins import AjaxableResponseMixin
 from django.core.files.storage import FileSystemStorage
-
+from django.views.decorators.csrf import csrf_protect
 import logging
 
 logger_info = logging.getLogger('info_logger')
@@ -320,17 +320,29 @@ def dmatree_revise(request):
     
     return HttpResponse(json.dumps(organtree))
 
-
+# If the form is not in foo.html then you need to add the @csrf_protect method to the view function that is generating it.
+@csrf_protect
 def dmatree(request):   
     organtree = []
+
+    if request.method == "GET":
+        stationflag = request.GET.get("isStation") or ''
+        dmaflag = request.GET.get("isDma") or ''
+        communityflag = request.GET.get("isCommunity") or ''
+        buidlingflag = request.GET.get("isBuilding") or ''
+        pressureflag = request.GET.get("isPressure") or ''
+        protocolflag = request.GET.get("isProtocol") or ''
+        secondwaterflag = request.GET.get("isSecondwater") or ''
+    else:
     
-    stationflag = request.POST.get("isStation") or ''
-    dmaflag = request.POST.get("isDma") or ''
-    communityflag = request.POST.get("isCommunity") or ''
-    buidlingflag = request.POST.get("isBuilding") or ''
-    pressureflag = request.POST.get("isPressure") or ''
-    protocolflag = request.POST.get("isProtocol") or ''
-    secondwaterflag = request.POST.get("isSecondwater") or ''
+        stationflag = request.POST.get("isStation") or ''
+        dmaflag = request.POST.get("isDma") or ''
+        communityflag = request.POST.get("isCommunity") or ''
+        buidlingflag = request.POST.get("isBuilding") or ''
+        pressureflag = request.POST.get("isPressure") or ''
+        protocolflag = request.POST.get("isProtocol") or ''
+        secondwaterflag = request.POST.get("isSecondwater") or ''
+        
     user = request.user
     
     # if user.is_anonymous:
@@ -976,7 +988,12 @@ def dmabaseinfo(request):
                 serialnumber = s["meter__serialnumber"]
                 createdate = s["madedate"]
             elif station_type == '2':
-                s = VCommunity.objects.filter(id=commaddr).values("id","name","vconcentrators__name","belongto__name")[0]
+                try:
+                    s = VCommunity.objects.filter(id=commaddr).values("id","name","vconcentrators__name","belongto__name")[0]
+                except:
+                    return {
+                    'error':'not community exist'
+                    }
                 edit_id = s["id"]
                 username = s["name"]
                 usertype = "小区"

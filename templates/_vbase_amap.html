@@ -141,7 +141,7 @@ var headers = {"access_token": "8ec340a5-b4d9-4ebb-9889-e014993a8099"};
                                     </div>
                                     <div class="panel-body" style="padding: 0px;">
                                       <div class="form-group" style="margin-top: 15px;">
-                                        <div class="col-md-12">
+                                        <div class="col-md-12">{% csrf_token %}
                                           <input id="search_condition" name="search" class="form-control" style="margin-bottom: 10px;" type="text" placeholder="请输入组织名称" />
                                         </div>
                                       </div>
