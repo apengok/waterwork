@@ -36,5 +36,12 @@ urlpatterns = [
     
     
     url(r'^station/list/?$',views.stationlist,name='stationlist'),
+
+    # api
+    url(r'^api/station/$',views.station_list,name='station_list'),
+    url(r'^api/station/(?P<pk>[0-9]+)/?$',views.station_detail,name='station_detail'),
+    
+    url(r'^api/alarm/(?P<pk>[0-9]+)/?$',views.alarm_detail,name='alarm_detail'),
+
         
 ]

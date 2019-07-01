@@ -29,6 +29,9 @@ from django.conf.urls.static import static
 from accounts.views import LoginView, RegisterView
 from shexian.views import getTreeByMonitorCount,getActiveDate,fenceTreeByVid,getHistoryData,getSensorMessage,exportKMLLineArr,monitoringaddress
 
+from rest_framework import routers, serializers, viewsets
+
+
 urlpatterns = [
     # url(r'^favicon\.ico$', RedirectView.as_view(url='/static/virvo/resources/img/favicon.ico')),
     url(r'^favicon\.ico$', faviconredirect,name='faviconredirect'),
@@ -36,6 +39,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',LoginView.as_view(), name='login'),
     # url(r'^$',TemplateView.as_view(template_name='_vbase.html'),name='home'),
+
+    # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     url(r'^(?P<page>.+\.html)$', StaticView.as_view()),
     url(r'^echarts/map/province/(?P<page>.+\.json)$', StaticView.as_view()),

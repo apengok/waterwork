@@ -27,9 +27,11 @@ from accounts.models import User,MyRoles
 from legacy.models import HdbFlowDataDay,HdbFlowDataMonth,Bigmeter,Alarm
 from ggis.models import FenceShape
 from entm.models import Organizations
-from dmam.models import DMABaseinfo
+from dmam.models import DMABaseinfo,Station
 from dmam.utils import merge_values, merge_values_with,merge_values_to_dict
 
+from .serializers import StationSerializer
+from legacy.serializers import AlarmSerializer
 # from django.core.urlresolvers import reverse_lazy
 
 
@@ -694,3 +696,36 @@ def getmapsecondwaterlist(request):
     return HttpResponse(json.dumps(result))
 
 
+
+
+# api
+def station_list(request):
+    if request.method == 'GET':
+        station = Station.objects.all()
+        serializer = StationSerializer(station, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
+def station_detail(request,pk):
+    try:
+        print('pk=',pk)
+        station = Station.objects.get(pk=pk)
+    except Station.DoesNotExist:
+        print('Station DoesNotExist')
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = StationSerializer(station)
+        print('serializer.data:',serializer.data)
+        return JsonResponse(serializer.data)
+
+
+def alarm_detail(request,pk):
+    try:
+        alarm = Alarm.objects.get(pk=pk)
+    except Alarm.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = AlarmSerializer(alarm)
+        return JsonResponse(serializer.data)
