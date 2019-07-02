@@ -41,7 +41,7 @@ from waterwork.mixins import AjaxableResponseMixin
 from sysm.models import Personalized
 
 from waterwork.menus import choicetreedict
-
+from .serializers import OrganizationsSerializer
 import logging
 
 logger_info = logging.getLogger('info_logger')
@@ -1790,3 +1790,25 @@ def userexport(request):
     response = HttpResponse(dataset.xls, content_type='text/xls')
     response['Content-Disposition'] = 'attachment; filename='+ escape_uri_path("导出用户.xls")
     return response
+
+
+def organ_lists(request):
+    if request.method == 'GET':
+        organ = Organizations.objects.all()
+
+        print (organ)
+        serializer = OrganizationsSerializer(organ)
+        # print(serializer.data)
+        return JsonResponse(serializer.data)
+
+
+def organ_details(request,pk):
+    try:
+        organ = Organizations.objects.get(pk=pk)
+    except Organizations.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = OrganizationsSerializer(organ)
+        print(serializer.data)
+        return JsonResponse(serializer.data)

@@ -3,7 +3,7 @@
 from django.conf.urls import url
 from . import views
 from django.views.generic import TemplateView
-
+from .serializers import DepartmentViewSet
 from . import views
 
 app_name = 'entm'
@@ -81,6 +81,9 @@ urlpatterns = [
     # url(r'^user/assign_role/(?P<pk>[0-9]+)/?$', views.AssignRoleView.as_view(), name='assign_role'),#分配角色
     # url(r'^user/auth_station/(?P<pk>[0-9]+)/?$', views.AuthStationView.as_view(), name='auth_station'),#授权站点
 
+    # url(r'^api/organs/$',DepartmentViewSet.as_view({'get': 'list'}),name='organ_lists'),
+    url(r'^api/organs/$',views.organ_lists,name='organ_lists'),
+    url(r'^api/organs/(?P<pk>[0-9]+)/?$',views.organ_details,name='organ_details'),
 
     
 ]
