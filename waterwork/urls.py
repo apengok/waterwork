@@ -83,6 +83,9 @@ urlpatterns = [
     url(r'^clbs/v/monitoring/address', monitoringaddress),
     
     # url(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
+
+    # api
+    url(r'^api/accounts/', include('accounts.api.urls', namespace='api-account')),
     
 ]
 

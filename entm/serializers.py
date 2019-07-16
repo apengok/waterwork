@@ -61,6 +61,9 @@ class OrganizationsSerializer(serializers.ModelSerializer):
 #         fields = ('id', 'title', 'subtitle', 'section_set')
 
 
+'''
+    This works fine
+'''
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organizations
