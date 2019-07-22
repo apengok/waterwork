@@ -19650,7 +19650,7 @@ function tg_createTable(tg_table) {
         },
         "ajax": {
             "url": tg_table.listUrl,
-            "type": "POST", // post方式请求
+            "type": tg_table.requestType, // post方式请求
             "data": tg_table.ajaxDataParamFun,
             // data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
             "complete": function (r) {
@@ -19675,10 +19675,11 @@ function tg_createTable(tg_table) {
             //  "error":error,
             //"dataSrc" : "records"
             "dataSrc": function (json) {
-                if (!json.success) {
-                    layer.msg("系统的情绪不稳定，并向你扔了一个错误~");
-                    return [];
-                }
+                console.log(json);
+                // if (!json.success) {
+                //     layer.msg("系统的情绪不稳定，并向你扔了一个错误~");
+                //     return [];
+                // }
                 if (tg_table.dataTableDiv == 'dataTableBind') {
                     if ($('#TabCarBox').hasClass('active')) {
                         var dataLength = json.records.length;
@@ -19702,7 +19703,11 @@ function tg_createTable(tg_table) {
                     }, 30);
                 }
                 ;
-                return json.records
+                if(json.hasOwnProperty("records")){
+                    return json.records;
+                }else {
+                    return json.data;
+                }
             }
         },
         "columnDefs": tg_table.columnDefs,
@@ -19766,6 +19771,7 @@ var TG_Tabel = {
         ;
 
         var tg_table = {};
+        tg_table.requestType = !option.requestType ? 'POST' : option.requestType; // POST or GET
         tg_table.listUrl = option.listUrl; // 请求url
         tg_table.editUrl = option.editUrl; // 修改url
         tg_table.detailUrl = option.detailUrl;//详情

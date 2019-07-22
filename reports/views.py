@@ -27,6 +27,8 @@ from django.utils.encoding import escape_uri_path
 from . resources import HdbFlowDataResource
 import monthdelta
 
+from legacy.serializers import AlarmSerializer
+
 # Create your views here.
 
 class QuerylogView(LoginRequiredMixin,TemplateView):
@@ -1468,6 +1470,112 @@ def bigusermeterlist(request):
     result["end"] = 0
 
     print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
+    
+    return HttpResponse(json.dumps(result))
+
+
+# 返回报警报表数据列表
+def reportAlarmlist(request):
+    
+    draw = 1
+    length = 0
+    start=0
+
+    t1=time.time()
+    
+    if request.method == "GET":
+        draw = int(request.GET.get("draw", 1))
+        length = int(request.GET.get("length", 10))
+        start = int(request.GET.get("start", 0))
+        search_value = request.GET.get("search[value]", None)
+        # order_column = request.GET.get("order[0][column]", None)[0]
+        # order = request.GET.get("order[0][dir]", None)[0]
+        groupName = request.GET.get("groupName")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        # print("simpleQueryParam",simpleQueryParam)
+
+    if request.method == "POST":
+        draw = int(request.POST.get("draw", 1))
+        length = int(request.POST.get("length", 10))
+        start = int(request.POST.get("start", 0))
+        pageSize = int(request.POST.get("pageSize", 10))
+        search_value = request.POST.get("search[value]", None)
+        order_column = int(request.POST.get("order[0][column]", None))
+        order = request.POST.get("order[0][dir]", None)
+        groupName = request.POST.get("groupName")
+        groupType = request.POST.get("groupType")
+        districtId = request.POST.get("districtId")
+        simpleQueryParam = request.POST.get("simpleQueryParam")
+        sTime = request.POST.get("startTime") #or '2018-10-31 00:00:00'
+        eTime = request.POST.get("endTime") #or '2018-11-01 23:59:59'
+        commaddr = request.POST.get("commaddr") or '064893856864'
+    
+    
+    user = request.user
+    organs = user.belongto
+    print(commaddr,sTime,eTime)
+    # commaddr = '13470906292'
+    # sTime = '2015-09-20'
+    # eTime = '2015-09-21'
+    
+    # alarms = Alarm.objects.all().values_list()
+    
+    # # bgm = Bigmeter.objects.filter(commaddr=commaddr).values_list("commaddr","signlen")
+    # # bgm_dict = dict(bgm)
+    
+    # def flows_data(b):
+        
+    #     # if commaddr in bgm_dict.keys():
+    #     #     signlen = bgm_dict[commaddr]
+    #     return {
+    #         "alarmtime":b[1],
+    #         "alarmevent":b[2],
+    #         "alarmtype":b[3],
+    #         "alarmlevel":b[4],
+    #         "alarmcontent":b[5],
+    #         "alarmstate":b[6],
+    #         "dealtime":b[7],
+    #         "dealcontent":b[8],
+    #         "dealjob":b[9],
+    #         "alarmobj":b[10],
+    #         "communityid":b[11],
+    #         "waterid":b[12],
+    #         "commaddr":b[13],
+            
+    #     }
+
+    # data = []
+
+    # for b in alarms:  #[start:start+length]
+        
+    #     ret=flows_data(b)
+        
+    #     if ret is not None:
+    #         data.append(ret)
+
+    
+        
+    alarms = Alarm.objects.all()[start:start+length]
+    serialize = AlarmSerializer(alarms,many=True)
+    
+    data = serialize.data
+    print(type(data),serialize.data)
+    recordsTotal = Alarm.objects.count()
+    # recordsTotal = len(data)
+    
+    result = dict()
+    result["records"] = data #data[start:start+length]
+    result["draw"] = draw
+    result["success"] = "true"
+    result["pageSize"] = pageSize
+    result["totalPages"] = recordsTotal/pageSize
+    result["recordsTotal"] = recordsTotal
+    result["recordsFiltered"] = recordsTotal
+    result["start"] = 0
+    result["end"] = 0
+
+    print("alarm time elapse:",time.time()-t1)
+    # print(draw,pageSize,recordsTotal/pageSize,recordsTotal)
     
     return HttpResponse(json.dumps(result))
 

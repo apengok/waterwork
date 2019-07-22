@@ -19,6 +19,7 @@ urlpatterns = [
     
     # 报警报表
     url(r'^alarm/?$',views.AlarmView.as_view(),name='alarm'),
+    url(r'^alarm/list/$',views.reportAlarmlist,name='reportAlarmlist'),
     
     # 大用户报表
     url(r'^biguser/?$',views.BiguserView.as_view(),name='biguser'),

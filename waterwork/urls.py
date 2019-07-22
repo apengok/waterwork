@@ -86,6 +86,7 @@ urlpatterns = [
 
     # api
     url(r'^api/accounts/', include('accounts.api.urls', namespace='api-account')),
+    url(r'^api/legacy/', include('legacy.api.urls', namespace='api-legacy')),
     
 ]
 
