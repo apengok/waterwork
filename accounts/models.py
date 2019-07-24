@@ -510,18 +510,13 @@ class LoginRecord(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'loginrecord'
+        db_table = 'virvo_loginrecord'
 
 
 
 
 
 def user_login_record(sender, user, request, **kwargs):
-    print('sender',sender)
-    print('user',user,type(user),user.belongto,type(user.belongto))
-    # print('request',request.META)
-    print('**kwargs',kwargs)
-    
     user_agent = request.META['HTTP_USER_AGENT']
 
     if 'HTTP_X_FORWARDED_FOR' in request.META:
@@ -531,16 +526,19 @@ def user_login_record(sender, user, request, **kwargs):
     
     print("user:{} ip:{} \nuser_agent:{}".format(user,ip,user_agent))
 
-    record = {
-        "user":user,
-        "belongto":user.belongto,
-        "ip":ip,
-        "user_agent" : user_agent,
-        "description":"用户 {} 登录".format(user.user_name),
-        "log_from":"平台操作"
-    }
+    try:
+        record = {
+            "user":user,
+            "belongto":user.belongto,
+            "ip":ip,
+            "user_agent" : user_agent,
+            "description":"用户 {} 登录".format(user.user_name),
+            "log_from":"平台操作"
+        }
 
-    if user.user_name not in [ 'pwl','pwl2']:
-        LoginRecord.objects.create(**record)
+        if user.user_name not in [ 'pwl','pwl2']:
+            LoginRecord.objects.create(**record)
+    except:
+        pass
 
 user_logged_in.connect(user_login_record)    

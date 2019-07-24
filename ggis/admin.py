@@ -17,12 +17,6 @@ class FenceDistrictAdmin(admin.ModelAdmin,ExportCsvMixin):
 
 
 
-
-@admin.register(models.Polygon)
-class PolygonAdmin(admin.ModelAdmin):
-    list_display = ['name','polygonId','ftype','shape','pointSeqs','longitudes','latitudes','dma_no']
-
-
 @admin.register(models.FenceShape)
 class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
     list_display = ['shapeId','name','zonetype','shape','dma_no','geomdata','geomjson','pointSeqs','longitudes','latitudes','lnglatQuery_LU','lnglatQuery_RD']

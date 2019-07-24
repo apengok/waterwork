@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import url
+from django.conf.urls import url,include
 from . import views
 from django.views.generic import TemplateView
+from rest_framework import routers, serializers, viewsets
 
 from . import views
 
@@ -100,5 +101,7 @@ urlpatterns = [
     url(r'^community/getCommunitySelect/$',views.getCommunitySelect,name='getCommunitySelect'),
 
 
+    # api
+    url(r'^api/', include('dmam.api.urls', namespace='api-dmam')),
 
 ]

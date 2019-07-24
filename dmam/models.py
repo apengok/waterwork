@@ -35,7 +35,7 @@ class WaterUserType(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'waterusertype'
+        db_table = 'virvo_waterusertype'
 
     def __unicode__(self):
         return self.usertype
@@ -101,7 +101,7 @@ class DMABaseinfo(models.Model):
     class Meta:
         managed=True
         unique_together = ('dma_no', )
-        db_table = 'dmabaseinfo'
+        db_table = 'virvo_dmabaseinfo'
 
     @property
     def dma_level(self):
@@ -655,7 +655,7 @@ class DmaStation(models.Model):
 
     class Meta:
         managed=True
-        db_table = 'dmastation'  
+        db_table = 'virvo_dmastation'  
 
     def __unicode__(self):
         return self.dmaid.dma_name
@@ -672,7 +672,7 @@ class DmaGisinfo(models.Model):
 
     class Meta:
         managed=True
-        db_table = 'dmagisinfo'  
+        db_table = 'virvo_dmagisinfo'  
 
     def __unicode__(self):
         return "{} polygon path".format(self.dma_no)
@@ -721,7 +721,7 @@ class SimCard(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'simcard'
+        db_table = 'virvo_simcard'
 
     def __unicode__(self):
         return '%s'%(self.simcardNumber)    
@@ -774,7 +774,7 @@ class Meter(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'meter'
+        db_table = 'virvo_meter'
 
     def __unicode__(self):
         return '%s'%(self.serialnumber)   
@@ -821,20 +821,20 @@ class Station(models.Model):
     biguser     = models.CharField(db_column='biguser', max_length=30, blank=True, null=True)  # Field name made lowercase.
     focus       = models.CharField(db_column='focus', max_length=30, blank=True, null=True)  # Field name made lowercase.
     locate      = models.CharField(db_column='locate', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE) #所属组织
+    belongto    = models.ForeignKey(Organizations,on_delete=models.CASCADE,related_name='station') #所属组织
     meter       = models.ForeignKey(Meter,on_delete=models.SET_NULL, blank=True, null=True) #关联表具
     # dmaid       = models.ForeignKey(DMABaseinfo,blank=True, null=True,on_delete=models.CASCADE) #所在dma分区
     dmaid       = models.ManyToManyField(DMABaseinfo)
 
     dmametertype     = models.CharField(db_column='MeterType', max_length=30, blank=True, null=True)  # Field name made lowercase.
 
-    # bigmeter = models.OneToOneField(Bigmeter,on_delete=models.CASCADE,null=True)
+    bigmeter = models.ForeignKey(Bigmeter,on_delete=models.CASCADE,related_name='station',blank=True,null=True)
 
     objects = StationManager()
 
     class Meta:
         managed = True
-        db_table = 'station'
+        db_table = 'virvo_station'
 
     def __unicode__(self):
         return '%s'%(self.username)  
@@ -1201,7 +1201,7 @@ class VConcentrator(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'vconcentrator'
+        db_table = 'virvo_concentrator'
 
 
     def __str__(self):
@@ -1312,7 +1312,7 @@ class VCommunity(MPTTModel):
 
     class Meta:
         managed = True
-        db_table = 'vcommunity'
+        db_table = 'virvo_community'
 
     def __str__(self):
         return self.name
@@ -1418,7 +1418,7 @@ class VWatermeter(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'vwatermeter'
+        db_table = 'virvo_watermeter'
 
 
     def __str__(self):
@@ -1557,7 +1557,7 @@ class VPressure(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'vpressure'
+        db_table = 'virvo_pressure'
 
     def __unicode__(self):
         return '%s'%(self.username)   
@@ -1682,7 +1682,7 @@ class VSecondWater(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'vsecondwater'
+        db_table = 'virvo_secondwater'
 
     def __unicode__(self):
         return '%s'%(self.name)   

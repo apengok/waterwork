@@ -160,6 +160,9 @@ class Bigmeter(models.Model):
     def __unicode__(self):
         return '%s%s'%(self.username)
 
+    def __str__(self):
+        return '%s'%(self.username)
+
 
 class Bigmeter2(models.Model):
     username = models.CharField(db_column='UserName', max_length=30, blank=True, null=True)  # Field name made lowercase.

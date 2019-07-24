@@ -171,7 +171,7 @@
                         "class" : "text-center"
                     },
                     {
-                        "data" : "stationname",
+                        "data" : "username",
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
                             if (data != null) {
@@ -182,7 +182,7 @@
                         }
                     },
                     {
-                        "data" : "belongto",
+                        "data" : "belongto_name",
                         "class" : "text-center", //最后一列，操作按钮
                         render : function(data, type, row, meta) {
                             if (data != null) {
@@ -215,7 +215,7 @@
                         }
                     },
                     {
-                        "data" : "status",
+                        "data" : "commstate",
                         "class" : "text-center",
                         render : function(data, type, row, meta) {
                             if (data == "1") {
@@ -234,47 +234,47 @@
                         
                     } ,
                     {
-                        "data" : "readtime",
+                        "data" : "fluxreadtime",
                         "class" : "text-center",
                         
                     }, 
                     {
-                        "data" : "collectperiod",
+                        "data" : "pickperiod",
                         "class" : "text-center",
                         
 
                     },
                     {
-                        "data":"updataperiod",
+                        "data":"reportperiod",
                     },
                      {
-                        "data" : "influx",
+                        "data" : "flux",
                         "class" : "text-center",
                         
 
                     },{
-                        "data" : "plusflux",
+                        "data" : "plustotalflux",
                         "class" : "text-center",
                         
                     }, {
-                        "data" : "revertflux",
+                        "data" : "reversetotalflux",
                         "class" : "text-center",
                         
                     }, {
-                        "data" : "press",
+                        "data" : "pressure",
                         "class" : "text-center",
                         
                     }, {
-                        "data" : "baseelectricity",
+                        "data" : "meterv",
                         "class" : "text-center",
                         
                     },{
-                        "data" : "remoteelectricity",
+                        "data" : "gprsv",
                         "class" : "text-center",
                         
                     
                     },{
-                        "data":"signal",
+                        "data":"signlen",
                         "class":"text-center",
                         
                     }
@@ -289,7 +289,8 @@
             //表格setting
             var setting = {
                 suffix  : '/',
-                listUrl : '/monitor/station/list/',
+                listUrl : '/dmam/api/bigmeter/?format=datatables', ///monitor/station/list/
+                requestType:'GET',
                 // editUrl : '/devm/meter/edit/',
                 // deleteUrl : '/devm/meter/delete/',
                 // deletemoreUrl : '/devm/meter/deletemore/',

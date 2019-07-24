@@ -40,8 +40,8 @@ class VPressureAdmin(admin.ModelAdmin):
 
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
-    actions = ['sync_bigmeter']
-    list_display = ['username','usertype','biguser','focus','madedate','meter','belongto','dmametertype']
+    actions = ['sync_bigmeter','attach_bigmeter']
+    list_display = ['username','usertype','biguser','focus','madedate','meter','belongto','dmametertype','bigmeter']
 
     search_fields = ("username","meter__serialnumber","meter__simid__simcardNumber" )
 
@@ -68,6 +68,32 @@ class StationAdmin(admin.ModelAdmin):
             message_bit = "%s items were" % rows_updated
         self.message_user(request, "%s successfully updated as nomal." % message_bit)
     sync_bigmeter.short_description = 'create bigmeter' 
+
+
+    def attach_bigmeter(self,request,queryset):
+        # rows_updated = queryset.update(meterstate='正常')
+        rows_updated = queryset.count()
+        district = District.objects.first()
+        districtid = district.id
+        for q in queryset:
+            try:
+                username= q.username
+                
+                commaddr=q.commaddr
+                simid = q.commaddr
+                bgm=Bigmeter.objects.get(username=username,commaddr=commaddr) 
+                print("bgm:",bgm)
+                q.bigmeter = bgm
+                q.save()
+            except Exception as e:
+                print('error appear:',username,e)
+                pass
+        if rows_updated == 1:
+            message_bit = "1 item was"
+        else:
+            message_bit = "%s items were" % rows_updated
+        self.message_user(request, "%s successfully updated as nomal." % message_bit)
+    attach_bigmeter.short_description = 'attach bigmeter' 
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(StationAdmin, self).get_form(request, obj, **kwargs)

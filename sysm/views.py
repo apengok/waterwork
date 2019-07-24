@@ -182,6 +182,7 @@ def personalizedFind(request):
     user = request.user
     ubelongto = user.belongto
     pers = Personalized.objects.filter(belongto=ubelongto)
+    print("personalizedFind " ,user,ubelongto,pers)
 
     if pers.exists():
         p = pers.first()

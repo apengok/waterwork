@@ -49,7 +49,7 @@ class Organizations(MPTTModel):
 
     cid           = models.CharField(max_length=300,null=True,blank=True)
     pId           = models.CharField(max_length=300,null=True,blank=True)
-    is_org        = models.BooleanField(max_length=300,blank=True)
+    is_org        = models.CharField(max_length=300,null=True,blank=True)
     uuid          = models.CharField(max_length=300,null=True,blank=True)
 
     adcode        = models.CharField(max_length=300,null=True,blank=True) #行政代码
@@ -62,7 +62,7 @@ class Organizations(MPTTModel):
 
     class Meta:
         managed = True
-        db_table = 'organizations'
+        db_table = 'virvo_organizations'
 
         permissions = (
             
@@ -165,7 +165,7 @@ class PorgressBar(models.Model):
 
     class Meta:
         managed=True
-        db_table='porgressbar'
+        db_table='virvo_porgressbar'
 
     def progress_add(self):
         self.progress += 1

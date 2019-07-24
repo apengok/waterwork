@@ -16,3 +16,9 @@ class MetercommForm(forms.ModelForm):
     class Meta:
         model = Metercomm
         fields = ('name','commtype','tcpport','commprotocol')
+
+
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField()
+
+                

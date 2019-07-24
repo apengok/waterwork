@@ -48,7 +48,7 @@ class FenceDistrict(MPTTModel):
 
     class Meta:
         managed = True
-        db_table = 'fencedistrict'
+        db_table = 'virvo_fencedistrict'
 
         
 
@@ -59,29 +59,6 @@ class FenceDistrict(MPTTModel):
         return self.name 
 
 
-class Polygon(models.Model):
-    polygonId   = models.CharField(max_length=255,null=True,blank=True)
-    name   = models.CharField('区域名称',max_length=100,unique=True)
-    ftype   = models.CharField('区域类型',max_length=30,null=True,blank=True)
-    shape   = models.CharField('形状',max_length=30,null=True,blank=True)
-    pointSeqs   = models.TextField()
-    longitudes   = models.TextField()
-    latitudes   = models.TextField()
-
-    dma_no       = models.CharField(max_length=30,null=True,blank=True) #关联的dma分区  
-
-
-    class Meta:
-        managed = True
-        db_table = 'polygon'
-
-        
-
-    def __unicode__(self):
-        return self.name    
-
-    def __str__(self):
-        return self.name 
 
 def build_feature_collection(cur,prop):
     """
@@ -149,7 +126,7 @@ class FenceShape(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'fenceshape'
+        db_table = 'virvo_fenceshape'
 
         
 

@@ -44,7 +44,7 @@ class Personalized(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'personalized'
+        db_table = 'virvo_personalized'
 
     def __unicode__(self):
         return self.topTitleMsg

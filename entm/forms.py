@@ -53,4 +53,7 @@ class OrganizationsEditForm(forms.ModelForm):
     
 
 
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField()
+
         
