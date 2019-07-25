@@ -4,7 +4,8 @@ from entm.models import Organizations
 from dmam.models import Station
 from legacy.models import Bigmeter
 from .serializers import StationSerializer,BigmeterSerializer,OranizationsSerializer
-
+from waterwork.filters import DatatablesFilterBackend
+# from rest_framework_datatables.filters import DatatablesFilterBackend
 
 class OrganizationsViewSet(viewsets.ModelViewSet):
     queryset = Organizations.objects.all()
@@ -36,18 +37,33 @@ class StationRealtimeListView(generics.ListAPIView):
 class BigmeterViewSet(viewsets.ModelViewSet):
     queryset = Bigmeter.objects.all()
     serializer_class = BigmeterSerializer
-    filter_backends = [filters.OrderingFilter]
+    filter_backends = [DatatablesFilterBackend]
 
     ordering_fields = ['fluxreadtime', 'username']
     ordering = ['-fluxreadtime']
 
-    # def get_queryset(self):
-    #     # stations = self.request.user.station_list_queryset('')
-    #     return Bigmeter.objects.all()
+    class Meta:
+        datatables_extra_json = ('get_options',)
 
-    def filter_queryset(self, queryset):
-        # print('i am here?')
+    def get_options(self):
+        return "options",{"success":True}
+
+    def get_queryset(self):
+        getter = self.request.query_params.get
+        groupName = getter("groupName")
+        queryset = Bigmeter.objects.all()
         stations = self.request.user.station_list_queryset('')
-        # print(stations.count())
-        # print(queryset.filter(station__in=stations).count())
-        return queryset.filter(station__in=stations)
+        pressures = self.request.user.pressure_list_queryset('')
+        if groupName != "":
+            stations = stations.filter(belongto__uuid=groupName)
+            pressures = pressures.filter(belongto__uuid=groupName)
+        return queryset.filter(station__in=stations).order_by('-fluxreadtime')
+
+    # def filter_queryset(self, queryset):
+    #     print('i am here?')
+    #     stations = self.request.user.station_list_queryset('')
+    #     # print(stations.count())
+    #     # print(queryset.filter(station__in=stations).count())
+    #     return queryset.filter(station__in=stations).order_by('-fluxreadtime')
+
+    

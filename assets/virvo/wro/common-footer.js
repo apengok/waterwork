@@ -19632,7 +19632,7 @@ function tg_createTable(tg_table) {
         /* "scrollX": true,
          "bAutoWidth": false,  //是否自适应宽度*/
 
-        "searching": false, // 搜索
+        "searching": true, // 搜索
         // 分页相关
         "paging": pageable,
         "destroy": true,

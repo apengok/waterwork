@@ -173,6 +173,8 @@
                     {
                         "data" : "username",
                         "class" : "text-center",
+                        "name":"username",
+
                         render : function(data, type, row, meta) {
                             if (data != null) {
                                 return data;
@@ -184,27 +186,39 @@
                     {
                         "data" : "belongto_name",
                         "class" : "text-center", //最后一列，操作按钮
+                        "bSearchable":false,
                         render : function(data, type, row, meta) {
+                            console.log(data)
                             if (data != null) {
                                 return data;
                             } else{
-                                return "";
+                                if(row.station != null){
+                                    if(row.station.length > 0){
+                                        return row.station[0].belongto_name;
+                                    }
+                                }
                             }
                         }
                     }, {
                         "data" : "serialnumber",
                         "class" : "text-center",
+                        "bSearchable":false,
                         
                         render : function(data, type, row, meta) {
                             if (data != null) {
                                 return data;
                             } else{
-                                return "";
+                                if(row.station != null){
+                                    if(row.station.length > 0){
+                                        return row.station[0].serialnumber;
+                                    }
+                                }
                             }
                         }
                     }, {
                         "data" : "alarm",
                         "class" : "text-center",
+                        "bSearchable":false,
                         render:function(data){
                             if(data==0){
                                 ret_html= ""
@@ -231,7 +245,18 @@
                     {
                         "data" : "dn",
                         "class" : "text-center",
-                        
+                        "bSearchable":false,
+                        render : function(data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else{
+                                if(row.station != null){
+                                    if(row.station.length > 0){
+                                        return row.station[0].dn;
+                                    }
+                                }
+                            }
+                        }
                     } ,
                     {
                         "data" : "fluxreadtime",
@@ -277,13 +302,22 @@
                         "data":"signlen",
                         "class":"text-center",
                         
-                    }
+                    },{
+                        "data" : "station",
+                        "class" : "hidden",
+                        "bSearchable":false,
+                        render : function(data, type, row, meta) {
+                            
+                            return data;
+                        }
+                    }, 
                     ];
             //ajax参数
             var ajaxDataParamFun = function(d) {
                 d.simpleQueryParam = $('#simpleQueryParam').val(); //模糊查询
                 d.groupName = selectTreeId;
                 d.groupType = selectTreeType;
+
 
             };
             //表格setting
@@ -448,34 +482,34 @@
 
         pageLayout.init();
 
-        $('#dataTable').on( 'draw.dt', function ( e, settings, len ) {
-            console.log( 'New page length: '+len );
-            winHeight = $(window).height();
-            var newpageheight = $('#dataTable').height();
-            var sidebarHeight = $('.sidebar').height()
+        // $('#dataTable').on( 'draw.dt', function ( e, settings, len ) {
+        //     console.log( 'New page length: '+len );
+        //     winHeight = $(window).height();
+        //     var newpageheight = $('#dataTable').height();
+        //     var sidebarHeight = $('.sidebar').height()
 
-            if(newpageheight > sidebarHeight){
+        //     if(newpageheight > sidebarHeight){
 
-                console.log("winHeight",winHeight,newpageheight);
-                headerHeight = $("#header").height();//头部高度
-                var stationStateHeight = $("#station_status").height()
-                console.log("station status height",stationStateHeight);
-                var paneHeaderHeight = $(".panel-heading").height();
-                console.log("paneHeaderHeight",paneHeaderHeight);
+        //         console.log("winHeight",winHeight,newpageheight);
+        //         headerHeight = $("#header").height();//头部高度
+        //         var stationStateHeight = $("#station_status").height()
+        //         console.log("station status height",stationStateHeight);
+        //         var paneHeaderHeight = $(".panel-heading").height();
+        //         console.log("paneHeaderHeight",paneHeaderHeight);
                 
-                var newContLeftH = newpageheight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 100;
-                //sidebar高度
-                // $(".sidebar").css('height',newContLeftH + 'px');
-                // organTree.css('height',newpageheight + 'px');
-            }
-            // $('#sidebar').css({"height":newpageheight+"px"});
-            console.log("sidwbar heith",sidebarHeight);
-            var newTreeH = newpageheight - headerHeight - 110;
-            console.log("newpageheight heith",newpageheight);
+        //         var newContLeftH = newpageheight - headerHeight - stationStateHeight - 2*paneHeaderHeight - 100;
+        //         //sidebar高度
+        //         // $(".sidebar").css('height',newContLeftH + 'px');
+        //         // organTree.css('height',newpageheight + 'px');
+        //     }
+        //     // $('#sidebar').css({"height":newpageheight+"px"});
+        //     console.log("sidwbar heith",sidebarHeight);
+        //     var newTreeH = newpageheight - headerHeight - 110;
+        //     console.log("newpageheight heith",newpageheight);
 
-            console.log("newTreeH heith",newTreeH);
+        //     console.log("newTreeH heith",newTreeH);
 
-            organTree.css('height',newTreeH + 'px');
-        } );
+        //     organTree.css('height',newTreeH + 'px');
+        // } );
     })
 })(window,$)

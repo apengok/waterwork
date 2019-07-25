@@ -13,24 +13,12 @@ class StationSerializer(serializers.ModelSerializer):
     serialnumber = serializers.ReadOnlyField(source='meter.serialnumber')
     dn = serializers.ReadOnlyField(source='meter.dn')
     # commaddr = serializers.SerializerMethodField()
-    fluxreadtime = serializers.ReadOnlyField(source='bigmeter.fluxreadtime')
-    commstate = serializers.ReadOnlyField(source='bigmeter.commstate')
-    pickperiod = serializers.ReadOnlyField(source='bigmeter.pickperiod')
-    reportperiod = serializers.ReadOnlyField(source='bigmeter.reportperiod')
-    flux = serializers.ReadOnlyField(source='bigmeter.flux')
-    plustotalflux = serializers.ReadOnlyField(source='bigmeter.plustotalflux')
-    reversetotalflux = serializers.ReadOnlyField(source='bigmeter.reversetotalflux')
-    pressure = serializers.ReadOnlyField(source='bigmeter.pressure')
-    meterv = serializers.ReadOnlyField(source='bigmeter.meterv')
-    gprsv = serializers.ReadOnlyField(source='bigmeter.gprsv')
-    signlen = serializers.ReadOnlyField(source='bigmeter.signlen')
-    pressurereadtime = serializers.ReadOnlyField(source='bigmeter.pressurereadtime')
+    
 
     class Meta:
         model = Station
-        fields = ('fluxreadtime','username','usertype','biguser','focus','madedate','serialnumber','dn',
-        'belongto_name','dmametertype','commaddr','commstate','pickperiod','reportperiod',
-        'flux','plustotalflux','reversetotalflux','pressure','meterv','gprsv','signlen','pressurereadtime')
+        fields = ('username','usertype','biguser','focus','madedate','serialnumber','dn',
+        'belongto_name','dmametertype')
 
 
 
