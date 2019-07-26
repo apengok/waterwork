@@ -54,10 +54,15 @@ class BigmeterViewSet(viewsets.ModelViewSet):
         queryset = Bigmeter.objects.all()
         stations = self.request.user.station_list_queryset('')
         pressures = self.request.user.pressure_list_queryset('')
+        ret_queryset = Bigmeter.objects.none()
         if groupName != "":
             stations = stations.filter(belongto__uuid=groupName)
             pressures = pressures.filter(belongto__uuid=groupName)
-        return queryset.filter(station__in=stations).order_by('-fluxreadtime')
+
+        pressure_list = pressures.filter(simid__isnull=False).values_list('simid__simcardNumber')
+        ret_queryset |= queryset.filter(station__in=stations).order_by('-fluxreadtime')
+        ret_queryset |= queryset.filter(commaddr__in=pressure_list).order_by('-fluxreadtime')
+        return ret_queryset
 
     # def filter_queryset(self, queryset):
     #     print('i am here?')

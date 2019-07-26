@@ -30,53 +30,6 @@ class District(models.Model):
         return '%s%s'%(self.name)
 
 
-class Alarm(models.Model):
-    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    alarmtime = models.CharField(db_column='AlarmTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    alarmevent = models.IntegerField(db_column='AlarmEvent', blank=True, null=True)  # Field name made lowercase.
-    alarmtype = models.IntegerField(db_column='AlarmType', blank=True, null=True)  # Field name made lowercase.
-    alarmlevel = models.IntegerField(db_column='AlarmLevel', blank=True, null=True)  # Field name made lowercase.
-    alarmcontent = models.CharField(db_column='AlarmContent', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    alarmstate = models.IntegerField(db_column='AlarmState', blank=True, null=True)  # Field name made lowercase.
-    dealtime = models.CharField(db_column='DealTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    dealcontent = models.CharField(db_column='DealContent', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    dealjob = models.CharField(db_column='DealJob', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    alarmobj = models.IntegerField(db_column='AlarmObj', blank=True, null=True)  # Field name made lowercase.
-    communityid = models.CharField(db_column='CommunityId', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    waterid = models.CharField(db_column='WaterId', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    commaddr = models.CharField(db_column='CommAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'alarm'
-
-    def __unicode__(self):
-        return '%s%s'%(self.alarmcontent)
-
-
-class AlarmProcess(models.Model):
-    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    alarmstate = models.IntegerField(db_column='AlarmState', blank=True, null=True)  # Field name made lowercase.
-    dealtime = models.CharField(db_column='DealTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    dealcontent = models.CharField(db_column='DealContent', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    dealjob = models.CharField(db_column='DealJob', max_length=30, blank=True, null=True)  # Field name made lowercase.
-    alarmid = models.IntegerField(db_column='AlarmId', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'alarm_process'
-
-    def __unicode__(self):
-        return '%s%s'%(self.DealContent)
-
-class Amrsparam(models.Model):
-    paramkey = models.CharField(db_column='paramKey', primary_key=True, max_length=64)  # Field name made lowercase.
-    paramvalue = models.CharField(db_column='paramValue', max_length=128)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'amrsparam'
-
 
 class BigmeterQuerySet(models.query.QuerySet):
     def search(self, query): #RestaurantLocation.objects.all().search(query) #RestaurantLocation.objects.filter(something).search()
@@ -162,6 +115,56 @@ class Bigmeter(models.Model):
 
     def __str__(self):
         return '%s'%(self.username)
+
+
+
+class Alarm(models.Model):
+    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
+    alarmtime = models.CharField(db_column='AlarmTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    alarmevent = models.IntegerField(db_column='AlarmEvent', blank=True, null=True)  # Field name made lowercase.
+    alarmtype = models.IntegerField(db_column='AlarmType', blank=True, null=True)  # Field name made lowercase.
+    alarmlevel = models.IntegerField(db_column='AlarmLevel', blank=True, null=True)  # Field name made lowercase.
+    alarmcontent = models.CharField(db_column='AlarmContent', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    alarmstate = models.IntegerField(db_column='AlarmState', blank=True, null=True)  # Field name made lowercase.
+    dealtime = models.CharField(db_column='DealTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    dealcontent = models.CharField(db_column='DealContent', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    dealjob = models.CharField(db_column='DealJob', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    alarmobj = models.IntegerField(db_column='AlarmObj', blank=True, null=True)  # Field name made lowercase.
+    communityid = models.CharField(db_column='CommunityId', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    waterid = models.CharField(db_column='WaterId', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    # commaddr = models.CharField(db_column='CommAddr', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    commaddr = models.ForeignKey(Bigmeter,db_column='CommAddr',related_name="alarm", on_delete=models.CASCADE, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = True
+        db_table = 'alarm'
+
+    def __unicode__(self):
+        return '%s%s'%(self.alarmcontent)
+
+
+class AlarmProcess(models.Model):
+    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
+    alarmstate = models.IntegerField(db_column='AlarmState', blank=True, null=True)  # Field name made lowercase.
+    dealtime = models.CharField(db_column='DealTime', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    dealcontent = models.CharField(db_column='DealContent', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    dealjob = models.CharField(db_column='DealJob', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    alarmid = models.IntegerField(db_column='AlarmId', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'alarm_process'
+
+    def __unicode__(self):
+        return '%s%s'%(self.DealContent)
+
+class Amrsparam(models.Model):
+    paramkey = models.CharField(db_column='paramKey', primary_key=True, max_length=64)  # Field name made lowercase.
+    paramvalue = models.CharField(db_column='paramValue', max_length=128)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'amrsparam'
 
 
 class Bigmeter2(models.Model):

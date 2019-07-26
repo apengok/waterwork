@@ -27,7 +27,7 @@ from django.utils.encoding import escape_uri_path
 from . resources import HdbFlowDataResource
 import monthdelta
 
-from legacy.serializers import AlarmSerializer
+from legacy.api.serializers import AlarmSerializer
 
 # Create your views here.
 

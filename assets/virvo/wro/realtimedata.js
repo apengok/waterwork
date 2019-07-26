@@ -220,7 +220,7 @@
                         "class" : "text-center",
                         "bSearchable":false,
                         render:function(data){
-                            if(data==0){
+                            if(data==0 || data === undefined){
                                 ret_html= ""
                             }else{
                                 ret_html='<button  data-target="#showalarm" data-toggle="modal"  type="button" class="btn-danger" style="width:60px;">'+data+'</button>&nbsp;';
@@ -261,6 +261,13 @@
                     {
                         "data" : "fluxreadtime",
                         "class" : "text-center",
+                        render:function(data,type,row,meta){
+                            if(data != null){
+                                return data;
+                            }else{
+                                return row.pressurereadtime;
+                            }
+                        }
                         
                     }, 
                     {
@@ -310,7 +317,10 @@
                             
                             return data;
                         }
-                    }, 
+                    }, {
+                        "data":"pressurereadtime",
+                        "class":"hidden"
+                    }
                     ];
             //ajax参数
             var ajaxDataParamFun = function(d) {

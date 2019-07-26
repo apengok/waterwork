@@ -31,7 +31,7 @@ from dmam.models import DMABaseinfo,Station
 from dmam.utils import merge_values, merge_values_with,merge_values_to_dict
 
 from .serializers import StationSerializer
-from legacy.serializers import AlarmSerializer
+from legacy.api.serializers import AlarmSerializer
 # from django.core.urlresolvers import reverse_lazy
 
 
