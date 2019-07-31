@@ -141,6 +141,7 @@ class FenceShape(models.Model):
         pointSeqs = self.pointSeqs.split(',')
         longitudes = self.longitudes.split(',')
         latitudes = self.latitudes.split(',')
+        print('-----------',pointSeqs,longitudes,latitudes)
 
         coords = [list(p) for p in zip(longitudes,latitudes)]
         coords.append([float(longitudes[0]),float(latitudes[0])])
@@ -162,9 +163,16 @@ class FenceShape(models.Model):
         #             "properties":"null"
         #         }]
         # }
+        print("shap now is",self.shape)
+        if self.shape == "Point":
+            shape = "Point"
+            coordinates = [float(longitudes[0]),float(latitudes[0])]
+            print('-0----coordinates',coordinates)
+        else:
+            shape = "Polygon"
 
         geodata = {
-            "type":"Polygon",
+            "type":shape,
             "coordinates":coordinates,
             # "properties":{"name":self.name}
         }
@@ -234,16 +242,25 @@ def polygon_pre_save_post_receiver(sender, instance, *args, **kwargs):
         print('instance.geomjson---',instance.geomjson)
         try:
             instance.save()
-
+            print("shape:",instance.shape)
             # geomdata
             jd = json.loads(instance.geomjson)
-            d = jd['coordinates'][0]
-            coordstr = ','.join('%s %s'%(a[0],a[1]) for a in d)
-            wkt = "GeomFromText('POLYGON(({}))')".format(coordstr)
+            
+            
+            if instance.shape == "Point":
+                d = jd['coordinates']
+                print('----d---',d)
+                coordstr = '%s %s'%(d[0],d[1]) 
+                wkt = "ST_GEOMFROMTEXT('POINT({})')".format(coordstr)
+                print('wkttt',wkt)
+            else:
+                d = jd['coordinates'][0]
+                coordstr = ','.join('%s %s'%(a[0],a[1]) for a in d)
+                wkt = "GeomFromText('POLYGON(({}))')".format(coordstr)
             name = instance.name
-            strqerer="""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name)
+            strqerer="""update virvo_fenceshape set geomdata=%s where name='%s'  """%(wkt,name)
             with connection.cursor() as cursor:
-                cursor.execute("""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name))
+                cursor.execute("""update virvo_fenceshape set geomdata=%s where name='%s'  """%(wkt,name))
 
         except Exception as e:
             print('Error shows :',e)

@@ -298,11 +298,14 @@ def savePolygons(request):
 
         
         coordstr = ','.join('%s %s'%(a[0],a[1]) for a in coords_trans)
-        wkt = "ST_GEOMFROMTEXT('POLYGON(({}))')".format(coordstr)
+        if shape == "Point":
+            wkt = "ST_GEOMFROMTEXT('POINT(({}))')".format(coordstr)
+        else:
+            wkt = "ST_GEOMFROMTEXT('POLYGON(({}))')".format(coordstr)
         print(wkt)
         updated_dict = {"wkt":wkt,"name":name,"zonetype":ftype,"pointSeqs":pointSeqs,"longitudes":longitudes,"latitudes":latitudes,
         "dma_no":dma_no,"geomjson":pgeojson,"polygonId":polygonId}
-        strqerer="""update fenceshape set geomdata={wkt},name='{name}',zonetype='{zonetype}',pointSeqs='{pointSeqs}',longitudes='{longitudes}',latitudes='{latitudes}',dma_no='{dma_no}' where shapeId='{polygonId}' """.format(**updated_dict)
+        strqerer="""update virvo_fenceshape set geomdata={wkt},name='{name}',zonetype='{zonetype}',pointSeqs='{pointSeqs}',longitudes='{longitudes}',latitudes='{latitudes}',dma_no='{dma_no}' where shapeId='{polygonId}' """.format(**updated_dict)
         print(strqerer)
         with connection.cursor() as cursor:
             cursor.execute(strqerer)
@@ -431,7 +434,7 @@ def getdmageojson(request):
 
     # geodata=FenceShape.objects.filter(geomdata__intersects=geom)
     rsql = '''
-        SELECT id,geomdata,geomjson FROM  `fenceshape` 
+        SELECT id,geomdata,geomjson FROM  `virvo_fenceshape` 
         WHERE 
             MBRWITHIN(geomdata,
                 ST_GEOMFROMTEXT('{}', 0 )
@@ -488,7 +491,7 @@ def getdmadetail(request):
 
     # geodata=FenceShape.objects.filter(geomdata__intersects=geom)
     rsql = '''
-        SELECT id,geomdata,geomjson FROM  `fenceshape` 
+        SELECT id,geomdata,geomjson FROM  `virvo_fenceshape` 
         WHERE 
             MBRWITHIN(geomdata,
                 ST_GEOMFROMTEXT('{}', 0 )

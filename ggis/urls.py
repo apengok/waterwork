@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import url
+from django.conf.urls import url,include
 from . import views
 from django.views.generic import TemplateView
 
@@ -11,6 +11,8 @@ urlpatterns = [
     
     url(r'^$', TemplateView.as_view(template_name='ggis/pipelinequery.html')),
     url(r'^pipeline/$', TemplateView.as_view(template_name='ggis/pipeline_home.html')),
+
+    url(r'^api/', include('ggis.api.urls', namespace='api-ggis')),
 
     
 

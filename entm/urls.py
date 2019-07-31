@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import url
+from django.conf.urls import url,include
 from . import views
 from django.views.generic import TemplateView
 from .serializers import DepartmentViewSet
@@ -82,8 +82,11 @@ urlpatterns = [
     # url(r'^user/auth_station/(?P<pk>[0-9]+)/?$', views.AuthStationView.as_view(), name='auth_station'),#授权站点
 
     # url(r'^api/organs/$',DepartmentViewSet.as_view({'get': 'list'}),name='organ_lists'),
-    url(r'^api/organs/$',views.organ_lists,name='organ_lists'),
-    url(r'^api/organs/(?P<pk>[0-9]+)/?$',views.organ_details,name='organ_details'),
+    # url(r'^api/organs/$',views.organ_lists,name='organ_lists'),
+    # url(r'^api/organs/(?P<pk>[0-9]+)/?$',views.organ_details,name='organ_details'),
+    # api
+    url(r'^api/organs/', include('entm.api.urls', namespace='api-entm')),
+
 
     
 ]

@@ -1,6 +1,9 @@
 # -*- coding:utf-8 -*-
 
 from django.contrib import admin
+from django.conf.urls import url
+from django.shortcuts import render,redirect
+
 from . import models
 from waterwork.mixins import ExportCsvMixin
 import json
@@ -8,6 +11,9 @@ from django.contrib.gis.db import models as gis_model
 from django.contrib.gis.geos import GEOSGeometry
 import traceback
 from django.db import connection
+from entm.forms import CsvImportForm
+import unicodecsv
+
 # Register your models here.
 
 @admin.register(models.FenceDistrict)
@@ -30,6 +36,47 @@ class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
         ('Administrator', {'fields': ('province','city','district','administrativeLngLat')}),
     )
 
+    change_list_template = "entm/heroes_changelist.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            # ...
+            url('import-csv/', self.import_csv),
+        ]
+        return my_urls + urls
+
+    def import_csv(self, request):
+        if request.method == "POST":
+            csv_file = request.FILES["csv_file"]
+            reader = unicodecsv.reader(csv_file)
+            # Create Hero objects from passed in data
+            # ...
+            headers = next(reader)
+            print(headers,len(headers))
+            # data = {i: v for (i, v) in enumerate(reader)}
+            
+            for row in reader:
+                # print(row,len(row))
+                data = {headers[i]:v for (i, v) in enumerate(row)}
+                del data["id"]
+                del data["geomdata"]
+                
+                # data = ["{}={}".format(headers[i],v) for (i, v) in enumerate(row)]
+                # tdata = list("{}={}".format(k,v) for k,v in data.items())
+                print(data)
+                
+                models.FenceShape.objects.create(**data)
+                # for i in range(len(row)):
+                #     print("{}.{}={}".format(i,headers[i],row[i]))
+            self.message_user(request, "Your csv file has been imported")
+            return redirect("..")
+        form = CsvImportForm()
+        payload = {"form": form}
+        return render(
+            request, "entm/csv_form.html", payload
+        )
+
     def convert_to_geomjson(self,request,queryset):
         rows_updated = queryset.count()
 
@@ -43,7 +90,7 @@ class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
                 name = q.name
                 with connection.cursor() as cursor:
                     #cursor.execute("""UPDATE fenceshape SET geomdata = %(coord)s  """, {'coord':wkt})
-                    print(cursor.execute("""update fenceshape set geomjson=%s where name='%s'  """%(wkt,name)))
+                    print(cursor.execute("""update virvo_fenceshape set geomjson=%s where name='%s'  """%(wkt,name)))
             except Exception as e:
                 print('error appear:',e)
                 pass
@@ -68,7 +115,7 @@ class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
                 name = q.name
                 with connection.cursor() as cursor:
                     #cursor.execute("""UPDATE fenceshape SET geomdata = %(coord)s  """, {'coord':wkt})
-                    print(cursor.execute("""update fenceshape set geomjson=%s where name='%s'  """%(wkt,name)))
+                    print(cursor.execute("""update virvo_fenceshape set geomjson=%s where name='%s'  """%(wkt,name)))
             except Exception as e:
                 print('error appear:',e)
                 pass
@@ -104,13 +151,13 @@ class FenceShapeAdmin(admin.ModelAdmin,ExportCsvMixin):
                 print("wkt:",wkt)
                 name = q.name
                 print('name=',name)
-                strqerer="""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name)
+                strqerer="""update virvo_fenceshape set geomdata=%s where name='%s'  """%(wkt,name)
                 print("sdfe:",strqerer)
                 # q.save()
                 # models.FenceShape.objects.raw("update fenceshape set geomdata = 'POLYGON(( 10 10, 10 20, 20 20, 20 15, 10 10))'")
                 with connection.cursor() as cursor:
                     # cursor.execute("""UPDATE fenceshape SET geomdata = %(coord)s  """, {'coord':wkt})
-                    cursor.execute("""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name))
+                    cursor.execute("""update virvo_fenceshape set geomdata=%s where name='%s'  """%(wkt,name))
                     # print(cursor.execute("""update fenceshape set geomdata=%s where name='%s'  """%(wkt,name)))
             except Exception as e:
                 print('error appear:',e)

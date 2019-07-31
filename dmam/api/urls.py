@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
-from .views import StationViewSet,StationRealtimeListView,BigmeterViewSet,OrganizationsViewSet
+from .views import StationViewSet,StationRealtimeListView,BigmeterViewSet
+from entm.api.views import OrganizationsViewSet
 
 
 router = routers.DefaultRouter()
